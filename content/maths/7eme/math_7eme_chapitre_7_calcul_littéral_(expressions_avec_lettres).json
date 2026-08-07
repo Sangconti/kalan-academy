@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Le calcul littéral",
+  "chapter_order": 7,
+  "lessons": [
+    {
+      "title": "Découvrir les expressions littérales",
+      "description": "Comprendre l'utilisation des lettres en mathématiques.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du calcul littéral",
+          "content": "Le calcul littéral utilise des lettres pour représenter des nombres inconnus ou variables. Une expression littérale contient des nombres, des opérations et une ou plusieurs lettres."
+        },
+        {
+          "type": "text",
+          "title": "Exemple simple",
+          "content": "Dans l'expression 3 × a, la lettre a représente un nombre. Si a vaut 5, alors 3 × a devient 3 × 5 = 15."
+        },
+        {
+          "type": "text",
+          "title": "Utilité dans la vie quotidienne",
+          "content": "Les lettres permettent de représenter des situations générales. Par exemple, si un sac coûte x FCFA, le prix de 4 sacs sera 4 × x FCFA."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Découvrir le calcul littéral",
+        "questions": [
+          {
+            "question": "Dans 5 × x, que représente x ?",
+            "options": [
+              "Une opération",
+              "Une lettre représentant un nombre",
+              "Un résultat fixe",
+              "Un signe"
+            ],
+            "correct_answer": 1,
+            "explanation": "La lettre x représente une valeur qui peut changer."
+          },
+          {
+            "question": "Une expression littérale contient :",
+            "options": [
+              "Seulement des nombres",
+              "Des lettres et des nombres",
+              "Seulement des lettres",
+              "Des dessins"
+            ],
+            "correct_answer": 1,
+            "explanation": "Une expression littérale associe des nombres, des lettres et des opérations."
+          },
+          {
+            "question": "Si x = 4, alors 2 × x =",
+            "options": [
+              "6",
+              "8",
+              "4",
+              "2"
+            ],
+            "correct_answer": 1,
+            "explanation": "On remplace x par 4 : 2 × 4 = 8."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer une expression littérale avec une valeur donnée",
+      "description": "Remplacer une lettre par un nombre et effectuer le calcul.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Remplacement d'une lettre",
+          "content": "Pour calculer une expression littérale, on remplace la lettre par sa valeur connue puis on effectue les opérations."
+        },
+        {
+          "type": "text",
+          "title": "Exemple",
+          "content": "Si A = 3 + b et b = 7, alors A = 3 + 7 = 10. La lettre b est remplacée par sa valeur."
+        },
+        {
+          "type": "text",
+          "title": "Attention aux priorités",
+          "content": "Lorsqu'il y a plusieurs opérations, il faut respecter les règles de calcul : parenthèses, multiplications et divisions avant additions et soustractions."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Remplacer une lettre",
+        "questions": [
+          {
+            "question": "Si x = 5, combien vaut x + 3 ?",
+            "options": [
+              "8",
+              "15",
+              "2",
+              "5"
+            ],
+            "correct_answer": 0,
+            "explanation": "On remplace x par 5 : 5 + 3 = 8."
+          },
+          {
+            "question": "Si a = 4, combien vaut 2a ?",
+            "options": [
+              "6",
+              "8",
+              "4",
+              "24"
+            ],
+            "correct_answer": 1,
+            "explanation": "2a signifie 2 × a, donc 2 × 4 = 8."
+          },
+          {
+            "question": "Pour calculer une expression avec une lettre, il faut d'abord :",
+            "options": [
+              "Changer la lettre par sa valeur",
+              "Supprimer la lettre",
+              "Ajouter une autre lettre",
+              "Diviser toujours"
+            ],
+            "correct_answer": 0,
+            "explanation": "On remplace la lettre par la valeur donnée."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comprendre les termes d'une expression",
+      "description": "Identifier les termes et les coefficients dans une expression littérale.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les termes",
+          "content": "Les parties séparées par les signes + ou - sont appelées des termes. Exemple : dans 3x + 5, les termes sont 3x et 5."
+        },
+        {
+          "type": "text",
+          "title": "Le coefficient",
+          "content": "Dans 4x, le nombre 4 est appelé coefficient de x. Il indique combien de fois la lettre x est multipliée."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Si une personne achète 3 objets au prix de x FCFA chacun, le prix total est représenté par 3x."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Termes et coefficients",
+        "questions": [
+          {
+            "question": "Dans 5x, quel est le coefficient de x ?",
+            "options": [
+              "5",
+              "x",
+              "0",
+              "10"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le nombre placé devant la lettre est le coefficient."
+          },
+          {
+            "question": "Dans x + 7, les termes sont :",
+            "options": [
+              "x et 7",
+              "x seulement",
+              "7 seulement",
+              "x et x"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les termes sont séparés par le signe +."
+          },
+          {
+            "question": "3a représente :",
+            "options": [
+              "3 + a",
+              "3 × a",
+              "3 - a",
+              "a ÷ 3"
+            ],
+            "correct_answer": 1,
+            "explanation": "Lorsqu'un nombre est écrit devant une lettre, cela signifie une multiplication."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Réduire une expression littérale simple",
+      "description": "Apprendre à simplifier des expressions en regroupant les termes semblables.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Réduire une expression",
+          "content": "Réduire une expression consiste à regrouper les termes qui contiennent la même lettre afin d'obtenir une écriture plus simple."
+        },
+        {
+          "type": "text",
+          "title": "Exemple",
+          "content": "Dans 3x + 2x, les deux termes contiennent x. On peut les regrouper : 3x + 2x = 5x."
+        },
+        {
+          "type": "text",
+          "title": "Règle importante",
+          "content": "On peut seulement réduire les termes semblables. Par exemple, 3x et 2y ne peuvent pas être regroupés car les lettres sont différentes."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Réduire une expression",
+        "questions": [
+          {
+            "question": "3x + 4x =",
+            "options": [
+              "7x",
+              "12x",
+              "7",
+              "x"
+            ],
+            "correct_answer": 0,
+            "explanation": "On additionne les coefficients : 3 + 4 = 7."
+          },
+          {
+            "question": "Peut-on réduire 2a + 3b ?",
+            "options": [
+              "Oui en 5ab",
+              "Non, les lettres sont différentes",
+              "Oui en 5a",
+              "Oui en 5b"
+            ],
+            "correct_answer": 1,
+            "explanation": "Les termes ne sont pas semblables car les lettres a et b sont différentes."
+          },
+          {
+            "question": "5x + x =",
+            "options": [
+              "5x",
+              "6x",
+              "x",
+              "10x"
+            ],
+            "correct_answer": 1,
+            "explanation": "x correspond à 1x, donc 5x + 1x = 6x."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Développer une expression simple",
+      "description": "Comprendre la distributivité dans le calcul littéral.",
+      "duration_minutes": 15,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La distributivité",
+          "content": "Développer une expression consiste à supprimer les parenthèses en multipliant le nombre placé devant par chaque terme à l'intérieur."
+        },
+        {
+          "type": "text",
+          "title": "Exemple",
+          "content": "2(x + 3) signifie 2 × x + 2 × 3, donc 2(x + 3) = 2x + 6."
+        },
+        {
+          "type": "text",
+          "title": "Utilité",
+          "content": "Le développement permet de transformer une expression compliquée en une expression plus facile à calculer ou à comparer."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Développer une expression",
+        "questions": [
+          {
+            "question": "3(x + 2) =",
+            "options": [
+              "3x + 6",
+              "3x + 2",
+              "x + 6",
+              "3 + x"
+            ],
+            "correct_answer": 0,
+            "explanation": "On multiplie 3 par x puis par 2 : 3x + 6."
+          },
+          {
+            "question": "Développer signifie :",
+            "options": [
+              "Ajouter des nombres",
+              "Supprimer les parenthèses avec une multiplication",
+              "Diviser une expression",
+              "Changer les lettres"
+            ],
+            "correct_answer": 1,
+            "explanation": "Le développement utilise la distributivité."
+          },
+          {
+            "question": "4(a + 1) =",
+            "options": [
+              "4a + 4",
+              "4a + 1",
+              "a + 4",
+              "5a"
+            ],
+            "correct_answer": 0,
+            "explanation": "4 × a + 4 × 1 donne 4a + 4."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes avec le calcul littéral",
+      "description": "Utiliser les lettres pour représenter et résoudre des situations.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Représenter une situation",
+          "content": "Le calcul littéral permet d'écrire une formule générale. Une lettre représente une quantité qui peut varier selon la situation."
+        },
+        {
+          "type": "text",
+          "title": "Exemple concret",
+          "content": "Un cahier coûte x FCFA. Le prix de 5 cahiers est 5x FCFA. Si x = 250, alors le prix est 1250 FCFA."
+        },
+        {
+          "type": "text",
+          "title": "Méthode",
+          "content": "Pour résoudre un problème, il faut choisir une lettre, écrire l'expression, remplacer la lettre par sa valeur si nécessaire et effectuer le calcul."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes avec le calcul littéral",
+        "questions": [
+          {
+            "question": "Un stylo coûte x FCFA. Trois stylos coûtent :",
+            "options": [
+              "3x FCFA",
+              "x + 3 FCFA",
+              "x³ FCFA",
+              "3 + x FCFA"
+            ],
+            "correct_answer": 0,
+            "explanation": "Trois objets identiques coûtent 3 fois le prix d'un objet."
+          },
+          {
+            "question": "Si x = 100, alors 4x =",
+            "options": [
+              "400",
+              "104",
+              "40",
+              "100"
+            ],
+            "correct_answer": 0,
+            "explanation": "4 × 100 = 400."
+          },
+          {
+            "question": "Le calcul littéral sert à :",
+            "options": [
+              "Représenter des situations générales",
+              "Faire uniquement des additions",
+              "Supprimer les nombres",
+              "Éviter les calculs"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les lettres permettent de représenter des quantités variables."
+          }
+        ]
+      }
+    }
+  ]
+}

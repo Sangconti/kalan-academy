@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Les opérations sur les nombres décimaux",
+  "chapter_order": 5,
+  "lessons": [
+    {
+      "title": "Multiplier un nombre décimal par un nombre entier",
+      "description": "Comprendre et effectuer la multiplication d'un nombre décimal par un entier.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Règle de multiplication",
+          "content": "Pour multiplier un nombre décimal par un nombre entier, on effectue d'abord la multiplication comme avec les nombres entiers. Ensuite, on place correctement la virgule dans le résultat."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Un élève achète 4 cahiers à 250,5 FCFA chacun. Le calcul est 250,5 × 4 = 1002 FCFA. La multiplication permet de trouver rapidement le prix total."
+        },
+        {
+          "type": "text",
+          "title": "Utilisation quotidienne",
+          "content": "Au Mali, les nombres décimaux sont utilisés dans les prix, les mesures de longueur, les poids et les quantités. La multiplication aide à calculer plusieurs objets identiques."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Multiplier un nombre décimal",
+        "questions": [
+          {
+            "question": "2,5 × 4 =",
+            "options": [
+              "10",
+              "8",
+              "12",
+              "6"
+            ],
+            "correct_answer": 0,
+            "explanation": "2,5 × 4 = 10."
+          },
+          {
+            "question": "3,2 × 5 =",
+            "options": [
+              "16",
+              "15",
+              "8",
+              "12"
+            ],
+            "correct_answer": 0,
+            "explanation": "3,2 multiplié par 5 donne 16."
+          },
+          {
+            "question": "La multiplication sert à :",
+            "options": [
+              "Répéter une quantité plusieurs fois",
+              "Toujours diminuer un nombre",
+              "Comparer deux nombres uniquement",
+              "Changer une unité"
+            ],
+            "correct_answer": 0,
+            "explanation": "La multiplication permet de répéter une même quantité plusieurs fois."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Multiplier deux nombres décimaux",
+      "description": "Apprendre la multiplication entre deux nombres décimaux.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode",
+          "content": "Pour multiplier deux nombres décimaux, on enlève momentanément les virgules, on effectue la multiplication puis on replace la virgule en comptant tous les chiffres décimaux."
+        },
+        {
+          "type": "text",
+          "title": "Exemple",
+          "content": "1,5 × 2,4 donne 3,60. Le résultat garde la bonne position de la virgule pour respecter la valeur du calcul."
+        },
+        {
+          "type": "text",
+          "title": "Application",
+          "content": "Cette opération est utile pour calculer le prix de plusieurs quantités, des surfaces ou des mesures précises."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Multiplier deux nombres décimaux",
+        "questions": [
+          {
+            "question": "1,5 × 2 =",
+            "options": [
+              "3",
+              "2",
+              "4",
+              "1"
+            ],
+            "correct_answer": 0,
+            "explanation": "1,5 × 2 = 3."
+          },
+          {
+            "question": "0,5 × 6 =",
+            "options": [
+              "3",
+              "6",
+              "0,6",
+              "2"
+            ],
+            "correct_answer": 0,
+            "explanation": "La moitié de 6 est 3."
+          },
+          {
+            "question": "Après une multiplication de nombres décimaux, il faut :",
+            "options": [
+              "Placer correctement la virgule",
+              "Supprimer le résultat",
+              "Changer les nombres",
+              "Diviser automatiquement"
+            ],
+            "correct_answer": 0,
+            "explanation": "La virgule doit être placée selon le nombre de chiffres décimaux."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Diviser un nombre décimal par un entier",
+      "description": "Comprendre la division des nombres décimaux.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Principe de division",
+          "content": "Diviser un nombre décimal consiste à partager une quantité en parts égales. Le résultat indique la quantité obtenue pour chaque part."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "6,5 litres d'eau sont partagés entre 5 personnes. Chaque personne reçoit 6,5 ÷ 5 = 1,3 litre."
+        },
+        {
+          "type": "text",
+          "title": "Vérification",
+          "content": "Pour vérifier une division, on multiplie le résultat par le diviseur. On doit retrouver le nombre initial."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Diviser un nombre décimal",
+        "questions": [
+          {
+            "question": "8,0 ÷ 2 =",
+            "options": [
+              "4",
+              "2",
+              "6",
+              "8"
+            ],
+            "correct_answer": 0,
+            "explanation": "8 partagé en deux parties égales donne 4."
+          },
+          {
+            "question": "4,5 ÷ 3 =",
+            "options": [
+              "1,5",
+              "2,5",
+              "3,5",
+              "4,5"
+            ],
+            "correct_answer": 0,
+            "explanation": "4,5 divisé par 3 donne 1,5."
+          },
+          {
+            "question": "La division permet de :",
+            "options": [
+              "Partager une quantité",
+              "Ajouter deux nombres",
+              "Multiplier toujours",
+              "Changer une écriture"
+            ],
+            "correct_answer": 0,
+            "explanation": "La division sert principalement à partager une quantité."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Additionner et soustraire des nombres décimaux",
+      "description": "Effectuer des additions et soustractions avec des nombres décimaux.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Addition des nombres décimaux",
+          "content": "Pour additionner des nombres décimaux, on aligne les virgules afin que les unités, dixièmes et centièmes soient placés correctement."
+        },
+        {
+          "type": "text",
+          "title": "Soustraction des nombres décimaux",
+          "content": "Pour effectuer une soustraction, on aligne aussi les virgules puis on retire les chiffres qui ont la même valeur."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Un élève achète un cahier à 500,50 FCFA et un stylo à 100,25 FCFA. La dépense totale est 600,75 FCFA grâce à l'addition."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Addition et soustraction des nombres décimaux",
+        "questions": [
+          {
+            "question": "2,5 + 3,5 =",
+            "options": [
+              "6",
+              "5",
+              "7",
+              "4"
+            ],
+            "correct_answer": 0,
+            "explanation": "2,5 + 3,5 = 6."
+          },
+          {
+            "question": "7,8 - 2,3 =",
+            "options": [
+              "5,5",
+              "6,5",
+              "4,5",
+              "9,5"
+            ],
+            "correct_answer": 0,
+            "explanation": "7,8 moins 2,3 donne 5,5."
+          },
+          {
+            "question": "Pourquoi aligne-t-on les virgules ?",
+            "options": [
+              "Pour garder la valeur des chiffres",
+              "Pour changer le nombre",
+              "Pour supprimer les décimales",
+              "Pour rendre le calcul plus long"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'alignement permet de respecter la valeur de chaque chiffre."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Effectuer des opérations avec parenthèses",
+      "description": "Respecter les priorités de calcul avec les nombres décimaux.",
+      "duration_minutes": 15,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Ordre des opérations",
+          "content": "Dans un calcul avec plusieurs opérations, on effectue d'abord les calculs entre parenthèses, puis les multiplications et divisions, et enfin les additions et soustractions."
+        },
+        {
+          "type": "text",
+          "title": "Exemple",
+          "content": "Dans 2 + (3 × 1,5), on calcule d'abord 3 × 1,5 = 4,5 puis 2 + 4,5 = 6,5."
+        },
+        {
+          "type": "text",
+          "title": "Importance de la méthode",
+          "content": "Respecter les priorités permet d'obtenir toujours le même résultat et d'éviter les erreurs de calcul."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Priorités des opérations",
+        "questions": [
+          {
+            "question": "Dans un calcul avec parenthèses, quelle opération fait-on en premier ?",
+            "options": [
+              "Les calculs entre parenthèses",
+              "Les additions",
+              "Les soustractions",
+              "Les calculs au hasard"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les parenthèses sont toujours prioritaires."
+          },
+          {
+            "question": "2 + (2 × 3) =",
+            "options": [
+              "8",
+              "12",
+              "6",
+              "4"
+            ],
+            "correct_answer": 0,
+            "explanation": "On calcule d'abord 2 × 3 = 6 puis 2 + 6 = 8."
+          },
+          {
+            "question": "Pourquoi respecter l'ordre des opérations ?",
+            "options": [
+              "Pour éviter les erreurs",
+              "Pour changer les nombres",
+              "Pour supprimer les parenthèses",
+              "Pour ne pas calculer"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'ordre des opérations garantit un résultat correct."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes avec les nombres décimaux",
+      "description": "Utiliser les opérations décimales dans des situations concrètes.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": "Pour résoudre un problème, il faut lire attentivement l'énoncé, identifier les informations utiles, choisir l'opération adaptée et vérifier le résultat."
+        },
+        {
+          "type": "text",
+          "title": "Exemple au quotidien",
+          "content": "Un cultivateur vend 12,5 kg de mil le matin et 8,5 kg l'après-midi. La quantité vendue est 21 kg après addition."
+        },
+        {
+          "type": "text",
+          "title": "Vérification",
+          "content": "Une bonne réponse doit être cohérente avec la situation. Une quantité totale doit être supérieure aux quantités ajoutées séparément."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes avec les nombres décimaux",
+        "questions": [
+          {
+            "question": "Un sac contient 10,5 kg de riz. On utilise 3,5 kg. Quelle quantité reste-t-il ?",
+            "options": [
+              "7 kg",
+              "13 kg",
+              "6 kg",
+              "3 kg"
+            ],
+            "correct_answer": 0,
+            "explanation": "10,5 - 3,5 = 7 kg."
+          },
+          {
+            "question": "Une famille achète 2,5 kg de sucre puis 1,5 kg. Quelle quantité totale ?",
+            "options": [
+              "4 kg",
+              "3 kg",
+              "5 kg",
+              "2 kg"
+            ],
+            "correct_answer": 0,
+            "explanation": "2,5 + 1,5 = 4 kg."
+          },
+          {
+            "question": "Avant de calculer un problème, il faut d'abord :",
+            "options": [
+              "Comprendre l'énoncé",
+              "Choisir un nombre au hasard",
+              "Toujours multiplier",
+              "Ignorer les données"
+            ],
+            "correct_answer": 0,
+            "explanation": "Il faut comprendre la situation avant de choisir une opération."
+          }
+        ]
+      }
+    }
+  ]
+}

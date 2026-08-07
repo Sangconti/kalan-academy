@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Organisation et gestion des données",
+  "chapter_order": 17,
+  "lessons": [
+    {
+      "title": "Lire et comprendre un tableau de données",
+      "description": "Apprendre à lire et interpréter les informations dans un tableau.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'un tableau de données",
+          "content": "Un tableau de données permet d'organiser des informations en lignes et en colonnes afin de faciliter la lecture et la comparaison."
+        },
+        {
+          "type": "text",
+          "title": "Les éléments d'un tableau",
+          "content": "Un tableau possède un titre, des colonnes et des lignes. Chaque case contient une information précise."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique au Mali",
+          "content": "Un enseignant peut utiliser un tableau pour présenter les notes des élèves d'une classe et comparer les résultats."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Lire un tableau",
+        "questions": [
+          {
+            "question": "Un tableau sert à :",
+            "options": [
+              "Organiser des informations",
+              "Dessiner seulement",
+              "Faire uniquement des calculs",
+              "Remplacer une règle"
+            ],
+            "correct_answer": 0,
+            "explanation": "Un tableau permet de classer et présenter clairement des données."
+          },
+          {
+            "question": "Un tableau contient généralement :",
+            "options": [
+              "Des lignes et des colonnes",
+              "Des angles",
+              "Des figures géométriques",
+              "Des couleurs uniquement"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les données sont organisées dans des lignes et des colonnes."
+          },
+          {
+            "question": "Le titre d'un tableau indique :",
+            "options": [
+              "Le sujet des données",
+              "Une opération",
+              "Une mesure d'angle",
+              "Un signe"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le titre permet de comprendre le thème du tableau."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Organiser des données dans un tableau",
+      "description": "Savoir classer des informations dans un tableau adapté.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Pourquoi organiser les données",
+          "content": "Organiser les données permet de retrouver rapidement une information et de faire des comparaisons plus facilement."
+        },
+        {
+          "type": "text",
+          "title": "Construire un tableau",
+          "content": "Pour construire un tableau, il faut choisir un titre, définir les catégories et placer chaque information dans la bonne case."
+        },
+        {
+          "type": "text",
+          "title": "Exemple concret",
+          "content": "Une boutique peut organiser ses ventes quotidiennes dans un tableau avec les produits, les quantités vendues et les prix."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Organiser des données",
+        "questions": [
+          {
+            "question": "Avant de créer un tableau, il faut :",
+            "options": [
+              "Choisir les informations à présenter",
+              "Supprimer les données",
+              "Changer les nombres",
+              "Faire un dessin"
+            ],
+            "correct_answer": 0,
+            "explanation": "Il faut savoir quelles informations organiser."
+          },
+          {
+            "question": "Chaque information d'un tableau doit être placée :",
+            "options": [
+              "Dans la bonne case",
+              "Au hasard",
+              "Hors du tableau",
+              "Seulement en haut"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une bonne organisation facilite la lecture."
+          },
+          {
+            "question": "Un tableau bien organisé permet de :",
+            "options": [
+              "Comparer facilement les données",
+              "Cacher les informations",
+              "Empêcher les calculs",
+              "Supprimer les valeurs"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'organisation rend les comparaisons plus simples."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Lire et construire des graphiques simples",
+      "description": "Comprendre la représentation graphique des données.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le rôle des graphiques",
+          "content": "Un graphique représente des données sous une forme visuelle. Il permet de comprendre rapidement une situation."
+        },
+        {
+          "type": "text",
+          "title": "Les éléments d'un graphique",
+          "content": "Un graphique possède un titre, des axes, des graduations et des informations représentées par des points, des barres ou des secteurs."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Un graphique peut représenter le nombre d'élèves présents chaque jour dans une classe afin d'observer les variations."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Graphiques simples",
+        "questions": [
+          {
+            "question": "Un graphique sert à :",
+            "options": [
+              "Représenter visuellement des données",
+              "Écrire une histoire",
+              "Faire une multiplication seulement",
+              "Tracer une droite uniquement"
+            ],
+            "correct_answer": 0,
+            "explanation": "Un graphique permet de visualiser facilement des informations."
+          },
+          {
+            "question": "Un graphique possède généralement :",
+            "options": [
+              "Un titre et des axes",
+              "Une équation seulement",
+              "Une règle seulement",
+              "Un compas uniquement"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les axes et le titre permettent de comprendre le graphique."
+          },
+          {
+            "question": "Les graphiques facilitent :",
+            "options": [
+              "La compréhension des données",
+              "La suppression des nombres",
+              "Le changement des résultats",
+              "L'oubli des informations"
+            ],
+            "correct_answer": 0,
+            "explanation": "La représentation visuelle aide à analyser les données."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les diagrammes en bâtons et circulaires",
+      "description": "Découvrir les différents types de graphiques et leur utilisation.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le diagramme en bâtons",
+          "content": "Un diagramme en bâtons représente des données avec des rectangles ou des barres de différentes hauteurs. Plus la barre est haute, plus la valeur est grande."
+        },
+        {
+          "type": "text",
+          "title": "Le diagramme circulaire",
+          "content": "Un diagramme circulaire représente une situation sous forme de secteurs d'un cercle. Chaque secteur correspond à une partie des données."
+        },
+        {
+          "type": "text",
+          "title": "Choisir le bon graphique",
+          "content": "Le diagramme en bâtons est utile pour comparer des valeurs. Le diagramme circulaire est utile pour montrer une répartition en parts."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Diagrammes",
+        "questions": [
+          {
+            "question": "Un diagramme en bâtons utilise :",
+            "options": [
+              "Des barres",
+              "Des cercles uniquement",
+              "Des équations",
+              "Des angles seulement"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les données sont représentées par des barres de différentes hauteurs."
+          },
+          {
+            "question": "Un diagramme circulaire représente :",
+            "options": [
+              "Des parts d'un ensemble",
+              "Une multiplication",
+              "Une droite graduée",
+              "Une équation"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le cercle est partagé en secteurs représentant des proportions."
+          },
+          {
+            "question": "Pour comparer plusieurs quantités, on utilise souvent :",
+            "options": [
+              "Un diagramme en bâtons",
+              "Un diagramme circulaire uniquement",
+              "Une fraction",
+              "Une puissance"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les barres permettent de comparer rapidement les valeurs."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer des effectifs et des fréquences",
+      "description": "Comprendre les notions d'effectif et de fréquence.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de l'effectif",
+          "content": "L'effectif d'une valeur correspond au nombre de fois où cette valeur apparaît dans une série de données."
+        },
+        {
+          "type": "text",
+          "title": "Définition de la fréquence",
+          "content": "La fréquence représente la proportion d'une valeur par rapport à l'effectif total. Elle peut être écrite sous forme de fraction ou de pourcentage."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Dans une classe de 40 élèves, si 10 élèves portent des lunettes, l'effectif est 10 et la fréquence est 10/40 = 1/4."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Effectifs et fréquences",
+        "questions": [
+          {
+            "question": "L'effectif représente :",
+            "options": [
+              "Le nombre d'apparitions d'une valeur",
+              "Une longueur",
+              "Un angle",
+              "Une puissance"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'effectif compte combien de fois une donnée apparaît."
+          },
+          {
+            "question": "La fréquence se calcule par :",
+            "options": [
+              "Effectif ÷ effectif total",
+              "Effectif + total",
+              "Effectif × total",
+              "Effectif - total"
+            ],
+            "correct_answer": 0,
+            "explanation": "La fréquence est une proportion de l'ensemble."
+          },
+          {
+            "question": "Une fréquence peut être exprimée en :",
+            "options": [
+              "Pourcentage",
+              "Mètre",
+              "Kilogramme",
+              "Degré"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les fréquences sont souvent exprimées en fractions ou pourcentages."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes avec des données statistiques",
+      "description": "Utiliser des tableaux et graphiques pour analyser des situations.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode d'analyse",
+          "content": "Pour résoudre un problème statistique, il faut lire les données, identifier les informations utiles, effectuer les calculs nécessaires puis interpréter le résultat."
+        },
+        {
+          "type": "text",
+          "title": "Exemple dans la vie quotidienne au Mali",
+          "content": "Une école peut analyser les résultats des élèves grâce à un tableau de notes afin de connaître les matières où les élèves réussissent le mieux."
+        },
+        {
+          "type": "text",
+          "title": "Résumé du chapitre",
+          "content": "Les tableaux et graphiques permettent d'organiser, représenter et analyser des données pour prendre de meilleures décisions."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Analyse des données",
+        "questions": [
+          {
+            "question": "Pour analyser des données, il faut d'abord :",
+            "options": [
+              "Lire et comprendre les informations",
+              "Changer les valeurs",
+              "Supprimer le tableau",
+              "Choisir au hasard"
+            ],
+            "correct_answer": 0,
+            "explanation": "La lecture des données est la première étape de l'analyse."
+          },
+          {
+            "question": "Les statistiques permettent de :",
+            "options": [
+              "Étudier des données",
+              "Dessiner uniquement",
+              "Calculer seulement des angles",
+              "Mesurer une longueur"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les statistiques servent à organiser et interpréter des informations."
+          },
+          {
+            "question": "Un tableau ou un graphique aide à :",
+            "options": [
+              "Prendre des décisions grâce aux informations",
+              "Cacher les résultats",
+              "Éviter les calculs",
+              "Supprimer les données"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une bonne représentation aide à comprendre une situation."
+          }
+        ]
+      }
+    }
+  ]
+}

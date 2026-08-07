@@ -1,0 +1,333 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Les nombres décimaux",
+  "chapter_order": 4,
+  "lessons": [
+    {
+      "title": "Découvrir les nombres décimaux",
+      "description": "Comprendre la notion de nombre décimal et sa représentation.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition des nombres décimaux",
+          "content": "Un nombre décimal est un nombre qui possède une partie entière et une partie décimale séparées par une virgule. La partie entière indique les unités et la partie décimale indique les parties plus petites que l'unité."
+        },
+        {
+          "type": "text",
+          "title": "Exemples pratiques",
+          "content": "Dans la vie quotidienne au Mali, on utilise les nombres décimaux pour mesurer une longueur, un poids ou un prix. Par exemple, 2,5 kg de riz signifie 2 kg et 5 dixièmes de kilogramme."
+        },
+        {
+          "type": "text",
+          "title": "Valeur des chiffres",
+          "content": "Dans 4,73, le chiffre 4 représente les unités, le chiffre 7 représente les dixièmes et le chiffre 3 représente les centièmes. Chaque chiffre possède une valeur selon sa position."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Découvrir les nombres décimaux",
+        "questions": [
+          {
+            "question": "Dans 5,24, quel chiffre représente les dixièmes ?",
+            "options": ["5", "2", "4", "24"],
+            "correct_answer": 1,
+            "explanation": "Le chiffre juste après la virgule représente les dixièmes. Ici c'est 2."
+          },
+          {
+            "question": "Un nombre décimal possède :",
+            "options": [
+              "Seulement une partie entière",
+              "Une partie entière et une partie décimale",
+              "Toujours deux chiffres après la virgule",
+              "Uniquement des fractions"
+            ],
+            "correct_answer": 1,
+            "explanation": "Un nombre décimal peut avoir une partie entière et une partie décimale."
+          },
+          {
+            "question": "Comment écrit-on deux unités et cinq dixièmes ?",
+            "options": ["25", "2,5", "0,25", "5,2"],
+            "correct_answer": 1,
+            "explanation": "Deux unités et cinq dixièmes s'écrit 2,5."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Lire et écrire les nombres décimaux",
+      "description": "Savoir lire et écrire correctement un nombre décimal.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Lecture des nombres décimaux",
+          "content": "Pour lire un nombre décimal, on lit d'abord la partie entière puis la partie décimale. Exemple : 3,45 se lit trois unités et quarante-cinq centièmes."
+        },
+        {
+          "type": "text",
+          "title": "Écriture décimale",
+          "content": "Une fraction décimale peut être transformée en nombre décimal. Par exemple, 25/100 devient 0,25. Cette écriture facilite les calculs."
+        },
+        {
+          "type": "text",
+          "title": "Utilisation quotidienne",
+          "content": "Les commerçants utilisent les nombres décimaux pour afficher les prix. Un article à 1500,50 FCFA contient une partie entière et une partie décimale."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Lire et écrire les nombres décimaux",
+        "questions": [
+          {
+            "question": "Comment lit-on 7,50 ?",
+            "options": [
+              "Sept virgule cinquante",
+              "Sept unités et cinquante centièmes",
+              "Soixante-quinze",
+              "Les deux premières réponses"
+            ],
+            "correct_answer": 3,
+            "explanation": "7,50 peut se lire sept virgule cinquante ou sept unités et cinquante centièmes."
+          },
+          {
+            "question": "25/100 correspond à :",
+            "options": ["25", "2,5", "0,25", "0,025"],
+            "correct_answer": 2,
+            "explanation": "Vingt-cinq centièmes s'écrit 0,25."
+          },
+          {
+            "question": "Dans 8,36, le chiffre 6 représente :",
+            "options": ["Les unités", "Les dixièmes", "Les centièmes", "Les dizaines"],
+            "correct_answer": 2,
+            "explanation": "Le deuxième chiffre après la virgule représente les centièmes."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparer les nombres décimaux",
+      "description": "Apprendre à comparer des nombres décimaux.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de comparaison",
+          "content": "Pour comparer deux nombres décimaux, on compare d'abord les parties entières. Si elles sont égales, on compare les chiffres après la virgule."
+        },
+        {
+          "type": "text",
+          "title": "Exemple",
+          "content": "Entre 4,7 et 4,5, les parties entières sont égales. On compare les dixièmes : 7 est supérieur à 5 donc 4,7 est plus grand."
+        },
+        {
+          "type": "text",
+          "title": "Importance de la comparaison",
+          "content": "Comparer les nombres décimaux permet de choisir le meilleur prix, la plus grande mesure ou la quantité la plus importante dans des situations réelles."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Comparer les nombres décimaux",
+        "questions": [
+          {
+            "question": "Quel nombre est le plus grand ?",
+            "options": ["3,5", "3,8", "3,2", "3,1"],
+            "correct_answer": 1,
+            "explanation": "Les parties entières sont égales et 8 dixièmes est le plus grand."
+          },
+          {
+            "question": "Entre 6,25 et 6,52, lequel est plus grand ?",
+            "options": ["6,25", "6,52", "Ils sont égaux", "Impossible"],
+            "correct_answer": 1,
+            "explanation": "52 centièmes est supérieur à 25 centièmes."
+          },
+          {
+            "question": "Pour comparer deux nombres décimaux, on commence par :",
+            "options": ["La virgule", "La partie entière", "Le dernier chiffre", "Le nombre de chiffres"],
+            "correct_answer": 1,
+            "explanation": "On compare d'abord les parties entières."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Additionner des nombres décimaux",
+      "description": "Effectuer des additions avec des nombres décimaux.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Règle d'addition",
+          "content": "Pour additionner des nombres décimaux, il faut aligner les virgules afin que les unités, dixièmes et centièmes soient bien placés."
+        },
+        {
+          "type": "text",
+          "title": "Exemple de calcul",
+          "content": "2,5 + 1,3 = 3,8. On additionne les dixièmes ensemble et les unités ensemble."
+        },
+        {
+          "type": "text",
+          "title": "Application pratique",
+          "content": "Un élève achète un cahier à 500,50 FCFA et un stylo à 100,25 FCFA. L'addition permet de connaître la dépense totale."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Addition des nombres décimaux",
+        "questions": [
+          {
+            "question": "2,4 + 3,5 =",
+            "options": ["5,9", "6,0", "5,5", "4,9"],
+            "correct_answer": 0,
+            "explanation": "2,4 + 3,5 donne 5,9."
+          },
+          {
+            "question": "Pourquoi faut-il aligner les virgules ?",
+            "options": [
+              "Pour décorer le calcul",
+              "Pour respecter la valeur des chiffres",
+              "Pour changer le résultat",
+              "Ce n'est pas nécessaire"
+            ],
+            "correct_answer": 1,
+            "explanation": "L'alignement garantit que chaque chiffre garde sa valeur."
+          },
+          {
+            "question": "1,25 + 2,25 =",
+            "options": ["3,50", "4,50", "3,25", "2,50"],
+            "correct_answer": 0,
+            "explanation": "125 centièmes + 225 centièmes = 350 centièmes soit 3,50."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Soustraire des nombres décimaux",
+      "description": "Effectuer des soustractions avec des nombres décimaux.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Règle de soustraction",
+          "content": "Pour soustraire des nombres décimaux, on aligne les virgules comme dans une addition. On soustrait ensuite les chiffres ayant la même valeur."
+        },
+        {
+          "type": "text",
+          "title": "Exemple de calcul",
+          "content": "5,8 - 2,3 = 3,5. On retire 3 dixièmes de 8 dixièmes et 2 unités de 5 unités."
+        },
+        {
+          "type": "text",
+          "title": "Situation pratique",
+          "content": "Un commerçant possède 10,5 kg de riz et vend 3,2 kg. La quantité restante est obtenue par une soustraction : 10,5 - 3,2 = 7,3 kg."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Soustraction des nombres décimaux",
+        "questions": [
+          {
+            "question": "6,5 - 2,5 =",
+            "options": ["4,0", "3,0", "5,0", "8,0"],
+            "correct_answer": 0,
+            "explanation": "La différence entre 6,5 et 2,5 est 4,0."
+          },
+          {
+            "question": "Pour effectuer une soustraction décimale, il faut :",
+            "options": [
+              "Aligner les virgules",
+              "Supprimer les virgules",
+              "Changer les nombres",
+              "Multiplier les nombres"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les virgules doivent être alignées pour garder la valeur correcte des chiffres."
+          },
+          {
+            "question": "9,7 - 4,2 =",
+            "options": ["5,5", "6,5", "4,5", "3,5"],
+            "correct_answer": 0,
+            "explanation": "9,7 moins 4,2 donne 5,5."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes avec les nombres décimaux",
+      "description": "Utiliser les nombres décimaux dans des problèmes de la vie courante.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": "Pour résoudre un problème avec des nombres décimaux, il faut lire l'énoncé, identifier les données importantes, choisir l'opération adaptée puis vérifier le résultat."
+        },
+        {
+          "type": "text",
+          "title": "Exemple concret",
+          "content": "Fatou achète 2,5 mètres de tissu puis encore 1,75 mètre. La longueur totale est 4,25 mètres après addition des deux mesures."
+        },
+        {
+          "type": "text",
+          "title": "Vérification du résultat",
+          "content": "Après un calcul, il faut vérifier si la réponse est logique. Une quantité totale doit être plus grande qu'une quantité ajoutée seule."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes avec les nombres décimaux",
+        "questions": [
+          {
+            "question": "Un élève possède 5,5 litres d'eau et utilise 2,0 litres. Quelle quantité reste-t-il ?",
+            "options": ["3,5 litres", "7,5 litres", "2,5 litres", "5,0 litres"],
+            "correct_answer": 0,
+            "explanation": "On effectue 5,5 - 2,0 = 3,5 litres."
+          },
+          {
+            "question": "Mariam achète 1,5 kg de sucre puis 2,5 kg. Quelle quantité totale a-t-elle ?",
+            "options": ["3 kg", "4 kg", "3,5 kg", "2 kg"],
+            "correct_answer": 1,
+            "explanation": "1,5 + 2,5 = 4 kg."
+          },
+          {
+            "question": "Quelle opération utilise-t-on pour trouver une quantité totale ?",
+            "options": [
+              "Addition",
+              "Soustraction uniquement",
+              "Division uniquement",
+              "Comparaison uniquement"
+            ],
+            "correct_answer": 0,
+            "explanation": "On utilise généralement l'addition pour réunir plusieurs quantités."
+          }
+        ]
+      }
+    }
+  ]
+}

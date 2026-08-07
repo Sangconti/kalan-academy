@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Les nombres relatifs",
+  "chapter_order": 13,
+  "lessons": [
+    {
+      "title": "Découvrir les nombres relatifs",
+      "description": "Comprendre la notion de nombres positifs et négatifs.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition des nombres relatifs",
+          "content": "Un nombre relatif est un nombre qui possède un signe positif (+) ou négatif (-). Les nombres positifs sont supérieurs à zéro et les nombres négatifs sont inférieurs à zéro."
+        },
+        {
+          "type": "text",
+          "title": "Les nombres positifs et négatifs",
+          "content": "Les nombres positifs peuvent s'écrire avec le signe + ou sans signe. Les nombres négatifs sont toujours précédés du signe -."
+        },
+        {
+          "type": "text",
+          "title": "Exemples dans la vie quotidienne",
+          "content": "Les températures peuvent être positives ou négatives. Par exemple, +35°C représente une température chaude et -5°C représente une température inférieure à zéro."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Découvrir les nombres relatifs",
+        "questions": [
+          {
+            "question": "Un nombre relatif possède :",
+            "options": [
+              "Un signe positif ou négatif",
+              "Toujours une lettre",
+              "Seulement une virgule",
+              "Aucun signe"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les nombres relatifs sont caractérisés par leur signe."
+          },
+          {
+            "question": "Le nombre -8 est :",
+            "options": [
+              "Un nombre positif",
+              "Un nombre négatif",
+              "Un nombre nul",
+              "Une fraction"
+            ],
+            "correct_answer": 1,
+            "explanation": "-8 est inférieur à zéro, donc c'est un nombre négatif."
+          },
+          {
+            "question": "Le nombre 5 peut s'écrire :",
+            "options": [
+              "+5",
+              "-5",
+              "0",
+              "5/0"
+            ],
+            "correct_answer": 0,
+            "explanation": "Un nombre positif peut être écrit avec le signe +."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Repérer les nombres relatifs sur une droite graduée",
+      "description": "Placer et lire les nombres relatifs sur une droite.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La droite graduée",
+          "content": "Une droite graduée permet de représenter les nombres relatifs. Le zéro est l'origine, les nombres positifs sont à droite et les nombres négatifs sont à gauche."
+        },
+        {
+          "type": "text",
+          "title": "La distance à zéro",
+          "content": "La distance entre un nombre relatif et zéro s'appelle la distance à zéro ou valeur absolue."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Sur une droite graduée, -3 est situé à trois unités à gauche de zéro tandis que +3 est situé à trois unités à droite."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Droite graduée",
+        "questions": [
+          {
+            "question": "Sur une droite graduée, les nombres négatifs sont à :",
+            "options": [
+              "Gauche du zéro",
+              "Droite du zéro",
+              "Au-dessus du zéro",
+              "Nulle part"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les nombres négatifs se trouvent à gauche de zéro."
+          },
+          {
+            "question": "L'origine d'une droite graduée est :",
+            "options": [
+              "0",
+              "1",
+              "-1",
+              "10"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le point de départ d'une droite graduée est le zéro."
+          },
+          {
+            "question": "Entre -2 et +2, le plus éloigné de zéro est :",
+            "options": [
+              "Ils sont à la même distance",
+              "-2 seulement",
+              "+2 seulement",
+              "0"
+            ],
+            "correct_answer": 0,
+            "explanation": "-2 et +2 ont la même distance à zéro."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparer et ranger les nombres relatifs",
+      "description": "Apprendre à comparer des nombres relatifs.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comparer les nombres relatifs",
+          "content": "Sur une droite graduée, le nombre situé le plus à droite est toujours le plus grand."
+        },
+        {
+          "type": "text",
+          "title": "Règle des signes",
+          "content": "Un nombre positif est toujours supérieur à un nombre négatif. Entre deux nombres négatifs, celui qui a la plus petite distance à zéro est le plus grand."
+        },
+        {
+          "type": "text",
+          "title": "Exemples",
+          "content": "+4 est supérieur à -2. Entre -3 et -7, -3 est le plus grand car il est plus proche de zéro."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Comparer les nombres relatifs",
+        "questions": [
+          {
+            "question": "Quel nombre est le plus grand ?",
+            "options": [
+              "-5",
+              "+3",
+              "-8",
+              "-10"
+            ],
+            "correct_answer": 1,
+            "explanation": "Un nombre positif est toujours supérieur aux nombres négatifs."
+          },
+          {
+            "question": "Entre -2 et -6, le plus grand est :",
+            "options": [
+              "-2",
+              "-6",
+              "Ils sont égaux",
+              "0"
+            ],
+            "correct_answer": 0,
+            "explanation": "-2 est plus proche de zéro donc il est plus grand."
+          },
+          {
+            "question": "Sur une droite graduée, aller vers la droite signifie :",
+            "options": [
+              "Augmenter les nombres",
+              "Diminuer les nombres",
+              "Changer de signe",
+              "Multiplier"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les nombres augmentent lorsqu'on se déplace vers la droite."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Additionner des nombres relatifs",
+      "description": "Apprendre les règles d'addition des nombres relatifs.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Addition de nombres de même signe",
+          "content": "Pour additionner deux nombres relatifs de même signe, on additionne leurs distances à zéro et on garde le même signe. Exemple : (+3) + (+5) = (+8) et (-4) + (-2) = (-6)."
+        },
+        {
+          "type": "text",
+          "title": "Addition de nombres de signes différents",
+          "content": "Pour additionner deux nombres relatifs de signes différents, on soustrait les distances à zéro et on garde le signe du nombre qui a la plus grande distance à zéro."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Un commerçant gagne 5000 FCFA puis perd 2000 FCFA. On peut représenter cette situation par (+5000) + (-2000) = +3000 FCFA."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Addition des nombres relatifs",
+        "questions": [
+          {
+            "question": "(+5) + (+3) =",
+            "options": [
+              "+8",
+              "-8",
+              "+2",
+              "-2"
+            ],
+            "correct_answer": 0,
+            "explanation": "Deux nombres positifs s'additionnent et donnent +8."
+          },
+          {
+            "question": "(-4) + (-6) =",
+            "options": [
+              "-10",
+              "+10",
+              "-2",
+              "+2"
+            ],
+            "correct_answer": 0,
+            "explanation": "Deux nombres négatifs donnent un résultat négatif : -10."
+          },
+          {
+            "question": "(+7) + (-3) =",
+            "options": [
+              "+4",
+              "-4",
+              "+10",
+              "-10"
+            ],
+            "correct_answer": 0,
+            "explanation": "7 - 3 = 4 et on garde le signe du nombre le plus grand."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Soustraire des nombres relatifs",
+      "description": "Comprendre la soustraction des nombres relatifs.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Transformer une soustraction",
+          "content": "Soustraire un nombre relatif revient à ajouter son opposé. Exemple : (+5) - (+2) devient (+5) + (-2)."
+        },
+        {
+          "type": "text",
+          "title": "L'opposé d'un nombre",
+          "content": "Deux nombres opposés ont la même distance à zéro mais des signes contraires. L'opposé de +6 est -6 et l'opposé de -6 est +6."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Une température passe de +8°C à +3°C. La variation est (+3) - (+8), soit (+3) + (-8) = -5°C."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Soustraction des nombres relatifs",
+        "questions": [
+          {
+            "question": "(+8) - (+3) =",
+            "options": [
+              "+5",
+              "-5",
+              "+11",
+              "-11"
+            ],
+            "correct_answer": 0,
+            "explanation": "On transforme en (+8) + (-3), donc le résultat est +5."
+          },
+          {
+            "question": "L'opposé de -9 est :",
+            "options": [
+              "+9",
+              "-9",
+              "0",
+              "+1"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'opposé change seulement le signe."
+          },
+          {
+            "question": "Soustraire un nombre revient à :",
+            "options": [
+              "Ajouter son opposé",
+              "Changer sa valeur",
+              "Le multiplier par deux",
+              "Le supprimer"
+            ],
+            "correct_answer": 0,
+            "explanation": "Toute soustraction peut être transformée en addition de l'opposé."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes avec les nombres relatifs",
+      "description": "Utiliser les nombres relatifs dans des situations de la vie courante.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": "Pour résoudre un problème avec des nombres relatifs, il faut identifier les valeurs positives et négatives, choisir l'opération adaptée puis effectuer le calcul."
+        },
+        {
+          "type": "text",
+          "title": "Exemple dans la vie quotidienne",
+          "content": "Un plongeur descend de 10 mètres puis remonte de 4 mètres. La situation peut être représentée par (-10) + (+4) = -6 mètres."
+        },
+        {
+          "type": "text",
+          "title": "Résumé du chapitre",
+          "content": "Les nombres relatifs permettent de représenter des situations avec des augmentations et des diminutions comme les températures, les dettes, les gains et les pertes."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes avec les nombres relatifs",
+        "questions": [
+          {
+            "question": "Une dette de 5000 FCFA peut être représentée par :",
+            "options": [
+              "-5000",
+              "+5000",
+              "0",
+              "5000/0"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une dette représente une quantité négative."
+          },
+          {
+            "question": "Une température de 6°C au-dessus de zéro s'écrit :",
+            "options": [
+              "+6°C",
+              "-6°C",
+              "0°C",
+              "6/0"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une température au-dessus de zéro est positive."
+          },
+          {
+            "question": "Pour résoudre un problème avec des nombres relatifs, il faut d'abord :",
+            "options": [
+              "Comprendre la situation",
+              "Choisir au hasard",
+              "Ignorer les signes",
+              "Changer les nombres"
+            ],
+            "correct_answer": 0,
+            "explanation": "Il faut analyser les données avant de calculer."
+          }
+        ]
+      }
+    }
+  ]
+}

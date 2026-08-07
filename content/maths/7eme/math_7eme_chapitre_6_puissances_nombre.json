@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Les puissances d'un nombre",
+  "chapter_order": 6,
+  "lessons": [
+    {
+      "title": "Découvrir les puissances",
+      "description": "Comprendre la notion de puissance et son écriture.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'une puissance",
+          "content": "Une puissance permet d'écrire plus simplement une multiplication répétée d'un même nombre. Par exemple, 3 × 3 × 3 × 3 s'écrit 3⁴. Le nombre 3 est appelé la base et 4 est l'exposant."
+        },
+        {
+          "type": "text",
+          "title": "Vocabulaire",
+          "content": "Dans l'écriture aⁿ, a représente la base et n représente l'exposant. L'exposant indique combien de fois la base est multipliée par elle-même."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Si un élève multiplie 5 par lui-même trois fois, on obtient 5³ = 5 × 5 × 5 = 125. Cette écriture permet de simplifier les grands calculs."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Découvrir les puissances",
+        "questions": [
+          {
+            "question": "Dans 4³, quel est le nombre 4 ?",
+            "options": [
+              "L'exposant",
+              "La base",
+              "Le résultat",
+              "Le produit"
+            ],
+            "correct_answer": 1,
+            "explanation": "Dans 4³, le nombre 4 est la base."
+          },
+          {
+            "question": "Que signifie 2⁴ ?",
+            "options": [
+              "2 + 4",
+              "2 × 2 × 2 × 2",
+              "4 × 4",
+              "2 × 4"
+            ],
+            "correct_answer": 1,
+            "explanation": "L'exposant 4 indique que 2 est multiplié quatre fois par lui-même."
+          },
+          {
+            "question": "Dans 7², quel est l'exposant ?",
+            "options": [
+              "7",
+              "2",
+              "14",
+              "49"
+            ],
+            "correct_answer": 1,
+            "explanation": "Le petit nombre placé en haut est l'exposant."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer les puissances simples",
+      "description": "Savoir calculer une puissance avec des nombres entiers.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Calcul d'une puissance",
+          "content": "Pour calculer une puissance, on transforme l'écriture en multiplication répétée puis on effectue le calcul. Exemple : 3² = 3 × 3 = 9."
+        },
+        {
+          "type": "text",
+          "title": "Carré et cube",
+          "content": "Une puissance avec l'exposant 2 est appelée un carré. Une puissance avec l'exposant 3 est appelée un cube. Exemple : 5² se lit cinq au carré et 2³ se lit deux au cube."
+        },
+        {
+          "type": "text",
+          "title": "Utilisation",
+          "content": "Les puissances sont utilisées en mathématiques pour simplifier les calculs, notamment dans les mesures de surfaces et de volumes."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Calculer les puissances",
+        "questions": [
+          {
+            "question": "3² =",
+            "options": [
+              "6",
+              "9",
+              "12",
+              "3"
+            ],
+            "correct_answer": 1,
+            "explanation": "3² = 3 × 3 = 9."
+          },
+          {
+            "question": "2³ =",
+            "options": [
+              "6",
+              "8",
+              "4",
+              "9"
+            ],
+            "correct_answer": 1,
+            "explanation": "2³ = 2 × 2 × 2 = 8."
+          },
+          {
+            "question": "5² représente :",
+            "options": [
+              "5 × 5",
+              "5 + 5",
+              "5 × 2",
+              "25 + 5"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le carré d'un nombre correspond à sa multiplication par lui-même."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les puissances de 10",
+      "description": "Comprendre les puissances de 10 et leur utilisation.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Principe",
+          "content": "Les puissances de 10 permettent d'écrire rapidement de grands nombres. Par exemple, 10² = 100 et 10³ = 1000."
+        },
+        {
+          "type": "text",
+          "title": "Règle pratique",
+          "content": "Multiplier un nombre par 10, 100 ou 1000 revient à déplacer la virgule vers la droite selon le nombre de zéros."
+        },
+        {
+          "type": "text",
+          "title": "Exemples au quotidien",
+          "content": "Les puissances de 10 sont utilisées pour exprimer des distances, des populations ou des quantités importantes plus facilement."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Les puissances de 10",
+        "questions": [
+          {
+            "question": "10² =",
+            "options": [
+              "20",
+              "100",
+              "1000",
+              "10"
+            ],
+            "correct_answer": 1,
+            "explanation": "10² signifie 10 × 10 = 100."
+          },
+          {
+            "question": "10³ =",
+            "options": [
+              "100",
+              "300",
+              "1000",
+              "30"
+            ],
+            "correct_answer": 2,
+            "explanation": "10³ signifie 10 × 10 × 10 = 1000."
+          },
+          {
+            "question": "Multiplier par 100 revient à déplacer la virgule de :",
+            "options": [
+              "Un rang",
+              "Deux rangs",
+              "Trois rangs",
+              "Aucun rang"
+            ],
+            "correct_answer": 1,
+            "explanation": "100 possède deux zéros, donc la virgule se déplace de deux rangs."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparer des puissances simples",
+      "description": "Comparer des puissances et comprendre leur valeur.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comparer les puissances",
+          "content": "Pour comparer deux puissances, on peut calculer leur valeur ou observer leur base et leur exposant lorsque les situations sont simples."
+        },
+        {
+          "type": "text",
+          "title": "Exemple",
+          "content": "3² = 9 et 2³ = 8. Donc 3² est supérieur à 2³ car 9 est plus grand que 8."
+        },
+        {
+          "type": "text",
+          "title": "Importance",
+          "content": "Comparer des puissances aide à choisir la plus grande quantité dans les problèmes mathématiques et scientifiques."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Comparer des puissances",
+        "questions": [
+          {
+            "question": "Quelle puissance est la plus grande ?",
+            "options": [
+              "2²",
+              "3²",
+              "1²",
+              "0²"
+            ],
+            "correct_answer": 1,
+            "explanation": "2² = 4 et 3² = 9. Donc 3² est plus grand."
+          },
+          {
+            "question": "4² vaut :",
+            "options": [
+              "8",
+              "12",
+              "16",
+              "20"
+            ],
+            "correct_answer": 2,
+            "explanation": "4² = 4 × 4 = 16."
+          },
+          {
+            "question": "Pour comparer deux puissances simples, on peut :",
+            "options": [
+              "Calculer leur valeur",
+              "Changer leur base",
+              "Supprimer l'exposant",
+              "Ajouter les nombres"
+            ],
+            "correct_answer": 0,
+            "explanation": "Calculer leur valeur permet de les comparer facilement."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Utiliser les puissances dans les problèmes",
+      "description": "Appliquer les puissances dans des situations concrètes.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Puissances et surfaces",
+          "content": "Les puissances interviennent dans le calcul des surfaces. Par exemple, l'aire d'un carré de côté 5 mètres est 5² = 25 mètres carrés."
+        },
+        {
+          "type": "text",
+          "title": "Puissances et volumes",
+          "content": "Le volume d'un cube utilise une puissance de trois. Un cube de côté 3 cm possède un volume égal à 3³ = 27 cm³."
+        },
+        {
+          "type": "text",
+          "title": "Applications au Mali",
+          "content": "Les puissances peuvent être utilisées pour calculer des surfaces de terrains, des volumes de réservoirs ou comparer de grandes quantités."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes avec les puissances",
+        "questions": [
+          {
+            "question": "Un carré de côté 4 m a une aire de :",
+            "options": [
+              "8 m²",
+              "16 m²",
+              "12 m²",
+              "20 m²"
+            ],
+            "correct_answer": 1,
+            "explanation": "L'aire du carré est 4² = 16 m²."
+          },
+          {
+            "question": "Un cube de côté 2 cm a un volume de :",
+            "options": [
+              "4 cm³",
+              "6 cm³",
+              "8 cm³",
+              "2 cm³"
+            ],
+            "correct_answer": 2,
+            "explanation": "Le volume du cube est 2³ = 8 cm³."
+          },
+          {
+            "question": "L'exposant 3 représente souvent :",
+            "options": [
+              "Une longueur",
+              "Un volume",
+              "Une addition",
+              "Une division"
+            ],
+            "correct_answer": 1,
+            "explanation": "Une puissance trois est souvent utilisée pour représenter un volume."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Réviser les puissances",
+      "description": "Consolider les connaissances sur les puissances.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Résumé du chapitre",
+          "content": "Une puissance est une multiplication répétée d'un même nombre. Elle possède une base et un exposant. Cette écriture simplifie les calculs."
+        },
+        {
+          "type": "text",
+          "title": "Méthode de réussite",
+          "content": "Pour réussir un exercice, il faut identifier la base, l'exposant, transformer la puissance en multiplication puis effectuer le calcul."
+        },
+        {
+          "type": "text",
+          "title": "Vérification",
+          "content": "Après un calcul, il faut vérifier si le résultat est logique et si l'exposant a été correctement utilisé."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Révision des puissances",
+        "questions": [
+          {
+            "question": "6² =",
+            "options": [
+              "12",
+              "36",
+              "18",
+              "24"
+            ],
+            "correct_answer": 1,
+            "explanation": "6² = 6 × 6 = 36."
+          },
+          {
+            "question": "Dans 9³, le nombre 3 représente :",
+            "options": [
+              "La base",
+              "Le résultat",
+              "L'exposant",
+              "Le produit"
+            ],
+            "correct_answer": 2,
+            "explanation": "Le petit nombre en haut est l'exposant."
+          },
+          {
+            "question": "Une puissance sert à :",
+            "options": [
+              "Écrire une multiplication répétée plus simplement",
+              "Supprimer les nombres",
+              "Faire uniquement des divisions",
+              "Changer une unité"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une puissance simplifie l'écriture d'une multiplication répétée."
+          }
+        ]
+      }
+    }
+  ]
+}

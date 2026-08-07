@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Révisions générales et problèmes de synthèse",
+  "chapter_order": 19,
+  "lessons": [
+    {
+      "title": "Révision des nombres et calculs",
+      "description": "Revoir les nombres entiers, relatifs et les règles de calcul.",
+      "duration_minutes": 20,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les nombres étudiés en 7ème",
+          "content": "En 7ème année, on utilise les nombres entiers naturels, les nombres relatifs et les fractions pour représenter différentes situations mathématiques."
+        },
+        {
+          "type": "text",
+          "title": "Priorités des opérations",
+          "content": "Dans un calcul, on effectue d'abord les opérations entre parenthèses, puis les multiplications et divisions, et enfin les additions et soustractions."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Pour calculer 5 + 3 × 4, on effectue d'abord 3 × 4 = 12 puis 5 + 12 = 17. Le respect des priorités évite les erreurs."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Nombres et calculs",
+        "questions": [
+          {
+            "question": "Dans un calcul, on effectue en priorité :",
+            "options": [
+              "Les multiplications et divisions",
+              "Les additions seulement",
+              "Les soustractions seulement",
+              "Les calculs au hasard"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les multiplications et divisions sont prioritaires sur les additions et soustractions."
+          },
+          {
+            "question": "Les nombres relatifs peuvent être :",
+            "options": [
+              "Positifs ou négatifs",
+              "Seulement positifs",
+              "Seulement des fractions",
+              "Seulement zéro"
+            ],
+            "correct_answer": 0,
+            "explanation": "Un nombre relatif peut avoir un signe positif ou négatif."
+          },
+          {
+            "question": "Les parenthèses servent à :",
+            "options": [
+              "Indiquer une priorité de calcul",
+              "Décorer un calcul",
+              "Supprimer les nombres",
+              "Changer les signes automatiquement"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les parenthèses indiquent les opérations à effectuer en premier."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Révision des fractions et puissances",
+      "description": "Revoir les opérations sur les fractions et les puissances.",
+      "duration_minutes": 20,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les fractions",
+          "content": "Une fraction représente une partie d'un ensemble. Elle possède un numérateur et un dénominateur. Exemple : 3/4 représente trois parties sur quatre."
+        },
+        {
+          "type": "text",
+          "title": "Les puissances",
+          "content": "Une puissance est une multiplication répétée d'un même nombre. Exemple : 2³ = 2 × 2 × 2 = 8."
+        },
+        {
+          "type": "text",
+          "title": "Utilisation pratique",
+          "content": "Les fractions sont utilisées pour partager des quantités et les puissances permettent d'écrire rapidement des grands nombres."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Fractions et puissances",
+        "questions": [
+          {
+            "question": "Dans la fraction 3/5, le nombre 3 est :",
+            "options": [
+              "Le numérateur",
+              "Le dénominateur",
+              "La puissance",
+              "Le résultat"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le numérateur est le nombre situé en haut de la fraction."
+          },
+          {
+            "question": "2³ est égal à :",
+            "options": [
+              "8",
+              "6",
+              "5",
+              "9"
+            ],
+            "correct_answer": 0,
+            "explanation": "2³ = 2 × 2 × 2 = 8."
+          },
+          {
+            "question": "Une fraction représente :",
+            "options": [
+              "Une partie d'un ensemble",
+              "Toujours un nombre entier",
+              "Une équation",
+              "Une figure"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une fraction permet de représenter une partie d'une quantité."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Révision des équations",
+      "description": "Revoir les méthodes pour résoudre une équation simple.",
+      "duration_minutes": 20,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Rappel sur les équations",
+          "content": "Une équation est une égalité contenant une inconnue. Résoudre une équation consiste à trouver la valeur de cette inconnue."
+        },
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": "On utilise les opérations inverses pour isoler l'inconnue. Une addition devient une soustraction et une multiplication devient une division."
+        },
+        {
+          "type": "text",
+          "title": "Vérification",
+          "content": "Après avoir trouvé une solution, on remplace l'inconnue dans l'équation pour vérifier que l'égalité est correcte."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Révision des équations",
+        "questions": [
+          {
+            "question": "Résoudre une équation signifie :",
+            "options": [
+              "Trouver la valeur de l'inconnue",
+              "Changer les nombres",
+              "Supprimer l'égalité",
+              "Faire un dessin"
+            ],
+            "correct_answer": 0,
+            "explanation": "Résoudre une équation consiste à déterminer la valeur recherchée."
+          },
+          {
+            "question": "Si x + 4 = 10, alors x =",
+            "options": [
+              "6",
+              "14",
+              "4",
+              "10"
+            ],
+            "correct_answer": 0,
+            "explanation": "10 - 4 = 6."
+          },
+          {
+            "question": "Après avoir résolu une équation, il faut :",
+            "options": [
+              "Vérifier la solution",
+              "Changer le résultat",
+              "Ignorer le calcul",
+              "Supprimer l'équation"
+            ],
+            "correct_answer": 0,
+            "explanation": "La vérification confirme que la solution est correcte."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Révision géométrie et mesures",
+      "description": "Revoir les principales notions de géométrie et de mesures.",
+      "duration_minutes": 20,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les figures géométriques",
+          "content": "En 7ème année, on étudie plusieurs figures comme le triangle, le carré, le rectangle et le cercle. Chaque figure possède des propriétés particulières."
+        },
+        {
+          "type": "text",
+          "title": "Périmètres et aires",
+          "content": "Le périmètre correspond à la longueur du contour d'une figure. L'aire représente la surface occupée par cette figure."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Pour clôturer un terrain rectangulaire dans un village au Mali, on calcule son périmètre. Pour connaître la surface cultivable, on calcule son aire."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Géométrie et mesures",
+        "questions": [
+          {
+            "question": "Le périmètre d'une figure représente :",
+            "options": [
+              "La longueur de son contour",
+              "Sa surface",
+              "Son volume",
+              "Son angle"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le périmètre mesure le contour extérieur d'une figure."
+          },
+          {
+            "question": "L'aire représente :",
+            "options": [
+              "La surface d'une figure",
+              "Le contour seulement",
+              "Une opération",
+              "Une équation"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'aire mesure l'espace occupé par une surface."
+          },
+          {
+            "question": "Un rectangle possède :",
+            "options": [
+              "4 côtés",
+              "3 côtés",
+              "5 côtés",
+              "1 côté"
+            ],
+            "correct_answer": 0,
+            "explanation": "Un rectangle possède quatre côtés."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Révision statistiques",
+      "description": "Revoir les tableaux, effectifs, fréquences et moyennes.",
+      "duration_minutes": 20,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Organisation des données",
+          "content": "Les tableaux permettent de classer les informations. Les graphiques permettent de représenter visuellement les données."
+        },
+        {
+          "type": "text",
+          "title": "Effectif et fréquence",
+          "content": "L'effectif indique le nombre d'apparitions d'une valeur. La fréquence indique la proportion de cette valeur dans l'ensemble."
+        },
+        {
+          "type": "text",
+          "title": "Calcul de moyenne",
+          "content": "La moyenne se calcule en additionnant toutes les valeurs puis en divisant par le nombre total de valeurs."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Statistiques",
+        "questions": [
+          {
+            "question": "Un tableau statistique sert à :",
+            "options": [
+              "Organiser des données",
+              "Dessiner seulement",
+              "Mesurer une longueur",
+              "Construire une figure"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les tableaux organisent les informations pour faciliter leur étude."
+          },
+          {
+            "question": "La moyenne se calcule avec :",
+            "options": [
+              "Une somme divisée par un nombre",
+              "Une multiplication seulement",
+              "Une soustraction seulement",
+              "Une comparaison"
+            ],
+            "correct_answer": 0,
+            "explanation": "La moyenne est la somme des valeurs divisée par leur nombre."
+          },
+          {
+            "question": "Une fréquence peut être exprimée en :",
+            "options": [
+              "Pourcentage",
+              "Mètre",
+              "Kilogramme",
+              "Degré"
+            ],
+            "correct_answer": 0,
+            "explanation": "La fréquence représente une proportion souvent exprimée en pourcentage."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Problèmes de synthèse",
+      "description": "Appliquer plusieurs notions mathématiques pour résoudre des problèmes complexes.",
+      "duration_minutes": 25,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Choisir la bonne méthode",
+          "content": "Dans un problème de synthèse, il faut lire attentivement l'énoncé, identifier les informations importantes et choisir l'outil mathématique adapté."
+        },
+        {
+          "type": "text",
+          "title": "Exemple de problème au Mali",
+          "content": "Un commerçant calcule ses dépenses, ses ventes et son bénéfice. Il utilise les opérations, les fractions, les équations ou les statistiques selon la situation."
+        },
+        {
+          "type": "text",
+          "title": "Bilan de l'année",
+          "content": "Les mathématiques permettent de résoudre des problèmes de la vie quotidienne grâce aux calculs, à la géométrie, aux équations et aux statistiques."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes de synthèse",
+        "questions": [
+          {
+            "question": "Avant de résoudre un problème, il faut :",
+            "options": [
+              "Comprendre l'énoncé",
+              "Calculer immédiatement",
+              "Changer les données",
+              "Ignorer les informations"
+            ],
+            "correct_answer": 0,
+            "explanation": "La compréhension du problème permet de choisir la bonne méthode."
+          },
+          {
+            "question": "Un problème de commerce peut utiliser :",
+            "options": [
+              "Plusieurs notions mathématiques",
+              "Une seule règle toujours",
+              "Aucune opération",
+              "Seulement la géométrie"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les situations réelles utilisent souvent plusieurs notions."
+          },
+          {
+            "question": "Les mathématiques servent à :",
+            "options": [
+              "Résoudre des problèmes de la vie quotidienne",
+              "Éviter tous les calculs",
+              "Supprimer les données",
+              "Remplacer la réflexion"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les mathématiques sont un outil pour analyser et résoudre des situations."
+          }
+        ]
+      }
+    }
+  ]
+}

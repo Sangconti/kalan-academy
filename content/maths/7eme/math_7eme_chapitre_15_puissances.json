@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Les puissances",
+  "chapter_order": 15,
+  "lessons": [
+    {
+      "title": "Découvrir la notion de puissance",
+      "description": "Comprendre l'écriture et le sens d'une puissance.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'une puissance",
+          "content": "Une puissance permet d'écrire plus simplement une multiplication répétée d'un même nombre. Exemple : 3 × 3 × 3 × 3 s'écrit 3⁴."
+        },
+        {
+          "type": "text",
+          "title": "La base et l'exposant",
+          "content": "Dans l'écriture aⁿ, a est appelé la base et n est appelé l'exposant. L'exposant indique combien de fois on multiplie la base par elle-même."
+        },
+        {
+          "type": "text",
+          "title": "Exemples pratiques",
+          "content": "Un carré de côté 5 cm possède une aire de 5² = 25 cm². Les puissances sont utilisées en géométrie et dans les sciences."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Découvrir les puissances",
+        "questions": [
+          {
+            "question": "Dans 4³, le nombre 3 représente :",
+            "options": [
+              "La base",
+              "L'exposant",
+              "Le résultat",
+              "Le signe"
+            ],
+            "correct_answer": 1,
+            "explanation": "L'exposant indique le nombre de fois que la base est multipliée."
+          },
+          {
+            "question": "2³ signifie :",
+            "options": [
+              "2 × 2 × 2",
+              "2 + 2 + 2",
+              "2 × 3",
+              "3 × 3"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une puissance est une multiplication répétée."
+          },
+          {
+            "question": "Dans 5², la base est :",
+            "options": [
+              "5",
+              "2",
+              "25",
+              "10"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le nombre élevé à une puissance est la base."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer une puissance d'un nombre",
+      "description": "Savoir calculer les puissances avec des exposants simples.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de calcul",
+          "content": "Pour calculer une puissance, on écrit la multiplication de la base autant de fois que l'indique l'exposant puis on effectue le calcul."
+        },
+        {
+          "type": "text",
+          "title": "Exemples de puissances",
+          "content": "3² = 3 × 3 = 9. 2⁴ = 2 × 2 × 2 × 2 = 16."
+        },
+        {
+          "type": "text",
+          "title": "Cas particuliers",
+          "content": "Tout nombre élevé à la puissance 1 reste lui-même. Exemple : 7¹ = 7."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Calculer une puissance",
+        "questions": [
+          {
+            "question": "3² est égal à :",
+            "options": [
+              "9",
+              "6",
+              "5",
+              "12"
+            ],
+            "correct_answer": 0,
+            "explanation": "3² = 3 × 3 = 9."
+          },
+          {
+            "question": "2⁴ est égal à :",
+            "options": [
+              "16",
+              "8",
+              "6",
+              "12"
+            ],
+            "correct_answer": 0,
+            "explanation": "2⁴ = 2 × 2 × 2 × 2 = 16."
+          },
+          {
+            "question": "Un nombre à la puissance 1 donne :",
+            "options": [
+              "Le même nombre",
+              "Zéro",
+              "Deux fois le nombre",
+              "Un autre nombre"
+            ],
+            "correct_answer": 0,
+            "explanation": "La puissance 1 ne change pas le nombre."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les puissances de 10",
+      "description": "Comprendre les puissances de 10 et leur utilité.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition des puissances de 10",
+          "content": "Les puissances de 10 sont des multiplications répétées par 10. Exemple : 10³ = 10 × 10 × 10 = 1000."
+        },
+        {
+          "type": "text",
+          "title": "Déplacement de la virgule",
+          "content": "Multiplier par 10, 100 ou 1000 revient à déplacer la virgule vers la droite d'un, deux ou trois rangs."
+        },
+        {
+          "type": "text",
+          "title": "Applications pratiques",
+          "content": "Les puissances de 10 permettent d'écrire facilement de grandes distances, des populations ou des mesures scientifiques."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Puissances de 10",
+        "questions": [
+          {
+            "question": "10² est égal à :",
+            "options": [
+              "100",
+              "20",
+              "10",
+              "1000"
+            ],
+            "correct_answer": 0,
+            "explanation": "10² = 10 × 10 = 100."
+          },
+          {
+            "question": "10³ est égal à :",
+            "options": [
+              "1000",
+              "300",
+              "30",
+              "100"
+            ],
+            "correct_answer": 0,
+            "explanation": "10³ = 10 × 10 × 10 = 1000."
+          },
+          {
+            "question": "Multiplier par 100 déplace la virgule de :",
+            "options": [
+              "Deux rangs vers la droite",
+              "Un rang vers la gauche",
+              "Trois rangs vers la gauche",
+              "Aucun rang"
+            ],
+            "correct_answer": 0,
+            "explanation": "100 correspond à 10² donc deux déplacements."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Règles de calcul avec les puissances simples",
+      "description": "Appliquer les règles de base pour effectuer des calculs avec les puissances.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Multiplier des puissances de même base",
+          "content": "Lorsque les bases sont identiques, on additionne les exposants. Exemple : 2² × 2³ = 2⁵."
+        },
+        {
+          "type": "text",
+          "title": "Diviser des puissances de même base",
+          "content": "Lorsque les bases sont identiques dans une division, on soustrait les exposants. Exemple : 5⁴ ÷ 5² = 5²."
+        },
+        {
+          "type": "text",
+          "title": "Attention aux erreurs",
+          "content": "On ne peut additionner les exposants que lorsque les bases sont les mêmes. Il faut toujours vérifier les nombres avant le calcul."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Calculs avec les puissances",
+        "questions": [
+          {
+            "question": "2² × 2³ est égal à :",
+            "options": [
+              "2⁵",
+              "4⁵",
+              "2⁶",
+              "5²"
+            ],
+            "correct_answer": 0,
+            "explanation": "Avec la même base, on additionne les exposants : 2 + 3 = 5."
+          },
+          {
+            "question": "5⁴ ÷ 5² est égal à :",
+            "options": [
+              "5²",
+              "5⁶",
+              "10²",
+              "25⁴"
+            ],
+            "correct_answer": 0,
+            "explanation": "On soustrait les exposants : 4 - 2 = 2."
+          },
+          {
+            "question": "Pour utiliser ces règles, il faut avoir :",
+            "options": [
+              "La même base",
+              "Des nombres différents",
+              "Toujours un zéro",
+              "Un angle"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les règles concernent les puissances ayant la même base."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Écriture scientifique et grands nombres",
+      "description": "Découvrir une manière simple d'écrire les très grands nombres.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de l'écriture scientifique",
+          "content": "L'écriture scientifique permet d'écrire un nombre sous la forme a × 10ⁿ avec a compris entre 1 et 10."
+        },
+        {
+          "type": "text",
+          "title": "Exemples de grands nombres",
+          "content": "Un million s'écrit 1 000 000 = 1 × 10⁶. Cette écriture est utilisée en sciences et en technologie."
+        },
+        {
+          "type": "text",
+          "title": "Utilité au quotidien",
+          "content": "L'écriture scientifique facilite la lecture de grandes distances, des populations et des mesures très petites ou très grandes."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Écriture scientifique",
+        "questions": [
+          {
+            "question": "L'écriture scientifique utilise la forme :",
+            "options": [
+              "a × 10ⁿ",
+              "a + 10",
+              "a ÷ 10",
+              "a - 10"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une écriture scientifique s'écrit avec une puissance de 10."
+          },
+          {
+            "question": "1 000 000 peut s'écrire :",
+            "options": [
+              "1 × 10⁶",
+              "1 × 10³",
+              "10 × 10",
+              "100"
+            ],
+            "correct_answer": 0,
+            "explanation": "Un million correspond à 10⁶."
+          },
+          {
+            "question": "L'écriture scientifique sert à :",
+            "options": [
+              "Écrire facilement de grands nombres",
+              "Changer la valeur d'un nombre",
+              "Supprimer les nombres",
+              "Mesurer les angles"
+            ],
+            "correct_answer": 0,
+            "explanation": "Elle simplifie l'écriture des nombres très grands."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes avec les puissances",
+      "description": "Utiliser les puissances dans des situations concrètes.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": "Pour résoudre un problème avec les puissances, il faut identifier la multiplication répétée, choisir l'écriture adaptée et effectuer le calcul."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique au Mali",
+          "content": "Une population de 1 000 000 habitants peut être représentée par 1 × 10⁶ habitants pour simplifier les calculs et les comparaisons."
+        },
+        {
+          "type": "text",
+          "title": "Résumé du chapitre",
+          "content": "Les puissances permettent d'écrire rapidement les multiplications répétées. Les puissances de 10 facilitent l'écriture des grands nombres."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes avec les puissances",
+        "questions": [
+          {
+            "question": "4² représente :",
+            "options": [
+              "4 × 4",
+              "4 + 2",
+              "4 × 2",
+              "2 × 2"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'exposant 2 signifie que l'on multiplie la base deux fois."
+          },
+          {
+            "question": "10⁴ est égal à :",
+            "options": [
+              "10000",
+              "1000",
+              "100",
+              "100000"
+            ],
+            "correct_answer": 0,
+            "explanation": "10⁴ = 10 × 10 × 10 × 10 = 10000."
+          },
+          {
+            "question": "Les puissances sont utiles pour :",
+            "options": [
+              "Simplifier les calculs",
+              "Rendre les calculs impossibles",
+              "Changer les nombres",
+              "Supprimer les opérations"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les puissances rendent certaines écritures plus simples."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,376 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Les opérations sur les nombres entiers naturels",
+  "chapter_order": 2,
+  "lessons": [
+    {
+      "title": "Additionner des nombres entiers naturels",
+      "description": "Apprendre à effectuer une addition de nombres entiers naturels et comprendre son utilisation dans la vie quotidienne.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de l'addition",
+          "content": {
+            "text": "L'addition est une opération qui permet de réunir plusieurs quantités pour obtenir une quantité totale. Le résultat d'une addition s'appelle la somme."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Méthode pour poser une addition",
+          "content": {
+            "text": "Pour poser une addition, on aligne les chiffres de même rang : unités sous unités, dizaines sous dizaines, centaines sous centaines. Exemple : 245 + 132 = 377."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique au Mali",
+          "content": {
+            "text": "Un cultivateur récolte 245 sacs de mil dans un champ et 132 sacs dans un autre champ. Sa récolte totale est : 245 + 132 = 377 sacs."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz sur l'addition",
+        "questions": [
+          {
+            "question": "Quel est le résultat de 125 + 230 ?",
+            "options": ["355", "345", "365", "3550"],
+            "correct_index": 0,
+            "explanation": "125 + 230 = 355."
+          },
+          {
+            "question": "Le résultat d'une addition s'appelle :",
+            "options": ["Produit", "Somme", "Différence", "Quotient"],
+            "correct_index": 1,
+            "explanation": "Le résultat d'une addition est appelé la somme."
+          },
+          {
+            "question": "Pour poser une addition, il faut aligner :",
+            "options": [
+              "Les chiffres au hasard",
+              "Les chiffres de même rang",
+              "Seulement les unités",
+              "Seulement les centaines"
+            ],
+            "correct_index": 1,
+            "explanation": "Les chiffres de même rang doivent être alignés."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Soustraire des nombres entiers naturels",
+      "description": "Comprendre la soustraction et savoir calculer une différence entre deux nombres.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de la soustraction",
+          "content": {
+            "text": "La soustraction permet de retirer une quantité d'une autre ou de calculer une différence entre deux nombres. Le résultat s'appelle la différence."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Méthode",
+          "content": {
+            "text": "Comme pour l'addition, on aligne les chiffres selon leur rang. On commence le calcul par les unités puis on continue vers les dizaines et les centaines."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": {
+            "text": "Une boutique possède 500 bouteilles d'eau. Elle vend 125 bouteilles. Il reste : 500 - 125 = 375 bouteilles."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz sur la soustraction",
+        "questions": [
+          {
+            "question": "500 - 200 donne :",
+            "options": ["200", "300", "400", "700"],
+            "correct_index": 1,
+            "explanation": "500 - 200 = 300."
+          },
+          {
+            "question": "Le résultat d'une soustraction s'appelle :",
+            "options": ["Somme", "Produit", "Différence", "Facteur"],
+            "correct_index": 2,
+            "explanation": "Le résultat d'une soustraction est la différence."
+          },
+          {
+            "question": "Dans 800 - 350, quel nombre est retiré ?",
+            "options": ["800", "350", "450", "1150"],
+            "correct_index": 1,
+            "explanation": "350 est le nombre que l'on retire à 800."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Multiplier des nombres entiers naturels",
+      "description": "Découvrir la multiplication comme une addition répétée et apprendre les techniques de calcul.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de la multiplication",
+          "content": {
+            "text": "La multiplication permet d'additionner plusieurs fois le même nombre. Exemple : 5 × 3 signifie 5 + 5 + 5."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Vocabulaire",
+          "content": {
+            "text": "Dans une multiplication, les nombres multipliés sont appelés facteurs. Le résultat obtenu est appelé produit."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": {
+            "text": "Une école possède 8 classes. Chaque classe reçoit 25 cahiers. Nombre total de cahiers : 8 × 25 = 200 cahiers."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz sur la multiplication",
+        "questions": [
+          {
+            "question": "7 × 5 = ?",
+            "options": ["25", "30", "35", "40"],
+            "correct_index": 2,
+            "explanation": "7 × 5 = 35."
+          },
+          {
+            "question": "Le résultat d'une multiplication s'appelle :",
+            "options": ["Produit", "Somme", "Différence", "Reste"],
+            "correct_index": 0,
+            "explanation": "Le résultat d'une multiplication est le produit."
+          },
+          {
+            "question": "4 × 10 représente :",
+            "options": ["4 + 10", "10 + 10 + 10 + 10", "40 - 4", "14"],
+            "correct_index": 1,
+            "explanation": "4 × 10 signifie additionner 10 quatre fois."
+          }
+        ]
+      }
+    },
+    {
+      "title" : "Diviser des nombres entiers naturels" ,
+      "description" : "Comprendre la division et apprendre à partager une quantité en parts égales." ,
+      "duration_minutes" : 15 ,
+      "difficulty" : "medium" ,
+      "order_number" : 4 ,
+      "blocks" : [
+        {
+          "type" : "text" ,
+          "title" : "Définition de la division" ,
+          "content" : {
+            "text" : "La division est une opération qui permet de partager une quantité en parts égales ou de rechercher combien de fois un nombre est contenu dans un autre."
+          }
+        } ,
+        {
+          "type" : "text" ,
+          "title" : "Vocabulaire de la division" ,
+          "content" : {
+            "text" : "Dans une division, le nombre que l'on partage s'appelle le dividende. Le nombre par lequel on divise s'appelle le diviseur. Le résultat s'appelle le quotient."
+          }
+        } ,
+        {
+          "type" : "text" ,
+          "title" : "Exemple pratique au Mali" ,
+          "content" : {
+            "text" : "Un maître distribue 120 cahiers à 30 élèves de façon égale. Chaque élève reçoit : 120 ÷ 30 = 4 cahiers."
+          }
+        }
+      ] ,
+      "quiz" : {
+        "title" : "Quiz sur la division" ,
+        "questions" : [
+          {
+            "question" : "120 ÷ 10 = ?" ,
+            "options" : [
+              "10" ,
+              "12" ,
+              "120" ,
+              "130"
+            ] ,
+            "correct_index" : 1 ,
+            "explanation" : "120 partagé en 10 parts égales donne 12."
+          } ,
+          {
+            "question" : "Le résultat d'une division s'appelle :" ,
+            "options" : [
+              "Produit" ,
+              "Somme" ,
+              "Quotient" ,
+              "Facteur"
+            ] ,
+            "correct_index" : 2 ,
+            "explanation" : "Le résultat d'une division est appelé quotient."
+          } ,
+          {
+            "question" : "Dans 50 ÷ 5, le nombre 5 est :" ,
+            "options" : [
+              "Le dividende" ,
+              "Le diviseur" ,
+              "Le quotient" ,
+              "Le reste"
+            ] ,
+            "correct_index" : 1 ,
+            "explanation" : "Le diviseur est le nombre qui partage le dividende."
+          }
+        ]
+      }
+    } ,
+    {
+      "title" : "Priorités des opérations" ,
+      "description" : "Apprendre l'ordre des calculs dans une expression mathématique." ,
+      "duration_minutes" : 15 ,
+      "difficulty" : "medium" ,
+      "order_number" : 5 ,
+      "blocks" : [
+        {
+          "type" : "text" ,
+          "title" : "Pourquoi des priorités ?" ,
+          "content" : {
+            "text" : "Dans une expression contenant plusieurs opérations, il faut respecter un ordre précis pour trouver le bon résultat."
+          }
+        } ,
+        {
+          "type" : "text" ,
+          "title" : "Règle de priorité" ,
+          "content" : {
+            "text" : "On effectue d'abord les multiplications et les divisions, puis les additions et les soustractions. Exemple : 5 + 3 × 2 = 5 + 6 = 11."
+          }
+        } ,
+        {
+          "type" : "text" ,
+          "title" : "Avec les parenthèses" ,
+          "content" : {
+            "text" : "Les calculs entre parenthèses sont toujours réalisés en premier. Exemple : (5 + 3) × 2 = 8 × 2 = 16."
+          }
+        }
+      ] ,
+      "quiz" : {
+        "title" : "Quiz sur les priorités" ,
+        "questions" : [
+          {
+            "question" : "Dans un calcul, quelle opération fait-on en premier ?" ,
+            "options" : [
+              "Addition" ,
+              "Multiplication" ,
+              "Soustraction" ,
+              "On choisit"
+            ] ,
+            "correct_index" : 1 ,
+            "explanation" : "La multiplication est prioritaire sur l'addition."
+          } ,
+          {
+            "question" : "Quel est le résultat de 5 + 2 × 3 ?" ,
+            "options" : [
+              "21" ,
+              "11" ,
+              "15" ,
+              "7"
+            ] ,
+            "correct_index" : 1 ,
+            "explanation" : "On fait d'abord 2 × 3 = 6 puis 5 + 6 = 11."
+          } ,
+          {
+            "question" : "(10 + 5) × 2 donne :" ,
+            "options" : [
+              "20" ,
+              "25" ,
+              "30" ,
+              "15"
+            ] ,
+            "correct_index" : 2 ,
+            "explanation" : "On calcule d'abord la parenthèse : 10 + 5 = 15 puis 15 × 2 = 30."
+          }
+        ]
+      }
+    } ,
+    {
+      "title" : "Résoudre des problèmes avec les nombres entiers naturels" ,
+      "description" : "Utiliser les opérations pour résoudre des situations concrètes de la vie quotidienne." ,
+      "duration_minutes" : 15 ,
+      "difficulty" : "hard" ,
+      "order_number" : 6 ,
+      "blocks" : [
+        {
+          "type" : "text" ,
+          "title" : "Comprendre un problème" ,
+          "content" : {
+            "text" : "Pour résoudre un problème, il faut lire attentivement l'énoncé, identifier les informations importantes et choisir la bonne opération."
+          }
+        } ,
+        {
+          "type" : "text" ,
+          "title" : "Méthode en trois étapes" ,
+          "content" : {
+            "text" : "Étape 1 : chercher les données. Étape 2 : choisir l'opération. Étape 3 : effectuer le calcul et écrire une réponse complète."
+          }
+        } ,
+        {
+          "type" : "text" ,
+          "title" : "Exemple pratique" ,
+          "content" : {
+            "text" : "Un commerçant possède 15 cartons contenant chacun 20 bouteilles. Le nombre total de bouteilles est : 15 × 20 = 300 bouteilles."
+          }
+        }
+      ] ,
+      "quiz" : {
+        "title" : "Quiz résolution de problèmes" ,
+        "questions" : [
+          {
+            "question" : "Une école achète 10 paquets de 50 feuilles. Combien de feuilles possède-t-elle ?" ,
+            "options" : [
+              "60" ,
+              "500" ,
+              "510" ,
+              "50"
+            ] ,
+            "correct_index" : 1 ,
+            "explanation" : "On utilise une multiplication : 10 × 50 = 500."
+          } ,
+          {
+            "question" : "Un agriculteur récolte 800 kg et vend 300 kg. Il lui reste :" ,
+            "options" : [
+              "500 kg" ,
+              "1100 kg" ,
+              "300 kg" ,
+              "800 kg"
+            ] ,
+            "correct_index" : 0 ,
+            "explanation" : "On utilise une soustraction : 800 - 300 = 500."
+          } ,
+          {
+            "question" : "24 élèves reçoivent 3 cahiers chacun. Nombre total de cahiers :" ,
+            "options" : [
+              "27" ,
+              "72" ,
+              "21" ,
+              "8"
+            ] ,
+            "correct_index" : 1 ,
+            "explanation" : "On utilise une multiplication : 24 × 3 = 72."
+          }
+        ]
+      }
+    }
+  ]
+}

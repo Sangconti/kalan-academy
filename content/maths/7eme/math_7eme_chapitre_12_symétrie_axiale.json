@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "La symétrie axiale",
+  "chapter_order": 12,
+  "lessons": [
+    {
+      "title": "Découvrir la symétrie axiale",
+      "description": "Comprendre la notion de symétrie axiale et reconnaître des figures symétriques.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de la symétrie axiale",
+          "content": "La symétrie axiale est une transformation qui permet d'obtenir une figure identique de l'autre côté d'une droite appelée axe de symétrie."
+        },
+        {
+          "type": "text",
+          "title": "L'axe de symétrie",
+          "content": "L'axe de symétrie est une droite qui partage une figure en deux parties qui se correspondent parfaitement comme dans un miroir."
+        },
+        {
+          "type": "text",
+          "title": "Exemples dans la vie quotidienne",
+          "content": "On retrouve la symétrie dans certains motifs de tissus, les dessins traditionnels, les bâtiments et les objets fabriqués par les artisans."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Découvrir la symétrie axiale",
+        "questions": [
+          {
+            "question": "La symétrie axiale utilise une :",
+            "options": [
+              "Droite appelée axe",
+              "Courbe",
+              "Couleur",
+              "Mesure"
+            ],
+            "correct_answer": 0,
+            "explanation": "La symétrie axiale se fait par rapport à une droite appelée axe de symétrie."
+          },
+          {
+            "question": "Deux figures symétriques par rapport à un axe sont :",
+            "options": [
+              "Différentes",
+              "Identiques en forme et en taille",
+              "Toujours des cercles",
+              "Toujours des triangles"
+            ],
+            "correct_answer": 1,
+            "explanation": "Une symétrie conserve la forme et les dimensions de la figure."
+          },
+          {
+            "question": "L'axe de symétrie ressemble à :",
+            "options": [
+              "Un miroir",
+              "Une règle cassée",
+              "Un nombre",
+              "Un angle"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'axe joue le rôle d'un miroir entre les deux parties de la figure."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire le symétrique d'une figure",
+      "description": "Apprendre à construire une figure symétrique par rapport à un axe.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de construction",
+          "content": "Pour construire le symétrique d'un point, on trace une droite perpendiculaire à l'axe puis on reporte la même distance de l'autre côté."
+        },
+        {
+          "type": "text",
+          "title": "Symétrique d'une figure",
+          "content": "Pour construire une figure symétrique, on construit d'abord les points symétriques de chaque sommet puis on les relie dans le même ordre."
+        },
+        {
+          "type": "text",
+          "title": "Conseils pratiques",
+          "content": "Il faut utiliser correctement la règle et l'équerre pour respecter les distances et obtenir une figure exacte."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Construction du symétrique",
+        "questions": [
+          {
+            "question": "Pour construire le symétrique d'un point, il faut conserver :",
+            "options": [
+              "La même distance à l'axe",
+              "Une distance différente",
+              "Une autre forme",
+              "Une autre couleur"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le point et son symétrique sont à la même distance de l'axe."
+          },
+          {
+            "question": "La droite reliant un point à son symétrique est :",
+            "options": [
+              "Perpendiculaire à l'axe",
+              "Toujours parallèle",
+              "Toujours courbe",
+              "Inexistante"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le segment entre un point et son symétrique est perpendiculaire à l'axe."
+          },
+          {
+            "question": "Pour tracer une symétrie précise, on utilise :",
+            "options": [
+              "Règle et équerre",
+              "Balance",
+              "Calculatrice seulement",
+              "Thermomètre"
+            ],
+            "correct_answer": 0,
+            "explanation": "La règle et l'équerre permettent une construction correcte."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les propriétés de la symétrie axiale",
+      "description": "Étudier les propriétés conservées par la symétrie.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Conservation des longueurs",
+          "content": "La symétrie axiale conserve les longueurs. Un segment et son symétrique ont toujours la même mesure."
+        },
+        {
+          "type": "text",
+          "title": "Conservation des angles",
+          "content": "Les angles gardent la même mesure après une symétrie axiale. La forme générale de la figure reste identique."
+        },
+        {
+          "type": "text",
+          "title": "Conservation de l'alignement",
+          "content": "Si des points sont alignés avant la symétrie, leurs images restent alignées après la symétrie."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Propriétés de la symétrie",
+        "questions": [
+          {
+            "question": "La symétrie axiale conserve :",
+            "options": [
+              "Les longueurs",
+              "Seulement les couleurs",
+              "Seulement les positions",
+              "Rien"
+            ],
+            "correct_answer": 0,
+            "explanation": "La symétrie conserve les distances et les formes."
+          },
+          {
+            "question": "Un angle de 50° devient après symétrie :",
+            "options": [
+              "50°",
+              "100°",
+              "0°",
+              "90°"
+            ],
+            "correct_answer": 0,
+            "explanation": "La mesure des angles est conservée."
+          },
+          {
+            "question": "La symétrie change :",
+            "options": [
+              "La position par rapport à l'axe",
+              "La longueur des côtés",
+              "La taille de la figure",
+              "La forme"
+            ],
+            "correct_answer": 0,
+            "explanation": "La figure est déplacée de l'autre côté de l'axe."
+          }
+        ]
+      }
+    },
+    {
+      "title": "L'axe de symétrie des figures usuelles",
+      "description": "Identifier les axes de symétrie des figures géométriques courantes.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Figures avec des axes de symétrie",
+          "content": "Certaines figures possèdent un ou plusieurs axes de symétrie. Par exemple, le carré possède quatre axes de symétrie et le rectangle possède deux axes de symétrie."
+        },
+        {
+          "type": "text",
+          "title": "Le triangle et la symétrie",
+          "content": "Un triangle équilatéral possède trois axes de symétrie. Un triangle isocèle possède un seul axe de symétrie."
+        },
+        {
+          "type": "text",
+          "title": "Reconnaître un axe",
+          "content": "Pour savoir si une droite est un axe de symétrie, on imagine plier la figure suivant cette droite. Les deux parties doivent se superposer."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Axes de symétrie des figures",
+        "questions": [
+          {
+            "question": "Le carré possède combien d'axes de symétrie ?",
+            "options": [
+              "1",
+              "2",
+              "4",
+              "5"
+            ],
+            "correct_answer": 2,
+            "explanation": "Le carré possède quatre axes de symétrie."
+          },
+          {
+            "question": "Un triangle isocèle possède généralement :",
+            "options": [
+              "Un axe de symétrie",
+              "Deux axes obligatoirement",
+              "Aucun axe",
+              "Quatre axes"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le triangle isocèle possède un axe de symétrie passant par son sommet principal."
+          },
+          {
+            "question": "Pour vérifier un axe de symétrie, on peut imaginer :",
+            "options": [
+              "Un pliage",
+              "Une multiplication",
+              "Une division",
+              "Une mesure de masse"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le pliage permet de vérifier si les deux parties se superposent."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Symétrie et constructions géométriques",
+      "description": "Utiliser la symétrie dans des constructions géométriques.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Construire une figure symétrique",
+          "content": "Pour construire une figure symétrique, il faut déterminer l'axe de symétrie puis construire l'image de chaque point par rapport à cet axe."
+        },
+        {
+          "type": "text",
+          "title": "Utilisation des instruments",
+          "content": "La règle sert à tracer les segments, l'équerre sert à tracer les perpendiculaires et le compas permet de reporter les distances."
+        },
+        {
+          "type": "text",
+          "title": "Applications pratiques",
+          "content": "La symétrie est utilisée dans l'architecture, les dessins, les motifs de tissus et certains objets artisanaux au Mali."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Symétrie et constructions",
+        "questions": [
+          {
+            "question": "La première étape pour construire une symétrie est :",
+            "options": [
+              "Identifier l'axe de symétrie",
+              "Changer la figure",
+              "Effacer les points",
+              "Mesurer une masse"
+            ],
+            "correct_answer": 0,
+            "explanation": "Il faut connaître l'axe par rapport auquel on réalise la symétrie."
+          },
+          {
+            "question": "Le compas sert à :",
+            "options": [
+              "Reporter une distance",
+              "Mesurer une température",
+              "Tracer seulement des droites",
+              "Calculer une somme"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le compas permet de conserver les distances."
+          },
+          {
+            "question": "La symétrie est utilisée dans :",
+            "options": [
+              "L'art et la construction",
+              "La cuisine uniquement",
+              "Les calculs seulement",
+              "Aucun domaine"
+            ],
+            "correct_answer": 0,
+            "explanation": "La symétrie est présente dans plusieurs domaines de la vie quotidienne."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes avec la symétrie",
+      "description": "Appliquer la symétrie axiale dans des situations pratiques.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": "Pour résoudre un problème de symétrie, il faut identifier l'axe, repérer les points importants et utiliser les propriétés de conservation."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique au Mali",
+          "content": "Un artisan réalise un motif sur un tissu. Il utilise un axe central pour reproduire exactement la même forme de chaque côté."
+        },
+        {
+          "type": "text",
+          "title": "Résumé du chapitre",
+          "content": "La symétrie axiale permet de créer une image miroir d'une figure. Elle conserve les longueurs, les angles et les formes."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes de symétrie",
+        "questions": [
+          {
+            "question": "Une figure symétrique garde :",
+            "options": [
+              "La même forme et les mêmes dimensions",
+              "Une nouvelle taille",
+              "Une nouvelle forme",
+              "Des longueurs différentes"
+            ],
+            "correct_answer": 0,
+            "explanation": "La symétrie conserve les propriétés géométriques de la figure."
+          },
+          {
+            "question": "Le point symétrique d'un point est situé :",
+            "options": [
+              "À la même distance de l'axe",
+              "Au hasard",
+              "Toujours sur l'axe",
+              "Très loin obligatoirement"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les deux points sont à égale distance de l'axe de symétrie."
+          },
+          {
+            "question": "La symétrie axiale permet de créer :",
+            "options": [
+              "Une image miroir",
+              "Une nouvelle unité",
+              "Une mesure",
+              "Une opération"
+            ],
+            "correct_answer": 0,
+            "explanation": "La symétrie axiale correspond à une réflexion comme dans un miroir."
+          }
+        ]
+      }
+    }
+  ]
+}

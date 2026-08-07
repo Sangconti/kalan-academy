@@ -1,0 +1,78 @@
+{
+  "subject":"Mathématiques",
+  "class":"7ème année",
+  "chapter":"Les nombres entiers naturels",
+  "chapter_order":1,
+
+  "lessons":[
+    {
+      "title":"Introduction aux nombres entiers",
+      "description":"Découverte des nombres naturels",
+      "duration_minutes":15,
+      "difficulty":"easy",
+      "order_number":1,
+
+      "blocks":[
+
+        {
+          "type":"text",
+          "title":"Définition",
+          "content":{
+            "text":"Les nombres naturels sont utilisés pour compter. Ils commencent généralement par 0 et continuent avec 1, 2, 3..."
+          }
+        },
+
+
+        {
+          "type":"text",
+          "title":"Exemple",
+          "content":{
+            "text":"0, 1, 2, 3, 4, 5 sont des nombres naturels."
+          }
+        },
+
+
+        {
+          "type":"text",
+          "title":"À retenir",
+          "content":{
+            "text":"Un nombre naturel ne contient ni virgule ni partie décimale."
+          }
+        }
+
+      ],
+
+
+      "quiz":{
+        "title":"Quiz nombres entiers",
+        "questions":[
+
+          {
+            "question":"Quel est le plus petit nombre entier naturel ?",
+            "options":["0","1","-1","10"],
+            "correct_index":0,
+            "explanation":"0 est le plus petit nombre naturel dans la convention utilisée au collège."
+          },
+
+          {
+            "question":"Quel nombre vient après 9 ?",
+            "options":["8","9","10","11"],
+            "correct_index":2,
+            "explanation":"Après 9 vient 10."
+          },
+
+          {
+            "question":"Combien vaut 5 + 3 ?",
+            "options":["6","7","8","9"],
+            "correct_index":2,
+            "explanation":"5 + 3 = 8, donc la bonne réponse est 8."
+          }
+
+        ]
+      }
+
+    }
+
+  ]
+
+}

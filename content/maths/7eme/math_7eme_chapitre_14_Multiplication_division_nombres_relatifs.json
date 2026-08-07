@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Multiplication et division des nombres relatifs",
+  "chapter_order": 14,
+  "lessons": [
+    {
+      "title": "Comprendre la multiplication des nombres relatifs",
+      "description": "Découvrir comment multiplier des nombres positifs et négatifs.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Principe de la multiplication",
+          "content": "Multiplier des nombres relatifs consiste à multiplier les distances à zéro puis à déterminer le signe du résultat selon les signes des nombres."
+        },
+        {
+          "type": "text",
+          "title": "Produit de deux nombres positifs",
+          "content": "Le produit de deux nombres positifs est positif. Exemple : (+4) × (+3) = +12."
+        },
+        {
+          "type": "text",
+          "title": "Produit dans la vie quotidienne",
+          "content": "Si une personne gagne 3000 FCFA chaque jour pendant 4 jours, on peut représenter le gain par (+3000) × (+4) = +12000 FCFA."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Multiplication des nombres relatifs",
+        "questions": [
+          {
+            "question": "(+3) × (+5) donne un résultat :",
+            "options": [
+              "Positif",
+              "Négatif",
+              "Nul",
+              "Impossible"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le produit de deux nombres positifs est positif."
+          },
+          {
+            "question": "Pour multiplier deux nombres relatifs, on calcule d'abord :",
+            "options": [
+              "Les distances à zéro",
+              "Les couleurs",
+              "Les angles",
+              "Les unités seulement"
+            ],
+            "correct_answer": 0,
+            "explanation": "On multiplie les valeurs numériques puis on applique la règle des signes."
+          },
+          {
+            "question": "(+2) × (+6) =",
+            "options": [
+              "+12",
+              "-12",
+              "+8",
+              "-8"
+            ],
+            "correct_answer": 0,
+            "explanation": "2 × 6 = 12 et les deux signes sont positifs."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Règles des signes pour la multiplication",
+      "description": "Appliquer correctement les règles des signes.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Même signe",
+          "content": "Lorsque deux nombres relatifs ont le même signe, leur produit est positif. (+) × (+) = (+) et (-) × (-) = (+)."
+        },
+        {
+          "type": "text",
+          "title": "Signes différents",
+          "content": "Lorsque deux nombres relatifs ont des signes différents, leur produit est négatif. (+) × (-) = (-) et (-) × (+) = (-)."
+        },
+        {
+          "type": "text",
+          "title": "Astuce de mémorisation",
+          "content": "Même signe donne plus (+), signes différents donnent moins (-). Cette règle aide à éviter les erreurs."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Règles des signes",
+        "questions": [
+          {
+            "question": "(-4) × (-2) donne :",
+            "options": [
+              "+8",
+              "-8",
+              "+6",
+              "-6"
+            ],
+            "correct_answer": 0,
+            "explanation": "Deux nombres négatifs donnent un résultat positif."
+          },
+          {
+            "question": "(+5) × (-3) donne :",
+            "options": [
+              "-15",
+              "+15",
+              "-8",
+              "+8"
+            ],
+            "correct_answer": 0,
+            "explanation": "Des signes différents donnent un résultat négatif."
+          },
+          {
+            "question": "(-7) × (+2) donne :",
+            "options": [
+              "-14",
+              "+14",
+              "-9",
+              "+9"
+            ],
+            "correct_answer": 0,
+            "explanation": "Un négatif multiplié par un positif donne un négatif."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer un produit de nombres relatifs",
+      "description": "Effectuer des multiplications avec plusieurs nombres relatifs.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Multiplier plusieurs nombres",
+          "content": "Pour multiplier plusieurs nombres relatifs, on multiplie les valeurs numériques et on compte le nombre de signes négatifs."
+        },
+        {
+          "type": "text",
+          "title": "Nombre de signes négatifs",
+          "content": "Un nombre pair de facteurs négatifs donne un résultat positif. Un nombre impair de facteurs négatifs donne un résultat négatif."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "(-2) × (-3) × (+4) = +24 car il y a deux nombres négatifs, donc un nombre pair de signes moins."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Produits de nombres relatifs",
+        "questions": [
+          {
+            "question": "(-2) × (-5) =",
+            "options": [
+              "+10",
+              "-10",
+              "+7",
+              "-7"
+            ],
+            "correct_answer": 0,
+            "explanation": "Deux signes négatifs donnent un résultat positif."
+          },
+          {
+            "question": "(-3) × (+4) =",
+            "options": [
+              "-12",
+              "+12",
+              "-7",
+              "+7"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les signes sont différents donc le résultat est négatif."
+          },
+          {
+            "question": "Un nombre pair de signes négatifs donne :",
+            "options": [
+              "Un résultat positif",
+              "Un résultat négatif",
+              "Toujours zéro",
+              "Une division"
+            ],
+            "correct_answer": 0,
+            "explanation": "Deux, quatre ou six signes négatifs donnent un produit positif."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comprendre la division des nombres relatifs",
+      "description": "Découvrir comment diviser des nombres positifs et négatifs.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Principe de la division",
+          "content": "Diviser deux nombres relatifs consiste à diviser leurs distances à zéro puis à appliquer la règle des signes pour trouver le signe du quotient."
+        },
+        {
+          "type": "text",
+          "title": "Division de nombres positifs",
+          "content": "Lorsque deux nombres positifs sont divisés, le résultat est positif. Exemple : (+12) ÷ (+3) = (+4)."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Un commerçant partage un bénéfice de 12000 FCFA entre 3 personnes. Chaque personne reçoit (+12000) ÷ (+3) = +4000 FCFA."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Division des nombres relatifs",
+        "questions": [
+          {
+            "question": "(+20) ÷ (+5) =",
+            "options": [
+              "+4",
+              "-4",
+              "+25",
+              "-25"
+            ],
+            "correct_answer": 0,
+            "explanation": "Deux nombres positifs donnent un quotient positif."
+          },
+          {
+            "question": "Pour diviser des nombres relatifs, on divise d'abord :",
+            "options": [
+              "Les valeurs numériques",
+              "Les signes seulement",
+              "Les angles",
+              "Les longueurs"
+            ],
+            "correct_answer": 0,
+            "explanation": "On effectue d'abord la division des nombres sans tenir compte des signes."
+          },
+          {
+            "question": "Le quotient de deux nombres positifs est :",
+            "options": [
+              "Positif",
+              "Négatif",
+              "Toujours zéro",
+              "Impossible"
+            ],
+            "correct_answer": 0,
+            "explanation": "Deux signes positifs donnent un résultat positif."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Règles des signes pour la division",
+      "description": "Appliquer les règles des signes dans les divisions.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Même signe en division",
+          "content": "Lorsque le dividende et le diviseur ont le même signe, le quotient est positif. Exemple : (-18) ÷ (-6) = (+3)."
+        },
+        {
+          "type": "text",
+          "title": "Signes différents en division",
+          "content": "Lorsque les signes sont différents, le quotient est négatif. Exemple : (+18) ÷ (-6) = (-3)."
+        },
+        {
+          "type": "text",
+          "title": "Résumé de la règle",
+          "content": "Comme pour la multiplication : même signe donne plus (+), signes différents donnent moins (-)."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Signes dans la division",
+        "questions": [
+          {
+            "question": "(-24) ÷ (-6) =",
+            "options": [
+              "+4",
+              "-4",
+              "+30",
+              "-30"
+            ],
+            "correct_answer": 0,
+            "explanation": "Deux signes négatifs donnent un quotient positif."
+          },
+          {
+            "question": "(+15) ÷ (-3) =",
+            "options": [
+              "-5",
+              "+5",
+              "-18",
+              "+18"
+            ],
+            "correct_answer": 0,
+            "explanation": "Des signes différents donnent un résultat négatif."
+          },
+          {
+            "question": "Même signe en division donne :",
+            "options": [
+              "Un résultat positif",
+              "Un résultat négatif",
+              "Toujours zéro",
+              "Une multiplication"
+            ],
+            "correct_answer": 0,
+            "explanation": "Deux signes identiques donnent un quotient positif."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes avec multiplication et division",
+      "description": "Utiliser les opérations sur les nombres relatifs dans des situations concrètes.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": "Pour résoudre un problème, il faut identifier les données, choisir l'opération adaptée, appliquer les règles des signes puis vérifier le résultat."
+        },
+        {
+          "type": "text",
+          "title": "Exemple dans la vie quotidienne",
+          "content": "Une dette totale de 20000 FCFA est répartie entre 4 personnes. Chaque personne représente une part de (-20000) ÷ 4 = (-5000) FCFA."
+        },
+        {
+          "type": "text",
+          "title": "Résumé du chapitre",
+          "content": "La multiplication et la division des nombres relatifs utilisent les mêmes règles de signes : même signe donne positif, signes différents donnent négatif."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes avec les relatifs",
+        "questions": [
+          {
+            "question": "(-30) ÷ (+5) =",
+            "options": [
+              "-6",
+              "+6",
+              "-35",
+              "+35"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les signes sont différents donc le résultat est négatif."
+          },
+          {
+            "question": "(+7) × (-3) =",
+            "options": [
+              "-21",
+              "+21",
+              "-10",
+              "+10"
+            ],
+            "correct_answer": 0,
+            "explanation": "Un positif multiplié par un négatif donne un négatif."
+          },
+          {
+            "question": "Avant de calculer un problème, il faut :",
+            "options": [
+              "Analyser la situation",
+              "Changer les signes au hasard",
+              "Ignorer les données",
+              "Choisir une réponse sans calcul"
+            ],
+            "correct_answer": 0,
+            "explanation": "Comprendre le problème permet de choisir la bonne opération."
+          }
+        ]
+      }
+    }
+  ]
+}

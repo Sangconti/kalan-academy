@@ -1,0 +1,172 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Les nombres entiers naturels",
+  "chapter_order": 1,
+  "lessons": [
+    {
+      "title": "Découverte et écriture des nombres entiers naturels",
+      "description": "Comprendre ce que sont les nombres entiers naturels, savoir les lire, les écrire et les utiliser dans des situations de la vie quotidienne.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition des nombres entiers naturels",
+          "content": {
+            "text": "Les nombres entiers naturels sont les nombres utilisés pour compter des objets. Ils commencent par 0 et continuent sans fin : 0, 1, 2, 3, 4, 5... Exemple : dans une classe de 45 élèves, le nombre 45 est un entier naturel."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Écriture en chiffres et en lettres",
+          "content": {
+            "text": "Un nombre peut être écrit avec des chiffres ou avec des lettres. Exemple : 125 s'écrit en lettres cent vingt-cinq. Pour lire un grand nombre, on le sépare en groupes de trois chiffres : 12 500 = douze mille cinq cents."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique au Mali",
+          "content": {
+            "text": "Un commerçant de Bamako possède 2 500 mangues dans son stock. Le nombre 2 500 représente une quantité précise d'objets. C'est un nombre entier naturel."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz sur les nombres entiers naturels",
+        "questions": [
+          {
+            "question": "Lequel de ces nombres est un entier naturel ?",
+            "options": ["-5", "3", "2,5", "1/2"],
+            "correct_index": 1,
+            "explanation": "3 est un entier naturel car il sert à compter et ne contient ni signe négatif ni partie décimale."
+          },
+          {
+            "question": "Comment écrit-on 1 000 en lettres ?",
+            "options": ["Cent", "Dix mille", "Mille", "Un million"],
+            "correct_index": 2,
+            "explanation": "Le nombre 1 000 se lit mille."
+          },
+          {
+            "question": "Quel nombre vient après 999 ?",
+            "options": ["998", "1000", "990", "99"],
+            "correct_index": 1,
+            "explanation": "Dans la suite des nombres naturels, après 999 vient 1000."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparer et ranger les nombres entiers naturels",
+      "description": "Apprendre à comparer des nombres et à les classer dans l'ordre croissant ou décroissant.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comparer deux nombres",
+          "content": {
+            "text": "Pour comparer deux nombres naturels, on regarde d'abord le nombre de chiffres. Le nombre qui possède le plus de chiffres est généralement le plus grand. Exemple : 8 000 > 950 car 8 000 possède quatre chiffres."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Les signes de comparaison",
+          "content": {
+            "text": "On utilise les signes suivants : > signifie plus grand que, < signifie plus petit que, = signifie égal à. Exemple : 25 > 12 et 40 = 40."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Ranger les nombres",
+          "content": {
+            "text": "Ranger dans l'ordre croissant signifie du plus petit au plus grand. Exemple : 5, 12, 30, 45. Ranger dans l'ordre décroissant signifie du plus grand au plus petit."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz comparaison des nombres",
+        "questions": [
+          {
+            "question": "Quel signe complète cette opération : 45 __ 32 ?",
+            "options": [">", "<", "=", "+"],
+            "correct_index": 0,
+            "explanation": "45 est plus grand que 32, donc on utilise le signe >."
+          },
+          {
+            "question": "Quel est l'ordre croissant correct ?",
+            "options": ["20, 10, 5", "5, 10, 20", "10, 5, 20", "20, 5, 10"],
+            "correct_index": 1,
+            "explanation": "L'ordre croissant va du plus petit nombre vers le plus grand."
+          },
+          {
+            "question": "Entre 7 500 et 750, quel nombre est le plus grand ?",
+            "options": ["750", "7 500", "Ils sont égaux", "Aucun"],
+            "correct_index": 1,
+            "explanation": "7 500 possède quatre chiffres alors que 750 en possède trois."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Décomposition et valeur des chiffres dans un nombre",
+      "description": "Comprendre la valeur de chaque chiffre selon sa position dans un nombre entier naturel.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les rangs d'un nombre",
+          "content": {
+            "text": "Dans un nombre, chaque chiffre a une valeur selon sa position. Les principaux rangs sont : unités, dizaines, centaines, milliers. Exemple : dans 4 582, le chiffre 4 représente 4 milliers."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Décomposer un nombre",
+          "content": {
+            "text": "Décomposer un nombre consiste à écrire la valeur de chaque chiffre. Exemple : 3 456 = 3 000 + 400 + 50 + 6."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Application pratique",
+          "content": {
+            "text": "Une école possède 1 250 cahiers. Ce nombre peut être décomposé ainsi : 1 000 + 200 + 50."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz décomposition des nombres",
+        "questions": [
+          {
+            "question": "Dans 5 432, quelle est la valeur du chiffre 5 ?",
+            "options": ["5 unités", "5 dizaines", "5 centaines", "5 milliers"],
+            "correct_index": 3,
+            "explanation": "Le chiffre 5 est placé au rang des milliers, donc sa valeur est 5 000."
+          },
+          {
+            "question": "Quelle est la bonne décomposition de 2 345 ?",
+            "options": [
+              "2000 + 300 + 40 + 5",
+              "200 + 30 + 4 + 5",
+              "2000 + 3000 + 40",
+              "20 + 300 + 400"
+            ],
+            "correct_index": 0,
+            "explanation": "Chaque chiffre garde sa valeur selon son rang."
+          },
+          {
+            "question": "Combien vaut le chiffre 8 dans 8 120 ?",
+            "options": ["8", "80", "800", "8000"],
+            "correct_index": 3,
+            "explanation": "Le chiffre 8 est au rang des milliers, donc il vaut 8 000."
+          }
+        ]
+      }
+    }
+  ]
+}

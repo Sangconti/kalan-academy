@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Les équations du premier degré",
+  "chapter_order": 8,
+  "lessons": [
+    {
+      "title": "Découvrir une équation",
+      "description": "Comprendre la notion d'équation et d'inconnue.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'une équation",
+          "content": "Une équation est une égalité dans laquelle un nombre inconnu est représenté par une lettre, souvent x. Résoudre une équation consiste à trouver la valeur de cette inconnue."
+        },
+        {
+          "type": "text",
+          "title": "Exemple simple",
+          "content": "Dans x + 5 = 12, le nombre x est inconnu. On cherche quel nombre ajouté à 5 donne 12. La solution est x = 7."
+        },
+        {
+          "type": "text",
+          "title": "Utilité dans la vie quotidienne",
+          "content": "Les équations permettent de trouver une quantité inconnue dans des situations réelles comme les prix, les âges ou les distances."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Découvrir une équation",
+        "questions": [
+          {
+            "question": "Dans x + 3 = 8, que représente x ?",
+            "options": [
+              "Une opération",
+              "Une inconnue",
+              "Un résultat fixe",
+              "Un signe"
+            ],
+            "correct_answer": 1,
+            "explanation": "x représente le nombre que l'on cherche."
+          },
+          {
+            "question": "Résoudre une équation signifie :",
+            "options": [
+              "Trouver la valeur de l'inconnue",
+              "Changer tous les nombres",
+              "Supprimer le signe égal",
+              "Ajouter une lettre"
+            ],
+            "correct_answer": 0,
+            "explanation": "Résoudre une équation consiste à trouver la valeur qui rend l'égalité vraie."
+          },
+          {
+            "question": "Une équation contient généralement :",
+            "options": [
+              "Une égalité et une inconnue",
+              "Seulement des nombres",
+              "Seulement des opérations",
+              "Un dessin"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une équation possède une égalité et une ou plusieurs inconnues."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Vocabulaire des équations",
+      "description": "Identifier les différents éléments d'une équation.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les membres d'une équation",
+          "content": "Dans une équation, la partie située avant le signe égal est appelée premier membre et celle après le signe égal est appelée deuxième membre."
+        },
+        {
+          "type": "text",
+          "title": "Les termes",
+          "content": "Les termes sont les éléments séparés par les signes + ou -. Dans 3x + 4 = 10, les termes sont 3x et 4 dans le premier membre."
+        },
+        {
+          "type": "text",
+          "title": "L'inconnue",
+          "content": "L'inconnue est la lettre dont on cherche la valeur. Elle est souvent représentée par x, mais d'autres lettres peuvent être utilisées."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Vocabulaire des équations",
+        "questions": [
+          {
+            "question": "Dans x + 4 = 9, quelle est l'inconnue ?",
+            "options": [
+              "4",
+              "9",
+              "x",
+              "="
+            ],
+            "correct_answer": 2,
+            "explanation": "La lettre x représente la valeur inconnue."
+          },
+          {
+            "question": "Le signe = indique :",
+            "options": [
+              "Une égalité",
+              "Une multiplication",
+              "Une division",
+              "Une addition"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le signe égal montre que les deux membres ont la même valeur."
+          },
+          {
+            "question": "Une équation possède :",
+            "options": [
+              "Deux membres séparés par =",
+              "Un seul nombre",
+              "Une seule opération",
+              "Aucun calcul"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une équation est composée de deux membres séparés par le signe égal."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre une équation par addition et soustraction",
+      "description": "Trouver l'inconnue en utilisant les opérations inverses.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Principe de l'opération inverse",
+          "content": "Pour résoudre une équation, on utilise l'opération inverse. L'addition et la soustraction sont des opérations opposées."
+        },
+        {
+          "type": "text",
+          "title": "Exemple",
+          "content": "Dans x + 6 = 14, on enlève 6 des deux côtés : x = 14 - 6, donc x = 8."
+        },
+        {
+          "type": "text",
+          "title": "Règle importante",
+          "content": "Une opération effectuée d'un côté de l'équation doit aussi être effectuée de l'autre côté pour conserver l'égalité."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Équations avec addition et soustraction",
+        "questions": [
+          {
+            "question": "x + 5 = 12, alors x =",
+            "options": [
+              "7",
+              "17",
+              "5",
+              "12"
+            ],
+            "correct_answer": 0,
+            "explanation": "On fait 12 - 5 = 7."
+          },
+          {
+            "question": "x - 3 = 8, alors x =",
+            "options": [
+              "5",
+              "11",
+              "24",
+              "3"
+            ],
+            "correct_answer": 1,
+            "explanation": "On ajoute 3 aux deux membres : x = 11."
+          },
+          {
+            "question": "Pour annuler une addition, on utilise :",
+            "options": [
+              "Une soustraction",
+              "Une multiplication",
+              "Une division",
+              "Une puissance"
+            ],
+            "correct_answer": 0,
+            "explanation": "La soustraction est l'opération inverse de l'addition."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre une équation avec multiplication et division",
+      "description": "Apprendre à résoudre des équations utilisant la multiplication et la division.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Utiliser l'opération inverse",
+          "content": "Pour résoudre une équation avec une multiplication, on utilise la division. Pour une division, on utilise la multiplication."
+        },
+        {
+          "type": "text",
+          "title": "Exemple avec multiplication",
+          "content": "Dans 3x = 15, on divise les deux membres par 3 : x = 15 ÷ 3, donc x = 5."
+        },
+        {
+          "type": "text",
+          "title": "Exemple avec division",
+          "content": "Dans x ÷ 4 = 6, on multiplie les deux membres par 4 : x = 6 × 4, donc x = 24."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Équations avec multiplication et division",
+        "questions": [
+          {
+            "question": "2x = 10, alors x =",
+            "options": [
+              "5",
+              "8",
+              "12",
+              "20"
+            ],
+            "correct_answer": 0,
+            "explanation": "On divise 10 par 2 : x = 5."
+          },
+          {
+            "question": "4x = 20, alors x =",
+            "options": [
+              "4",
+              "5",
+              "6",
+              "8"
+            ],
+            "correct_answer": 1,
+            "explanation": "20 ÷ 4 = 5."
+          },
+          {
+            "question": "L'opération inverse de la multiplication est :",
+            "options": [
+              "La division",
+              "L'addition",
+              "La soustraction",
+              "La puissance"
+            ],
+            "correct_answer": 0,
+            "explanation": "La division permet d'annuler une multiplication."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Vérifier une solution d'équation",
+      "description": "Contrôler si une valeur trouvée est correcte.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Principe de vérification",
+          "content": "Après avoir trouvé une solution, on remplace l'inconnue par cette valeur dans l'équation de départ pour vérifier que l'égalité est vraie."
+        },
+        {
+          "type": "text",
+          "title": "Exemple",
+          "content": "Pour x + 4 = 10, on trouve x = 6. Vérification : 6 + 4 = 10. L'égalité est correcte."
+        },
+        {
+          "type": "text",
+          "title": "Pourquoi vérifier ?",
+          "content": "La vérification permet de détecter les erreurs de calcul et de confirmer que la solution trouvée est juste."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Vérifier une solution",
+        "questions": [
+          {
+            "question": "Pour vérifier une solution, on doit :",
+            "options": [
+              "Remplacer l'inconnue par la valeur trouvée",
+              "Changer l'équation",
+              "Supprimer le signe égal",
+              "Ajouter un nombre"
+            ],
+            "correct_answer": 0,
+            "explanation": "On remplace l'inconnue pour vérifier l'égalité."
+          },
+          {
+            "question": "Si x = 5 dans x + 2 = 7, la solution est-elle correcte ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Impossible à savoir",
+              "Seulement parfois"
+            ],
+            "correct_answer": 0,
+            "explanation": "5 + 2 = 7, donc la solution est correcte."
+          },
+          {
+            "question": "La vérification sert à :",
+            "options": [
+              "Confirmer le résultat",
+              "Changer la solution",
+              "Faire une nouvelle équation",
+              "Éviter le calcul"
+            ],
+            "correct_answer": 0,
+            "explanation": "Elle permet de confirmer que la réponse est juste."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes avec des équations",
+      "description": "Utiliser les équations pour résoudre des situations de la vie courante.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Transformer un problème en équation",
+          "content": "Pour résoudre un problème, on choisit une inconnue, on traduit la situation par une équation puis on cherche sa valeur."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Un élève possède une certaine somme. Après avoir reçu 500 FCFA, il possède 1500 FCFA. Si x représente la somme de départ : x + 500 = 1500, donc x = 1000 FCFA."
+        },
+        {
+          "type": "text",
+          "title": "Méthode finale",
+          "content": "Les étapes sont : choisir l'inconnue, écrire l'équation, résoudre, vérifier et rédiger la réponse complète."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes avec équations",
+        "questions": [
+          {
+            "question": "Mariam a une somme x. Elle reçoit 200 FCFA et possède 800 FCFA. L'équation est :",
+            "options": [
+              "x + 200 = 800",
+              "x - 200 = 800",
+              "200x = 800",
+              "x = 200 + 800"
+            ],
+            "correct_answer": 0,
+            "explanation": "La somme de départ plus 200 donne 800."
+          },
+          {
+            "question": "Si x + 300 = 1000, alors x =",
+            "options": [
+              "700",
+              "1300",
+              "300",
+              "1000"
+            ],
+            "correct_answer": 0,
+            "explanation": "1000 - 300 = 700."
+          },
+          {
+            "question": "Pour résoudre un problème avec une équation, il faut d'abord :",
+            "options": [
+              "Choisir l'inconnue",
+              "Faire une multiplication",
+              "Changer les données",
+              "Ignorer l'énoncé"
+            ],
+            "correct_answer": 0,
+            "explanation": "On commence par représenter la quantité inconnue."
+          }
+        ]
+      }
+    }
+  ]
+}

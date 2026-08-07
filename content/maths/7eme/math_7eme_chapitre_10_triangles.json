@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Les triangles",
+  "chapter_order": 10,
+  "lessons": [
+    {
+      "title": "Reconnaître et classer les triangles",
+      "description": "Identifier les différents types de triangles selon leurs côtés et leurs angles.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'un triangle",
+          "content": "Un triangle est une figure géométrique composée de trois côtés, trois sommets et trois angles. La somme des trois angles d'un triangle est toujours égale à 180°."
+        },
+        {
+          "type": "text",
+          "title": "Les triangles selon leurs côtés",
+          "content": "Un triangle équilatéral possède trois côtés égaux. Un triangle isocèle possède deux côtés égaux. Un triangle quelconque possède trois côtés différents."
+        },
+        {
+          "type": "text",
+          "title": "Les triangles selon leurs angles",
+          "content": "Un triangle rectangle possède un angle droit. Un triangle aigu possède trois angles aigus. Un triangle obtus possède un angle obtus."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Reconnaître les triangles",
+        "questions": [
+          {
+            "question": "Un triangle possède combien de côtés ?",
+            "options": [
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "correct_answer": 1,
+            "explanation": "Un triangle possède toujours trois côtés."
+          },
+          {
+            "question": "Un triangle avec trois côtés égaux est :",
+            "options": [
+              "Rectangle",
+              "Isocèle",
+              "Équilatéral",
+              "Obtus"
+            ],
+            "correct_answer": 2,
+            "explanation": "Un triangle équilatéral a trois côtés de même longueur."
+          },
+          {
+            "question": "La somme des angles d'un triangle est :",
+            "options": [
+              "90°",
+              "120°",
+              "180°",
+              "360°"
+            ],
+            "correct_answer": 2,
+            "explanation": "Les trois angles d'un triangle totalisent toujours 180°."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire un triangle avec les instruments",
+      "description": "Apprendre à tracer un triangle correctement.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les instruments nécessaires",
+          "content": "Pour construire un triangle, on utilise généralement une règle, un compas et un rapporteur selon les informations données."
+        },
+        {
+          "type": "text",
+          "title": "Construction avec les côtés",
+          "content": "Lorsque les trois longueurs des côtés sont connues, on peut utiliser le compas pour reporter les mesures et trouver le troisième sommet."
+        },
+        {
+          "type": "text",
+          "title": "Construction avec un angle",
+          "content": "Lorsqu'un angle est donné, on utilise le rapporteur pour le tracer puis on place les autres points selon les longueurs demandées."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Construire un triangle",
+        "questions": [
+          {
+            "question": "Quel instrument mesure les longueurs ?",
+            "options": [
+              "Rapporteur",
+              "Règle",
+              "Compas",
+              "Équerre"
+            ],
+            "correct_answer": 1,
+            "explanation": "La règle permet de mesurer les longueurs."
+          },
+          {
+            "question": "Le compas sert principalement à :",
+            "options": [
+              "Tracer des cercles et reporter des longueurs",
+              "Mesurer les angles",
+              "Peser des objets",
+              "Calculer"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le compas permet de reporter des distances."
+          },
+          {
+            "question": "Pour construire un angle donné, on utilise :",
+            "options": [
+              "Un rapporteur",
+              "Une balance",
+              "Une calculatrice",
+              "Un thermomètre"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le rapporteur sert à construire les angles."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le triangle rectangle et ses propriétés",
+      "description": "Comprendre les caractéristiques du triangle rectangle.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du triangle rectangle",
+          "content": "Un triangle rectangle est un triangle qui possède un angle droit de 90°. Le côté opposé à cet angle est appelé hypoténuse."
+        },
+        {
+          "type": "text",
+          "title": "L'hypoténuse",
+          "content": "Dans un triangle rectangle, l'hypoténuse est toujours le côté le plus long. Elle est située en face de l'angle droit."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Les triangles rectangles sont utilisés dans la construction pour vérifier qu'un mur ou une structure forme un angle droit."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Triangle rectangle",
+        "questions": [
+          {
+            "question": "Un triangle rectangle possède un angle de :",
+            "options": [
+              "45°",
+              "90°",
+              "120°",
+              "180°"
+            ],
+            "correct_answer": 1,
+            "explanation": "Un triangle rectangle possède un angle droit de 90°."
+          },
+          {
+            "question": "Le côté opposé à l'angle droit s'appelle :",
+            "options": [
+              "La hauteur",
+              "Le sommet",
+              "L'hypoténuse",
+              "La base"
+            ],
+            "correct_answer": 2,
+            "explanation": "Dans un triangle rectangle, le côté opposé à l'angle droit est l'hypoténuse."
+          },
+          {
+            "question": "Dans un triangle rectangle, l'hypoténuse est :",
+            "options": [
+              "Le plus petit côté",
+              "Le plus grand côté",
+              "Toujours un angle",
+              "Un sommet"
+            ],
+            "correct_answer": 1,
+            "explanation": "L'hypoténuse est toujours le côté le plus long."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les médiatrices et les hauteurs d'un triangle",
+      "description": "Découvrir les lignes importantes dans un triangle.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La médiatrice d'un côté",
+          "content": "La médiatrice d'un segment est une droite perpendiculaire au segment qui passe par son milieu. Tous les points de la médiatrice sont à la même distance des deux extrémités du segment."
+        },
+        {
+          "type": "text",
+          "title": "La hauteur d'un triangle",
+          "content": "Une hauteur d'un triangle est une droite qui passe par un sommet et qui est perpendiculaire au côté opposé."
+        },
+        {
+          "type": "text",
+          "title": "Utilité en géométrie",
+          "content": "Les médiatrices et les hauteurs permettent de construire des figures, de trouver des centres importants et de résoudre des problèmes géométriques."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Médiatrices et hauteurs",
+        "questions": [
+          {
+            "question": "La médiatrice d'un segment passe par :",
+            "options": [
+              "Son milieu",
+              "Une extrémité seulement",
+              "Un angle",
+              "Un cercle"
+            ],
+            "correct_answer": 0,
+            "explanation": "La médiatrice passe par le milieu du segment."
+          },
+          {
+            "question": "Une hauteur d'un triangle est :",
+            "options": [
+              "Parallèle à un côté",
+              "Perpendiculaire à un côté opposé",
+              "Un cercle",
+              "Une longueur"
+            ],
+            "correct_answer": 1,
+            "explanation": "Une hauteur forme un angle droit avec le côté opposé."
+          },
+          {
+            "question": "Une droite perpendiculaire forme un angle de :",
+            "options": [
+              "45°",
+              "60°",
+              "90°",
+              "180°"
+            ],
+            "correct_answer": 2,
+            "explanation": "Deux droites perpendiculaires forment un angle droit de 90°."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer le périmètre et l'aire d'un triangle",
+      "description": "Apprendre à calculer les mesures d'un triangle.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le périmètre du triangle",
+          "content": "Le périmètre d'un triangle est obtenu en additionnant les longueurs de ses trois côtés. Exemple : un triangle de côtés 5 cm, 6 cm et 7 cm a un périmètre de 18 cm."
+        },
+        {
+          "type": "text",
+          "title": "L'aire du triangle",
+          "content": "L'aire d'un triangle se calcule avec la formule : Aire = (base × hauteur) ÷ 2."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Un terrain triangulaire peut être mesuré grâce à cette formule pour connaître sa surface avant une construction ou un aménagement."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Périmètre et aire d'un triangle",
+        "questions": [
+          {
+            "question": "Le périmètre d'un triangle est :",
+            "options": [
+              "La somme des trois côtés",
+              "La multiplication des côtés",
+              "Un seul côté",
+              "La hauteur"
+            ],
+            "correct_answer": 0,
+            "explanation": "On additionne les trois longueurs des côtés."
+          },
+          {
+            "question": "La formule de l'aire d'un triangle est :",
+            "options": [
+              "Base × hauteur",
+              "(Base × hauteur) ÷ 2",
+              "Côté × côté",
+              "Base + hauteur"
+            ],
+            "correct_answer": 1,
+            "explanation": "L'aire d'un triangle est égale à la moitié du produit de la base par la hauteur."
+          },
+          {
+            "question": "Un triangle de côtés 4 cm, 5 cm et 6 cm a un périmètre de :",
+            "options": [
+              "15 cm",
+              "10 cm",
+              "20 cm",
+              "24 cm"
+            ],
+            "correct_answer": 0,
+            "explanation": "4 + 5 + 6 = 15 cm."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes avec les triangles",
+      "description": "Utiliser les propriétés des triangles dans des situations concrètes.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": "Pour résoudre un problème sur les triangles, il faut identifier les données, choisir la bonne formule et présenter clairement les calculs."
+        },
+        {
+          "type": "text",
+          "title": "Exemple concret au Mali",
+          "content": "Un agriculteur possède une parcelle triangulaire. Pour connaître sa surface, il mesure la base et la hauteur puis utilise la formule de l'aire du triangle."
+        },
+        {
+          "type": "text",
+          "title": "Résumé du chapitre",
+          "content": "Les triangles peuvent être classés selon leurs côtés et leurs angles. Ils possèdent des propriétés utiles pour les constructions et les calculs de mesures."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes sur les triangles",
+        "questions": [
+          {
+            "question": "Pour calculer l'aire d'un triangle, il faut connaître :",
+            "options": [
+              "La base et la hauteur",
+              "Seulement un côté",
+              "Seulement un angle",
+              "Le sommet"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'aire utilise la base et la hauteur."
+          },
+          {
+            "question": "Un triangle avec deux côtés égaux est :",
+            "options": [
+              "Équilatéral",
+              "Isocèle",
+              "Rectangle obligatoirement",
+              "Obtus"
+            ],
+            "correct_answer": 1,
+            "explanation": "Un triangle isocèle possède deux côtés de même longueur."
+          },
+          {
+            "question": "Avant de résoudre un problème de géométrie, il faut :",
+            "options": [
+              "Analyser les données",
+              "Choisir une réponse au hasard",
+              "Ignorer la figure",
+              "Changer les mesures"
+            ],
+            "correct_answer": 0,
+            "explanation": "Il faut comprendre les informations données avant de calculer."
+          }
+        ]
+      }
+    }
+  ]
+}

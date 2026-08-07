@@ -1,0 +1,380 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Les fractions",
+  "chapter_order": 3,
+  "lessons": [
+    {
+      "title": "Découvrir les fractions",
+      "description": "Comprendre la notion de fraction et ses éléments.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "lesson_blocks": [
+        {
+          "type": "text",
+          "content": "Une fraction représente une ou plusieurs parties d'une même unité. Elle est composée d'un numérateur placé au-dessus de la barre et d'un dénominateur placé en dessous. Le dénominateur indique en combien de parts égales l'unité est partagée. Le numérateur indique combien de ces parts sont prises."
+        },
+        {
+          "type": "text",
+          "content": "Exemple : Une maman partage un gâteau en 8 parts égales. Si Moussa mange 3 parts, il a mangé 3/8 du gâteau. Ici, 3 est le numérateur et 8 est le dénominateur. Les parts doivent être de même taille pour que la fraction soit correcte."
+        },
+        {
+          "type": "text",
+          "content": "Dans la vie quotidienne au Mali, les fractions servent à partager des mangues, des pains, des terrains ou du temps. Elles permettent de représenter des quantités plus petites qu'une unité entière et facilitent les calculs."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Découvrir les fractions",
+        "questions": [
+          {
+            "question": "Dans la fraction 5/9, quel est le dénominateur ?",
+            "options": [
+              "5",
+              "9",
+              "14",
+              "4"
+            ],
+            "correct_answer": 1,
+            "explanation": "Le dénominateur est le nombre placé sous la barre. Ici, c'est 9."
+          },
+          {
+            "question": "Une orange est coupée en 4 parts égales. Aminata mange 1 part. Quelle fraction a-t-elle mangée ?",
+            "options": [
+              "1/2",
+              "1/3",
+              "1/4",
+              "4/1"
+            ],
+            "correct_answer": 2,
+            "explanation": "Une part sur quatre correspond à la fraction 1/4."
+          },
+          {
+            "question": "Que représente le numérateur ?",
+            "options": [
+              "Le nombre de parts prises",
+              "Le nombre de parts totales",
+              "La taille des parts",
+              "Le poids de l'objet"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le numérateur indique le nombre de parts choisies parmi toutes les parts égales. "
+          }
+        ]
+      }
+    },
+    {
+      "title": "Lire et écrire une fraction",
+      "description": "Savoir lire, écrire et représenter une fraction.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "lesson_blocks": [
+        {
+          "type": "text",
+          "content": "Une fraction se lit en prononçant d'abord le numérateur puis le dénominateur. Par exemple, 2/5 se lit 'deux cinquièmes' et 7/10 se lit 'sept dixièmes'."
+        },
+        {
+          "type": "text",
+          "content": "Pour écrire une fraction à partir d'une situation, il faut compter le nombre total de parts égales puis le nombre de parts prises. Si un champ est partagé en 6 parcelles identiques et que 2 sont cultivées, la fraction est 2/6."
+        },
+        {
+          "type": "text",
+          "content": "La représentation graphique aide à mieux comprendre les fractions. On peut colorier certaines cases d'un rectangle ou certains secteurs d'un cercle pour illustrer une fraction."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Lire et écrire une fraction",
+        "questions": [
+          {
+            "question": "Comment lit-on 4/7 ?",
+            "options": [
+              "Quatre sept",
+              "Quatre septièmes",
+              "Sept quatrièmes",
+              "Quatrième sept"
+            ],
+            "correct_answer": 1,
+            "explanation": "4/7 se lit 'quatre septièmes'."
+          },
+          {
+            "question": "Un rectangle est partagé en 5 parties égales. Trois sont coloriées. Quelle fraction est représentée ?",
+            "options": [
+              "3/5",
+              "5/3",
+              "2/5",
+              "1/5"
+            ],
+            "correct_answer": 0,
+            "explanation": "Trois parties coloriées sur cinq donnent la fraction 3/5."
+          },
+          {
+            "question": "Quelle est la bonne écriture d'une moitié ?",
+            "options": [
+              "1/3",
+              "2/1",
+              "1/2",
+              "2/2"
+            ],
+            "correct_answer": 2,
+            "explanation": "Une moitié correspond à une part lorsque l'unité est divisée en deux parts égales."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Fractions équivalentes",
+      "description": "Reconnaître des fractions qui représentent la même quantité.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "lesson_blocks": [
+        {
+          "type": "text",
+          "content": "Deux fractions sont équivalentes lorsqu'elles représentent la même quantité, même si leurs écritures sont différentes. Par exemple, 1/2 et 2/4 représentent la même moitié."
+        },
+        {
+          "type": "text",
+          "content": "Pour obtenir une fraction équivalente, on multiplie ou on divise le numérateur et le dénominateur par un même nombre différent de zéro. Cette propriété est très utile pour comparer des fractions."
+        },
+        {
+          "type": "text",
+          "content": "Exemple : Si une calebasse est remplie à 2/6 et une autre à 1/3, les deux niveaux sont identiques car 2/6 = 1/3 après simplification."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Fractions équivalentes",
+        "questions": [
+          {
+            "question": "Quelle fraction est équivalente à 1/2 ?",
+            "options": [
+              "2/4",
+              "3/5",
+              "2/5",
+              "1/4"
+            ],
+            "correct_answer": 0,
+            "explanation": "En multipliant le numérateur et le dénominateur par 2, on obtient 2/4."
+          },
+          {
+            "question": "Complète : 3/6 = ?",
+            "options": [
+              "1/3",
+              "1/2",
+              "2/3",
+              "3/4"
+            ],
+            "correct_answer": 1,
+            "explanation": "En divisant 3 et 6 par 3, on obtient 1/2."
+          },
+          {
+            "question": "Pour créer une fraction équivalente, il faut :",
+            "options": [
+              "Ajouter le même nombre",
+              "Multiplier ou diviser par le même nombre",
+              "Changer seulement le numérateur",
+              "Changer seulement le dénominateur"
+            ],
+            "correct_answer": 1,
+            "explanation": "Le numérateur et le dénominateur doivent être modifiés de la même façon."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparer des fractions",
+      "description": "Comparer des fractions simples.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "lesson_blocks": [
+        {
+          "type": "text",
+          "content": "Lorsque deux fractions ont le même dénominateur, la plus grande est celle dont le numérateur est le plus grand. Par exemple, 5/8 est plus grand que 3/8."
+        },
+        {
+          "type": "text",
+          "content": "Lorsque deux fractions ont le même numérateur, la plus grande est celle dont le dénominateur est le plus petit. Ainsi, 2/3 est plus grand que 2/5."
+        },
+        {
+          "type": "text",
+          "content": "Pour comparer des fractions différentes, on peut utiliser des fractions équivalentes ayant le même dénominateur. Cette méthode est souvent la plus simple."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Comparer des fractions",
+        "questions": [
+          {
+            "question": "Quelle fraction est la plus grande ?",
+            "options": [
+              "3/7",
+              "5/7",
+              "2/7",
+              "1/7"
+            ],
+            "correct_answer": 1,
+            "explanation": "Les dénominateurs sont identiques. On compare les numérateurs : 5 est le plus grand."
+          },
+          {
+            "question": "Laquelle est la plus grande ?",
+            "options": [
+              "2/5",
+              "2/3",
+              "Égales",
+              "Impossible"
+            ],
+            "correct_answer": 1,
+            "explanation": "À numérateur égal, le plus petit dénominateur donne la plus grande fraction."
+          },
+          {
+            "question": "Pour comparer 1/2 et 2/4, on conclut que :",
+            "options": [
+              "1/2 est plus grand",
+              "2/4 est plus grand",
+              "Les deux sont égales",
+              "Impossible"
+            ],
+            "correct_answer": 2,
+            "explanation": "1/2 et 2/4 sont des fractions équivalentes."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Additionner et soustraire des fractions de même dénominateur",
+      "description": "Effectuer des opérations simples sur les fractions.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "lesson_blocks": [
+        {
+          "type": "text",
+          "content": "Pour additionner des fractions ayant le même dénominateur, on additionne les numérateurs et on conserve le même dénominateur. Exemple : 2/7 + 3/7 = 5/7."
+        },
+        {
+          "type": "text",
+          "content": "Pour soustraire des fractions de même dénominateur, on soustrait les numérateurs et on garde le même dénominateur. Exemple : 6/9 - 2/9 = 4/9."
+        },
+        {
+          "type": "text",
+          "content": "Après un calcul, il est conseillé de simplifier la fraction si cela est possible afin d'obtenir une écriture plus simple."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Addition et soustraction",
+        "questions": [
+          {
+            "question": "2/5 + 1/5 =",
+            "options": [
+              "3/5",
+              "3/10",
+              "2/10",
+              "1/5"
+            ],
+            "correct_answer": 0,
+            "explanation": "On additionne les numérateurs : 2 + 1 = 3 et on garde 5."
+          },
+          {
+            "question": "7/8 - 3/8 =",
+            "options": [
+              "4/8",
+              "4/5",
+              "10/8",
+              "3/5"
+            ],
+            "correct_answer": 0,
+            "explanation": "On soustrait les numérateurs : 7 - 3 = 4 et on garde 8."
+          },
+          {
+            "question": "Après un calcul, pourquoi simplifier une fraction ?",
+            "options": [
+              "Pour la rendre plus compliquée",
+              "Pour obtenir une forme plus simple",
+              "Pour changer sa valeur",
+              "Ce n'est jamais utile"
+            ],
+            "correct_answer": 1,
+            "explanation": "La simplification conserve la même valeur tout en donnant une écriture plus facile à lire."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes avec les fractions",
+      "description": "Utiliser les fractions dans des situations de la vie courante.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "lesson_blocks": [
+        {
+          "type": "text",
+          "content": "Les fractions interviennent dans de nombreuses situations : partage d'aliments, mesure de distances, calcul de quantités ou organisation du temps. Elles permettent de résoudre des problèmes pratiques."
+        },
+        {
+          "type": "text",
+          "content": "Exemple : Un sac de riz est partagé en 10 parts égales. Une famille utilise 4 parts. La quantité utilisée est 4/10 du sac, soit 2/5 après simplification. Cette correction montre que deux écritures différentes peuvent représenter la même quantité."
+        },
+        {
+          "type": "text",
+          "content": "Pour résoudre un problème, il faut lire attentivement l'énoncé, identifier l'unité, déterminer le nombre total de parts puis le nombre de parts concernées. Enfin, il faut vérifier si la fraction obtenue peut être simplifiée."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes avec les fractions",
+        "questions": [
+          {
+            "question": "Un terrain est partagé en 8 parcelles. Ali cultive 6 parcelles. Quelle fraction du terrain cultive-t-il ?",
+            "options": [
+              "6/8",
+              "8/6",
+              "2/8",
+              "3/4 seulement"
+            ],
+            "correct_answer": 0,
+            "explanation": "Ali cultive 6 parcelles sur 8. La réponse est 6/8. On peut aussi simplifier en 3/4."
+          },
+          {
+            "question": "Une bouteille contient 12 verres de jus. Les élèves boivent 9 verres. Quelle fraction est consommée ?",
+            "options": [
+              "9/12",
+              "3/12",
+              "12/9",
+              "1/12"
+            ],
+            "correct_answer": 0,
+            "explanation": "9 verres sur 12 donnent la fraction 9/12, qui se simplifie en 3/4."
+          },
+          {
+            "question": "Quelle est la première étape pour résoudre un problème de fractions ?",
+            "options": [
+              "Faire un dessin au hasard",
+              "Lire attentivement l'énoncé",
+              "Multiplier tous les nombres",
+              "Toujours additionner"
+            ],
+            "correct_answer": 1,
+            "explanation": "La compréhension de l'énoncé est indispensable avant tout calcul afin d'identifier correctement les données et la fraction recherchée."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Statistiques et moyennes",
+  "chapter_order": 18,
+  "lessons": [
+    {
+      "title": "Comprendre une série statistique",
+      "description": "Découvrir les notions de base de la statistique.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'une série statistique",
+          "content": "Une série statistique est un ensemble de données recueillies sur un sujet précis. Elle permet d'étudier et d'analyser des informations."
+        },
+        {
+          "type": "text",
+          "title": "Population et caractère",
+          "content": "La population est l'ensemble étudié. Le caractère est l'information observée sur cette population. Exemple : les élèves d'une classe et leurs notes."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique au Mali",
+          "content": "Un directeur d'école peut étudier les notes des élèves d'une classe pour connaître le niveau général des apprentissages."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Série statistique",
+        "questions": [
+          {
+            "question": "Une série statistique est :",
+            "options": [
+              "Un ensemble de données étudiées",
+              "Une figure géométrique",
+              "Une opération",
+              "Une équation"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une série statistique rassemble des informations sur un sujet."
+          },
+          {
+            "question": "La population correspond à :",
+            "options": [
+              "L'ensemble étudié",
+              "Un seul nombre",
+              "Une opération",
+              "Une unité de mesure"
+            ],
+            "correct_answer": 0,
+            "explanation": "La population regroupe tous les éléments observés."
+          },
+          {
+            "question": "Les notes des élèves peuvent représenter :",
+            "options": [
+              "Une série statistique",
+              "Une figure",
+              "Une puissance",
+              "Une équation"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les notes sont des données que l'on peut analyser."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Effectifs, valeurs et tableau statistique",
+      "description": "Organiser les données statistiques dans un tableau.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les valeurs d'une série",
+          "content": "Les valeurs sont les différentes informations observées dans une série statistique. Exemple : les différentes notes obtenues par les élèves."
+        },
+        {
+          "type": "text",
+          "title": "L'effectif d'une valeur",
+          "content": "L'effectif indique combien de fois une valeur apparaît dans une série. Exemple : si la note 12 apparaît cinq fois, son effectif est 5."
+        },
+        {
+          "type": "text",
+          "title": "Construire un tableau statistique",
+          "content": "Un tableau statistique permet de présenter les valeurs et leurs effectifs pour faciliter l'analyse."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Effectifs et tableaux",
+        "questions": [
+          {
+            "question": "L'effectif d'une valeur représente :",
+            "options": [
+              "Le nombre de fois où elle apparaît",
+              "La somme des valeurs",
+              "La moyenne",
+              "La différence"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'effectif compte les apparitions d'une valeur."
+          },
+          {
+            "question": "Un tableau statistique contient souvent :",
+            "options": [
+              "Des valeurs et des effectifs",
+              "Des angles seulement",
+              "Des figures",
+              "Des équations"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le tableau organise les données statistiques."
+          },
+          {
+            "question": "Une valeur statistique est :",
+            "options": [
+              "Une donnée observée",
+              "Une opération",
+              "Une règle",
+              "Un symbole"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une valeur est une information recueillie dans l'étude."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer une moyenne simple",
+      "description": "Apprendre à calculer la moyenne d'une série de nombres.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de la moyenne",
+          "content": "La moyenne permet de remplacer plusieurs valeurs par une seule valeur représentant l'ensemble."
+        },
+        {
+          "type": "text",
+          "title": "Formule de la moyenne",
+          "content": "Pour calculer une moyenne, on additionne toutes les valeurs puis on divise par le nombre total de valeurs."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Un élève obtient les notes 12, 14 et 16. Sa moyenne est (12 + 14 + 16) ÷ 3 = 14."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Moyenne simple",
+        "questions": [
+          {
+            "question": "Pour calculer une moyenne, on doit :",
+            "options": [
+              "Additionner puis diviser",
+              "Multiplier seulement",
+              "Soustraire seulement",
+              "Comparer seulement"
+            ],
+            "correct_answer": 0,
+            "explanation": "La moyenne est la somme des valeurs divisée par leur nombre."
+          },
+          {
+            "question": "La moyenne de 10 et 20 est :",
+            "options": [
+              "15",
+              "30",
+              "10",
+              "20"
+            ],
+            "correct_answer": 0,
+            "explanation": "(10 + 20) ÷ 2 = 15."
+          },
+          {
+            "question": "La moyenne sert à :",
+            "options": [
+              "Résumer plusieurs valeurs",
+              "Supprimer les données",
+              "Changer les nombres",
+              "Créer une figure"
+            ],
+            "correct_answer": 0,
+            "explanation": "Elle donne une valeur représentative d'une série."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Moyenne avec effectifs",
+      "description": "Calculer une moyenne lorsque les valeurs possèdent des effectifs.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comprendre la moyenne avec effectifs",
+          "content": "Lorsque certaines valeurs apparaissent plusieurs fois, on utilise les effectifs pour calculer la moyenne. Chaque valeur est multipliée par son effectif."
+        },
+        {
+          "type": "text",
+          "title": "Méthode de calcul",
+          "content": "On calcule la somme des produits (valeur × effectif), puis on divise par l'effectif total."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Dans une classe, trois élèves ont 10/20 et deux élèves ont 15/20. La moyenne est ((10×3)+(15×2)) ÷ (3+2) = 12."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Moyenne avec effectifs",
+        "questions": [
+          {
+            "question": "Pour une moyenne avec effectifs, on utilise :",
+            "options": [
+              "Valeurs et effectifs",
+              "Des angles",
+              "Des figures",
+              "Des puissances uniquement"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les effectifs permettent de savoir combien de fois chaque valeur apparaît."
+          },
+          {
+            "question": "Pour calculer la moyenne pondérée, on calcule d'abord :",
+            "options": [
+              "Les produits valeur × effectif",
+              "Les différences",
+              "Les carrés",
+              "Les divisions seulement"
+            ],
+            "correct_answer": 0,
+            "explanation": "Chaque valeur doit être multipliée par son effectif."
+          },
+          {
+            "question": "L'effectif total correspond :",
+            "options": [
+              "Au nombre total d'observations",
+              "À la plus grande valeur",
+              "À la moyenne",
+              "À la différence"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'effectif total est la somme de tous les effectifs."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Interpréter une moyenne",
+      "description": "Comprendre le sens d'une moyenne dans une situation réelle.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Signification d'une moyenne",
+          "content": "La moyenne donne une idée générale du niveau d'une série de données. Elle permet de comparer plusieurs groupes."
+        },
+        {
+          "type": "text",
+          "title": "Comparer des moyennes",
+          "content": "Une moyenne plus élevée indique généralement un meilleur résultat dans la situation étudiée."
+        },
+        {
+          "type": "text",
+          "title": "Exemple scolaire",
+          "content": "Si une classe a une moyenne de 14/20 en mathématiques et une autre 11/20, la première classe obtient de meilleurs résultats en moyenne."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Interpréter une moyenne",
+        "questions": [
+          {
+            "question": "Une moyenne permet de :",
+            "options": [
+              "Résumer une série de données",
+              "Supprimer les valeurs",
+              "Changer les résultats",
+              "Créer une figure"
+            ],
+            "correct_answer": 0,
+            "explanation": "La moyenne représente globalement plusieurs valeurs."
+          },
+          {
+            "question": "Une moyenne plus élevée signifie souvent :",
+            "options": [
+              "Un meilleur résultat",
+              "Un résultat plus faible",
+              "Une erreur obligatoire",
+              "Une absence de données"
+            ],
+            "correct_answer": 0,
+            "explanation": "Une valeur moyenne plus grande indique généralement de meilleurs résultats."
+          },
+          {
+            "question": "Comparer des moyennes permet de :",
+            "options": [
+              "Comparer des performances",
+              "Changer les nombres",
+              "Supprimer les tableaux",
+              "Éviter les calculs"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les moyennes servent à comparer différentes situations."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes statistiques",
+      "description": "Utiliser les statistiques et les moyennes dans des situations concrètes.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": "Pour résoudre un problème statistique, il faut identifier les données utiles, organiser les informations, effectuer les calculs puis expliquer le résultat."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique au Mali",
+          "content": "Un agriculteur peut calculer la production moyenne de plusieurs champs pour comparer les rendements et améliorer ses méthodes de travail."
+        },
+        {
+          "type": "text",
+          "title": "Résumé du chapitre",
+          "content": "Les statistiques permettent d'organiser et d'étudier des données. La moyenne aide à obtenir une valeur représentative d'un ensemble."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes statistiques",
+        "questions": [
+          {
+            "question": "Pour résoudre un problème statistique, il faut d'abord :",
+            "options": [
+              "Analyser les données",
+              "Choisir au hasard",
+              "Supprimer les informations",
+              "Changer les valeurs"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'analyse des données permet de choisir la bonne méthode."
+          },
+          {
+            "question": "La moyenne d'une série permet de trouver :",
+            "options": [
+              "Une valeur représentative",
+              "Une figure géométrique",
+              "Une longueur",
+              "Un angle"
+            ],
+            "correct_answer": 0,
+            "explanation": "La moyenne résume l'ensemble des valeurs."
+          },
+          {
+            "question": "Les statistiques sont utilisées pour :",
+            "options": [
+              "Étudier des informations",
+              "Dessiner uniquement",
+              "Faire seulement des multiplications",
+              "Éviter les calculs"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les statistiques servent à collecter, organiser et interpréter des données."
+          }
+        ]
+      }
+    }
+  ]
+}

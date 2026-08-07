@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Les angles et les droites",
+  "chapter_order": 9,
+  "lessons": [
+    {
+      "title": "Reconnaître et mesurer un angle",
+      "description": "Comprendre la notion d'angle et apprendre à le mesurer.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'un angle",
+          "content": "Un angle est une figure géométrique formée par deux demi-droites qui partent d'un même point appelé sommet. Les deux demi-droites sont les côtés de l'angle."
+        },
+        {
+          "type": "text",
+          "title": "Mesure d'un angle",
+          "content": "La mesure d'un angle s'exprime en degrés (°). On utilise un rapporteur pour connaître la valeur exacte d'un angle."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Dans la vie quotidienne, les angles apparaissent dans les portes, les toits des maisons, les routes et les objets fabriqués par les artisans."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Reconnaître un angle",
+        "questions": [
+          {
+            "question": "Un angle est formé par :",
+            "options": [
+              "Deux demi-droites ayant un même sommet",
+              "Deux cercles",
+              "Une seule droite",
+              "Deux nombres"
+            ],
+            "correct_answer": 0,
+            "explanation": "Un angle possède deux côtés qui partent d'un même point."
+          },
+          {
+            "question": "L'unité de mesure d'un angle est :",
+            "options": [
+              "Le mètre",
+              "Le degré",
+              "Le kilogramme",
+              "Le litre"
+            ],
+            "correct_answer": 1,
+            "explanation": "Les angles se mesurent en degrés."
+          },
+          {
+            "question": "L'outil utilisé pour mesurer un angle est :",
+            "options": [
+              "La règle",
+              "Le compas",
+              "Le rapporteur",
+              "La balance"
+            ],
+            "correct_answer": 2,
+            "explanation": "Le rapporteur permet de mesurer les angles."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les différents types d'angles",
+      "description": "Identifier les angles selon leur mesure.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Angle aigu",
+          "content": "Un angle aigu mesure moins de 90°. Il est plus petit qu'un angle droit."
+        },
+        {
+          "type": "text",
+          "title": "Angle droit et angle obtus",
+          "content": "Un angle droit mesure exactement 90°. Un angle obtus mesure plus de 90° mais moins de 180°."
+        },
+        {
+          "type": "text",
+          "title": "Exemples dans la vie courante",
+          "content": "Les coins d'un cahier forment des angles droits. Certaines ouvertures de portes peuvent former des angles aigus ou obtus."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Types d'angles",
+        "questions": [
+          {
+            "question": "Un angle de 90° est :",
+            "options": [
+              "Un angle aigu",
+              "Un angle droit",
+              "Un angle obtus",
+              "Un angle nul"
+            ],
+            "correct_answer": 1,
+            "explanation": "Un angle droit mesure exactement 90 degrés."
+          },
+          {
+            "question": "Un angle aigu mesure :",
+            "options": [
+              "Plus de 180°",
+              "Moins de 90°",
+              "Exactement 90°",
+              "360°"
+            ],
+            "correct_answer": 1,
+            "explanation": "Un angle aigu est inférieur à 90 degrés."
+          },
+          {
+            "question": "Un angle de 120° est :",
+            "options": [
+              "Aigu",
+              "Droit",
+              "Obtus",
+              "Nul"
+            ],
+            "correct_answer": 2,
+            "explanation": "120° est supérieur à 90° et inférieur à 180°, donc il est obtus."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire un angle avec un rapporteur",
+      "description": "Apprendre à tracer correctement un angle donné.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les étapes de construction",
+          "content": "Pour construire un angle, on trace d'abord un côté, on place le centre du rapporteur sur le sommet puis on marque la mesure demandée."
+        },
+        {
+          "type": "text",
+          "title": "Tracer le deuxième côté",
+          "content": "Après avoir placé le point correspondant à la mesure, on trace la deuxième demi-droite passant par ce point."
+        },
+        {
+          "type": "text",
+          "title": "Conseils pratiques",
+          "content": "Il faut bien aligner le centre du rapporteur avec le sommet et utiliser la bonne graduation pour éviter les erreurs."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Construire un angle",
+        "questions": [
+          {
+            "question": "Pour construire un angle, on utilise principalement :",
+            "options": [
+              "Un rapporteur",
+              "Une balance",
+              "Une calculatrice",
+              "Une règle seule"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le rapporteur sert à mesurer et construire les angles."
+          },
+          {
+            "question": "Le centre du rapporteur doit être placé :",
+            "options": [
+              "Sur le sommet de l'angle",
+              "Sur un côté seulement",
+              "Au hasard",
+              "Sur la règle"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le centre du rapporteur doit coïncider avec le sommet."
+          },
+          {
+            "question": "Après avoir marqué la mesure, on doit :",
+            "options": [
+              "Tracer le deuxième côté de l'angle",
+              "Effacer le sommet",
+              "Changer la mesure",
+              "Ajouter un cercle"
+            ],
+            "correct_answer": 0,
+            "explanation": "On trace la deuxième demi-droite pour terminer l'angle."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les droites parallèles et perpendiculaires",
+      "description": "Identifier et tracer des droites parallèles et perpendiculaires.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les droites parallèles",
+          "content": "Deux droites sont parallèles lorsqu'elles ne se rencontrent jamais, même si on les prolonge. Elles gardent toujours le même écartement."
+        },
+        {
+          "type": "text",
+          "title": "Les droites perpendiculaires",
+          "content": "Deux droites sont perpendiculaires lorsqu'elles se coupent en formant un angle droit de 90°."
+        },
+        {
+          "type": "text",
+          "title": "Exemples pratiques",
+          "content": "Les lignes d'un cahier sont parallèles. Les murs et le sol d'une salle de classe forment souvent des angles droits."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Droites parallèles et perpendiculaires",
+        "questions": [
+          {
+            "question": "Deux droites parallèles :",
+            "options": [
+              "Se coupent toujours",
+              "Ne se rencontrent jamais",
+              "Forment toujours 90°",
+              "Sont toujours courbes"
+            ],
+            "correct_answer": 1,
+            "explanation": "Les droites parallèles gardent le même écartement et ne se croisent pas."
+          },
+          {
+            "question": "Deux droites perpendiculaires forment un angle de :",
+            "options": [
+              "45°",
+              "90°",
+              "120°",
+              "180°"
+            ],
+            "correct_answer": 1,
+            "explanation": "Les droites perpendiculaires forment un angle droit de 90°."
+          },
+          {
+            "question": "L'outil utilisé pour vérifier un angle droit est :",
+            "options": [
+              "Une équerre",
+              "Une balance",
+              "Un thermomètre",
+              "Une horloge"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'équerre permet de vérifier un angle droit."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les relations entre les angles",
+      "description": "Comprendre les angles particuliers formés par des droites.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Angles complémentaires",
+          "content": "Deux angles sont complémentaires lorsque leur somme est égale à 90°. Exemple : 30° et 60° sont complémentaires."
+        },
+        {
+          "type": "text",
+          "title": "Angles supplémentaires",
+          "content": "Deux angles sont supplémentaires lorsque leur somme est égale à 180°. Exemple : 70° et 110° sont supplémentaires."
+        },
+        {
+          "type": "text",
+          "title": "Utilisation",
+          "content": "Ces relations permettent de trouver une mesure d'angle inconnue sans utiliser directement le rapporteur."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Relations entre les angles",
+        "questions": [
+          {
+            "question": "Deux angles complémentaires ont une somme de :",
+            "options": [
+              "90°",
+              "180°",
+              "360°",
+              "45°"
+            ],
+            "correct_answer": 0,
+            "explanation": "Des angles complémentaires totalisent 90°."
+          },
+          {
+            "question": "70° et 110° sont des angles :",
+            "options": [
+              "Complémentaires",
+              "Supplémentaires",
+              "Égaux",
+              "Nuls"
+            ],
+            "correct_answer": 1,
+            "explanation": "70° + 110° = 180°, donc ils sont supplémentaires."
+          },
+          {
+            "question": "Si un angle mesure 40°, son complément mesure :",
+            "options": [
+              "50°",
+              "40°",
+              "140°",
+              "180°"
+            ],
+            "correct_answer": 0,
+            "explanation": "90° - 40° = 50°."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes de géométrie avec les angles",
+      "description": "Appliquer les connaissances sur les angles dans des situations concrètes.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": "Pour résoudre un problème sur les angles, il faut identifier les informations données, choisir la relation adaptée et effectuer le calcul nécessaire."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Un angle droit mesure 90°. Si une partie mesure 35°, l'autre partie mesure 90° - 35° = 55°."
+        },
+        {
+          "type": "text",
+          "title": "Application dans la vie courante",
+          "content": "Les angles sont utilisés dans la construction des maisons, la fabrication des meubles, les dessins techniques et l'artisanat."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Problèmes avec les angles",
+        "questions": [
+          {
+            "question": "Un angle droit est partagé en deux parties. Une partie mesure 25°. L'autre mesure :",
+            "options": [
+              "65°",
+              "75°",
+              "90°",
+              "25°"
+            ],
+            "correct_answer": 0,
+            "explanation": "90° - 25° = 65°."
+          },
+          {
+            "question": "Deux angles supplémentaires ont une somme de :",
+            "options": [
+              "90°",
+              "120°",
+              "180°",
+              "360°"
+            ],
+            "correct_answer": 2,
+            "explanation": "Les angles supplémentaires totalisent 180°."
+          },
+          {
+            "question": "Pour résoudre un problème d'angle, il faut d'abord :",
+            "options": [
+              "Lire et comprendre les données",
+              "Choisir un résultat au hasard",
+              "Ignorer la figure",
+              "Changer les mesures"
+            ],
+            "correct_answer": 0,
+            "explanation": "Il faut comprendre la situation avant de calculer."
+          }
+        ]
+      }
+    }
+  ]
+}

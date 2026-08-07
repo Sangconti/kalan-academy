@@ -1,0 +1,398 @@
+{
+  "subject": "Mathématiques",
+  "class": "7ème année",
+  "chapter": "Les quadrilatères",
+  "chapter_order": 11,
+  "lessons": [
+    {
+      "title": "Reconnaître les quadrilatères",
+      "description": "Découvrir les caractéristiques des quadrilatères.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'un quadrilatère",
+          "content": "Un quadrilatère est une figure géométrique qui possède quatre côtés, quatre sommets et quatre angles. Les côtés peuvent avoir différentes longueurs et positions."
+        },
+        {
+          "type": "text",
+          "title": "Les différents quadrilatères",
+          "content": "Il existe plusieurs types de quadrilatères : le carré, le rectangle, le losange, le parallélogramme et le trapèze. Chacun possède des propriétés particulières."
+        },
+        {
+          "type": "text",
+          "title": "Exemples dans la vie quotidienne",
+          "content": "Les fenêtres, les portes, les tables et certains terrains peuvent avoir des formes de quadrilatères."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Reconnaître les quadrilatères",
+        "questions": [
+          {
+            "question": "Un quadrilatère possède combien de côtés ?",
+            "options": [
+              "3",
+              "4",
+              "5",
+              "6"
+            ],
+            "correct_answer": 1,
+            "explanation": "Un quadrilatère possède toujours quatre côtés."
+          },
+          {
+            "question": "Un quadrilatère possède :",
+            "options": [
+              "Quatre côtés et quatre angles",
+              "Trois côtés",
+              "Deux sommets",
+              "Un seul angle"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le mot quadrilatère signifie une figure à quatre côtés."
+          },
+          {
+            "question": "Lequel est un quadrilatère ?",
+            "options": [
+              "Triangle",
+              "Carré",
+              "Cercle",
+              "Droite"
+            ],
+            "correct_answer": 1,
+            "explanation": "Le carré est un quadrilatère car il possède quatre côtés."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le parallélogramme et ses propriétés",
+      "description": "Comprendre les caractéristiques du parallélogramme.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du parallélogramme",
+          "content": "Un parallélogramme est un quadrilatère dont les côtés opposés sont parallèles deux à deux."
+        },
+        {
+          "type": "text",
+          "title": "Propriétés principales",
+          "content": "Dans un parallélogramme, les côtés opposés ont la même longueur et les angles opposés ont la même mesure."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Certaines formes utilisées dans les constructions et les motifs décoratifs peuvent avoir une forme de parallélogramme."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Le parallélogramme",
+        "questions": [
+          {
+            "question": "Dans un parallélogramme, les côtés opposés sont :",
+            "options": [
+              "Perpendiculaires",
+              "Parallèles",
+              "Courbes",
+              "Inexistants"
+            ],
+            "correct_answer": 1,
+            "explanation": "Les côtés opposés d'un parallélogramme sont parallèles."
+          },
+          {
+            "question": "Dans un parallélogramme, les côtés opposés ont :",
+            "options": [
+              "La même longueur",
+              "Toujours des longueurs différentes",
+              "Une longueur nulle",
+              "Une forme courbe"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les côtés opposés d'un parallélogramme sont égaux."
+          },
+          {
+            "question": "Le parallélogramme possède :",
+            "options": [
+              "4 côtés",
+              "3 côtés",
+              "2 côtés",
+              "1 côté"
+            ],
+            "correct_answer": 0,
+            "explanation": "C'est un quadrilatère donc il possède quatre côtés."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le rectangle et le losange",
+      "description": "Identifier et différencier le rectangle et le losange.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le rectangle",
+          "content": "Un rectangle est un quadrilatère qui possède quatre angles droits. Ses côtés opposés sont égaux et parallèles."
+        },
+        {
+          "type": "text",
+          "title": "Le losange",
+          "content": "Un losange est un quadrilatère dont les quatre côtés ont la même longueur. Ses côtés opposés sont parallèles."
+        },
+        {
+          "type": "text",
+          "title": "Différence entre rectangle et losange",
+          "content": "Le rectangle se reconnaît par ses angles droits tandis que le losange se reconnaît par ses quatre côtés égaux."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Rectangle et losange",
+        "questions": [
+          {
+            "question": "Un rectangle possède :",
+            "options": [
+              "Quatre angles droits",
+              "Trois côtés",
+              "Un seul angle",
+              "Des côtés courbes"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le rectangle possède quatre angles de 90°."
+          },
+          {
+            "question": "Un losange possède :",
+            "options": [
+              "Quatre côtés égaux",
+              "Deux côtés seulement",
+              "Aucun angle",
+              "Un cercle"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les quatre côtés du losange ont la même longueur."
+          },
+          {
+            "question": "Le rectangle et le losange sont :",
+            "options": [
+              "Des quadrilatères",
+              "Des triangles",
+              "Des cercles",
+              "Des droites"
+            ],
+            "correct_answer": 0,
+            "explanation": "Ils appartiennent tous les deux à la famille des quadrilatères."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le carré et ses caractéristiques",
+      "description": "Découvrir les propriétés particulières du carré.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du carré",
+          "content": "Un carré est un quadrilatère qui possède quatre côtés égaux et quatre angles droits. Il appartient à la fois à la famille des rectangles et des losanges."
+        },
+        {
+          "type": "text",
+          "title": "Les propriétés du carré",
+          "content": "Dans un carré, les côtés opposés sont parallèles, les quatre côtés ont la même longueur et chaque angle mesure 90°."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Les carreaux de sol, certains cadres et des motifs de décoration utilisent souvent la forme du carré."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Le carré",
+        "questions": [
+          {
+            "question": "Un carré possède :",
+            "options": [
+              "Quatre côtés égaux et quatre angles droits",
+              "Seulement deux côtés égaux",
+              "Trois angles",
+              "Un côté"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le carré possède quatre côtés égaux et quatre angles droits."
+          },
+          {
+            "question": "Un angle d'un carré mesure :",
+            "options": [
+              "45°",
+              "90°",
+              "120°",
+              "180°"
+            ],
+            "correct_answer": 1,
+            "explanation": "Tous les angles d'un carré sont droits, donc ils mesurent 90°."
+          },
+          {
+            "question": "Le carré est aussi un :",
+            "options": [
+              "Rectangle et losange",
+              "Triangle",
+              "Cercle",
+              "Trapèze uniquement"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le carré possède les propriétés du rectangle et du losange."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire des quadrilatères",
+      "description": "Apprendre à construire différents quadrilatères avec les instruments.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les instruments nécessaires",
+          "content": "Pour construire un quadrilatère, on utilise une règle, une équerre, un compas et parfois un rapporteur selon les informations données."
+        },
+        {
+          "type": "text",
+          "title": "Construction d'un rectangle",
+          "content": "Pour construire un rectangle, on trace un côté, puis on utilise l'équerre pour tracer les côtés perpendiculaires et respecter les longueurs demandées."
+        },
+        {
+          "type": "text",
+          "title": "Construction d'un carré",
+          "content": "Pour construire un carré, il faut respecter deux conditions : quatre côtés égaux et quatre angles droits."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Construire des quadrilatères",
+        "questions": [
+          {
+            "question": "L'équerre sert principalement à tracer :",
+            "options": [
+              "Des angles droits",
+              "Des cercles",
+              "Des nombres",
+              "Des courbes"
+            ],
+            "correct_answer": 0,
+            "explanation": "L'équerre permet de vérifier et tracer des angles de 90°."
+          },
+          {
+            "question": "Pour construire un carré, il faut avoir :",
+            "options": [
+              "Des côtés égaux et des angles droits",
+              "Seulement un angle",
+              "Trois côtés",
+              "Des côtés courbes"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le carré possède quatre côtés égaux et quatre angles droits."
+          },
+          {
+            "question": "Une règle permet de mesurer :",
+            "options": [
+              "Les longueurs",
+              "Les masses",
+              "Les températures",
+              "Les volumes"
+            ],
+            "correct_answer": 0,
+            "explanation": "La règle sert à mesurer les distances."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Périmètres et problèmes avec les quadrilatères",
+      "description": "Calculer les mesures des quadrilatères dans des situations concrètes.",
+      "duration_minutes": 20,
+      "difficulty": "hard",
+      "video_url": "",
+      "thumbnail_url": "",
+      "is_premium": false,
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Calculer un périmètre",
+          "content": "Le périmètre d'un quadrilatère est la somme des longueurs de ses quatre côtés. Pour un carré, on utilise souvent la formule : P = 4 × côté."
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Un terrain carré de côté 20 mètres possède un périmètre égal à 4 × 20 = 80 mètres."
+        },
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": "Pour résoudre un problème, il faut identifier la figure, connaître ses propriétés, choisir la bonne formule puis effectuer le calcul."
+        }
+      ],
+      "quiz": {
+        "title": "Quiz : Périmètres des quadrilatères",
+        "questions": [
+          {
+            "question": "Le périmètre d'un carré de côté 5 cm est :",
+            "options": [
+              "20 cm",
+              "10 cm",
+              "15 cm",
+              "25 cm"
+            ],
+            "correct_answer": 0,
+            "explanation": "P = 4 × 5 = 20 cm."
+          },
+          {
+            "question": "Pour calculer le périmètre d'un quadrilatère, on :",
+            "options": [
+              "Additionne les quatre côtés",
+              "Multiplie seulement deux côtés",
+              "Compte les angles",
+              "Mesure la hauteur seulement"
+            ],
+            "correct_answer": 0,
+            "explanation": "Le périmètre est la somme des longueurs des côtés."
+          },
+          {
+            "question": "Un terrain rectangulaire peut être étudié avec :",
+            "options": [
+              "Les propriétés du rectangle",
+              "Les propriétés d'un cercle",
+              "Aucun calcul",
+              "Seulement les angles"
+            ],
+            "correct_answer": 0,
+            "explanation": "Les propriétés de la figure permettent de résoudre le problème."
+          }
+        ]
+      }
+    }
+  ]
+}

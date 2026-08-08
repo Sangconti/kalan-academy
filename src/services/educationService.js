@@ -1,98 +1,117 @@
 // src/services/educationService.js
 
+
 import { supabase } from "../lib/supabase";
 
 
 import {
 
-cacheClasses,
-getCachedClasses,
+  cacheClasses,
+  getCachedClasses,
 
-cacheSubjects,
-getCachedSubjects,
+  cacheSubjects,
+  getCachedSubjects,
 
-cacheChapters,
-getCachedChapters,
+  cacheChapters,
+  getCachedChapters,
 
-cacheLessons,
-getCachedLessons,
+  cacheChapter,
+  getCachedChapter,
 
-cacheLesson,
-getCachedLesson,
 
-cacheChapter,
-getCachedChapter,
+  cacheLessons,
+  getCachedLessons,
 
-cacheLessonBlocks,
-getCachedLessonBlocks,
+  cacheLesson,
+  getCachedLesson,
 
-cacheQuizzes,
-getCachedQuizzes,
 
-cacheQuizQuestions,
-getCachedQuizQuestions
+  cacheLessonBlocks,
+  getCachedLessonBlocks,
+
+
+  cacheExercises,
+  getCachedExercises,
+
+
+  cacheQuizzes,
+  getCachedQuizzes,
+
+
+  cacheQuizQuestions,
+  getCachedQuizQuestions
+
 
 } from "../offline/db";
 
 
-// Vérification réseau
 
-function isOnline() {
 
-  return navigator.onLine;
+// ===============================
+// NETWORK
+// ===============================
+
+function isOnline(){
+
+ return navigator.onLine;
 
 }
 
 
 
 
-// =====================================
+// ===============================
 // CLASSES
-// =====================================
-
-export async function getClasses() {
+// ===============================
 
 
-  if (!isOnline()) {
+export async function getClasses(){
 
-    return await getCachedClasses();
 
+ if(!isOnline()){
+
+  return await getCachedClasses();
+
+ }
+
+
+
+ const {
+
+  data,
+
+  error
+
+ } = await supabase
+
+ .from("classes")
+
+ .select("*")
+
+ .order(
+  "order_number",
+  {
+   ascending:true
   }
+ );
 
 
 
-  const {
-    data,
-    error
-  } = await supabase
+ if(error){
 
-    .from("classes")
+  console.error(error);
 
-    .select("*")
+  return await getCachedClasses();
 
-    .order(
-      "order_number",
-      {
-        ascending:true
-      }
-    );
+ }
 
 
 
-  if(error){
-
-    console.error(error);
-
-    return await getCachedClasses();
-
-  }
+ await cacheClasses(data || []);
 
 
 
-  await cacheClasses(data || []);
-
-
-  return data || [];
+ return data || [];
 
 }
 
@@ -101,58 +120,75 @@ export async function getClasses() {
 
 
 
-
-// =====================================
+// ===============================
 // SUBJECTS
-// =====================================
-
-export async function getSubjects(classId) {
+// ===============================
 
 
-  if(!isOnline()){
+export async function getSubjects(classId){
 
-    return await getCachedSubjects(classId);
+console.log(
+"GET SUBJECTS CLASS ID",
+classId
+);
 
+if(!classId){
+ return [];
+}
+
+
+ if(!isOnline()){
+
+  return await getCachedSubjects(classId);
+
+ }
+
+
+
+ const {
+
+  data,
+
+  error
+
+ } = await supabase
+
+ .from("subjects")
+
+ .select("*")
+
+ .eq(
+  "class_id",
+  classId
+ )
+
+ .order(
+  "order_number",
+  {
+   ascending:true
   }
+ );
 
 
 
-  const {
-    data,
-    error
-  } = await supabase
+ if(error){
 
-    .from("subjects")
+    console.error(
+         "Erreur subjects :",
+         error
+       );
 
-    .select("*")
+  return await getCachedSubjects(classId);
 
-    .eq(
-      "class_id",
-      classId
-    )
-
-    .order(
-      "order_number",
-      {
-        ascending:true
-      }
-    );
+ }
 
 
 
-  if(error){
-
-    return await getCachedSubjects(classId);
-
-  }
+ await cacheSubjects(data || []);
 
 
 
-  await cacheSubjects(data || []);
-
-
-
-  return data || [];
+ return data || [];
 
 }
 
@@ -161,116 +197,65 @@ export async function getSubjects(classId) {
 
 
 
-
-
-// =====================================
+// ===============================
 // CHAPTERS
-// =====================================
-
-export async function getChapters(subjectId) {
+// ===============================
 
 
-  if(!isOnline()){
+export async function getChapters(subjectId){
 
-    return await getCachedChapters(subjectId);
+console.log(
+  "🔎 GET CHAPTERS SUBJECT ID :",
+  subjectId
+);
 
+ if(!isOnline()){
+
+  return await getCachedChapters(subjectId);
+
+ }
+
+
+
+ const {
+
+  data,
+
+  error
+
+ } = await supabase
+
+ .from("chapters")
+
+ .select("*")
+
+ .eq(
+  "subject_id",
+  subjectId
+ )
+
+ .order(
+  "order_number",
+  {
+   ascending:true
   }
+ );
 
 
 
-  const {
-    data,
-    error
-  } = await supabase
+ if(error){
 
-    .from("chapters")
+  return await getCachedChapters(subjectId);
 
-    .select("*")
-
-    .eq(
-      "subject_id",
-      subjectId
-    )
-
-    .order(
-      "order_number",
-      {
-        ascending:true
-      }
-    );
+ }
 
 
 
-  if(error){
-
-    return await getCachedChapters(subjectId);
-
-  }
+ await cacheChapters(data || []);
 
 
 
-  await cacheChapters(data || []);
-
-
-
-  return data || [];
-
-}
-
-export async function getChapter(chapterId) {
-
-
-  if(!isOnline()){
-
-    return await getCachedChapter(chapterId);
-
-  }
-
-
-  const {
-    data,
-    error
-  } = await supabase
-
-    .from("chapters")
-
-    .select(`
-      id,
-      title,
-      description,
-      order_number,
-      subject_id
-    `)
-
-    .eq(
-      "id",
-      chapterId
-    )
-
-    .single();
-
-
-
-  if(error){
-
-    console.error(
-      "Erreur getChapter :",
-      error
-    );
-
-
-    return await getCachedChapter(chapterId);
-
-  }
-
-
-
-  await cacheChapter(data);
-
-
-
-  return data;
-
+ return data || [];
 
 }
 
@@ -278,469 +263,592 @@ export async function getChapter(chapterId) {
 
 
 
-// =====================================
+
+// ===============================
+// ONE CHAPTER
+// ===============================
+
+
+export async function getChapter(chapterId){
+
+
+ if(!isOnline()){
+
+  return await getCachedChapter(chapterId);
+
+ }
+
+
+
+
+ const {
+
+  data,
+
+  error
+
+ } = await supabase
+
+ .from("chapters")
+
+ .select(`
+
+  id,
+
+  title,
+
+  description,
+
+  subject_id,
+
+  order_number
+
+ `)
+
+ .eq(
+  "id",
+  chapterId
+ )
+
+ .single();
+
+
+
+
+ if(error){
+
+  console.error(
+   "Erreur getChapter :",
+   error
+  );
+
+
+  return await getCachedChapter(chapterId);
+
+ }
+
+
+
+ await cacheChapter(data);
+
+
+
+ return data;
+
+}
+
+
+
+
+
+
+
+// ===============================
 // LESSONS
-// =====================================
+// ===============================
 
-export async function getLessons(chapterId) {
 
+export async function getLessons(chapterId){
 
-  if(!isOnline()){
 
-    return await getCachedLessons(chapterId);
+ if(!isOnline()){
 
-  }
-
-
-
-  const {
-    data,
-    error
-  } = await supabase
-
-    .from("lessons")
-
-    .select("*")
-
-    .eq(
-      "chapter_id",
-      chapterId
-    )
-
-    .order(
-      "order_number",
-      {
-        ascending:true
-      }
-    );
-
-
-
-  if(error){
-
-    return await getCachedLessons(chapterId);
-
-  }
-
-
-
-  await cacheLessons(data || []);
-
-
-
-  return data || [];
-
-}
-
-
-
-
-
-
-
-
-// =====================================
-// UNE LEÇON
-// =====================================
-
-export async function getLesson(lessonId) {
-
-
-  if(!isOnline()){
-
-    return await getCachedLesson(lessonId);
-
-  }
-
-
-
-  const {
-    data,
-    error
-  } = await supabase
-
-    .from("lessons")
-
-    .select("*")
-
-    .eq(
-      "id",
-      lessonId
-    )
-
-    .single();
-
-
-
-  if(error){
-
-    return await getCachedLesson(lessonId);
-
-  }
-
-
-
-  await cacheLesson(data);
-
-
-
-  return data;
-
-}
-
-
-
-
-
-
-
-
-// =====================================
-// BLOCS DE LEÇON
-// =====================================
-
-export async function getLessonBlocks(lessonId) {
-
-  if (!isOnline()) {
-
-    return await getCachedLessonBlocks(lessonId);
-
-  }
-
-
-  const {
-    data,
-    error
-  } = await supabase
-
-    .from("lesson_blocks")
-
-    .select("*")
-
-    .eq("lesson_id", lessonId)
-
-    .order(
-      "order_number",
-      {
-        ascending: true
-      }
-    );
-
-
-  if(error){
-
-    console.error(
-      "Erreur récupération lesson_blocks :",
-      error
-    );
-
-
-    return await getCachedLessonBlocks(lessonId);
-
-  }
-
-
-
-  await cacheLessonBlocks(data || []);
-
-
-  return data || [];
-
-}
-
-
-
-
-
-
-// =====================================
-// EXERCICES
-// =====================================
-
-export async function getExercises(lessonId) {
-
-
-  if (!isOnline()) {
-
-    return await getCachedExercises(lessonId);
-
-  }
-
-
-
-  const {
-    data,
-    error
-  } = await supabase
-
-    .from("exercises")
-
-    .select(`
-      id,
-      lesson_id,
-      level,
-      question,
-      answer,
-      explanation,
-      points,
-      order_number,
-      created_at
-    `)
-
-    .eq(
-      "lesson_id",
-      lessonId
-    )
-
-    .order(
-      "order_number",
-      {
-        ascending:true
-      }
-    );
-
-
-
-  if(error){
-
-    console.error(
-      "Erreur récupération exercises :",
-      error
-    );
-
-
-    return await getCachedExercises(lessonId);
-
-  }
-
-
-
-  await cacheExercises(data || []);
-
-
-  return data || [];
-
-}
-
-
-
-
-
-// =====================================
-// QUIZZ
-// =====================================
-
-export async function getQuizzes(lessonId) {
-
-
-  if(!isOnline()){
-
-    return await getCachedQuizzes(lessonId);
-
-  }
-
-
-
-  const {
-    data,
-    error
-  } = await supabase
-
-    .from("quizzes")
-
-    .select("*")
-
-    .eq(
-      "lesson_id",
-      lessonId
-    );
-
-
-
-  if(error){
-
-    return await getCachedQuizzes(lessonId);
-
-  }
-
-
-
-  await cacheQuizzes(data || []);
-
-
-
-  return data || [];
-
-}
-
-
-
-
-
-
-
-
- // =====================================
- // QUESTIONS QUIZ
- // =====================================
-
- export async function getQuizQuestions(quizId) {
-
-
-   if(!isOnline()){
-
-     return await getCachedQuizQuestions(quizId);
-
-   }
-
-
-
-   const {
-     data,
-     error
-   } = await supabase
-
-     .from("quiz_questions")
-
-     .select("*")
-
-     .eq(
-       "quiz_id",
-       quizId
-     )
-
-     .order(
-       "order_number",
-       {
-         ascending:true
-       }
-     );
-
-
-
-   if(error){
-
-     console.error(
-       "Erreur récupération quiz_questions :",
-       error
-     );
-
-     return await getCachedQuizQuestions(quizId);
-
-   }
-
-
-
-   await cacheQuizQuestions(data || []);
-
-
-
-   return data || [];
+  return await getCachedLessons(chapterId);
 
  }
 
 
 
+ const {
 
+  data,
 
- // =====================================
- // QUIZ COMPLET PAR LEÇON
- // =====================================
+  error
 
- export async function getQuizByLesson(lessonId) {
+ } = await supabase
 
-   console.log("Recherche quiz :", lessonId);
+ .from("lessons")
 
-   // 1. Récupérer le quiz
+ .select("*")
 
-   const {
+ .eq(
+  "chapter_id",
+  chapterId
+ )
 
-     data: quizzes,
-     error: quizError
-
-   } = await supabase
-
-     .from("quizzes")
-
-     .select(`
-       id,
-       lesson_id,
-       title,
-       passing_score,
-       time_limit_seconds
-     `)
-
-     .eq("lesson_id", lessonId)
-
-     .limit(1);
+ .order(
+  "order_number",
+  {
+   ascending:true
+  }
+ );
 
 
 
-   if (quizError) {
+ if(error){
 
-     console.error("Erreur quiz :", quizError);
-
-     return null;
-
-   }
-
-
-
-   if (!quizzes || quizzes.length === 0) {
-
-     console.log("Aucun quiz trouvé");
-
-     return null;
-
-   }
-
-
-
-   const quiz = quizzes[0];
-
-
-
-   // 2. Récupérer les questions
-
-   const {
-
-     data: questions,
-     error: questionsError
-
-   } = await supabase
-
-     .from("quiz_questions")
-
-     .select("*")
-
-     .eq("quiz_id", quiz.id)
-
-     .order("order_number");
-
-
-
-   if (questionsError) {
-
-     console.error(
-
-       "Erreur questions :",
-
-       questionsError
-
-     );
-
-     return null;
-
-   }
-
-
-
-   return {
-
-     ...quiz,
-
-     quiz_questions: questions || []
-
-   };
+  return await getCachedLessons(chapterId);
 
  }
+
+
+
+ await cacheLessons(data || []);
+
+
+
+ return data || [];
+
+}
+
+
+
+
+
+
+
+// ===============================
+// ONE LESSON
+// ===============================
+
+
+export async function getLesson(lessonId){
+
+
+ if(!isOnline()){
+
+  return await getCachedLesson(lessonId);
+
+ }
+
+
+
+ const {
+
+  data,
+
+  error
+
+ } = await supabase
+
+ .from("lessons")
+
+ .select("*")
+
+ .eq(
+  "id",
+  lessonId
+ )
+
+ .single();
+
+
+
+ if(error){
+
+  return await getCachedLesson(lessonId);
+
+ }
+
+
+
+ await cacheLesson(data);
+
+
+
+ return data;
+
+}
+
+
+
+
+
+
+// ===============================
+// LESSON BLOCKS
+// ===============================
+
+
+export async function getLessonBlocks(lessonId){
+
+
+ if(!isOnline()){
+
+  return await getCachedLessonBlocks(lessonId);
+
+ }
+
+
+
+ const {
+
+  data,
+
+  error
+
+ } = await supabase
+
+ .from("lesson_blocks")
+
+ .select("*")
+
+ .eq(
+  "lesson_id",
+  lessonId
+ )
+
+ .order(
+  "order_number",
+  {
+   ascending:true
+  }
+ );
+
+
+
+ if(error){
+
+  return await getCachedLessonBlocks(lessonId);
+
+ }
+
+
+
+ await cacheLessonBlocks(data || []);
+
+
+
+ return data || [];
+
+}
+
+
+
+
+
+
+
+// ===============================
+// EXERCISES
+// ===============================
+
+
+export async function getExercises(lessonId){
+
+
+ if(!isOnline()){
+
+  return await getCachedExercises(lessonId);
+
+ }
+
+
+
+ const {
+
+  data,
+
+  error
+
+ } = await supabase
+
+ .from("exercises")
+
+ .select("*")
+
+ .eq(
+  "lesson_id",
+  lessonId
+ )
+
+ .order(
+  "order_number",
+  {
+   ascending:true
+  }
+ );
+
+
+
+ if(error){
+
+  return await getCachedExercises(lessonId);
+
+ }
+
+
+
+ await cacheExercises(data || []);
+
+
+
+ return data || [];
+
+}
+
+
+
+
+
+
+
+// ===============================
+// QUIZZES
+// ===============================
+
+
+export async function getQuizzes(lessonId){
+
+
+ if(!isOnline()){
+
+  return await getCachedQuizzes(lessonId);
+
+ }
+
+
+
+ const {
+
+  data,
+
+  error
+
+ } = await supabase
+
+ .from("quizzes")
+
+ .select("*")
+
+ .eq(
+  "lesson_id",
+  lessonId
+ );
+
+
+
+ if(error){
+
+  return await getCachedQuizzes(lessonId);
+
+ }
+
+
+
+ await cacheQuizzes(data || []);
+
+
+
+ return data || [];
+
+}
+
+
+
+
+
+
+
+// ===============================
+// QUIZ QUESTIONS
+// ===============================
+
+
+export async function getQuizQuestions(quizId){
+
+
+ if(!isOnline()){
+
+  return await getCachedQuizQuestions(quizId);
+
+ }
+
+
+
+ const {
+
+  data,
+
+  error
+
+ } = await supabase
+
+ .from("quiz_questions")
+
+ .select("*")
+
+ .eq(
+  "quiz_id",
+  quizId
+ )
+
+ .order(
+  "order_number"
+ );
+
+
+
+ if(error){
+
+  return await getCachedQuizQuestions(quizId);
+
+ }
+
+
+
+ await cacheQuizQuestions(data || []);
+
+
+
+ return data || [];
+
+}
+
+
+
+
+
+
+
+// ===============================
+// COMPLETE QUIZ
+// ===============================
+
+
+export async function getQuizByLesson(lessonId){
+
+
+  // ==========================
+  // MODE OFFLINE
+  // ==========================
+
+  if(!isOnline()){
+
+
+    const quizzes =
+      await getCachedQuizzes(lessonId);
+
+
+
+    if(!quizzes || quizzes.length === 0){
+
+      return null;
+
+    }
+
+
+
+    const quiz = quizzes[0];
+
+
+
+    const questions =
+      await getCachedQuizQuestions(
+        quiz.id
+      );
+
+
+
+    return {
+
+      ...quiz,
+
+      quiz_questions:
+        questions || []
+
+    };
+
+
+  }
+
+
+
+
+  // ==========================
+  // MODE ONLINE
+  // ==========================
+
+
+  const {
+
+    data: quizzes,
+
+    error
+
+  } = await supabase
+
+  .from("quizzes")
+
+  .select("*")
+
+  .eq(
+    "lesson_id",
+    lessonId
+  )
+
+  .limit(1);
+
+
+
+  if(error || !quizzes?.length){
+
+
+    return null;
+
+
+  }
+
+
+
+  const quiz = quizzes[0];
+
+
+
+  const {
+
+    data: questions
+
+  } = await supabase
+
+  .from("quiz_questions")
+
+  .select("*")
+
+  .eq(
+    "quiz_id",
+    quiz.id
+  )
+
+  .order(
+    "order_number"
+  );
+
+
+
+  await cacheQuizzes([
+    quiz
+  ]);
+
+
+
+  await cacheQuizQuestions(
+    questions || []
+  );
+
+
+
+  return {
+
+
+    ...quiz,
+
+
+    quiz_questions:
+      questions || []
+
+
+  };
+
+
+}

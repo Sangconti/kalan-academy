@@ -1,20 +1,166 @@
-import { useState, useEffect } from 'react'
-import { Timer } from 'lucide-react'
+// src/components/QuizTimer.jsx
 
-export default function QuizTimer({ duration = 60, onTimeUp }) {
-  const [timeLeft, setTimeLeft] = useState(duration)
+import {
+  useEffect,
+  useRef,
+  useState
+} from "react";
+
+import {
+  Timer
+} from "lucide-react";
+
+
+export default function QuizTimer({
+  duration = 60,
+  onTimeUp
+}) {
+
+  const [timeLeft, setTimeLeft] =
+    useState(duration);
+
+  const timeUpCalled =
+    useRef(false);
+
+
+  // =====================================================
+  // INITIALISATION
+  // =====================================================
+
   useEffect(() => {
-    if (timeLeft <= 0) { onTimeUp(); return }
-    const timer = setInterval(() => setTimeLeft(t => t - 1), 1000)
-    return () => clearInterval(timer)
-  }, [timeLeft, onTimeUp])
 
-  const percent = (timeLeft / duration) * 100
-  const color = percent > 50 ? 'text-green-600' : percent > 25 ? 'text-yellow-600' : 'text-red-600'
+    setTimeLeft(duration);
+
+    timeUpCalled.current = false;
+
+  }, [duration]);
+
+
+  // =====================================================
+  // COMPTE À REBOURS
+  // =====================================================
+
+  useEffect(() => {
+
+    if (timeLeft <= 0) {
+
+      if (
+        !timeUpCalled.current
+      ) {
+
+        timeUpCalled.current = true;
+
+        if (onTimeUp) {
+
+          onTimeUp();
+
+        }
+
+      }
+
+      return;
+
+    }
+
+
+    const timer =
+      setInterval(() => {
+
+        setTimeLeft(
+          previous =>
+            Math.max(
+              previous - 1,
+              0
+            )
+        );
+
+      }, 1000);
+
+
+    return () => {
+
+      clearInterval(timer);
+
+    };
+
+  }, [
+    timeLeft,
+    onTimeUp
+  ]);
+
+
+  // =====================================================
+  // FORMATAGE
+  // =====================================================
+
+  const minutes =
+    Math.floor(
+      timeLeft / 60
+    );
+
+
+  const seconds =
+    String(
+      timeLeft % 60
+    ).padStart(2, "0");
+
+
+  // =====================================================
+  // COULEUR
+  // =====================================================
+
+  const percent =
+    duration > 0
+      ? (timeLeft / duration) * 100
+      : 0;
+
+
+  let colorClass =
+    "text-green-600";
+
+
+  if (percent <= 50) {
+
+    colorClass =
+      "text-yellow-600";
+
+  }
+
+
+  if (percent <= 25) {
+
+    colorClass =
+      "text-red-600";
+
+  }
+
+
+  // =====================================================
+  // AFFICHAGE
+  // =====================================================
+
   return (
-    <div className={`flex items-center gap-2 font-mono font-bold ${color}`}>
+
+    <div
+      className={`
+        flex
+        items-center
+        gap-2
+        font-mono
+        font-bold
+        ${colorClass}
+      `}
+      aria-label="Temps restant"
+    >
+
       <Timer size={18} />
-      <span>{Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}</span>
+
+      <span>
+        {minutes}:{seconds}
+      </span>
+
     </div>
-  )
+
+  );
+
 }

@@ -1,15 +1,32 @@
 // src/pages/ProfilePage.jsx
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { supabase } from "../lib/supabase";
-import { LogOut } from "lucide-react";
+
+import {
+  User,
+  Crown,
+  Trophy,
+  Star,
+  Download,
+  LogOut,
+  Home,
+  Award
+} from "lucide-react";
 
 export default function ProfilePage() {
+
+  const navigate = useNavigate();
 
   const [profile, setProfile] = useState(null);
   const [badges, setBadges] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // ====================================
+  // CHARGEMENT PROFIL
+  // ====================================
 
   useEffect(() => {
 
@@ -18,13 +35,11 @@ export default function ProfilePage() {
   }, []);
 
 
-
   async function loadProfile() {
 
     try {
 
       setLoading(true);
-
 
       const {
         data: {
@@ -33,24 +48,24 @@ export default function ProfilePage() {
       } = await supabase.auth.getSession();
 
 
-
       if (!session?.user) {
 
-        console.log("Utilisateur non connecté");
+        console.log(
+          "Utilisateur non connecté"
+        );
 
         return;
 
       }
 
 
+      const userId =
+        session.user.id;
 
-      const userId = session.user.id;
 
-
-
-      // ==========================
+      // ====================================
       // PROFILE
-      // ==========================
+      // ====================================
 
       const {
         data: profileData,
@@ -77,8 +92,7 @@ export default function ProfilePage() {
         .single();
 
 
-
-      if(profileError){
+      if (profileError) {
 
         console.error(
           "PROFILE ERROR:",
@@ -88,13 +102,14 @@ export default function ProfilePage() {
       }
 
 
-      setProfile(profileData || null);
+      setProfile(
+        profileData || null
+      );
 
 
-
-      // ==========================
+      // ====================================
       // BADGES
-      // ==========================
+      // ====================================
 
       const {
         data: badgeData,
@@ -122,12 +137,10 @@ export default function ProfilePage() {
         );
 
 
-
       console.log(
         "BADGES:",
         badgeData
       );
-
 
       console.log(
         "BADGES ERROR:",
@@ -135,8 +148,7 @@ export default function ProfilePage() {
       );
 
 
-
-      if(badgeError){
+      if (badgeError) {
 
         console.error(
           badgeError
@@ -144,7 +156,7 @@ export default function ProfilePage() {
 
         setBadges([]);
 
-      }else{
+      } else {
 
         setBadges(
           badgeData || []
@@ -153,8 +165,7 @@ export default function ProfilePage() {
       }
 
 
-
-    } catch(error){
+    } catch (error) {
 
       console.error(
         "Erreur ProfilePage:",
@@ -170,133 +181,848 @@ export default function ProfilePage() {
   }
 
 
+  // ====================================
+  // DÉCONNEXION
+  // ====================================
 
-  if(loading){
+  async function handleLogout() {
+
+    try {
+
+      await supabase.auth.signOut();
+
+      navigate("/");
+
+    } catch (error) {
+
+      console.error(
+        "Erreur déconnexion :",
+        error
+      );
+
+    }
+
+  }
+
+
+  // ====================================
+  // LOADING
+  // ====================================
+
+  if (loading) {
 
     return (
-      <div className="p-6 text-center">
-        Chargement du profil...
+
+      <div className="
+        min-h-[60vh]
+        flex
+        flex-col
+        items-center
+        justify-center
+        px-6
+      ">
+
+        <div className="
+          w-14
+          h-14
+          rounded-2xl
+          bg-blue-100
+          flex
+          items-center
+          justify-center
+          mb-4
+        ">
+
+          <User
+            size={28}
+            className="text-blue-600"
+          />
+
+        </div>
+
+
+        <p className="
+          text-gray-600
+          font-medium
+        ">
+
+          Chargement du profil...
+
+        </p>
+
       </div>
+
     );
 
   }
 
 
+  // ====================================
+  // AFFICHAGE
+  // ====================================
 
   return (
 
-    <div className="p-6 max-w-xl mx-auto">
+    <div className="
+      min-h-screen
+      bg-gray-50
+      pb-8
+    ">
 
 
-      <h1 className="text-2xl font-bold mb-6">
-        Mon profil
-      </h1>
+      {/* ==================================
+          HEADER
+      ================================== */}
+
+      <div className="
+        bg-white
+        border-b
+        border-gray-100
+        px-5
+        py-4
+      ">
+
+        <button
+          onClick={() => navigate("/")}
+          className="
+            flex
+            items-center
+            gap-2
+            text-xl
+            font-bold
+            text-gray-900
+            hover:text-blue-600
+            transition
+          "
+        >
+
+          <span className="
+            w-9
+            h-9
+            rounded-xl
+            bg-blue-600
+            text-white
+            flex
+            items-center
+            justify-center
+          ">
+
+            🎓
+
+          </span>
+
+          Kalan Academy
+
+        </button>
+
+      </div>
 
 
+      {/* ==================================
+          CONTENU
+      ================================== */}
 
-      {profile && (
-
-        <div className="bg-white rounded-xl shadow p-4 mb-6">
-
-          <h2 className="text-xl font-semibold">
-
-            {profile.full_name || "Étudiant Kalan"}
-
-          </h2>
+      <div className="
+        max-w-3xl
+        mx-auto
+        px-5
+        py-6
+      ">
 
 
-          <p>
-            Statut :
-            {" "}
-            {profile.is_premium
-              ? "Premium"
-              : "Gratuit"
-            }
+        {/* ==================================
+            TITRE
+        ================================== */}
+
+        <div className="
+          mb-6
+        ">
+
+          <h1 className="
+            text-2xl
+            md:text-3xl
+            font-bold
+            text-gray-900
+          ">
+
+            Mon profil
+
+          </h1>
+
+
+          <p className="
+            text-gray-500
+            mt-1
+          ">
+
+            Consulte ton profil et tes récompenses.
+
           </p>
 
         </div>
 
-      )}
+
+        {/* ==================================
+            CARTE PROFIL
+        ================================== */}
+
+        {profile && (
+
+          <div className="
+            bg-white
+            rounded-2xl
+            shadow-sm
+            border
+            border-gray-100
+            overflow-hidden
+            mb-6
+          ">
 
 
+            {/* BANDEAU */}
 
-      <h2 className="text-xl font-bold mb-4">
-        Mes badges
-      </h2>
+            <div className="
+              h-24
+              bg-blue-600
+            " />
 
 
+            <div className="
+              px-5
+              pb-6
+            ">
 
-      {
-        badges.length === 0 ? (
 
-          <div className="text-gray-500">
+              {/* AVATAR */}
 
-            Aucun badge obtenu.
+              <div className="
+                -mt-10
+                mb-4
+              ">
+
+                <div className="
+                  w-20
+                  h-20
+                  rounded-2xl
+                  bg-white
+                  border-4
+                  border-white
+                  shadow-sm
+                  overflow-hidden
+                  flex
+                  items-center
+                  justify-center
+                ">
+
+                  {profile.avatar_url ? (
+
+                    <img
+                      src={
+                        profile.avatar_url
+                      }
+                      alt="Avatar"
+                      className="
+                        w-full
+                        h-full
+                        object-cover
+                      "
+                    />
+
+                  ) : (
+
+                    <User
+                      size={34}
+                      className="text-blue-600"
+                    />
+
+                  )}
+
+                </div>
+
+              </div>
+
+
+              {/* NOM */}
+
+              <h2 className="
+                text-xl
+                font-bold
+                text-gray-900
+              ">
+
+                {profile.full_name ||
+                  "Étudiant Kalan"}
+
+              </h2>
+
+
+              <p className="
+                text-sm
+                text-gray-500
+                mt-1
+              ">
+
+                Élève Kalan Academy
+
+              </p>
+
+
+              {/* INFORMATIONS */}
+
+              <div className="
+                grid
+                grid-cols-2
+                gap-3
+                mt-5
+              ">
+
+
+                {/* STATUT */}
+
+                <div className="
+                  rounded-2xl
+                  bg-gray-50
+                  p-4
+                ">
+
+                  <div className="
+                    w-9
+                    h-9
+                    rounded-xl
+                    bg-yellow-50
+                    flex
+                    items-center
+                    justify-center
+                    mb-3
+                  ">
+
+                    {profile.is_premium ? (
+
+                      <Crown
+                        size={19}
+                        className="text-yellow-500"
+                      />
+
+                    ) : (
+
+                      <User
+                        size={19}
+                        className="text-gray-500"
+                      />
+
+                    )}
+
+                  </div>
+
+
+                  <p className="
+                    text-xs
+                    text-gray-500
+                  ">
+
+                    Statut
+
+                  </p>
+
+
+                  <p className="
+                    font-bold
+                    text-gray-900
+                    mt-1
+                  ">
+
+                    {profile.is_premium
+                      ? "Premium"
+                      : "Gratuit"
+                    }
+
+                  </p>
+
+                </div>
+
+
+                {/* COMPTE */}
+
+                <div className="
+                  rounded-2xl
+                  bg-gray-50
+                  p-4
+                ">
+
+                  <div className="
+                    w-9
+                    h-9
+                    rounded-xl
+                    bg-blue-50
+                    flex
+                    items-center
+                    justify-center
+                    mb-3
+                  ">
+
+                    <Star
+                      size={19}
+                      className="text-blue-600"
+                    />
+
+                  </div>
+
+
+                  <p className="
+                    text-xs
+                    text-gray-500
+                  ">
+
+                    Compte
+
+                  </p>
+
+
+                  <p className="
+                    font-bold
+                    text-gray-900
+                    mt-1
+                  ">
+
+                    {profile.role === "super_admin"
+                      ? "Administrateur"
+                      : profile.role === "admin"
+                      ? "Administrateur"
+                      : "Étudiant"
+                    }
+
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        )}
+
+
+        {/* ==================================
+            TÉLÉCHARGEMENTS
+        ================================== */}
+
+        <button
+          onClick={() =>
+            navigate("/downloads")
+          }
+          className="
+            w-full
+            bg-white
+            rounded-2xl
+            border
+            border-gray-100
+            shadow-sm
+            p-4
+            mb-6
+            flex
+            items-center
+            gap-4
+            text-left
+            hover:shadow-md
+            transition
+          "
+        >
+
+          <div className="
+            w-12
+            h-12
+            rounded-2xl
+            bg-blue-100
+            flex
+            items-center
+            justify-center
+          ">
+
+            <Download
+              size={23}
+              className="text-blue-600"
+            />
+
+          </div>
+
+
+          <div className="
+            flex-1
+          ">
+
+            <h2 className="
+              font-bold
+              text-gray-900
+            ">
+
+              Mes téléchargements
+
+            </h2>
+
+
+            <p className="
+              text-sm
+              text-gray-500
+              mt-1
+            ">
+
+              Accéder à mes vidéos hors ligne
+
+            </p>
+
+          </div>
+
+
+          <span className="
+            text-gray-400
+            text-xl
+          ">
+
+            →
+
+          </span>
+
+        </button>
+
+
+        {/* ==================================
+            BADGES HEADER
+        ================================== */}
+
+        <div className="
+          flex
+          items-center
+          justify-between
+          mb-4
+        ">
+
+          <div>
+
+            <h2 className="
+              text-xl
+              font-bold
+              text-gray-900
+              flex
+              items-center
+              gap-2
+            ">
+
+              <Trophy
+                size={21}
+                className="text-yellow-500"
+              />
+
+              Mes badges
+
+            </h2>
+
+
+            <p className="
+              text-sm
+              text-gray-500
+              mt-1
+            ">
+
+              Tes récompenses Kalan Academy.
+
+            </p>
+
+          </div>
+
+
+          {badges.length > 0 && (
+
+            <div className="
+              min-w-9
+              h-9
+              px-3
+              rounded-full
+              bg-blue-50
+              text-blue-600
+              flex
+              items-center
+              justify-center
+              text-sm
+              font-bold
+            ">
+
+              {badges.length}
+
+            </div>
+
+          )}
+
+        </div>
+
+
+        {/* ==================================
+            AUCUN BADGE
+        ================================== */}
+
+        {badges.length === 0 ? (
+
+          <div className="
+            bg-white
+            rounded-2xl
+            border
+            border-gray-100
+            shadow-sm
+            p-8
+            text-center
+          ">
+
+            <div className="
+              w-16
+              h-16
+              mx-auto
+              mb-4
+              rounded-2xl
+              bg-gray-50
+              flex
+              items-center
+              justify-center
+            ">
+
+              <Award
+                size={30}
+                className="text-gray-400"
+              />
+
+            </div>
+
+
+            <p className="
+              font-bold
+              text-gray-700
+            ">
+
+              Aucun badge obtenu
+
+            </p>
+
+
+            <p className="
+              text-sm
+              text-gray-500
+              mt-1
+            ">
+
+              Continue tes leçons et tes quiz
+              pour gagner des récompenses.
+
+            </p>
 
           </div>
 
         ) : (
 
-          <div className="space-y-4">
 
+          /* ==================================
+             BADGES
+          ================================== */
 
-            {
-              badges.map((item)=>(
+          <div className="
+            space-y-3
+          ">
+
+            {badges.map(
+              (item) => (
 
                 <div
                   key={item.id}
-                  className="bg-white shadow rounded-xl p-4 flex gap-4 items-center"
+                  className="
+                    bg-white
+                    rounded-2xl
+                    border
+                    border-gray-100
+                    shadow-sm
+                    p-4
+                    flex
+                    items-center
+                    gap-4
+                    hover:shadow-md
+                    transition
+                  "
                 >
 
 
-                  <div className="w-14 h-14 rounded-full bg-yellow-100 flex items-center justify-center">
+                  {/* ICÔNE */}
 
-                    🏆
+                  <div className="
+                    shrink-0
+                    w-14
+                    h-14
+                    rounded-2xl
+                    bg-yellow-50
+                    flex
+                    items-center
+                    justify-center
+                    overflow-hidden
+                  ">
+
+                    {item.badges?.image_url ? (
+
+                      <img
+                        src={
+                          item.badges.image_url
+                        }
+                        alt={
+                          item.badges?.name ||
+                          "Badge"
+                        }
+                        className="
+                          w-10
+                          h-10
+                          object-contain
+                        "
+                      />
+
+                    ) : (
+
+                      <Trophy
+                        size={27}
+                        className="text-yellow-500"
+                      />
+
+                    )}
 
                   </div>
 
 
+                  {/* CONTENU */}
 
-                  <div>
+                  <div className="
+                    flex-1
+                    min-w-0
+                  ">
 
+                    <h3 className="
+                      font-bold
+                      text-gray-900
+                    ">
 
-                    <h3 className="font-bold">
-
-                      {item.badges?.name}
+                      {item.badges?.name ||
+                        "Badge Kalan"}
 
                     </h3>
 
 
-                    <p className="text-sm">
+                    <p className="
+                      text-sm
+                      text-gray-500
+                      mt-1
+                    ">
 
                       {item.badges?.description}
 
                     </p>
 
 
-                    <p className="text-sm font-semibold mt-1">
+                    <div className="
+                      inline-flex
+                      items-center
+                      gap-1
+                      mt-2
+                      px-2.5
+                      py-1
+                      rounded-full
+                      bg-blue-50
+                      text-blue-600
+                      text-xs
+                      font-bold
+                    ">
+
+                      <Star
+                        size={13}
+                      />
 
                       +{item.badges?.xp_reward || 0} XP
 
-                    </p>
-
+                    </div>
 
                   </div>
 
-
                 </div>
 
-              ))
-
-            }
-
+              )
+            )}
 
           </div>
 
-        )
+        )}
 
-      }
 
+        {/* ==================================
+            ACCUEIL
+        ================================== */}
+
+        <button
+          onClick={() =>
+            navigate("/")
+          }
+          className="
+            w-full
+            mt-6
+            flex
+            items-center
+            justify-center
+            gap-2
+            bg-white
+            border
+            border-gray-200
+            text-gray-700
+            px-5
+            py-3
+            rounded-xl
+            font-semibold
+            hover:bg-gray-100
+            transition
+          "
+        >
+
+          <Home
+            size={18}
+          />
+
+          Retour à l'accueil
+
+        </button>
+
+
+        {/* ==================================
+            DÉCONNEXION
+        ================================== */}
+
+        <button
+          onClick={handleLogout}
+          className="
+            w-full
+            mt-3
+            flex
+            items-center
+            justify-center
+            gap-2
+            text-red-500
+            px-5
+            py-3
+            rounded-xl
+            font-semibold
+            hover:bg-red-50
+            transition
+          "
+        >
+
+          <LogOut
+            size={18}
+          />
+
+          Se déconnecter
+
+        </button>
+
+      </div>
 
     </div>
 

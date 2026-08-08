@@ -1,5 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "../lib/supabase";
+// =====================================================
+// src/components/UserMenu.jsx
+// =====================================================
+
+import {
+  Link,
+  useNavigate
+} from "react-router-dom";
+
+import {
+  supabase
+} from "../lib/supabase";
 
 import {
   User,
@@ -13,49 +23,92 @@ import {
 
 export default function UserMenu() {
 
+  const navigate =
+    useNavigate();
 
-  const navigate = useNavigate();
 
+  // =====================================================
+  // DÉCONNEXION
+  // =====================================================
 
   async function logout() {
 
-    await supabase.auth.signOut();
+    try {
 
-    navigate("/login");
+      const {
+        error
+      } =
+        await supabase.auth.signOut();
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      navigate("/login");
+
+    } catch (error) {
+
+      console.error(
+        "Erreur déconnexion :",
+        error
+      );
+
+    }
 
   }
 
 
+  // =====================================================
+  // STYLE
+  // =====================================================
+
+  const itemClass = `
+    flex
+    items-center
+    gap-3
+    p-3
+    rounded-lg
+    hover:bg-gray-100
+    transition
+    text-gray-800
+  `;
 
 
-  const item =
-    "flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition text-gray-800";
-
-
+  // =====================================================
+  // AFFICHAGE
+  // =====================================================
 
   return (
 
     <div
       className="
-      bg-white
-      text-gray-800
-      rounded-xl
-      shadow-xl
-      p-4
-      space-y-2
-      border
-      border-gray-100
+        bg-white
+        text-gray-800
+        rounded-xl
+        shadow-xl
+        p-4
+        space-y-2
+        border
+        border-gray-100
       "
     >
 
 
+      {/* PROFIL */}
 
       <Link
         to="/profile"
-        className={item}
+        className={itemClass}
       >
 
-        <User size={20} className="text-blue-600"/>
+        <User
+          size={20}
+          className="text-blue-600"
+        />
 
         <span>
           Mon profil
@@ -64,12 +117,11 @@ export default function UserMenu() {
       </Link>
 
 
-
-
+      {/* TABLEAU DE BORD */}
 
       <Link
         to="/dashboard"
-        className={item}
+        className={itemClass}
       >
 
         <LayoutDashboard
@@ -84,12 +136,11 @@ export default function UserMenu() {
       </Link>
 
 
-
-
+      {/* BADGES */}
 
       <Link
         to="/profile"
-        className={item}
+        className={itemClass}
       >
 
         <Award
@@ -104,13 +155,11 @@ export default function UserMenu() {
       </Link>
 
 
-
-
-
+      {/* TÉLÉCHARGEMENTS */}
 
       <Link
         to="/downloads"
-        className={item}
+        className={itemClass}
       >
 
         <Download
@@ -125,13 +174,11 @@ export default function UserMenu() {
       </Link>
 
 
-
-
-
+      {/* PARAMÈTRES */}
 
       <Link
         to="/settings"
-        className={item}
+        className={itemClass}
       >
 
         <Settings
@@ -146,38 +193,32 @@ export default function UserMenu() {
       </Link>
 
 
-
-
-
+      {/* DÉCONNEXION */}
 
       <button
-
+        type="button"
         onClick={logout}
-
         className="
-        w-full
-        flex
-        items-center
-        gap-3
-        p-3
-        rounded-lg
-        bg-red-600
-        text-white
-        hover:bg-red-700
+          w-full
+          flex
+          items-center
+          gap-3
+          p-3
+          rounded-lg
+          bg-red-600
+          text-white
+          hover:bg-red-700
+          transition
         "
-
       >
 
-        <LogOut size={20}/>
+        <LogOut size={20} />
 
         <span>
           Déconnexion
         </span>
 
-
       </button>
-
-
 
 
     </div>
@@ -185,3 +226,4 @@ export default function UserMenu() {
   );
 
 }
+

@@ -20,319 +20,403 @@ import { useNetwork } from "../hooks/useNetwork";
 import {
   ArrowLeft,
   PlayCircle,
-  BookOpen
+  BookOpen,
+  Clock,
+  CheckCircle2,
+  Trophy
 } from "lucide-react";
 
-
-export default function LessonPage(){
-
+export default function LessonPage() {
   const { lessonId } = useParams();
   const navigate = useNavigate();
 
   const { isOnline } = useNetwork();
 
+  const [lesson, setLesson] = useState(null);
+  const [blocks, setBlocks] = useState([]);
 
-  const [lesson,setLesson] = useState(null);
-  const [blocks,setBlocks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [loading,setLoading] = useState(true);
-  const [error,setError] = useState(null);
-
-
-
-  useEffect(()=>{
-
+  useEffect(() => {
     loadLesson();
+  }, [lessonId, isOnline]);
 
-  },[lessonId,isOnline]);
+  async function loadLesson() {
+    try {
+      setLoading(true);
+      setError(null);
 
+      let lessonData = null;
+      let blockData = [];
 
+      if (isOnline) {
+        lessonData = await getLesson(lessonId);
 
+        blockData =
+          await getLessonBlocks(lessonId);
 
-  async function loadLesson(){
-
-      try{
-
-        setLoading(true);
-
-
-        let lessonData = null;
-        let blockData = [];
-
-
-
-        if(isOnline){
-
-
-          lessonData = await getLesson(lessonId);
-
-          blockData = await getLessonBlocks(lessonId);
-
-
-
-          if(lessonData){
-
-            await cacheLesson(lessonData);
-
-          }
-
-
-
-          await cacheLessonBlocks(
-            blockData || []
-          );
-
-
-        }else{
-
-
-          lessonData =
-            await getCachedLesson(lessonId);
-
-
-          blockData =
-            await getCachedLessonBlocks(lessonId);
-
-
+        if (lessonData) {
+          await cacheLesson(lessonData);
         }
 
-
-
-
-        setLesson(lessonData);
-
-        setBlocks(blockData || []);
-
-
-
-      }catch(err){
-
-
-        console.error(
-          "Erreur LessonPage:",
-          err
+        await cacheLessonBlocks(
+          blockData || []
         );
+      } else {
+        lessonData =
+          await getCachedLesson(lessonId);
 
-
-        setError(err.message);
-
-
-      }finally{
-
-
-        setLoading(false);
-
-
+        blockData =
+          await getCachedLessonBlocks(
+            lessonId
+          );
       }
 
+      setLesson(lessonData);
+      setBlocks(blockData || []);
+    } catch (err) {
+      console.error(
+        "Erreur LessonPage:",
+        err
+      );
+
+      setError(
+        err.message ||
+        "Impossible de charger la leçon"
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
-
-
-
-  if(loading){
-
+  if (loading) {
     return (
-      <div className="p-6 text-center">
-        Chargement...
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 mx-auto mb-4 rounded-full border-4 border-blue-100 border-t-blue-600 animate-spin" />
+
+          <p className="text-gray-500 font-medium">
+            Chargement de la leçon...
+          </p>
+        </div>
       </div>
     );
-
   }
 
-
-
-  if(error){
-
+  if (error) {
     return (
-      <div className="p-6 text-red-600">
-        {error}
-      </div>
-    );
-
-  }
-
-
-
-  if(!lesson){
-
-    return (
-      <div className="p-6">
-        Leçon introuvable.
-      </div>
-    );
-
-  }
-
-
-
-
-  return (
-
-    <div className="p-6 space-y-6">
-
-
-      <button
-        onClick={()=>navigate(-1)}
-        className="flex items-center gap-2 text-gray-600 hover:text-blue-600"
-      >
-
-        <ArrowLeft size={18}/>
-
-        Retour
-
-      </button>
-
-
-
-
-      <div className="bg-white rounded-xl shadow p-5">
-
-
-        <h1 className="text-2xl font-bold">
-          {lesson.title}
-        </h1>
-
-
-        <p className="text-gray-600 mt-2">
-          {lesson.description}
-        </p>
-
-
-
-
-        {
-          lesson.video_url &&
-
-          <button
-
-            onClick={()=>
-              navigate(`/video/${lesson.id}`)
-            }
-
-            className="
-            mt-4
-            flex
-            items-center
-            gap-2
-            bg-blue-600
-            text-white
-            px-4
-            py-3
-            rounded-lg
-            "
-
-          >
-
-            <PlayCircle size={20}/>
-
-            Voir la vidéo
-
-          </button>
-
-        }
-
-
-      </div>
-
-
-
-
-
-
-      <div>
-
-
-        <h2 className="text-xl font-bold mb-3 flex items-center gap-2">
-
-          <BookOpen size={22}/>
-
-          Cours
-
-        </h2>
-
-
-
-
-        {
-          blocks.length === 0 ?
-
-          <p className="text-gray-500">
-            Aucun contenu disponible.
+      <div className="p-4 md:p-6">
+        <div className="bg-white rounded-3xl border border-red-100 p-6 text-center">
+          <p className="text-red-500 mb-4">
+            {error}
           </p>
 
-
-          :
-
-          blocks.map(block=>(
-
-            <div
-              key={block.id}
-              className="bg-white rounded-xl shadow p-4 mb-3"
-            >
-
-              <h3 className="font-semibold text-lg">
-               {block.title || "Cours"}
-              </h3>
-
-              <p className="text-gray-700 mt-2 whitespace-pre-line">
-                {
-                  typeof block.content === "object"
-                    ? block.content.text
-                    : block.content
-                }
-              </p>
-
-
-            </div>
-
-          ))
-
-        }
-
-
+          <button
+            onClick={() => window.location.reload()}
+            className="
+              px-5
+              py-3
+              rounded-xl
+              bg-blue-600
+              text-white
+              font-semibold
+            "
+          >
+            Réessayer
+          </button>
+        </div>
       </div>
+    );
+  }
 
+  if (!lesson) {
+    return (
+      <div className="p-6 text-center">
+        <p className="text-gray-500">
+          Leçon introuvable.
+        </p>
+      </div>
+    );
+  }
 
+  return (
+    <div className="p-4 md:p-6 pb-10 max-w-4xl mx-auto">
 
-
-
-
-
-      <div className="bg-white rounded-xl shadow p-5">
-
-      <h2 className="text-xl font-bold mb-3">
-      Quiz de validation
-      </h2>
-
+      {/* RETOUR */}
 
       <button
-
-      onClick={()=>
-      navigate(`/exercise/${lesson.id}`)
-      }
-
-      className="
-      bg-green-600
-      text-white
-      px-5
-      py-3
-      rounded-lg
-      "
-
+        onClick={() => navigate(-1)}
+        className="
+          inline-flex
+          items-center
+          gap-2
+          mb-5
+          px-4
+          py-2.5
+          rounded-xl
+          bg-white
+          border
+          border-gray-100
+          shadow-sm
+          text-gray-700
+          font-medium
+          hover:text-blue-600
+          transition
+        "
       >
-
-      Commencer le quiz
-
+        <ArrowLeft size={18} />
+        Retour aux leçons
       </button>
 
+      {/* HEADER LEÇON */}
+
+      <div
+        className="
+          relative
+          overflow-hidden
+          rounded-3xl
+          bg-gradient-to-br
+          from-blue-600
+          via-blue-700
+          to-indigo-800
+          text-white
+          p-6
+          md:p-8
+          shadow-lg
+          mb-7
+        "
+      >
+
+        <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/10" />
+
+        <div className="relative z-10">
+
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 text-blue-50 text-xs font-semibold mb-4">
+            <BookOpen size={14} />
+            Leçon
+          </div>
+
+          <h1 className="text-2xl md:text-3xl font-bold leading-tight">
+            {lesson.title}
+          </h1>
+
+          {lesson.description && (
+            <p className="text-blue-100 mt-3 leading-relaxed">
+              {lesson.description}
+            </p>
+          )}
+
+          <div className="flex flex-wrap items-center gap-3 mt-5">
+
+            {lesson.duration_minutes && (
+              <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 text-sm">
+                <Clock size={16} />
+
+                {lesson.duration_minutes} min
+              </div>
+            )}
+
+            {!isOnline && (
+              <div className="px-3 py-2 rounded-xl bg-white/10 text-sm">
+                📱 Disponible hors ligne
+              </div>
+            )}
+
+          </div>
+
+          {/* VIDEO */}
+
+          {lesson.video_url && (
+            <button
+              onClick={() =>
+                navigate(`/video/${lesson.id}`)
+              }
+              className="
+                mt-6
+                inline-flex
+                items-center
+                gap-2
+                bg-white
+                text-blue-700
+                px-5
+                py-3
+                rounded-xl
+                font-bold
+                shadow-md
+                hover:shadow-lg
+                hover:-translate-y-0.5
+                transition
+              "
+            >
+              <PlayCircle size={21} />
+
+              Voir la vidéo
+            </button>
+          )}
+
+        </div>
 
       </div>
 
+      {/* COURS */}
 
+      <div className="mb-7">
+
+        <div className="flex items-center gap-3 mb-5">
+
+          <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center">
+            <BookOpen
+              size={22}
+              className="text-blue-600"
+            />
+          </div>
+
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+              Cours
+            </h2>
+
+            <p className="text-sm text-gray-500">
+              Apprends étape par étape.
+            </p>
+          </div>
+
+        </div>
+
+        {blocks.length === 0 ? (
+
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 text-center">
+            <BookOpen
+              size={38}
+              className="mx-auto text-gray-300 mb-3"
+            />
+
+            <p className="text-gray-500">
+              Aucun contenu disponible.
+            </p>
+          </div>
+
+        ) : (
+
+          <div className="space-y-4">
+
+            {blocks.map((block, index) => {
+
+              const content =
+                typeof block.content === "object"
+                  ? block.content?.text
+                  : block.content;
+
+              return (
+                <article
+                  key={block.id}
+                  className="
+                    bg-white
+                    rounded-3xl
+                    border
+                    border-gray-100
+                    shadow-sm
+                    overflow-hidden
+                  "
+                >
+
+                  <div className="p-5 md:p-6">
+
+                    <div className="flex items-start gap-4">
+
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold flex-shrink-0">
+                        {index + 1}
+                      </div>
+
+                      <div className="flex-1">
+
+                        <h3 className="font-bold text-lg text-gray-900">
+                          {block.title || "Cours"}
+                        </h3>
+
+                        <p className="text-gray-700 mt-3 leading-7 whitespace-pre-line">
+                          {content}
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </article>
+              );
+            })}
+
+          </div>
+
+        )}
+
+      </div>
+
+      {/* QUIZ */}
+
+      <div
+        className="
+          rounded-3xl
+          bg-gradient-to-br
+          from-green-500
+          to-emerald-700
+          text-white
+          p-6
+          md:p-7
+          shadow-lg
+        "
+      >
+
+        <div className="flex items-start gap-4">
+
+          <div className="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center flex-shrink-0">
+            <Trophy size={25} />
+          </div>
+
+          <div className="flex-1">
+
+            <h2 className="text-xl font-bold">
+              Quiz de validation
+            </h2>
+
+            <p className="text-green-50 text-sm mt-1">
+              Vérifie ce que tu as appris dans cette leçon.
+            </p>
+
+            <button
+              onClick={() =>
+                navigate(`/exercise/${lesson.id}`)
+              }
+              className="
+                mt-5
+                inline-flex
+                items-center
+                gap-2
+                bg-white
+                text-green-700
+                px-5
+                py-3
+                rounded-xl
+                font-bold
+                shadow-md
+                hover:shadow-lg
+                transition
+              "
+            >
+              <CheckCircle2 size={20} />
+
+              Commencer le quiz
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
-
   );
-
 }

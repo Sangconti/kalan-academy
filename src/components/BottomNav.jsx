@@ -1,162 +1,175 @@
 // src/components/BottomNav.jsx
 
-import { useNavigate, useLocation } from "react-router-dom";
+import {
+  useNavigate,
+  useLocation
+} from "react-router-dom";
 
 import {
   Home,
-  BookOpen,
+  Settings,
   BarChart3,
   Download,
   User
 } from "lucide-react";
 
+export default function BottomNav() {
 
-export default function BottomNav(){
+  const navigate = useNavigate();
+  const location = useLocation();
 
+  // =====================================================
+  // NAVIGATION
+  // =====================================================
 
-const navigate = useNavigate();
+  const items = [
 
-const location = useLocation();
+    {
+      path: "/",
+      label: "Accueil",
+      icon: Home
+    },
 
+    {
+      path: "/settings",
+      label: "Paramètres",
+      icon: Settings
+    },
 
+    {
+      path: "/dashboard",
+      label: "Progression",
+      icon: BarChart3
+    },
 
-const isActive = (path)=>{
+    {
+      path: "/downloads",
+      label: "Téléchargés",
+      icon: Download
+    },
 
- if(path === "/"){
-   return location.pathname === "/";
- }
+    {
+      path: "/profile",
+      label: "Profil",
+      icon: User
+    }
 
- return location.pathname.startsWith(path);
+  ];
 
-};
+  // =====================================================
+  // ÉTAT ACTIF
+  // =====================================================
 
+  function isActive(item) {
 
+    // Accueil
+    if (item.path === "/") {
 
-const items=[
+      return location.pathname === "/";
 
-{
-path:"/",
-label:"Accueil",
-icon:Home
-},
+    }
 
-{
-path:"/courses",
-label:"Cours",
-icon:BookOpen
-},
+    // Autres pages
+    return location.pathname.startsWith(
+      item.path
+    );
 
-{
-path:"/dashboard",
-label:"Progression",
-icon:BarChart3
-},
+  }
 
-{
-path:"/downloads",
-label:"Téléchargés",
-icon:Download
-},
+  // =====================================================
+  // NAVIGATION
+  // =====================================================
 
-{
-path:"/profile",
-label:"Profil",
-icon:User
-}
+  function handleNavigation(item) {
 
-];
+    navigate(item.path);
 
+  }
 
+  // =====================================================
+  // AFFICHAGE
+  // =====================================================
 
-return (
+  return (
 
-<nav
-className="
-fixed
-bottom-0
-left-0
-right-0
-bg-white
-border-t
-shadow-lg
-z-20
-"
->
+    <nav
+      className="
+        fixed
+        bottom-0
+        left-0
+        right-0
+        z-30
+        bg-white
+        border-t
+        border-gray-200
+        shadow-lg
+      "
+    >
 
+      <div
+        className="
+          max-w-2xl
+          mx-auto
+          grid
+          grid-cols-5
+          h-16
+        "
+      >
 
-<div
-className="
-max-w-md
-mx-auto
-flex
-justify-around
-py-2
-"
->
+        {items.map((item) => {
 
+          const Icon = item.icon;
 
-{
-items.map((item)=>{
+          const active =
+            isActive(item);
 
+          return (
 
-const Icon=item.icon;
+            <button
+              key={item.path}
+              type="button"
+              onClick={() =>
+                handleNavigation(item)
+              }
+              className={`
+                flex
+                flex-col
+                items-center
+                justify-center
+                gap-1
+                text-xs
+                transition
+                active:scale-95
 
+                ${
+                  active
+                    ? "text-blue-600 font-semibold"
+                    : "text-gray-400 hover:text-gray-600"
+                }
+              `}
+            >
 
-return (
+              <Icon
+                size={21}
+                strokeWidth={
+                  active ? 2.5 : 2
+                }
+              />
 
-<button
+              <span>
+                {item.label}
+              </span>
 
-key={item.path}
+            </button>
 
-onClick={()=>navigate(item.path)}
+          );
 
-className={`
-flex
-flex-col
-items-center
-gap-1
-p-2
+        })}
 
-${
-isActive(item.path)
-?
-"text-blue-600 font-semibold"
-:
-"text-gray-400"
-}
+      </div>
 
-`}
+    </nav>
 
->
-
-
-<Icon size={22}/>
-
-
-<span className="text-xs">
-
-{item.label}
-
-</span>
-
-
-</button>
-
-
-)
-
-
-})
-
-}
-
-
-</div>
-
-
-</nav>
-
-);
-
+  );
 
 }

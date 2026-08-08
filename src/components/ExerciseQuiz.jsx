@@ -1,562 +1,1063 @@
 // src/components/ExerciseQuiz.jsx
 
-import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
-import { addXP } from "../services/xpService";
-import { Trophy } from "lucide-react";
-import { saveLessonProgress } from "../services/progressService";
+import {
+useEffect,
+useState
+} from "react";
 
+import {
+addXP
+} from "../services/xpService";
+
+import {
+saveLessonProgress
+} from "../services/progressService";
+
+import {
+submitQuizAttempt,
+getQuizQuestions,
+giveBadge
+} from "../services/quizService";
+
+import {
+CheckCircle2,
+Trophy,
+ArrowRight,
+Loader2
+} from "lucide-react";
 
 export default function ExerciseQuiz({
-  quizId,
-  lessonId
+quizId,
+lessonId
 }) {
 
+// ====================================
+// STATE
+// ====================================
 
-const [answers,setAnswers]=useState({});
+const [answers, setAnswers] = useState({});
+const [result, setResult] = useState(null);
+const [questions, setQuestions] = useState([]);
+const [loading, setLoading] = useState(true);
+const [validating, setValidating] = useState(false);
 
-const [result,setResult]=useState(null);
+// ====================================
+// CHARGEMENT QUESTIONS
+// ====================================
 
-const [questions,setQuestions]=useState([]);
+useEffect(() => {
 
-const [loading,setLoading]=useState(true);
-
-
-
-
-
-useEffect(()=>{
+if (!quizId) return;
 
 loadQuestions();
 
-},[quizId]);
+}, [quizId]);
 
+async function loadQuestions() {
 
+setLoading(true);
 
+try {
 
+  const data =
+    await getQuizQuestions(quizId);
 
-async function loadQuestions(){
+  const formatted =
+    (data || []).map(
+      question => ({
 
+        ...question,
 
-const {data,error}=await supabase
+        choices:
+          question.choices ||
+          question.options ||
+          []
 
-.from("quiz_questions")
+      })
+    );
 
-.select("*")
+  console.log(
+    "QUESTIONS CHARGEES",
+    formatted
+  );
 
-.eq(
-"quiz_id",
-quizId
-)
-
-.order(
-"order_number",
-{
-ascending:true
-}
-);
-
-
-
-if(error){
-
-console.error(
-"Erreur chargement questions",
-error
-);
-
-return;
+  setQuestions(formatted);
 
 }
 
+catch (error) {
 
+  console.error(
+    "Erreur chargement questions",
+    error
+  );
 
-const formatted = (data || []).map(q=>({
-
-...q,
-
-choices:
-q.choices || q.options || []
-
-}));
-
-
-console.log(
-"QUESTIONS CHARGEES",
-formatted
-);
-
-
-
-setQuestions(formatted);
-
-setLoading(false);
-
+  setQuestions([]);
 
 }
 
+finally {
 
+  setLoading(false);
 
+}
 
+}
+
+// ====================================
+// CHOIX RÉPONSE
+// ====================================
 
 function chooseAnswer(
 questionIndex,
 answerIndex
-){
+) {
 
+if (validating || result) return;
 
-setAnswers(prev=>({
+setAnswers(
+  previous => ({
 
-...prev,
+    ...previous,
 
-[questionIndex]:answerIndex
+    [questionIndex]:
+      answerIndex
 
-}));
+  })
+);
 
 }
 
+// ====================================
+// VALIDATION
+// ====================================
 
+async function validateQuiz() {
 
+if (validating) return;
 
-async function validateQuiz(){
+if (questions.length === 0) {
+  return;
+}
 
+setValidating(true);
 
+try {
 
-const {
+  /*
+    Vérifier utilisateur connecté.
 
-data:{user}
+    Le quiz lui-même peut fonctionner
+    offline. La session sert uniquement
+    à récupérer user.id.
+  */
 
-}=await supabase.auth.getUser();
+  const {
+    data: {
+      session
+    }
+  } =
+    await import(
+      "../lib/supabase"
+    ).then(
+      module =>
+        module.supabase.auth.getSession()
+    );
 
+  const user =
+    session?.user;
 
+  if (!user) {
 
-if(!user)
-return;
+    console.error(
+      "Utilisateur non connecté"
+    );
 
+    return;
 
+  }
 
-console.log(
-"REPONSES UTILISATEUR",
-answers
-);
+  console.log(
+    "REPONSES UTILISATEUR",
+    answers
+  );
 
+  // ====================================
+  // CORRECTION + SAUVEGARDE
+  // ====================================
 
-console.log(
-"QUESTIONS",
-questions
-);
+  const quizResult =
+    await submitQuizAttempt(
 
+      user.id,
 
+      quizId,
 
-let correct=0;
+      lessonId,
 
+      answers,
 
+      questions
 
-questions.forEach(
-(q,index)=>{
+    );
 
+  if (!quizResult) {
 
-const userAnswer =
-answers[index];
+    throw new Error(
+      "Résultat quiz indisponible."
+    );
 
+  }
 
-const goodAnswer =
-q.correct_index;
+  console.log(
+    "RÉSULTAT QUIZ",
+    quizResult
+  );
 
+  // ====================================
+  // XP
+  // ====================================
 
+  let xpResult = null;
 
-if(
-Number(userAnswer) === Number(goodAnswer)
-){
+  if (
+    quizResult.xp > 0
+  ) {
 
-correct++;
+    xpResult =
+      await addXP(
+
+        user.id,
+
+        quizResult.xp
+
+      );
+
+  }
+
+  // ====================================
+  // PROGRESSION
+  // ====================================
+
+  await saveLessonProgress({
+
+    userId:
+      user.id,
+
+    lessonId,
+
+    score:
+      quizResult.score
+
+  });
+
+  // ====================================
+  // BADGE
+  // ====================================
+
+  if (
+    quizResult.score >= 80
+  ) {
+
+    await giveBadge(
+
+      user.id,
+
+      "Élève brillant"
+
+    );
+
+  }
+
+  // ====================================
+  // RÉSULTAT UI
+  // ====================================
+
+  setResult({
+
+    score:
+      quizResult.score,
+
+    xp:
+      quizResult.xp,
+
+    correct:
+      quizResult.correct,
+
+    synced:
+      quizResult.synced,
+
+    pendingXP:
+      xpResult?.pending || false
+
+  });
 
 }
 
+catch (error) {
 
-});
+  console.error(
+    "Erreur validation quiz :",
+    error
+  );
+
+}
+
+finally {
+
+  setValidating(false);
+
+}
+
+}
+
+// ====================================
+// CONTINUER
+// ====================================
+
+function continueQuiz() {
+
+window.history.back();
+
+}
+
+// ====================================
+// TEXTE DU SCORE
+// ====================================
+
+function getResultMessage(score) {
+
+if (score >= 80) {
+  return "Excellent travail !";
+}
+
+if (score >= 50) {
+  return "Bon travail ! Continue tes efforts.";
+}
+
+return "Continue à apprendre, tu vas progresser !";
+
+}
+
+// ====================================
+// LOADING
+// ====================================
+
+if (loading) {
+
+return (
+
+  <div className="
+    bg-white
+    rounded-2xl
+    shadow-sm
+    p-8
+    text-center
+  ">
+
+    <Loader2
+      size={28}
+      className="
+        mx-auto
+        mb-3
+        animate-spin
+        text-blue-600
+      "
+    />
+
+    <p className="
+      text-gray-500
+    ">
+
+      Chargement du quiz...
+
+    </p>
+
+  </div>
+
+);
+
+}
+
+// ====================================
+// AUCUNE QUESTION
+// ====================================
+
+if (
+questions.length === 0
+) {
+
+return (
+
+  <div className="
+    bg-white
+    rounded-2xl
+    shadow-sm
+    p-8
+    text-center
+  ">
+
+    <p className="
+      text-gray-500
+    ">
+
+      Aucune question trouvée.
+
+    </p>
+
+  </div>
+
+);
+
+}
+
+// ====================================
+// RÉSULTAT
+// ====================================
+
+if (result) {
+
+return (
+
+  <div className="
+    space-y-5
+  ">
+
+    {/* TITRE */}
+
+    <div>
+
+      <p className="
+        text-sm
+        font-medium
+        text-blue-600
+        mb-1
+      ">
+
+        Quiz terminé
+
+      </p>
+
+      <h2 className="
+        text-2xl
+        font-bold
+        text-gray-900
+      ">
+
+        Ton résultat
+
+      </h2>
+
+    </div>
 
 
+    {/* CARTE RÉSULTAT */}
+
+    <div className="
+      bg-white
+      rounded-2xl
+      shadow-sm
+      border
+      border-gray-100
+      p-6
+      text-center
+    ">
+
+      <div className="
+        w-16
+        h-16
+        mx-auto
+        mb-4
+        rounded-full
+        bg-blue-50
+        flex
+        items-center
+        justify-center
+      ">
+
+        <Trophy
+          size={30}
+          className="text-blue-600"
+        />
+
+      </div>
 
 
+      <h3 className="
+        text-xl
+        font-bold
+        text-gray-900
+      ">
 
-const score =
-questions.length > 0
-?
+        {getResultMessage(
+          result.score
+        )}
+
+      </h3>
+
+
+      <p className="
+        text-gray-500
+        mt-1
+      ">
+
+        Tu as obtenu
+
+      </p>
+
+
+      {/* SCORE */}
+
+      <div className="
+        text-4xl
+        font-bold
+        text-blue-600
+        mt-2
+      ">
+
+        {result.score}%
+
+      </div>
+
+
+      {/* INFOS */}
+
+      <div className="
+        grid
+        grid-cols-2
+        gap-3
+        mt-6
+      ">
+
+        <div className="
+          rounded-xl
+          bg-gray-50
+          p-3
+        ">
+
+          <p className="
+            text-xs
+            text-gray-500
+          ">
+
+            Bonnes réponses
+
+          </p>
+
+          <p className="
+            font-bold
+            text-gray-900
+            mt-1
+          ">
+
+            {result.correct}/{questions.length}
+
+          </p>
+
+        </div>
+
+
+        <div className="
+          rounded-xl
+          bg-gray-50
+          p-3
+        ">
+
+          <p className="
+            text-xs
+            text-gray-500
+          ">
+
+            XP gagnés
+
+          </p>
+
+          <p className="
+            font-bold
+            text-gray-900
+            mt-1
+          ">
+
+            +{result.xp} XP
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+      {/* SYNCHRONISATION */}
+
+      <div className="
+        mt-5
+        text-sm
+      ">
+
+        {result.synced ? (
+
+          <p className="
+            text-green-600
+          ">
+
+            ☁️ Résultat synchronisé
+
+          </p>
+
+        ) : (
+
+          <p className="
+            text-orange-600
+          ">
+
+            💾 Résultat sauvegardé hors ligne
+
+          </p>
+
+        )}
+
+      </div>
+
+
+      {/* CONTINUER */}
+
+      <button
+
+        type="button"
+
+        onClick={
+          continueQuiz
+        }
+
+        className="
+          w-full
+          mt-6
+          flex
+          items-center
+          justify-center
+          gap-2
+          bg-blue-600
+          text-white
+          font-semibold
+          px-5
+          py-3
+          rounded-xl
+          hover:bg-blue-700
+          transition
+        "
+
+      >
+
+        Continuer
+
+        <ArrowRight
+          size={18}
+        />
+
+      </button>
+
+    </div>
+
+  </div>
+
+);
+
+}
+
+// ====================================
+// INTERFACE QUIZ
+// ====================================
+
+const answeredCount =
+Object.keys(answers).length;
+
+const progress =
 Math.round(
-(correct/questions.length)*100
-)
-:
-0;
-
-
-
-
-let gainedXP=0;
-
-
-
-if(score>=80){
-
-gainedXP=300;
-
-}
-else if(score>=50){
-
-gainedXP=100;
-
-}
-
-
-
-
-if(gainedXP>0){
-
-await addXP(
-user.id,
-gainedXP
+(
+answeredCount /
+questions.length
+) * 100
 );
-
-}
-
-
-
-
-
-// sauvegarde tentative
-
-const {error:attemptError}=await supabase
-
-.from("quiz_attempts")
-
-.insert({
-
-user_id:user.id,
-
-quiz_id:quizId,
-
-score:score,
-
-answers:answers,
-
-attempt_number:1
-
-});
-
-
-
-if(attemptError){
-
-console.error(
-"Erreur quiz_attempts",
-attemptError
-);
-
-}
-
-
-
-
-
-// badge
-
-if(score>=80){
-
-
-const {
-
-data:badge
-
-}=await supabase
-
-.from("badges")
-
-.select("id")
-
-.eq(
-"name",
-"Élève brillant"
-)
-
-.maybeSingle();
-
-
-
-if(badge){
-
-
-const {error}=await supabase
-
-.from("user_badges")
-
-.insert({
-
-user_id:user.id,
-
-badge_id:badge.id
-
-});
-
-
-if(error){
-
-console.error(
-"Erreur badge",
-error
-);
-
-}
-
-}
-
-
-}
-
-
-
-
-
-await saveLessonProgress({
-
-userId:user.id,
-
-lessonId:lessonId,
-
-score:score
-
-});
-
-
-
-
-
-setResult({
-
-score,
-
-xp:gainedXP,
-
-correct
-
-});
-
-
-}
-
-
-
-
-
-
-
-if(loading){
 
 return (
 
-<div>
+<div className="
+  space-y-6
+">
 
-Chargement quiz...
+  {/* EN-TÊTE */}
+
+  <div>
+
+    <p className="
+      text-sm
+      font-medium
+      text-blue-600
+      mb-1
+    ">
+
+
+
+
+    </p>
+
+    <h2 className="
+      text-2xl
+      font-bold
+      text-gray-900
+    ">
+
+      Vérifie tes connaissances
+
+    </h2>
+
+    <p className="
+      text-gray-500
+      mt-1
+    ">
+
+      Choisis une réponse pour chaque question.
+
+    </p>
+
+  </div>
+
+
+  {/* PROGRESSION */}
+
+  <div className="
+    bg-white
+    rounded-2xl
+    shadow-sm
+    border
+    border-gray-100
+    p-4
+  ">
+
+    <div className="
+      flex
+      items-center
+      justify-between
+      text-sm
+      mb-2
+    ">
+
+      <span className="
+        font-medium
+        text-gray-700
+      ">
+
+        Progression
+
+      </span>
+
+      <span className="
+        text-gray-500
+      ">
+
+        {answeredCount}/{questions.length}
+
+      </span>
+
+    </div>
+
+
+    <div className="
+      h-2
+      bg-gray-100
+      rounded-full
+      overflow-hidden
+    ">
+
+      <div
+        className="
+          h-full
+          bg-blue-600
+          rounded-full
+          transition-all
+        "
+        style={{
+          width: `${progress}%`
+        }}
+      />
+
+    </div>
+
+  </div>
+
+
+  {/* QUESTIONS */}
+
+  <div className="
+    space-y-4
+  ">
+
+    {questions.map(
+      (question, index) => (
+
+        <div
+          key={question.id}
+          className="
+            bg-white
+            rounded-2xl
+            shadow-sm
+            border
+            border-gray-100
+            p-5
+          "
+        >
+
+          {/* NUMÉRO */}
+
+          <div className="
+            flex
+            items-start
+            gap-3
+            mb-4
+          ">
+
+            <div className="
+              shrink-0
+              w-8
+              h-8
+              rounded-full
+              bg-blue-50
+              text-blue-600
+              flex
+              items-center
+              justify-center
+              text-sm
+              font-bold
+            ">
+
+              {index + 1}
+
+            </div>
+
+
+            <p className="
+              font-semibold
+              text-gray-900
+              leading-6
+            ">
+
+              {question.question}
+
+            </p>
+
+          </div>
+
+
+          {/* RÉPONSES */}
+
+          <div className="
+            space-y-2
+          ">
+
+            {question.choices.map(
+              (
+                choice,
+                choiceIndex
+              ) => {
+
+                const selected =
+                  answers[index] ===
+                  choiceIndex;
+
+                return (
+
+                  <button
+
+                    key={choiceIndex}
+
+                    type="button"
+
+                    onClick={() =>
+                      chooseAnswer(
+                        index,
+                        choiceIndex
+                      )
+                    }
+
+                    disabled={
+                      validating
+                    }
+
+                    className={`
+                      w-full
+                      flex
+                      items-center
+                      gap-3
+                      text-left
+                      px-4
+                      py-3
+                      rounded-xl
+                      border
+                      transition
+                      ${
+                        selected
+                          ? `
+                            bg-blue-50
+                            border-blue-500
+                            text-blue-700
+                          `
+                          : `
+                            bg-white
+                            border-gray-200
+                            text-gray-700
+                            hover:bg-gray-50
+                            hover:border-gray-300
+                          `
+                      }
+                      ${
+                        validating
+                          ? `
+                            opacity-60
+                            cursor-not-allowed
+                          `
+                          : ""
+                      }
+                    `}
+
+                  >
+
+                    <span className={`
+                      shrink-0
+                      w-7
+                      h-7
+                      rounded-full
+                      flex
+                      items-center
+                      justify-center
+                      text-xs
+                      font-semibold
+                      ${
+                        selected
+                          ? `
+                            bg-blue-600
+                            text-white
+                          `
+                          : `
+                            bg-gray-100
+                            text-gray-500
+                          `
+                      }
+                    `}>
+
+                      {String.fromCharCode(
+                        65 + choiceIndex
+                      )}
+
+                    </span>
+
+
+                    <span className="
+                      flex-1
+                    ">
+
+                      {choice}
+
+                    </span>
+
+
+                    {selected && (
+
+                      <CheckCircle2
+                        size={18}
+                        className="
+                          text-blue-600
+                        "
+                      />
+
+                    )}
+
+                  </button>
+
+                );
+
+              }
+
+            )}
+
+          </div>
+
+        </div>
+
+      )
+
+    )}
+
+  </div>
+
+
+  {/* BOUTON VALIDATION */}
+
+  <button
+
+    type="button"
+
+    onClick={
+      validateQuiz
+    }
+
+    disabled={
+      validating ||
+      answeredCount <
+      questions.length
+    }
+
+    className="
+      w-full
+      flex
+      items-center
+      justify-center
+      gap-2
+      bg-blue-600
+      text-white
+      font-semibold
+      px-6
+      py-3.5
+      rounded-xl
+      shadow-sm
+      hover:bg-blue-700
+      transition
+      disabled:opacity-50
+      disabled:cursor-not-allowed
+    "
+
+  >
+
+    {validating ? (
+
+      <>
+        <Loader2
+          size={19}
+          className="
+            animate-spin
+          "
+        />
+
+        Validation...
+
+      </>
+
+    ) : (
+
+      <>
+        <CheckCircle2
+          size={19}
+        />
+
+        Valider le quiz
+
+      </>
+
+    )}
+
+  </button>
 
 </div>
 
 );
-
-}
-
-
-
-
-
-if(questions.length===0){
-
-return (
-
-<div className="bg-white p-5 rounded-xl shadow">
-
-Aucune question trouvée.
-
-</div>
-
-);
-
-}
-
-
-
-
-
-return (
-
-<div className="space-y-6">
-
-
-<h2 className="text-2xl font-bold">
-
-Quiz
-
-</h2>
-
-
-
-
-{
-
-questions.map(
-(q,index)=>(
-
-
-<div
-
-key={q.id}
-
-className="bg-white shadow rounded-xl p-5"
-
->
-
-
-<h3 className="font-semibold mb-4">
-
-{index+1}. {q.question}
-
-</h3>
-
-
-
-
-<div className="space-y-2">
-
-
-{
-
-q.choices.map(
-
-(choice,i)=>(
-
-
-<button
-
-key={i}
-
-onClick={()=>chooseAnswer(index,i)}
-
-className={`
-
-w-full text-left p-3 rounded-lg border
-
-${
-answers[index]===i
-
-?
-
-"bg-blue-200 border-blue-500"
-
-:
-
-"bg-gray-100"
-
-}
-
-`}
-
->
-
-{choice}
-
-</button>
-
-
-)
-
-)
-
-
-}
-
-
-</div>
-
-
-</div>
-
-
-)
-
-)
-
-
-}
-
-
-
-
-
-<button
-
-onClick={validateQuiz}
-
-className="bg-blue-600 text-white px-6 py-3 rounded-xl"
-
->
-
-Valider le quiz
-
-</button>
-
-
-
-
-
-{
-
-result &&
-
-<div className="bg-green-100 p-5 rounded-xl">
-
-
-<Trophy/>
-
-
-<h2 className="font-bold text-xl">
-
-Résultat
-
-</h2>
-
-
-
-<p>
-
-Score : {result.score} %
-
-</p>
-
-
-<p>
-
-Bonnes réponses :
-
-{result.correct}/{questions.length}
-
-</p>
-
-
-<p>
-
-+{result.xp} XP
-
-</p>
-
-
-
-</div>
-
-}
-
-
-
-</div>
-
-);
-
 
 }

@@ -616,7 +616,7 @@ export async function importAdminLessonPack(jsonData) {
          jsonData.chapter,
 
        description:
-         "Chapitre importé depuis JSON Mali",
+        jsonData.description ?? null,
 
        order_number:
          jsonData.chapter_order ?? 1

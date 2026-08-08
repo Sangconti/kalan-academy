@@ -1,716 +1,1593 @@
 // src/pages/VideoPage.jsx
 
 import {
-useEffect,
-useState
+  useEffect,
+  useState
 } from "react";
 
 import {
-useParams,
-useNavigate
+  useParams,
+  useNavigate
 } from "react-router-dom";
 
-
 import {
-supabase
+  supabase
 } from "../lib/supabase";
 
-
 import {
-getLesson
+  getLesson
 } from "../services/educationService";
 
-
 import {
-addXP
+  addXP
 } from "../services/xpService";
 
-
 import {
-unlockBadge
+  unlockBadge
 } from "../services/badgeService";
 
-
 import {
-ArrowLeft,
-CheckCircle
+  ArrowLeft,
+  PlayCircle,
+  CheckCircle2,
+  Trophy,
+  Award,
+  BookOpen,
+  Loader2,
+  CircleHelp
 } from "lucide-react";
 
+export default function VideoPage() {
 
+  const { lessonId } = useParams();
 
+  const navigate = useNavigate();
 
+  const [lesson, setLesson] = useState(null);
 
-export default function VideoPage(){
+  const [quiz, setQuiz] = useState(null);
 
+  const [questions, setQuestions] = useState([]);
 
-const {lessonId}=useParams();
+  const [answers, setAnswers] = useState({});
 
-const navigate=useNavigate();
+  const [result, setResult] = useState(null);
 
+  const [loading, setLoading] = useState(true);
 
-const [lesson,setLesson]=useState(null);
+  const [validating, setValidating] = useState(false);
 
-const [quiz,setQuiz]=useState(null);
+  const [user, setUser] = useState(null);
 
-const [questions,setQuestions]=useState([]);
 
-const [answers,setAnswers]=useState({});
+  // ==========================================
+  // CHARGEMENT
+  // ==========================================
 
-const [result,setResult]=useState(null);
+  useEffect(() => {
 
-const [loading,setLoading]=useState(true);
+    loadData();
 
-const [user,setUser]=useState(null);
+  }, [lessonId]);
 
 
+  async function loadData() {
 
+    try {
 
+      setLoading(true);
 
 
+      // ========================================
+      // UTILISATEUR
+      // ========================================
 
-useEffect(()=>{
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
 
-loadData();
 
-},[lessonId]);
+      setUser(user);
 
 
+      // ========================================
+      // LEÇON
+      // ========================================
 
+      const lessonData =
+        await getLesson(lessonId);
 
 
+      setLesson(lessonData);
 
 
-async function loadData(){
+      if (!lessonData) {
 
+        return;
 
-try{
+      }
 
 
-const {
+      // ========================================
+      // QUIZ
+      // ========================================
 
-data:{
-user
+      const {
+        data: quizData,
+        error: quizError
+      } = await supabase
 
-}
+        .from("quizzes")
 
-}
-=
-await supabase.auth.getUser();
+        .select("*")
 
+        .eq(
+          "lesson_id",
+          lessonId
+        )
 
+        .maybeSingle();
 
-setUser(user);
 
+      if (quizError) {
 
+        console.warn(
+          "Erreur chargement quiz :",
+          quizError
+        );
 
+        return;
 
+      }
 
-const lessonData =
-await getLesson(lessonId);
 
+      if (!quizData) {
 
-setLesson(lessonData);
+        return;
 
+      }
 
 
+      setQuiz(quizData);
 
 
-const {
+      // ========================================
+      // QUESTIONS
+      // ========================================
 
-data:quizData
+      const {
+        data: questionsData,
+        error: questionsError
+      } = await supabase
 
-}
-=
-await supabase
+        .from("quiz_questions")
 
-.from("quizzes")
+        .select("*")
 
-.select("*")
+        .eq(
+          "quiz_id",
+          quizData.id
+        )
 
-.eq(
-"lesson_id",
-lessonId
-)
+        .order(
+          "order_number",
+          {
+            ascending: true
+          }
+        );
 
-.single();
 
+      if (questionsError) {
 
+        throw questionsError;
 
+      }
 
 
-if(!quizData){
+      setQuestions(
+        (questionsData || []).map(
+          question => ({
 
-setLoading(false);
+            ...question,
 
-return;
+            choices:
+              question.choices ||
+              question.options ||
+              []
 
-}
+          })
+        )
+      );
 
 
+    }
 
-setQuiz(quizData);
+    catch (error) {
 
+      console.error(
+        "Chargement VideoPage :",
+        error
+      );
 
+    }
 
+    finally {
 
+      setLoading(false);
 
-const {
+    }
 
-data:questionsData,
+  }
 
-error
 
-}
-=
-await supabase
+  // ==========================================
+  // CHOIX RÉPONSE
+  // ==========================================
 
-.from("quiz_questions")
+  function chooseAnswer(
+    questionId,
+    index
+  ) {
 
-.select("*")
+    if (
+      validating ||
+      result
+    ) {
 
-.eq(
-"quiz_id",
-quizData.id
-)
+      return;
 
-.order(
-"order_number"
-);
+    }
 
 
+    setAnswers(
+      previous => ({
 
-if(error)
-throw error;
+        ...previous,
 
+        [questionId]: index
 
+      })
+    );
 
-setQuestions(
-questionsData || []
-);
+  }
 
 
+  // ==========================================
+  // VALIDATION QUIZ
+  // ==========================================
 
-}
-catch(error){
+  async function validateQuiz() {
 
-console.error(
-"Chargement erreur:",
-error
-);
+    if (
+      validating ||
+      result ||
+      !user ||
+      !quiz ||
+      questions.length === 0
+    ) {
 
-}
-finally{
+      return;
 
-setLoading(false);
+    }
 
-}
 
+    if (
+      Object.keys(answers).length <
+      questions.length
+    ) {
 
-}
+      return;
 
+    }
 
 
+    setValidating(true);
 
 
+    try {
 
+      let goodAnswers = 0;
 
 
+      // ======================================
+      // CORRECTION
+      // ======================================
 
-function chooseAnswer(
-questionId,
-index
-){
+      questions.forEach(
+        question => {
 
+          if (
+            answers[question.id] ===
+            question.correct_index
+          ) {
 
-setAnswers({
+            goodAnswers++;
 
-...answers,
+          }
 
-[questionId]:index
+        }
+      );
 
-});
 
+      const score =
+        Math.round(
+          (
+            goodAnswers /
+            questions.length
+          ) * 100
+        );
 
-}
 
+      // ======================================
+      // SAUVEGARDE TENTATIVE
+      // ======================================
 
+      const {
+        error: attemptError
+      } = await supabase
 
+        .from("quiz_attempts")
 
+        .insert({
 
+          user_id:
+            user.id,
 
+          quiz_id:
+            quiz.id,
 
+          score
 
+        });
 
-async function validateQuiz(){
 
+      if (attemptError) {
 
-let goodAnswers=0;
+        console.warn(
+          "Erreur sauvegarde tentative :",
+          attemptError
+        );
 
+      }
 
 
-questions.forEach(q=>{
+      // ======================================
+      // PROGRESSION
+      // ======================================
 
+      const {
+        error: progressError
+      } = await supabase
 
-if(
-answers[q.id] === q.correct_index
-){
+        .from("user_progress")
 
-goodAnswers++;
+        .upsert({
 
-}
+          user_id:
+            user.id,
 
+          lesson_id:
+            lessonId,
 
-});
+          last_score:
+            score,
 
+          completion_percentage:
+            score,
 
+          completed:
+            score >= 80,
 
+          completed_at:
+            score >= 80
+              ? new Date().toISOString()
+              : null
 
-const score =
-Math.round(
-(goodAnswers/questions.length)*100
-);
+        });
 
 
+      if (progressError) {
 
+        console.warn(
+          "Erreur progression :",
+          progressError
+        );
 
+      }
 
-// sauvegarde tentative
 
-await supabase
+      // ======================================
+      // XP
+      // ======================================
 
-.from("quiz_attempts")
+      let xpGain = 50;
 
-.insert({
 
-user_id:user.id,
+      if (score >= 80) {
 
-quiz_id:quiz.id,
+        xpGain = 100;
 
-score:score
 
-});
+        try {
 
+          await unlockBadge(
+            user.id,
+            "Élève brillant"
+          );
 
+        }
 
+        catch (badgeError) {
 
+          console.warn(
+            "Badge non attribué :",
+            badgeError
+          );
 
+        }
 
+      }
 
-// progression
 
-await supabase
+      // ======================================
+      // AJOUT XP
+      // ======================================
 
-.from("user_progress")
+      const levelData =
+        await addXP(
+          user.id,
+          xpGain
+        );
 
-.upsert({
 
-user_id:user.id,
+      // ======================================
+      // RÉSULTAT
+      // ======================================
 
-lesson_id:lessonId,
+      setResult({
 
-last_score:score,
+        score,
 
-completion_percentage:score,
+        goodAnswers,
 
-completed:
-score>=80,
+        total:
+          questions.length,
 
-completed_at:
-score>=80
-?
-new Date()
-:
-null
+        xp:
+          xpGain,
 
-});
+        level:
+          levelData?.level ||
+          null
 
+      });
 
+    }
 
+    catch (error) {
 
+      console.error(
+        "Erreur validation quiz :",
+        error
+      );
 
+    }
 
+    finally {
 
-// XP + badge
+      setValidating(false);
 
+    }
 
-let xpGain = 50;
+  }
 
 
+  // ==========================================
+  // MESSAGE SCORE
+  // ==========================================
 
-if(score>=80){
+  function getResultMessage(score) {
 
+    if (score >= 80) {
 
-xpGain=100;
+      return "Excellent travail !";
 
+    }
 
+    if (score >= 50) {
 
-await unlockBadge(
+      return "Bon travail !";
 
-user.id,
+    }
 
-"Élève brillant"
+    return "Continue tes efforts !";
 
-);
+  }
 
 
+  // ==========================================
+  // LOADING
+  // ==========================================
 
-}
+  if (loading) {
 
+    return (
 
+      <div className="
+        min-h-[60vh]
+        flex
+        flex-col
+        items-center
+        justify-center
+        px-6
+      ">
 
-const levelData =
-await addXP(
-user.id,
-xpGain
-);
+        <div className="
+          w-14
+          h-14
+          rounded-2xl
+          bg-blue-100
+          flex
+          items-center
+          justify-center
+          mb-4
+        ">
 
+          <Loader2
+            size={28}
+            className="
+              text-blue-600
+              animate-spin
+            "
+          />
 
+        </div>
 
 
+        <p className="
+          text-gray-600
+          font-medium
+        ">
 
+          Chargement de la vidéo...
 
+        </p>
 
-setResult({
+      </div>
 
-score,
+    );
 
-goodAnswers,
+  }
 
-total:questions.length,
 
-xp:xpGain,
+  // ==========================================
+  // LEÇON INTROUVABLE
+  // ==========================================
 
-level:
-levelData?.level || null
+  if (!lesson) {
 
+    return (
 
-});
+      <div className="
+        max-w-3xl
+        mx-auto
+        px-5
+        py-10
+        text-center
+      ">
 
+        <div className="
+          bg-white
+          rounded-2xl
+          border
+          border-gray-100
+          shadow-sm
+          p-8
+        ">
 
+          <BookOpen
+            size={40}
+            className="
+              mx-auto
+              mb-4
+              text-gray-300
+            "
+          />
 
-}
+          <h1 className="
+            text-xl
+            font-bold
+            text-gray-900
+          ">
 
+            Leçon introuvable
 
+          </h1>
 
 
+          <button
+            onClick={() =>
+              navigate(-1)
+            }
+            className="
+              mt-5
+              inline-flex
+              items-center
+              gap-2
+              bg-blue-600
+              text-white
+              px-5
+              py-3
+              rounded-xl
+              font-semibold
+              hover:bg-blue-700
+              transition
+            "
+          >
 
+            <ArrowLeft size={18} />
 
+            Retour
 
+          </button>
 
+        </div>
 
-if(loading)
+      </div>
 
-return (
+    );
 
-<div className="p-6">
+  }
 
-Chargement...
 
-</div>
+  // ==========================================
+  // PROGRESSION QUESTIONS
+  // ==========================================
 
-);
+  const answeredCount =
+    Object.keys(answers).length;
 
 
+  const progress =
+    questions.length > 0
+      ? Math.round(
+          (
+            answeredCount /
+            questions.length
+          ) * 100
+        )
+      : 0;
 
 
+  // ==========================================
+  // INTERFACE
+  // ==========================================
 
+  return (
 
+    <div className="
+      min-h-screen
+      bg-gray-50
+      pb-10
+    ">
 
-if(!lesson)
 
-return (
+      {/* =====================================
+          HEADER
+      ====================================== */}
 
-<div className="p-6">
+      <div className="
+        bg-white
+        border-b
+        border-gray-100
+        px-5
+        py-4
+      ">
 
-Leçon introuvable
+        <button
+          onClick={() =>
+            navigate("/")
+          }
+          className="
+            flex
+            items-center
+            gap-3
+            text-xl
+            font-bold
+            text-gray-900
+            hover:text-blue-600
+            transition
+          "
+        >
 
-</div>
+          <span className="
+            w-9
+            h-9
+            rounded-xl
+            bg-blue-600
+            text-white
+            flex
+            items-center
+            justify-center
+          ">
 
-);
+            🎓
 
+          </span>
 
+          Kalan Academy
 
+        </button>
 
+      </div>
 
 
+      {/* =====================================
+          CONTENU
+      ====================================== */}
 
+      <div className="
+        max-w-4xl
+        mx-auto
+        px-5
+        py-6
+      ">
 
-return (
 
+        {/* ===================================
+            NAVIGATION
+        ==================================== */}
 
-<div className="p-6 space-y-6">
+        <button
+          onClick={() =>
+            navigate(-1)
+          }
+          className="
+            inline-flex
+            items-center
+            gap-2
+            text-sm
+            font-medium
+            text-gray-600
+            hover:text-blue-600
+            transition
+            mb-5
+          "
+        >
 
+          <ArrowLeft size={18} />
 
+          Retour à la leçon
 
+        </button>
 
 
-<button
+        {/* ===================================
+            TITRE
+        ==================================== */}
 
-onClick={()=>navigate(-1)}
+        <div className="mb-5">
 
-className="
-flex items-center gap-2
-text-gray-600
-"
+          <p className="
+            text-sm
+            font-medium
+            text-blue-600
+            mb-1
+          ">
 
->
+            🎬 Vidéo de cours
 
-<ArrowLeft size={18}/>
+          </p>
 
-Retour
 
-</button>
+          <h1 className="
+            text-2xl
+            md:text-3xl
+            font-bold
+            text-gray-900
+          ">
 
+            {lesson.title}
 
+          </h1>
 
 
+          {lesson.description && (
 
+            <p className="
+              text-gray-500
+              mt-2
+              leading-relaxed
+            ">
 
+              {lesson.description}
 
-<h1 className="text-2xl font-bold">
+            </p>
 
-{lesson.title}
+          )}
 
-</h1>
+        </div>
 
 
+        {/* ===================================
+            VIDÉO
+        ==================================== */}
 
+        <div className="
+          bg-black
+          rounded-3xl
+          overflow-hidden
+          shadow-xl
+          mb-6
+          aspect-video
+        ">
 
+          {lesson.video_url ? (
 
+            <video
+              controls
+              playsInline
+              preload="metadata"
+              src={lesson.video_url}
+              className="
+                w-full
+                h-full
+                object-contain
+              "
+            />
 
+          ) : (
 
-<div className="
-bg-black
-rounded-xl
-overflow-hidden
-aspect-video
-">
+            <div className="
+              w-full
+              h-full
+              flex
+              flex-col
+              items-center
+              justify-center
+              text-white
+              px-6
+              text-center
+            ">
 
+              <PlayCircle
+                size={50}
+                className="
+                  text-gray-500
+                  mb-4
+                "
+              />
 
-{
-lesson.video_url ?
+              <p className="
+                font-semibold
+              ">
 
-<video
+                Vidéo indisponible
 
-controls
+              </p>
 
-src={lesson.video_url}
 
-className="w-full h-full"
+              <p className="
+                text-sm
+                text-gray-400
+                mt-1
+              ">
 
-/>
+                Cette leçon ne contient pas encore
+                de vidéo.
 
-:
+              </p>
 
-<div className="
-text-white
-flex
-justify-center
-items-center
-h-full
-">
+            </div>
 
-Vidéo indisponible
+          )}
 
-</div>
+        </div>
 
-}
 
+        {/* ===================================
+            INFORMATIONS LEÇON
+        ==================================== */}
 
+        <div className="
+          bg-white
+          rounded-2xl
+          border
+          border-gray-100
+          shadow-sm
+          p-5
+          mb-8
+        ">
 
-</div>
+          <div className="
+            flex
+            items-center
+            gap-3
+          ">
 
+            <div className="
+              w-11
+              h-11
+              rounded-xl
+              bg-blue-50
+              flex
+              items-center
+              justify-center
+            ">
 
+              <BookOpen
+                size={22}
+                className="text-blue-600"
+              />
 
+            </div>
 
 
+            <div>
 
+              <p className="
+                text-sm
+                text-gray-500
+              ">
 
+                Leçon
 
+              </p>
 
+              <p className="
+                font-semibold
+                text-gray-900
+              ">
 
-<h2 className="text-xl font-bold">
+                Apprends la leçon puis
+                vérifie tes connaissances.
 
-QCM
+              </p>
 
-</h2>
+            </div>
 
+          </div>
 
+        </div>
 
 
+        {/* ===================================
+            QUIZ
+        ==================================== */}
 
+        {questions.length > 0 && (
 
+          <div>
 
+            {/* TITRE QUIZ */}
 
-{
-questions.map(
-(q,index)=>(
+            <div className="
+              mb-5
+            ">
 
+              <div className="
+                flex
+                items-center
+                gap-3
+                mb-2
+              ">
 
-<div
+                <div className="
+                  w-11
+                  h-11
+                  rounded-xl
+                  bg-purple-50
+                  flex
+                  items-center
+                  justify-center
+                ">
 
-key={q.id}
+                  <CircleHelp
+                    size={23}
+                    className="text-purple-600"
+                  />
 
-className="
-bg-white
-shadow
-rounded-xl
-p-4
-space-y-3
-"
+                </div>
 
->
 
+                <div>
 
-<h3 className="font-semibold">
+                  <p className="
+                    text-sm
+                    font-medium
+                    text-purple-600
+                  ">
 
-{index+1}. {q.question}
+                  </p>
 
-</h3>
+                  <h2 className="
+                    text-xl
+                    font-bold
+                    text-gray-900
+                  ">
 
+                    Vérifie tes connaissances
 
+                  </h2>
 
+                </div>
 
-{
-q.choices.map(
-(choice,i)=>(
+              </div>
 
 
-<button
+              <p className="
+                text-sm
+                text-gray-500
+                mt-2
+              ">
 
-key={i}
+                Réponds à toutes les questions
+                pour valider le quiz.
 
-onClick={()=>chooseAnswer(q.id,i)}
+              </p>
 
-className={`
-w-full
-text-left
-p-3
-rounded-lg
+            </div>
 
-${
-answers[q.id]===i
-?
-"bg-blue-200"
-:
-"bg-gray-100"
-}
 
-`}
+            {/* PROGRESSION */}
 
->
+            {!result && (
 
-{choice}
+              <div className="
+                mb-5
+              ">
 
-</button>
+                <div className="
+                  flex
+                  items-center
+                  justify-between
+                  text-sm
+                  mb-2
+                ">
 
+                  <span className="
+                    font-medium
+                    text-gray-700
+                  ">
 
-))
+                    Progression
 
-}
+                  </span>
 
 
+                  <span className="
+                    text-gray-500
+                  ">
 
-</div>
+                    {answeredCount}/
+                    {questions.length}
 
+                  </span>
 
+                </div>
 
-))
-}
 
+                <div className="
+                  h-2
+                  bg-gray-100
+                  rounded-full
+                  overflow-hidden
+                ">
 
+                  <div
+                    className="
+                      h-full
+                      bg-blue-600
+                      rounded-full
+                      transition-all
+                    "
+                    style={{
+                      width:
+                        `${progress}%`
+                    }}
+                  />
 
+                </div>
 
+              </div>
 
+            )}
 
 
-{
-questions.length>0 && !result &&
+            {/* =================================
+                RÉSULTAT
+            ================================== */}
 
-<button
+            {result ? (
 
-onClick={validateQuiz}
+              <div className="
+                bg-white
+                rounded-3xl
+                border
+                border-gray-100
+                shadow-sm
+                p-6
+                md:p-8
+                text-center
+              ">
 
-className="
-bg-blue-600
-text-white
-px-6
-py-3
-rounded-xl
-"
+                <div className="
+                  w-16
+                  h-16
+                  mx-auto
+                  mb-4
+                  rounded-full
+                  bg-blue-50
+                  flex
+                  items-center
+                  justify-center
+                ">
 
->
+                  <Trophy
+                    size={32}
+                    className="text-blue-600"
+                  />
 
-Valider
+                </div>
 
-</button>
 
-}
+                <p className="
+                  text-sm
+                  font-medium
+                  text-blue-600
+                ">
 
+                  Quiz terminé
 
+                </p>
 
 
+                <h2 className="
+                  text-2xl
+                  font-bold
+                  text-gray-900
+                  mt-1
+                ">
 
+                  {getResultMessage(
+                    result.score
+                  )}
 
+                </h2>
 
 
-{
-result &&
+                <div className="
+                  text-5xl
+                  font-bold
+                  text-blue-600
+                  mt-4
+                ">
 
+                  {result.score}%
 
-<div className="
-bg-green-100
-p-5
-rounded-xl
-space-y-2
-">
+                </div>
 
 
-<div className="flex gap-2 items-center">
+                <p className="
+                  text-gray-500
+                  mt-2
+                ">
 
-<CheckCircle/>
+                  {result.goodAnswers}
+                  /
+                  {result.total}
+                  {" "}
+                  bonnes réponses
 
-Résultat
+                </p>
 
-</div>
 
+                <div className="
+                  grid
+                  grid-cols-2
+                  gap-3
+                  mt-6
+                ">
 
-<p>
-Score :
-<b>{result.score}%</b>
-</p>
+                  <div className="
+                    bg-gray-50
+                    rounded-xl
+                    p-4
+                  ">
 
+                    <Award
+                      size={20}
+                      className="
+                        mx-auto
+                        text-yellow-500
+                        mb-2
+                      "
+                    />
 
-<p>
-Réponses correctes :
-{result.goodAnswers}/{result.total}
-</p>
+                    <p className="
+                      text-xs
+                      text-gray-500
+                    ">
 
+                      XP gagnés
 
-<p>
-XP gagné :
-+{result.xp}
-</p>
+                    </p>
 
 
-<p>
-Niveau :
-{result.level}
-</p>
+                    <p className="
+                      font-bold
+                      text-gray-900
+                      mt-1
+                    ">
 
+                      +{result.xp} XP
 
+                    </p>
 
-</div>
+                  </div>
 
 
-}
+                  <div className="
+                    bg-gray-50
+                    rounded-xl
+                    p-4
+                  ">
 
+                    <Trophy
+                      size={20}
+                      className="
+                        mx-auto
+                        text-blue-600
+                        mb-2
+                      "
+                    />
 
+                    <p className="
+                      text-xs
+                      text-gray-500
+                    ">
 
-</div>
+                      Niveau
 
+                    </p>
 
-);
 
+                    <p className="
+                      font-bold
+                      text-gray-900
+                      mt-1
+                    ">
+
+                      {result.level || "-"}
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                <button
+                  onClick={() =>
+                    navigate(
+                      `/lesson/${lessonId}`
+                    )
+                  }
+                  className="
+                    w-full
+                    mt-6
+                    flex
+                    items-center
+                    justify-center
+                    gap-2
+                    bg-blue-600
+                    text-white
+                    font-semibold
+                    px-5
+                    py-3
+                    rounded-xl
+                    hover:bg-blue-700
+                    transition
+                  "
+                >
+
+                  <ArrowLeft
+                    size={18}
+                  />
+
+                  Retour à la leçon
+
+                </button>
+
+              </div>
+
+            ) : (
+
+              <>
+                {/* QUESTIONS */}
+
+                <div className="
+                  space-y-4
+                ">
+
+                  {questions.map(
+                    (
+                      question,
+                      index
+                    ) => (
+
+                      <div
+                        key={question.id}
+                        className="
+                          bg-white
+                          rounded-2xl
+                          border
+                          border-gray-100
+                          shadow-sm
+                          p-5
+                        "
+                      >
+
+                        <div className="
+                          flex
+                          items-start
+                          gap-3
+                          mb-4
+                        ">
+
+                          <div className="
+                            shrink-0
+                            w-8
+                            h-8
+                            rounded-full
+                            bg-blue-50
+                            text-blue-600
+                            flex
+                            items-center
+                            justify-center
+                            text-sm
+                            font-bold
+                          ">
+
+                            {index + 1}
+
+                          </div>
+
+
+                          <p className="
+                            font-semibold
+                            text-gray-900
+                            leading-6
+                          ">
+
+                            {question.question}
+
+                          </p>
+
+                        </div>
+
+
+                        <div className="
+                          space-y-2
+                        ">
+
+                          {question.choices.map(
+                            (
+                              choice,
+                              choiceIndex
+                            ) => {
+
+                              const selected =
+                                answers[
+                                  question.id
+                                ] ===
+                                choiceIndex;
+
+
+                              return (
+
+                                <button
+                                  key={
+                                    choiceIndex
+                                  }
+                                  type="button"
+                                  onClick={() =>
+                                    chooseAnswer(
+                                      question.id,
+                                      choiceIndex
+                                    )
+                                  }
+                                  disabled={
+                                    validating
+                                  }
+                                  className={`
+                                    w-full
+                                    flex
+                                    items-center
+                                    gap-3
+                                    text-left
+                                    px-4
+                                    py-3
+                                    rounded-xl
+                                    border
+                                    transition
+
+                                    ${
+                                      selected
+                                        ? `
+                                          bg-blue-50
+                                          border-blue-500
+                                          text-blue-700
+                                        `
+                                        : `
+                                          bg-white
+                                          border-gray-200
+                                          text-gray-700
+                                          hover:bg-gray-50
+                                          hover:border-gray-300
+                                        `
+                                    }
+
+                                    ${
+                                      validating
+                                        ? `
+                                          opacity-60
+                                          cursor-not-allowed
+                                        `
+                                        : ""
+                                    }
+                                  `}
+                                >
+
+                                  <span
+                                    className={`
+                                      shrink-0
+                                      w-7
+                                      h-7
+                                      rounded-full
+                                      flex
+                                      items-center
+                                      justify-center
+                                      text-xs
+                                      font-semibold
+
+                                      ${
+                                        selected
+                                          ? `
+                                            bg-blue-600
+                                            text-white
+                                          `
+                                          : `
+                                            bg-gray-100
+                                            text-gray-500
+                                          `
+                                      }
+                                    `}
+                                  >
+
+                                    {String.fromCharCode(
+                                      65 +
+                                      choiceIndex
+                                    )}
+
+                                  </span>
+
+
+                                  <span className="
+                                    flex-1
+                                  ">
+
+                                    {choice}
+
+                                  </span>
+
+
+                                  {selected && (
+
+                                    <CheckCircle2
+                                      size={18}
+                                      className="
+                                        text-blue-600
+                                      "
+                                    />
+
+                                  )}
+
+                                </button>
+
+                              );
+
+                            }
+                          )}
+
+                        </div>
+
+                      </div>
+
+                    )
+                  )}
+
+                </div>
+
+
+                {/* VALIDATION */}
+
+                <button
+                  type="button"
+                  onClick={
+                    validateQuiz
+                  }
+                  disabled={
+                    validating ||
+                    answeredCount <
+                      questions.length
+                  }
+                  className="
+                    w-full
+                    mt-6
+                    flex
+                    items-center
+                    justify-center
+                    gap-2
+                    bg-blue-600
+                    text-white
+                    font-semibold
+                    px-6
+                    py-3.5
+                    rounded-xl
+                    shadow-sm
+                    hover:bg-blue-700
+                    transition
+                    disabled:opacity-50
+                    disabled:cursor-not-allowed
+                  "
+                >
+
+                  {validating ? (
+
+                    <>
+
+                      <Loader2
+                        size={19}
+                        className="
+                          animate-spin
+                        "
+                      />
+
+                      Validation...
+
+                    </>
+
+                  ) : (
+
+                    <>
+
+                      <CheckCircle2
+                        size={19}
+                      />
+
+                      Valider le quiz
+
+                    </>
+
+                  )}
+
+                </button>
+
+              </>
+
+            )}
+
+          </div>
+
+        )}
+
+      </div>
+
+    </div>
+
+  );
 
 }

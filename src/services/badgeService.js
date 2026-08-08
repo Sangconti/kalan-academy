@@ -60,17 +60,78 @@ return;
 
 
 
-await supabase
+export async function addUserBadge(userId, badgeId){
 
-.from("user_badges")
+  // Vérifier si le badge existe déjà
 
-.insert({
+  const { data: existing, error: checkError } = await supabase
+    .from("user_badges")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("badge_id", badgeId)
+    .maybeSingle();
 
-user_id:userId,
 
-badge_id:badge.id
+  if(checkError){
 
-});
+    console.error(
+      "Erreur vérification badge :",
+      checkError
+    );
+
+    return null;
+
+  }
+
+
+
+  // Déjà obtenu
+
+  if(existing){
+
+    console.log(
+      "Badge déjà obtenu"
+    );
+
+    return existing;
+
+  }
+
+
+
+  // Nouveau badge
+
+  const {
+    data,
+    error
+  } = await supabase
+    .from("user_badges")
+    .insert({
+
+      user_id:userId,
+      badge_id:badgeId
+
+    })
+    .select()
+    .single();
+
+
+
+  if(error){
+
+    console.error(
+      "Erreur ajout badge :",
+      error
+    );
+
+    return null;
+
+  }
+
+
+  return data;
+
+}
 
 
 }

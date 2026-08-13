@@ -1,5 +1,3 @@
-// src/pages/SettingsPage.jsx
-
 import {
   Settings,
   User,
@@ -11,21 +9,32 @@ import {
   Trash2,
   RotateCcw,
   Info,
-  ChevronRight
+  ChevronRight,
+  Sun,
+  Moon,
+  Monitor,
+  Check,
 } from "lucide-react";
 
 import {
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 
 import {
-  useEffect,
-  useState
+  useState,
 } from "react";
 
 import {
-  supabase
+  supabase,
 } from "../lib/supabase";
+
+import {
+  useNetwork,
+} from "../hooks/useNetwork";
+
+import {
+  useTheme,
+} from "../hooks/useTheme";
 
 
 // =====================================================
@@ -36,6 +45,65 @@ const APP_VERSION = "1.0.0";
 
 
 // =====================================================
+// THÈMES
+// =====================================================
+
+const THEME_OPTIONS = [
+  {
+    id: "light",
+    label: "Clair",
+    description: "Utiliser le thème clair.",
+    icon: Sun,
+  },
+  {
+    id: "dark",
+    label: "Sombre",
+    description: "Utiliser le thème sombre.",
+    icon: Moon,
+  },
+  {
+    id: "system",
+    label: "Système",
+    description: "Suivre le thème de ton appareil.",
+    icon: Monitor,
+  },
+];
+
+
+// =====================================================
+// COULEURS
+// =====================================================
+
+const COLOR_OPTIONS = [
+  {
+    id: "blue",
+    label: "Bleu",
+    className: "bg-blue-500",
+  },
+  {
+    id: "green",
+    label: "Vert",
+    className: "bg-green-500",
+  },
+  {
+    id: "purple",
+    label: "Violet",
+    className: "bg-purple-500",
+  },
+  {
+    id: "orange",
+    label: "Orange",
+    className: "bg-orange-500",
+  },
+  {
+    id: "pink",
+    label: "Rose",
+    className: "bg-pink-500",
+  },
+];
+
+
+// =====================================================
 // COMPOSANT
 // =====================================================
 
@@ -43,58 +111,23 @@ export default function SettingsPage() {
 
   const navigate = useNavigate();
 
-  const [isOnline, setIsOnline] =
-    useState(
-      typeof navigator !== "undefined"
-        ? navigator.onLine
-        : true
-    );
-
-  const [loggingOut, setLoggingOut] =
-    useState(false);
+  const {
+    isOnline,
+  } = useNetwork();
 
 
-  // ===================================================
-  // ÉTAT RÉSEAU
-  // ===================================================
-
-  useEffect(() => {
-
-    function handleOnline() {
-      setIsOnline(true);
-    }
-
-    function handleOffline() {
-      setIsOnline(false);
-    }
+  const {
+    theme,
+    setTheme,
+    accentColor,
+    setAccentColor,
+  } = useTheme();
 
 
-    window.addEventListener(
-      "online",
-      handleOnline
-    );
-
-    window.addEventListener(
-      "offline",
-      handleOffline
-    );
-
-
-    return () => {
-
-      window.removeEventListener(
-        "online",
-        handleOnline
-      );
-
-      window.removeEventListener(
-        "offline",
-        handleOffline
-      );
-
-    };
-
-  }, []);
+  const [
+    loggingOut,
+    setLoggingOut,
+  ] = useState(false);
 
 
   // ===================================================
@@ -102,9 +135,7 @@ export default function SettingsPage() {
   // ===================================================
 
   function openProfile() {
-
     navigate("/profile");
-
   }
 
 
@@ -114,15 +145,21 @@ export default function SettingsPage() {
 
   async function logout() {
 
-    if (loggingOut) return;
+    if (loggingOut) {
+      return;
+    }
+
 
     try {
 
       setLoggingOut(true);
 
+
       const {
-        error
-      } = await supabase.auth.signOut();
+        error,
+      } = await supabase.auth.signOut({
+        scope: "local",
+      });
 
 
       if (error) {
@@ -131,6 +168,12 @@ export default function SettingsPage() {
           "❌ Erreur déconnexion :",
           error
         );
+
+
+        if (!isOnline) {
+          navigate("/login");
+        }
+
 
         return;
 
@@ -145,6 +188,11 @@ export default function SettingsPage() {
         "❌ Erreur déconnexion :",
         error
       );
+
+
+      if (!isOnline) {
+        navigate("/login");
+      }
 
     } finally {
 
@@ -187,12 +235,13 @@ export default function SettingsPage() {
             items-center
             justify-center
             mb-4
+            theme-accent-light
           "
         >
 
           <Settings
             size={25}
-            className="text-blue-600"
+            className="text-blue-600 theme-accent-text"
           />
 
         </div>
@@ -204,6 +253,7 @@ export default function SettingsPage() {
             font-medium
             text-blue-600
             mb-1
+            theme-accent-text
           "
         >
           Kalan Academy
@@ -216,6 +266,7 @@ export default function SettingsPage() {
             md:text-3xl
             font-bold
             text-gray-900
+            theme-text
           "
         >
           Paramètres
@@ -226,12 +277,320 @@ export default function SettingsPage() {
           className="
             text-gray-500
             mt-2
+            theme-text-secondary
           "
         >
           Gère les paramètres de ton application.
         </p>
 
       </div>
+
+
+      {/* =================================================
+          APPARENCE
+      ================================================= */}
+
+      <section className="mb-5">
+
+        <h2
+          className="
+            text-xs
+            font-bold
+            text-gray-500
+            uppercase
+            tracking-wider
+            mb-2
+            px-1
+            theme-text-secondary
+          "
+        >
+          🎨 Apparence
+        </h2>
+
+
+        <div
+          className="
+            bg-white
+            rounded-2xl
+            border
+            border-gray-100
+            shadow-sm
+            overflow-hidden
+            theme-surface
+            theme-border
+          "
+        >
+
+          {/* THÈME */}
+
+          <div className="p-5">
+
+            <div className="mb-4">
+
+              <h3
+                className="
+                  font-semibold
+                  text-gray-900
+                  theme-text
+                "
+              >
+                Thème
+              </h3>
+
+
+              <p
+                className="
+                  text-sm
+                  text-gray-500
+                  mt-1
+                  theme-text-secondary
+                "
+              >
+                Choisis l'apparence de Kalan Academy.
+              </p>
+
+            </div>
+
+
+            <div
+              className="
+                grid
+                grid-cols-1
+                sm:grid-cols-3
+                gap-3
+              "
+            >
+
+              {THEME_OPTIONS.map((option) => {
+
+                const Icon = option.icon;
+
+                const selected =
+                  theme === option.id;
+
+
+                return (
+
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => setTheme(option.id)}
+                    className={`
+                      relative
+                      flex
+                      flex-col
+                      items-center
+                      justify-center
+                      gap-2
+                      p-4
+                      rounded-xl
+                      border
+                      transition-all
+                      ${
+                        selected
+                          ? "theme-option-selected"
+                          : "border-gray-200 hover:bg-gray-50 theme-option"
+                      }
+                    `}
+                  >
+
+                    {selected && (
+
+                      <div
+                        className="
+                          absolute
+                          top-2
+                          right-2
+                          w-5
+                          h-5
+                          rounded-full
+                          flex
+                          items-center
+                          justify-center
+                          accent-bg
+                        "
+                      >
+
+                        <Check
+                          size={13}
+                          className="text-white"
+                        />
+
+                      </div>
+
+                    )}
+
+
+                    <Icon
+                      size={22}
+                      className={
+                        selected
+                          ? "theme-accent-text"
+                          : "text-gray-500 theme-text-secondary"
+                      }
+                    />
+
+
+                    <span
+                      className="
+                        text-sm
+                        font-semibold
+                        theme-text
+                      "
+                    >
+                      {option.label}
+                    </span>
+
+
+                    <span
+                      className="
+                        text-xs
+                        text-gray-500
+                        text-center
+                        theme-text-secondary
+                      "
+                    >
+                      {option.description}
+                    </span>
+
+                  </button>
+
+                );
+
+              })}
+
+            </div>
+
+          </div>
+
+
+          <div
+            className="
+              border-t
+              border-gray-100
+              theme-border
+            "
+          />
+
+
+          {/* COULEUR */}
+
+          <div className="p-5">
+
+            <div className="mb-4">
+
+              <h3
+                className="
+                  font-semibold
+                  text-gray-900
+                  theme-text
+                "
+              >
+                Couleur principale
+              </h3>
+
+
+              <p
+                className="
+                  text-sm
+                  text-gray-500
+                  mt-1
+                  theme-text-secondary
+                "
+              >
+                Choisis la couleur principale de l'application.
+              </p>
+
+            </div>
+
+
+            <div
+              className="
+                flex
+                flex-wrap
+                gap-3
+              "
+            >
+
+              {COLOR_OPTIONS.map((color) => {
+
+                const selected =
+                  accentColor === color.id;
+
+
+                return (
+
+                  <button
+                    key={color.id}
+                    type="button"
+                    onClick={() =>
+                      setAccentColor(color.id)
+                    }
+                    title={color.label}
+                    aria-label={`Couleur ${color.label}`}
+                    className={`
+                      relative
+                      w-12
+                      h-12
+                      rounded-full
+                      ${color.className}
+                      transition-all
+                      ${
+                        selected
+                          ? "ring-4 ring-offset-2 ring-gray-300 scale-110"
+                          : "hover:scale-105"
+                      }
+                    `}
+                  >
+
+                    {selected && (
+
+                      <Check
+                        size={20}
+                        className="
+                          absolute
+                          inset-0
+                          m-auto
+                          text-white
+                          drop-shadow
+                        "
+                      />
+
+                    )}
+
+                  </button>
+
+                );
+
+              })}
+
+            </div>
+
+
+            <p
+              className="
+                text-xs
+                text-gray-500
+                mt-4
+                theme-text-secondary
+              "
+            >
+              Couleur sélectionnée :{" "}
+              <span className="font-semibold theme-accent-text">
+                {
+                  COLOR_OPTIONS.find(
+                    (color) =>
+                      color.id === accentColor
+                  )?.label
+                }
+              </span>
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
 
 
       {/* =================================================
@@ -249,6 +608,7 @@ export default function SettingsPage() {
             tracking-wider
             mb-2
             px-1
+            theme-text-secondary
           "
         >
           👤 Compte
@@ -263,10 +623,12 @@ export default function SettingsPage() {
             border-gray-100
             shadow-sm
             overflow-hidden
+            theme-surface
+            theme-border
           "
         >
 
-          {/* MON PROFIL */}
+          {/* PROFIL */}
 
           <button
             type="button"
@@ -280,6 +642,7 @@ export default function SettingsPage() {
               text-left
               hover:bg-gray-50
               transition
+              theme-hover
             "
           >
 
@@ -293,12 +656,16 @@ export default function SettingsPage() {
                 items-center
                 justify-center
                 shrink-0
+                theme-accent-light
               "
             >
 
               <User
                 size={20}
-                className="text-blue-600"
+                className="
+                  text-blue-600
+                  theme-accent-text
+                "
               />
 
             </div>
@@ -310,6 +677,7 @@ export default function SettingsPage() {
                 className="
                   font-semibold
                   text-gray-900
+                  theme-text
                 "
               >
                 Mon profil
@@ -321,6 +689,7 @@ export default function SettingsPage() {
                   text-sm
                   text-gray-500
                   mt-1
+                  theme-text-secondary
                 "
               >
                 Consulter et gérer mon profil.
@@ -331,18 +700,16 @@ export default function SettingsPage() {
 
             <ChevronRight
               size={20}
-              className="text-gray-400"
+              className="
+                text-gray-400
+                theme-text-secondary
+              "
             />
 
           </button>
 
 
-          <div
-            className="
-              border-t
-              border-gray-100
-            "
-          />
+          <div className="border-t border-gray-100 theme-border" />
 
 
           {/* DÉCONNEXION */}
@@ -405,6 +772,7 @@ export default function SettingsPage() {
                   text-sm
                   text-gray-500
                   mt-1
+                  theme-text-secondary
                 "
               >
                 Se déconnecter de Kalan Academy.
@@ -434,6 +802,7 @@ export default function SettingsPage() {
             tracking-wider
             mb-2
             px-1
+            theme-text-secondary
           "
         >
           📱 Application
@@ -448,19 +817,14 @@ export default function SettingsPage() {
             border-gray-100
             shadow-sm
             overflow-hidden
+            theme-surface
+            theme-border
           "
         >
 
           {/* NOTIFICATIONS */}
 
-          <div
-            className="
-              flex
-              items-center
-              gap-4
-              p-5
-            "
-          >
+          <div className="flex items-center gap-4 p-5">
 
             <div
               className="
@@ -489,6 +853,7 @@ export default function SettingsPage() {
                 className="
                   font-semibold
                   text-gray-900
+                  theme-text
                 "
               >
                 Notifications
@@ -500,6 +865,7 @@ export default function SettingsPage() {
                   text-sm
                   text-gray-500
                   mt-1
+                  theme-text-secondary
                 "
               >
                 Les notifications ne sont pas
@@ -526,24 +892,12 @@ export default function SettingsPage() {
           </div>
 
 
-          <div
-            className="
-              border-t
-              border-gray-100
-            "
-          />
+          <div className="border-t border-gray-100 theme-border" />
 
 
           {/* LANGUE */}
 
-          <div
-            className="
-              flex
-              items-center
-              gap-4
-              p-5
-            "
-          >
+          <div className="flex items-center gap-4 p-5">
 
             <div
               className="
@@ -572,6 +926,7 @@ export default function SettingsPage() {
                 className="
                   font-semibold
                   text-gray-900
+                  theme-text
                 "
               >
                 Langue
@@ -583,6 +938,7 @@ export default function SettingsPage() {
                   text-sm
                   text-gray-500
                   mt-1
+                  theme-text-secondary
                 "
               >
                 Français
@@ -612,6 +968,7 @@ export default function SettingsPage() {
             tracking-wider
             mb-2
             px-1
+            theme-text-secondary
           "
         >
           📴 Hors connexion
@@ -626,19 +983,14 @@ export default function SettingsPage() {
             border-gray-100
             shadow-sm
             overflow-hidden
+            theme-surface
+            theme-border
           "
         >
 
-          {/* ÉTAT SYNCHRONISATION */}
+          {/* ÉTAT */}
 
-          <div
-            className="
-              flex
-              items-center
-              gap-4
-              p-5
-            "
-          >
+          <div className="flex items-center gap-4 p-5">
 
             <div
               className={`
@@ -649,7 +1001,6 @@ export default function SettingsPage() {
                 items-center
                 justify-center
                 shrink-0
-
                 ${
                   isOnline
                     ? "bg-green-50"
@@ -683,6 +1034,7 @@ export default function SettingsPage() {
                 className="
                   font-semibold
                   text-gray-900
+                  theme-text
                 "
               >
                 État de synchronisation
@@ -690,18 +1042,20 @@ export default function SettingsPage() {
 
 
               <p
-                className="
+                className={`
                   text-sm
                   mt-1
-                  text-gray-500
-                "
+                  ${
+                    isOnline
+                      ? "text-gray-500 theme-text-secondary"
+                      : "text-orange-600"
+                  }
+                `}
               >
-
                 {isOnline
                   ? "Connexion Internet disponible."
                   : "Mode hors connexion actif."
                 }
-
               </p>
 
             </div>
@@ -714,7 +1068,6 @@ export default function SettingsPage() {
                 px-2.5
                 py-1
                 rounded-full
-
                 ${
                   isOnline
                     ? "bg-green-100 text-green-700"
@@ -722,35 +1075,21 @@ export default function SettingsPage() {
                 }
               `}
             >
-
               {isOnline
                 ? "En ligne"
                 : "Hors ligne"
               }
-
             </span>
 
           </div>
 
 
-          <div
-            className="
-              border-t
-              border-gray-100
-            "
-          />
+          <div className="border-t border-gray-100 theme-border" />
 
 
-          {/* VIDER LE CACHE */}
+          {/* CACHE */}
 
-          <div
-            className="
-              flex
-              items-center
-              gap-4
-              p-5
-            "
-          >
+          <div className="flex items-center gap-4 p-5">
 
             <div
               className="
@@ -779,6 +1118,7 @@ export default function SettingsPage() {
                 className="
                   font-semibold
                   text-gray-900
+                  theme-text
                 "
               >
                 Vider le cache
@@ -790,6 +1130,7 @@ export default function SettingsPage() {
                   text-sm
                   text-gray-500
                   mt-1
+                  theme-text-secondary
                 "
               >
                 Cette fonction sera activée
@@ -835,6 +1176,7 @@ export default function SettingsPage() {
             tracking-wider
             mb-2
             px-1
+            theme-text-secondary
           "
         >
           📚 Apprentissage
@@ -849,19 +1191,12 @@ export default function SettingsPage() {
             border-gray-100
             shadow-sm
             overflow-hidden
+            theme-surface
+            theme-border
           "
         >
 
-          {/* RÉINITIALISATION */}
-
-          <div
-            className="
-              flex
-              items-center
-              gap-4
-              p-5
-            "
-          >
+          <div className="flex items-center gap-4 p-5">
 
             <div
               className="
@@ -890,6 +1225,7 @@ export default function SettingsPage() {
                 className="
                   font-semibold
                   text-gray-900
+                  theme-text
                 "
               >
                 Réinitialiser ma progression
@@ -901,6 +1237,7 @@ export default function SettingsPage() {
                   text-sm
                   text-gray-500
                   mt-1
+                  theme-text-secondary
                 "
               >
                 Cette fonction sera activée après
@@ -946,6 +1283,7 @@ export default function SettingsPage() {
             tracking-wider
             mb-2
             px-1
+            theme-text-secondary
           "
         >
           ℹ️ À propos
@@ -960,10 +1298,10 @@ export default function SettingsPage() {
             border-gray-100
             shadow-sm
             overflow-hidden
+            theme-surface
+            theme-border
           "
         >
-
-          {/* VERSION */}
 
           <div
             className="
@@ -973,6 +1311,7 @@ export default function SettingsPage() {
               p-5
               border-b
               border-gray-100
+              theme-border
             "
           >
 
@@ -986,12 +1325,16 @@ export default function SettingsPage() {
                 items-center
                 justify-center
                 shrink-0
+                theme-accent-light
               "
             >
 
               <Info
                 size={20}
-                className="text-blue-600"
+                className="
+                  text-blue-600
+                  theme-accent-text
+                "
               />
 
             </div>
@@ -1003,6 +1346,7 @@ export default function SettingsPage() {
                 className="
                   font-semibold
                   text-gray-900
+                  theme-text
                 "
               >
                 Version
@@ -1014,6 +1358,7 @@ export default function SettingsPage() {
                   text-sm
                   text-gray-500
                   mt-1
+                  theme-text-secondary
                 "
               >
                 Version actuelle de l'application.
@@ -1027,6 +1372,7 @@ export default function SettingsPage() {
                 text-sm
                 font-semibold
                 text-gray-600
+                theme-text-secondary
               "
             >
               {APP_VERSION}
@@ -1035,16 +1381,7 @@ export default function SettingsPage() {
           </div>
 
 
-          {/* KALAN ACADEMY */}
-
-          <div
-            className="
-              flex
-              items-center
-              gap-4
-              p-5
-            "
-          >
+          <div className="flex items-center gap-4 p-5">
 
             <div
               className="
@@ -1072,6 +1409,7 @@ export default function SettingsPage() {
                 className="
                   font-semibold
                   text-gray-900
+                  theme-text
                 "
               >
                 Kalan Academy
@@ -1083,6 +1421,7 @@ export default function SettingsPage() {
                   text-sm
                   text-gray-500
                   mt-1
+                  theme-text-secondary
                 "
               >
                 Plateforme d'apprentissage

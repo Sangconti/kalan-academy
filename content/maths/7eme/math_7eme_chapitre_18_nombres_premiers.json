@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Nombres premiers",
+  "chapter_order": 18,
+  "lessons": [
+    {
+      "title": "Définition d'un nombre premier",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'un nombre premier",
+          "content": {
+            "text": "Un nombre premier est un entier naturel supérieur ou égal à 2 qui possède exactement deux diviseurs positifs : 1 et lui-même. Par exemple, 2, 3, 5, 7 et 11 sont des nombres premiers."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Cas particuliers de 1 et 2",
+          "content": {
+            "text": "Le nombre 1 n'est pas un nombre premier car il ne possède qu'un seul diviseur positif : 1. Le nombre 2 est le seul nombre premier qui est pair. Tous les autres nombres premiers sont impairs."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Vérifier si un nombre est premier",
+          "content": {
+            "text": "Pour déterminer si un nombre est premier, on cherche ses diviseurs. Par exemple, 13 n'est divisible que par 1 et 13 : il est donc premier. En revanche, 15 est divisible par 1, 3, 5 et 15 : il n'est donc pas premier."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Définition d'un nombre premier",
+        "questions": [
+          {
+            "question": "Combien de diviseurs positifs possède un nombre premier ?",
+            "options": [
+              "Un seul",
+              "Deux",
+              "Trois",
+              "Au moins quatre"
+            ],
+            "correct_answer": "Deux",
+            "explanation": "Un nombre premier possède exactement deux diviseurs positifs : 1 et lui-même."
+          },
+          {
+            "question": "Lequel de ces nombres est premier ?",
+            "options": [
+              "9",
+              "11",
+              "15",
+              "21"
+            ],
+            "correct_answer": "11",
+            "explanation": "11 n'est divisible que par 1 et 11."
+          },
+          {
+            "question": "Pourquoi 1 n'est-il pas un nombre premier ?",
+            "options": [
+              "Parce qu'il est impair",
+              "Parce qu'il est trop petit",
+              "Parce qu'il n'a qu'un seul diviseur positif",
+              "Parce qu'il est divisible par 2"
+            ],
+            "correct_answer": "Parce qu'il n'a qu'un seul diviseur positif",
+            "explanation": "Un nombre premier doit avoir exactement deux diviseurs positifs."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Reconnaître un nombre premier",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Rechercher les diviseurs",
+          "content": {
+            "text": "Pour savoir si un petit nombre est premier, on peut rechercher ses diviseurs. Si on trouve un diviseur autre que 1 et lui-même, le nombre n'est pas premier. Par exemple, 17 est premier car aucun entier entre 2 et 16 ne le divise exactement."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Utiliser les critères de divisibilité",
+          "content": {
+            "text": "Les critères de divisibilité sont très utiles pour reconnaître les nombres qui ne sont pas premiers. Un nombre supérieur à 5 qui se termine par 0, 2, 4, 5, 6 ou 8 n'est pas premier, car il est divisible par 2 ou par 5."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple avec le nombre 29",
+          "content": {
+            "text": "Pour vérifier un nombre comme 29, on peut tester les petits diviseurs possibles. Il n'est divisible ni par 2, ni par 3, ni par 5. Comme 29 est inférieur à 7 × 7 = 49, cela suffit pour conclure qu'il est premier."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Reconnaître un nombre premier",
+        "questions": [
+          {
+            "question": "Lequel de ces nombres est premier ?",
+            "options": [
+              "21",
+              "23",
+              "25",
+              "27"
+            ],
+            "correct_answer": "23",
+            "explanation": "23 n'est divisible que par 1 et 23."
+          },
+          {
+            "question": "Pourquoi 35 n'est-il pas premier ?",
+            "options": [
+              "Il est impair",
+              "Il est divisible par 5 et 7",
+              "Il est supérieur à 30",
+              "Il n'est pas divisible par 2"
+            ],
+            "correct_answer": "Il est divisible par 5 et 7",
+            "explanation": "35 = 5 × 7, donc il possède des diviseurs autres que 1 et lui-même."
+          },
+          {
+            "question": "Le nombre 2 est particulier car...",
+            "options": [
+              "il n'est pas premier",
+              "il est le seul nombre premier pair",
+              "il possède trois diviseurs",
+              "il est divisible par 5"
+            ],
+            "correct_answer": "il est le seul nombre premier pair",
+            "explanation": "Tous les autres nombres pairs supérieurs à 2 sont divisibles par 2 et ne sont donc pas premiers."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Liste des nombres premiers",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les premiers nombres premiers",
+          "content": {
+            "text": "Les premiers nombres premiers sont : 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43 et 47. Il est utile de connaître les nombres premiers inférieurs à 100 pour faciliter les calculs et les décompositions."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le crible d'Ératosthène",
+          "content": {
+            "text": "Pour construire une liste de nombres premiers, on peut utiliser le crible d'Ératosthène. On écrit les nombres à partir de 2, puis on élimine les multiples des nombres premiers successifs. Les nombres qui restent sont les nombres premiers."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple jusqu'à 30",
+          "content": {
+            "text": "Pour rechercher les nombres premiers jusqu'à 30, on conserve 2 et on élimine ses multiples, puis on conserve 3 et on élimine ses multiples. On continue avec 5. Les nombres restants sont 2, 3, 5, 7, 11, 13, 17, 19, 23 et 29."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Liste des nombres premiers",
+        "questions": [
+          {
+            "question": "Lequel de ces nombres est un nombre premier inférieur à 20 ?",
+            "options": [
+              "12",
+              "15",
+              "17",
+              "18"
+            ],
+            "correct_answer": "17",
+            "explanation": "17 est premier car ses seuls diviseurs positifs sont 1 et 17."
+          },
+          {
+            "question": "Quel est le plus petit nombre premier ?",
+            "options": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ],
+            "correct_answer": "2",
+            "explanation": "2 est le plus petit nombre premier et le seul nombre premier pair."
+          },
+          {
+            "question": "Lequel de ces nombres n'est pas premier ?",
+            "options": [
+              "19",
+              "23",
+              "27",
+              "29"
+            ],
+            "correct_answer": "27",
+            "explanation": "27 = 3 × 9, donc il possède des diviseurs autres que 1 et 27."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Décomposition en facteurs premiers",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Principe de la décomposition",
+          "content": {
+            "text": "Tout entier naturel supérieur à 1 qui n'est pas premier peut être écrit comme un produit de nombres premiers. Cette écriture s'appelle la décomposition en facteurs premiers. Par exemple, 12 = 2 × 2 × 3 = 2² × 3."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Méthode de décomposition",
+          "content": {
+            "text": "Pour décomposer un nombre, on commence par le plus petit nombre premier possible. Par exemple, 60 est divisible par 2 : 60 = 2 × 30. Puis 30 = 2 × 15 et 15 = 3 × 5. Donc 60 = 2² × 3 × 5."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Unicité de la décomposition",
+          "content": {
+            "text": "La décomposition en facteurs premiers est unique à l'ordre des facteurs près. Elle permet de mieux comprendre les diviseurs d'un nombre et sera utile dans plusieurs calculs d'arithmétique."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Décomposition en facteurs premiers",
+        "questions": [
+          {
+            "question": "Quelle est la décomposition en facteurs premiers de 12 ?",
+            "options": [
+              "2 × 6",
+              "3 × 4",
+              "2² × 3",
+              "2 × 12"
+            ],
+            "correct_answer": "2² × 3",
+            "explanation": "12 = 2 × 2 × 3 = 2² × 3."
+          },
+          {
+            "question": "Quelle est la décomposition en facteurs premiers de 30 ?",
+            "options": [
+              "2 × 3 × 5",
+              "3 × 10",
+              "5 × 6",
+              "2 × 15"
+            ],
+            "correct_answer": "2 × 3 × 5",
+            "explanation": "30 = 2 × 3 × 5 et 2, 3 et 5 sont premiers."
+          },
+          {
+            "question": "Quelle est la décomposition en facteurs premiers de 60 ?",
+            "options": [
+              "2 × 30",
+              "3 × 20",
+              "2² × 3 × 5",
+              "6 × 10"
+            ],
+            "correct_answer": "2² × 3 × 5",
+            "explanation": "60 = 2 × 2 × 3 × 5 = 2² × 3 × 5."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Utilisation des facteurs premiers",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Trouver des diviseurs",
+          "content": {
+            "text": "La décomposition en facteurs premiers permet de trouver facilement certains diviseurs d'un nombre. Par exemple, comme 36 = 2² × 3², les nombres 2, 3, 4, 6, 9, 12 et 18 sont notamment des diviseurs de 36."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Comparer les facteurs de deux nombres",
+          "content": {
+            "text": "Les facteurs premiers permettent aussi de comparer les compositions de deux nombres. Par exemple, 12 = 2² × 3 et 18 = 2 × 3². On voit immédiatement que les deux nombres possèdent les facteurs premiers 2 et 3."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Répartir en groupes égaux",
+          "content": {
+            "text": "Dans les problèmes de répartition, la connaissance des facteurs premiers aide à rechercher des groupes égaux. Par exemple, si l'on veut répartir 60 objets en groupes identiques, la décomposition 60 = 2² × 3 × 5 permet de comprendre les différentes possibilités de division exacte."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Utiliser les facteurs premiers",
+        "questions": [
+          {
+            "question": "Si 36 = 2² × 3², lequel est un diviseur de 36 ?",
+            "options": [
+              "5",
+              "7",
+              "9",
+              "11"
+            ],
+            "correct_answer": "9",
+            "explanation": "9 = 3² et 36 ÷ 9 = 4, donc 9 est un diviseur de 36."
+          },
+          {
+            "question": "Quels sont les facteurs premiers de 18 ?",
+            "options": [
+              "2 et 3",
+              "3 et 6",
+              "2 et 9",
+              "1 et 18"
+            ],
+            "correct_answer": "2 et 3",
+            "explanation": "18 = 2 × 3², donc ses facteurs premiers sont 2 et 3."
+          },
+          {
+            "question": "Quelle est la décomposition correcte de 24 ?",
+            "options": [
+              "2³ × 3",
+              "2 × 12",
+              "3 × 8",
+              "4 × 6"
+            ],
+            "correct_answer": "2³ × 3",
+            "explanation": "24 = 2 × 2 × 2 × 3 = 2³ × 3."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exercices et problèmes sur les nombres premiers",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": {
+            "text": "Pour résoudre un exercice sur les nombres premiers, il faut commencer par vérifier si le nombre est premier. S'il ne l'est pas, on peut rechercher sa décomposition en facteurs premiers. Les critères de divisibilité étudiés précédemment facilitent cette recherche."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple avec 84 cahiers",
+          "content": {
+            "text": "Exemple : un enseignant possède 84 cahiers et souhaite les répartir en paquets identiques. On peut décomposer 84 : 84 = 2 × 42 = 2² × 21 = 2² × 3 × 7. Cette décomposition aide à trouver plusieurs répartitions possibles sans reste."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Applications dans la vie quotidienne",
+          "content": {
+            "text": "Dans la vie quotidienne, la notion de nombre premier peut être utilisée pour comprendre les possibilités de regroupement et de partage exact. Il faut toujours vérifier les calculs et conserver une écriture claire des facteurs premiers."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Applications des nombres premiers",
+        "questions": [
+          {
+            "question": "Quelle est la décomposition en facteurs premiers de 84 ?",
+            "options": [
+              "2² × 3 × 7",
+              "2 × 42",
+              "4 × 21",
+              "6 × 14"
+            ],
+            "correct_answer": "2² × 3 × 7",
+            "explanation": "84 = 2 × 2 × 3 × 7 = 2² × 3 × 7."
+          },
+          {
+            "question": "Lequel de ces nombres est premier ?",
+            "options": [
+              "31",
+              "33",
+              "35",
+              "39"
+            ],
+            "correct_answer": "31",
+            "explanation": "31 n'a que deux diviseurs positifs : 1 et 31."
+          },
+          {
+            "question": "Pourquoi la décomposition en facteurs premiers est-elle utile ?",
+            "options": [
+              "Elle permet seulement de faire des additions",
+              "Elle permet d'étudier les diviseurs et les répartitions exactes",
+              "Elle transforme toujours un nombre en nombre pair",
+              "Elle permet de supprimer les nombres premiers"
+            ],
+            "correct_answer": "Elle permet d'étudier les diviseurs et les répartitions exactes",
+            "explanation": "Les facteurs premiers permettent notamment d'étudier les diviseurs et les possibilités de partage sans reste."
+          }
+        ]
+      }
+    }
+  ]
+}

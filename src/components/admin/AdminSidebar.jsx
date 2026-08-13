@@ -5,8 +5,14 @@ import {
   Video,
   BarChart3,
   Settings,
-  Upload
+  GraduationCap,
+  X
 } from "lucide-react";
+
+import {
+  NavLink,
+  useNavigate
+} from "react-router-dom";
 
 
 const menu = [
@@ -15,31 +21,31 @@ const menu = [
     path: "/admin",
     icon: LayoutDashboard
   },
+
   {
     name: "Utilisateurs",
     path: "/admin/users",
     icon: Users
   },
-    {
-     name:"Matières",
-     path:"/admin/subjects",
-     icon:BookOpen
-    },
+
   {
-    name: "Cours",
-    path: "/admin/courses",
+    name: "Matières",
+    path: "/admin/subjects",
     icon: BookOpen
   },
+
   {
     name: "Vidéos",
     path: "/admin/videos",
     icon: Video
   },
+
   {
     name: "Statistiques",
     path: "/admin/stats",
     icon: BarChart3
   },
+
   {
     name: "Paramètres",
     path: "/admin/settings",
@@ -48,72 +54,285 @@ const menu = [
 ];
 
 
-export default function AdminSidebar(){
+export default function AdminSidebar({
+  open = false,
+  onClose
+}) {
 
-return (
-
-<aside className="
-w-64
-bg-slate-900
-text-white
-min-h-screen
-p-5
-">
+  const navigate = useNavigate();
 
 
-<h1 className="
-text-2xl
-font-bold
-mb-8
-">
-Kalan Admin
-</h1>
+  // ==========================================
+  // FERMER LE MENU
+  // ==========================================
+
+  function handleClose() {
+
+    if (onClose) {
+
+      onClose();
+
+    }
+
+  }
 
 
-<nav className="space-y-2">
+  // ==========================================
+  // NAVIGATION
+  // ==========================================
+
+  function handleNavigation() {
+
+    // Sur mobile uniquement,
+    // le parent fermera la sidebar.
+
+    handleClose();
+
+  }
 
 
-{
-menu.map((item)=>{
+  return (
 
-const Icon=item.icon;
-
-
-return (
-
-<a
-key={item.name}
-href={item.path}
-className="
-flex
-items-center
-gap-3
-p-3
-rounded-lg
-hover:bg-slate-700
-"
->
-
-<Icon size={20}/>
-
-<span>
-{item.name}
-</span>
+    <>
 
 
-</a>
+      {/* ==========================================
+          OVERLAY MOBILE
+      ========================================== */}
 
-)
+      <div
+        onClick={handleClose}
+        className={`
+          fixed
+          inset-0
+          bg-black/50
+          z-40
+          transition-opacity
+          duration-300
+          md:hidden
 
-})
-}
+          ${
+            open
+              ? "opacity-100 visible"
+              : "opacity-0 invisible pointer-events-none"
+          }
+        `}
+        aria-hidden="true"
+      />
 
 
-</nav>
+      {/* ==========================================
+          SIDEBAR
+      ========================================== */}
+
+      <aside
+        className={`
+          fixed
+          inset-y-0
+          left-0
+          z-50
+          w-64
+          bg-slate-900
+          text-white
+          min-h-screen
+          p-5
+          flex
+          flex-col
+          shadow-2xl
+
+          transform
+          transition-transform
+          duration-300
+          ease-in-out
+
+          md:static
+          md:translate-x-0
+          md:shadow-none
+
+          ${
+            open
+              ? "translate-x-0"
+              : "-translate-x-full"
+          }
+        `}
+      >
 
 
-</aside>
+        {/* ==========================================
+            EN-TÊTE SIDEBAR
+        ========================================== */}
 
-)
+        <div className="
+          flex
+          items-center
+          justify-between
+          mb-8
+        ">
+
+
+          <h1
+            className="
+              text-2xl
+              font-bold
+            "
+          >
+            Kalan Admin
+          </h1>
+
+
+          {/* ========================================
+              BOUTON FERMER MOBILE
+          ======================================== */}
+
+          <button
+            type="button"
+            onClick={handleClose}
+            aria-label="Fermer le menu"
+            className="
+              flex
+              items-center
+              justify-center
+              w-9
+              h-9
+              rounded-lg
+              text-slate-300
+              hover:bg-slate-700
+              hover:text-white
+              transition
+              md:hidden
+            "
+          >
+
+            <X size={22} />
+
+          </button>
+
+
+        </div>
+
+
+        {/* ==========================================
+            MENU
+        ========================================== */}
+
+        <nav className="space-y-2">
+
+
+          {menu.map((item) => {
+
+            const Icon = item.icon;
+
+
+            return (
+
+              <NavLink
+                key={item.name}
+                to={item.path}
+                end={item.path === "/admin"}
+                onClick={handleNavigation}
+                className={({ isActive }) => `
+                  flex
+                  items-center
+                  gap-3
+                  p-3
+                  rounded-lg
+                  transition
+
+                  ${
+                    isActive
+                      ? "bg-slate-700"
+                      : "hover:bg-slate-700"
+                  }
+                `}
+              >
+
+                <Icon size={20} />
+
+
+                <span>
+                  {item.name}
+                </span>
+
+
+              </NavLink>
+
+            );
+
+          })}
+
+
+        </nav>
+
+
+        {/* ==========================================
+            ESPACE ÉLÈVE
+        ========================================== */}
+
+        <div className="
+          mt-auto
+          pt-6
+        ">
+
+
+          <div className="
+            border-t
+            border-slate-700
+            pt-5
+          ">
+
+
+            <button
+              type="button"
+              onClick={() => {
+
+                console.log(
+                  "🎓 [ADMIN SIDEBAR] Navigation vers l'application élève"
+                );
+
+
+                handleClose();
+
+
+                navigate("/");
+
+              }}
+              className="
+                w-full
+                flex
+                items-center
+                gap-3
+                p-3
+                rounded-lg
+                transition
+                text-left
+                text-slate-200
+                hover:bg-slate-700
+                hover:text-white
+              "
+            >
+
+              <GraduationCap size={20} />
+
+
+              <span>
+                Voir l'application élève
+              </span>
+
+
+            </button>
+
+
+          </div>
+
+
+        </div>
+
+
+      </aside>
+
+
+    </>
+
+  );
 
 }

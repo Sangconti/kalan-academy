@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Corps purs simples et composés",
+  "chapter_order": 13,
+  "lessons": [
+    {
+      "title": "Notion de corps pur simple et composé",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Rappel sur les corps purs",
+          "content": "Un corps pur est une substance constituée d'une seule espèce chimique. Les corps purs peuvent être classés en deux grandes catégories : les corps purs simples et les corps purs composés.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Corps pur simple",
+          "content": "Un corps pur simple est constitué d'une seule sorte d'élément chimique. Par exemple, le dioxygène O₂ est constitué uniquement de l'élément oxygène. Le fer Fe et le cuivre Cu sont également des corps purs simples.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Corps pur composé",
+          "content": "Un corps pur composé est constitué de plusieurs éléments chimiques différents associés entre eux. L'eau H₂O est un exemple de corps pur composé car elle contient les éléments hydrogène et oxygène.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Corps purs simples et composés",
+        "questions": [
+          {
+            "question": "Un corps pur simple contient...",
+            "options": [
+              "un seul élément chimique",
+              "plusieurs mélanges",
+              "toujours de l'eau",
+              "plusieurs solutions"
+            ],
+            "correct_answer": "un seul élément chimique",
+            "explanation": "Un corps pur simple est constitué d'une seule sorte d'élément chimique."
+          },
+          {
+            "question": "L'eau H₂O est un corps pur...",
+            "options": [
+              "composé",
+              "simple",
+              "mélangé",
+              "hétérogène"
+            ],
+            "correct_answer": "composé",
+            "explanation": "L'eau H₂O contient deux éléments chimiques : l'hydrogène et l'oxygène."
+          },
+          {
+            "question": "Le fer Fe est un...",
+            "options": [
+              "corps pur simple",
+              "corps pur composé",
+              "mélange homogène",
+              "mélange hétérogène"
+            ],
+            "correct_answer": "corps pur simple",
+            "explanation": "Le fer est constitué d'un seul élément chimique : le fer."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les corps purs simples",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Exemples de corps purs simples",
+          "content": "Plusieurs substances connues sont des corps purs simples. On peut citer le fer Fe, le cuivre Cu, l'aluminium Al, le dioxygène O₂ et le dihydrogène H₂. Chacune est constituée d'un seul élément chimique.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Métaux et corps simples",
+          "content": "Des métaux comme le fer, le cuivre et l'aluminium sont des corps purs simples lorsqu'ils sont constitués uniquement de leur élément respectif. Ils possèdent des propriétés physiques et chimiques particulières.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Corps simples moléculaires",
+          "content": "Certains corps purs simples sont constitués de molécules formées d'atomes d'un même élément. Par exemple, une molécule de dioxygène O₂ contient deux atomes d'oxygène. Le dihydrogène H₂ contient deux atomes d'hydrogène.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Corps purs simples",
+        "questions": [
+          {
+            "question": "Lequel est un corps pur simple ?",
+            "options": [
+              "Le cuivre Cu",
+              "L'eau H₂O",
+              "Le dioxyde de carbone CO₂",
+              "Le chlorure de sodium NaCl"
+            ],
+            "correct_answer": "Le cuivre Cu",
+            "explanation": "Le cuivre est constitué d'un seul élément chimique : le cuivre."
+          },
+          {
+            "question": "La formule O₂ représente...",
+            "options": [
+              "une molécule de dioxygène",
+              "une molécule d'eau",
+              "du dioxyde de carbone",
+              "du chlorure de sodium"
+            ],
+            "correct_answer": "une molécule de dioxygène",
+            "explanation": "O₂ représente une molécule constituée de deux atomes d'oxygène."
+          },
+          {
+            "question": "Dans H₂, les deux atomes sont...",
+            "options": [
+              "des atomes d'hydrogène",
+              "des atomes d'oxygène",
+              "des atomes de carbone",
+              "des atomes de chlore"
+            ],
+            "correct_answer": "des atomes d'hydrogène",
+            "explanation": "La formule H₂ indique deux atomes d'hydrogène associés."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les corps purs composés",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Exemples de corps composés",
+          "content": "L'eau H₂O, le dioxyde de carbone CO₂ et le chlorure de sodium NaCl sont des exemples de corps purs composés. Chacun contient plusieurs éléments chimiques différents associés dans des proportions définies.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "L'eau comme exemple",
+          "content": "L'eau H₂O est constituée des éléments hydrogène et oxygène. Chaque molécule d'eau contient deux atomes d'hydrogène et un atome d'oxygène. L'eau pure est donc un corps pur composé.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Le dioxyde de carbone",
+          "content": "Le dioxyde de carbone CO₂ est constitué de carbone et d'oxygène. Une molécule de CO₂ contient un atome de carbone et deux atomes d'oxygène. C'est donc un corps pur composé.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Corps purs composés",
+        "questions": [
+          {
+            "question": "Le dioxyde de carbone CO₂ est...",
+            "options": [
+              "un corps pur composé",
+              "un corps pur simple",
+              "un mélange hétérogène",
+              "un métal"
+            ],
+            "correct_answer": "un corps pur composé",
+            "explanation": "CO₂ contient deux éléments chimiques différents : le carbone et l'oxygène."
+          },
+          {
+            "question": "Combien d'atomes d'oxygène contient une molécule H₂O ?",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "0"
+            ],
+            "correct_answer": "1",
+            "explanation": "Dans H₂O, l'indice 2 concerne H et l'absence d'indice après O signifie qu'il y a un seul atome d'oxygène."
+          },
+          {
+            "question": "Le chlorure de sodium NaCl contient...",
+            "options": [
+              "du sodium et du chlore",
+              "du carbone et de l'oxygène",
+              "de l'hydrogène et de l'oxygène",
+              "uniquement du sodium"
+            ],
+            "correct_answer": "du sodium et du chlore",
+            "explanation": "NaCl est constitué des éléments sodium et chlore."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Lire une formule chimique simple",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Signification d'une formule",
+          "content": "Une formule chimique permet de représenter la composition d'une espèce chimique. Les symboles indiquent les éléments présents et les indices indiquent le nombre d'atomes de chaque élément dans une molécule lorsque l'espèce est moléculaire.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple H₂O",
+          "content": "Dans la formule H₂O, H représente l'hydrogène et O représente l'oxygène. L'indice 2 indique qu'une molécule d'eau contient deux atomes d'hydrogène. L'absence d'indice après O signifie qu'il y a un seul atome d'oxygène.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple CO₂",
+          "content": "Dans CO₂, C représente le carbone et O représente l'oxygène. L'indice 2 indique que chaque molécule de dioxyde de carbone contient deux atomes d'oxygène et un atome de carbone.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Formules chimiques",
+        "questions": [
+          {
+            "question": "Que signifie le chiffre 2 dans H₂O ?",
+            "options": [
+              "Il indique deux atomes d'hydrogène",
+              "Il indique deux atomes d'oxygène",
+              "Il indique deux molécules d'eau",
+              "Il indique deux éléments chimiques différents"
+            ],
+            "correct_answer": "Il indique deux atomes d'hydrogène",
+            "explanation": "L'indice 2 placé après H indique deux atomes d'hydrogène dans une molécule d'eau."
+          },
+          {
+            "question": "Combien d'atomes d'oxygène contient CO₂ ?",
+            "options": [
+              "2",
+              "1",
+              "3",
+              "0"
+            ],
+            "correct_answer": "2",
+            "explanation": "L'indice 2 placé après O indique deux atomes d'oxygène."
+          },
+          {
+            "question": "Dans CO₂, quel élément est représenté par C ?",
+            "options": [
+              "Le carbone",
+              "Le calcium",
+              "Le chlore",
+              "Le cuivre"
+            ],
+            "correct_answer": "Le carbone",
+            "explanation": "Le symbole chimique C représente l'élément carbone."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Différence entre corps composé et mélange",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Corps composé",
+          "content": "Dans un corps pur composé, les différents éléments chimiques sont associés chimiquement dans une proportion définie. L'eau H₂O est toujours constituée d'hydrogène et d'oxygène dans la même proportion au niveau de ses molécules.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Mélange",
+          "content": "Dans un mélange, plusieurs espèces chimiques sont présentes ensemble sans former nécessairement une nouvelle espèce chimique. Par exemple, l'eau salée contient de l'eau et du chlorure de sodium mélangés.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple comparatif",
+          "content": "L'eau H₂O est un corps pur composé, tandis que l'eau salée est un mélange. Dans l'eau salée, la quantité de sel peut varier. Dans l'eau pure, la composition chimique de H₂O est définie.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Corps composé ou mélange ?",
+        "questions": [
+          {
+            "question": "L'eau H₂O pure est...",
+            "options": [
+              "un corps pur composé",
+              "un mélange",
+              "un corps pur simple",
+              "un mélange hétérogène"
+            ],
+            "correct_answer": "un corps pur composé",
+            "explanation": "L'eau pure contient une seule espèce chimique, H₂O, constituée de deux éléments."
+          },
+          {
+            "question": "L'eau salée est...",
+            "options": [
+              "un mélange",
+              "un corps pur composé",
+              "un corps pur simple",
+              "un élément chimique"
+            ],
+            "correct_answer": "un mélange",
+            "explanation": "L'eau salée contient plusieurs espèces chimiques, notamment l'eau et les substances issues du sel dissous."
+          },
+          {
+            "question": "Quelle affirmation est correcte ?",
+            "options": [
+              "Un corps composé contient plusieurs éléments chimiquement associés",
+              "Un mélange contient toujours un seul élément",
+              "Un corps simple contient plusieurs éléments",
+              "L'eau salée est toujours un corps pur"
+            ],
+            "correct_answer": "Un corps composé contient plusieurs éléments chimiquement associés",
+            "explanation": "Un corps pur composé est formé de plusieurs éléments chimiques associés au sein d'une même espèce chimique."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Identifier les corps purs simples et composés",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode d'identification",
+          "content": "Pour identifier un corps pur simple ou composé, on commence par vérifier qu'il s'agit bien d'un corps pur. Ensuite, on examine sa composition : s'il contient un seul élément chimique, il est simple ; s'il contient plusieurs éléments chimiques associés, il est composé.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Quelques exemples",
+          "content": "Fe, Cu, Al et O₂ sont des corps purs simples. H₂O, CO₂ et NaCl sont des corps purs composés. Il faut distinguer ces corps purs des mélanges comme l'air ou l'eau salée.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Bilan",
+          "content": "Un corps pur simple est constitué d'un seul élément chimique. Un corps pur composé contient plusieurs éléments chimiques associés. Les formules chimiques permettent de représenter la composition des espèces chimiques et d'identifier les éléments présents.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Bilan",
+        "questions": [
+          {
+            "question": "Lequel est un corps pur simple ?",
+            "options": [
+              "O₂",
+              "H₂O",
+              "CO₂",
+              "NaCl"
+            ],
+            "correct_answer": "O₂",
+            "explanation": "O₂ ne contient qu'un seul élément chimique : l'oxygène."
+          },
+          {
+            "question": "Lequel est un corps pur composé ?",
+            "options": [
+              "CO₂",
+              "Fe",
+              "Cu",
+              "O₂"
+            ],
+            "correct_answer": "CO₂",
+            "explanation": "CO₂ contient du carbone et de l'oxygène : c'est un corps pur composé."
+          },
+          {
+            "question": "Quelle méthode permet de distinguer un corps simple d'un corps composé ?",
+            "options": [
+              "Examiner les éléments chimiques qui le constituent",
+              "Observer uniquement sa couleur",
+              "Mesurer uniquement son volume",
+              "Regarder uniquement son état physique"
+            ],
+            "correct_answer": "Examiner les éléments chimiques qui le constituent",
+            "explanation": "Un corps simple contient un seul élément chimique, tandis qu'un corps composé en contient plusieurs associés."
+          }
+        ]
+      }
+    }
+  ]
+}

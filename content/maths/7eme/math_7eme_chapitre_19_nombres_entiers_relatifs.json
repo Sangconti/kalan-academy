@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Nombres entiers relatifs",
+  "chapter_order": 19,
+  "lessons": [
+    {
+      "title": "Découvrir les nombres entiers relatifs",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition des entiers relatifs",
+          "content": {
+            "text": "Les nombres entiers relatifs permettent de représenter des situations où il existe des valeurs positives et négatives. L'ensemble des entiers relatifs est noté ℤ. Il contient les entiers naturels, les entiers positifs, les entiers négatifs et zéro : ..., -3, -2, -1, 0, +1, +2, +3, ..."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Entiers positifs et négatifs",
+          "content": {
+            "text": "Un entier positif est supérieur ou égal à zéro et peut être écrit avec ou sans le signe +. Par exemple, +5 = 5. Un entier négatif est inférieur à zéro et possède obligatoirement le signe -. Ainsi, -4 est un entier négatif. Le nombre 0 n'est ni positif ni négatif."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Situations représentées par les relatifs",
+          "content": {
+            "text": "Les nombres relatifs permettent de décrire des situations de la vie quotidienne : une température de -5 °C, une altitude de 300 mètres sous le niveau de référence ou une dette de 2 000 F CFA peuvent être représentées à l'aide de nombres relatifs. Le signe indique la position ou le sens par rapport à une référence."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Découvrir les entiers relatifs",
+        "questions": [
+          {
+            "question": "Quel ensemble désigne les nombres entiers relatifs ?",
+            "options": [
+              "ℕ",
+              "ℤ",
+              "ℚ",
+              "ℝ"
+            ],
+            "correct_answer": "ℤ",
+            "explanation": "L'ensemble des nombres entiers relatifs est noté ℤ."
+          },
+          {
+            "question": "Lequel de ces nombres est négatif ?",
+            "options": [
+              "5",
+              "0",
+              "-7",
+              "+3"
+            ],
+            "correct_answer": "-7",
+            "explanation": "-7 est inférieur à zéro, donc c'est un entier négatif."
+          },
+          {
+            "question": "Le nombre 0 est...",
+            "options": [
+              "positif",
+              "négatif",
+              "à la fois positif et négatif",
+              "ni positif ni négatif"
+            ],
+            "correct_answer": "ni positif ni négatif",
+            "explanation": "Le zéro est un entier relatif, mais il n'est ni positif ni négatif."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Repérer les entiers relatifs sur une droite graduée",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Construction d'une droite graduée",
+          "content": {
+            "text": "Pour représenter les entiers relatifs, on utilise une droite graduée. On choisit une origine notée 0, une unité de longueur et un sens positif. Les nombres positifs sont placés à droite de 0 et les nombres négatifs à gauche de 0."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Position des entiers sur la droite",
+          "content": {
+            "text": "Sur une droite graduée, chaque graduation correspond à une unité. Ainsi, en partant de 0 vers la droite, on trouve +1, +2, +3, etc. En partant de 0 vers la gauche, on trouve -1, -2, -3, etc. Plus on se déplace vers la droite, plus les nombres sont grands."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Placer un entier relatif",
+          "content": {
+            "text": "Pour placer -4, on part de 0 et on se déplace de quatre unités vers la gauche. Pour placer +4, on se déplace de quatre unités vers la droite. Les points représentant -4 et +4 sont à la même distance de 0 mais de côtés opposés."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Droite graduée et entiers relatifs",
+        "questions": [
+          {
+            "question": "Où place-t-on les nombres négatifs sur une droite graduée classique ?",
+            "options": [
+              "À droite de 0",
+              "À gauche de 0",
+              "Au-dessus de 0",
+              "Ils ne peuvent pas être placés"
+            ],
+            "correct_answer": "À gauche de 0",
+            "explanation": "Sur une droite graduée, les nombres négatifs sont placés à gauche de l'origine."
+          },
+          {
+            "question": "Quel nombre se trouve quatre unités à gauche de 0 ?",
+            "options": [
+              "-4",
+              "-3",
+              "+4",
+              "+3"
+            ],
+            "correct_answer": "-4",
+            "explanation": "Quatre unités à gauche de 0 correspondent au nombre -4."
+          },
+          {
+            "question": "Quel nombre est le plus à droite sur une droite graduée ?",
+            "options": [
+              "-5",
+              "-2",
+              "0",
+              "+3"
+            ],
+            "correct_answer": "+3",
+            "explanation": "Plus un nombre est grand, plus son point est situé à droite sur la droite graduée."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Opposé d'un nombre relatif et distance à zéro",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de deux nombres opposés",
+          "content": {
+            "text": "Deux nombres relatifs sont opposés lorsqu'ils ont la même distance à zéro mais des signes contraires. Par exemple, +5 et -5 sont opposés. L'opposé de +7 est -7 et l'opposé de -3 est +3. L'opposé de 0 est 0."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Valeur absolue et distance à zéro",
+          "content": {
+            "text": "La distance d'un nombre relatif à zéro est appelée sa valeur absolue. Elle est toujours positive ou nulle. La valeur absolue de +6 est 6 et celle de -6 est également 6. On peut écrire |+6| = 6 et |-6| = 6."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Représentation des nombres opposés",
+          "content": {
+            "text": "Sur une droite graduée, deux nombres opposés sont situés à la même distance de 0 et de part et d'autre de 0. Cette représentation permet de comprendre facilement pourquoi +8 et -8 sont opposés."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Opposés et distance à zéro",
+        "questions": [
+          {
+            "question": "Quel est l'opposé de -8 ?",
+            "options": [
+              "-8",
+              "0",
+              "+8",
+              "16"
+            ],
+            "correct_answer": "+8",
+            "explanation": "L'opposé d'un nombre négatif est le nombre positif ayant la même valeur absolue."
+          },
+          {
+            "question": "Quelle est la valeur absolue de -7 ?",
+            "options": [
+              "-7",
+              "0",
+              "7",
+              "14"
+            ],
+            "correct_answer": "7",
+            "explanation": "La distance de -7 à zéro est de 7 unités : |-7| = 7."
+          },
+          {
+            "question": "Quel est l'opposé de 0 ?",
+            "options": [
+              "-1",
+              "0",
+              "+1",
+              "Cela n'existe pas"
+            ],
+            "correct_answer": "0",
+            "explanation": "Zéro est son propre opposé."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparer et ranger des entiers relatifs",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comparer avec la droite graduée",
+          "content": {
+            "text": "Pour comparer deux entiers relatifs, on peut utiliser leur position sur une droite graduée. Le nombre situé le plus à droite est le plus grand. Par exemple, -2 est supérieur à -5 car -2 est situé plus à droite que -5."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Comparer des nombres de signes différents",
+          "content": {
+            "text": "Tout entier positif est supérieur à tout entier négatif. Par exemple, +3 > -8. Entre deux nombres négatifs, celui qui a la plus petite valeur absolue est le plus grand : -3 > -7."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Ranger des entiers relatifs",
+          "content": {
+            "text": "Pour ranger des nombres dans l'ordre croissant, on les place mentalement de gauche à droite sur la droite graduée. Par exemple, -6, -2, 0, +3 et +5 sont déjà dans l'ordre croissant."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Comparer et ranger les relatifs",
+        "questions": [
+          {
+            "question": "Laquelle de ces comparaisons est correcte ?",
+            "options": [
+              "-3 > -1",
+              "-5 > -2",
+              "-2 > -6",
+              "-7 > 0"
+            ],
+            "correct_answer": "-2 > -6",
+            "explanation": "Sur une droite graduée, -2 est situé à droite de -6, donc -2 est plus grand."
+          },
+          {
+            "question": "Lequel est le plus grand ?",
+            "options": [
+              "-8",
+              "-3",
+              "-10",
+              "-12"
+            ],
+            "correct_answer": "-3",
+            "explanation": "Parmi ces nombres négatifs, -3 est le plus proche de zéro et donc le plus grand."
+          },
+          {
+            "question": "Quel est l'ordre croissant correct ?",
+            "options": [
+              "3, 0, -2, -5",
+              "-5, -2, 0, 3",
+              "-2, -5, 0, 3",
+              "0, -2, 3, -5"
+            ],
+            "correct_answer": "-5, -2, 0, 3",
+            "explanation": "L'ordre croissant va du plus petit au plus grand, donc de gauche à droite sur la droite graduée."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Introduction à l'addition et à la soustraction des relatifs",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Additionner deux relatifs de même signe",
+          "content": {
+            "text": "Pour additionner deux entiers relatifs de même signe, on additionne leurs distances à zéro et on conserve le signe commun. Par exemple, (+4) + (+3) = +7 et (-4) + (-3) = -7."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Additionner deux relatifs de signes contraires",
+          "content": {
+            "text": "Pour additionner deux nombres de signes contraires, on soustrait les valeurs absolues et on conserve le signe du nombre ayant la plus grande valeur absolue. Par exemple, (+8) + (-3) = +5 et (-8) + (+3) = -5."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Transformer une soustraction en addition",
+          "content": {
+            "text": "Soustraire un entier relatif revient à ajouter son opposé. Par exemple, (+5) - (+2) = (+5) + (-2) = +3. De même, (-4) - (-3) = (-4) + (+3) = -1. Ces règles seront approfondies dans le chapitre consacré aux opérations dans ℤ."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Introduction aux opérations dans ℤ",
+        "questions": [
+          {
+            "question": "Quelle est la valeur de (+4) + (+3) ?",
+            "options": [
+              "-7",
+              "-1",
+              "+7",
+              "+1"
+            ],
+            "correct_answer": "+7",
+            "explanation": "Deux nombres positifs s'additionnent : 4 + 3 = 7."
+          },
+          {
+            "question": "Quelle est la valeur de (+8) + (-3) ?",
+            "options": [
+              "-11",
+              "-5",
+              "+5",
+              "+11"
+            ],
+            "correct_answer": "+5",
+            "explanation": "Les signes sont différents : 8 - 3 = 5 et le signe est celui de 8, donc +5."
+          },
+          {
+            "question": "Quelle opération équivaut à (+5) - (+2) ?",
+            "options": [
+              "(+5) + (+2)",
+              "(+5) + (-2)",
+              "(-5) + (+2)",
+              "(-5) - (-2)"
+            ],
+            "correct_answer": "(+5) + (-2)",
+            "explanation": "Soustraire un nombre revient à ajouter son opposé."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exercices et problèmes sur les entiers relatifs",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Interpréter une variation avec un relatif",
+          "content": {
+            "text": "Les entiers relatifs permettent de représenter des variations et des positions. Une hausse peut être représentée par un nombre positif et une baisse par un nombre négatif. Par exemple, une température qui passe de 5 °C à 2 °C a diminué de 3 °C."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Résoudre un problème de température",
+          "content": {
+            "text": "Exemple : le matin, la température est de -2 °C. Dans l'après-midi, elle augmente de 7 °C. On peut représenter cette situation par (-2) + (+7) = +5. La température finale est donc de +5 °C."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Méthode pour résoudre un problème",
+          "content": {
+            "text": "Dans les problèmes, il faut identifier la référence, choisir le signe adapté et effectuer les opérations avec attention. Les entiers relatifs sont utiles pour représenter les températures, les altitudes, les déplacements, les gains et les pertes."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Applications des entiers relatifs",
+        "questions": [
+          {
+            "question": "Une température est de -2 °C et augmente de 7 °C. Quelle est la température finale ?",
+            "options": [
+              "-9 °C",
+              "-5 °C",
+              "+5 °C",
+              "+9 °C"
+            ],
+            "correct_answer": "+5 °C",
+            "explanation": "(-2) + (+7) = +5 °C."
+          },
+          {
+            "question": "Quel nombre représente une baisse de 6 unités ?",
+            "options": [
+              "+6",
+              "-6",
+              "0",
+              "6²"
+            ],
+            "correct_answer": "-6",
+            "explanation": "Une baisse est représentée par une valeur négative."
+          },
+          {
+            "question": "Entre -4 et +2, lequel est le plus grand ?",
+            "options": [
+              "-4",
+              "+2",
+              "Ils sont égaux",
+              "On ne peut pas comparer"
+            ],
+            "correct_answer": "+2",
+            "explanation": "Tout nombre positif est supérieur à tout nombre négatif."
+          }
+        ]
+      }
+    }
+  ]
+}

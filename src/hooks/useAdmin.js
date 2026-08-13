@@ -7,13 +7,24 @@ export default function useAdmin() {
 
   useEffect(() => {
     async function load() {
+
+    console.log("👤 useAdmin — chargement");
+
       const data = await getCurrentAdmin();
+
+     console.log("👤 useAdmin — résultat =", data);
       setAdmin(data);
       setLoading(false);
     }
 
     load();
   }, []);
+
+  console.log("📊 [USE ADMIN] state =", {
+      loading,
+      admin,
+      isAdmin: !!admin,
+    });
 
   return {
     loading,

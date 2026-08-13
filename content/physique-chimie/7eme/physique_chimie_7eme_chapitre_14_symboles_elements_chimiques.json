@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Symboles des éléments chimiques",
+  "chapter_order": 14,
+  "lessons": [
+    {
+      "title": "Notion d'élément chimique",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce qu'un élément chimique ?",
+          "content": "Un élément chimique est caractérisé par un type particulier d'atome. Tous les atomes d'un même élément possèdent les mêmes caractéristiques fondamentales. Par exemple, tous les atomes de fer appartiennent à l'élément fer.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les éléments dans les corps simples",
+          "content": "Un corps pur simple est constitué d'un seul élément chimique. Par exemple, le fer Fe contient l'élément fer et le dioxygène O₂ contient l'élément oxygène.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Les éléments dans les corps composés",
+          "content": "Un corps pur composé contient plusieurs éléments chimiques associés. Par exemple, l'eau H₂O contient les éléments hydrogène et oxygène. Le dioxyde de carbone CO₂ contient les éléments carbone et oxygène.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Élément chimique",
+        "questions": [
+          {
+            "question": "Un élément chimique correspond à...",
+            "options": [
+              "un type particulier d'atome",
+              "un mélange de plusieurs liquides",
+              "une solution uniquement",
+              "un changement d'état"
+            ],
+            "correct_answer": "un type particulier d'atome",
+            "explanation": "Un élément chimique regroupe les atomes qui possèdent les mêmes caractéristiques fondamentales."
+          },
+          {
+            "question": "Le corps simple O₂ contient quel élément ?",
+            "options": [
+              "L'oxygène",
+              "L'hydrogène",
+              "Le carbone",
+              "Le chlore"
+            ],
+            "correct_answer": "L'oxygène",
+            "explanation": "O₂ est constitué uniquement de l'élément oxygène."
+          },
+          {
+            "question": "Quels éléments sont présents dans H₂O ?",
+            "options": [
+              "Hydrogène et oxygène",
+              "Carbone et oxygène",
+              "Sodium et chlore",
+              "Fer et cuivre"
+            ],
+            "correct_answer": "Hydrogène et oxygène",
+            "explanation": "La formule H₂O montre que l'eau est constituée d'hydrogène et d'oxygène."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les symboles chimiques",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "À quoi sert un symbole chimique ?",
+          "content": "Chaque élément chimique est représenté par un symbole chimique. Le symbole permet d'écrire rapidement le nom d'un élément dans les formules et les équations chimiques.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Une ou deux lettres",
+          "content": "Un symbole chimique comporte une ou deux lettres. La première lettre est toujours une majuscule. Lorsqu'il y a une deuxième lettre, elle est toujours minuscule. Par exemple : H pour hydrogène, O pour oxygène et Cl pour chlore.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Attention aux majuscules",
+          "content": "La manière d'écrire un symbole est importante. Par exemple, Co représente le cobalt alors que CO n'est pas la même écriture. Il faut respecter la majuscule de la première lettre et la minuscule de la deuxième lorsqu'elle existe.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Symboles chimiques",
+        "questions": [
+          {
+            "question": "Comment commence toujours un symbole chimique ?",
+            "options": [
+              "Par une lettre majuscule",
+              "Par une lettre minuscule",
+              "Par un chiffre",
+              "Par un signe +"
+            ],
+            "correct_answer": "Par une lettre majuscule",
+            "explanation": "La première lettre d'un symbole chimique est toujours une majuscule."
+          },
+          {
+            "question": "Quel est le symbole de l'oxygène ?",
+            "options": [
+              "O",
+              "Ox",
+              "Og",
+              "O₂"
+            ],
+            "correct_answer": "O",
+            "explanation": "O est le symbole de l'élément oxygène. O₂ représente une molécule de dioxygène."
+          },
+          {
+            "question": "Quel est le symbole correct du chlore ?",
+            "options": [
+              "Cl",
+              "CL",
+              "cl",
+              "Ch"
+            ],
+            "correct_answer": "Cl",
+            "explanation": "Le symbole du chlore est Cl : C majuscule et l minuscule."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Symboles des éléments courants",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Hydrogène, oxygène et carbone",
+          "content": "Quelques éléments sont très importants en chimie. L'hydrogène a pour symbole H, l'oxygène O et le carbone C. On retrouve notamment ces éléments dans l'eau H₂O et le dioxyde de carbone CO₂.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Fer, cuivre et aluminium",
+          "content": "Le fer a pour symbole Fe, le cuivre Cu et l'aluminium Al. Ces éléments sont couramment rencontrés dans les objets et matériaux utilisés dans la vie quotidienne.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Quelques autres symboles",
+          "content": "Le sodium est représenté par Na, le chlore par Cl, le calcium par Ca et le magnésium par Mg. Il est important de mémoriser progressivement les symboles des éléments les plus courants.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Éléments courants",
+        "questions": [
+          {
+            "question": "Quel est le symbole du fer ?",
+            "options": [
+              "Fe",
+              "F",
+              "Fr",
+              "Fi"
+            ],
+            "correct_answer": "Fe",
+            "explanation": "Le symbole chimique du fer est Fe."
+          },
+          {
+            "question": "Quel est le symbole du cuivre ?",
+            "options": [
+              "Cu",
+              "C",
+              "Cp",
+              "Co"
+            ],
+            "correct_answer": "Cu",
+            "explanation": "Cu est le symbole chimique du cuivre."
+          },
+          {
+            "question": "Quel élément possède le symbole Na ?",
+            "options": [
+              "Le sodium",
+              "L'azote",
+              "Le nickel",
+              "Le néon"
+            ],
+            "correct_answer": "Le sodium",
+            "explanation": "Na est le symbole chimique du sodium."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Origine de certains symboles chimiques",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Des symboles issus du nom",
+          "content": "Pour certains éléments, le symbole correspond directement ou presque au nom français. Par exemple, H représente l'hydrogène, O l'oxygène, C le carbone et Ca le calcium.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Des symboles issus de noms anciens",
+          "content": "Certains symboles proviennent de noms historiques ou latins. Par exemple, Fe vient du latin ferrum pour le fer, Cu de cuprum pour le cuivre et Na de natrium pour le sodium.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Pourquoi les apprendre ?",
+          "content": "Connaître les symboles chimiques permet de lire plus facilement les formules chimiques. Par exemple, NaCl peut être identifié grâce aux symboles Na et Cl comme une substance contenant du sodium et du chlore.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Origine des symboles",
+        "questions": [
+          {
+            "question": "Pourquoi le symbole Fe représente-t-il le fer ?",
+            "options": [
+              "Il vient notamment du nom latin ferrum",
+              "Il vient du mot français eau",
+              "Il représente l'oxygène",
+              "Il représente le fluor"
+            ],
+            "correct_answer": "Il vient notamment du nom latin ferrum",
+            "explanation": "Le symbole Fe est issu du latin ferrum, qui signifie fer."
+          },
+          {
+            "question": "Le symbole Na correspond au...",
+            "options": [
+              "sodium",
+              "néon",
+              "nickel",
+              "soufre"
+            ],
+            "correct_answer": "sodium",
+            "explanation": "Na vient notamment du nom latin natrium et représente le sodium."
+          },
+          {
+            "question": "Connaître les symboles permet principalement de...",
+            "options": [
+              "lire et comprendre les formules chimiques",
+              "mesurer directement la température",
+              "transformer un liquide en solide",
+              "mesurer uniquement le volume"
+            ],
+            "correct_answer": "lire et comprendre les formules chimiques",
+            "explanation": "Les symboles permettent d'identifier les éléments présents dans les formules chimiques."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Lire une formule grâce aux symboles",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Lire H₂O",
+          "content": "La formule H₂O contient les symboles H et O. H représente l'hydrogène et O représente l'oxygène. L'indice 2 indique qu'une molécule d'eau contient deux atomes d'hydrogène et un atome d'oxygène.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Lire CO₂",
+          "content": "La formule CO₂ contient les symboles C et O. C représente le carbone et O l'oxygène. L'indice 2 indique qu'une molécule de dioxyde de carbone contient deux atomes d'oxygène.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Lire NaCl",
+          "content": "La formule NaCl contient les symboles Na et Cl. Na représente le sodium et Cl représente le chlore. Cette formule correspond au chlorure de sodium, couramment appelé sel de cuisine.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Lecture des formules",
+        "questions": [
+          {
+            "question": "Quels éléments sont représentés dans H₂O ?",
+            "options": [
+              "Hydrogène et oxygène",
+              "Carbone et oxygène",
+              "Sodium et chlore",
+              "Fer et cuivre"
+            ],
+            "correct_answer": "Hydrogène et oxygène",
+            "explanation": "H représente l'hydrogène et O représente l'oxygène."
+          },
+          {
+            "question": "Quels éléments sont présents dans CO₂ ?",
+            "options": [
+              "Carbone et oxygène",
+              "Hydrogène et oxygène",
+              "Sodium et chlore",
+              "Calcium et magnésium"
+            ],
+            "correct_answer": "Carbone et oxygène",
+            "explanation": "C représente le carbone et O représente l'oxygène."
+          },
+          {
+            "question": "NaCl correspond au...",
+            "options": [
+              "chlorure de sodium",
+              "dioxyde de carbone",
+              "dioxygène",
+              "fer"
+            ],
+            "correct_answer": "chlorure de sodium",
+            "explanation": "Na représente le sodium et Cl représente le chlore."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mémoriser et utiliser les symboles chimiques",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les symboles à retenir",
+          "content": "Parmi les symboles importants à connaître en 7ème année, on peut retenir : H hydrogène, O oxygène, C carbone, Fe fer, Cu cuivre, Al aluminium, Na sodium, Cl chlore, Ca calcium et Mg magnésium.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Une bonne méthode",
+          "content": "Pour mémoriser les symboles, il est utile d'associer chaque symbole au nom de l'élément et de s'entraîner régulièrement à passer du nom au symbole puis du symbole au nom. Il faut également respecter les majuscules et minuscules.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Bilan",
+          "content": "Chaque élément chimique possède un symbole. Le symbole commence par une majuscule et peut comporter une deuxième lettre minuscule. Les symboles permettent de lire les formules chimiques et d'identifier les éléments présents dans les corps simples et composés.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Bilan des symboles",
+        "questions": [
+          {
+            "question": "Quel est le symbole du calcium ?",
+            "options": [
+              "Ca",
+              "C",
+              "Cl",
+              "Cm"
+            ],
+            "correct_answer": "Ca",
+            "explanation": "Ca est le symbole chimique du calcium."
+          },
+          {
+            "question": "Quel est le symbole du magnésium ?",
+            "options": [
+              "Mg",
+              "Mn",
+              "M",
+              "Ma"
+            ],
+            "correct_answer": "Mg",
+            "explanation": "Mg est le symbole chimique du magnésium."
+          },
+          {
+            "question": "Quelle écriture respecte la règle des symboles chimiques ?",
+            "options": [
+              "Cl",
+              "CL",
+              "cl",
+              "cL"
+            ],
+            "correct_answer": "Cl",
+            "explanation": "Le symbole du chlore s'écrit Cl : première lettre majuscule et deuxième lettre minuscule."
+          }
+        ]
+      }
+    }
+  ]
+}

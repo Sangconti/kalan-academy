@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Gaz carbonique",
+  "chapter_order": 15,
+  "lessons": [
+    {
+      "title": "Découverte du gaz carbonique",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce que le gaz carbonique ?",
+          "content": "Le gaz carbonique, appelé scientifiquement dioxyde de carbone, est un gaz présent naturellement dans l'atmosphère. Sa formule chimique est CO₂. Une molécule de dioxyde de carbone contient un atome de carbone et deux atomes d'oxygène.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Propriétés du dioxyde de carbone",
+          "content": "À température ordinaire, le dioxyde de carbone est un gaz incolore et difficilement perceptible par les sens. Il n'entretient pas la combustion et peut être produit lors de certaines combustions.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Présence dans la vie quotidienne",
+          "content": "Le dioxyde de carbone est présent dans l'air en faible quantité. Il est également produit par la respiration des êtres vivants, certaines combustions et différents phénomènes naturels.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Découverte du gaz carbonique",
+        "questions": [
+          {
+            "question": "Quelle est la formule du gaz carbonique ?",
+            "options": [
+              "CO₂",
+              "O₂",
+              "H₂O",
+              "CO"
+            ],
+            "correct_answer": "CO₂",
+            "explanation": "Le gaz carbonique, ou dioxyde de carbone, a pour formule CO₂."
+          },
+          {
+            "question": "Une molécule de CO₂ contient...",
+            "options": [
+              "un atome de carbone et deux atomes d'oxygène",
+              "deux atomes de carbone et un atome d'oxygène",
+              "deux atomes d'hydrogène et un atome d'oxygène",
+              "un seul atome d'oxygène"
+            ],
+            "correct_answer": "un atome de carbone et deux atomes d'oxygène",
+            "explanation": "L'indice 2 après O indique deux atomes d'oxygène."
+          },
+          {
+            "question": "Le dioxyde de carbone est normalement...",
+            "options": [
+              "un gaz",
+              "un liquide",
+              "un solide",
+              "un métal"
+            ],
+            "correct_answer": "un gaz",
+            "explanation": "À température ordinaire, le CO₂ est un gaz."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mise en évidence du dioxyde de carbone",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le test à l'eau de chaux",
+          "content": "Le dioxyde de carbone peut être identifié grâce à l'eau de chaux. Lorsqu'on fait passer du dioxyde de carbone dans de l'eau de chaux, celle-ci devient trouble. Cette réaction constitue un test caractéristique du dioxyde de carbone.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Observation de l'expérience",
+          "content": "Au départ, l'eau de chaux est limpide. Après introduction de dioxyde de carbone, elle devient blanchâtre ou trouble. Cette observation indique la présence de dioxyde de carbone.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Pourquoi l'eau de chaux devient-elle trouble ?",
+          "content": "Le dioxyde de carbone réagit avec l'hydroxyde de calcium présent dans l'eau de chaux et forme notamment un précipité de carbonate de calcium. Ce précipité rend le liquide trouble.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Test du dioxyde de carbone",
+        "questions": [
+          {
+            "question": "Quel produit permet de mettre en évidence le CO₂ ?",
+            "options": [
+              "L'eau de chaux",
+              "L'eau salée",
+              "L'huile",
+              "Le sable"
+            ],
+            "correct_answer": "L'eau de chaux",
+            "explanation": "L'eau de chaux devient trouble en présence de dioxyde de carbone."
+          },
+          {
+            "question": "Que devient l'eau de chaux en présence de CO₂ ?",
+            "options": [
+              "Elle devient trouble",
+              "Elle devient métallique",
+              "Elle devient solide immédiatement",
+              "Elle disparaît"
+            ],
+            "correct_answer": "Elle devient trouble",
+            "explanation": "La formation d'un précipité rend l'eau de chaux trouble."
+          },
+          {
+            "question": "Le trouble observé est notamment dû à la formation de...",
+            "options": [
+              "carbonate de calcium",
+              "chlorure de sodium",
+              "dioxygène",
+              "fer"
+            ],
+            "correct_answer": "carbonate de calcium",
+            "explanation": "La réaction entre le CO₂ et l'eau de chaux produit notamment du carbonate de calcium solide."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Production du dioxyde de carbone",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Production par combustion",
+          "content": "Le dioxyde de carbone est produit lors de la combustion complète de nombreuses substances contenant du carbone. Par exemple, lors de la combustion complète du charbon de bois, du carbone réagit avec le dioxygène pour former du dioxyde de carbone.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Production par respiration",
+          "content": "Les êtres humains et de nombreux autres êtres vivants produisent du dioxyde de carbone lors de la respiration. Les cellules utilisent notamment le dioxygène et rejettent du dioxyde de carbone.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Autres sources naturelles",
+          "content": "Le dioxyde de carbone peut également provenir de la décomposition de matières organiques, de certains phénomènes volcaniques et d'autres processus naturels. Les activités humaines peuvent aussi augmenter les émissions de CO₂.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Production du CO₂",
+        "questions": [
+          {
+            "question": "La combustion complète du carbone produit notamment...",
+            "options": [
+              "du dioxyde de carbone",
+              "du chlorure de sodium",
+              "du fer",
+              "du diazote uniquement"
+            ],
+            "correct_answer": "du dioxyde de carbone",
+            "explanation": "Le carbone réagit avec le dioxygène pour former du CO₂ lors d'une combustion complète."
+          },
+          {
+            "question": "Lors de la respiration, les êtres humains rejettent notamment...",
+            "options": [
+              "du dioxyde de carbone",
+              "du chlorure de sodium",
+              "du fer",
+              "du dioxygène uniquement"
+            ],
+            "correct_answer": "du dioxyde de carbone",
+            "explanation": "La respiration produit notamment du CO₂ qui est rejeté lors de l'expiration."
+          },
+          {
+            "question": "Le CO₂ peut aussi provenir...",
+            "options": [
+              "de phénomènes naturels et de la décomposition de matières organiques",
+              "uniquement de l'eau",
+              "uniquement du sel",
+              "uniquement des métaux"
+            ],
+            "correct_answer": "de phénomènes naturels et de la décomposition de matières organiques",
+            "explanation": "Plusieurs phénomènes naturels peuvent produire du dioxyde de carbone."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Dioxyde de carbone et combustion",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le CO₂ n'entretient pas la combustion",
+          "content": "Le dioxyde de carbone ne permet généralement pas d'entretenir une combustion. Une flamme placée dans une atmosphère riche en CO₂ finit par s'éteindre.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Expérience simple",
+          "content": "On peut produire du dioxyde de carbone puis le faire parvenir vers une petite flamme dans une expérience réalisée avec les précautions nécessaires. La flamme s'éteint lorsque le dioxyde de carbone remplace suffisamment le dioxygène autour d'elle.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Attention à ne pas confondre CO₂ et O₂",
+          "content": "Le dioxygène O₂ favorise de nombreuses combustions alors que le dioxyde de carbone CO₂ ne les entretient pas. Les deux gaz contiennent de l'oxygène dans leur formule, mais leurs propriétés sont différentes.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — CO₂ et combustion",
+        "questions": [
+          {
+            "question": "Le dioxyde de carbone entretient-il une combustion ?",
+            "options": [
+              "Non, il ne l'entretient généralement pas",
+              "Oui, toujours",
+              "Oui, mieux que le dioxygène",
+              "Uniquement dans l'eau"
+            ],
+            "correct_answer": "Non, il ne l'entretient généralement pas",
+            "explanation": "Le CO₂ n'est pas un comburant pour les combustions ordinaires et peut contribuer à éteindre une flamme."
+          },
+          {
+            "question": "Quel gaz favorise les combustions ordinaires ?",
+            "options": [
+              "Le dioxygène",
+              "Le dioxyde de carbone",
+              "Le diazote",
+              "La vapeur d'eau"
+            ],
+            "correct_answer": "Le dioxygène",
+            "explanation": "Le dioxygène est le principal comburant présent dans l'air."
+          },
+          {
+            "question": "Quelle formule représente le dioxygène ?",
+            "options": [
+              "O₂",
+              "CO₂",
+              "CO",
+              "H₂O"
+            ],
+            "correct_answer": "O₂",
+            "explanation": "O₂ représente une molécule de dioxygène."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Dioxyde de carbone et environnement",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le rôle du CO₂ dans la nature",
+          "content": "Le dioxyde de carbone joue un rôle important dans la nature. Les plantes vertes utilisent le CO₂, l'eau et l'énergie lumineuse pour réaliser la photosynthèse. Cette activité permet notamment la production de matière organique et contribue à libérer du dioxygène.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Effet de serre",
+          "content": "Le dioxyde de carbone est un gaz à effet de serre. Il participe naturellement à l'effet de serre qui contribue à maintenir une température compatible avec la vie sur Terre. Une augmentation importante de sa concentration contribue cependant au renforcement de l'effet de serre.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Sources d'émissions",
+          "content": "La combustion du charbon, du pétrole, du gaz et d'autres combustibles contenant du carbone libère du dioxyde de carbone. La réduction du gaspillage d'énergie et l'utilisation de sources d'énergie moins émettrices peuvent contribuer à limiter les émissions.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — CO₂ et environnement",
+        "questions": [
+          {
+            "question": "Quel gaz les plantes utilisent-elles notamment pour la photosynthèse ?",
+            "options": [
+              "Le dioxyde de carbone",
+              "Le monoxyde de carbone",
+              "Le chlore",
+              "Le méthane uniquement"
+            ],
+            "correct_answer": "Le dioxyde de carbone",
+            "explanation": "Les plantes utilisent le CO₂ comme matière première pour la photosynthèse."
+          },
+          {
+            "question": "Le CO₂ est un...",
+            "options": [
+              "gaz à effet de serre",
+              "métal",
+              "solide à température ordinaire",
+              "sel de cuisine"
+            ],
+            "correct_answer": "gaz à effet de serre",
+            "explanation": "Le dioxyde de carbone participe à l'effet de serre naturel."
+          },
+          {
+            "question": "La combustion de combustibles carbonés libère généralement...",
+            "options": [
+              "du dioxyde de carbone",
+              "du chlorure de sodium",
+              "du cuivre",
+              "du calcium"
+            ],
+            "correct_answer": "du dioxyde de carbone",
+            "explanation": "La combustion complète de nombreuses substances contenant du carbone produit du CO₂."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Utilisations et bilan du gaz carbonique",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Quelques utilisations",
+          "content": "Le dioxyde de carbone possède plusieurs utilisations. Il peut être utilisé pour gazéifier certaines boissons, dans certains extincteurs et dans différentes applications industrielles. Son utilisation dépend de ses propriétés physiques et chimiques.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Précautions",
+          "content": "Même si le CO₂ est naturellement présent dans l'air, une concentration élevée peut être dangereuse car elle peut remplacer une partie du dioxygène disponible pour la respiration. Il faut donc éviter son accumulation dans les espaces mal ventilés.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Bilan",
+          "content": "Le gaz carbonique ou dioxyde de carbone a pour formule CO₂. C'est un gaz incolore qui peut être produit par la combustion complète et la respiration. Il trouble l'eau de chaux et n'entretient pas les combustions ordinaires. Il joue également un rôle important dans la photosynthèse et dans l'effet de serre.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Bilan sur le gaz carbonique",
+        "questions": [
+          {
+            "question": "Quel est le nom scientifique du gaz carbonique ?",
+            "options": [
+              "Dioxyde de carbone",
+              "Dioxygène",
+              "Monoxyde de carbone",
+              "Diazote"
+            ],
+            "correct_answer": "Dioxyde de carbone",
+            "explanation": "Le gaz carbonique est couramment appelé dioxyde de carbone."
+          },
+          {
+            "question": "Quel test permet d'identifier le CO₂ ?",
+            "options": [
+              "L'eau de chaux qui devient trouble",
+              "Le sel qui devient bleu",
+              "L'eau qui devient rouge",
+              "Le cuivre qui disparaît"
+            ],
+            "correct_answer": "L'eau de chaux qui devient trouble",
+            "explanation": "Le trouble de l'eau de chaux constitue un test caractéristique du dioxyde de carbone."
+          },
+          {
+            "question": "Quelle formule correspond au dioxyde de carbone ?",
+            "options": [
+              "CO₂",
+              "O₂",
+              "H₂",
+              "NaCl"
+            ],
+            "correct_answer": "CO₂",
+            "explanation": "CO₂ représente une molécule constituée d'un atome de carbone et de deux atomes d'oxygène."
+          }
+        ]
+      }
+    }
+  ]
+}

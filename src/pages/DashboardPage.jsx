@@ -37,31 +37,24 @@ export default function DashboardPage() {
   // STATE
   // ===================================================
 
-  const [profile, setProfile] =
-    useState(null);
+  const [profile, setProfile] = useState(null);
 
-  const [subjects, setSubjects] =
-    useState({});
+  const [subjects, setSubjects] = useState({});
 
-  const [stats, setStats] =
-    useState({
-      lessons: 0,
-      score: 0,
-      badges: 0,
-      attempts: 0
-    });
+  const [stats, setStats] = useState({
+    lessons: 0,
+    score: 0,
+    badges: 0,
+    attempts: 0
+  });
 
-  const [badges, setBadges] =
-    useState([]);
+  const [badges, setBadges] = useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [error, setError] =
-    useState("");
+  const [error, setError] = useState("");
 
-  const [refreshing, setRefreshing] =
-    useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
 
   // ===================================================
@@ -79,9 +72,7 @@ export default function DashboardPage() {
   // CHARGER DASHBOARD
   // ===================================================
 
-  async function loadDashboard(
-    isRefresh = false
-  ) {
+  async function loadDashboard(isRefresh = false) {
 
     try {
 
@@ -103,8 +94,7 @@ export default function DashboardPage() {
           user
         },
         error: userError
-      } =
-        await supabase.auth.getUser();
+      } = await supabase.auth.getUser();
 
 
       if (userError) {
@@ -133,12 +123,6 @@ export default function DashboardPage() {
       }
 
 
-      console.log(
-        "DASHBOARD USER :",
-        user.id
-      );
-
-
       // =================================================
       // PROFILE
       // =================================================
@@ -146,35 +130,19 @@ export default function DashboardPage() {
       const {
         data: profileData,
         error: profileError
-      } =
-        await supabase
-
-          .from("profiles")
-
-          .select("*")
-
-          .eq(
-            "id",
-            user.id
-          )
-
-          .single();
+      } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
 
 
       if (profileError) {
-
-        console.error(
-          "Erreur profil :",
-          profileError
-        );
-
         throw profileError;
       }
 
 
-      setProfile(
-        profileData
-      );
+      setProfile(profileData);
 
 
       // =================================================
@@ -184,35 +152,28 @@ export default function DashboardPage() {
       const {
         data: progress,
         error: progressError
-      } =
-        await supabase
-
-          .from("user_progress")
-
-          .select(`
+      } = await supabase
+        .from("user_progress")
+        .select(`
+          id,
+          completed,
+          last_score,
+          completion_percentage,
+          lessons(
             id,
-            completed,
-            last_score,
-            completion_percentage,
-            lessons(
+            title,
+            chapter_id,
+            chapters(
               id,
-              title,
-              chapter_id,
-              chapters(
+              subject_id,
+              subjects(
                 id,
-                subject_id,
-                subjects(
-                  id,
-                  name
-                )
+                name
               )
             )
-          `)
-
-          .eq(
-            "user_id",
-            user.id
-          );
+          )
+        `)
+        .eq("user_id", user.id);
 
 
       if (progressError) {
@@ -225,8 +186,7 @@ export default function DashboardPage() {
       }
 
 
-      const progressData =
-        progress || [];
+      const progressData = progress || [];
 
 
       // =================================================
@@ -235,8 +195,7 @@ export default function DashboardPage() {
 
       const completedLessons =
         progressData.filter(
-          item =>
-            item.completed === true
+          item => item.completed === true
         ).length;
 
 
@@ -247,73 +206,55 @@ export default function DashboardPage() {
       const subjectsProgress = {};
 
 
-      progressData.forEach(
-        item => {
+      progressData.forEach(item => {
 
-          const subject =
-            item?.lessons
-              ?.chapters
-              ?.subjects;
-
-
-          if (!subject?.name) {
-            return;
-          }
+        const subject =
+          item?.lessons
+            ?.chapters
+            ?.subjects;
 
 
-          const subjectName =
-            subject.name;
+        if (!subject?.name) {
+          return;
+        }
 
 
-          if (
-            !subjectsProgress[
-              subjectName
-            ]
-          ) {
-
-            subjectsProgress[
-              subjectName
-            ] = {
-              total: 0,
-              completed: 0,
-              percent: 0
-            };
-
-          }
+        const subjectName =
+          subject.name;
 
 
-          subjectsProgress[
-            subjectName
-          ].total += 1;
+        if (!subjectsProgress[subjectName]) {
 
-
-          if (
-            item.completed === true
-          ) {
-
-            subjectsProgress[
-              subjectName
-            ].completed += 1;
-
-          }
+          subjectsProgress[subjectName] = {
+            total: 0,
+            completed: 0,
+            percent: 0
+          };
 
         }
-      );
+
+
+        subjectsProgress[subjectName].total += 1;
+
+
+        if (item.completed === true) {
+
+          subjectsProgress[subjectName].completed += 1;
+
+        }
+
+      });
 
 
       // =================================================
-      // CALCUL POURCENTAGE
+      // POURCENTAGES
       // =================================================
 
-      Object.keys(
-        subjectsProgress
-      ).forEach(
+      Object.keys(subjectsProgress).forEach(
         subjectName => {
 
           const data =
-            subjectsProgress[
-              subjectName
-            ];
+            subjectsProgress[subjectName];
 
 
           if (data.total > 0) {
@@ -326,19 +267,13 @@ export default function DashboardPage() {
                 ) * 100
               );
 
-          } else {
-
-            data.percent = 0;
-
           }
 
         }
       );
 
 
-      setSubjects(
-        subjectsProgress
-      );
+      setSubjects(subjectsProgress);
 
 
       // =================================================
@@ -348,19 +283,10 @@ export default function DashboardPage() {
       const {
         data: attempts,
         error: attemptsError
-      } =
-        await supabase
-
-          .from("quiz_attempts")
-
-          .select(
-            "id, score"
-          )
-
-          .eq(
-            "user_id",
-            user.id
-          );
+      } = await supabase
+        .from("quiz_attempts")
+        .select("id, score")
+        .eq("user_id", user.id);
 
 
       if (attemptsError) {
@@ -384,22 +310,15 @@ export default function DashboardPage() {
       let averageScore = 0;
 
 
-      if (
-        attemptsData.length > 0
-      ) {
+      if (attemptsData.length > 0) {
 
         const totalScore =
           attemptsData.reduce(
-            (
-              total,
-              attempt
-            ) => {
+            (total, attempt) => {
 
               return (
                 total +
-                Number(
-                  attempt.score || 0
-                )
+                Number(attempt.score || 0)
               );
 
             },
@@ -423,26 +342,19 @@ export default function DashboardPage() {
       const {
         data: userBadges,
         error: badgeError
-      } =
-        await supabase
-
-          .from("user_badges")
-
-          .select(`
+      } = await supabase
+        .from("user_badges")
+        .select(`
+          id,
+          badges(
             id,
-            badges(
-              id,
-              name,
-              description,
-              xp_reward,
-              image_url
-            )
-          `)
-
-          .eq(
-            "user_id",
-            user.id
-          );
+            name,
+            description,
+            xp_reward,
+            image_url
+          )
+        `)
+        .eq("user_id", user.id);
 
 
       if (badgeError) {
@@ -455,9 +367,11 @@ export default function DashboardPage() {
       }
 
 
-      setBadges(
-        userBadges || []
-      );
+      const badgeData =
+        userBadges || [];
+
+
+      setBadges(badgeData);
 
 
       // =================================================
@@ -473,25 +387,12 @@ export default function DashboardPage() {
           averageScore,
 
         badges:
-          userBadges?.length || 0,
+          badgeData.length,
 
         attempts:
           attemptsData.length
 
       });
-
-
-      console.log(
-        "DASHBOARD CHARGÉ",
-        {
-          completedLessons,
-          averageScore,
-          badges:
-            userBadges?.length || 0,
-          attempts:
-            attemptsData.length
-        }
-      );
 
     }
 
@@ -544,7 +445,7 @@ export default function DashboardPage() {
             w-14
             h-14
             rounded-2xl
-            bg-blue-100
+            bg-accent-soft
             flex
             items-center
             justify-center
@@ -554,9 +455,7 @@ export default function DashboardPage() {
 
           <TrendingUp
             size={28}
-            className="
-              text-blue-600
-            "
+            className="text-accent"
           />
 
         </div>
@@ -564,8 +463,9 @@ export default function DashboardPage() {
 
         <p
           className="
-            text-gray-600
-            font-medium
+            text-gray-700
+            dark:text-gray-300
+            font-semibold
           "
         >
           Chargement de ton tableau de bord...
@@ -597,10 +497,10 @@ export default function DashboardPage() {
 
         <div
           className="
-            bg-white
+            theme-surface
             rounded-3xl
             border
-            border-red-100
+            theme-border
             shadow-sm
             p-8
             text-center
@@ -631,6 +531,7 @@ export default function DashboardPage() {
               text-xl
               font-bold
               text-gray-900
+              dark:text-white
             "
           >
             Impossible de charger le dashboard
@@ -640,7 +541,8 @@ export default function DashboardPage() {
           <p
             className="
               text-sm
-              text-gray-500
+              text-gray-600
+              dark:text-gray-400
               mt-2
             "
           >
@@ -650,29 +552,25 @@ export default function DashboardPage() {
 
           <button
             type="button"
-            onClick={() =>
-              loadDashboard(true)
-            }
+            onClick={() => loadDashboard(true)}
             className="
               mt-6
               inline-flex
               items-center
               justify-center
               gap-2
-              bg-blue-600
+              bg-accent
               text-white
               px-5
               py-3
               rounded-xl
               font-semibold
-              hover:bg-blue-700
+              hover:opacity-90
               transition
             "
           >
 
-            <RefreshCw
-              size={18}
-            />
+            <RefreshCw size={18} />
 
             Réessayer
 
@@ -707,10 +605,10 @@ export default function DashboardPage() {
 
         <div
           className="
-            bg-white
+            theme-surface
             rounded-3xl
             border
-            border-gray-100
+            theme-border
             shadow-sm
             p-8
           "
@@ -721,6 +619,7 @@ export default function DashboardPage() {
               text-xl
               font-bold
               text-gray-900
+              dark:text-white
             "
           >
             Profil introuvable
@@ -729,7 +628,8 @@ export default function DashboardPage() {
 
           <p
             className="
-              text-gray-500
+              text-gray-600
+              dark:text-gray-400
               mt-2
             "
           >
@@ -750,8 +650,9 @@ export default function DashboardPage() {
   // ===================================================
 
   const xp =
-    Number(
-      profile.xp || 0
+    Math.max(
+      Number(profile.xp || 0),
+      0
     );
 
 
@@ -776,6 +677,13 @@ export default function DashboardPage() {
     currentLevelXP;
 
 
+  const xpRemaining =
+    Math.max(
+      nextLevelXP - xp,
+      0
+    );
+
+
   const progressXP =
     Math.min(
       Math.max(
@@ -793,8 +701,7 @@ export default function DashboardPage() {
   // RANG
   // ===================================================
 
-  let rank =
-    "Débutant";
+  let rank = "Débutant";
 
 
   if (xp >= 500) {
@@ -815,7 +722,7 @@ export default function DashboardPage() {
 
 
   // ===================================================
-  // NOM ÉLÈVE
+  // NOM
   // ===================================================
 
   const studentName =
@@ -832,7 +739,7 @@ export default function DashboardPage() {
     <div
       className="
         min-h-screen
-        bg-gray-50
+        bg-white
         px-5
         py-6
         md:px-8
@@ -849,9 +756,9 @@ export default function DashboardPage() {
       >
 
 
-        {/* ============================================
+        {/* =================================================
             HEADER
-        ============================================ */}
+        ================================================= */}
 
         <div
           className="
@@ -869,8 +776,8 @@ export default function DashboardPage() {
             <p
               className="
                 text-sm
-                font-semibold
-                text-blue-600
+                font-bold
+                text-accent
               "
             >
               Kalan Academy
@@ -882,7 +789,8 @@ export default function DashboardPage() {
                 text-2xl
                 md:text-3xl
                 font-extrabold
-                text-gray-900
+                text-gray-950
+                dark:text-gray-950
                 mt-1
               "
             >
@@ -892,7 +800,8 @@ export default function DashboardPage() {
 
             <p
               className="
-                text-gray-500
+                text-gray-600
+                dark:text-gray-600
                 mt-1
               "
             >
@@ -904,9 +813,7 @@ export default function DashboardPage() {
 
           <button
             type="button"
-            onClick={() =>
-              loadDashboard(true)
-            }
+            onClick={() => loadDashboard(true)}
             disabled={refreshing}
             className="
               inline-flex
@@ -915,8 +822,8 @@ export default function DashboardPage() {
               gap-2
               bg-white
               border
-              border-gray-200
-              text-gray-700
+              theme-border
+              text-gray-800
               px-4
               py-2.5
               rounded-xl
@@ -944,25 +851,25 @@ export default function DashboardPage() {
         </div>
 
 
-        {/* ============================================
-            CARTE XP PRINCIPALE
-        ============================================ */}
+        {/* =================================================
+            CARTE XP
+        ================================================= */}
 
         <div
           className="
             relative
             overflow-hidden
-            bg-gradient-to-br
-            from-blue-600
-            via-blue-700
-            to-indigo-900
             rounded-3xl
-            text-white
+            bg-accent-soft
+            border
+            border-accent
             p-6
             md:p-8
             shadow-xl
           "
         >
+
+          {/* DÉCORATION */}
 
           <div
             className="
@@ -972,7 +879,8 @@ export default function DashboardPage() {
               w-48
               h-48
               rounded-full
-              bg-white/10
+              bg-accent
+              opacity-10
             "
           />
 
@@ -985,7 +893,8 @@ export default function DashboardPage() {
               w-56
               h-56
               rounded-full
-              bg-white/5
+              bg-accent
+              opacity-10
             "
           />
 
@@ -997,12 +906,14 @@ export default function DashboardPage() {
             "
           >
 
+            {/* NIVEAU */}
+
             <div
               className="
                 flex
                 items-center
                 gap-3
-                mb-5
+                mb-6
               "
             >
 
@@ -1011,16 +922,16 @@ export default function DashboardPage() {
                   w-12
                   h-12
                   rounded-2xl
-                  bg-white/15
+                  bg-accent
+                  text-white
                   flex
                   items-center
                   justify-center
+                  shrink-0
                 "
               >
 
-                <Star
-                  size={25}
-                />
+                <Star size={25} />
 
               </div>
 
@@ -1029,8 +940,9 @@ export default function DashboardPage() {
 
                 <p
                   className="
-                    text-blue-100
+                    text-accent
                     text-sm
+                    font-medium
                   "
                 >
                   Ton niveau
@@ -1040,7 +952,9 @@ export default function DashboardPage() {
                 <h2
                   className="
                     text-2xl
-                    font-bold
+                    md:text-3xl
+                    font-extrabold
+                    text-gray-950
                   "
                 >
                   Niveau {level}
@@ -1051,23 +965,25 @@ export default function DashboardPage() {
             </div>
 
 
+            {/* XP + RANG */}
+
             <div
               className="
-                flex
-                flex-col
-                sm:flex-row
-                sm:items-end
-                sm:justify-between
-                gap-5
+                grid
+                sm:grid-cols-2
+                gap-6
               "
             >
+
+              {/* XP TOTAL */}
 
               <div>
 
                 <p
                   className="
-                    text-blue-100
+                    text-accent
                     text-sm
+                    font-medium
                   "
                 >
                   XP total
@@ -1080,23 +996,30 @@ export default function DashboardPage() {
                     md:text-5xl
                     font-extrabold
                     mt-1
+                    tracking-tight
+                    text-gray-950
                   "
                 >
+
                   {xp}
+
                   <span
                     className="
                       text-lg
-                      font-medium
-                      text-blue-200
+                      font-semibold
+                      text-accent
                       ml-2
                     "
                   >
                     XP
                   </span>
+
                 </p>
 
               </div>
 
+
+              {/* RANG */}
 
               <div
                 className="
@@ -1106,8 +1029,9 @@ export default function DashboardPage() {
 
                 <p
                   className="
-                    text-blue-100
+                    text-accent
                     text-sm
+                    font-medium
                   "
                 >
                   Rang
@@ -1117,8 +1041,10 @@ export default function DashboardPage() {
                 <p
                   className="
                     text-xl
-                    font-bold
+                    md:text-2xl
+                    font-extrabold
                     mt-1
+                    text-gray-950
                   "
                 >
                   {rank}
@@ -1129,31 +1055,31 @@ export default function DashboardPage() {
             </div>
 
 
-            {/* BARRE XP */}
+            {/* PROGRESSION */}
 
-            <div
-              className="
-                mt-6
-              "
-            >
+            <div className="mt-7">
 
               <div
                 className="
                   flex
-                  justify-between
-                  text-xs
-                  text-blue-100
+                  flex-col
+                  sm:flex-row
+                  sm:items-center
+                  sm:justify-between
+                  gap-1
+                  text-sm
+                  text-gray-700
                   mb-2
                 "
               >
 
-                <span>
-                  Progression du niveau
+                <span className="font-medium">
+                  Progression vers le niveau {level + 1}
                 </span>
 
 
-                <span>
-                  {xpInCurrentLevel}/{XP_PER_LEVEL} XP
+                <span className="font-bold">
+                  {xpInCurrentLevel} / {XP_PER_LEVEL} XP
                 </span>
 
               </div>
@@ -1162,7 +1088,7 @@ export default function DashboardPage() {
               <div
                 className="
                   h-3
-                  bg-white/20
+                  bg-white/70
                   rounded-full
                   overflow-hidden
                 "
@@ -1171,34 +1097,43 @@ export default function DashboardPage() {
                 <div
                   className="
                     h-full
-                    bg-white
+                    bg-accent
                     rounded-full
                     transition-all
                     duration-500
                   "
                   style={{
-                    width:
-                      `${progressXP}%`
+                    width: `${progressXP}%`
                   }}
                 />
 
               </div>
 
 
-              <p
+              <div
                 className="
-                  text-xs
-                  text-blue-100
+                  flex
+                  flex-col
+                  sm:flex-row
+                  sm:items-center
+                  sm:justify-between
+                  gap-1
                   mt-2
+                  text-xs
+                  text-gray-600
                 "
               >
-                Encore{" "}
-                {Math.max(
-                  nextLevelXP - xp,
-                  0
-                )}{" "}
-                XP pour atteindre le niveau suivant.
-              </p>
+
+                <span>
+                  {xpInCurrentLevel} XP gagnés dans ce niveau
+                </span>
+
+
+                <span>
+                  Encore {xpRemaining} XP
+                </span>
+
+              </div>
 
             </div>
 
@@ -1207,9 +1142,9 @@ export default function DashboardPage() {
         </div>
 
 
-        {/* ============================================
+        {/* =================================================
             STATISTIQUES
-        ============================================ */}
+        ================================================= */}
 
         <div
           className="
@@ -1224,10 +1159,10 @@ export default function DashboardPage() {
 
           <div
             className="
-              bg-white
+              theme-surface
               rounded-2xl
               border
-              border-gray-100
+              theme-border
               shadow-sm
               p-5
             "
@@ -1238,8 +1173,8 @@ export default function DashboardPage() {
                 w-10
                 h-10
                 rounded-xl
-                bg-blue-50
-                text-blue-600
+                bg-accent-soft
+                text-accent
                 flex
                 items-center
                 justify-center
@@ -1247,9 +1182,7 @@ export default function DashboardPage() {
               "
             >
 
-              <BookOpen
-                size={21}
-              />
+              <BookOpen size={21} />
 
             </div>
 
@@ -1257,7 +1190,8 @@ export default function DashboardPage() {
             <p
               className="
                 text-sm
-                text-gray-500
+                text-gray-600
+                dark:text-gray-600
               "
             >
               Leçons terminées
@@ -1268,7 +1202,7 @@ export default function DashboardPage() {
               className="
                 text-2xl
                 font-extrabold
-                text-gray-900
+                text-gray-950
                 mt-1
               "
             >
@@ -1282,10 +1216,10 @@ export default function DashboardPage() {
 
           <div
             className="
-              bg-white
+              theme-surface
               rounded-2xl
               border
-              border-gray-100
+              theme-border
               shadow-sm
               p-5
             "
@@ -1296,8 +1230,8 @@ export default function DashboardPage() {
                 w-10
                 h-10
                 rounded-xl
-                bg-yellow-50
-                text-yellow-600
+                bg-accent-soft
+                text-accent
                 flex
                 items-center
                 justify-center
@@ -1305,9 +1239,7 @@ export default function DashboardPage() {
               "
             >
 
-              <Star
-                size={21}
-              />
+              <Star size={21} />
 
             </div>
 
@@ -1315,7 +1247,8 @@ export default function DashboardPage() {
             <p
               className="
                 text-sm
-                text-gray-500
+                text-gray-600
+                dark:text-gray-600
               "
             >
               Score moyen
@@ -1326,7 +1259,7 @@ export default function DashboardPage() {
               className="
                 text-2xl
                 font-extrabold
-                text-gray-900
+                text-gray-950
                 mt-1
               "
             >
@@ -1340,10 +1273,10 @@ export default function DashboardPage() {
 
           <div
             className="
-              bg-white
+              theme-surface
               rounded-2xl
               border
-              border-gray-100
+              theme-border
               shadow-sm
               p-5
             "
@@ -1354,8 +1287,8 @@ export default function DashboardPage() {
                 w-10
                 h-10
                 rounded-xl
-                bg-purple-50
-                text-purple-600
+                bg-accent-soft
+                text-accent
                 flex
                 items-center
                 justify-center
@@ -1363,9 +1296,7 @@ export default function DashboardPage() {
               "
             >
 
-              <Award
-                size={21}
-              />
+              <Award size={21} />
 
             </div>
 
@@ -1373,7 +1304,8 @@ export default function DashboardPage() {
             <p
               className="
                 text-sm
-                text-gray-500
+                text-gray-600
+                dark:text-gray-600
               "
             >
               Badges
@@ -1384,7 +1316,7 @@ export default function DashboardPage() {
               className="
                 text-2xl
                 font-extrabold
-                text-gray-900
+                text-gray-950
                 mt-1
               "
             >
@@ -1398,10 +1330,10 @@ export default function DashboardPage() {
 
           <div
             className="
-              bg-white
+              theme-surface
               rounded-2xl
               border
-              border-gray-100
+              theme-border
               shadow-sm
               p-5
             "
@@ -1412,8 +1344,8 @@ export default function DashboardPage() {
                 w-10
                 h-10
                 rounded-xl
-                bg-green-50
-                text-green-600
+                bg-accent-soft
+                text-accent
                 flex
                 items-center
                 justify-center
@@ -1421,9 +1353,7 @@ export default function DashboardPage() {
               "
             >
 
-              <Target
-                size={21}
-              />
+              <Target size={21} />
 
             </div>
 
@@ -1431,7 +1361,8 @@ export default function DashboardPage() {
             <p
               className="
                 text-sm
-                text-gray-500
+                text-gray-600
+                dark:text-gray-600
               "
             >
               Quiz réalisés
@@ -1442,7 +1373,7 @@ export default function DashboardPage() {
               className="
                 text-2xl
                 font-extrabold
-                text-gray-900
+                text-gray-950
                 mt-1
               "
             >
@@ -1454,9 +1385,9 @@ export default function DashboardPage() {
         </div>
 
 
-        {/* ============================================
+        {/* =================================================
             PROGRESSION PAR MATIÈRE
-        ============================================ */}
+        ================================================= */}
 
         <section>
 
@@ -1474,17 +1405,15 @@ export default function DashboardPage() {
                 w-10
                 h-10
                 rounded-xl
-                bg-blue-50
-                text-blue-600
+                bg-accent-soft
+                text-accent
                 flex
                 items-center
                 justify-center
               "
             >
 
-              <TrendingUp
-                size={20}
-              />
+              <TrendingUp size={20} />
 
             </div>
 
@@ -1495,7 +1424,7 @@ export default function DashboardPage() {
                 className="
                   text-xl
                   font-bold
-                  text-gray-900
+                  text-gray-950
                 "
               >
                 Progression par matière
@@ -1505,7 +1434,8 @@ export default function DashboardPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
+                  text-gray-600
+                  mt-1
                 "
               >
                 Suis ton avancement dans chaque matière.
@@ -1516,16 +1446,14 @@ export default function DashboardPage() {
           </div>
 
 
-          {Object.keys(
-            subjects
-          ).length === 0 ? (
+          {Object.keys(subjects).length === 0 ? (
 
             <div
               className="
-                bg-white
+                theme-surface
                 rounded-2xl
                 border
-                border-gray-100
+                theme-border
                 shadow-sm
                 p-8
                 text-center
@@ -1555,7 +1483,7 @@ export default function DashboardPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
+                  text-gray-600
                   mt-1
                 "
               >
@@ -1575,23 +1503,16 @@ export default function DashboardPage() {
               "
             >
 
-              {Object.entries(
-                subjects
-              ).map(
-                (
-                  [
-                    name,
-                    data
-                  ]
-                ) => (
+              {Object.entries(subjects).map(
+                ([name, data]) => (
 
                   <div
                     key={name}
                     className="
-                      bg-white
+                      theme-surface
                       rounded-2xl
                       border
-                      border-gray-100
+                      theme-border
                       shadow-sm
                       p-5
                     "
@@ -1609,7 +1530,7 @@ export default function DashboardPage() {
                       <h3
                         className="
                           font-bold
-                          text-gray-900
+                          text-gray-950
                           truncate
                         "
                       >
@@ -1621,7 +1542,7 @@ export default function DashboardPage() {
                         className="
                           text-sm
                           font-bold
-                          text-blue-600
+                          text-accent
                         "
                       >
                         {data.percent}%
@@ -1643,14 +1564,13 @@ export default function DashboardPage() {
                       <div
                         className="
                           h-full
-                          bg-blue-600
+                          bg-accent
                           rounded-full
                           transition-all
                           duration-500
                         "
                         style={{
-                          width:
-                            `${data.percent}%`
+                          width: `${data.percent}%`
                         }}
                       />
 
@@ -1660,7 +1580,7 @@ export default function DashboardPage() {
                     <p
                       className="
                         text-xs
-                        text-gray-500
+                        text-gray-600
                         mt-2
                       "
                     >
@@ -1684,9 +1604,9 @@ export default function DashboardPage() {
         </section>
 
 
-        {/* ============================================
+        {/* =================================================
             BADGES
-        ============================================ */}
+        ================================================= */}
 
         <section>
 
@@ -1704,17 +1624,15 @@ export default function DashboardPage() {
                 w-10
                 h-10
                 rounded-xl
-                bg-yellow-50
-                text-yellow-600
+                bg-accent-soft
+                text-accent
                 flex
                 items-center
                 justify-center
               "
             >
 
-              <Trophy
-                size={21}
-              />
+              <Trophy size={21} />
 
             </div>
 
@@ -1725,7 +1643,7 @@ export default function DashboardPage() {
                 className="
                   text-xl
                   font-bold
-                  text-gray-900
+                  text-gray-950
                 "
               >
                 Mes badges
@@ -1735,7 +1653,7 @@ export default function DashboardPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
+                  text-gray-600
                 "
               >
                 Les récompenses que tu as obtenues.
@@ -1750,10 +1668,10 @@ export default function DashboardPage() {
 
             <div
               className="
-                bg-white
+                theme-surface
                 rounded-2xl
                 border
-                border-gray-100
+                theme-border
                 shadow-sm
                 p-8
                 text-center
@@ -1783,7 +1701,7 @@ export default function DashboardPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
+                  text-gray-600
                   mt-1
                 "
               >
@@ -1803,135 +1721,125 @@ export default function DashboardPage() {
               "
             >
 
-              {badges.map(
-                item => {
+              {badges.map(item => {
 
-                  const badge =
-                    item.badges;
+                const badge = item.badges;
 
 
-                  return (
+                return (
+
+                  <div
+                    key={item.id}
+                    className="
+                      theme-surface
+                      rounded-2xl
+                      border
+                      theme-border
+                      shadow-sm
+                      p-5
+                    "
+                  >
 
                     <div
-                      key={item.id}
                       className="
-                        bg-white
-                        rounded-2xl
-                        border
-                        border-gray-100
-                        shadow-sm
-                        p-5
+                        flex
+                        items-start
+                        gap-4
                       "
                     >
 
                       <div
                         className="
+                          w-14
+                          h-14
+                          shrink-0
+                          rounded-2xl
+                          bg-accent-soft
                           flex
-                          items-start
-                          gap-4
+                          items-center
+                          justify-center
+                          overflow-hidden
                         "
                       >
 
-                        <div
-                          className="
-                            w-14
-                            h-14
-                            shrink-0
-                            rounded-2xl
-                            bg-yellow-50
-                            flex
-                            items-center
-                            justify-center
-                            overflow-hidden
-                          "
-                        >
+                        {badge?.image_url ? (
 
-                          {badge?.image_url ? (
-
-                            <img
-                              src={
-                                badge.image_url
-                              }
-                              alt={
-                                badge.name ||
-                                "Badge"
-                              }
-                              className="
-                                w-full
-                                h-full
-                                object-cover
-                              "
-                            />
-
-                          ) : (
-
-                            <span
-                              className="
-                                text-3xl
-                              "
-                            >
-                              🏆
-                            </span>
-
-                          )}
-
-                        </div>
-
-
-                        <div
-                          className="
-                            min-w-0
-                          "
-                        >
-
-                          <h3
+                          <img
+                            src={badge.image_url}
+                            alt={
+                              badge.name ||
+                              "Badge"
+                            }
                             className="
-                              font-bold
-                              text-gray-900
+                              w-full
+                              h-full
+                              object-cover
                             "
-                          >
-                            {badge?.name ||
-                              "Badge"}
-                          </h3>
+                          />
 
+                        ) : (
+
+                          <span className="text-3xl">
+                            🏆
+                          </span>
+
+                        )}
+
+                      </div>
+
+
+                      <div
+                        className="
+                          min-w-0
+                        "
+                      >
+
+                        <h3
+                          className="
+                            font-bold
+                            text-gray-950
+                          "
+                        >
+                          {badge?.name || "Badge"}
+                        </h3>
+
+
+                        <p
+                          className="
+                            text-sm
+                            text-gray-600
+                            mt-1
+                          "
+                        >
+                          {badge?.description ||
+                            "Badge obtenu sur Kalan Academy."}
+                        </p>
+
+
+                        {badge?.xp_reward ? (
 
                           <p
                             className="
                               text-sm
-                              text-gray-500
-                              mt-1
+                              font-semibold
+                              text-accent
+                              mt-2
                             "
                           >
-                            {badge?.description ||
-                              "Badge obtenu sur Kalan Academy."}
+                            +{badge.xp_reward} XP
                           </p>
 
-
-                          {badge?.xp_reward ? (
-
-                            <p
-                              className="
-                                text-sm
-                                font-semibold
-                                text-yellow-600
-                                mt-2
-                              "
-                            >
-                              +{badge.xp_reward} XP
-                            </p>
-
-                          ) : null}
-
-                        </div>
+                        ) : null}
 
                       </div>
 
                     </div>
 
-                  );
+                  </div>
 
-                }
-              )}
+                );
+
+              })}
 
             </div>
 

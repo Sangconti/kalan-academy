@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Symétrie axiale",
+  "chapter_order": 26,
+  "lessons": [
+    {
+      "title": "Symétrie axiale et axe de symétrie",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de la symétrie axiale",
+          "content": {
+            "text": "La symétrie axiale est une transformation géométrique qui permet de construire l'image d'une figure par rapport à une droite appelée axe de symétrie. On peut comparer cette transformation à l'image donnée par un miroir. La figure et son image sont placées de part et d'autre de l'axe."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Points symétriques",
+          "content": {
+            "text": "Deux points A et A' sont symétriques par rapport à une droite (d) lorsque la droite (d) est la médiatrice du segment [AA']. Cela signifie que (d) est perpendiculaire à [AA'] et passe par son milieu. Le point A' est appelé le symétrique de A par rapport à (d)."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Axe de symétrie d'une figure",
+          "content": {
+            "text": "Une figure possède un axe de symétrie lorsque son image par rapport à cette droite se superpose exactement à la figure initiale. Une figure peut posséder un seul axe, plusieurs axes ou aucun axe de symétrie. Par exemple, un carré possède quatre axes de symétrie."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Symétrie axiale et axe de symétrie",
+        "questions": [
+          {
+            "question": "Comment appelle-t-on la droite par rapport à laquelle on effectue une symétrie axiale ?",
+            "options": [
+              "Le rayon",
+              "L'axe de symétrie",
+              "La diagonale",
+              "Le diamètre"
+            ],
+            "correct_answer": "L'axe de symétrie",
+            "explanation": "La symétrie axiale se fait par rapport à une droite appelée axe de symétrie."
+          },
+          {
+            "question": "Si A et A' sont symétriques par rapport à une droite (d), alors (d) est...",
+            "options": [
+              "parallèle à [AA']",
+              "la médiatrice de [AA']",
+              "égale à [AA']",
+              "perpendiculaire uniquement à A"
+            ],
+            "correct_answer": "la médiatrice de [AA']",
+            "explanation": "L'axe de symétrie est perpendiculaire au segment [AA'] et passe par son milieu."
+          },
+          {
+            "question": "Une figure possède un axe de symétrie lorsque...",
+            "options": [
+              "elle devient plus grande",
+              "son image se superpose à la figure initiale",
+              "elle change de forme",
+              "elle possède quatre côtés"
+            ],
+            "correct_answer": "son image se superpose à la figure initiale",
+            "explanation": "Une figure est symétrique par rapport à un axe lorsque son image se superpose exactement à la figure initiale."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire le symétrique d'un point",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Tracer la perpendiculaire à l'axe",
+          "content": {
+            "text": "Pour construire le symétrique A' d'un point A par rapport à une droite (d), on commence par tracer la droite perpendiculaire à (d) passant par A. Cette perpendiculaire rencontre l'axe (d) en un point H."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Reporter la distance",
+          "content": {
+            "text": "Le point H est le milieu du segment [AA']. On reporte donc de l'autre côté de l'axe la distance HA pour placer A'. On obtient ainsi HA = HA'. Le point A et son symétrique A' sont donc à la même distance de l'axe."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Vérifier la construction",
+          "content": {
+            "text": "Pour vérifier la construction, il faut s'assurer que [AA'] est perpendiculaire à l'axe et que H est le milieu de [AA']. On peut utiliser une règle, une équerre et un compas. Si A est à 3 cm de l'axe, son symétrique A' est également à 3 cm de l'axe."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Construire le symétrique d'un point",
+        "questions": [
+          {
+            "question": "Pour construire le symétrique A' de A, on trace par A une droite...",
+            "options": [
+              "parallèle à l'axe",
+              "perpendiculaire à l'axe",
+              "toujours horizontale",
+              "toujours verticale"
+            ],
+            "correct_answer": "perpendiculaire à l'axe",
+            "explanation": "Le segment qui relie un point à son symétrique est perpendiculaire à l'axe de symétrie."
+          },
+          {
+            "question": "Si H est le milieu de [AA'], alors...",
+            "options": [
+              "HA = HA'",
+              "HA > HA'",
+              "HA < HA'",
+              "H est extérieur au segment"
+            ],
+            "correct_answer": "HA = HA'",
+            "explanation": "H est le milieu de [AA'], donc les deux longueurs HA et HA' sont égales."
+          },
+          {
+            "question": "Un point A est à 4 cm de l'axe. À quelle distance de l'axe se trouve A' ?",
+            "options": [
+              "2 cm",
+              "4 cm",
+              "8 cm",
+              "16 cm"
+            ],
+            "correct_answer": "4 cm",
+            "explanation": "Un point et son symétrique sont toujours à la même distance de l'axe."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire le symétrique d'une figure",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Symétrique d'un segment",
+          "content": {
+            "text": "Pour construire le symétrique d'un segment [AB], on construit d'abord le symétrique A' de A, puis le symétrique B' de B. On relie ensuite A' et B'. Le segment [A'B'] est le symétrique de [AB] par rapport à l'axe."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Symétrique d'un triangle",
+          "content": {
+            "text": "Pour construire le symétrique d'un triangle ABC, on construit les symétriques A', B' et C' des trois sommets. On relie ensuite A' à B', B' à C' et C' à A'. On obtient le triangle A'B'C', qui est le symétrique du triangle ABC."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Symétrique d'un polygone",
+          "content": {
+            "text": "Pour construire le symétrique d'un polygone, on construit le symétrique de chacun de ses sommets, puis on relie les points obtenus dans le même ordre. La figure symétrique conserve les mêmes longueurs et les mêmes mesures d'angles que la figure initiale."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Symétrique d'une figure",
+        "questions": [
+          {
+            "question": "Pour construire le symétrique d'un triangle ABC, que faut-il construire ?",
+            "options": [
+              "Seulement A'",
+              "A', B' et C'",
+              "Seulement le côté AB",
+              "Seulement le périmètre"
+            ],
+            "correct_answer": "A', B' et C'",
+            "explanation": "Il faut construire le symétrique de chacun des trois sommets."
+          },
+          {
+            "question": "Le symétrique d'un segment [AB] est...",
+            "options": [
+              "un point",
+              "un segment [A'B']",
+              "un cercle",
+              "une demi-droite"
+            ],
+            "correct_answer": "un segment [A'B']",
+            "explanation": "La symétrie axiale transforme un segment en un segment de même longueur."
+          },
+          {
+            "question": "Pour construire le symétrique d'un polygone, il faut...",
+            "options": [
+              "construire seulement son centre",
+              "construire le symétrique de chacun de ses sommets",
+              "modifier ses longueurs",
+              "supprimer ses angles"
+            ],
+            "correct_answer": "construire le symétrique de chacun de ses sommets",
+            "explanation": "On construit les images des sommets puis on les relie dans le même ordre."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Propriétés de la symétrie axiale",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Conservation des longueurs",
+          "content": {
+            "text": "La symétrie axiale conserve les longueurs. Si A' et B' sont les symétriques de A et B, alors A'B' = AB. Par exemple, si AB mesure 7 cm, alors A'B' mesure également 7 cm."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Conservation des angles et des formes",
+          "content": {
+            "text": "La symétrie axiale conserve les mesures des angles, les formes et les périmètres. Une figure et son image ont donc les mêmes dimensions. Un triangle de côtés 4 cm, 5 cm et 6 cm aura une image possédant également des côtés de 4 cm, 5 cm et 6 cm."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Points situés sur l'axe",
+          "content": {
+            "text": "Tout point situé sur l'axe de symétrie est son propre symétrique. En effet, sa distance à l'axe est nulle. Ces points sont appelés des points invariants par la symétrie axiale."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Propriétés de la symétrie axiale",
+        "questions": [
+          {
+            "question": "La symétrie axiale conserve-t-elle les longueurs ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement certaines longueurs",
+              "Seulement les diagonales"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "La symétrie axiale conserve toutes les longueurs."
+          },
+          {
+            "question": "Si AB = 8 cm, combien mesure A'B' après symétrie ?",
+            "options": [
+              "4 cm",
+              "8 cm",
+              "16 cm",
+              "64 cm"
+            ],
+            "correct_answer": "8 cm",
+            "explanation": "La symétrie axiale conserve les longueurs : A'B' = AB = 8 cm."
+          },
+          {
+            "question": "Quel est le symétrique d'un point situé sur l'axe ?",
+            "options": [
+              "Un point différent",
+              "Le même point",
+              "Le centre de la figure",
+              "Le milieu du segment"
+            ],
+            "correct_answer": "Le même point",
+            "explanation": "Tout point situé sur l'axe est invariant par symétrie axiale."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Axes de symétrie des figures usuelles",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Axes de symétrie du segment et du cercle",
+          "content": {
+            "text": "Un segment possède un axe de symétrie : sa médiatrice, c'est-à-dire la droite perpendiculaire au segment passant par son milieu. Un cercle possède une infinité d'axes de symétrie : toute droite passant par son centre est un axe de symétrie."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Axes de symétrie du rectangle et du carré",
+          "content": {
+            "text": "Un rectangle possède deux axes de symétrie. Ils passent par les milieux des côtés opposés. Un carré possède quatre axes de symétrie : deux passent par les milieux des côtés opposés et deux correspondent aux diagonales."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Axes de symétrie des triangles",
+          "content": {
+            "text": "Un triangle équilatéral possède trois axes de symétrie. Un triangle isocèle possède un axe de symétrie, qui est la médiatrice de sa base. Un triangle quelconque ne possède généralement aucun axe de symétrie."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Axes de symétrie des figures",
+        "questions": [
+          {
+            "question": "Combien d'axes de symétrie possède un carré ?",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "correct_answer": "4",
+            "explanation": "Un carré possède quatre axes de symétrie : deux axes passant par les milieux des côtés et deux diagonales."
+          },
+          {
+            "question": "Combien d'axes de symétrie possède un triangle équilatéral ?",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "correct_answer": "3",
+            "explanation": "Un triangle équilatéral possède trois axes de symétrie, un pour chacun de ses sommets."
+          },
+          {
+            "question": "Combien d'axes de symétrie possède un cercle ?",
+            "options": [
+              "1",
+              "2",
+              "4",
+              "Une infinité"
+            ],
+            "correct_answer": "Une infinité",
+            "explanation": "Toute droite passant par le centre du cercle est un axe de symétrie."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exercices et problèmes de synthèse sur la symétrie",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de construction",
+          "content": {
+            "text": "Pour résoudre un exercice de symétrie axiale, il faut d'abord repérer l'axe de symétrie. Pour chaque point à construire, on trace la perpendiculaire à l'axe passant par ce point, puis on reporte la même distance de l'autre côté de l'axe."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple de calcul de distance",
+          "content": {
+            "text": "Un point A est situé à 4 cm d'une droite (d). Son symétrique A' est également situé à 4 cm de (d), mais de l'autre côté. La distance AA' est donc 4 + 4 = 8 cm. La droite (d) est la médiatrice du segment [AA']."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Application aux figures",
+          "content": {
+            "text": "Dans un problème portant sur une figure et son symétrique, on peut utiliser les propriétés de conservation. Les longueurs, les angles, les périmètres et les formes sont conservés. Il est donc possible de déterminer certaines mesures de l'image sans effectuer toute la construction."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse sur la symétrie axiale",
+        "questions": [
+          {
+            "question": "Un point A est à 4 cm de l'axe. À quelle distance de l'axe se trouve A' ?",
+            "options": [
+              "2 cm",
+              "4 cm",
+              "8 cm",
+              "16 cm"
+            ],
+            "correct_answer": "4 cm",
+            "explanation": "Un point et son symétrique sont toujours à la même distance de l'axe."
+          },
+          {
+            "question": "Si AB = 9 cm, quelle est la longueur de son image A'B' ?",
+            "options": [
+              "3 cm",
+              "9 cm",
+              "18 cm",
+              "81 cm"
+            ],
+            "correct_answer": "9 cm",
+            "explanation": "La symétrie axiale conserve les longueurs, donc A'B' = 9 cm."
+          },
+          {
+            "question": "L'axe de symétrie est toujours...",
+            "options": [
+              "parallèle au segment reliant un point à son image",
+              "perpendiculaire au segment reliant un point à son image",
+              "égal au segment reliant un point à son image",
+              "extérieur à la figure"
+            ],
+            "correct_answer": "perpendiculaire au segment reliant un point à son image",
+            "explanation": "L'axe de symétrie est la médiatrice du segment reliant un point à son image. Il est donc perpendiculaire à ce segment et passe par son milieu."
+          }
+        ]
+      }
+    }
+  ]
+}

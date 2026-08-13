@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Proportionnalité",
+  "chapter_order": 10,
+  "lessons": [
+    {
+      "title": "Reconnaître une situation de proportionnalité",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de la proportionnalité",
+          "content": {
+            "text": "Deux grandeurs sont proportionnelles lorsque l'on peut passer de l'une à l'autre en multipliant toujours par un même nombre. Ce nombre est appelé coefficient de proportionnalité. Par exemple, si 1 cahier coûte 500 F CFA, alors 2 cahiers coûtent 1 000 F CFA et 3 cahiers coûtent 1 500 F CFA."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Reconnaître une proportionnalité",
+          "content": {
+            "text": "Pour reconnaître une situation de proportionnalité, on vérifie si le rapport entre les deux grandeurs reste constant. Dans l'exemple des cahiers, le prix est toujours égal au nombre de cahiers multiplié par 500. Le prix et la quantité sont donc proportionnels."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Attention aux situations non proportionnelles",
+          "content": {
+            "text": "Toutes les situations ne sont pas proportionnelles. Par exemple, si un taxi demande un prix fixe de départ auquel s'ajoute un prix selon la distance, le coût total ne varie pas nécessairement proportionnellement à la distance. Il faut donc vérifier la relation entre les deux grandeurs."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Reconnaître la proportionnalité",
+        "questions": [
+          {
+            "question": "Une situation est proportionnelle lorsque...",
+            "options": [
+              "on ajoute toujours le même nombre",
+              "on multiplie toujours par le même nombre",
+              "on soustrait toujours le même nombre",
+              "les nombres sont toujours égaux"
+            ],
+            "correct_answer": "on multiplie toujours par le même nombre",
+            "explanation": "Dans une situation de proportionnalité, le rapport entre les deux grandeurs est constant."
+          },
+          {
+            "question": "Un cahier coûte 500 F CFA. Combien coûtent 4 cahiers ?",
+            "options": [
+              "1 000 F CFA",
+              "1 500 F CFA",
+              "2 000 F CFA",
+              "2 500 F CFA"
+            ],
+            "correct_answer": "2 000 F CFA",
+            "explanation": "4 × 500 = 2 000 F CFA."
+          },
+          {
+            "question": "Quel nombre reste constant dans une situation de proportionnalité ?",
+            "options": [
+              "Le coefficient de proportionnalité",
+              "La première grandeur uniquement",
+              "La deuxième grandeur uniquement",
+              "La différence entre les grandeurs"
+            ],
+            "correct_answer": "Le coefficient de proportionnalité",
+            "explanation": "Le coefficient de proportionnalité permet de passer d'une grandeur à l'autre."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire et utiliser un tableau de proportionnalité",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Organiser les données dans un tableau",
+          "content": {
+            "text": "Un tableau de proportionnalité permet d'organiser deux grandeurs proportionnelles. Par exemple, si un kilogramme de riz coûte 500 F CFA, on peut placer la masse en kilogrammes sur une ligne et le prix en francs CFA sur l'autre."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Compléter un tableau",
+          "content": {
+            "text": "Pour 1 kg, 2 kg et 5 kg de riz à 500 F CFA le kilogramme, les prix sont respectivement 500 F, 1 000 F et 2 500 F CFA. Chaque prix est obtenu en multipliant la masse par 500."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Utiliser les propriétés du tableau",
+          "content": {
+            "text": "Dans un tableau de proportionnalité, on peut multiplier ou diviser une colonne par un même nombre pour obtenir une autre colonne. Par exemple, si l'on connaît le prix de 2 kg, on peut trouver celui de 4 kg en multipliant les deux valeurs par 2."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Tableau de proportionnalité",
+        "questions": [
+          {
+            "question": "1 kg de riz coûte 500 F CFA. Combien coûtent 6 kg ?",
+            "options": [
+              "2 000 F CFA",
+              "2 500 F CFA",
+              "3 000 F CFA",
+              "3 500 F CFA"
+            ],
+            "correct_answer": "3 000 F CFA",
+            "explanation": "6 × 500 = 3 000 F CFA."
+          },
+          {
+            "question": "Si 3 cahiers coûtent 1 500 F CFA, combien coûtent 6 cahiers ?",
+            "options": [
+              "2 000 F CFA",
+              "2 500 F CFA",
+              "3 000 F CFA",
+              "4 500 F CFA"
+            ],
+            "correct_answer": "3 000 F CFA",
+            "explanation": "6 cahiers représentent deux fois 3 cahiers. Le prix est donc deux fois 1 500 F, soit 3 000 F CFA."
+          },
+          {
+            "question": "Dans un tableau de proportionnalité, que peut-on faire pour passer d'une colonne à une autre ?",
+            "options": [
+              "Multiplier ou diviser par un même nombre",
+              "Ajouter toujours 10",
+              "Changer seulement une ligne",
+              "Supprimer une colonne"
+            ],
+            "correct_answer": "Multiplier ou diviser par un même nombre",
+            "explanation": "Les propriétés de la proportionnalité permettent de construire de nouvelles colonnes par multiplication ou division."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer le coefficient de proportionnalité",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définir le coefficient de proportionnalité",
+          "content": {
+            "text": "Le coefficient de proportionnalité est le nombre qui permet de passer d'une grandeur à l'autre. Pour le trouver, on divise une valeur de la deuxième grandeur par la valeur correspondante de la première. Par exemple, si 4 cahiers coûtent 2 000 F CFA, le coefficient permettant de passer du nombre de cahiers au prix est 2 000 ÷ 4 = 500."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Utiliser le coefficient",
+          "content": {
+            "text": "Une fois le coefficient trouvé, on peut calculer les autres valeurs. Si le coefficient est 500 et que l'on achète 7 cahiers, le prix est 7 × 500 = 3 500 F CFA. Le coefficient reste le même pour toute la situation."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Interpréter le coefficient",
+          "content": {
+            "text": "Il faut toujours vérifier les unités utilisées. Par exemple, si la masse est exprimée en kilogrammes et le prix en francs CFA, le coefficient peut être interprété comme un prix par kilogramme. Cette vérification aide à comprendre le résultat obtenu."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Coefficient de proportionnalité",
+        "questions": [
+          {
+            "question": "5 cahiers coûtent 2 500 F CFA. Quel est le coefficient de proportionnalité ?",
+            "options": [
+              "250",
+              "400",
+              "500",
+              "1 000"
+            ],
+            "correct_answer": "500",
+            "explanation": "2 500 ÷ 5 = 500. Un cahier coûte donc 500 F CFA."
+          },
+          {
+            "question": "Si le coefficient est 300, combien coûtent 8 articles ?",
+            "options": [
+              "1 800",
+              "2 100",
+              "2 400",
+              "2 700"
+            ],
+            "correct_answer": "2 400",
+            "explanation": "8 × 300 = 2 400."
+          },
+          {
+            "question": "Pour trouver le coefficient de proportionnalité, on peut...",
+            "options": [
+              "additionner les deux grandeurs",
+              "diviser une grandeur par la grandeur correspondante",
+              "soustraire les deux grandeurs",
+              "multiplier les deux grandeurs"
+            ],
+            "correct_answer": "diviser une grandeur par la grandeur correspondante",
+            "explanation": "Le coefficient est obtenu en divisant une valeur d'une grandeur par la valeur correspondante de l'autre."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer une quatrième proportionnelle",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comprendre la quatrième proportionnelle",
+          "content": {
+            "text": "Dans une situation de proportionnalité, on peut connaître trois valeurs et chercher la quatrième. Cette valeur inconnue est appelée quatrième proportionnelle. Par exemple, si 3 cahiers coûtent 1 500 F CFA, on peut chercher le prix de 7 cahiers."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Passer par une unité",
+          "content": {
+            "text": "Une méthode simple consiste à trouver le prix d'une unité. Si 3 cahiers coûtent 1 500 F CFA, un cahier coûte 1 500 ÷ 3 = 500 F CFA. Donc 7 cahiers coûtent 7 × 500 = 3 500 F CFA."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Utiliser le produit en croix",
+          "content": {
+            "text": "On peut également utiliser le produit en croix. Par exemple, si 3 cahiers coûtent 1 500 F CFA et que l'on cherche le prix de 7 cahiers, on écrit 3/1 500 = 7/x. En croisant les produits, on obtient 3 × x = 1 500 × 7, donc x = 10 500 ÷ 3 = 3 500 F CFA. Il est important de bien organiser les grandeurs correspondantes."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Quatrième proportionnelle",
+        "questions": [
+          {
+            "question": "3 cahiers coûtent 1 500 F CFA. Combien coûtent 7 cahiers ?",
+            "options": [
+              "2 500 F CFA",
+              "3 000 F CFA",
+              "3 500 F CFA",
+              "4 000 F CFA"
+            ],
+            "correct_answer": "3 500 F CFA",
+            "explanation": "Un cahier coûte 1 500 ÷ 3 = 500 F. Donc 7 × 500 = 3 500 F CFA."
+          },
+          {
+            "question": "4 kg de riz coûtent 2 000 F CFA. Combien coûtent 9 kg ?",
+            "options": [
+              "3 500 F CFA",
+              "4 000 F CFA",
+              "4 500 F CFA",
+              "5 000 F CFA"
+            ],
+            "correct_answer": "4 500 F CFA",
+            "explanation": "1 kg coûte 2 000 ÷ 4 = 500 F. Donc 9 kg coûtent 4 500 F CFA."
+          },
+          {
+            "question": "Si 5 objets coûtent 4 000 F CFA, quel est le prix de 10 objets ?",
+            "options": [
+              "6 000 F CFA",
+              "7 000 F CFA",
+              "8 000 F CFA",
+              "10 000 F CFA"
+            ],
+            "correct_answer": "8 000 F CFA",
+            "explanation": "10 objets représentent deux fois 5 objets. Le prix est donc 2 × 4 000 = 8 000 F CFA."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer des pourcentages simples",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comprendre un pourcentage",
+          "content": {
+            "text": "Un pourcentage permet d'exprimer une proportion sur 100. Par exemple, 25 % signifie 25 pour 100, soit 25/100. Pour calculer 25 % d'une quantité, on peut multiplier cette quantité par 25 puis diviser par 100."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Calculer un pourcentage",
+          "content": {
+            "text": "Exemple : 10 % de 5 000 F CFA = 5 000 × 10 ÷ 100 = 500 F CFA. De même, 20 % de 5 000 F CFA = 1 000 F CFA. Les pourcentages sont utilisés pour les réductions, les augmentations, les résultats scolaires et de nombreuses situations de la vie quotidienne."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Calculer une réduction",
+          "content": {
+            "text": "Pour calculer une réduction, on peut d'abord calculer le montant de la réduction, puis le soustraire au prix initial. Par exemple, une réduction de 10 % sur 10 000 F CFA représente 1 000 F CFA. Le prix après réduction est donc 10 000 − 1 000 = 9 000 F CFA."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Pourcentages",
+        "questions": [
+          {
+            "question": "Combien représentent 10 % de 2 000 F CFA ?",
+            "options": [
+              "100 F CFA",
+              "200 F CFA",
+              "300 F CFA",
+              "400 F CFA"
+            ],
+            "correct_answer": "200 F CFA",
+            "explanation": "2 000 × 10 ÷ 100 = 200 F CFA."
+          },
+          {
+            "question": "Combien représentent 25 % de 4 000 F CFA ?",
+            "options": [
+              "500 F CFA",
+              "750 F CFA",
+              "1 000 F CFA",
+              "1 250 F CFA"
+            ],
+            "correct_answer": "1 000 F CFA",
+            "explanation": "4 000 × 25 ÷ 100 = 1 000 F CFA."
+          },
+          {
+            "question": "Un article coûte 10 000 F CFA et bénéficie d'une réduction de 10 %. Quel est le montant de la réduction ?",
+            "options": [
+              "500 F CFA",
+              "1 000 F CFA",
+              "1 500 F CFA",
+              "2 000 F CFA"
+            ],
+            "correct_answer": "1 000 F CFA",
+            "explanation": "10 % de 10 000 = 1 000 F CFA."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes de proportionnalité",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Identifier une situation proportionnelle",
+          "content": {
+            "text": "Les situations de proportionnalité apparaissent dans les achats, les recettes, les distances, les masses, les prix et les consommations. Pour résoudre un problème, il faut identifier les deux grandeurs, vérifier qu'elles sont proportionnelles et organiser les données dans un tableau."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Résoudre un problème d'achat",
+          "content": {
+            "text": "Exemple : une famille achète 3 kg de riz pour 1 500 F CFA. Combien paiera-t-elle pour 8 kg au même prix ? Un kilogramme coûte 1 500 ÷ 3 = 500 F CFA. Donc 8 kg coûtent 8 × 500 = 4 000 F CFA."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Résoudre un problème de consommation",
+          "content": {
+            "text": "Autre exemple : une voiture consomme 6 litres de carburant pour 100 km. Dans une situation où la consommation est proportionnelle à la distance, pour 300 km elle consommera 18 litres. Il faut cependant être attentif aux situations réelles où la consommation peut varier selon les conditions."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Problèmes de proportionnalité",
+        "questions": [
+          {
+            "question": "4 kg de riz coûtent 2 000 F CFA. Combien coûtent 7 kg ?",
+            "options": [
+              "2 500 F CFA",
+              "3 000 F CFA",
+              "3 500 F CFA",
+              "4 000 F CFA"
+            ],
+            "correct_answer": "3 500 F CFA",
+            "explanation": "1 kg coûte 500 F CFA. Donc 7 kg coûtent 7 × 500 = 3 500 F CFA."
+          },
+          {
+            "question": "Une recette nécessite 2 kg de farine pour 8 personnes. Combien faut-il de farine pour 16 personnes, dans les mêmes proportions ?",
+            "options": [
+              "2 kg",
+              "3 kg",
+              "4 kg",
+              "6 kg"
+            ],
+            "correct_answer": "4 kg",
+            "explanation": "16 personnes représentent deux fois 8 personnes. Il faut donc deux fois 2 kg : 4 kg."
+          },
+          {
+            "question": "Une voiture consomme 5 litres pour 100 km. Combien consomme-t-elle pour 400 km dans une situation proportionnelle ?",
+            "options": [
+              "10 litres",
+              "15 litres",
+              "20 litres",
+              "25 litres"
+            ],
+            "correct_answer": "20 litres",
+            "explanation": "400 km représentent 4 fois 100 km. Donc 4 × 5 = 20 litres."
+          }
+        ]
+      }
+    }
+  ]
+}

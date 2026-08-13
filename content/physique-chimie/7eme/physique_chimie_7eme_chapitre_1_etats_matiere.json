@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Les trois états de la matière",
+  "chapter_order": 1,
+  "lessons": [
+    {
+      "title": "Découverte de la matière",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce que la matière ?",
+          "content": "La matière désigne tout ce qui nous entoure et qui possède une masse et occupe un espace. Une pierre, de l'eau, le bois, le fer et l'air sont des exemples de matière.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les trois états physiques",
+          "content": "Dans les conditions habituelles, la matière peut se présenter sous trois états physiques principaux : l'état solide, l'état liquide et l'état gazeux. Ces états possèdent des propriétés différentes.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemples dans la vie quotidienne",
+          "content": "Au Mali, on peut observer facilement ces trois états : une pierre ou un morceau de bois est solide, l'eau d'un puits ou d'un robinet est liquide et l'air que nous respirons est gazeux.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Découverte de la matière",
+        "questions": [
+          {
+            "question": "Quels sont les trois principaux états de la matière ?",
+            "options": [
+              "Solide, liquide et gazeux",
+              "Dur, mou et chaud",
+              "Petit, moyen et grand",
+              "Froid, tiède et chaud"
+            ],
+            "correct_answer": "Solide, liquide et gazeux",
+            "explanation": "La matière peut principalement se présenter sous les états solide, liquide et gazeux."
+          },
+          {
+            "question": "Lequel est un exemple de matière ?",
+            "options": [
+              "Une pierre",
+              "Une idée",
+              "Un nombre",
+              "Une couleur"
+            ],
+            "correct_answer": "Une pierre",
+            "explanation": "Une pierre est un corps matériel : elle possède une masse et occupe un espace."
+          },
+          {
+            "question": "L'air appartient à quel état physique ?",
+            "options": [
+              "Solide",
+              "Liquide",
+              "Gazeux",
+              "Métallique"
+            ],
+            "correct_answer": "Gazeux",
+            "explanation": "L'air est constitué de gaz et se trouve donc à l'état gazeux."
+          }
+        ]
+      }
+    },
+    {
+      "title": "L'état solide",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Caractéristiques d'un solide",
+          "content": "Un solide possède généralement une forme propre et un volume propre. Lorsqu'on le déplace d'un endroit à un autre, il conserve sa forme et occupe toujours le même volume, sauf s'il est déformé ou brisé.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemples de solides",
+          "content": "Une pierre, une règle, un cahier, un morceau de bois, une chaise et un morceau de fer sont des corps solides. Ils peuvent être saisis et déplacés sans prendre automatiquement la forme du récipient qui les contient.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Solides rigides et déformables",
+          "content": "Certains solides sont rigides, comme une pierre ou une règle. D'autres peuvent être déformés, comme une éponge ou une pâte. Malgré ces différences, ils restent des corps solides.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — L'état solide",
+        "questions": [
+          {
+            "question": "Un solide possède généralement...",
+            "options": [
+              "une forme propre et un volume propre",
+              "un volume propre mais aucune forme",
+              "ni forme ni volume",
+              "toujours la forme du récipient"
+            ],
+            "correct_answer": "une forme propre et un volume propre",
+            "explanation": "Un solide possède généralement sa propre forme et son propre volume."
+          },
+          {
+            "question": "Lequel est un corps solide ?",
+            "options": [
+              "Une pierre",
+              "L'air",
+              "L'eau",
+              "La vapeur d'eau"
+            ],
+            "correct_answer": "Une pierre",
+            "explanation": "Une pierre possède une forme et un volume propres : c'est un solide."
+          },
+          {
+            "question": "Une éponge peut-elle être considérée comme un solide ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement lorsqu'elle est mouillée",
+              "Seulement lorsqu'elle est sèche"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "Une éponge est un solide déformable."
+          }
+        ]
+      }
+    },
+    {
+      "title": "L'état liquide",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Caractéristiques d'un liquide",
+          "content": "Un liquide possède un volume propre mais n'a pas de forme propre. Il prend la forme du récipient qui le contient.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les liquides peuvent s'écouler",
+          "content": "Contrairement à un solide, un liquide peut s'écouler. Lorsqu'on verse de l'eau d'un verre dans une bouteille, l'eau change de forme pour s'adapter au nouveau récipient.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemples de liquides",
+          "content": "L'eau, l'huile, le lait et certaines boissons sont des exemples de liquides. Dans la vie quotidienne, les liquides sont souvent conservés dans des bouteilles, des bidons ou d'autres récipients.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — L'état liquide",
+        "questions": [
+          {
+            "question": "Un liquide possède...",
+            "options": [
+              "un volume propre mais pas de forme propre",
+              "une forme propre mais pas de volume",
+              "ni forme ni volume",
+              "toujours une forme rectangulaire"
+            ],
+            "correct_answer": "un volume propre mais pas de forme propre",
+            "explanation": "Un liquide conserve son volume mais prend la forme du récipient."
+          },
+          {
+            "question": "Que fait l'eau lorsqu'on la verse dans une bouteille ?",
+            "options": [
+              "Elle prend la forme de la bouteille",
+              "Elle devient automatiquement solide",
+              "Elle disparaît",
+              "Elle perd toujours sa masse"
+            ],
+            "correct_answer": "Elle prend la forme de la bouteille",
+            "explanation": "Un liquide n'a pas de forme propre et prend la forme du récipient."
+          },
+          {
+            "question": "Lequel est un liquide dans les conditions ordinaires ?",
+            "options": [
+              "L'huile",
+              "Une pierre",
+              "L'air",
+              "Un morceau de bois"
+            ],
+            "correct_answer": "L'huile",
+            "explanation": "L'huile est un corps liquide dans les conditions ordinaires."
+          }
+        ]
+      }
+    },
+    {
+      "title": "L'état gazeux",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Caractéristiques d'un gaz",
+          "content": "Un gaz ne possède ni forme propre ni volume propre. Il occupe tout l'espace disponible dans le récipient qui le contient.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "L'air occupe un espace",
+          "content": "L'air est un mélange de gaz. Lorsqu'un ballon est gonflé, l'air occupe l'espace intérieur du ballon et donne au ballon sa forme. Si le ballon est ouvert, l'air se répand dans son environnement.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Les gaz sont compressibles",
+          "content": "Un gaz peut être comprimé ou détendu. Par exemple, l'air contenu dans une seringue bouchée peut occuper un volume plus petit lorsqu'on pousse le piston.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — L'état gazeux",
+        "questions": [
+          {
+            "question": "Un gaz possède-t-il une forme propre ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement dans une bouteille",
+              "Seulement lorsqu'il est froid"
+            ],
+            "correct_answer": "Non",
+            "explanation": "Un gaz n'a pas de forme propre et prend la forme de l'espace qu'il occupe."
+          },
+          {
+            "question": "Que fait un gaz dans un récipient fermé ?",
+            "options": [
+              "Il occupe l'espace disponible",
+              "Il reste uniquement au fond",
+              "Il devient toujours liquide",
+              "Il disparaît"
+            ],
+            "correct_answer": "Il occupe l'espace disponible",
+            "explanation": "Un gaz se répand dans tout l'espace disponible."
+          },
+          {
+            "question": "Quelle propriété caractérise les gaz ?",
+            "options": [
+              "Ils peuvent être comprimés",
+              "Ils ont toujours une forme propre",
+              "Ils ont toujours un volume fixe",
+              "Ils ne peuvent pas se déplacer"
+            ],
+            "correct_answer": "Ils peuvent être comprimés",
+            "explanation": "Les gaz sont compressibles, contrairement aux solides et aux liquides dans les conditions ordinaires."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparaison des trois états",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Forme et volume",
+          "content": "Le solide possède généralement une forme propre et un volume propre. Le liquide possède un volume propre mais pas de forme propre. Le gaz ne possède ni forme propre ni volume propre.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le cas de l'eau",
+          "content": "L'eau permet d'observer facilement les trois états. La glace est l'état solide de l'eau, l'eau liquide est son état liquide et la vapeur d'eau correspond à son état gazeux.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Tableau de comparaison",
+          "content": "Solide : forme propre et volume propre. Liquide : pas de forme propre mais volume propre. Gaz : ni forme propre ni volume propre. Ces propriétés permettent de distinguer les trois états physiques.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Comparaison des états",
+        "questions": [
+          {
+            "question": "Quel état possède un volume propre mais pas de forme propre ?",
+            "options": [
+              "Solide",
+              "Liquide",
+              "Gaz",
+              "Aucun"
+            ],
+            "correct_answer": "Liquide",
+            "explanation": "Un liquide possède un volume propre mais prend la forme du récipient."
+          },
+          {
+            "question": "Quel état ne possède ni forme propre ni volume propre ?",
+            "options": [
+              "Solide",
+              "Liquide",
+              "Gaz",
+              "Tous"
+            ],
+            "correct_answer": "Gaz",
+            "explanation": "Un gaz occupe tout l'espace disponible et ne possède ni forme ni volume propres."
+          },
+          {
+            "question": "La glace et l'eau liquide sont-elles deux états d'une même matière ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement en hiver",
+              "Seulement dans un laboratoire"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "La glace et l'eau liquide sont deux états physiques de l'eau."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exercices de synthèse",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Identifier un état physique",
+          "content": "Pour identifier l'état physique d'un corps, on observe son comportement. S'il possède une forme propre, il est généralement solide. S'il prend la forme du récipient tout en conservant son volume, il est liquide. S'il occupe tout l'espace disponible, il est gazeux.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Situation d'application",
+          "content": "Une bouteille contient de l'eau et de l'air. L'eau est liquide : elle prend la forme de la partie inférieure de la bouteille. L'air est gazeux : il occupe l'espace disponible au-dessus de l'eau. Une pierre placée dans la bouteille reste solide.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": "Il faut retenir trois idées essentielles : le solide possède généralement une forme et un volume propres ; le liquide possède un volume propre mais pas de forme propre ; le gaz ne possède ni forme propre ni volume propre. Ces connaissances seront nécessaires pour étudier les changements d'état de la matière.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse sur les trois états",
+        "questions": [
+          {
+            "question": "Une pierre conserve sa forme lorsqu'on la déplace. Elle est donc...",
+            "options": [
+              "solide",
+              "liquide",
+              "gazeuse",
+              "toujours liquide"
+            ],
+            "correct_answer": "solide",
+            "explanation": "La pierre possède une forme propre : elle est solide."
+          },
+          {
+            "question": "Quel état possède un volume propre mais prend la forme du récipient ?",
+            "options": [
+              "Solide",
+              "Liquide",
+              "Gaz",
+              "Aucun"
+            ],
+            "correct_answer": "Liquide",
+            "explanation": "Un liquide conserve son volume mais n'a pas de forme propre."
+          },
+          {
+            "question": "L'air présent dans une salle est principalement à l'état...",
+            "options": [
+              "solide",
+              "liquide",
+              "gazeux",
+              "solide et liquide"
+            ],
+            "correct_answer": "gazeux",
+            "explanation": "L'air est constitué d'un mélange de gaz."
+          }
+        ]
+      }
+    }
+  ]
+}

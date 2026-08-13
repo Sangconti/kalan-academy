@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Triangles",
+  "chapter_order": 23,
+  "lessons": [
+    {
+      "title": "Vocabulaire et éléments d'un triangle",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'un triangle",
+          "content": {
+            "text": "Un triangle est une figure géométrique formée de trois points non alignés reliés deux à deux par trois segments. Ces points sont appelés les sommets du triangle. Un triangle possède donc trois sommets, trois côtés et trois angles."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Sommets, côtés et angles",
+          "content": {
+            "text": "Un triangle dont les sommets sont A, B et C se note généralement ABC. Ses côtés sont [AB], [BC] et [CA]. Ses angles sont ceux formés aux sommets A, B et C. Pour nommer un angle, le sommet doit être placé au milieu du nom de l'angle."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Côtés opposés aux sommets",
+          "content": {
+            "text": "Pour bien lire une figure, il faut identifier chaque sommet, chaque côté et chaque angle. Dans un triangle ABC, le côté opposé au sommet A est [BC]. Le côté opposé au sommet B est [AC], et le côté opposé au sommet C est [AB]."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Éléments d'un triangle",
+        "questions": [
+          {
+            "question": "Combien de côtés possède un triangle ?",
+            "options": [
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "correct_answer": "3",
+            "explanation": "Un triangle possède exactement trois côtés."
+          },
+          {
+            "question": "Comment appelle-t-on les points qui délimitent un triangle ?",
+            "options": [
+              "Les centres",
+              "Les sommets",
+              "Les rayons",
+              "Les diagonales"
+            ],
+            "correct_answer": "Les sommets",
+            "explanation": "Les trois points d'un triangle sont appelés ses sommets."
+          },
+          {
+            "question": "Dans le triangle ABC, quel est le côté opposé au sommet A ?",
+            "options": [
+              "[AB]",
+              "[AC]",
+              "[BC]",
+              "[ABC]"
+            ],
+            "correct_answer": "[BC]",
+            "explanation": "Le côté opposé au sommet A est le côté qui ne contient pas A : [BC]."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire un triangle",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Instruments de construction",
+          "content": {
+            "text": "Pour construire un triangle, on utilise généralement une règle et un compas. Le rapporteur peut également être utilisé lorsque certaines mesures d'angles sont connues. Lorsque les trois longueurs des côtés sont connues, le compas permet de construire précisément le triangle."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Construction avec trois longueurs",
+          "content": {
+            "text": "Pour construire un triangle ABC tel que AB = 5 cm, AC = 4 cm et BC = 3 cm, on trace d'abord le segment [AB] de 5 cm. On trace ensuite un arc de cercle de centre A et de rayon 4 cm, puis un arc de centre B et de rayon 3 cm. Leur point d'intersection donne le point C."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Condition pour construire un triangle",
+          "content": {
+            "text": "Avant de construire un triangle à partir de trois longueurs, il faut vérifier que ces longueurs permettent réellement de former un triangle. La somme des longueurs de deux côtés doit être supérieure à la longueur du troisième côté. Par exemple, 3 cm, 4 cm et 5 cm permettent de construire un triangle car 3 + 4 > 5."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Construction d'un triangle",
+        "questions": [
+          {
+            "question": "Quel instrument permet principalement de tracer des arcs de cercle lors d'une construction de triangle ?",
+            "options": [
+              "Le compas",
+              "La gomme",
+              "L'équerre uniquement",
+              "Le rapporteur uniquement"
+            ],
+            "correct_answer": "Le compas",
+            "explanation": "Le compas permet de tracer les arcs nécessaires à la construction d'un triangle."
+          },
+          {
+            "question": "Pour construire AB = 5 cm, que faut-il faire en premier ?",
+            "options": [
+              "Tracer un cercle quelconque",
+              "Tracer le segment [AB] de 5 cm",
+              "Mesurer l'angle C",
+              "Effacer A"
+            ],
+            "correct_answer": "Tracer le segment [AB] de 5 cm",
+            "explanation": "On commence par construire le côté connu [AB]."
+          },
+          {
+            "question": "Pour former un triangle, la somme des longueurs de deux côtés doit être...",
+            "options": [
+              "inférieure au troisième côté",
+              "égale au troisième côté",
+              "supérieure au troisième côté",
+              "toujours égale à 10 cm"
+            ],
+            "correct_answer": "supérieure au troisième côté",
+            "explanation": "Dans un triangle, la somme des longueurs de deux côtés est toujours supérieure à celle du troisième côté."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Classification des triangles",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Classification selon les côtés",
+          "content": {
+            "text": "On peut classer les triangles selon la longueur de leurs côtés. Un triangle équilatéral possède trois côtés de même longueur. Un triangle isocèle possède deux côtés de même longueur. Un triangle quelconque, appelé aussi scalène, possède trois côtés de longueurs différentes."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Classification selon les angles",
+          "content": {
+            "text": "On peut aussi classer les triangles selon leurs angles. Un triangle rectangle possède un angle droit. Un triangle obtus possède un angle obtus. Un triangle acutangle possède trois angles aigus."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Deux classifications possibles",
+          "content": {
+            "text": "Un même triangle peut appartenir à deux catégories différentes selon les critères utilisés. Par exemple, un triangle peut être à la fois isocèle et rectangle. Il faut donc préciser si on classe le triangle selon ses côtés ou selon ses angles."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Classification des triangles",
+        "questions": [
+          {
+            "question": "Un triangle ayant trois côtés égaux est...",
+            "options": [
+              "rectangle",
+              "isocèle",
+              "équilatéral",
+              "quelconque"
+            ],
+            "correct_answer": "équilatéral",
+            "explanation": "Un triangle équilatéral possède trois côtés de même longueur."
+          },
+          {
+            "question": "Un triangle ayant deux côtés de même longueur est...",
+            "options": [
+              "isocèle",
+              "équilatéral uniquement",
+              "rectangle uniquement",
+              "quelconque"
+            ],
+            "correct_answer": "isocèle",
+            "explanation": "Un triangle isocèle possède au moins deux côtés de même longueur."
+          },
+          {
+            "question": "Quel triangle possède un angle droit ?",
+            "options": [
+              "Le triangle aigu",
+              "Le triangle rectangle",
+              "Le triangle équilatéral uniquement",
+              "Le triangle plat"
+            ],
+            "correct_answer": "Le triangle rectangle",
+            "explanation": "Un triangle rectangle possède un angle de 90°."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Propriétés des triangles",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Somme des angles d'un triangle",
+          "content": {
+            "text": "Dans tout triangle, la somme des mesures des trois angles est égale à 180°. Par exemple, si deux angles mesurent 50° et 60°, le troisième mesure 180° - 50° - 60° = 70°."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Propriété du triangle isocèle",
+          "content": {
+            "text": "Dans un triangle isocèle, les angles opposés aux deux côtés de même longueur sont égaux. Par exemple, si AB = AC dans le triangle ABC, alors les angles en B et en C ont la même mesure."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Propriété du triangle équilatéral",
+          "content": {
+            "text": "Dans un triangle équilatéral, les trois côtés sont égaux et les trois angles sont également égaux. Comme leur somme est 180°, chacun mesure 60°. Cette propriété permet de reconnaître et de calculer rapidement les angles d'un triangle équilatéral."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Propriétés des triangles",
+        "questions": [
+          {
+            "question": "Quelle est la somme des angles d'un triangle ?",
+            "options": [
+              "90°",
+              "120°",
+              "180°",
+              "360°"
+            ],
+            "correct_answer": "180°",
+            "explanation": "La somme des trois angles intérieurs d'un triangle est toujours égale à 180°."
+          },
+          {
+            "question": "Un triangle possède deux angles de 50° et 60°. Combien mesure le troisième ?",
+            "options": [
+              "60°",
+              "70°",
+              "80°",
+              "90°"
+            ],
+            "correct_answer": "70°",
+            "explanation": "180° - 50° - 60° = 70°."
+          },
+          {
+            "question": "Combien mesure chaque angle d'un triangle équilatéral ?",
+            "options": [
+              "30°",
+              "45°",
+              "60°",
+              "90°"
+            ],
+            "correct_answer": "60°",
+            "explanation": "Les trois angles sont égaux et leur somme est 180°, donc chacun mesure 60°."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Périmètre d'un triangle",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du périmètre",
+          "content": {
+            "text": "Le périmètre d'un triangle est la longueur totale de ses trois côtés. Pour le calculer, on additionne les longueurs des trois côtés. Si les côtés mesurent 5 cm, 4 cm et 3 cm, le périmètre est 5 + 4 + 3 = 12 cm."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Périmètre d'un triangle équilatéral",
+          "content": {
+            "text": "Pour un triangle équilatéral, les trois côtés ont la même longueur. On peut donc utiliser la formule : P = 3 × côté. Par exemple, un triangle équilatéral de côté 6 cm possède un périmètre de 3 × 6 = 18 cm."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Attention aux unités",
+          "content": {
+            "text": "Il faut toujours utiliser la même unité pour les trois côtés avant de calculer le périmètre. Si un côté est donné en mètres et un autre en centimètres, il faut effectuer une conversion avant l'addition."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Périmètre d'un triangle",
+        "questions": [
+          {
+            "question": "Un triangle possède des côtés de 5 cm, 4 cm et 3 cm. Quel est son périmètre ?",
+            "options": [
+              "9 cm",
+              "10 cm",
+              "12 cm",
+              "15 cm"
+            ],
+            "correct_answer": "12 cm",
+            "explanation": "P = 5 + 4 + 3 = 12 cm."
+          },
+          {
+            "question": "Quel est le périmètre d'un triangle équilatéral de côté 6 cm ?",
+            "options": [
+              "12 cm",
+              "18 cm",
+              "24 cm",
+              "36 cm"
+            ],
+            "correct_answer": "18 cm",
+            "explanation": "P = 3 × 6 = 18 cm."
+          },
+          {
+            "question": "Avant de calculer un périmètre, les longueurs doivent être...",
+            "options": [
+              "toutes dans la même unité",
+              "toutes différentes",
+              "uniquement en mètres",
+              "uniquement en centimètres"
+            ],
+            "correct_answer": "toutes dans la même unité",
+            "explanation": "On doit utiliser la même unité pour pouvoir additionner correctement les longueurs."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Problèmes et exercices de synthèse sur les triangles",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": {
+            "text": "Pour résoudre un problème sur les triangles, il faut identifier les informations données : longueurs des côtés, mesures des angles, nature du triangle ou périmètre. Ensuite, on choisit la propriété ou la formule adaptée."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Calcul d'un angle",
+          "content": {
+            "text": "Dans un triangle ABC, l'angle A mesure 45° et l'angle B mesure 65°. L'angle C mesure 180° - 45° - 65° = 70°. La somme des trois angles est bien 180°."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Calcul d'un périmètre",
+          "content": {
+            "text": "Un terrain triangulaire possède des côtés de 20 m, 25 m et 30 m. Son périmètre est 20 + 25 + 30 = 75 m. Pour les constructions géométriques, il faut également respecter les mesures données et utiliser correctement les instruments."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse sur les triangles",
+        "questions": [
+          {
+            "question": "Dans un triangle, deux angles mesurent 45° et 65°. Le troisième angle mesure...",
+            "options": [
+              "60°",
+              "70°",
+              "80°",
+              "90°"
+            ],
+            "correct_answer": "70°",
+            "explanation": "180° - 45° - 65° = 70°."
+          },
+          {
+            "question": "Un terrain triangulaire possède des côtés de 20 m, 25 m et 30 m. Quel est son périmètre ?",
+            "options": [
+              "65 m",
+              "70 m",
+              "75 m",
+              "80 m"
+            ],
+            "correct_answer": "75 m",
+            "explanation": "20 + 25 + 30 = 75 m."
+          },
+          {
+            "question": "Quel type de triangle possède trois côtés de même longueur ?",
+            "options": [
+              "Isocèle",
+              "Rectangle",
+              "Équilatéral",
+              "Quelconque"
+            ],
+            "correct_answer": "Équilatéral",
+            "explanation": "Un triangle équilatéral possède trois côtés de même longueur."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Propagation de la lumière",
+  "chapter_order": 7,
+  "lessons": [
+    {
+      "lesson_order": 1,
+      "title": "Les sources de lumière",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour voir un objet, il faut que de la lumière provenant de cet objet ou diffusée par lui atteigne nos yeux. Certains objets produisent eux-mêmes de la lumière : on les appelle des sources primaires de lumière. Le Soleil, une lampe allumée et une flamme sont des exemples de sources primaires."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "D’autres objets ne produisent pas leur propre lumière mais deviennent visibles lorsqu’ils sont éclairés. On les appelle des objets éclairés ou sources secondaires. La Lune, un cahier, un mur ou un arbre sont visibles parce qu’ils reçoivent de la lumière et en diffusent une partie vers nos yeux."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans la vie quotidienne au Mali, le Soleil est une source naturelle importante de lumière. Une lampe électrique ou une lampe solaire peut également éclairer une pièce. Il faut donc distinguer l’objet qui produit la lumière de celui qui est simplement éclairé."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les sources de lumière",
+        "questions": [
+          {
+            "question": "Lequel est une source primaire de lumière ?",
+            "options": [
+              "Le Soleil",
+              "Un cahier",
+              "Un mur",
+              "Une table"
+            ],
+            "correct_answer": "Le Soleil",
+            "explanation": "Le Soleil produit lui-même de la lumière : c’est une source primaire."
+          },
+          {
+            "question": "Pourquoi la Lune est-elle visible depuis la Terre ?",
+            "options": [
+              "Elle reçoit de la lumière du Soleil et en diffuse une partie",
+              "Elle produit sa propre lumière comme le Soleil",
+              "Elle est toujours en feu",
+              "Elle est une lampe géante"
+            ],
+            "correct_answer": "Elle reçoit de la lumière du Soleil et en diffuse une partie",
+            "explanation": "La Lune n’est pas une source primaire de lumière. Elle est visible parce qu’elle reçoit et diffuse la lumière solaire."
+          },
+          {
+            "question": "Une lampe allumée est :",
+            "options": [
+              "Une source primaire de lumière",
+              "Un objet opaque sans lumière",
+              "Une source secondaire uniquement",
+              "Un objet qui absorbe toute la lumière"
+            ],
+            "correct_answer": "Une source primaire de lumière",
+            "explanation": "Une lampe allumée produit elle-même de la lumière."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 2,
+      "title": "La lumière et les milieux de propagation",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "La lumière peut se propager à travers certains matériaux. Un milieu transparent laisse passer la lumière et permet généralement de voir nettement à travers lui. Le verre clair et certains plastiques transparents sont des exemples de matériaux transparents."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Un milieu translucide laisse passer une partie de la lumière mais ne permet pas de voir nettement les objets situés derrière lui. Un verre dépoli ou certains matériaux opaques à la vision mais laissant passer une lumière diffuse peuvent être translucides. Un milieu opaque ne laisse pas passer la lumière."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La distinction entre transparent, translucide et opaque permet de comprendre de nombreuses situations quotidiennes. Une vitre claire laisse entrer la lumière dans une salle de classe, tandis qu’un mur bloque la lumière. Ces propriétés influencent aussi la formation des ombres."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les milieux de propagation",
+        "questions": [
+          {
+            "question": "Quel matériau laisse généralement passer la lumière et permet de voir nettement à travers lui ?",
+            "options": [
+              "Le verre transparent",
+              "Un mur en ciment",
+              "Une plaque métallique",
+              "Une pierre"
+            ],
+            "correct_answer": "Le verre transparent",
+            "explanation": "Un matériau transparent laisse passer la lumière et permet généralement de voir nettement les objets situés derrière."
+          },
+          {
+            "question": "Un matériau opaque :",
+            "options": [
+              "Ne laisse pas passer la lumière",
+              "Laisse toujours passer toute la lumière",
+              "Produit toujours de la lumière",
+              "Est nécessairement liquide"
+            ],
+            "correct_answer": "Ne laisse pas passer la lumière",
+            "explanation": "Un matériau opaque bloque la transmission de la lumière."
+          },
+          {
+            "question": "Un matériau translucide :",
+            "options": [
+              "Laisse passer une partie de la lumière sans permettre une vision nette",
+              "Ne laisse passer aucune lumière",
+              "Produit sa propre lumière",
+              "Est toujours transparent"
+            ],
+            "correct_answer": "Laisse passer une partie de la lumière sans permettre une vision nette",
+            "explanation": "Un milieu translucide transmet une partie de la lumière, mais les objets derrière ne sont généralement pas vus nettement."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 3,
+      "title": "La propagation rectiligne de la lumière",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans un milieu transparent et homogène, la lumière se propage en ligne droite. Cette propriété est appelée propagation rectiligne de la lumière. Pour représenter son trajet, on utilise généralement un rayon lumineux représenté par une ligne droite munie d’une flèche indiquant le sens de propagation."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Une expérience simple permet de mettre en évidence cette propriété. Si l’on place plusieurs écrans percés de petits trous et qu’on veut faire passer un faisceau lumineux à travers tous les trous, ceux-ci doivent être correctement alignés. Si un trou est déplacé, la lumière ne traverse plus l’ensemble des écrans."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La propagation rectiligne explique aussi pourquoi une personne ne peut pas voir directement derrière un obstacle opaque. La lumière provenant de la source ne peut pas contourner simplement l’obstacle dans le modèle étudié. Cette propriété est fondamentale pour comprendre les ombres et certains phénomènes astronomiques."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Propagation rectiligne",
+        "questions": [
+          {
+            "question": "Dans un milieu transparent et homogène, comment la lumière se propage-t-elle ?",
+            "options": [
+              "En ligne droite",
+              "Toujours en cercle",
+              "Uniquement vers le bas",
+              "En zigzag obligatoire"
+            ],
+            "correct_answer": "En ligne droite",
+            "explanation": "Dans un milieu transparent et homogène, la lumière se propage suivant des lignes droites."
+          },
+          {
+            "question": "Comment représente-t-on généralement un rayon lumineux ?",
+            "options": [
+              "Par une ligne droite avec une flèche",
+              "Par un cercle fermé",
+              "Par un carré",
+              "Par un point sans direction"
+            ],
+            "correct_answer": "Par une ligne droite avec une flèche",
+            "explanation": "Le rayon lumineux est représenté par une ligne droite orientée par une flèche indiquant le sens de propagation."
+          },
+          {
+            "question": "Pourquoi plusieurs petits trous doivent-ils être alignés pour qu’un faisceau lumineux les traverse successivement ?",
+            "options": [
+              "Parce que la lumière se propage en ligne droite dans le milieu considéré",
+              "Parce que la lumière est toujours immobile",
+              "Parce que les trous produisent de la lumière",
+              "Parce que la lumière tourne automatiquement"
+            ],
+            "correct_answer": "Parce que la lumière se propage en ligne droite dans le milieu considéré",
+            "explanation": "La propagation rectiligne impose que les ouvertures soient alignées sur le trajet du rayon lumineux."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 4,
+      "title": "Rayons et faisceaux lumineux",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Un rayon lumineux est une représentation simplifiée d’une direction de propagation de la lumière. Un faisceau lumineux est constitué d’un ensemble de rayons lumineux. En pratique, une source lumineuse peut produire un faisceau composé de nombreux rayons."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "On distingue notamment trois types de faisceaux selon l’évolution des rayons : un faisceau divergent lorsque les rayons s’écartent, un faisceau convergent lorsqu’ils se rapprochent et un faisceau parallèle lorsque les rayons restent parallèles entre eux. Ces représentations permettent de décrire différents systèmes optiques."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Une petite source lumineuse placée près d’un objet peut produire des rayons qui se dirigent dans différentes directions. Dans une lampe ou un dispositif optique, des éléments peuvent modifier la direction des rayons. L’étude des rayons lumineux permet ainsi de représenter simplement le trajet de la lumière."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Rayons et faisceaux",
+        "questions": [
+          {
+            "question": "Qu’est-ce qu’un faisceau lumineux ?",
+            "options": [
+              "Un ensemble de rayons lumineux",
+              "Un seul objet opaque",
+              "Une source qui ne produit aucune lumière",
+              "Un récipient contenant de l’eau"
+            ],
+            "correct_answer": "Un ensemble de rayons lumineux",
+            "explanation": "Un faisceau lumineux est constitué d’un ensemble de rayons représentant des directions de propagation."
+          },
+          {
+            "question": "Dans un faisceau divergent, les rayons lumineux :",
+            "options": [
+              "S’écartent les uns des autres",
+              "Se rapprochent toujours",
+              "S’arrêtent immédiatement",
+              "Deviennent tous opaques"
+            ],
+            "correct_answer": "S’écartent les uns des autres",
+            "explanation": "Un faisceau est divergent lorsque les rayons s’éloignent progressivement les uns des autres."
+          },
+          {
+            "question": "Dans un faisceau convergent, les rayons :",
+            "options": [
+              "Se rapprochent les uns des autres",
+              "S’écartent nécessairement",
+              "Sont toujours immobiles",
+              "Ne représentent pas de lumière"
+            ],
+            "correct_answer": "Se rapprochent les uns des autres",
+            "explanation": "Dans un faisceau convergent, les rayons se rapprochent les uns des autres."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 5,
+      "title": "Les ombres et les zones éclairées",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Une ombre apparaît lorsqu’un objet opaque est placé sur le trajet de la lumière et empêche une partie des rayons lumineux d’atteindre une surface située derrière lui. La présence d’une ombre est donc liée à une source de lumière, à un objet qui intercepte la lumière et à une surface de réception."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La forme et la taille de l’ombre dépendent notamment de la position de la source lumineuse et de l’objet. Lorsque la position du Soleil change au cours de la journée, la direction et la longueur des ombres des objets au sol changent également. Ce phénomène peut être facilement observé à l’extérieur."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans la vie quotidienne au Mali, on peut observer les ombres d’un arbre, d’une personne ou d’un poteau lorsque le Soleil éclaire le sol. Une lampe peut également produire une ombre lorsqu’un objet est placé entre la lampe et un mur. Ces observations illustrent la propagation de la lumière et l’interception des rayons par un objet opaque."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les ombres",
+        "questions": [
+          {
+            "question": "Quelle condition est nécessaire pour former une ombre sur un écran ?",
+            "options": [
+              "Un objet opaque doit intercepter une partie de la lumière",
+              "Il faut uniquement de l’eau",
+              "Il faut supprimer toute source de lumière",
+              "Il faut un objet transparent uniquement"
+            ],
+            "correct_answer": "Un objet opaque doit intercepter une partie de la lumière",
+            "explanation": "Un objet opaque placé entre une source lumineuse et une surface peut empêcher certains rayons d’atteindre cette surface et former une ombre."
+          },
+          {
+            "question": "Pourquoi l’ombre d’un poteau peut-elle changer de longueur pendant la journée ?",
+            "options": [
+              "Parce que la position apparente du Soleil change dans le ciel",
+              "Parce que le poteau grandit et rétrécit",
+              "Parce que la lumière disparaît",
+              "Parce que le sol devient transparent"
+            ],
+            "correct_answer": "Parce que la position apparente du Soleil change dans le ciel",
+            "explanation": "La direction des rayons solaires par rapport au poteau change au cours de la journée, ce qui modifie l’ombre."
+          },
+          {
+            "question": "Quel objet peut produire une ombre lorsqu’il est placé entre une lampe et un mur ?",
+            "options": [
+              "Un objet opaque",
+              "Uniquement un objet parfaitement transparent",
+              "Un rayon lumineux",
+              "L’air seul"
+            ],
+            "correct_answer": "Un objet opaque",
+            "explanation": "Un objet opaque bloque la lumière et peut donc former une ombre sur le mur."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 6,
+      "title": "Les éclipses et les applications de la propagation de la lumière",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Les éclipses sont des phénomènes astronomiques qui peuvent être expliqués en partie par la propagation de la lumière et l’alignement des astres. Une éclipse solaire se produit lorsque la Lune passe entre le Soleil et une partie de la Terre et masque tout ou partie du Soleil pour certains observateurs."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Une éclipse lunaire se produit lorsque la Terre se trouve entre le Soleil et la Lune et que la Lune passe dans l’ombre de la Terre. Ces situations nécessitent un alignement particulier du Soleil, de la Terre et de la Lune. Elles ne se produisent donc pas à chaque nouvelle Lune ou à chaque pleine Lune."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Les éclipses montrent l’importance de la propagation de la lumière et des ombres dans l’observation des phénomènes astronomiques. Il ne faut jamais regarder directement le Soleil sans une protection spécialement conçue pour l’observation solaire, car cela peut gravement endommager les yeux."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les éclipses",
+        "questions": [
+          {
+            "question": "Lors d’une éclipse solaire, quel astre se trouve entre le Soleil et la Terre ?",
+            "options": [
+              "La Lune",
+              "Mars",
+              "Jupiter",
+              "Une étoile quelconque"
+            ],
+            "correct_answer": "La Lune",
+            "explanation": "Lors d’une éclipse solaire, la Lune se place entre le Soleil et une partie de la Terre et masque le Soleil pour certains observateurs."
+          },
+          {
+            "question": "Lors d’une éclipse lunaire, quel ordre correspond à l’alignement principal ?",
+            "options": [
+              "Soleil — Terre — Lune",
+              "Soleil — Lune — Terre",
+              "Terre — Soleil — Lune",
+              "Lune — Soleil — Terre"
+            ],
+            "correct_answer": "Soleil — Terre — Lune",
+            "explanation": "Lors d’une éclipse lunaire, la Terre se trouve entre le Soleil et la Lune, et la Lune peut entrer dans l’ombre de la Terre."
+          },
+          {
+            "question": "Pourquoi faut-il protéger ses yeux lors de l’observation du Soleil ?",
+            "options": [
+              "Parce que l’observation directe peut endommager gravement les yeux",
+              "Parce que le Soleil devient froid",
+              "Parce que la lumière solaire ne se propage pas",
+              "Parce que le Soleil est transparent"
+            ],
+            "correct_answer": "Parce que l’observation directe peut endommager gravement les yeux",
+            "explanation": "La lumière intense du Soleil peut provoquer des lésions oculaires. Une protection spécialement conçue pour l’observation solaire est nécessaire."
+          }
+        ]
+      }
+    }
+  ]
+}

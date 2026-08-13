@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Quadrilatères",
+  "chapter_order": 24,
+  "lessons": [
+    {
+      "title": "Définition et éléments d'un quadrilatère",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'un quadrilatère",
+          "content": {
+            "text": "Un quadrilatère est une figure géométrique formée de quatre points non alignés deux à deux, reliés par quatre segments. Il possède quatre sommets, quatre côtés et quatre angles. Les sommets sont généralement désignés par des lettres comme A, B, C et D."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Côtés opposés",
+          "content": {
+            "text": "Dans un quadrilatère ABCD, les côtés sont [AB], [BC], [CD] et [DA]. Les côtés qui n'ont pas de sommet commun sont appelés côtés opposés. Ainsi, [AB] et [CD] sont opposés, tout comme [BC] et [DA]."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Diagonales d'un quadrilatère",
+          "content": {
+            "text": "Les diagonales d'un quadrilatère sont les segments qui relient deux sommets opposés. Dans le quadrilatère ABCD, les diagonales sont [AC] et [BD]. Pour reconnaître un quadrilatère, on vérifie donc qu'il possède quatre côtés et quatre sommets."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Éléments d'un quadrilatère",
+        "questions": [
+          {
+            "question": "Combien de côtés possède un quadrilatère ?",
+            "options": [
+              "3",
+              "4",
+              "5",
+              "6"
+            ],
+            "correct_answer": "4",
+            "explanation": "Le préfixe « quadri- » signifie quatre : un quadrilatère possède quatre côtés."
+          },
+          {
+            "question": "Dans ABCD, quels sont les côtés opposés ?",
+            "options": [
+              "[AB] et [BC]",
+              "[AB] et [CD]",
+              "[AC] et [BD]",
+              "[AD] et [AB]"
+            ],
+            "correct_answer": "[AB] et [CD]",
+            "explanation": "[AB] et [CD] n'ont aucun sommet commun : ce sont des côtés opposés."
+          },
+          {
+            "question": "Quelles sont les diagonales du quadrilatère ABCD ?",
+            "options": [
+              "[AB] et [CD]",
+              "[BC] et [DA]",
+              "[AC] et [BD]",
+              "[AD] et [BC]"
+            ],
+            "correct_answer": "[AC] et [BD]",
+            "explanation": "Les diagonales relient deux sommets opposés."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le parallélogramme",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du parallélogramme",
+          "content": {
+            "text": "Un parallélogramme est un quadrilatère dont les côtés opposés sont parallèles deux à deux. Dans un parallélogramme ABCD, on a (AB) // (CD) et (AD) // (BC)."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Propriétés des côtés et des angles",
+          "content": {
+            "text": "Dans un parallélogramme, les côtés opposés ont la même longueur. Les angles opposés ont également la même mesure. Par exemple, si l'angle A mesure 70°, alors l'angle C mesure aussi 70°."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Propriété des diagonales",
+          "content": {
+            "text": "Les diagonales d'un parallélogramme se coupent en leur milieu. Cela signifie que leur point d'intersection partage chacune des deux diagonales en deux segments de même longueur. Ces propriétés permettent de reconnaître et de construire un parallélogramme."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Le parallélogramme",
+        "questions": [
+          {
+            "question": "Dans un parallélogramme, les côtés opposés sont...",
+            "options": [
+              "perpendiculaires",
+              "parallèles deux à deux",
+              "toujours égaux tous les quatre",
+              "toujours de longueurs différentes"
+            ],
+            "correct_answer": "parallèles deux à deux",
+            "explanation": "C'est la propriété fondamentale du parallélogramme."
+          },
+          {
+            "question": "Dans un parallélogramme, les côtés opposés sont...",
+            "options": [
+              "de même longueur",
+              "toujours perpendiculaires",
+              "toujours différents",
+              "sans relation"
+            ],
+            "correct_answer": "de même longueur",
+            "explanation": "Les côtés opposés d'un parallélogramme ont la même longueur."
+          },
+          {
+            "question": "Que peut-on dire des diagonales d'un parallélogramme ?",
+            "options": [
+              "Elles sont toujours perpendiculaires",
+              "Elles se coupent en leur milieu",
+              "Elles ont toujours la même longueur",
+              "Elles ne se coupent jamais"
+            ],
+            "correct_answer": "Elles se coupent en leur milieu",
+            "explanation": "Les diagonales d'un parallélogramme se coupent en leur milieu."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le rectangle",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du rectangle",
+          "content": {
+            "text": "Un rectangle est un quadrilatère qui possède quatre angles droits. Comme chaque angle mesure 90°, les côtés consécutifs sont perpendiculaires. Un rectangle est aussi un parallélogramme particulier."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Côtés et périmètre du rectangle",
+          "content": {
+            "text": "Dans un rectangle, les côtés opposés sont parallèles et ont la même longueur. Les deux côtés les plus longs sont appelés longueurs et les deux autres sont appelés largeurs. Son périmètre est P = 2 × (L + l)."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Diagonales du rectangle",
+          "content": {
+            "text": "Les diagonales d'un rectangle ont la même longueur et se coupent en leur milieu. Par exemple, un rectangle de longueur 8 cm et de largeur 5 cm possède un périmètre de 2 × (8 + 5) = 26 cm."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Le rectangle",
+        "questions": [
+          {
+            "question": "Combien d'angles droits possède un rectangle ?",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "correct_answer": "4",
+            "explanation": "Les quatre angles d'un rectangle sont des angles droits."
+          },
+          {
+            "question": "Quelle est la formule du périmètre d'un rectangle ?",
+            "options": [
+              "L × l",
+              "2 × (L + l)",
+              "L + l",
+              "4 × L"
+            ],
+            "correct_answer": "2 × (L + l)",
+            "explanation": "Le périmètre est la somme des quatre côtés : L + l + L + l = 2 × (L + l)."
+          },
+          {
+            "question": "Un rectangle mesure 8 cm sur 5 cm. Quel est son périmètre ?",
+            "options": [
+              "13 cm",
+              "20 cm",
+              "26 cm",
+              "40 cm"
+            ],
+            "correct_answer": "26 cm",
+            "explanation": "P = 2 × (8 + 5) = 26 cm."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le carré",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du carré",
+          "content": {
+            "text": "Un carré est un quadrilatère qui possède quatre côtés de même longueur et quatre angles droits. Il possède donc les propriétés du rectangle et du losange. Tous ses côtés sont égaux et chacun de ses angles mesure 90°."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Périmètre du carré",
+          "content": {
+            "text": "Le périmètre d'un carré de côté c se calcule avec la formule P = 4 × c. Par exemple, si le côté mesure 7 cm, alors P = 4 × 7 = 28 cm."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Diagonales du carré",
+          "content": {
+            "text": "Les diagonales d'un carré ont la même longueur, se coupent en leur milieu et sont perpendiculaires. Elles partagent également les angles du carré en deux angles égaux. Le carré possède donc de nombreuses propriétés utiles en géométrie."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Le carré",
+        "questions": [
+          {
+            "question": "Combien de côtés égaux possède un carré ?",
+            "options": [
+              "2",
+              "3",
+              "4",
+              "Aucun"
+            ],
+            "correct_answer": "4",
+            "explanation": "Les quatre côtés d'un carré ont la même longueur."
+          },
+          {
+            "question": "Quel est le périmètre d'un carré de côté 7 cm ?",
+            "options": [
+              "14 cm",
+              "21 cm",
+              "28 cm",
+              "49 cm"
+            ],
+            "correct_answer": "28 cm",
+            "explanation": "P = 4 × 7 = 28 cm."
+          },
+          {
+            "question": "Les angles d'un carré mesurent chacun...",
+            "options": [
+              "45°",
+              "60°",
+              "90°",
+              "180°"
+            ],
+            "correct_answer": "90°",
+            "explanation": "Les quatre angles d'un carré sont droits."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le losange et les autres quadrilatères",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le losange",
+          "content": {
+            "text": "Un losange est un quadrilatère dont les quatre côtés ont la même longueur. Ses côtés opposés sont parallèles. Un losange est donc un parallélogramme particulier. Ses diagonales se coupent en leur milieu et sont perpendiculaires."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le trapèze",
+          "content": {
+            "text": "Le trapèze est un quadrilatère qui possède au moins une paire de côtés parallèles. Selon les conventions utilisées, on distingue notamment le trapèze rectangle et le trapèze isocèle. Il faut toujours observer les propriétés indiquées dans l'énoncé."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Relations entre les quadrilatères",
+          "content": {
+            "text": "Les quadrilatères particuliers sont liés entre eux. Un carré est à la fois un rectangle, un losange et un parallélogramme. Un rectangle est un parallélogramme, et un losange est également un parallélogramme. Ces relations permettent de déduire plusieurs propriétés."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Losange et quadrilatères particuliers",
+        "questions": [
+          {
+            "question": "Quelle propriété caractérise principalement un losange ?",
+            "options": [
+              "Il possède quatre côtés de même longueur",
+              "Il possède seulement un angle droit",
+              "Il possède quatre côtés différents",
+              "Il n'a pas de côtés parallèles"
+            ],
+            "correct_answer": "Il possède quatre côtés de même longueur",
+            "explanation": "Un losange possède quatre côtés de même longueur."
+          },
+          {
+            "question": "Quel quadrilatère possède au moins une paire de côtés parallèles ?",
+            "options": [
+              "Un trapèze",
+              "Un triangle",
+              "Un cercle",
+              "Une demi-droite"
+            ],
+            "correct_answer": "Un trapèze",
+            "explanation": "Un trapèze est un quadrilatère possédant au moins une paire de côtés parallèles."
+          },
+          {
+            "question": "Un carré est à la fois...",
+            "options": [
+              "un rectangle et un losange",
+              "seulement un rectangle",
+              "seulement un losange",
+              "un triangle et un rectangle"
+            ],
+            "correct_answer": "un rectangle et un losange",
+            "explanation": "Le carré possède quatre angles droits comme le rectangle et quatre côtés égaux comme le losange."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Périmètres et problèmes sur les quadrilatères",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Calculer le périmètre",
+          "content": {
+            "text": "Le périmètre d'un quadrilatère est obtenu en additionnant les longueurs de ses quatre côtés. Pour un rectangle, on utilise P = 2 × (L + l). Pour un carré, P = 4 × c. Pour un quadrilatère quelconque, on additionne directement les quatre côtés."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple avec une cour rectangulaire",
+          "content": {
+            "text": "Une cour rectangulaire mesure 12 m de longueur et 8 m de largeur. Son périmètre est P = 2 × (12 + 8) = 40 m. Si l'on veut poser une clôture autour de la cour, il faut donc prévoir 40 m de clôture, sans tenir compte d'une éventuelle ouverture."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": {
+            "text": "Pour résoudre un problème de quadrilatères, il faut identifier la figure et utiliser ses propriétés. Il faut également vérifier les unités. Par exemple, avant de calculer le périmètre d'une parcelle, toutes les longueurs doivent être exprimées dans la même unité."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse sur les quadrilatères",
+        "questions": [
+          {
+            "question": "Une cour rectangulaire mesure 12 m sur 8 m. Quel est son périmètre ?",
+            "options": [
+              "20 m",
+              "32 m",
+              "40 m",
+              "96 m"
+            ],
+            "correct_answer": "40 m",
+            "explanation": "P = 2 × (12 + 8) = 40 m."
+          },
+          {
+            "question": "Quel est le périmètre d'un carré de côté 9 m ?",
+            "options": [
+              "18 m",
+              "27 m",
+              "36 m",
+              "81 m"
+            ],
+            "correct_answer": "36 m",
+            "explanation": "P = 4 × 9 = 36 m."
+          },
+          {
+            "question": "Avant de calculer le périmètre d'une figure, il faut notamment vérifier que...",
+            "options": [
+              "toutes les longueurs sont dans la même unité",
+              "tous les angles mesurent 90°",
+              "la figure est toujours un carré",
+              "les diagonales sont nulles"
+            ],
+            "correct_answer": "toutes les longueurs sont dans la même unité",
+            "explanation": "Les longueurs doivent être converties dans une même unité avant d'être additionnées."
+          }
+        ]
+      }
+    }
+  ]
+}

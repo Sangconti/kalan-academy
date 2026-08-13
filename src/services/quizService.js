@@ -186,14 +186,30 @@ export async function submitQuizAttempt(
       const userAnswer =
         answers?.[index];
 
+      const correctIndex =
+        Number(question.correct_index);
 
-      if (
-        Number(userAnswer) ===
-        Number(question.correct_index)
-      ) {
+      const isCorrect =
+        Number(userAnswer) === correctIndex;
 
+      console.log(
+        `📝 QUESTION ${index + 1}`,
+        {
+          userAnswer,
+          userAnswerText:
+            question.choices?.[Number(userAnswer)],
+
+          correctIndex,
+
+          correctAnswerText:
+            question.choices?.[correctIndex],
+
+          isCorrect
+        }
+      );
+
+      if (isCorrect) {
         correct++;
-
       }
 
     }

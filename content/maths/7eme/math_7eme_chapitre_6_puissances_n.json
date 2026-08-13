@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Puissances dans ℕ",
+  "chapter_order": 6,
+  "lessons": [
+    {
+      "title": "Découvrir la notion de puissance",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'une puissance",
+          "content": {
+            "text": "Une puissance permet d'écrire plus simplement un produit dont tous les facteurs sont identiques. Par exemple, 2 × 2 × 2 × 2 peut s'écrire 2⁴. Le nombre 2 est appelé la base et le nombre 4 est appelé l'exposant. On lit 2⁴ : « deux puissance quatre »."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Base et exposant",
+          "content": {
+            "text": "Dans une puissance aⁿ, le nombre a est la base et n est l'exposant. Lorsque n est un entier naturel non nul, cela signifie que la base a est multipliée par elle-même n fois. Ainsi, 5³ = 5 × 5 × 5 = 125."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Ne pas confondre puissance et multiplication",
+          "content": {
+            "text": "Il faut bien distinguer la puissance de la multiplication. Par exemple, 3² signifie 3 × 3 = 9 et non pas 3 × 2 = 6. L'exposant indique le nombre de fois où la base apparaît comme facteur."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Notion de puissance",
+        "questions": [
+          {
+            "question": "Dans 7³, quel est l'exposant ?",
+            "options": [
+              "3",
+              "7",
+              "10",
+              "21"
+            ],
+            "correct_answer": "3",
+            "explanation": "Dans 7³, 7 est la base et 3 est l'exposant."
+          },
+          {
+            "question": "Comment écrire 4 × 4 × 4 sous forme de puissance ?",
+            "options": [
+              "4²",
+              "4³",
+              "3⁴",
+              "12²"
+            ],
+            "correct_answer": "4³",
+            "explanation": "Le facteur 4 apparaît trois fois. On écrit donc 4³."
+          },
+          {
+            "question": "Que signifie 6² ?",
+            "options": [
+              "6 × 2",
+              "6 + 6",
+              "6 × 6",
+              "2 × 2 × 2 × 2 × 2 × 2"
+            ],
+            "correct_answer": "6 × 6",
+            "explanation": "L'exposant 2 indique que la base 6 apparaît deux fois comme facteur."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer une puissance",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de calcul d'une puissance",
+          "content": {
+            "text": "Pour calculer une puissance, on multiplie la base par elle-même autant de fois que l'indique l'exposant. Par exemple : 3⁴ = 3 × 3 × 3 × 3 = 81. Il est important de respecter le nombre de facteurs indiqué par l'exposant."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Calcul progressif des puissances",
+          "content": {
+            "text": "Les puissances de petits nombres peuvent être calculées progressivement. Par exemple : 2² = 4, 2³ = 8, 2⁴ = 16 et 2⁵ = 32. À chaque étape, on multiplie le résultat précédent par la base 2."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Premières puissances de 10",
+          "content": {
+            "text": "Certaines puissances sont particulièrement importantes : 10² = 100, 10³ = 1 000 et 10⁴ = 10 000. Pour une puissance de 10, l'exposant indique le nombre de zéros placés après le 1."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Calculer une puissance",
+        "questions": [
+          {
+            "question": "Quelle est la valeur de 2⁵ ?",
+            "options": [
+              "10",
+              "16",
+              "25",
+              "32"
+            ],
+            "correct_answer": "32",
+            "explanation": "2⁵ = 2 × 2 × 2 × 2 × 2 = 32."
+          },
+          {
+            "question": "Quelle est la valeur de 3³ ?",
+            "options": [
+              "9",
+              "18",
+              "27",
+              "30"
+            ],
+            "correct_answer": "27",
+            "explanation": "3³ = 3 × 3 × 3 = 27."
+          },
+          {
+            "question": "Quelle est la valeur de 10⁴ ?",
+            "options": [
+              "100",
+              "1 000",
+              "10 000",
+              "100 000"
+            ],
+            "correct_answer": "10 000",
+            "explanation": "10⁴ = 10 × 10 × 10 × 10 = 10 000."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Carrés et cubes des nombres naturels",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le carré d'un nombre naturel",
+          "content": {
+            "text": "La puissance 2 d'un nombre est appelée son carré. Par exemple, le carré de 7 est 7² = 7 × 7 = 49. Le carré d'un nombre naturel est donc obtenu en multipliant ce nombre par lui-même."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le cube d'un nombre naturel",
+          "content": {
+            "text": "La puissance 3 d'un nombre est appelée son cube. Par exemple, le cube de 4 est 4³ = 4 × 4 × 4 = 64. Il ne faut pas confondre le carré et le cube : 4² = 16 alors que 4³ = 64."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Applications des carrés et des cubes",
+          "content": {
+            "text": "Les carrés et les cubes apparaissent dans de nombreuses situations. Par exemple, un carré de côté 5 m possède une aire de 5² = 25 m². Un cube dont l'arête mesure 3 cm possède un volume de 3³ = 27 cm³."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Carrés et cubes",
+        "questions": [
+          {
+            "question": "Quel est le carré de 8 ?",
+            "options": [
+              "16",
+              "32",
+              "64",
+              "72"
+            ],
+            "correct_answer": "64",
+            "explanation": "8² = 8 × 8 = 64."
+          },
+          {
+            "question": "Quel est le cube de 3 ?",
+            "options": [
+              "6",
+              "9",
+              "18",
+              "27"
+            ],
+            "correct_answer": "27",
+            "explanation": "3³ = 3 × 3 × 3 = 27."
+          },
+          {
+            "question": "Un carré possède un côté de 6 cm. Quelle est son aire ?",
+            "options": [
+              "12 cm²",
+              "18 cm²",
+              "36 cm²",
+              "42 cm²"
+            ],
+            "correct_answer": "36 cm²",
+            "explanation": "L'aire d'un carré est côté × côté. Donc 6² = 36 cm²."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Puissances de 10",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Écriture des puissances de 10",
+          "content": {
+            "text": "Les puissances de 10 sont faciles à calculer. On a : 10¹ = 10, 10² = 100, 10³ = 1 000, 10⁴ = 10 000 et ainsi de suite. Une puissance de 10 s'écrit avec un 1 suivi d'un nombre de zéros égal à l'exposant."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Multiplier par une puissance de 10",
+          "content": {
+            "text": "Multiplier un nombre naturel par 10 revient à ajouter un zéro à droite lorsque le nombre est entier. Multiplier par 100 revient à ajouter deux zéros, et multiplier par 1 000 revient à ajouter trois zéros. On peut donc utiliser les puissances de 10 pour simplifier certaines écritures."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemples avec les puissances de 10",
+          "content": {
+            "text": "Exemple : 35 × 10² = 35 × 100 = 3 500. De même, 72 × 10³ = 72 × 1 000 = 72 000. Il faut toujours vérifier le nombre de zéros correspondant à l'exposant."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Puissances de 10",
+        "questions": [
+          {
+            "question": "Quelle est la valeur de 10³ ?",
+            "options": [
+              "100",
+              "1 000",
+              "10 000",
+              "100 000"
+            ],
+            "correct_answer": "1 000",
+            "explanation": "10³ = 10 × 10 × 10 = 1 000."
+          },
+          {
+            "question": "Combien de zéros possède 10⁵ ?",
+            "options": [
+              "3",
+              "4",
+              "5",
+              "6"
+            ],
+            "correct_answer": "5",
+            "explanation": "10⁵ s'écrit 100 000 : il y a cinq zéros."
+          },
+          {
+            "question": "Quel est le résultat de 24 × 10² ?",
+            "options": [
+              "240",
+              "2 400",
+              "24 000",
+              "240 000"
+            ],
+            "correct_answer": "2 400",
+            "explanation": "10² = 100, donc 24 × 100 = 2 400."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Règles simples sur les puissances",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Produit de puissances de même base",
+          "content": {
+            "text": "Lorsque deux puissances ont la même base et sont multipliées, on peut additionner les exposants. Par exemple, 2³ × 2² = 2⁵. En effet, 2³ × 2² = (2 × 2 × 2) × (2 × 2) = 2⁵."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Puissance d'une puissance",
+          "content": {
+            "text": "Lorsqu'une puissance est élevée à une autre puissance, on multiplie les exposants. Par exemple, (3²)³ = 3⁶. Cette règle permet de simplifier certaines expressions comportant plusieurs puissances."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Attention aux règles de calcul",
+          "content": {
+            "text": "Attention : ces règles doivent être utilisées avec des puissances qui ont la même base lorsque cela est nécessaire. Par exemple, 2² × 3² ne devient pas 6⁴. Il faut toujours identifier correctement la base et l'exposant avant de simplifier."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Règles des puissances",
+        "questions": [
+          {
+            "question": "Comment simplifier 2³ × 2² ?",
+            "options": [
+              "2⁵",
+              "2⁶",
+              "4⁵",
+              "4⁶"
+            ],
+            "correct_answer": "2⁵",
+            "explanation": "Les bases sont identiques, donc on additionne les exposants : 3 + 2 = 5."
+          },
+          {
+            "question": "Comment simplifier (5²)³ ?",
+            "options": [
+              "5⁵",
+              "5⁶",
+              "5⁸",
+              "10⁶"
+            ],
+            "correct_answer": "5⁶",
+            "explanation": "Pour une puissance d'une puissance, on multiplie les exposants : 2 × 3 = 6."
+          },
+          {
+            "question": "Quelle expression est correcte ?",
+            "options": [
+              "3² × 3³ = 3⁵",
+              "3² × 3³ = 6⁵",
+              "3² × 3³ = 3⁶",
+              "3² × 3³ = 9⁶"
+            ],
+            "correct_answer": "3² × 3³ = 3⁵",
+            "explanation": "Les bases sont identiques, donc on additionne les exposants : 2 + 3 = 5."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Applications des puissances",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Utiliser les puissances pour les grands nombres",
+          "content": {
+            "text": "Les puissances permettent de représenter simplement de grandes quantités et de résoudre des problèmes. Elles sont particulièrement utiles pour les carrés, les cubes, les grands nombres et certaines mesures. Par exemple, 1 000 000 = 10⁶."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Applications aux aires et aux volumes",
+          "content": {
+            "text": "Exemple : un carré possède un côté de 12 m. Son aire est 12² = 144 m². Si un cube possède une arête de 5 cm, son volume est 5³ = 125 cm³. Il faut choisir la puissance adaptée à la situation : carré pour une aire de carré, cube pour un volume de cube."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Comparer des nombres avec les puissances",
+          "content": {
+            "text": "Les puissances peuvent aussi aider à comparer des nombres. Par exemple, 10⁴ = 10 000 et 10⁵ = 100 000. Comme 10⁵ possède un zéro de plus, 10⁵ est dix fois plus grand que 10⁴. La maîtrise des puissances facilite donc la lecture et la comparaison des grands nombres."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Applications des puissances",
+        "questions": [
+          {
+            "question": "Un carré a un côté de 9 m. Quelle est son aire ?",
+            "options": [
+              "18 m²",
+              "27 m²",
+              "81 m²",
+              "90 m²"
+            ],
+            "correct_answer": "81 m²",
+            "explanation": "L'aire d'un carré est côté². Donc 9² = 81 m²."
+          },
+          {
+            "question": "Un cube a une arête de 4 cm. Quel est son volume ?",
+            "options": [
+              "12 cm³",
+              "16 cm³",
+              "32 cm³",
+              "64 cm³"
+            ],
+            "correct_answer": "64 cm³",
+            "explanation": "Le volume d'un cube est arête³. Donc 4³ = 64 cm³."
+          },
+          {
+            "question": "Quelle est l'écriture en puissance de 1 000 000 ?",
+            "options": [
+              "10⁴",
+              "10⁵",
+              "10⁶",
+              "10⁷"
+            ],
+            "correct_answer": "10⁶",
+            "explanation": "10⁶ = 1 suivi de six zéros, soit 1 000 000."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,5 +1,3 @@
-// src/components/Layout.jsx
-
 import {
   Outlet,
   useNavigate
@@ -22,7 +20,6 @@ import {
   ChevronDown
 } from "lucide-react";
 
-
 export default function Layout() {
 
   const navigate = useNavigate();
@@ -31,8 +28,7 @@ export default function Layout() {
 
   const { isOnline } = useNetwork();
 
-  const [openMenu, setOpenMenu] =
-    useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
 
   const menuRef = useRef(null);
 
@@ -54,12 +50,10 @@ export default function Layout() {
 
     }
 
-
     document.addEventListener(
       "mousedown",
       handleClickOutside
     );
-
 
     return () => {
 
@@ -82,11 +76,11 @@ export default function Layout() {
     <div
       className="
         min-h-screen
-        bg-gray-50
+        theme-bg
+        theme-text
         pb-20
       "
     >
-
 
       {/* =================================================
           HEADER
@@ -94,7 +88,7 @@ export default function Layout() {
 
       <header
         className="
-          bg-blue-600
+          bg-accent
           text-white
           px-4
           py-3
@@ -107,7 +101,6 @@ export default function Layout() {
           shadow
         "
       >
-
 
         {/* LOGO */}
 
@@ -152,15 +145,17 @@ export default function Layout() {
             "
           >
 
+            {/* ÉTAT HORS LIGNE */}
+
             {!isOnline && (
 
               <WifiOff
                 size={18}
                 className="text-yellow-300"
+                title="Connexion Internet indisponible"
               />
 
             )}
-
 
             <span className="text-sm">
 
@@ -171,7 +166,6 @@ export default function Layout() {
               }
 
             </span>
-
 
             <ChevronDown size={16} />
 
@@ -192,7 +186,11 @@ export default function Layout() {
               "
             >
 
-              <UserMenu />
+              <UserMenu
+                onClose={() => {
+                  setOpenMenu(false);
+                }}
+              />
 
             </div>
 
@@ -204,6 +202,32 @@ export default function Layout() {
 
 
       {/* =================================================
+          INDICATEUR HORS LIGNE
+      ================================================= */}
+
+      {!isOnline && (
+
+        <div
+          className="
+            bg-orange-50
+            border-b
+            border-orange-200
+            px-4
+            py-2
+            text-center
+            text-sm
+            font-medium
+            text-orange-700
+          "
+        >
+          📡 Connexion Internet indisponible — Mode hors
+          connexion actif
+        </div>
+
+      )}
+
+
+      {/* =================================================
           CONTENU
       ================================================= */}
 
@@ -211,6 +235,7 @@ export default function Layout() {
         className="
           max-w-2xl
           mx-auto
+          w-full
           p-4
         "
       >

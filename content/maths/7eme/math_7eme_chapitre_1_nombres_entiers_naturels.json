@@ -1,110 +1,141 @@
 {
-  "subject": "Mathématiques",
   "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
   "chapter": "Les nombres entiers naturels",
   "chapter_order": 1,
   "lessons": [
     {
       "title": "Découverte et écriture des nombres entiers naturels",
-      "description": "Comprendre ce que sont les nombres entiers naturels, savoir les lire, les écrire et les utiliser dans des situations de la vie quotidienne.",
-      "duration_minutes": 15,
-      "difficulty": "easy",
-      "order_number": 1,
+      "lesson_order": 1,
       "blocks": [
         {
           "type": "text",
           "title": "Définition des nombres entiers naturels",
           "content": {
             "text": "Les nombres entiers naturels sont les nombres utilisés pour compter des objets. Ils commencent par 0 et continuent sans fin : 0, 1, 2, 3, 4, 5... Exemple : dans une classe de 45 élèves, le nombre 45 est un entier naturel."
-          }
+          },
+          "block_order": 1
         },
         {
           "type": "text",
           "title": "Écriture en chiffres et en lettres",
           "content": {
             "text": "Un nombre peut être écrit avec des chiffres ou avec des lettres. Exemple : 125 s'écrit en lettres cent vingt-cinq. Pour lire un grand nombre, on le sépare en groupes de trois chiffres : 12 500 = douze mille cinq cents."
-          }
+          },
+          "block_order": 2
         },
         {
           "type": "text",
           "title": "Exemple pratique au Mali",
           "content": {
             "text": "Un commerçant de Bamako possède 2 500 mangues dans son stock. Le nombre 2 500 représente une quantité précise d'objets. C'est un nombre entier naturel."
-          }
+          },
+          "block_order": 3
         }
       ],
       "quiz": {
-        "title": "Quiz sur les nombres entiers naturels",
+        "title": "Quiz — Découverte des nombres entiers naturels",
         "questions": [
           {
             "question": "Lequel de ces nombres est un entier naturel ?",
-            "options": ["-5", "3", "2,5", "1/2"],
-            "correct_index": 1,
+            "options": [
+              "-5",
+              "3",
+              "2,5",
+              "1/2"
+            ],
+            "correct_answer": "3",
             "explanation": "3 est un entier naturel car il sert à compter et ne contient ni signe négatif ni partie décimale."
           },
           {
             "question": "Comment écrit-on 1 000 en lettres ?",
-            "options": ["Cent", "Dix mille", "Mille", "Un million"],
-            "correct_index": 2,
+            "options": [
+              "Cent",
+              "Dix mille",
+              "Mille",
+              "Un million"
+            ],
+            "correct_answer": "Mille",
             "explanation": "Le nombre 1 000 se lit mille."
           },
           {
             "question": "Quel nombre vient après 999 ?",
-            "options": ["998", "1000", "990", "99"],
-            "correct_index": 1,
-            "explanation": "Dans la suite des nombres naturels, après 999 vient 1000."
+            "options": [
+              "998",
+              "1 000",
+              "990",
+              "99"
+            ],
+            "correct_answer": "1 000",
+            "explanation": "Dans la suite des nombres naturels, après 999 vient 1 000."
           }
         ]
       }
     },
     {
       "title": "Comparer et ranger les nombres entiers naturels",
-      "description": "Apprendre à comparer des nombres et à les classer dans l'ordre croissant ou décroissant.",
-      "duration_minutes": 15,
-      "difficulty": "easy",
-      "order_number": 2,
+      "lesson_order": 2,
       "blocks": [
         {
           "type": "text",
           "title": "Comparer deux nombres",
           "content": {
-            "text": "Pour comparer deux nombres naturels, on regarde d'abord le nombre de chiffres. Le nombre qui possède le plus de chiffres est généralement le plus grand. Exemple : 8 000 > 950 car 8 000 possède quatre chiffres."
-          }
+            "text": "Pour comparer deux nombres naturels, on regarde d'abord le nombre de chiffres. Le nombre qui possède le plus de chiffres est généralement le plus grand. Exemple : 8 000 > 950 car 8 000 possède quatre chiffres alors que 950 en possède trois."
+          },
+          "block_order": 1
         },
         {
           "type": "text",
           "title": "Les signes de comparaison",
           "content": {
-            "text": "On utilise les signes suivants : > signifie plus grand que, < signifie plus petit que, = signifie égal à. Exemple : 25 > 12 et 40 = 40."
-          }
+            "text": "On utilise les signes suivants : > signifie plus grand que, < signifie plus petit que et = signifie égal à. Exemple : 25 > 12, 8 < 15 et 40 = 40."
+          },
+          "block_order": 2
         },
         {
           "type": "text",
           "title": "Ranger les nombres",
           "content": {
-            "text": "Ranger dans l'ordre croissant signifie du plus petit au plus grand. Exemple : 5, 12, 30, 45. Ranger dans l'ordre décroissant signifie du plus grand au plus petit."
-          }
+            "text": "Ranger des nombres dans l'ordre croissant signifie les classer du plus petit au plus grand. Exemple : 5, 12, 30, 45. L'ordre décroissant consiste à les classer du plus grand au plus petit : 45, 30, 12, 5."
+          },
+          "block_order": 3
         }
       ],
       "quiz": {
-        "title": "Quiz comparaison des nombres",
+        "title": "Quiz — Comparaison des nombres",
         "questions": [
           {
-            "question": "Quel signe complète cette opération : 45 __ 32 ?",
-            "options": [">", "<", "=", "+"],
-            "correct_index": 0,
+            "question": "Quel signe complète cette comparaison : 45 __ 32 ?",
+            "options": [
+              ">",
+              "<",
+              "=",
+              "+"
+            ],
+            "correct_answer": ">",
             "explanation": "45 est plus grand que 32, donc on utilise le signe >."
           },
           {
             "question": "Quel est l'ordre croissant correct ?",
-            "options": ["20, 10, 5", "5, 10, 20", "10, 5, 20", "20, 5, 10"],
-            "correct_index": 1,
+            "options": [
+              "20, 10, 5",
+              "5, 10, 20",
+              "10, 5, 20",
+              "20, 5, 10"
+            ],
+            "correct_answer": "5, 10, 20",
             "explanation": "L'ordre croissant va du plus petit nombre vers le plus grand."
           },
           {
             "question": "Entre 7 500 et 750, quel nombre est le plus grand ?",
-            "options": ["750", "7 500", "Ils sont égaux", "Aucun"],
-            "correct_index": 1,
+            "options": [
+              "750",
+              "7 500",
+              "Ils sont égaux",
+              "Aucun"
+            ],
+            "correct_answer": "7 500",
             "explanation": "7 500 possède quatre chiffres alors que 750 en possède trois."
           }
         ]
@@ -112,58 +143,272 @@
     },
     {
       "title": "Décomposition et valeur des chiffres dans un nombre",
-      "description": "Comprendre la valeur de chaque chiffre selon sa position dans un nombre entier naturel.",
-      "duration_minutes": 15,
-      "difficulty": "medium",
-      "order_number": 3,
+      "lesson_order": 3,
       "blocks": [
         {
           "type": "text",
           "title": "Les rangs d'un nombre",
           "content": {
-            "text": "Dans un nombre, chaque chiffre a une valeur selon sa position. Les principaux rangs sont : unités, dizaines, centaines, milliers. Exemple : dans 4 582, le chiffre 4 représente 4 milliers."
-          }
+            "text": "Dans un nombre, chaque chiffre a une valeur selon sa position. Les principaux rangs sont les unités, les dizaines, les centaines et les milliers. Exemple : dans 4 582, le chiffre 4 représente 4 milliers, le chiffre 5 représente 5 centaines, le chiffre 8 représente 8 dizaines et le chiffre 2 représente 2 unités."
+          },
+          "block_order": 1
         },
         {
           "type": "text",
           "title": "Décomposer un nombre",
           "content": {
-            "text": "Décomposer un nombre consiste à écrire la valeur de chaque chiffre. Exemple : 3 456 = 3 000 + 400 + 50 + 6."
-          }
+            "text": "Décomposer un nombre consiste à écrire la valeur de chacun de ses chiffres. Exemple : 3 456 = 3 000 + 400 + 50 + 6."
+          },
+          "block_order": 2
         },
         {
           "type": "text",
           "title": "Application pratique",
           "content": {
-            "text": "Une école possède 1 250 cahiers. Ce nombre peut être décomposé ainsi : 1 000 + 200 + 50."
-          }
+            "text": "Une école possède 1 250 cahiers. Ce nombre peut être décomposé ainsi : 1 000 + 200 + 50. Cette décomposition permet de mieux comprendre la valeur de chaque chiffre."
+          },
+          "block_order": 3
         }
       ],
       "quiz": {
-        "title": "Quiz décomposition des nombres",
+        "title": "Quiz — Décomposition des nombres",
         "questions": [
           {
             "question": "Dans 5 432, quelle est la valeur du chiffre 5 ?",
-            "options": ["5 unités", "5 dizaines", "5 centaines", "5 milliers"],
-            "correct_index": 3,
+            "options": [
+              "5 unités",
+              "5 dizaines",
+              "5 centaines",
+              "5 milliers"
+            ],
+            "correct_answer": "5 milliers",
             "explanation": "Le chiffre 5 est placé au rang des milliers, donc sa valeur est 5 000."
           },
           {
             "question": "Quelle est la bonne décomposition de 2 345 ?",
             "options": [
-              "2000 + 300 + 40 + 5",
+              "2 000 + 300 + 40 + 5",
               "200 + 30 + 4 + 5",
-              "2000 + 3000 + 40",
+              "2 000 + 3 000 + 40",
               "20 + 300 + 400"
             ],
-            "correct_index": 0,
-            "explanation": "Chaque chiffre garde sa valeur selon son rang."
+            "correct_answer": "2 000 + 300 + 40 + 5",
+            "explanation": "Chaque chiffre prend sa valeur selon son rang."
           },
           {
             "question": "Combien vaut le chiffre 8 dans 8 120 ?",
-            "options": ["8", "80", "800", "8000"],
-            "correct_index": 3,
+            "options": [
+              "8",
+              "80",
+              "800",
+              "8 000"
+            ],
+            "correct_answer": "8 000",
             "explanation": "Le chiffre 8 est au rang des milliers, donc il vaut 8 000."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Encadrement et repérage des nombres entiers naturels",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La droite graduée",
+          "content": {
+            "text": "Les nombres entiers naturels peuvent être représentés sur une droite graduée. Chaque graduation correspond à une unité. Les nombres augmentent lorsqu'on se déplace vers la droite et diminuent lorsqu'on se déplace vers la gauche."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Encadrer un nombre",
+          "content": {
+            "text": "Encadrer un nombre consiste à trouver deux nombres entre lesquels il se situe. Par exemple, 47 est compris entre 40 et 50 : 40 < 47 < 50. On peut également l'encadrer entre deux nombres entiers consécutifs : 46 < 47 < 48."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Repérer un nombre",
+          "content": {
+            "text": "Pour repérer un nombre sur une droite graduée, on cherche la graduation qui correspond à sa valeur. Par exemple, pour placer 25, on part de 0 et on avance jusqu'à la vingt-cinquième graduation lorsque chaque graduation représente une unité."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Encadrement et repérage",
+        "questions": [
+          {
+            "question": "Lequel de ces encadrements est correct pour 35 ?",
+            "options": [
+              "20 < 35 < 30",
+              "30 < 35 < 40",
+              "40 < 35 < 50",
+              "35 < 30 < 40"
+            ],
+            "correct_answer": "30 < 35 < 40",
+            "explanation": "35 est supérieur à 30 et inférieur à 40."
+          },
+          {
+            "question": "Sur une droite graduée, les nombres augmentent généralement vers...",
+            "options": [
+              "la gauche",
+              "la droite",
+              "le bas",
+              "le haut"
+            ],
+            "correct_answer": "la droite",
+            "explanation": "Sur une droite graduée orientée normalement, les nombres augmentent lorsqu'on se déplace vers la droite."
+          },
+          {
+            "question": "Quel nombre est situé entre 58 et 60 ?",
+            "options": [
+              "57",
+              "58",
+              "59",
+              "61"
+            ],
+            "correct_answer": "59",
+            "explanation": "59 est supérieur à 58 et inférieur à 60."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Suite et succession des nombres entiers naturels",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La suite des nombres naturels",
+          "content": {
+            "text": "Les nombres entiers naturels forment une suite ordonnée : 0, 1, 2, 3, 4, 5, 6... Chaque nombre naturel possède un successeur, c'est-à-dire le nombre qui vient immédiatement après lui. Le successeur de 25 est 26."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le prédécesseur d'un nombre",
+          "content": {
+            "text": "Le prédécesseur d'un nombre naturel non nul est le nombre qui vient immédiatement avant lui. Par exemple, le prédécesseur de 100 est 99 et son successeur est 101."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Compter de plusieurs façons",
+          "content": {
+            "text": "On peut compter de 1 en 1, mais aussi de 2 en 2, de 5 en 5, de 10 en 10 ou selon d'autres intervalles réguliers. Par exemple : 10, 20, 30, 40, 50 est une suite où l'on ajoute 10 à chaque étape."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Suite des nombres naturels",
+        "questions": [
+          {
+            "question": "Quel est le successeur de 99 ?",
+            "options": [
+              "98",
+              "99",
+              "100",
+              "101"
+            ],
+            "correct_answer": "100",
+            "explanation": "Le successeur d'un nombre est le nombre qui vient immédiatement après lui."
+          },
+          {
+            "question": "Quel est le prédécesseur de 500 ?",
+            "options": [
+              "498",
+              "499",
+              "501",
+              "510"
+            ],
+            "correct_answer": "499",
+            "explanation": "Le nombre qui vient immédiatement avant 500 est 499."
+          },
+          {
+            "question": "Quel nombre complète la suite : 10, 20, 30, 40, __ ?",
+            "options": [
+              "45",
+              "50",
+              "60",
+              "100"
+            ],
+            "correct_answer": "50",
+            "explanation": "On ajoute 10 à chaque nombre : 10, 20, 30, 40, 50."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exercices et problèmes sur les nombres entiers naturels",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Résoudre un problème avec des nombres naturels",
+          "content": {
+            "text": "Les nombres entiers naturels permettent de résoudre de nombreuses situations de la vie quotidienne. Par exemple, si une boutique possède 1 250 cahiers et reçoit 350 cahiers supplémentaires, les quantités peuvent être représentées et calculées à l'aide de nombres naturels."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Lire et interpréter les données",
+          "content": {
+            "text": "Pour résoudre un problème, il faut d'abord lire attentivement les informations données, identifier les nombres utilisés et comprendre ce que représente chaque quantité. Il faut ensuite choisir la méthode de calcul adaptée à la situation."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Synthèse du chapitre",
+          "content": {
+            "text": "Dans ce chapitre, nous avons appris à reconnaître, lire, écrire, comparer, ranger, décomposer et repérer les nombres entiers naturels. Nous savons également déterminer le prédécesseur et le successeur d'un nombre et utiliser les nombres naturels dans des situations de la vie quotidienne."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse sur les nombres entiers naturels",
+        "questions": [
+          {
+            "question": "Quelle est la bonne décomposition de 4 205 ?",
+            "options": [
+              "4 000 + 200 + 5",
+              "400 + 20 + 5",
+              "4 000 + 20 + 50",
+              "400 + 200 + 5"
+            ],
+            "correct_answer": "4 000 + 200 + 5",
+            "explanation": "Dans 4 205, le 4 représente 4 000, le 2 représente 200 et le 5 représente 5 unités."
+          },
+          {
+            "question": "Quel est l'ordre croissant correct de 450, 405 et 540 ?",
+            "options": [
+              "540, 450, 405",
+              "405, 450, 540",
+              "450, 405, 540",
+              "405, 540, 450"
+            ],
+            "correct_answer": "405, 450, 540",
+            "explanation": "L'ordre croissant consiste à classer les nombres du plus petit au plus grand."
+          },
+          {
+            "question": "Quel est le successeur de 2 999 ?",
+            "options": [
+              "2 998",
+              "2 990",
+              "3 000",
+              "3 001"
+            ],
+            "correct_answer": "3 000",
+            "explanation": "Le nombre qui vient immédiatement après 2 999 est 3 000."
           }
         ]
       }

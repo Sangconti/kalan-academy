@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Biologie",
+  "curriculum": "Mali",
+  "chapter": "La reproduction sexuée",
+  "chapter_order": 4,
+  "lessons": [
+    {
+      "title": "La reproduction chez les êtres vivants",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La reproduction permet la continuité des espèces",
+          "content": {
+            "text": "La reproduction est une fonction biologique qui permet aux êtres vivants de donner naissance à de nouveaux individus. Elle permet ainsi le renouvellement des générations et la continuité des espèces dans le temps."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Deux grands modes de reproduction",
+          "content": {
+            "text": "On distingue principalement la reproduction asexuée et la reproduction sexuée. La reproduction sexuée fait intervenir des cellules reproductrices appelées gamètes et conduit généralement à la rencontre de deux gamètes lors de la fécondation."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "La diversité des descendants",
+          "content": {
+            "text": "La reproduction sexuée contribue à la diversité des individus d'une même espèce. Les descendants héritent de caractères provenant de leurs parents, ce qui explique certaines ressemblances entre parents et descendants tout en permettant des différences entre les individus."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — La reproduction",
+        "questions": [
+          {
+            "question": "Quel est le rôle principal de la reproduction ?",
+            "options": [
+              "Permettre la continuité des espèces",
+              "Faire disparaître les espèces",
+              "Empêcher les individus de grandir",
+              "Produire uniquement de l'eau"
+            ],
+            "correct_answer": "Permettre la continuité des espèces",
+            "explanation": "La reproduction permet la naissance de nouveaux individus et le renouvellement des générations."
+          },
+          {
+            "question": "Quels éléments interviennent dans la reproduction sexuée ?",
+            "options": [
+              "Des cellules reproductrices appelées gamètes",
+              "Uniquement des cellules musculaires",
+              "Uniquement des cellules osseuses",
+              "Des minéraux du sol uniquement"
+            ],
+            "correct_answer": "Des cellules reproductrices appelées gamètes",
+            "explanation": "La reproduction sexuée fait intervenir des gamètes mâles et femelles."
+          },
+          {
+            "question": "La reproduction sexuée contribue notamment...",
+            "options": [
+              "à la diversité des individus",
+              "à la disparition automatique des espèces",
+              "à l'absence totale de différences entre individus",
+              "à la suppression des caractères héréditaires"
+            ],
+            "correct_answer": "à la diversité des individus",
+            "explanation": "La reproduction sexuée produit une diversité entre les descendants d'une même espèce."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les appareils reproducteurs chez l'être humain",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "L'appareil reproducteur masculin",
+          "content": {
+            "text": "L'appareil reproducteur masculin comprend notamment les testicules, qui produisent les spermatozoïdes. Les spermatozoïdes sont les cellules reproductrices mâles. D'autres organes participent au transport et à l'émission du sperme."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "L'appareil reproducteur féminin",
+          "content": {
+            "text": "L'appareil reproducteur féminin comprend notamment les ovaires, les trompes utérines, l'utérus et le vagin. Les ovaires produisent les ovules, qui sont les cellules reproductrices femelles."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Le rôle des cellules reproductrices",
+          "content": {
+            "text": "Les spermatozoïdes et les ovules sont des cellules reproductrices. Lorsqu'un spermatozoïde rencontre un ovule et fusionne avec lui, il se produit une fécondation qui marque le début du développement d'un nouvel individu."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les appareils reproducteurs",
+        "questions": [
+          {
+            "question": "Quel organe produit les spermatozoïdes chez l'homme ?",
+            "options": [
+              "Les testicules",
+              "Les poumons",
+              "L'estomac",
+              "Les reins"
+            ],
+            "correct_answer": "Les testicules",
+            "explanation": "Les testicules sont les organes reproducteurs masculins qui produisent les spermatozoïdes."
+          },
+          {
+            "question": "Quel organe produit les ovules chez la femme ?",
+            "options": [
+              "Les ovaires",
+              "L'utérus",
+              "Les poumons",
+              "Les reins"
+            ],
+            "correct_answer": "Les ovaires",
+            "explanation": "Les ovaires produisent les cellules reproductrices femelles appelées ovules."
+          },
+          {
+            "question": "Comment appelle-t-on la rencontre et la fusion d'un spermatozoïde avec un ovule ?",
+            "options": [
+              "La fécondation",
+              "La respiration",
+              "La digestion",
+              "La germination"
+            ],
+            "correct_answer": "La fécondation",
+            "explanation": "La fécondation correspond à la fusion d'un gamète mâle et d'un gamète femelle."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les gamètes et la fécondation",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les gamètes",
+          "content": {
+            "text": "Les gamètes sont les cellules reproductrices. Chez l'être humain, le gamète mâle est le spermatozoïde et le gamète femelle est l'ovule. Ils possèdent chacun une partie de l'information génétique nécessaire au nouvel individu."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "La rencontre des gamètes",
+          "content": {
+            "text": "Lors de la reproduction sexuée, un spermatozoïde peut rencontrer un ovule. Chez l'être humain, la fécondation se produit généralement dans une trompe utérine. La fusion des deux gamètes forme une cellule appelée cellule-œuf ou zygote."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "La cellule-œuf",
+          "content": {
+            "text": "La cellule-œuf issue de la fécondation commence à se diviser et donne progressivement naissance à un embryon. Elle contient une combinaison d'informations génétiques provenant des deux parents."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Gamètes et fécondation",
+        "questions": [
+          {
+            "question": "Comment appelle-t-on les cellules reproductrices ?",
+            "options": [
+              "Les gamètes",
+              "Les neurones",
+              "Les globules rouges",
+              "Les cellules musculaires"
+            ],
+            "correct_answer": "Les gamètes",
+            "explanation": "Les gamètes sont les cellules spécialisées dans la reproduction sexuée."
+          },
+          {
+            "question": "Que forme la fusion d'un spermatozoïde et d'un ovule ?",
+            "options": [
+              "Une cellule-œuf",
+              "Un poumon",
+              "Un muscle",
+              "Une racine"
+            ],
+            "correct_answer": "Une cellule-œuf",
+            "explanation": "La fécondation produit une cellule-œuf appelée également zygote."
+          },
+          {
+            "question": "Chez l'être humain, où se produit généralement la fécondation ?",
+            "options": [
+              "Dans une trompe utérine",
+              "Dans l'estomac",
+              "Dans les poumons",
+              "Dans les reins"
+            ],
+            "correct_answer": "Dans une trompe utérine",
+            "explanation": "Chez l'être humain, la fécondation se produit généralement dans une trompe utérine."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le développement du nouvel individu",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "De la cellule-œuf à l'embryon",
+          "content": {
+            "text": "Après la fécondation, la cellule-œuf se divise plusieurs fois. Ces divisions successives permettent la formation progressive de l'embryon, qui va se développer et se différencier au cours du temps."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le développement dans l'utérus",
+          "content": {
+            "text": "Chez l'être humain, l'embryon se développe dans l'utérus. Il reçoit les substances nécessaires à son développement grâce aux échanges avec l'organisme maternel à travers le placenta et le cordon ombilical."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "De l'embryon au fœtus",
+          "content": {
+            "text": "Au cours de la grossesse, l'embryon grandit et ses organes se mettent progressivement en place. Après les premières semaines de développement, on parle de fœtus. Le développement se poursuit jusqu'à la naissance."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Développement du nouvel individu",
+        "questions": [
+          {
+            "question": "Que devient la cellule-œuf après plusieurs divisions ?",
+            "options": [
+              "Elle donne progressivement naissance à un embryon",
+              "Elle devient immédiatement un adulte",
+              "Elle devient une cellule végétale",
+              "Elle disparaît toujours"
+            ],
+            "correct_answer": "Elle donne progressivement naissance à un embryon",
+            "explanation": "La cellule-œuf se divise et permet progressivement la formation de l'embryon."
+          },
+          {
+            "question": "Où l'embryon humain se développe-t-il ?",
+            "options": [
+              "Dans l'utérus",
+              "Dans les poumons",
+              "Dans l'estomac",
+              "Dans les reins"
+            ],
+            "correct_answer": "Dans l'utérus",
+            "explanation": "Après son implantation, l'embryon se développe dans l'utérus."
+          },
+          {
+            "question": "Comment appelle-t-on l'organisme en développement après les premières semaines de grossesse ?",
+            "options": [
+              "Le fœtus",
+              "Le gamète",
+              "Le spermatozoïde",
+              "La cellule musculaire"
+            ],
+            "correct_answer": "Le fœtus",
+            "explanation": "Après la période embryonnaire initiale, l'organisme en développement est appelé fœtus."
+          }
+        ]
+      }
+    },
+    {
+      "title": "La reproduction sexuée chez les animaux",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La reproduction chez les animaux",
+          "content": {
+            "text": "Chez de nombreux animaux, la reproduction sexuée nécessite la rencontre d'un gamète mâle et d'un gamète femelle. Les modalités de cette reproduction varient selon les espèces et leur milieu de vie."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Fécondation interne et externe",
+          "content": {
+            "text": "La fécondation peut être interne ou externe. Elle est interne lorsque la rencontre des gamètes se produit à l'intérieur de l'organisme femelle. Elle est externe lorsque les gamètes sont libérés dans le milieu, souvent dans l'eau, où se produit leur rencontre."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Les œufs et les jeunes",
+          "content": {
+            "text": "Selon les espèces, les animaux peuvent pondre des œufs ou donner naissance à des jeunes déjà formés. Les conditions de développement des jeunes varient également. Ces différences constituent des adaptations aux modes de vie des espèces."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Reproduction sexuée chez les animaux",
+        "questions": [
+          {
+            "question": "La reproduction sexuée chez les animaux implique généralement...",
+            "options": [
+              "la rencontre de deux gamètes",
+              "uniquement la croissance",
+              "uniquement la respiration",
+              "la disparition des cellules reproductrices"
+            ],
+            "correct_answer": "la rencontre de deux gamètes",
+            "explanation": "La reproduction sexuée implique généralement un gamète mâle et un gamète femelle."
+          },
+          {
+            "question": "Quand la fécondation est-elle dite externe ?",
+            "options": [
+              "Lorsque les gamètes se rencontrent dans le milieu extérieur",
+              "Lorsque les gamètes se rencontrent toujours dans les poumons",
+              "Lorsque la fécondation ne fait intervenir aucun gamète",
+              "Lorsque le jeune est déjà adulte"
+            ],
+            "correct_answer": "Lorsque les gamètes se rencontrent dans le milieu extérieur",
+            "explanation": "La fécondation externe se produit dans le milieu extérieur, souvent dans l'eau."
+          },
+          {
+            "question": "Pourquoi les modes de reproduction diffèrent-ils selon les espèces ?",
+            "options": [
+              "Ils sont adaptés aux caractéristiques et au milieu de vie des espèces",
+              "Toutes les espèces vivent exactement de la même manière",
+              "Les animaux n'ont pas de cellules reproductrices",
+              "La reproduction ne dépend jamais du milieu"
+            ],
+            "correct_answer": "Ils sont adaptés aux caractéristiques et au milieu de vie des espèces",
+            "explanation": "Les modalités de reproduction sont diverses et liées notamment au mode de vie et au milieu des espèces."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bilan sur la reproduction sexuée",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les étapes essentielles",
+          "content": {
+            "text": "La reproduction sexuée repose sur la production de gamètes mâles et femelles, leur rencontre et la fécondation. La fécondation forme une cellule-œuf qui se divise et se développe progressivement pour donner un nouvel individu."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Transmission des caractères",
+          "content": {
+            "text": "Le nouvel individu reçoit une partie de son information génétique de chacun de ses parents. Il présente ainsi des ressemblances avec ses parents tout en possédant une combinaison particulière de caractères."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": {
+            "text": "La reproduction sexuée permet le renouvellement des générations et contribue à la diversité des individus. Elle fait intervenir des gamètes, la fécondation, puis le développement d'un nouvel individu."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Bilan sur la reproduction sexuée",
+        "questions": [
+          {
+            "question": "Quelle cellule résulte de la fécondation ?",
+            "options": [
+              "La cellule-œuf",
+              "Le globule rouge",
+              "Le neurone",
+              "La cellule musculaire"
+            ],
+            "correct_answer": "La cellule-œuf",
+            "explanation": "La fusion des gamètes lors de la fécondation forme la cellule-œuf."
+          },
+          {
+            "question": "Que permet la reproduction sexuée ?",
+            "options": [
+              "Le renouvellement des générations et la diversité des individus",
+              "Uniquement la respiration",
+              "Uniquement la digestion",
+              "La disparition des espèces"
+            ],
+            "correct_answer": "Le renouvellement des générations et la diversité des individus",
+            "explanation": "La reproduction sexuée permet la naissance de nouveaux individus et contribue à la diversité génétique."
+          },
+          {
+            "question": "D'où provient l'information génétique du nouvel individu ?",
+            "options": [
+              "Des deux parents",
+              "Uniquement du milieu extérieur",
+              "Uniquement de l'eau",
+              "Uniquement de la lumière"
+            ],
+            "correct_answer": "Des deux parents",
+            "explanation": "Lors de la reproduction sexuée, le nouvel individu reçoit une partie de son information génétique de chacun de ses parents."
+          }
+        ]
+      }
+    }
+  ]
+}

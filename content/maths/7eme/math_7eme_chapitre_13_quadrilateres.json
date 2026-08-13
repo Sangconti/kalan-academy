@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Quadrilatères",
+  "chapter_order": 13,
+  "lessons": [
+    {
+      "title": "Découvrir les quadrilatères",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'un quadrilatère",
+          "content": {
+            "text": "Un quadrilatère est un polygone qui possède quatre côtés, quatre sommets et quatre angles. On peut nommer un quadrilatère ABCD en suivant ses sommets dans l'ordre. Ses côtés sont [AB], [BC], [CD] et [DA]."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Côtés consécutifs et côtés opposés",
+          "content": {
+            "text": "Les côtés qui se suivent sont appelés côtés consécutifs. Les côtés qui ne se suivent pas sont appelés côtés opposés. Dans le quadrilatère ABCD, [AB] et [CD] sont opposés, tandis que [AB] et [BC] sont consécutifs."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Les diagonales",
+          "content": {
+            "text": "Les diagonales d'un quadrilatère sont les segments qui relient deux sommets opposés. Dans ABCD, les diagonales sont [AC] et [BD]. Les quadrilatères peuvent avoir des propriétés différentes selon leurs côtés, leurs angles et leurs diagonales."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Découvrir les quadrilatères",
+        "questions": [
+          {
+            "question": "Combien de côtés possède un quadrilatère ?",
+            "options": [
+              "3",
+              "4",
+              "5",
+              "6"
+            ],
+            "correct_answer": "4",
+            "explanation": "Un quadrilatère est un polygone à quatre côtés."
+          },
+          {
+            "question": "Dans le quadrilatère ABCD, quels sont les côtés opposés ?",
+            "options": [
+              "[AB] et [BC]",
+              "[BC] et [CD]",
+              "[AB] et [CD]",
+              "[CD] et [DA]"
+            ],
+            "correct_answer": "[AB] et [CD]",
+            "explanation": "[AB] et [CD] ne se touchent pas : ce sont deux côtés opposés."
+          },
+          {
+            "question": "Quelles sont les diagonales du quadrilatère ABCD ?",
+            "options": [
+              "[AB] et [CD]",
+              "[BC] et [DA]",
+              "[AC] et [BD]",
+              "[AD] et [BC]"
+            ],
+            "correct_answer": "[AC] et [BD]",
+            "explanation": "Les diagonales relient les sommets opposés : A à C et B à D."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le rectangle",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du rectangle",
+          "content": {
+            "text": "Un rectangle est un quadrilatère qui possède quatre angles droits. Ses côtés opposés sont parallèles et ont la même longueur. Si ABCD est un rectangle, alors AB = CD et BC = AD."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les diagonales du rectangle",
+          "content": {
+            "text": "Les diagonales d'un rectangle ont la même longueur et se coupent en leur milieu. Par exemple, dans un rectangle ABCD, les diagonales [AC] et [BD] sont de même longueur et leur point d'intersection est le milieu de chacune."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Périmètre du rectangle",
+          "content": {
+            "text": "Le périmètre d'un rectangle de longueur L et de largeur l est P = 2 × (L + l). Par exemple, un rectangle de longueur 8 cm et de largeur 5 cm a un périmètre de 2 × (8 + 5) = 26 cm."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Le rectangle",
+        "questions": [
+          {
+            "question": "Combien d'angles droits possède un rectangle ?",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "correct_answer": "4",
+            "explanation": "Un rectangle possède quatre angles droits."
+          },
+          {
+            "question": "Dans un rectangle, les côtés opposés sont...",
+            "options": [
+              "toujours différents",
+              "de même longueur et parallèles",
+              "toujours perpendiculaires",
+              "toujours de longueur nulle"
+            ],
+            "correct_answer": "de même longueur et parallèles",
+            "explanation": "Les côtés opposés d'un rectangle sont parallèles et de même longueur."
+          },
+          {
+            "question": "Quel est le périmètre d'un rectangle de 8 cm sur 5 cm ?",
+            "options": [
+              "13 cm",
+              "18 cm",
+              "26 cm",
+              "40 cm"
+            ],
+            "correct_answer": "26 cm",
+            "explanation": "P = 2 × (8 + 5) = 26 cm."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le carré",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du carré",
+          "content": {
+            "text": "Un carré est un quadrilatère qui possède quatre côtés de même longueur et quatre angles droits. Il possède donc les propriétés du rectangle tout en ayant ses quatre côtés égaux."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les diagonales du carré",
+          "content": {
+            "text": "Les diagonales d'un carré ont la même longueur, se coupent en leur milieu et sont perpendiculaires. Elles partagent également les angles du carré en deux angles égaux. Le carré possède donc de nombreuses propriétés géométriques."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Périmètre du carré",
+          "content": {
+            "text": "Le périmètre d'un carré de côté c est P = 4 × c. Par exemple, si le côté d'un carré mesure 6 cm, son périmètre est 4 × 6 = 24 cm. Le carré est à la fois un rectangle et un losange."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Le carré",
+        "questions": [
+          {
+            "question": "Quelle propriété caractérise un carré ?",
+            "options": [
+              "Un seul côté égal",
+              "Quatre côtés égaux et quatre angles droits",
+              "Seulement deux angles droits",
+              "Aucun angle droit"
+            ],
+            "correct_answer": "Quatre côtés égaux et quatre angles droits",
+            "explanation": "Un carré possède quatre côtés de même longueur et quatre angles droits."
+          },
+          {
+            "question": "Quel est le périmètre d'un carré de côté 7 cm ?",
+            "options": [
+              "14 cm",
+              "21 cm",
+              "28 cm",
+              "49 cm"
+            ],
+            "correct_answer": "28 cm",
+            "explanation": "P = 4 × 7 = 28 cm."
+          },
+          {
+            "question": "Le carré est-il aussi un rectangle ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement parfois",
+              "Seulement s'il est grand"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "Un carré possède quatre angles droits et est donc un rectangle particulier."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le parallélogramme",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du parallélogramme",
+          "content": {
+            "text": "Un parallélogramme est un quadrilatère dont les côtés opposés sont parallèles deux à deux. Dans un parallélogramme ABCD, on a (AB) parallèle à (CD) et (BC) parallèle à (AD)."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Propriétés du parallélogramme",
+          "content": {
+            "text": "Dans un parallélogramme, les côtés opposés ont la même longueur. Les angles opposés sont également de même mesure. De plus, les diagonales se coupent en leur milieu. Ces propriétés permettent de reconnaître et d'étudier un parallélogramme."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Périmètre du parallélogramme",
+          "content": {
+            "text": "Le périmètre d'un parallélogramme dont les côtés mesurent a et b est P = 2 × (a + b). Par exemple, si ses côtés mesurent 9 cm et 5 cm, son périmètre est 2 × (9 + 5) = 28 cm."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Le parallélogramme",
+        "questions": [
+          {
+            "question": "Dans un parallélogramme, les côtés opposés sont...",
+            "options": [
+              "parallèles",
+              "toujours perpendiculaires",
+              "toujours de longueurs différentes",
+              "inexistants"
+            ],
+            "correct_answer": "parallèles",
+            "explanation": "C'est la définition d'un parallélogramme."
+          },
+          {
+            "question": "Dans un parallélogramme, les diagonales...",
+            "options": [
+              "ne se coupent jamais",
+              "se coupent en leur milieu",
+              "sont toujours perpendiculaires",
+              "ont toujours des longueurs différentes"
+            ],
+            "correct_answer": "se coupent en leur milieu",
+            "explanation": "Les diagonales d'un parallélogramme se coupent en leur milieu."
+          },
+          {
+            "question": "Quel est le périmètre d'un parallélogramme dont les côtés mesurent 9 cm et 5 cm ?",
+            "options": [
+              "14 cm",
+              "18 cm",
+              "28 cm",
+              "45 cm"
+            ],
+            "correct_answer": "28 cm",
+            "explanation": "P = 2 × (9 + 5) = 28 cm."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le losange",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du losange",
+          "content": {
+            "text": "Un losange est un quadrilatère dont les quatre côtés ont la même longueur. Il possède également les propriétés générales du parallélogramme : ses côtés opposés sont parallèles et ses diagonales se coupent en leur milieu."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les diagonales du losange",
+          "content": {
+            "text": "Les diagonales d'un losange sont perpendiculaires. Elles se coupent en leur milieu et chacune est la médiatrice de l'autre. Un losange peut avoir des angles différents de 90°, contrairement au carré."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Périmètre du losange",
+          "content": {
+            "text": "Le périmètre d'un losange de côté c est P = 4 × c. Par exemple, si chaque côté mesure 6 cm, son périmètre est 4 × 6 = 24 cm. Un carré est un cas particulier de losange car ses quatre côtés sont égaux."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Le losange",
+        "questions": [
+          {
+            "question": "Combien de côtés égaux possède un losange ?",
+            "options": [
+              "2",
+              "3",
+              "4",
+              "Aucun"
+            ],
+            "correct_answer": "4",
+            "explanation": "Les quatre côtés d'un losange ont la même longueur."
+          },
+          {
+            "question": "Quelle propriété caractérise les diagonales d'un losange ?",
+            "options": [
+              "Elles sont toujours parallèles",
+              "Elles sont perpendiculaires",
+              "Elles ne se coupent pas",
+              "Elles sont toujours de même longueur"
+            ],
+            "correct_answer": "Elles sont perpendiculaires",
+            "explanation": "Les diagonales d'un losange sont perpendiculaires et se coupent en leur milieu."
+          },
+          {
+            "question": "Quel est le périmètre d'un losange de côté 9 cm ?",
+            "options": [
+              "18 cm",
+              "27 cm",
+              "36 cm",
+              "81 cm"
+            ],
+            "correct_answer": "36 cm",
+            "explanation": "P = 4 × 9 = 36 cm."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire et résoudre des problèmes sur les quadrilatères",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Construire un quadrilatère",
+          "content": {
+            "text": "Pour construire un quadrilatère, il faut respecter les longueurs, les angles et les relations entre les côtés indiqués dans l'énoncé. La règle, l'équerre, le compas et le rapporteur peuvent être utilisés selon la construction demandée."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Construire un rectangle",
+          "content": {
+            "text": "Exemple : on souhaite construire un rectangle ABCD de longueur 8 cm et de largeur 5 cm. On trace d'abord [AB] de 8 cm. À partir de A et B, on construit deux perpendiculaires, puis on reporte 5 cm sur chacune. On relie ensuite les deux nouveaux points."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Résoudre un problème de périmètre",
+          "content": {
+            "text": "Pour résoudre un problème, il faut identifier le type de quadrilatère et utiliser la formule ou la propriété adaptée. Par exemple, pour un carré de côté 12 m, le périmètre est 4 × 12 = 48 m. Pour un rectangle de 12 m sur 7 m, le périmètre est 2 × (12 + 7) = 38 m."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Problèmes sur les quadrilatères",
+        "questions": [
+          {
+            "question": "Quel instrument permet de construire des angles droits dans un rectangle ?",
+            "options": [
+              "Une équerre",
+              "Une gomme",
+              "Un compas uniquement",
+              "Une calculatrice"
+            ],
+            "correct_answer": "Une équerre",
+            "explanation": "L'équerre permet de construire et vérifier les angles droits."
+          },
+          {
+            "question": "Quel est le périmètre d'un carré de côté 12 m ?",
+            "options": [
+              "24 m",
+              "36 m",
+              "48 m",
+              "144 m"
+            ],
+            "correct_answer": "48 m",
+            "explanation": "P = 4 × 12 = 48 m."
+          },
+          {
+            "question": "Quel est le périmètre d'un rectangle de longueur 12 m et largeur 7 m ?",
+            "options": [
+              "19 m",
+              "24 m",
+              "38 m",
+              "84 m"
+            ],
+            "correct_answer": "38 m",
+            "explanation": "P = 2 × (12 + 7) = 38 m."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -2,7 +2,589 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/* =========================================================
+   VARIABLES GÉNÉRALES
+========================================================= */
+
+:root {
+
+  --app-bg: #f9fafb;
+  --app-surface: #ffffff;
+
+  --app-text: #111827;
+  --app-text-secondary: #6b7280;
+
+  --app-border: #e5e7eb;
+
+
+  /* =====================================================
+     ACCENT PAR DÉFAUT
+  ===================================================== */
+
+  --accent-50: #eff6ff;
+  --accent-100: #dbeafe;
+  --accent-200: #bfdbfe;
+
+  --accent-500: #3b82f6;
+  --accent-600: #2563eb;
+  --accent-700: #1d4ed8;
+
+  /* IMPORTANT :
+     variables réellement utilisées par l'application */
+
+  --accent-primary: var(--accent-600);
+  --accent-soft: var(--accent-50);
+}
+
+
+/* =========================================================
+   SURFACE ACCENT
+========================================================= */
+
+.bg-accent-soft {
+  background-color: var(--accent-soft) !important;
+}
+
+.border-accent-soft {
+  border-color: var(--accent-200) !important;
+}
+
+
+html.dark .bg-accent-soft {
+  background-color: color-mix(
+    in srgb,
+    var(--accent-primary) 18%,
+    #1f2937
+  ) !important;
+}
+
+html.dark .border-accent-soft {
+  border-color: color-mix(
+    in srgb,
+    var(--accent-primary) 35%,
+    #374151
+  ) !important;
+}
+
+
+/* =====================================================
+   COULEUR PRINCIPALE DU THÈME
+===================================================== */
+
+.text-accent {
+  color: var(--accent-primary) !important;
+}
+
+.bg-accent {
+  background-color: var(--accent-primary) !important;
+}
+
+.border-accent {
+  border-color: var(--accent-primary) !important;
+}
+
+.bg-accent-soft {
+  background-color: var(--accent-soft) !important;
+}
+
+
+/* =========================================================
+   COULEUR BLEUE
+========================================================= */
+
+html.theme-blue {
+
+  --accent-50: #eff6ff;
+  --accent-100: #dbeafe;
+  --accent-200: #bfdbfe;
+
+  --accent-500: #3b82f6;
+  --accent-600: #2563eb;
+  --accent-700: #1d4ed8;
+
+  --accent-primary: #2563eb;
+  --accent-soft: #eff6ff;
+}
+
+
+/* =========================================================
+   COULEUR VERTE
+========================================================= */
+
+html.theme-green {
+
+  --accent-50: #f0fdf4;
+  --accent-100: #dcfce7;
+  --accent-200: #bbf7d0;
+
+  --accent-500: #22c55e;
+  --accent-600: #16a34a;
+  --accent-700: #15803d;
+
+  --accent-primary: #16a34a;
+  --accent-soft: #f0fdf4;
+}
+
+
+/* =========================================================
+   COULEUR VIOLETTE
+========================================================= */
+
+html.theme-purple {
+
+  --accent-50: #faf5ff;
+  --accent-100: #f3e8ff;
+  --accent-200: #e9d5ff;
+
+  --accent-500: #a855f7;
+  --accent-600: #9333ea;
+  --accent-700: #7e22ce;
+
+  --accent-primary: #9333ea;
+  --accent-soft: #faf5ff;
+}
+
+
+/* =========================================================
+   COULEUR ORANGE
+========================================================= */
+
+html.theme-orange {
+
+  --accent-50: #fff7ed;
+  --accent-100: #ffedd5;
+  --accent-200: #fed7aa;
+
+  --accent-500: #f97316;
+  --accent-600: #ea580c;
+  --accent-700: #c2410c;
+
+  --accent-primary: #ea580c;
+  --accent-soft: #fff7ed;
+}
+
+/* =========================================================
+   COULEUR ROSE
+========================================================= */
+
+html.theme-pink {
+
+  --accent-50: #fdf2f8;
+  --accent-100: #fce7f3;
+  --accent-200: #fbcfe8;
+
+  --accent-500: #ec4899;
+  --accent-600: #db2777;
+  --accent-700: #be185d;
+
+  --accent-primary: #db2777;
+  --accent-soft: #fdf2f8;
+}
+
+
+/* =========================================================
+   MODE CLAIR
+========================================================= */
+
+html:not(.dark) {
+
+  --app-bg: #f9fafb;
+  --app-surface: #ffffff;
+
+  --app-text: #111827;
+  --app-text-secondary: #6b7280;
+
+  --app-border: #e5e7eb;
+}
+
+
+/* =========================================================
+   MODE SOMBRE
+========================================================= */
+
+html.dark {
+
+  --app-bg: #111827;
+  --app-surface: #1f2937;
+
+  --app-text: #f9fafb;
+  --app-text-secondary: #9ca3af;
+
+  --app-border: #374151;
+}
+
+
+/* =========================================================
+   MODE SYSTÈME
+========================================================= */
+
+html.system-theme {
+  color-scheme: light dark;
+}
+
+
+/* =========================================================
+   BASE
+========================================================= */
+
+html {
+  min-height: 100%;
+  background: var(--app-bg);
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: #f3f4f6;
+
+  margin: 0;
+
+  min-width: 320px;
+  min-height: 100vh;
+
+  background: var(--app-bg);
+  color: var(--app-text);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+
+#root {
+  min-height: 100vh;
+}
+
+
+/* =========================================================
+   UTILITAIRES THÈME
+========================================================= */
+
+.theme-bg {
+  background-color: var(--app-bg) !important;
+}
+
+
+.theme-surface {
+  background-color: var(--app-surface) !important;
+}
+
+
+.theme-text {
+  color: var(--app-text) !important;
+}
+
+
+.theme-text-secondary {
+  color: var(--app-text-secondary) !important;
+}
+
+
+.theme-border {
+  border-color: var(--app-border) !important;
+}
+
+
+.theme-accent-text {
+  color: var(--accent-600) !important;
+}
+
+
+.theme-accent-light {
+  background-color: var(--accent-50) !important;
+}
+
+
+.accent-bg {
+  background-color: var(--accent-600) !important;
+}
+
+
+.accent-border {
+  border-color: var(--accent-200) !important;
+}
+
+
+/* =========================================================
+   BOUTONS DE THÈME
+========================================================= */
+
+.theme-option {
+  background-color: var(--app-surface);
+  border-color: var(--app-border);
+}
+
+
+.theme-option:hover {
+  background-color: var(--app-bg);
+}
+
+
+.theme-option-selected {
+
+  background-color: var(--accent-50) !important;
+
+  border-color: var(--accent-500) !important;
+
+  box-shadow:
+    0 0 0 1px var(--accent-500);
+}
+
+
+/* =========================================================
+   MODE SOMBRE — ÉLÉMENTS TAILWIND EXISTANTS
+========================================================= */
+
+/*
+ * Beaucoup de pages existantes de Kalan Academy utilisent
+ * encore bg-white / text-gray-900 / text-gray-500.
+ *
+ * Ces règles permettent au thème sombre de fonctionner
+ * immédiatement sans devoir réécrire toutes les pages.
+ */
+
+
+html.dark .bg-white {
+  background-color: #1f2937 !important;
+}
+
+
+html.dark .bg-gray-50 {
+  background-color: #111827 !important;
+}
+
+
+html.dark .bg-gray-100 {
+  background-color: #374151 !important;
+}
+
+
+html.dark .text-gray-900 {
+  color: #f9fafb !important;
+}
+
+
+html.dark .text-gray-800 {
+  color: #f3f4f6 !important;
+}
+
+
+html.dark .text-gray-700 {
+  color: #e5e7eb !important;
+}
+
+
+html.dark .text-gray-600 {
+  color: #d1d5db !important;
+}
+
+
+html.dark .text-gray-500 {
+  color: #9ca3af !important;
+}
+
+
+html.dark .text-gray-400 {
+  color: #6b7280 !important;
+}
+
+
+html.dark .border-gray-100 {
+  border-color: #374151 !important;
+}
+
+
+html.dark .border-gray-200 {
+  border-color: #4b5563 !important;
+}
+
+
+/* =========================================================
+   ACCENT — REMPLACEMENT DU BLEU TAILWIND
+========================================================= */
+
+html.theme-blue .text-blue-600,
+html.theme-green .text-blue-600,
+html.theme-purple .text-blue-600,
+html.theme-orange .text-blue-600,
+html.theme-pink .text-blue-600 {
+
+  color: var(--accent-600) !important;
+}
+
+
+html.theme-blue .text-blue-700,
+html.theme-green .text-blue-700,
+html.theme-purple .text-blue-700,
+html.theme-orange .text-blue-700,
+html.theme-pink .text-blue-700 {
+
+  color: var(--accent-700) !important;
+}
+
+
+html.theme-blue .bg-blue-50,
+html.theme-green .bg-blue-50,
+html.theme-purple .bg-blue-50,
+html.theme-orange .bg-blue-50,
+html.theme-pink .bg-blue-50 {
+
+  background-color: var(--accent-50) !important;
+}
+
+
+html.theme-blue .bg-blue-100,
+html.theme-green .bg-blue-100,
+html.theme-purple .bg-blue-100,
+html.theme-orange .bg-blue-100,
+html.theme-pink .bg-blue-100 {
+
+  background-color: var(--accent-100) !important;
+}
+
+
+html.theme-blue .bg-blue-500,
+html.theme-green .bg-blue-500,
+html.theme-purple .bg-blue-500,
+html.theme-orange .bg-blue-500,
+html.theme-pink .bg-blue-500 {
+
+  background-color: var(--accent-500) !important;
+}
+
+
+html.theme-blue .bg-blue-600,
+html.theme-green .bg-blue-600,
+html.theme-purple .bg-blue-600,
+html.theme-orange .bg-blue-600,
+html.theme-pink .bg-blue-600 {
+
+  background-color: var(--accent-600) !important;
+}
+
+
+html.theme-blue .border-blue-200,
+html.theme-green .border-blue-200,
+html.theme-purple .border-blue-200,
+html.theme-orange .border-blue-200,
+html.theme-pink .border-blue-200 {
+
+  border-color: var(--accent-200) !important;
+}
+
+
+html.theme-blue .border-blue-500,
+html.theme-green .border-blue-500,
+html.theme-purple .border-blue-500,
+html.theme-orange .border-blue-500,
+html.theme-pink .border-blue-500 {
+
+  border-color: var(--accent-500) !important;
+}
+
+
+/* =========================================================
+   HOVER ACCENT
+========================================================= */
+
+html.theme-blue .hover\:bg-blue-50:hover,
+html.theme-green .hover\:bg-blue-50:hover,
+html.theme-purple .hover\:bg-blue-50:hover,
+html.theme-orange .hover\:bg-blue-50:hover,
+html.theme-pink .hover\:bg-blue-50:hover {
+
+  background-color: var(--accent-50) !important;
+}
+
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+
+  outline: 2px solid var(--accent-500);
+
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   SÉLECTION
+========================================================= */
+
+::selection {
+
+  background-color: var(--accent-200);
+
+  color: var(--accent-700);
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+
+::-webkit-scrollbar-track {
+  background: var(--app-bg);
+}
+
+
+::-webkit-scrollbar-thumb {
+
+  background: var(--app-border);
+
+  border-radius: 999px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+
+  background: var(--app-text-secondary);
+}
+
+
+/* =========================================================
+   ÉLÉMENTS NATIFS
+========================================================= */
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+
+/* =========================================================
+   TRANSITION
+========================================================= */
+
+* {
+  border-color: var(--app-border);
 }

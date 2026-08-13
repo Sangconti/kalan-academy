@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Biologie",
+  "curriculum": "Mali",
+  "chapter": "Comportements et régimes alimentaires des animaux",
+  "chapter_order": 1,
+  "lessons": [
+    {
+      "title": "Les comportements alimentaires des animaux",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du comportement alimentaire",
+          "content": {
+            "text": "Le comportement alimentaire désigne l'ensemble des actions réalisées par un animal pour rechercher, trouver, obtenir et consommer sa nourriture. Ces comportements permettent à l'animal de satisfaire ses besoins nutritifs et de vivre dans son milieu."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Recherche de la nourriture",
+          "content": {
+            "text": "Pour trouver sa nourriture, un animal peut utiliser ses organes des sens, se déplacer, poursuivre une proie ou rechercher des végétaux. Les comportements observés dépendent de l'espèce et de son milieu de vie."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Des comportements différents selon les animaux",
+          "content": {
+            "text": "Les comportements alimentaires sont différents selon les animaux. Par exemple, le lion recherche et capture des proies, tandis que la vache broute l'herbe. Ces différences sont liées au régime alimentaire et aux caractéristiques de chaque espèce."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les comportements alimentaires",
+        "questions": [
+          {
+            "question": "Que désigne le comportement alimentaire ?",
+            "options": [
+              "Les actions liées à la recherche et à la consommation de nourriture",
+              "Uniquement le déplacement",
+              "Uniquement la respiration",
+              "Uniquement la reproduction"
+            ],
+            "correct_answer": "Les actions liées à la recherche et à la consommation de nourriture",
+            "explanation": "Le comportement alimentaire comprend les actions permettant à l'animal de rechercher, obtenir et consommer sa nourriture."
+          },
+          {
+            "question": "Pourquoi les animaux recherchent-ils leur nourriture ?",
+            "options": [
+              "Pour satisfaire leurs besoins nutritifs",
+              "Pour changer d'espèce",
+              "Pour produire de la lumière",
+              "Pour arrêter de respirer"
+            ],
+            "correct_answer": "Pour satisfaire leurs besoins nutritifs",
+            "explanation": "Les aliments apportent aux animaux les matières et l'énergie nécessaires à leur fonctionnement."
+          },
+          {
+            "question": "Les comportements alimentaires sont-ils identiques chez tous les animaux ?",
+            "options": [
+              "Non, ils varient selon les espèces",
+              "Oui, toujours",
+              "Oui, uniquement chez les mammifères",
+              "Oui, uniquement chez les oiseaux"
+            ],
+            "correct_answer": "Non, ils varient selon les espèces",
+            "explanation": "Chaque espèce possède des comportements adaptés à son alimentation et à son milieu de vie."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les différents régimes alimentaires",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du régime alimentaire",
+          "content": {
+            "text": "Le régime alimentaire correspond à l'ensemble des aliments habituellement consommés par un animal. Il dépend notamment de l'espèce, de ses besoins et des ressources disponibles dans son milieu."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les herbivores et les carnivores",
+          "content": {
+            "text": "Les animaux herbivores consomment principalement des végétaux. Les animaux carnivores consomment principalement d'autres animaux. La vache, la chèvre et le mouton sont principalement herbivores, tandis que le lion est principalement carnivore."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Les omnivores",
+          "content": {
+            "text": "Les animaux omnivores consomment des aliments d'origine végétale et animale. L'être humain et certains autres animaux sont omnivores. Leur alimentation peut donc comprendre à la fois des végétaux et des produits d'origine animale."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les régimes alimentaires",
+        "questions": [
+          {
+            "question": "Un animal herbivore consomme principalement...",
+            "options": [
+              "des végétaux",
+              "des animaux",
+              "des pierres",
+              "uniquement de l'eau"
+            ],
+            "correct_answer": "des végétaux",
+            "explanation": "Les végétaux constituent la principale source de nourriture des animaux herbivores."
+          },
+          {
+            "question": "Un animal carnivore consomme principalement...",
+            "options": [
+              "d'autres animaux",
+              "des végétaux uniquement",
+              "du sable",
+              "du bois uniquement"
+            ],
+            "correct_answer": "d'autres animaux",
+            "explanation": "Les carnivores se nourrissent principalement de matière animale."
+          },
+          {
+            "question": "Un animal omnivore peut consommer...",
+            "options": [
+              "des aliments d'origine végétale et animale",
+              "uniquement de l'herbe",
+              "uniquement de la viande",
+              "uniquement de l'eau"
+            ],
+            "correct_answer": "des aliments d'origine végétale et animale",
+            "explanation": "Un omnivore consomme des aliments provenant à la fois des végétaux et des animaux."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les adaptations des animaux à leur régime alimentaire",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Des organes adaptés à l'alimentation",
+          "content": {
+            "text": "Les animaux possèdent des caractéristiques adaptées à leur régime alimentaire. La forme des dents, du bec, des mâchoires ou de la langue peut faciliter la capture, la découpe, l'arrachage ou le broyage des aliments."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les dents des herbivores et des carnivores",
+          "content": {
+            "text": "Chez de nombreux herbivores, les dents sont adaptées à la coupe et au broyage des végétaux. Chez les carnivores, certaines dents sont adaptées à la saisie et à la déchirure des proies."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Le bec des oiseaux",
+          "content": {
+            "text": "La forme du bec des oiseaux varie selon leur alimentation. Certains oiseaux possèdent un bec adapté à la consommation de graines, tandis que d'autres ont un bec adapté à la capture de petits animaux ou à la recherche de nourriture."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Adaptations alimentaires",
+        "questions": [
+          {
+            "question": "Les dents de nombreux animaux sont adaptées...",
+            "options": [
+              "à leur régime alimentaire",
+              "uniquement à la respiration",
+              "uniquement à la reproduction",
+              "à la température extérieure"
+            ],
+            "correct_answer": "à leur régime alimentaire",
+            "explanation": "La forme et la disposition des dents facilitent la consommation des aliments adaptés au régime de l'animal."
+          },
+          {
+            "question": "Chez de nombreux herbivores, les dents permettent notamment de...",
+            "options": [
+              "broyer les végétaux",
+              "capturer des poissons uniquement",
+              "produire de l'eau",
+              "voler"
+            ],
+            "correct_answer": "broyer les végétaux",
+            "explanation": "Les dents des herbivores sont souvent adaptées à la coupe et au broyage des végétaux."
+          },
+          {
+            "question": "La forme du bec d'un oiseau peut être adaptée...",
+            "options": [
+              "à son alimentation",
+              "uniquement à son sommeil",
+              "à la production de chaleur",
+              "à la fabrication de racines"
+            ],
+            "correct_answer": "à son alimentation",
+            "explanation": "La forme du bec facilite l'utilisation de certaines ressources alimentaires."
+          }
+        ]
+      }
+    },
+    {
+      "title": "La locomotion et la recherche de nourriture",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Se déplacer pour rechercher sa nourriture",
+          "content": {
+            "text": "De nombreux animaux se déplacent pour rechercher leur nourriture. Selon leur organisation et leur milieu de vie, ils peuvent marcher, courir, voler, nager ou ramper."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les organes de locomotion",
+          "content": {
+            "text": "Les pattes permettent à de nombreux animaux terrestres de marcher ou de courir. Les ailes permettent à de nombreux oiseaux et insectes de voler. Les nageoires et la forme du corps facilitent les déplacements de nombreux animaux aquatiques."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Le déplacement selon le milieu",
+          "content": {
+            "text": "Le mode de déplacement dépend du milieu de vie et des caractéristiques de l'animal. Un poisson se déplace principalement dans l'eau tandis qu'un oiseau peut se déplacer dans l'air. Ces déplacements peuvent permettre de trouver de nouvelles ressources alimentaires."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Locomotion et recherche de nourriture",
+        "questions": [
+          {
+            "question": "Pourquoi de nombreux animaux se déplacent-ils ?",
+            "options": [
+              "Notamment pour rechercher leur nourriture",
+              "Uniquement pour dormir",
+              "Pour devenir des végétaux",
+              "Pour produire du sel"
+            ],
+            "correct_answer": "Notamment pour rechercher leur nourriture",
+            "explanation": "La recherche de nourriture constitue une raison importante des déplacements de nombreux animaux."
+          },
+          {
+            "question": "Quel animal est particulièrement adapté au déplacement dans l'eau ?",
+            "options": [
+              "Le poisson",
+              "La chèvre",
+              "Le mouton",
+              "La poule"
+            ],
+            "correct_answer": "Le poisson",
+            "explanation": "Le corps et les nageoires des poissons sont adaptés à la locomotion aquatique."
+          },
+          {
+            "question": "Les ailes permettent notamment à de nombreux oiseaux de...",
+            "options": [
+              "voler",
+              "brouter",
+              "creuser le sol uniquement",
+              "nager uniquement"
+            ],
+            "correct_answer": "voler",
+            "explanation": "Les ailes permettent aux oiseaux de se déplacer dans l'air."
+          }
+        ]
+      }
+    },
+    {
+      "title": "La capture et la consommation des aliments",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La capture des proies",
+          "content": {
+            "text": "Les animaux carnivores doivent souvent rechercher et capturer leurs proies. Ils peuvent utiliser leur vitesse, leurs griffes, leurs dents, leur bec ou d'autres caractéristiques pour obtenir leur nourriture."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "La recherche des végétaux",
+          "content": {
+            "text": "Les herbivores recherchent les végétaux disponibles dans leur milieu. Ils peuvent brouter l'herbe, manger des feuilles, des fruits, des graines ou d'autres parties des plantes selon leur régime alimentaire."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "La prise et la transformation des aliments",
+          "content": {
+            "text": "Après avoir obtenu leur nourriture, les animaux utilisent leurs organes adaptés pour la saisir et la consommer. Les dents, le bec, la langue et les mâchoires participent notamment à la prise et à la transformation des aliments."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Capture et consommation des aliments",
+        "questions": [
+          {
+            "question": "Quel animal doit généralement capturer une proie pour se nourrir ?",
+            "options": [
+              "Un carnivore",
+              "Un herbivore",
+              "Un végétal",
+              "Un animal qui ne se nourrit pas"
+            ],
+            "correct_answer": "Un carnivore",
+            "explanation": "Les animaux carnivores se nourrissent principalement d'autres animaux et doivent souvent les capturer."
+          },
+          {
+            "question": "Un herbivore peut se nourrir...",
+            "options": [
+              "de feuilles, d'herbe, de fruits ou de graines selon l'espèce",
+              "uniquement de viande",
+              "uniquement de pierres",
+              "uniquement d'eau"
+            ],
+            "correct_answer": "de feuilles, d'herbe, de fruits ou de graines selon l'espèce",
+            "explanation": "Les végétaux consommés varient selon les espèces herbivores."
+          },
+          {
+            "question": "Quels organes participent notamment à la consommation des aliments ?",
+            "options": [
+              "Les dents, le bec et les mâchoires",
+              "Les poumons uniquement",
+              "Les reins uniquement",
+              "Les os uniquement"
+            ],
+            "correct_answer": "Les dents, le bec et les mâchoires",
+            "explanation": "Ces organes sont adaptés à la prise, la découpe ou la mastication des aliments chez différents animaux."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Influence du milieu et bilan des régimes alimentaires",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le milieu influence le comportement alimentaire",
+          "content": {
+            "text": "Le comportement alimentaire d'un animal dépend de son milieu de vie et des ressources disponibles. La présence de nourriture, d'eau, d'abris et les conditions du milieu peuvent influencer les déplacements et les activités de recherche de nourriture."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les trois principaux régimes alimentaires",
+          "content": {
+            "text": "Les animaux présentent des régimes alimentaires différents et des adaptations correspondantes. Les herbivores consomment principalement des végétaux, les carnivores principalement des animaux et les omnivores des aliments d'origine végétale et animale."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": {
+            "text": "Le comportement alimentaire permet à l'animal de rechercher et d'utiliser sa nourriture. Son régime alimentaire correspond aux aliments qu'il consomme habituellement. Ses organes et ses comportements sont souvent adaptés à ce régime et à son milieu de vie."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Bilan du chapitre",
+        "questions": [
+          {
+            "question": "Quel régime correspond principalement à la consommation de végétaux ?",
+            "options": [
+              "Herbivore",
+              "Carnivore",
+              "Omnivore",
+              "Aucun"
+            ],
+            "correct_answer": "Herbivore",
+            "explanation": "Un herbivore consomme principalement des végétaux."
+          },
+          {
+            "question": "Quel régime comprend des aliments d'origine végétale et animale ?",
+            "options": [
+              "Omnivore",
+              "Herbivore",
+              "Carnivore",
+              "Minéral"
+            ],
+            "correct_answer": "Omnivore",
+            "explanation": "Les omnivores consomment des aliments d'origine végétale et animale."
+          },
+          {
+            "question": "Pourquoi les animaux possèdent-ils des adaptations alimentaires ?",
+            "options": [
+              "Pour faciliter l'obtention et la consommation de leur nourriture",
+              "Pour devenir des végétaux",
+              "Pour arrêter leur respiration",
+              "Pour produire de l'eau"
+            ],
+            "correct_answer": "Pour faciliter l'obtention et la consommation de leur nourriture",
+            "explanation": "Les adaptations alimentaires permettent aux animaux d'utiliser efficacement les ressources disponibles dans leur milieu."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -73,17 +73,21 @@ export async function deleteClass(id){
 // =====================================
 
 
-export async function getAllSubjects(){
-
-  const {data,error}=await supabase
+export async function getAllSubjects() {
+  const { data, error } = await supabase
     .from("subjects")
-    .select("*")
+    .select(`
+      *,
+      classes (
+        id,
+        name
+      )
+    `)
     .order("order_number");
 
-  if(error) throw error;
+  if (error) throw error;
 
   return data || [];
-
 }
 
 
@@ -500,557 +504,955 @@ export async function deleteLesson(id){
 
 }
 
+// =====================================
+// LESSON BLOCKS
+// =====================================
+
+export async function getLessonBlocks(lessonId) {
+  const { data, error } = await supabase
+    .from("lesson_blocks")
+    .select("*")
+    .eq("lesson_id", lessonId)
+    .order("order_number", {
+      ascending: true
+    });
+
+  if (error) throw error;
+
+  return data || [];
+}
+
 
 // =====================================
-// IMPORT PACK JSON ADMIN
+// CREER UN BLOC
+// =====================================
+
+export async function createLessonBlock(block) {
+  const { data, error } = await supabase
+    .from("lesson_blocks")
+    .insert({
+      lesson_id: block.lesson_id,
+
+      block_type:
+        block.block_type ??
+        block.type ??
+        "text",
+
+      title:
+        block.title?.trim() ||
+        null,
+
+      content:
+        block.content ?? "",
+
+      order_number:
+        block.order_number ?? 1
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}
+
+
+// =====================================
+// MODIFIER UN BLOC
+// =====================================
+
+export async function updateLessonBlock(
+  id,
+  updates
+) {
+  const { data, error } = await supabase
+    .from("lesson_blocks")
+    .update({
+      block_type:
+        updates.block_type ??
+        updates.type ??
+        "text",
+
+      title:
+        updates.title?.trim() ||
+        null,
+
+      content:
+        updates.content ?? "",
+
+      order_number:
+        updates.order_number ?? 1
+    })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}
+
+
+// =====================================
+// SUPPRIMER UN BLOC
+// =====================================
+
+export async function deleteLessonBlock(id) {
+  const { error } = await supabase
+    .from("lesson_blocks")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
+
+  return true;
+}
+
+// =====================================
+// QUIZZES
+// =====================================
+
+// =====================================
+// RECUPERER LE QUIZ D'UNE LEÇON
+// =====================================
+
+export async function getLessonQuiz(lessonId) {
+  const { data, error } = await supabase
+    .from("quizzes")
+    .select("*")
+    .eq("lesson_id", lessonId)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  return data || null;
+}
+
+
+// =====================================
+// CREER UN QUIZ
+// =====================================
+
+export async function createQuiz(quiz) {
+  const { data, error } = await supabase
+    .from("quizzes")
+    .insert({
+      lesson_id: quiz.lesson_id,
+      title: quiz.title?.trim() || "Quiz"
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}
+
+
+// =====================================
+// MODIFIER UN QUIZ
+// =====================================
+
+export async function updateQuiz(id, updates) {
+  const { data, error } = await supabase
+    .from("quizzes")
+    .update({
+      title:
+        updates.title?.trim() || "Quiz"
+    })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}
+
+
+// =====================================
+// SUPPRIMER UN QUIZ
+// =====================================
+
+export async function deleteQuiz(id) {
+  // Supprimer les questions
+  const { error: questionsError } =
+    await supabase
+      .from("quiz_questions")
+      .delete()
+      .eq("quiz_id", id);
+
+  if (questionsError) {
+    throw questionsError;
+  }
+
+  // Supprimer le quiz
+  const { error } =
+    await supabase
+      .from("quizzes")
+      .delete()
+      .eq("id", id);
+
+  if (error) throw error;
+
+  return true;
+}
+
+
+// =====================================
+// QUESTIONS
+// =====================================
+
+// =====================================
+// RECUPERER LES QUESTIONS
+// =====================================
+
+export async function getQuizQuestions(
+  quizId
+) {
+  const { data, error } = await supabase
+    .from("quiz_questions")
+    .select("*")
+    .eq("quiz_id", quizId)
+    .order("order_number", {
+      ascending: true
+    });
+
+  if (error) throw error;
+
+  return data || [];
+}
+
+
+// =====================================
+// CREER UNE QUESTION
+// =====================================
+
+export async function createQuizQuestion(
+  question
+) {
+  const { data, error } = await supabase
+    .from("quiz_questions")
+    .insert({
+      quiz_id: question.quiz_id,
+
+      question:
+        question.question?.trim() || "",
+
+      choices:
+        Array.isArray(question.choices)
+          ? question.choices
+          : [],
+
+      correct_index:
+        Number(
+          question.correct_index ?? 0
+        ),
+
+      explanation:
+        question.explanation?.trim() ||
+        null,
+
+      order_number:
+        Number(
+          question.order_number ?? 1
+        )
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}
+
+
+// =====================================
+// MODIFIER UNE QUESTION
+// =====================================
+
+export async function updateQuizQuestion(
+  id,
+  updates
+) {
+  const { data, error } = await supabase
+    .from("quiz_questions")
+    .update({
+      question:
+        updates.question?.trim() || "",
+
+      choices:
+        Array.isArray(updates.choices)
+          ? updates.choices
+          : [],
+
+      correct_index:
+        Number(
+          updates.correct_index ?? 0
+        ),
+
+      explanation:
+        updates.explanation?.trim() ||
+        null,
+
+      order_number:
+        Number(
+          updates.order_number ?? 1
+        )
+    })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}
+
+
+// =====================================
+// SUPPRIMER UNE QUESTION
+// =====================================
+
+export async function deleteQuizQuestion(
+  id
+) {
+  const { error } = await supabase
+    .from("quiz_questions")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
+
+  return true;
+}
+
+// =====================================
+// IMPORT PACK JSON ADMIN V3
+// =====================================
+// Compatible avec :
+// - anciens JSON sans block.title
+// - nouveaux JSON avec block.title
+// - migration des blocs existants
+// - anti-duplication
+// - quiz/questions
 // =====================================
 
 export async function importAdminLessonPack(jsonData) {
-
-// Import JSON reçu
-
   let result = {
+    created: {
+      chapters: 0,
+      lessons: 0,
+      blocks: 0,
+      quizzes: 0,
+      questions: 0
+    },
 
-   created:{
-       chapters:0,
-       lessons:0,
-       blocks:0,
-       quizzes:0,
-       questions:0
-     },
+    skipped: {
+      chapters: 0,
+      lessons: 0,
+      blocks: 0,
+      quizzes: 0,
+      questions: 0
+    },
 
-     skipped:{
-       chapters:0,
-       lessons:0,
-       blocks:0,
-       quizzes:0,
-       questions:0
-   }
-
+    updated: {
+      blocks: 0
+    }
   };
-
 
   let chapter = null;
   let subject = null;
 
-
-    // ==============================
-    // RECHERCHE DU SUJET
-    // ==============================
-
-   const {data:classData,error:classError}=await supabase
-   .from("classes")
-   .select("id")
-   .eq("name",jsonData.class)
-   .maybeSingle();
-
-
-   if(classError)
-     throw classError;
-
-
-   if(!classData){
-     throw new Error(
-       "Classe introuvable : " + jsonData.class
-     );
-   }
-
-
-
-   const {data:existingSubject,error:subjectError}=await supabase
-   .from("subjects")
-   .select("*")
-   .eq("name",jsonData.subject)
-   .eq("class_id",classData.id)
-   .maybeSingle();
-
-
-   if(subjectError)
-     throw subjectError;
-
-
-   if(!existingSubject){
-     throw new Error(
-       "Matière introuvable : " + jsonData.subject
-     );
-   }
-
-
-   subject = existingSubject;
-
-
-   // =====================================
-   // CHAPITRE
-   // =====================================
-
-
-   const {data:existingChapter,error:chapterError}=await supabase
-   .from("chapters")
-   .select("*")
-   .eq("subject_id",subject.id)
-   .eq("title",jsonData.chapter)
-   .maybeSingle();
-
-
-
-   if(chapterError)
-     throw chapterError;
-
-
-
-   if(existingChapter){
-
-     chapter = existingChapter;
-
-   }
-   else{
-
-
-     const {data:newChapter,error:createChapterError}=await supabase
-     .from("chapters")
-     .insert({
-
-       subject_id:subject.id,
-
-       title:
-         jsonData.chapter,
-
-       description:
-        jsonData.description ?? null,
-
-       order_number:
-         jsonData.chapter_order ?? 1
-
-     })
-     .select()
-     .single();
-
-
-
-     if(createChapterError)
-       throw createChapterError;
-
-
-
-     chapter = newChapter;
-
-    result.created.chapters++
-
-   }
-
-
   // =====================================
-  // LESSONS V2 IMPORT
+  // VALIDATION DE BASE
   // =====================================
 
+  if (!jsonData) {
+    throw new Error("Aucune donnée JSON reçue.");
+  }
 
-  for(const lesson of jsonData.lessons ?? []){
+  if (!jsonData.class) {
+    throw new Error("Le champ 'class' est obligatoire.");
+  }
 
+  if (!jsonData.subject) {
+    throw new Error("Le champ 'subject' est obligatoire.");
+  }
 
-    let newLesson = null;
+  if (!jsonData.chapter) {
+    throw new Error("Le champ 'chapter' est obligatoire.");
+  }
 
+  // =====================================
+  // RECHERCHE DE LA CLASSE
+  // =====================================
 
-
-    // ==============================
-    // RECHERCHE LEÇON EXISTANTE
-    // ==============================
-
-
-    const {data:oldLesson,error:findLessonError}=await supabase
-
-    .from("lessons")
-
-    .select("*")
-
-    .eq(
-      "chapter_id",
-      chapter.id
-    )
-
-    .eq(
-      "title",
-      lesson.title
-    )
-
+  const {
+    data: classData,
+    error: classError
+  } = await supabase
+    .from("classes")
+    .select("id")
+    .eq("name", jsonData.class)
     .maybeSingle();
 
+  if (classError) {
+    throw classError;
+  }
+
+  if (!classData) {
+    throw new Error(
+      "Classe introuvable : " + jsonData.class
+    );
+  }
+
+  // =====================================
+  // RECHERCHE DU SUJET
+  // =====================================
+
+  const {
+    data: existingSubject,
+    error: subjectError
+  } = await supabase
+    .from("subjects")
+    .select("*")
+    .eq("name", jsonData.subject)
+    .eq("class_id", classData.id)
+    .maybeSingle();
+
+  if (subjectError) {
+    throw subjectError;
+  }
+
+  if (!existingSubject) {
+    throw new Error(
+      "Matière introuvable : " + jsonData.subject
+    );
+  }
+
+  subject = existingSubject;
 
 
-    if(findLessonError)
+  // =====================================
+  // CHAPITRE
+  // =====================================
+
+  const {
+    data: existingChapter,
+    error: chapterError
+  } = await supabase
+    .from("chapters")
+    .select("*")
+    .eq("subject_id", subject.id)
+    .eq("title", jsonData.chapter)
+    .maybeSingle();
+
+  if (chapterError) {
+    throw chapterError;
+  }
+
+  if (existingChapter) {
+    chapter = existingChapter;
+
+    result.skipped.chapters++;
+  } else {
+    const {
+      data: newChapter,
+      error: createChapterError
+    } = await supabase
+      .from("chapters")
+      .insert({
+        subject_id: subject.id,
+
+        title: jsonData.chapter,
+
+        description:
+          jsonData.description ?? null,
+
+        order_number:
+          jsonData.chapter_order ?? 1
+      })
+      .select()
+      .single();
+
+    if (createChapterError) {
+      throw createChapterError;
+    }
+
+    chapter = newChapter;
+
+    result.created.chapters++;
+  }
+
+  // =====================================
+  // LESSONS
+  // =====================================
+
+  for (const lesson of jsonData.lessons ?? []) {
+    let newLesson = null;
+
+    // =====================================
+    // RECHERCHE LEÇON EXISTANTE
+    // =====================================
+
+    const {
+      data: oldLesson,
+      error: findLessonError
+    } = await supabase
+      .from("lessons")
+      .select("*")
+      .eq("chapter_id", chapter.id)
+      .eq("title", lesson.title)
+      .maybeSingle();
+
+    if (findLessonError) {
       throw findLessonError;
+    }
 
+    // =====================================
+    // LEÇON EXISTANTE
+    // =====================================
 
-
-    // ==============================
-    // SI LEÇON EXISTE
-    // ==============================
-
-
-    if(oldLesson){
-
-
-      // Leçon existante ignorée
-
+    if (oldLesson) {
       result.skipped.lessons++;
 
       newLesson = oldLesson;
-
-
     }
 
+    // =====================================
+    // NOUVELLE LEÇON
+    // =====================================
 
+    else {
+      const {
+        data: createdLesson,
+        error: lessonError
+      } = await supabase
+        .from("lessons")
+        .insert({
+          chapter_id: chapter.id,
 
-    // ==============================
-    // SINON CREATION LEÇON
-    // ==============================
+          title:
+            lesson.title,
 
+          description:
+            lesson.description ?? "",
 
-    else{
+          duration_minutes:
+            lesson.duration_minutes ?? 10,
 
+          difficulty:
+            lesson.difficulty ?? "easy",
 
-      const {data:createdLesson,error:lessonError}=
+          video_url:
+            lesson.video_url ?? null,
 
-      await supabase
+          thumbnail_url:
+            lesson.thumbnail_url ?? null,
 
-      .from("lessons")
+          is_premium:
+            lesson.is_premium ?? false,
 
-      .insert({
+          order_number:
+            lesson.order_number ?? 1
+        })
+        .select()
+        .single();
 
-        chapter_id:chapter.id,
-
-
-        title:
-          lesson.title,
-
-
-        description:
-          lesson.description ?? "",
-
-
-        duration_minutes:
-          lesson.duration_minutes ?? 10,
-
-
-        difficulty:
-          lesson.difficulty ?? "easy",
-
-
-        video_url:
-          lesson.video_url ?? null,
-
-
-        thumbnail_url:
-          lesson.thumbnail_url ?? null,
-
-
-        is_premium:
-          lesson.is_premium ?? false,
-
-
-        order_number:
-          lesson.order_number ?? 1
-
-
-      })
-
-
-      .select()
-
-      .single();
-
-
-
-      if(lessonError)
+      if (lessonError) {
         throw lessonError;
-
-
+      }
 
       newLesson = createdLesson;
 
-
-      result.created.lessons++
-
-
+      result.created.lessons++;
     }
 
-
-
-
-
     // =====================================
-    // BLOCKS
+    // BLOCS
     // =====================================
 
+    const lessonBlocks =
+      lesson.blocks ??
+      lesson.lesson_blocks ??
+      [];
 
-    for(const block of lesson.blocks ?? lesson.lesson_blocks ?? []){
-
-
-     const {data:existingBlock}=await supabase
-
-     .from("lesson_blocks")
-
-     .select("id")
-
-     .eq(
-       "lesson_id",
-       newLesson.id
-     )
-
-     .eq(
-       "title",
-       block.title
-     )
-
-     .maybeSingle();
-
-
-
-     if(existingBlock){
-
-       result.skipped.blocks++;
-
-       continue;
-
-     }
-
-
-
-     const {error:blockError}=
-
-     await supabase
-     .from("lesson_blocks")
-     .insert({
-
-
-        lesson_id:
-          newLesson.id,
-
-
-        block_type:
-          block.type ?? "text",
-
-
-        title:
-          block.title ?? null,
-
-
-        content:
-
-          typeof block.content === "object"
-
-          ? block.content.text
-
-          : block.content,
-
-
-        order_number:
-          block.order_number ?? 1
-
-
+    // Récupération de tous les blocs existants
+    // pour permettre la migration des anciens blocs.
+    const {
+      data: existingBlocks,
+      error: existingBlocksError
+    } = await supabase
+      .from("lesson_blocks")
+      .select("*")
+      .eq("lesson_id", newLesson.id)
+      .order("order_number", {
+        ascending: true
       });
 
-
-
-      if(blockError)
-        throw blockError;
-
-
-
-      result.created.blocks++;
-
-
+    if (existingBlocksError) {
+      throw existingBlocksError;
     }
 
+    for (
+      let blockIndex = 0;
+      blockIndex < lessonBlocks.length;
+      blockIndex++
+    ) {
+      const block = lessonBlocks[blockIndex];
 
+      // -------------------------------------
+      // ORDRE DU BLOC
+      // -------------------------------------
 
+      const blockOrder =
+        block.order_number ??
+        blockIndex + 1;
 
+      // -------------------------------------
+      // TITRE DU BLOC
+      // -------------------------------------
 
+      const blockTitle =
+        block.title?.trim() || null;
+
+      // -------------------------------------
+      // CONTENU
+      // -------------------------------------
+
+      const blockContent =
+        typeof block.content === "object"
+          ? block.content?.text ?? ""
+          : block.content ?? "";
+
+      // -------------------------------------
+      // TYPE
+      // -------------------------------------
+
+      const blockType =
+        block.type ??
+        block.block_type ??
+        "text";
+
+      // -------------------------------------
+      // RECHERCHE DU BLOC EXISTANT
+      // -------------------------------------
+
+      let existingBlock = null;
+
+      // 1. Première priorité :
+      // rechercher par titre s'il existe.
+      if (blockTitle) {
+        existingBlock =
+          existingBlocks?.find(
+            (existing) =>
+              existing.title?.trim() ===
+              blockTitle
+          ) ?? null;
+      }
+
+      // 2. Deuxième priorité :
+      // rechercher par ordre.
+      //
+      // Cela permet notamment de retrouver
+      // les anciens blocs dont title = null.
+      if (!existingBlock) {
+        const blocksWithSameOrder =
+          existingBlocks?.filter(
+            (existing) =>
+              Number(existing.order_number) ===
+              Number(blockOrder)
+          ) ?? [];
+
+        if (blocksWithSameOrder.length === 1) {
+          existingBlock =
+            blocksWithSameOrder[0];
+        }
+      }
+
+      // 3. Troisième priorité :
+      // migration des anciens blocs dont
+      // les order_number sont identiques.
+      //
+      // On utilise alors leur position.
+      if (!existingBlock) {
+        const candidate =
+          existingBlocks?.[blockIndex];
+
+        if (candidate) {
+          existingBlock = candidate;
+        }
+      }
+
+      // =====================================
+      // BLOC EXISTANT → MISE À JOUR
+      // =====================================
+
+      if (existingBlock) {
+        const needsUpdate =
+          (existingBlock.title ?? null) !==
+            blockTitle ||
+          (existingBlock.content ?? "") !==
+            blockContent ||
+          (existingBlock.block_type ?? "text") !==
+            blockType ||
+          Number(existingBlock.order_number ?? 1) !==
+            Number(blockOrder);
+
+        if (needsUpdate) {
+          const {
+            error: updateBlockError
+          } = await supabase
+            .from("lesson_blocks")
+            .update({
+              block_type: blockType,
+
+              title: blockTitle,
+
+              content: blockContent,
+
+              order_number: blockOrder
+            })
+            .eq(
+              "id",
+              existingBlock.id
+            );
+
+          if (updateBlockError) {
+            throw updateBlockError;
+          }
+
+          result.updated.blocks++;
+        } else {
+          result.skipped.blocks++;
+        }
+
+        continue;
+      }
+
+      // =====================================
+      // BLOC INEXISTANT → CREATION
+      // =====================================
+
+      const {
+        error: blockError
+      } = await supabase
+        .from("lesson_blocks")
+        .insert({
+          lesson_id:
+            newLesson.id,
+
+          block_type:
+            blockType,
+
+          title:
+            blockTitle,
+
+          content:
+            blockContent,
+
+          order_number:
+            blockOrder
+        });
+
+      if (blockError) {
+        throw blockError;
+      }
+
+      result.created.blocks++;
+    }
 
     // =====================================
-    // QUIZ V2
+    // QUIZ
     // =====================================
 
-    if(lesson.quiz){
+    if (lesson.quiz) {
+      const {
+        data: existingQuiz,
+        error: quizFindError
+      } = await supabase
+        .from("quizzes")
+        .select("*")
+        .eq(
+          "lesson_id",
+          newLesson.id
+        )
+        .maybeSingle();
 
-
-      const {data:existingQuiz,error:quizFindError}=await supabase
-
-      .from("quizzes")
-
-      .select("*")
-
-      .eq(
-        "lesson_id",
-        newLesson.id
-      )
-
-      .maybeSingle();
-
-
-
-      if(quizFindError)
+      if (quizFindError) {
         throw quizFindError;
-
-
+      }
 
       let quiz;
 
+      // =====================================
+      // QUIZ EXISTANT
+      // =====================================
 
-
-      if(existingQuiz){
-
-
-        // Quiz existant ignoré
-
+      if (existingQuiz) {
         quiz = existingQuiz;
 
-
         result.skipped.quizzes++;
-
-
       }
 
+      // =====================================
+      // NOUVEAU QUIZ
+      // =====================================
 
-      else{
+      else {
+        const {
+          data: newQuiz,
+          error: quizError
+        } = await supabase
+          .from("quizzes")
+          .insert({
+            lesson_id:
+              newLesson.id,
 
+            title:
+              lesson.quiz.title ??
+              "Quiz"
+          })
+          .select()
+          .single();
 
-        const {data:newQuiz,error:quizError}=await supabase
-
-        .from("quizzes")
-
-        .insert({
-
-          lesson_id:newLesson.id,
-
-          title:
-            lesson.quiz.title ?? "Quiz"
-
-        })
-
-        .select()
-
-        .single();
-
-
-
-        if(quizError)
+        if (quizError) {
           throw quizError;
-
-
+        }
 
         quiz = newQuiz;
 
-
         result.created.quizzes++;
-
-
       }
 
-
-
+      // =====================================
       // QUESTIONS
+      // =====================================
 
       let questionOrder = 1;
 
+      for (
+        const question
+        of lesson.quiz.questions ?? []
+      ) {
+        const {
+          data: existingQuestion,
+          error: existingQuestionError
+        } = await supabase
+          .from("quiz_questions")
+          .select("id")
+          .eq(
+            "quiz_id",
+            quiz.id
+          )
+          .eq(
+            "question",
+            question.question
+          )
+          .maybeSingle();
 
-      for(const question of lesson.quiz.questions ?? []){
+        if (existingQuestionError) {
+          throw existingQuestionError;
+        }
 
+        // -------------------------------------
+        // QUESTION EXISTANTE
+        // -------------------------------------
 
-        const {data:existingQuestion}=await supabase
-
-        .from("quiz_questions")
-
-        .select("id")
-
-        .eq(
-          "quiz_id",
-          quiz.id
-        )
-
-        .eq(
-          "question",
-          question.question
-        )
-
-        .maybeSingle();
-
-
-
-        if(existingQuestion){
-
-
+        if (existingQuestion) {
           result.skipped.questions++;
-
 
           questionOrder++;
 
           continue;
-
-
         }
 
+        // -------------------------------------
+        // NOUVELLE QUESTION
+        // -------------------------------------
 
+        const {
+          error: questionError
+        } = await supabase
+          .from("quiz_questions")
+          .insert({
+            quiz_id:
+              quiz.id,
 
+            question:
+              question.question,
 
-        const {error:questionError}=await supabase
+            choices:
+              question.options ??
+              question.choices ??
+              [],
 
-        .from("quiz_questions")
+            correct_index:
+              Number(
+                question.correct_index ??
+                0
+              ),
 
-        .insert({
+            explanation:
+              question.explanation ??
+              null,
 
-          quiz_id:
-            quiz.id,
+            order_number:
+              questionOrder
+          });
 
-
-          question:
-            question.question,
-
-
-          choices:
-            question.options
-            ?? question.choices
-            ?? [],
-
-
-          correct_index:
-            Number(question.correct_index ?? 0),
-
-
-          explanation:
-            question.explanation ?? null,
-
-
-          order_number:
-            questionOrder
-
-
-        });
-
-
-
-        if(questionError)
+        if (questionError) {
           throw questionError;
-
-
+        }
 
         result.created.questions++;
 
-
         questionOrder++;
-
-
       }
-
-
     }
-
-
-
   }
 
-// Résultat import retourné
+  // =====================================
+  // RESULTAT FINAL
+  // =====================================
+
+  console.log(
+    "RESULT IMPORT V3 :",
+    result
+  );
 
   return result;
+}
 
+// =====================================
+// CONTEXTE CHAPITRE
+// =====================================
 
+export async function getChapterContext(chapterId) {
+  const { data, error } = await supabase
+    .from("chapters")
+    .select(`
+      id,
+      title,
+      description,
+      order_number,
+      subject_id,
+      subjects (
+        id,
+        name,
+        code,
+        class_id,
+        classes (
+          id,
+          name
+        )
+      )
+    `)
+    .eq("id", chapterId)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  return data || null;
 }

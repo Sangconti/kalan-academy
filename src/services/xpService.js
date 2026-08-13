@@ -11,12 +11,35 @@ import {
 // CONSTANTES
 // =====================================
 
+const XP_PER_LEVEL = 500;
+
 const XP_CACHE_PREFIX =
   "kalan_xp_cache_";
 
 
 // =====================================
-// UTILITAIRES
+// UTILITAIRES XP
+// =====================================
+
+function calculateLevel(xp) {
+
+  const safeXP =
+    Math.max(
+      Number(xp) || 0,
+      0
+    );
+
+  return (
+    Math.floor(
+      safeXP / XP_PER_LEVEL
+    ) + 1
+  );
+
+}
+
+
+// =====================================
+// CACHE XP
 // =====================================
 
 function getCachedXP(userId) {
@@ -28,10 +51,34 @@ function getCachedXP(userId) {
         `${XP_CACHE_PREFIX}${userId}`
       );
 
-    if (!raw)
+    if (!raw) {
       return null;
+    }
 
-    return JSON.parse(raw);
+
+    const parsed =
+      JSON.parse(raw);
+
+
+    if (!parsed) {
+      return null;
+    }
+
+
+    return {
+
+      xp:
+        Math.max(
+          Number(parsed.xp) || 0,
+          0
+        ),
+
+      level:
+        calculateLevel(
+          parsed.xp
+        )
+
+    };
 
   }
   catch {
@@ -50,18 +97,40 @@ function saveCachedXP(
 
   try {
 
+    const safeXP =
+      Math.max(
+        Number(data?.xp) || 0,
+        0
+      );
+
+
+    const safeLevel =
+      calculateLevel(
+        safeXP
+      );
+
+
     localStorage.setItem(
 
       `${XP_CACHE_PREFIX}${userId}`,
 
-      JSON.stringify(data)
+      JSON.stringify({
+
+        xp:
+          safeXP,
+
+        level:
+          safeLevel
+
+      })
 
     );
 
   }
   catch {
 
-    // Rien à faire si localStorage indisponible
+    // localStorage indisponible :
+    // on continue sans bloquer l'application.
 
   }
 
@@ -77,23 +146,23 @@ export async function addXP(
   amount
 ) {
 
-  if (!userId)
+  if (!userId) {
     return null;
+  }
 
 
-  amount =
+  const safeAmount =
     Number(amount) || 0;
 
 
-  if (amount <= 0)
+  if (safeAmount <= 0) {
     return null;
+  }
 
 
-  /*
-    ------------------------------------
-    MODE ONLINE
-    ------------------------------------
-  */
+  // ===================================
+  // MODE ONLINE
+  // ===================================
 
   if (
     typeof navigator !== "undefined" &&
@@ -121,23 +190,44 @@ export async function addXP(
         .single();
 
 
-      if (getError)
+      if (getError) {
         throw getError;
+      }
 
+
+      // --------------------------------
+      // XP ACTUEL SERVEUR
+      // --------------------------------
 
       const currentXP =
-        Number(profile?.xp) || 0;
+        Math.max(
+          Number(profile?.xp) || 0,
+          0
+        );
 
+
+      // --------------------------------
+      // NOUVEL XP
+      // --------------------------------
 
       const newXP =
-        currentXP + amount;
+        currentXP +
+        safeAmount;
 
+
+      // --------------------------------
+      // NOUVEAU NIVEAU
+      // --------------------------------
 
       const newLevel =
-        Math.floor(
-          newXP / 500
-        ) + 1;
+        calculateLevel(
+          newXP
+        );
 
+
+      // --------------------------------
+      // SAUVEGARDE SUPABASE
+      // --------------------------------
 
       const {
         error: updateError
@@ -147,9 +237,11 @@ export async function addXP(
 
         .update({
 
-          xp: newXP,
+          xp:
+            newXP,
 
-          level: newLevel
+          level:
+            newLevel
 
         })
 
@@ -159,39 +251,51 @@ export async function addXP(
         );
 
 
-      if (updateError)
+      if (updateError) {
         throw updateError;
+      }
 
 
-      /*
-        On garde une copie locale
-        du dernier XP confirmé.
-      */
+      // --------------------------------
+      // CACHE LOCAL
+      // --------------------------------
 
       saveCachedXP(
 
         userId,
 
         {
-          xp: newXP,
-          level: newLevel
+
+          xp:
+            newXP,
+
+          level:
+            newLevel
+
         }
 
       );
 
 
       console.log(
-        `+${amount} XP | Niveau ${newLevel} ☁️ synchronisé`
+
+        `+${safeAmount} XP | ` +
+        `XP total : ${newXP} | ` +
+        `Niveau ${newLevel} ☁️`
+
       );
 
 
       return {
 
-        xp: newXP,
+        xp:
+          newXP,
 
-        level: newLevel,
+        level:
+          newLevel,
 
-        pending: false
+        pending:
+          false
 
       };
 
@@ -200,64 +304,151 @@ export async function addXP(
     catch (error) {
 
       console.error(
-        "⚠️ XP Supabase indisponible, sauvegarde offline :",
+
+        "⚠️ XP Supabase indisponible, " +
+        "passage en mode offline :",
+
         error
+
       );
 
-      /*
-        On continue volontairement
-        vers le mode offline.
-      */
+      // On continue vers le mode offline.
 
     }
 
   }
 
 
-  /*
-    ------------------------------------
-    MODE OFFLINE
-    ------------------------------------
-  */
+  // ===================================
+  // MODE OFFLINE
+  // ===================================
 
-  const cached =
+  let cached =
     getCachedXP(userId);
 
 
+  /*
+    Si aucun cache XP n'existe encore,
+    on essaie de récupérer le XP serveur
+    une dernière fois.
+
+    Cela évite de faire :
+
+    5500 XP → offline → 100 XP
+
+    au lieu de :
+
+    5500 XP → offline → 5600 XP
+  */
+
+  if (!cached) {
+
+    try {
+
+      const {
+        data: profile
+      } = await supabase
+
+        .from("profiles")
+
+        .select(
+          "xp, level"
+        )
+
+        .eq(
+          "id",
+          userId
+        )
+
+        .single();
+
+
+      if (profile) {
+
+        cached = {
+
+          xp:
+            Math.max(
+              Number(profile.xp) || 0,
+              0
+            ),
+
+          level:
+            calculateLevel(
+              profile.xp
+            )
+
+        };
+
+
+        saveCachedXP(
+          userId,
+          cached
+        );
+
+      }
+
+    }
+    catch {
+
+      // Si aucun accès serveur n'est possible,
+      // on utilisera 0 comme dernier recours.
+
+    }
+
+  }
+
+
+  // --------------------------------
+  // XP LOCAL
+  // --------------------------------
+
   const currentXP =
-    Number(cached?.xp) || 0;
+    Math.max(
+      Number(cached?.xp) || 0,
+      0
+    );
 
 
   const newXP =
-    currentXP + amount;
+    currentXP +
+    safeAmount;
 
+
+  // --------------------------------
+  // NIVEAU LOCAL
+  // --------------------------------
 
   const newLevel =
-    Math.floor(
-      newXP / 500
-    ) + 1;
+    calculateLevel(
+      newXP
+    );
 
+
+  // --------------------------------
+  // CACHE LOCAL
+  // --------------------------------
 
   saveCachedXP(
 
     userId,
 
     {
-      xp: newXP,
 
-      level: newLevel
+      xp:
+        newXP,
+
+      level:
+        newLevel
+
     }
 
   );
 
 
-  /*
-    Une opération XP est ajoutée
-    à la queue.
-
-    Le serveur recalculera le XP
-    lorsqu'Internet reviendra.
-  */
+  // --------------------------------
+  // FILE DE SYNCHRONISATION
+  // --------------------------------
 
   await addToSyncQueue({
 
@@ -278,7 +469,8 @@ export async function addXP(
       user_id:
         userId,
 
-      amount
+      amount:
+        safeAmount
 
     }
 
@@ -286,18 +478,105 @@ export async function addXP(
 
 
   console.log(
-    `+${amount} XP | Niveau ${newLevel} 💾 offline`
+
+    `+${safeAmount} XP | ` +
+    `XP total : ${newXP} | ` +
+    `Niveau ${newLevel} 💾 offline`
+
   );
 
 
   return {
 
-    xp: newXP,
+    xp:
+      newXP,
 
-    level: newLevel,
+    level:
+      newLevel,
 
-    pending: true
+    pending:
+      true
 
   };
 
 }
+
+
+// =====================================
+// CALCUL XP DU NIVEAU
+// =====================================
+
+export function getXPProgress(xp) {
+
+  const safeXP =
+    Math.max(
+      Number(xp) || 0,
+      0
+    );
+
+
+  const level =
+    calculateLevel(
+      safeXP
+    );
+
+
+  const currentLevelXP =
+    (level - 1) *
+    XP_PER_LEVEL;
+
+
+  const xpInCurrentLevel =
+    safeXP -
+    currentLevelXP;
+
+
+  const xpRemaining =
+    XP_PER_LEVEL -
+    xpInCurrentLevel;
+
+
+  const percentage =
+    Math.min(
+
+      Math.max(
+
+        (
+          xpInCurrentLevel /
+          XP_PER_LEVEL
+        ) * 100,
+
+        0
+
+      ),
+
+      100
+
+    );
+
+
+  return {
+
+    level,
+
+    currentLevelXP,
+
+    xpInCurrentLevel,
+
+    xpRemaining,
+
+    percentage
+
+  };
+
+}
+
+
+// =====================================
+// EXPORT
+// =====================================
+
+export {
+  XP_PER_LEVEL,
+  calculateLevel
+};

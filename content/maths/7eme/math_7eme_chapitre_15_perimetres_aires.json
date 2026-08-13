@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Périmètres et aires des figures usuelles",
+  "chapter_order": 15,
+  "lessons": [
+    {
+      "title": "Périmètre d'un carré et d'un rectangle",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Périmètre d'un carré",
+          "content": {
+            "text": "Le périmètre d'une figure est la longueur totale de son contour. Pour calculer le périmètre d'un carré, on additionne ses quatre côtés. Comme les quatre côtés ont la même longueur, si le côté mesure c, alors P = 4 × c. Par exemple, un carré de côté 6 cm a un périmètre de 4 × 6 = 24 cm."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Périmètre d'un rectangle",
+          "content": {
+            "text": "Pour un rectangle, les côtés opposés ont la même longueur. Si L représente la longueur et l la largeur, le périmètre est P = 2 × (L + l). Par exemple, un rectangle de longueur 8 m et de largeur 5 m possède un périmètre de 2 × (8 + 5) = 26 m."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Unités de longueur",
+          "content": {
+            "text": "Il faut toujours utiliser la même unité pour les longueurs avant de calculer un périmètre. Si un côté est donné en centimètres et un autre en mètres, il faut d'abord effectuer une conversion. Le résultat du périmètre est exprimé dans une unité de longueur : mm, cm, m, km, etc."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Périmètres du carré et du rectangle",
+        "questions": [
+          {
+            "question": "Quelle est la formule du périmètre d'un carré de côté c ?",
+            "options": [
+              "P = c + 2",
+              "P = 2 × c",
+              "P = 4 × c",
+              "P = c × c"
+            ],
+            "correct_answer": "P = 4 × c",
+            "explanation": "Un carré possède quatre côtés égaux, donc son périmètre est P = 4 × c."
+          },
+          {
+            "question": "Quel est le périmètre d'un rectangle de longueur 10 cm et largeur 4 cm ?",
+            "options": [
+              "14 cm",
+              "20 cm",
+              "28 cm",
+              "40 cm"
+            ],
+            "correct_answer": "28 cm",
+            "explanation": "P = 2 × (10 + 4) = 2 × 14 = 28 cm."
+          },
+          {
+            "question": "Quelle unité convient pour exprimer un périmètre ?",
+            "options": [
+              "cm",
+              "cm²",
+              "cm³",
+              "kg"
+            ],
+            "correct_answer": "cm",
+            "explanation": "Un périmètre est une longueur, donc il s'exprime avec une unité de longueur comme cm ou m."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Aire du carré et du rectangle",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Aire d'un carré",
+          "content": {
+            "text": "L'aire d'une figure mesure la surface qu'elle occupe. Pour calculer l'aire d'un carré de côté c, on utilise la formule A = c × c, que l'on peut aussi écrire A = c². Par exemple, un carré de côté 5 cm a une aire de 5 × 5 = 25 cm²."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Aire d'un rectangle",
+          "content": {
+            "text": "Pour un rectangle, l'aire se calcule en multipliant la longueur par la largeur : A = L × l. Par exemple, un rectangle de longueur 8 m et de largeur 3 m possède une aire de 8 × 3 = 24 m²."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Unités d'aire",
+          "content": {
+            "text": "Contrairement au périmètre, une aire s'exprime avec une unité carrée : mm², cm², m², km², etc. Avant de calculer une aire, il faut vérifier que les dimensions utilisées sont exprimées dans la même unité."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Aires du carré et du rectangle",
+        "questions": [
+          {
+            "question": "Quelle est la formule de l'aire d'un carré de côté c ?",
+            "options": [
+              "A = 4 × c",
+              "A = c + c",
+              "A = c × c",
+              "A = 2 × c"
+            ],
+            "correct_answer": "A = c × c",
+            "explanation": "L'aire d'un carré est égale au côté multiplié par lui-même."
+          },
+          {
+            "question": "Quelle est l'aire d'un rectangle de longueur 12 cm et largeur 5 cm ?",
+            "options": [
+              "17 cm²",
+              "34 cm²",
+              "60 cm²",
+              "120 cm²"
+            ],
+            "correct_answer": "60 cm²",
+            "explanation": "A = L × l = 12 × 5 = 60 cm²."
+          },
+          {
+            "question": "Quelle unité convient pour exprimer une aire ?",
+            "options": [
+              "m",
+              "m²",
+              "m³",
+              "kg"
+            ],
+            "correct_answer": "m²",
+            "explanation": "Une aire mesure une surface et s'exprime avec une unité carrée comme m²."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Périmètre et aire du triangle",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Périmètre d'un triangle",
+          "content": {
+            "text": "Le périmètre d'un triangle est la somme des longueurs de ses trois côtés. Si les côtés mesurent a, b et c, alors P = a + b + c. Par exemple, un triangle dont les côtés mesurent 5 cm, 6 cm et 7 cm a un périmètre de 5 + 6 + 7 = 18 cm."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Formule de l'aire",
+          "content": {
+            "text": "L'aire d'un triangle se calcule en multipliant la base par la hauteur correspondante, puis en divisant le résultat par 2. La formule est A = (b × h) ÷ 2. La hauteur doit être perpendiculaire à la base choisie."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple de calcul",
+          "content": {
+            "text": "Exemple : un triangle possède une base de 10 cm et une hauteur de 6 cm. Son aire est A = (10 × 6) ÷ 2 = 30 cm². Il faut faire attention à ne pas confondre la hauteur avec un côté quelconque du triangle."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Périmètre et aire du triangle",
+        "questions": [
+          {
+            "question": "Comment calcule-t-on le périmètre d'un triangle ?",
+            "options": [
+              "On additionne ses trois côtés",
+              "On multiplie ses trois côtés",
+              "On additionne seulement deux côtés",
+              "On divise la base par deux"
+            ],
+            "correct_answer": "On additionne ses trois côtés",
+            "explanation": "Le périmètre est la somme des longueurs des trois côtés."
+          },
+          {
+            "question": "Quelle est la formule de l'aire d'un triangle ?",
+            "options": [
+              "A = b × h",
+              "A = (b × h) ÷ 2",
+              "A = 2 × b × h",
+              "A = b + h"
+            ],
+            "correct_answer": "A = (b × h) ÷ 2",
+            "explanation": "L'aire d'un triangle est égale à la moitié du produit de la base par la hauteur correspondante."
+          },
+          {
+            "question": "Une base mesure 10 cm et la hauteur correspondante 6 cm. Quelle est l'aire ?",
+            "options": [
+              "16 cm²",
+              "30 cm²",
+              "60 cm²",
+              "120 cm²"
+            ],
+            "correct_answer": "30 cm²",
+            "explanation": "A = (10 × 6) ÷ 2 = 30 cm²."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Aire et périmètre du parallélogramme",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Aire du parallélogramme",
+          "content": {
+            "text": "L'aire d'un parallélogramme se calcule en multipliant la longueur d'une base par la hauteur correspondante. La formule est A = b × h. La hauteur est la distance perpendiculaire entre les deux côtés parallèles qui servent de bases."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Reconnaître la hauteur",
+          "content": {
+            "text": "Il ne faut pas confondre la hauteur avec le côté oblique du parallélogramme. La hauteur doit toujours être perpendiculaire à la base choisie. Par exemple, si la base mesure 9 cm et la hauteur 4 cm, l'aire vaut 9 × 4 = 36 cm²."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Périmètre du parallélogramme",
+          "content": {
+            "text": "Le périmètre d'un parallélogramme se calcule en additionnant ses quatre côtés. Comme les côtés opposés sont égaux, si les côtés mesurent a et b, alors P = 2 × (a + b). Il est important de distinguer la formule du périmètre de celle de l'aire."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Aire et périmètre du parallélogramme",
+        "questions": [
+          {
+            "question": "Quelle est la formule de l'aire d'un parallélogramme ?",
+            "options": [
+              "A = b × h",
+              "A = 2 × b × h",
+              "A = b + h",
+              "A = b²"
+            ],
+            "correct_answer": "A = b × h",
+            "explanation": "L'aire d'un parallélogramme est égale au produit de la base par la hauteur correspondante."
+          },
+          {
+            "question": "Une base mesure 9 cm et sa hauteur 4 cm. Quelle est l'aire ?",
+            "options": [
+              "13 cm²",
+              "18 cm²",
+              "36 cm²",
+              "72 cm²"
+            ],
+            "correct_answer": "36 cm²",
+            "explanation": "A = 9 × 4 = 36 cm²."
+          },
+          {
+            "question": "La hauteur d'un parallélogramme doit être...",
+            "options": [
+              "parallèle à la base",
+              "perpendiculaire à la base",
+              "toujours égale à la base",
+              "toujours diagonale"
+            ],
+            "correct_answer": "perpendiculaire à la base",
+            "explanation": "La hauteur correspond à la distance perpendiculaire entre les deux bases."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Aire du disque",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Formule de l'aire du disque",
+          "content": {
+            "text": "Le disque est la surface située à l'intérieur d'un cercle, y compris le cercle lui-même. Si le rayon du disque est r, son aire est donnée par la formule A = π × r². On utilise généralement π ≈ 3,14 dans les calculs scolaires."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Calcul avec le rayon",
+          "content": {
+            "text": "Exemple : pour un disque de rayon 5 cm, l'aire est A = 3,14 × 5² = 3,14 × 25 = 78,5 cm². Il faut utiliser le rayon et non le diamètre directement dans cette formule."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Rayon et diamètre",
+          "content": {
+            "text": "Comme toute aire, l'aire d'un disque s'exprime en unités carrées : cm², m², etc. Si le diamètre est connu, il faut d'abord calculer le rayon en divisant le diamètre par 2. Par exemple, un diamètre de 12 cm correspond à un rayon de 6 cm."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Aire du disque",
+        "questions": [
+          {
+            "question": "Quelle est la formule de l'aire d'un disque ?",
+            "options": [
+              "A = 2 × π × r",
+              "A = π × r²",
+              "A = π × r",
+              "A = 4 × r"
+            ],
+            "correct_answer": "A = π × r²",
+            "explanation": "L'aire du disque est A = π × r²."
+          },
+          {
+            "question": "Quelle est l'aire approximative d'un disque de rayon 5 cm avec π = 3,14 ?",
+            "options": [
+              "15,7 cm²",
+              "31,4 cm²",
+              "78,5 cm²",
+              "157 cm²"
+            ],
+            "correct_answer": "78,5 cm²",
+            "explanation": "A = 3,14 × 5² = 3,14 × 25 = 78,5 cm²."
+          },
+          {
+            "question": "Un disque a un diamètre de 12 cm. Quel est son rayon ?",
+            "options": [
+              "3 cm",
+              "6 cm",
+              "12 cm",
+              "24 cm"
+            ],
+            "correct_answer": "6 cm",
+            "explanation": "Le rayon est la moitié du diamètre : 12 ÷ 2 = 6 cm."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Problèmes de périmètres et d'aires",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": {
+            "text": "Dans les problèmes de périmètres et d'aires, il faut d'abord identifier la figure et les dimensions connues. Ensuite, on choisit la formule adaptée. Il faut également vérifier les unités avant d'effectuer les calculs et présenter le résultat avec son unité."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple avec un jardin",
+          "content": {
+            "text": "Exemple : un jardin rectangulaire mesure 20 m de longueur et 12 m de largeur. Son périmètre est P = 2 × (20 + 12) = 64 m. Son aire est A = 20 × 12 = 240 m². Le périmètre correspond au contour du jardin tandis que l'aire correspond à sa surface."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Applications dans la vie quotidienne",
+          "content": {
+            "text": "Pour résoudre correctement un problème, il faut lire attentivement l'énoncé, relever les données, choisir la formule, effectuer le calcul puis rédiger une réponse complète. Dans la vie quotidienne au Mali, ces notions peuvent servir à calculer la clôture d'un terrain, la surface d'une parcelle ou la quantité de matériau nécessaire."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Problèmes de périmètres et d'aires",
+        "questions": [
+          {
+            "question": "Un terrain rectangulaire mesure 20 m sur 12 m. Quel est son périmètre ?",
+            "options": [
+              "32 m",
+              "40 m",
+              "64 m",
+              "240 m"
+            ],
+            "correct_answer": "64 m",
+            "explanation": "P = 2 × (20 + 12) = 64 m."
+          },
+          {
+            "question": "Quel est l'aire de ce même terrain de 20 m sur 12 m ?",
+            "options": [
+              "32 m²",
+              "64 m²",
+              "120 m²",
+              "240 m²"
+            ],
+            "correct_answer": "240 m²",
+            "explanation": "A = 20 × 12 = 240 m²."
+          },
+          {
+            "question": "Quelle unité utilise-t-on pour exprimer la surface d'un terrain ?",
+            "options": [
+              "m",
+              "m²",
+              "m³",
+              "kg"
+            ],
+            "correct_answer": "m²",
+            "explanation": "Une surface s'exprime en unités carrées, par exemple m²."
+          }
+        ]
+      }
+    }
+  ]
+}

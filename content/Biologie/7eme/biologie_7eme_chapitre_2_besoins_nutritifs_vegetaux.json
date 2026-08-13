@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Biologie",
+  "curriculum": "Mali",
+  "chapter": "Besoins nutritifs des végétaux",
+  "chapter_order": 2,
+  "lessons": [
+    {
+      "title": "Les besoins en eau des végétaux",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "L'eau est indispensable aux végétaux",
+          "content": {
+            "text": "Comme tous les êtres vivants, les végétaux ont besoin d'eau pour vivre et se développer. L'eau participe à de nombreuses fonctions de la plante et permet notamment le transport de substances à l'intérieur de celle-ci."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "L'absorption de l'eau",
+          "content": {
+            "text": "Chez les plantes terrestres, l'eau présente dans le sol est principalement absorbée par les racines, notamment au niveau des poils absorbants. Elle circule ensuite vers les différentes parties de la plante."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Les conséquences du manque d'eau",
+          "content": {
+            "text": "Une plante privée d'eau pendant une période suffisamment longue se flétrit et peut finir par mourir. Les besoins en eau varient cependant selon les espèces, leur âge, leur milieu et les conditions climatiques."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les besoins en eau",
+        "questions": [
+          {
+            "question": "Pourquoi l'eau est-elle nécessaire aux végétaux ?",
+            "options": [
+              "Elle participe à leur fonctionnement et à leur développement",
+              "Elle remplace toujours la lumière",
+              "Elle transforme les plantes en animaux",
+              "Elle sert uniquement à refroidir les feuilles"
+            ],
+            "correct_answer": "Elle participe à leur fonctionnement et à leur développement",
+            "explanation": "L'eau est indispensable à de nombreuses fonctions vitales des végétaux."
+          },
+          {
+            "question": "Chez une plante terrestre, l'eau du sol est principalement absorbée par...",
+            "options": [
+              "les racines",
+              "les fleurs uniquement",
+              "les fruits uniquement",
+              "les graines uniquement"
+            ],
+            "correct_answer": "les racines",
+            "explanation": "Les racines, notamment les poils absorbants, permettent l'absorption de l'eau du sol."
+          },
+          {
+            "question": "Que peut-il arriver à une plante qui manque fortement d'eau ?",
+            "options": [
+              "Elle peut se flétrir et mourir",
+              "Elle devient automatiquement un animal",
+              "Elle produit toujours plus de fruits",
+              "Elle n'a plus besoin de lumière"
+            ],
+            "correct_answer": "Elle peut se flétrir et mourir",
+            "explanation": "Un manque important et prolongé d'eau peut provoquer le flétrissement puis la mort de la plante."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les besoins en sels minéraux",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les sels minéraux du sol",
+          "content": {
+            "text": "Les végétaux ont besoin de sels minéraux présents dans le sol. Ces substances sont absorbées principalement par les racines avec l'eau. Elles sont nécessaires à la croissance et au bon fonctionnement de la plante."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le rôle des sels minéraux",
+          "content": {
+            "text": "Les sels minéraux participent à la construction et au fonctionnement des différentes parties de la plante. Des éléments minéraux comme les ions nitrates, phosphates et potassium sont importants pour la croissance et le développement des végétaux."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Les carences minérales",
+          "content": {
+            "text": "Lorsque certains éléments minéraux manquent dans le sol, la croissance de la plante peut être ralentie et des signes de carence peuvent apparaître. Un sol suffisamment riche en éléments minéraux favorise généralement le développement normal des végétaux."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les sels minéraux",
+        "questions": [
+          {
+            "question": "Où trouve-t-on de nombreux sels minéraux nécessaires aux plantes ?",
+            "options": [
+              "Dans le sol",
+              "Dans l'air uniquement",
+              "Dans les pierres uniquement",
+              "Dans la lumière"
+            ],
+            "correct_answer": "Dans le sol",
+            "explanation": "Les racines prélèvent dans le sol l'eau et les sels minéraux nécessaires à la plante."
+          },
+          {
+            "question": "Comment les végétaux absorbent-ils principalement les sels minéraux ?",
+            "options": [
+              "Par les racines",
+              "Par les fleurs uniquement",
+              "Par les fruits uniquement",
+              "Par les graines uniquement"
+            ],
+            "correct_answer": "Par les racines",
+            "explanation": "Les racines prélèvent les éléments minéraux dissous dans l'eau du sol."
+          },
+          {
+            "question": "Que peut provoquer un manque de certains éléments minéraux ?",
+            "options": [
+              "Un ralentissement de la croissance ou des signes de carence",
+              "La transformation de la plante en animal",
+              "La disparition immédiate de toutes les racines",
+              "La production automatique de lumière"
+            ],
+            "correct_answer": "Un ralentissement de la croissance ou des signes de carence",
+            "explanation": "Les éléments minéraux sont nécessaires au développement normal des végétaux."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le besoin en dioxyde de carbone",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le dioxyde de carbone de l'air",
+          "content": {
+            "text": "Les végétaux verts ont besoin de dioxyde de carbone, ou CO₂, présent dans l'air. Ce gaz est utilisé par les feuilles lors de la photosynthèse, en présence de lumière."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "L'entrée du CO₂ dans la feuille",
+          "content": {
+            "text": "Le dioxyde de carbone pénètre principalement dans les feuilles par de petites ouvertures appelées stomates. Les stomates permettent les échanges gazeux entre la feuille et l'atmosphère."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Le rôle du CO₂ dans la photosynthèse",
+          "content": {
+            "text": "Le dioxyde de carbone fournit le carbone nécessaire à la fabrication de matière organique par la plante lors de la photosynthèse. Le CO₂ constitue donc une matière première importante pour les végétaux verts."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Le besoin en dioxyde de carbone",
+        "questions": [
+          {
+            "question": "Quel gaz les végétaux verts utilisent-ils lors de la photosynthèse ?",
+            "options": [
+              "Le dioxyde de carbone",
+              "Le dioxygène uniquement",
+              "Le diazote uniquement",
+              "L'hydrogène"
+            ],
+            "correct_answer": "Le dioxyde de carbone",
+            "explanation": "Le CO₂ de l'air est utilisé par les végétaux verts lors de la photosynthèse."
+          },
+          {
+            "question": "Par quelles structures le CO₂ entre-t-il principalement dans les feuilles ?",
+            "options": [
+              "Les stomates",
+              "Les racines uniquement",
+              "Les fleurs uniquement",
+              "Les graines"
+            ],
+            "correct_answer": "Les stomates",
+            "explanation": "Les stomates sont de petites ouvertures permettant notamment les échanges gazeux."
+          },
+          {
+            "question": "Le CO₂ apporte notamment à la plante...",
+            "options": [
+              "le carbone nécessaire à la fabrication de matière organique",
+              "du fer métallique",
+              "du sel de cuisine",
+              "uniquement de l'eau"
+            ],
+            "correct_answer": "le carbone nécessaire à la fabrication de matière organique",
+            "explanation": "Le carbone du CO₂ est utilisé pour fabriquer de la matière organique lors de la photosynthèse."
+          }
+        ]
+      }
+    },
+    {
+      "title": "La nécessité de la lumière",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La lumière et les végétaux verts",
+          "content": {
+            "text": "La lumière est indispensable à la photosynthèse des végétaux verts. L'énergie lumineuse permet à la plante de fabriquer de la matière organique à partir notamment du dioxyde de carbone et de l'eau."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Mettre en évidence le rôle de la lumière",
+          "content": {
+            "text": "On peut comparer deux plantes identiques dont l'une reçoit de la lumière et l'autre est maintenue dans l'obscurité, tout en contrôlant les autres conditions. Les différences observées permettent de mettre en évidence l'importance de la lumière pour la production de matière organique par les parties vertes."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "La chlorophylle",
+          "content": {
+            "text": "Les parties vertes des plantes contiennent généralement de la chlorophylle. Ce pigment absorbe une partie de l'énergie lumineuse nécessaire à la photosynthèse. Les feuilles sont donc des organes importants de la production de matière organique."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Lumière et végétaux",
+        "questions": [
+          {
+            "question": "Quel phénomène nécessite de la lumière chez les végétaux verts ?",
+            "options": [
+              "La photosynthèse",
+              "La dissolution du sel",
+              "La fusion",
+              "La respiration uniquement"
+            ],
+            "correct_answer": "La photosynthèse",
+            "explanation": "La photosynthèse utilise l'énergie lumineuse pour permettre la fabrication de matière organique."
+          },
+          {
+            "question": "Quel pigment est présent dans les parties vertes des plantes ?",
+            "options": [
+              "La chlorophylle",
+              "Le chlorure de sodium",
+              "Le dioxyde de carbone",
+              "Le fer métallique"
+            ],
+            "correct_answer": "La chlorophylle",
+            "explanation": "La chlorophylle est le principal pigment vert associé à la photosynthèse."
+          },
+          {
+            "question": "Les feuilles sont particulièrement importantes parce qu'elles...",
+            "options": [
+              "réalisent principalement la photosynthèse",
+              "absorbent uniquement les sels minéraux",
+              "produisent uniquement les racines",
+              "ne réalisent aucun échange avec l'air"
+            ],
+            "correct_answer": "réalisent principalement la photosynthèse",
+            "explanation": "Les feuilles vertes sont les principaux organes de la photosynthèse chez de nombreuses plantes."
+          }
+        ]
+      }
+    },
+    {
+      "title": "L'assimilation chlorophyllienne",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La fabrication de matière organique",
+          "content": {
+            "text": "L'assimilation chlorophyllienne correspond à la fabrication de matière organique par les végétaux verts grâce à l'énergie lumineuse. Cette fabrication utilise notamment l'eau et le dioxyde de carbone et se déroule dans les parties contenant de la chlorophylle."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le rôle de la photosynthèse",
+          "content": {
+            "text": "Lors de la photosynthèse, les végétaux verts utilisent l'énergie lumineuse pour transformer l'eau et le dioxyde de carbone en matière organique. Ce processus permet à la plante de produire la matière nécessaire à sa croissance et à son développement."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Les végétaux verts et l'autotrophie",
+          "content": {
+            "text": "On dit qu'un végétal vert est autotrophe pour le carbone lorsqu'il peut fabriquer sa propre matière organique à partir de matière minérale, notamment du dioxyde de carbone, grâce à l'énergie lumineuse. Cette capacité permet aux végétaux verts de produire leur propre matière organique."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Assimilation chlorophyllienne",
+        "questions": [
+          {
+            "question": "Que permet principalement l'assimilation chlorophyllienne ?",
+            "options": [
+              "La fabrication de matière organique par les végétaux verts",
+              "La fabrication de pierres",
+              "La transformation des plantes en animaux",
+              "La production de sel de cuisine"
+            ],
+            "correct_answer": "La fabrication de matière organique par les végétaux verts",
+            "explanation": "L'assimilation chlorophyllienne permet aux végétaux verts de fabriquer de la matière organique grâce à la lumière."
+          },
+          {
+            "question": "Les végétaux verts utilisent notamment pour la photosynthèse...",
+            "options": [
+              "de l'eau et du dioxyde de carbone",
+              "du sel de cuisine uniquement",
+              "du fer métallique uniquement",
+              "du sable uniquement"
+            ],
+            "correct_answer": "de l'eau et du dioxyde de carbone",
+            "explanation": "L'eau et le CO₂ sont des matières premières de la photosynthèse."
+          },
+          {
+            "question": "Un végétal vert est dit autotrophe pour le carbone lorsqu'il...",
+            "options": [
+              "fabrique sa matière organique à partir de matière minérale",
+              "mange uniquement des animaux",
+              "ne possède pas de chlorophylle",
+              "ne réalise aucune photosynthèse"
+            ],
+            "correct_answer": "fabrique sa matière organique à partir de matière minérale",
+            "explanation": "L'autotrophie correspond ici à la capacité de produire sa matière organique à partir de matières minérales."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bilan des besoins nutritifs des végétaux",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les besoins essentiels",
+          "content": {
+            "text": "Les végétaux ont besoin d'eau et de sels minéraux pour vivre et se développer. Les végétaux verts ont également besoin de dioxyde de carbone et de lumière pour réaliser la photosynthèse et fabriquer leur matière organique."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le rôle des racines et des feuilles",
+          "content": {
+            "text": "Les racines prélèvent principalement l'eau et les sels minéraux dans le sol. Les feuilles reçoivent la lumière et réalisent principalement les échanges gazeux nécessaires à la photosynthèse. Le CO₂ entre notamment par les stomates."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": {
+            "text": "Pour les végétaux verts, la nutrition repose notamment sur l'eau, les sels minéraux, le dioxyde de carbone et l'énergie lumineuse. Grâce à la photosynthèse, ils fabriquent de la matière organique indispensable à leur croissance et à leur développement."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Bilan des besoins nutritifs",
+        "questions": [
+          {
+            "question": "Quels éléments sont notamment nécessaires aux végétaux verts pour réaliser la photosynthèse ?",
+            "options": [
+              "De l'eau, du dioxyde de carbone et de la lumière",
+              "Uniquement du sel de cuisine",
+              "Uniquement du dioxygène",
+              "Du sable et du fer métallique"
+            ],
+            "correct_answer": "De l'eau, du dioxyde de carbone et de la lumière",
+            "explanation": "La photosynthèse utilise notamment l'eau, le CO₂ et l'énergie lumineuse."
+          },
+          {
+            "question": "Quel organe prélève principalement l'eau et les sels minéraux du sol ?",
+            "options": [
+              "La racine",
+              "La fleur",
+              "Le fruit",
+              "La graine"
+            ],
+            "correct_answer": "La racine",
+            "explanation": "Les racines, notamment grâce aux poils absorbants, prélèvent l'eau et les sels minéraux du sol."
+          },
+          {
+            "question": "Quel est le résultat essentiel de la photosynthèse pour le végétal vert ?",
+            "options": [
+              "La fabrication de matière organique",
+              "La fabrication de sable",
+              "La production de métal",
+              "La transformation en animal"
+            ],
+            "correct_answer": "La fabrication de matière organique",
+            "explanation": "La photosynthèse permet aux végétaux verts de fabriquer leur matière organique à partir de matière minérale grâce à la lumière."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Équations simples",
+  "chapter_order": 9,
+  "lessons": [
+    {
+      "title": "Découvrir une équation et une inconnue",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'une équation",
+          "content": {
+            "text": "Une équation est une égalité dans laquelle apparaît un nombre inconnu, généralement représenté par une lettre. Cette lettre est appelée l'inconnue. Par exemple, x + 5 = 12 est une équation dont l'inconnue est x."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Résoudre une équation",
+          "content": {
+            "text": "Résoudre une équation consiste à trouver la valeur de l'inconnue qui rend l'égalité vraie. Dans x + 5 = 12, on cherche le nombre qui, ajouté à 5, donne 12. Comme 7 + 5 = 12, la solution est x = 7."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Vérifier une solution",
+          "content": {
+            "text": "Pour vérifier une solution, on remplace l'inconnue par la valeur trouvée dans l'équation. Pour x = 7 dans x + 5 = 12, on obtient 7 + 5 = 12, ce qui est vrai. On peut donc conclure que 7 est bien la solution."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Découvrir les équations",
+        "questions": [
+          {
+            "question": "Dans l'équation x + 8 = 15, quelle est l'inconnue ?",
+            "options": [
+              "8",
+              "15",
+              "x",
+              "23"
+            ],
+            "correct_answer": "x",
+            "explanation": "La lettre x représente le nombre inconnu que l'on cherche."
+          },
+          {
+            "question": "Quelle est la solution de x + 4 = 10 ?",
+            "options": [
+              "4",
+              "5",
+              "6",
+              "14"
+            ],
+            "correct_answer": "6",
+            "explanation": "6 + 4 = 10. Donc x = 6."
+          },
+          {
+            "question": "Comment vérifier une solution d'équation ?",
+            "options": [
+              "On remplace l'inconnue par la solution",
+              "On additionne tous les nombres",
+              "On supprime l'égalité",
+              "On multiplie toujours par 10"
+            ],
+            "correct_answer": "On remplace l'inconnue par la solution",
+            "explanation": "La vérification consiste à remplacer l'inconnue par la valeur trouvée et à vérifier que l'égalité est vraie."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Égalités et propriétés de l'égalité",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comprendre une égalité",
+          "content": {
+            "text": "Une égalité est une relation entre deux expressions qui ont la même valeur. Par exemple, 8 + 4 = 12 est une égalité vraie. Le signe = signifie que les deux membres ont la même valeur."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Ajouter ou soustraire",
+          "content": {
+            "text": "Pour conserver une égalité vraie, on peut ajouter ou soustraire le même nombre aux deux membres. Par exemple, si x + 3 = 10, on peut soustraire 3 aux deux membres : x + 3 − 3 = 10 − 3, donc x = 7."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Multiplier ou diviser",
+          "content": {
+            "text": "On peut également multiplier ou diviser les deux membres par un même nombre non nul. Cette propriété permet de transformer progressivement une équation afin d'isoler l'inconnue. Il faut toujours effectuer la même opération des deux côtés de l'égalité."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Propriétés de l'égalité",
+        "questions": [
+          {
+            "question": "Quelle opération peut-on effectuer sur les deux membres d'une équation ?",
+            "options": [
+              "Une opération différente sur chaque membre",
+              "La même opération sur les deux membres",
+              "Aucune opération",
+              "Seulement une addition"
+            ],
+            "correct_answer": "La même opération sur les deux membres",
+            "explanation": "Pour conserver une égalité, il faut effectuer la même opération sur les deux membres."
+          },
+          {
+            "question": "Pour résoudre x + 6 = 14, quelle opération effectue-t-on ?",
+            "options": [
+              "Ajouter 6 aux deux membres",
+              "Soustraire 6 aux deux membres",
+              "Multiplier par 6",
+              "Diviser par 14"
+            ],
+            "correct_answer": "Soustraire 6 aux deux membres",
+            "explanation": "On soustrait 6 afin d'annuler le +6 : x = 14 − 6 = 8."
+          },
+          {
+            "question": "Si 3x = 18, par quel nombre faut-il diviser les deux membres ?",
+            "options": [
+              "2",
+              "3",
+              "6",
+              "18"
+            ],
+            "correct_answer": "3",
+            "explanation": "On divise les deux membres par 3 pour isoler x : x = 18 ÷ 3 = 6."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre une équation de la forme x + a = b",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": {
+            "text": "Pour résoudre une équation de la forme x + a = b, on cherche le nombre qui, ajouté à a, donne b. On peut soustraire a aux deux membres : x + a − a = b − a. On obtient donc x = b − a."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple de résolution",
+          "content": {
+            "text": "Exemple : x + 9 = 17. On soustrait 9 aux deux membres : x + 9 − 9 = 17 − 9. Donc x = 8. Vérification : 8 + 9 = 17. L'égalité est vraie."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Solution dans ℕ",
+          "content": {
+            "text": "Lorsque l'on travaille dans ℕ, il faut vérifier que la solution obtenue appartient bien à ℕ. Par exemple, dans x + 12 = 20, on obtient x = 8, qui est bien un nombre naturel. La solution est donc x = 8."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Équations x + a = b",
+        "questions": [
+          {
+            "question": "Quelle est la solution de x + 7 = 15 ?",
+            "options": [
+              "6",
+              "7",
+              "8",
+              "9"
+            ],
+            "correct_answer": "8",
+            "explanation": "x = 15 − 7 = 8."
+          },
+          {
+            "question": "Quelle est la solution de x + 12 = 25 ?",
+            "options": [
+              "11",
+              "12",
+              "13",
+              "14"
+            ],
+            "correct_answer": "13",
+            "explanation": "x = 25 − 12 = 13."
+          },
+          {
+            "question": "Quelle est la solution de x + 18 = 30 ?",
+            "options": [
+              "10",
+              "12",
+              "14",
+              "18"
+            ],
+            "correct_answer": "12",
+            "explanation": "x = 30 − 18 = 12."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre une équation de la forme x − a = b",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": {
+            "text": "Pour résoudre une équation de la forme x − a = b, on cherche le nombre qui, diminué de a, donne b. On peut ajouter a aux deux membres : x − a + a = b + a. On obtient donc x = b + a."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple de résolution",
+          "content": {
+            "text": "Exemple : x − 6 = 11. On ajoute 6 aux deux membres : x − 6 + 6 = 11 + 6. Donc x = 17. Vérification : 17 − 6 = 11. L'égalité est vraie."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Application concrète",
+          "content": {
+            "text": "Dans une situation concrète, cette forme d'équation peut représenter une quantité initiale inconnue. Par exemple, si un élève avait x cahiers et en donne 5, il lui en reste 12 : x − 5 = 12. On trouve x = 17 cahiers."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Équations x − a = b",
+        "questions": [
+          {
+            "question": "Quelle est la solution de x − 5 = 12 ?",
+            "options": [
+              "7",
+              "12",
+              "17",
+              "20"
+            ],
+            "correct_answer": "17",
+            "explanation": "x = 12 + 5 = 17."
+          },
+          {
+            "question": "Quelle est la solution de x − 8 = 20 ?",
+            "options": [
+              "12",
+              "28",
+              "30",
+              "32"
+            ],
+            "correct_answer": "28",
+            "explanation": "x = 20 + 8 = 28."
+          },
+          {
+            "question": "Un élève avait x francs CFA. Après avoir dépensé 500 F, il lui reste 1 500 F. Quelle équation représente la situation ?",
+            "options": [
+              "x + 500 = 1 500",
+              "x − 500 = 1 500",
+              "500x = 1 500",
+              "x ÷ 500 = 1 500"
+            ],
+            "correct_answer": "x − 500 = 1 500",
+            "explanation": "La dépense de 500 F est soustraite de la somme initiale x."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre une équation de la forme ax = b",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": {
+            "text": "Une équation de la forme ax = b signifie que le nombre a multiplié par l'inconnue x donne b. Pour isoler x, on divise les deux membres par a, à condition que a soit différent de zéro. On obtient x = b ÷ a."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple de résolution",
+          "content": {
+            "text": "Exemple : 4x = 28. On divise les deux membres par 4 : 4x ÷ 4 = 28 ÷ 4. Donc x = 7. Vérification : 4 × 7 = 28. L'égalité est vraie."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Solution dans ℕ",
+          "content": {
+            "text": "Dans ℕ, il faut vérifier que le résultat de la division est un nombre naturel lorsque l'on cherche une solution naturelle. Par exemple, 6x = 42 donne x = 7. En revanche, certaines équations peuvent ne pas avoir de solution dans ℕ si le quotient n'est pas un nombre naturel."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Équations ax = b",
+        "questions": [
+          {
+            "question": "Quelle est la solution de 3x = 21 ?",
+            "options": [
+              "6",
+              "7",
+              "8",
+              "9"
+            ],
+            "correct_answer": "7",
+            "explanation": "x = 21 ÷ 3 = 7."
+          },
+          {
+            "question": "Quelle est la solution de 5x = 45 ?",
+            "options": [
+              "7",
+              "8",
+              "9",
+              "10"
+            ],
+            "correct_answer": "9",
+            "explanation": "x = 45 ÷ 5 = 9."
+          },
+          {
+            "question": "Quelle est la solution de 8x = 64 ?",
+            "options": [
+              "6",
+              "7",
+              "8",
+              "9"
+            ],
+            "correct_answer": "8",
+            "explanation": "x = 64 ÷ 8 = 8."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes à l'aide d'équations",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Traduire un problème en équation",
+          "content": {
+            "text": "Une équation peut traduire un problème concret. Pour résoudre un problème, on commence par choisir une lettre pour représenter la quantité inconnue. Ensuite, on traduit les informations données sous forme d'une égalité, puis on résout l'équation."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple avec une somme d'argent",
+          "content": {
+            "text": "Exemple : un élève possède une certaine somme d'argent. Après avoir reçu 1 000 F CFA, il possède 3 500 F CFA. Si x représente la somme initiale, on écrit x + 1 000 = 3 500. Donc x = 2 500 F CFA. On vérifie : 2 500 + 1 000 = 3 500."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple avec une multiplication",
+          "content": {
+            "text": "Autre exemple : un nombre multiplié par 4 donne 36. Si x représente ce nombre, on écrit 4x = 36. En divisant par 4, on obtient x = 9. La réponse au problème est donc 9. Il faut toujours terminer par une phrase qui répond clairement à la question."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Problèmes avec des équations",
+        "questions": [
+          {
+            "question": "Un nombre augmenté de 8 donne 20. Quel est ce nombre ?",
+            "options": [
+              "10",
+              "12",
+              "14",
+              "16"
+            ],
+            "correct_answer": "12",
+            "explanation": "On écrit x + 8 = 20. Donc x = 20 − 8 = 12."
+          },
+          {
+            "question": "Un nombre multiplié par 5 donne 35. Quel est ce nombre ?",
+            "options": [
+              "5",
+              "6",
+              "7",
+              "8"
+            ],
+            "correct_answer": "7",
+            "explanation": "On écrit 5x = 35. Donc x = 35 ÷ 5 = 7."
+          },
+          {
+            "question": "Un élève avait une somme d'argent. Après avoir dépensé 1 500 F CFA, il lui reste 2 000 F CFA. Combien avait-il au départ ?",
+            "options": [
+              "500 F CFA",
+              "2 500 F CFA",
+              "3 000 F CFA",
+              "3 500 F CFA"
+            ],
+            "correct_answer": "3 500 F CFA",
+            "explanation": "On écrit x − 1 500 = 2 000. Donc x = 2 000 + 1 500 = 3 500 F CFA."
+          }
+        ]
+      }
+    }
+  ]
+}

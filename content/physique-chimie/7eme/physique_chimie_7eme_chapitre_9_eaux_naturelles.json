@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Eaux naturelles",
+  "chapter_order": 9,
+  "lessons": [
+    {
+      "title": "L'eau dans la nature",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Présence de l'eau",
+          "content": "L'eau est présente dans de nombreux endroits de la nature. On la trouve dans les fleuves, les rivières, les lacs, les mares, les océans, les nappes souterraines et dans l'atmosphère. Elle est indispensable à la vie des êtres humains, des animaux et des végétaux.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les eaux naturelles",
+          "content": "On appelle eaux naturelles les eaux que l'on trouve dans la nature. Elles peuvent être douces ou salées et contenir différentes substances dissoutes ou en suspension. Leur composition dépend notamment de leur origine et du milieu qu'elles traversent.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Importance de l'eau",
+          "content": "L'eau intervient dans de nombreuses activités humaines : consommation, cuisine, agriculture, élevage, hygiène et industrie. Au Mali, les eaux des fleuves, des rivières, des puits et des forages constituent des ressources importantes pour les populations.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — L'eau dans la nature",
+        "questions": [
+          {
+            "question": "Où peut-on trouver de l'eau dans la nature ?",
+            "options": [
+              "Dans les fleuves, lacs, nappes et océans",
+              "Uniquement dans les océans",
+              "Uniquement sous forme de glace",
+              "Uniquement dans les plantes"
+            ],
+            "correct_answer": "Dans les fleuves, lacs, nappes et océans",
+            "explanation": "L'eau naturelle est présente sous différentes formes et dans différents milieux."
+          },
+          {
+            "question": "Les eaux naturelles peuvent-elles contenir des substances dissoutes ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement les eaux de pluie",
+              "Seulement l'eau de mer"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "Les eaux naturelles contiennent souvent des substances minérales et autres éléments dissous."
+          },
+          {
+            "question": "Pourquoi l'eau est-elle importante pour les êtres vivants ?",
+            "options": [
+              "Elle est indispensable à la vie",
+              "Elle sert uniquement à laver les objets",
+              "Elle ne sert qu'à produire de l'électricité",
+              "Elle n'a aucun rôle biologique"
+            ],
+            "correct_answer": "Elle est indispensable à la vie",
+            "explanation": "L'eau est nécessaire au fonctionnement des organismes vivants."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les différentes sources d'eau",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les eaux de surface",
+          "content": "Les eaux de surface comprennent notamment les fleuves, rivières, lacs, mares et retenues d'eau. Elles sont directement exposées à l'environnement et peuvent recevoir des matières provenant du sol, de l'air ou des activités humaines.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les eaux souterraines",
+          "content": "Une partie de l'eau s'infiltre dans le sol et peut rejoindre des nappes souterraines. Les puits et les forages permettent dans certaines régions d'accéder à ces ressources en eau.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "L'eau de pluie",
+          "content": "L'eau de pluie provient de la condensation de la vapeur d'eau présente dans l'atmosphère. En traversant l'atmosphère puis en arrivant sur le sol, elle peut récupérer différentes substances présentes dans son environnement.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Sources d'eau",
+        "questions": [
+          {
+            "question": "Lequel est un exemple d'eau de surface ?",
+            "options": [
+              "Un fleuve",
+              "Une nappe souterraine",
+              "Un forage profond uniquement",
+              "La vapeur d'eau uniquement"
+            ],
+            "correct_answer": "Un fleuve",
+            "explanation": "Un fleuve est une eau de surface."
+          },
+          {
+            "question": "Où se trouve principalement une nappe souterraine ?",
+            "options": [
+              "Dans le sous-sol",
+              "Uniquement dans les nuages",
+              "À la surface des océans uniquement",
+              "Dans l'air sec"
+            ],
+            "correct_answer": "Dans le sous-sol",
+            "explanation": "Une nappe souterraine correspond à de l'eau présente dans le sous-sol."
+          },
+          {
+            "question": "Par quel phénomène l'eau de pluie arrive-t-elle du ciel ?",
+            "options": [
+              "Par les précipitations",
+              "Par la combustion",
+              "Par la fusion des métaux",
+              "Par la solidification du sol"
+            ],
+            "correct_answer": "Par les précipitations",
+            "explanation": "La pluie est une forme de précipitation issue de l'atmosphère."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Eau potable et eau non potable",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce qu'une eau potable ?",
+          "content": "Une eau potable est une eau qui peut être consommée sans présenter de danger pour la santé lorsqu'elle respecte les exigences de qualité prévues pour l'eau destinée à la consommation humaine. Elle doit notamment être suffisamment sûre sur les plans microbiologique et chimique.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Toutes les eaux naturelles ne sont pas potables",
+          "content": "Une eau naturelle peut paraître claire sans être potable. Elle peut contenir des microorganismes, des substances dissoutes ou des polluants invisibles à l'œil nu. Il ne faut donc pas considérer automatiquement une eau de rivière, de puits ou de mare comme potable.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Importance de la qualité de l'eau",
+          "content": "La qualité de l'eau est essentielle pour protéger la santé. Une eau contaminée peut être à l'origine de maladies. Il est donc important de protéger les sources d'eau et de respecter les règles d'hygiène et de traitement adaptées.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Eau potable",
+        "questions": [
+          {
+            "question": "Une eau potable est une eau qui...",
+            "options": [
+              "peut être consommée sans danger lorsqu'elle respecte les exigences de qualité",
+              "est toujours parfaitement transparente",
+              "vient obligatoirement d'un fleuve",
+              "contient toujours du sel"
+            ],
+            "correct_answer": "peut être consommée sans danger lorsqu'elle respecte les exigences de qualité",
+            "explanation": "La potabilité dépend de la qualité sanitaire de l'eau, et pas seulement de son apparence."
+          },
+          {
+            "question": "Une eau parfaitement claire est-elle forcément potable ?",
+            "options": [
+              "Non",
+              "Oui, toujours",
+              "Oui, si elle est froide",
+              "Oui, si elle provient d'une rivière"
+            ],
+            "correct_answer": "Non",
+            "explanation": "Des microorganismes ou certaines substances dissoutes peuvent être invisibles à l'œil nu."
+          },
+          {
+            "question": "Pourquoi faut-il protéger les sources d'eau ?",
+            "options": [
+              "Pour préserver la qualité de l'eau et la santé",
+              "Pour rendre toutes les eaux salées",
+              "Pour empêcher l'évaporation",
+              "Pour changer l'eau en solide"
+            ],
+            "correct_answer": "Pour préserver la qualité de l'eau et la santé",
+            "explanation": "La protection des ressources en eau contribue à limiter leur contamination."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les substances dissoutes dans l'eau",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Une eau naturelle n'est pas toujours pure",
+          "content": "L'eau naturelle contient souvent différentes substances dissoutes. Des sels minéraux, des gaz et d'autres substances peuvent être présents en petites quantités. La composition varie selon l'origine de l'eau.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple des sels minéraux",
+          "content": "Les eaux souterraines peuvent dissoudre des substances minérales lorsqu'elles traversent les roches et les sols. On peut notamment y retrouver des ions de calcium, de magnésium ou d'autres éléments minéraux.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Eau douce et eau salée",
+          "content": "Une eau douce contient généralement peu de sels dissous par rapport à l'eau de mer. L'eau de mer contient une quantité importante de sels dissous, notamment du chlorure de sodium, ce qui lui donne son caractère salé.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Substances dissoutes",
+        "questions": [
+          {
+            "question": "Les eaux naturelles peuvent contenir...",
+            "options": [
+              "des sels minéraux dissous",
+              "uniquement de l'eau pure",
+              "uniquement du sable visible",
+              "aucune substance"
+            ],
+            "correct_answer": "des sels minéraux dissous",
+            "explanation": "Les eaux naturelles contiennent souvent différentes substances dissoutes."
+          },
+          {
+            "question": "Pourquoi l'eau de mer est-elle salée ?",
+            "options": [
+              "Parce qu'elle contient des sels dissous",
+              "Parce qu'elle contient uniquement de la glace",
+              "Parce qu'elle ne contient aucune substance",
+              "Parce qu'elle est toujours chaude"
+            ],
+            "correct_answer": "Parce qu'elle contient des sels dissous",
+            "explanation": "L'eau de mer contient notamment des sels dissous, dont le chlorure de sodium."
+          },
+          {
+            "question": "Une eau douce contient généralement...",
+            "options": [
+              "moins de sels dissous que l'eau de mer",
+              "plus de sel que l'eau de mer",
+              "uniquement du chlorure de sodium",
+              "aucune substance dissoute"
+            ],
+            "correct_answer": "moins de sels dissous que l'eau de mer",
+            "explanation": "Les eaux douces sont caractérisées par une faible teneur en sels dissous comparée à l'eau de mer."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Pollution et protection de l'eau",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Sources de pollution",
+          "content": "Les eaux peuvent être polluées par différentes activités humaines : déchets, eaux usées, produits chimiques, hydrocarbures ou certaines activités agricoles. La pollution peut dégrader les ressources en eau et nuire aux êtres vivants.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Conséquences de la pollution",
+          "content": "La pollution de l'eau peut rendre une ressource impropre à certains usages, perturber les écosystèmes et présenter des risques pour la santé. Les conséquences dépendent de la nature et de la quantité des substances introduites dans l'eau.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Protéger les ressources en eau",
+          "content": "Pour protéger l'eau, il faut éviter de jeter des déchets dans les cours d'eau, limiter les rejets polluants, protéger les puits et les points d'eau et adopter de bonnes pratiques d'hygiène. Chaque citoyen peut contribuer à préserver cette ressource.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Pollution de l'eau",
+        "questions": [
+          {
+            "question": "Lequel peut polluer une source d'eau ?",
+            "options": [
+              "Le rejet d'eaux usées non traitées",
+              "La protection d'un puits",
+              "Le nettoyage régulier d'un point d'eau",
+              "La conservation d'un cours d'eau propre"
+            ],
+            "correct_answer": "Le rejet d'eaux usées non traitées",
+            "explanation": "Les eaux usées peuvent contenir des substances et microorganismes susceptibles de contaminer les ressources en eau."
+          },
+          {
+            "question": "Quel est un moyen de protéger les cours d'eau ?",
+            "options": [
+              "Ne pas y jeter de déchets",
+              "Y déverser des produits chimiques",
+              "Y jeter les eaux usées",
+              "Y déposer les déchets ménagers"
+            ],
+            "correct_answer": "Ne pas y jeter de déchets",
+            "explanation": "Éviter les rejets et les déchets contribue à préserver la qualité des eaux."
+          },
+          {
+            "question": "La pollution de l'eau peut-elle affecter les êtres vivants ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement les plantes artificielles",
+              "Seulement les objets métalliques"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "La pollution peut affecter les organismes aquatiques, les animaux, les végétaux et les êtres humains."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Étude et traitement simple de l'eau",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Observer une eau naturelle",
+          "content": "Pour étudier une eau naturelle, on peut observer son aspect, sa couleur, la présence éventuelle de particules et effectuer certaines expériences simples. Cependant, l'observation seule ne permet pas de déterminer si une eau est potable.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Séparer certaines matières",
+          "content": "Lorsqu'une eau contient des matières solides en suspension, certaines techniques physiques peuvent permettre de les séparer, notamment la décantation et la filtration. Ces opérations améliorent l'aspect de l'eau mais ne garantissent pas nécessairement sa potabilité.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": "Les eaux naturelles proviennent de différentes sources et contiennent souvent des substances dissoutes ou en suspension. Une eau claire n'est pas nécessairement potable. La protection des ressources en eau et les traitements adaptés sont essentiels pour disposer d'une eau de bonne qualité.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Étude des eaux naturelles",
+        "questions": [
+          {
+            "question": "La filtration peut notamment permettre de...",
+            "options": [
+              "séparer certaines matières solides en suspension",
+              "transformer automatiquement l'eau en eau potable",
+              "transformer l'eau en sel",
+              "supprimer toutes les substances dissoutes"
+            ],
+            "correct_answer": "séparer certaines matières solides en suspension",
+            "explanation": "La filtration permet notamment de retenir certaines particules solides présentes en suspension."
+          },
+          {
+            "question": "La décantation permet principalement de...",
+            "options": [
+              "laisser certaines particules se déposer",
+              "transformer l'eau en vapeur",
+              "ajouter du sel à l'eau",
+              "mesurer la température"
+            ],
+            "correct_answer": "laisser certaines particules se déposer",
+            "explanation": "La décantation utilise notamment la différence de densité pour permettre à certaines particules de se déposer."
+          },
+          {
+            "question": "Une filtration simple garantit-elle à elle seule que l'eau est potable ?",
+            "options": [
+              "Non",
+              "Oui, toujours",
+              "Oui, si l'eau est claire",
+              "Oui, si elle est froide"
+            ],
+            "correct_answer": "Non",
+            "explanation": "Une filtration simple ne suffit pas nécessairement à éliminer tous les microorganismes ou substances dangereuses."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Expressions littérales",
+  "chapter_order": 8,
+  "lessons": [
+    {
+      "title": "Découvrir les expressions littérales",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'une expression littérale",
+          "content": {
+            "text": "En mathématiques, une lettre peut représenter un nombre que l'on ne connaît pas encore ou qui peut changer. Une expression littérale est une expression mathématique qui contient une ou plusieurs lettres. Par exemple, 3 × x, x + 5 et 2a + 7 sont des expressions littérales."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Coefficient d'une lettre",
+          "content": {
+            "text": "La lettre utilisée représente une valeur numérique. Par convention, on peut écrire 3 × x sous la forme 3x. Le nombre 3 est appelé coefficient de x. Dans 5a, le coefficient de a est 5. Lorsqu'une lettre est seule, son coefficient est 1 : x signifie 1 × x."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Utiliser une expression littérale",
+          "content": {
+            "text": "Les expressions littérales permettent de représenter des situations générales. Par exemple, si un cahier coûte x francs CFA, alors le prix de 4 cahiers peut être représenté par 4x francs CFA. On peut ensuite remplacer x par une valeur connue pour effectuer le calcul."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Découvrir les expressions littérales",
+        "questions": [
+          {
+            "question": "Laquelle de ces expressions est littérale ?",
+            "options": [
+              "15 + 7",
+              "24 ÷ 6",
+              "3x + 5",
+              "8 × 4"
+            ],
+            "correct_answer": "3x + 5",
+            "explanation": "Une expression littérale contient au moins une lettre représentant un nombre."
+          },
+          {
+            "question": "Dans 7x, quel est le coefficient de x ?",
+            "options": [
+              "x",
+              "5",
+              "7",
+              "14"
+            ],
+            "correct_answer": "7",
+            "explanation": "Dans 7x, le nombre 7 multiplie la lettre x. Le coefficient de x est donc 7."
+          },
+          {
+            "question": "Que signifie 4a ?",
+            "options": [
+              "4 + a",
+              "4 − a",
+              "4 × a",
+              "a ÷ 4"
+            ],
+            "correct_answer": "4 × a",
+            "explanation": "4a est une écriture simplifiée de 4 × a."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Écrire une expression littérale",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Traduire une situation en expression",
+          "content": {
+            "text": "Pour traduire une situation en expression littérale, on identifie d'abord la quantité inconnue ou variable, puis on choisit l'opération adaptée. Par exemple, si un nombre est représenté par x, son double est 2x, son triple est 3x et son quadruple est 4x."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exprimer une somme ou une différence",
+          "content": {
+            "text": "Pour exprimer une somme, on utilise l'addition. Si un nombre est x, le nombre augmenté de 5 s'écrit x + 5. Le nombre diminué de 3 s'écrit x − 3. Le produit de x par 7 s'écrit 7x."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple avec les francs CFA",
+          "content": {
+            "text": "Exemple : un élève possède x francs CFA et reçoit 500 F CFA supplémentaires. La somme qu'il possède devient x + 500. S'il dépense ensuite 200 F CFA, il lui reste x + 500 − 200, que l'on peut simplifier en x + 300."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Écrire une expression",
+        "questions": [
+          {
+            "question": "Comment écrire le double de x ?",
+            "options": [
+              "x + 2",
+              "x − 2",
+              "2x",
+              "x²"
+            ],
+            "correct_answer": "2x",
+            "explanation": "Le double de x signifie 2 × x, donc 2x."
+          },
+          {
+            "question": "Comment écrire un nombre x augmenté de 7 ?",
+            "options": [
+              "7x",
+              "x + 7",
+              "x − 7",
+              "x ÷ 7"
+            ],
+            "correct_answer": "x + 7",
+            "explanation": "Augmenter x de 7 signifie ajouter 7 : x + 7."
+          },
+          {
+            "question": "Comment écrire le triple d'un nombre a diminué de 4 ?",
+            "options": [
+              "3a + 4",
+              "3a − 4",
+              "a − 12",
+              "3(a + 4)"
+            ],
+            "correct_answer": "3a − 4",
+            "explanation": "Le triple de a est 3a. Diminué de 4 donne 3a − 4."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer la valeur d'une expression",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Remplacer une lettre par une valeur",
+          "content": {
+            "text": "Calculer la valeur d'une expression littérale consiste à remplacer la lettre par la valeur donnée, puis à effectuer les opérations. Par exemple, si x = 5, alors 3x + 2 devient 3 × 5 + 2 = 17."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Respecter les priorités de calcul",
+          "content": {
+            "text": "Il faut respecter les priorités de calcul. Dans une expression comme 2x + 3, on remplace d'abord x par sa valeur, puis on effectue la multiplication avant l'addition. Si x = 4, on obtient 2 × 4 + 3 = 8 + 3 = 11."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Expression avec plusieurs lettres",
+          "content": {
+            "text": "Lorsqu'une expression contient plusieurs lettres, il faut remplacer chacune par sa valeur. Par exemple, si a = 3 et b = 5, alors 2a + b = 2 × 3 + 5 = 11. Il est conseillé d'écrire chaque étape pour éviter les erreurs."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Calculer une expression",
+        "questions": [
+          {
+            "question": "Si x = 4, quelle est la valeur de 3x + 2 ?",
+            "options": [
+              "10",
+              "12",
+              "14",
+              "16"
+            ],
+            "correct_answer": "14",
+            "explanation": "3 × 4 + 2 = 12 + 2 = 14."
+          },
+          {
+            "question": "Si a = 5, quelle est la valeur de 2a − 3 ?",
+            "options": [
+              "5",
+              "7",
+              "10",
+              "13"
+            ],
+            "correct_answer": "7",
+            "explanation": "2 × 5 − 3 = 10 − 3 = 7."
+          },
+          {
+            "question": "Si a = 2 et b = 6, quelle est la valeur de 3a + b ?",
+            "options": [
+              "8",
+              "10",
+              "12",
+              "14"
+            ],
+            "correct_answer": "12",
+            "explanation": "3 × 2 + 6 = 6 + 6 = 12."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Réduire des expressions simples",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Regrouper les termes semblables",
+          "content": {
+            "text": "Réduire une expression littérale consiste à regrouper les termes qui contiennent la même lettre. Par exemple, 3x + 5x = 8x. On additionne les coefficients des termes semblables : 3 + 5 = 8."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Soustraire des termes semblables",
+          "content": {
+            "text": "De même, 7a − 2a = 5a. Les termes 7a et 2a sont semblables car ils contiennent tous les deux la lettre a. En revanche, 3x et 4y ne sont pas des termes semblables et ne peuvent pas être regroupés en un seul terme."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Réduire une expression complète",
+          "content": {
+            "text": "Les nombres seuls peuvent également être regroupés. Par exemple, 4x + 3 + 2x + 5 = 6x + 8. On rassemble d'abord les termes en x, puis les nombres : 4x + 2x = 6x et 3 + 5 = 8."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Réduire une expression",
+        "questions": [
+          {
+            "question": "Réduis l'expression 3x + 5x.",
+            "options": [
+              "8",
+              "8x",
+              "15x",
+              "2x"
+            ],
+            "correct_answer": "8x",
+            "explanation": "On additionne les coefficients : 3 + 5 = 8. Donc 3x + 5x = 8x."
+          },
+          {
+            "question": "Réduis 9a − 4a.",
+            "options": [
+              "5a",
+              "13a",
+              "36a",
+              "5"
+            ],
+            "correct_answer": "5a",
+            "explanation": "9a − 4a = (9 − 4)a = 5a."
+          },
+          {
+            "question": "Quelle est la forme réduite de 2x + 3 + 4x + 5 ?",
+            "options": [
+              "6x + 8",
+              "6x + 5",
+              "2x + 8",
+              "8x + 6"
+            ],
+            "correct_answer": "6x + 8",
+            "explanation": "2x + 4x = 6x et 3 + 5 = 8. Donc l'expression réduite est 6x + 8."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Développer avec la distributivité",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Règle de distributivité",
+          "content": {
+            "text": "La distributivité permet de supprimer des parenthèses lorsqu'un nombre ou une expression multiplie une somme. La règle fondamentale est : a × (b + c) = a × b + a × c. Par exemple, 3(x + 4) = 3x + 12."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Distributivité avec une soustraction",
+          "content": {
+            "text": "La même règle fonctionne avec une soustraction : a × (b − c) = a × b − a × c. Par exemple, 5(x − 2) = 5x − 10. Il faut multiplier le facteur extérieur par chacun des termes à l'intérieur des parenthèses."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple de développement",
+          "content": {
+            "text": "Exemple : 4(2x + 3) = 4 × 2x + 4 × 3 = 8x + 12. Pour vérifier, on peut remplacer x par une valeur simple et comparer les deux expressions. Cette méthode aide à comprendre pourquoi le développement est correct."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Développer une expression",
+        "questions": [
+          {
+            "question": "Développe 3(x + 5).",
+            "options": [
+              "3x + 5",
+              "3x + 15",
+              "8x",
+              "15x"
+            ],
+            "correct_answer": "3x + 15",
+            "explanation": "3 × x + 3 × 5 = 3x + 15."
+          },
+          {
+            "question": "Développe 4(x − 2).",
+            "options": [
+              "4x − 2",
+              "4x − 6",
+              "4x − 8",
+              "4x + 8"
+            ],
+            "correct_answer": "4x − 8",
+            "explanation": "4 × x − 4 × 2 = 4x − 8."
+          },
+          {
+            "question": "Quelle est la forme développée de 2(3x + 4) ?",
+            "options": [
+              "6x + 4",
+              "5x + 8",
+              "6x + 8",
+              "6x + 6"
+            ],
+            "correct_answer": "6x + 8",
+            "explanation": "2 × 3x + 2 × 4 = 6x + 8."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Problèmes avec les expressions littérales",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Représenter une situation",
+          "content": {
+            "text": "Les expressions littérales permettent de représenter des situations générales avant de connaître toutes les valeurs. Par exemple, si le prix d'un cahier est x francs CFA, alors le prix de 5 cahiers est 5x francs CFA."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Périmètre d'un rectangle",
+          "content": {
+            "text": "Pour le périmètre d'un rectangle de longueur L et de largeur l, on utilise la formule P = 2L + 2l, ou P = 2(L + l). Par exemple, pour un rectangle de longueur 8 m et de largeur 5 m, P = 2(8 + 5) = 26 m."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Construire une formule générale",
+          "content": {
+            "text": "Une expression littérale peut aussi servir à construire une formule générale. Si un élève économise x francs CFA chaque jour pendant 7 jours, la somme économisée est 7x francs CFA. Si x = 500, alors 7x = 3 500 F CFA. On passe donc de la situation générale au calcul numérique en remplaçant la lettre par sa valeur."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Applications des expressions littérales",
+        "questions": [
+          {
+            "question": "Un cahier coûte x F CFA. Combien coûtent 6 cahiers ?",
+            "options": [
+              "x + 6",
+              "6x",
+              "x − 6",
+              "x ÷ 6"
+            ],
+            "correct_answer": "6x",
+            "explanation": "Six cahiers à x F chacun coûtent 6 × x = 6x F CFA."
+          },
+          {
+            "question": "Un rectangle mesure 10 m de longueur et 4 m de largeur. Quel est son périmètre ?",
+            "options": [
+              "14 m",
+              "20 m",
+              "28 m",
+              "40 m"
+            ],
+            "correct_answer": "28 m",
+            "explanation": "P = 2(10 + 4) = 2 × 14 = 28 m."
+          },
+          {
+            "question": "Un élève économise x F CFA par jour pendant 5 jours. S'il économise 600 F par jour, combien aura-t-il ?",
+            "options": [
+              "2 000 F CFA",
+              "2 500 F CFA",
+              "3 000 F CFA",
+              "3 500 F CFA"
+            ],
+            "correct_answer": "3 000 F CFA",
+            "explanation": "L'expression est 5x. Avec x = 600, on obtient 5 × 600 = 3 000 F CFA."
+          }
+        ]
+      }
+    }
+  ]
+}

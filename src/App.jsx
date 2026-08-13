@@ -4,243 +4,429 @@ import { useUser } from './hooks/useUser'
 import { useNetwork } from './hooks/useNetwork'
 import { syncPendingData } from './offline/sync'
 
-import LoginPage from "./pages/LoginPage";
-import HomePage from "./pages/HomePage";
-import ClassPage from "./pages/ClassPage";
-import SubjectPage from "./pages/SubjectPage";
-import ChapterPage from "./pages/ChapterPage";
-import LessonPage from "./pages/LessonPage";
-import ExercisePage from "./pages/ExercisePage";
+// ===============================
+// PAGES UTILISATEUR
+// ===============================
+import LoginPage from './pages/LoginPage'
+import HomePage from './pages/HomePage'
+import ClassPage from './pages/ClassPage'
+import SubjectPage from './pages/SubjectPage'
+import ChapterPage from './pages/ChapterPage'
+import LessonPage from './pages/LessonPage'
+import ExercisePage from './pages/ExercisePage'
 
-import DashboardPage from "./pages/DashboardPage";
-import ProfilePage from "./pages/ProfilePage";
-import DownloadsPage from "./pages/DownloadsPage";
-import SettingsPage from "./pages/SettingsPage";
-import CoursesPage from "./pages/CoursesPage";
-import Layout from "./components/Layout";
-import LoginAdmin from "./pages/admin/LoginAdmin";
-import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute";
-import DashboardAdmin from "./pages/admin/DashboardAdmin";
-import AdminLayout from "./components/admin/AdminLayout";
-import UsersAdmin from "./pages/admin/UsersAdmin";
-import ClassesAdmin from "./pages/admin/ClassesAdmin";
-import AdminSubjects from "./pages/admin/AdminSubjects";
-import AdminChapters from "./pages/admin/AdminChapters";
-import AdminLessons from "./pages/admin/AdminLessons";
+import DashboardPage from './pages/DashboardPage'
+import ProfilePage from './pages/ProfilePage'
+import DownloadsPage from './pages/DownloadsPage'
+import SettingsPage from './pages/SettingsPage'
+import CoursesPage from './pages/CoursesPage'
+
+import Layout from './components/Layout'
+
+// ===============================
+// ADMIN
+// ===============================
+import LoginAdmin from './pages/admin/LoginAdmin'
+import ProtectedAdminRoute from './components/admin/ProtectedAdminRoute'
+import AdminLayout from './components/admin/AdminLayout'
+
+import DashboardAdmin from './pages/admin/DashboardAdmin'
+import UsersAdmin from './pages/admin/UsersAdmin'
+import ClassesAdmin from './pages/admin/ClassesAdmin'
+import AdminSubjects from './pages/admin/AdminSubjects'
+import AdminChapters from './pages/admin/AdminChapters'
+import AdminLessons from './pages/admin/AdminLessons'
+import AdminLessonBlocks from './pages/admin/AdminLessonBlocks'
+import AdminQuiz from './pages/admin/AdminQuiz'
+
+// Nouvelles pages admin
+import AdminVideos from './pages/admin/AdminVideos'
+import AdminStats from './pages/admin/AdminStats'
+import AdminSettings from './pages/admin/AdminSettings'
 
 
 function App() {
   const { user, loading } = useUser()
   const { isOnline } = useNetwork()
 
+  // ==========================================
+  // SYNCHRONISATION OFFLINE
+  // ==========================================
   useEffect(() => {
-    if (isOnline && user) syncPendingData()
+    if (isOnline && user) {
+      syncPendingData()
+    }
   }, [isOnline, user])
 
+
+  // ==========================================
+  // CHARGEMENT INITIAL
+  // ==========================================
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">
+            Chargement...
+          </p>
+        </div>
       </div>
     )
   }
 
+
   return (
     <Routes>
 
-      <Route path="/admin/login" element={<LoginAdmin />} />
+      {/* =====================================================
+          ADMIN — CONNEXION
+      ===================================================== */}
 
       <Route
-      path="/admin"
-      element={
-      <ProtectedAdminRoute>
-
-      <AdminLayout>
-
-      <DashboardAdmin/>
-
-      </AdminLayout>
-
-      </ProtectedAdminRoute>
-      }
+        path="/admin/login"
+        element={<LoginAdmin />}
       />
 
-      <Route
-      path="/admin/users"
-      element={
-      <ProtectedAdminRoute>
 
-      <AdminLayout>
-
-      <UsersAdmin/>
-
-      </AdminLayout>
-
-      </ProtectedAdminRoute>
-      }
-      />
+      {/* =====================================================
+          ADMIN — DASHBOARD
+      ===================================================== */}
 
       <Route
-       path="/admin/subjects"
-       element={<AdminSubjects/>}
-      />
-
-      <Route
-       path="/admin/chapters/:subjectId"
-       element={<AdminChapters/>}
-      />
-
-      <Route
-       path="/admin/lessons/:chapterId"
-       element={<AdminLessons/>}
-      />
-
-      <Route
-
-      path="/admin/classes"
-
-      element={
-
-      <ProtectedAdminRoute>
-
-      <AdminLayout>
-
-      <ClassesAdmin/>
-
-      </AdminLayout>
-
-      </ProtectedAdminRoute>
-
-      }
-
-      />
-
-      <Route
-        path="/login"
+        path="/admin"
         element={
-          !user
-            ? <LoginPage />
-            : <Navigate to="/" />
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <DashboardAdmin />
+            </AdminLayout>
+          </ProtectedAdminRoute>
         }
       />
 
 
+      {/* =====================================================
+          ADMIN — UTILISATEURS
+      ===================================================== */}
+
+      <Route
+        path="/admin/users"
+        element={
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <UsersAdmin />
+            </AdminLayout>
+          </ProtectedAdminRoute>
+        }
+      />
+
+
+      {/* =====================================================
+          ADMIN — CLASSES
+      ===================================================== */}
+
+      <Route
+        path="/admin/classes"
+        element={
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <ClassesAdmin />
+            </AdminLayout>
+          </ProtectedAdminRoute>
+        }
+      />
+
+
+      {/* =====================================================
+          ADMIN — MATIÈRES
+      ===================================================== */}
+
+      <Route
+        path="/admin/subjects"
+        element={
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminSubjects />
+            </AdminLayout>
+          </ProtectedAdminRoute>
+        }
+      />
+
+
+      {/* =====================================================
+          ADMIN — CHAPITRES
+      ===================================================== */}
+
+      <Route
+        path="/admin/chapters/:subjectId"
+        element={
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminChapters />
+            </AdminLayout>
+          </ProtectedAdminRoute>
+        }
+      />
+
+
+      {/* =====================================================
+          ADMIN — LEÇONS
+      ===================================================== */}
+
+      <Route
+        path="/admin/lessons/:chapterId"
+        element={
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminLessons />
+            </AdminLayout>
+          </ProtectedAdminRoute>
+        }
+      />
+
+
+            {/* =====================================================
+                ADMIN — BLOCS PÉDAGOGIQUES
+                Gestion du contenu d'une leçon
+            ===================================================== */}
+
+            <Route
+              path="/admin/lesson/:lessonId/blocks"
+              element={
+                <ProtectedAdminRoute>
+                  <AdminLayout>
+                    <AdminLessonBlocks />
+                  </AdminLayout>
+                </ProtectedAdminRoute>
+              }
+            />
+
+             {/* =====================================================
+                 ADMIN — QUIZ
+                 Gestion du quiz et des questions d'une leçon
+             ===================================================== */}
+
+             <Route
+               path="/admin/lesson/:lessonId/quiz"
+               element={
+                 <ProtectedAdminRoute>
+                   <AdminLayout>
+                     <AdminQuiz />
+                   </AdminLayout>
+                 </ProtectedAdminRoute>
+               }
+             />
+
+      {/* =====================================================
+          ADMIN — VIDÉOS
+          Gestion réelle des vidéos liées aux leçons
+      ===================================================== */}
+
+      <Route
+        path="/admin/videos"
+        element={
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminVideos />
+            </AdminLayout>
+          </ProtectedAdminRoute>
+        }
+      />
+
+
+      {/* =====================================================
+          ADMIN — STATISTIQUES
+          Élèves, progression, XP, quiz, classes, matières
+      ===================================================== */}
+
+      <Route
+        path="/admin/stats"
+        element={
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminStats />
+            </AdminLayout>
+          </ProtectedAdminRoute>
+        }
+      />
+
+
+      {/* =====================================================
+          ADMIN — PARAMÈTRES
+          Paramètres administrateur persistants
+      ===================================================== */}
+
+      <Route
+        path="/admin/settings"
+        element={
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminSettings />
+            </AdminLayout>
+          </ProtectedAdminRoute>
+        }
+      />
+
+
+      {/* =====================================================
+          UTILISATEUR — LOGIN
+      ===================================================== */}
+
+      <Route
+        path="/login"
+        element={<LoginPage />}
+      />
+
+      {/*  <Route
+        path="/login"
+        element={
+          !user
+            ? <LoginPage />
+            : <Navigate to="/" replace />
+        }
+      />*/}
+
+
+      {/* =====================================================
+          APPLICATION UTILISATEUR
+      ===================================================== */}
+
       <Route element={<Layout />}>
 
+        {/* Accueil */}
         <Route
           path="/"
           element={
             user
               ? <HomePage />
-              : <Navigate to="/login" />
+              : <Navigate to="/login" replace />
           }
         />
 
 
+        {/* Classe */}
         <Route
           path="/class/:classId"
           element={
             user
               ? <ClassPage />
-              : <Navigate to="/login" />
+              : <Navigate to="/login" replace />
           }
         />
 
 
+        {/* Matière */}
         <Route
           path="/subject/:subjectId"
           element={
             user
               ? <SubjectPage />
-              : <Navigate to="/login" />
+              : <Navigate to="/login" replace />
           }
         />
 
 
+        {/* Chapitre */}
         <Route
           path="/chapter/:chapterId"
           element={
             user
               ? <ChapterPage />
-              : <Navigate to="/login" />
+              : <Navigate to="/login" replace />
           }
         />
 
 
+        {/* Leçon */}
         <Route
           path="/lesson/:lessonId"
           element={
             user
               ? <LessonPage />
-              : <Navigate to="/login" />
+              : <Navigate to="/login" replace />
           }
         />
 
 
+        {/* Exercices / Quiz */}
         <Route
           path="/exercise/:lessonId"
           element={
             user
               ? <ExercisePage />
-              : <Navigate to="/login" />
+              : <Navigate to="/login" replace />
           }
         />
 
 
+        {/* Dashboard élève */}
         <Route
           path="/dashboard"
           element={
             user
               ? <DashboardPage />
-              : <Navigate to="/login" />
+              : <Navigate to="/login" replace />
           }
         />
 
 
+        {/* Téléchargements */}
         <Route
           path="/downloads"
           element={
             user
               ? <DownloadsPage />
-              : <Navigate to="/login" />
+              : <Navigate to="/login" replace />
           }
         />
 
 
+        {/* Profil */}
         <Route
           path="/profile"
           element={
             user
               ? <ProfilePage />
-              : <Navigate to="/login" />
+              : <Navigate to="/login" replace />
           }
         />
 
 
+        {/* Paramètres élève */}
         <Route
           path="/settings"
           element={
             user
               ? <SettingsPage />
-              : <Navigate to="/login" />
+              : <Navigate to="/login" replace />
           }
         />
 
-
       </Route>
 
-        <Route
-         path="/courses"
-         element={
-         user ? <CoursesPage /> : <Navigate to="/login" />
-         }
-        />
+
+      {/* =====================================================
+          COURS
+      ===================================================== */}
+
+      <Route
+        path="/courses"
+        element={
+          user
+            ? <CoursesPage />
+            : <Navigate to="/login" replace />
+        }
+      />
+
+
+      {/* =====================================================
+          ROUTE INCONNUE
+      ===================================================== */}
 
       <Route
         path="*"
-        element={<Navigate to="/" />}
+        element={<Navigate to="/" replace />}
       />
-
 
     </Routes>
   )

@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Circuit électrique simple et schématisation",
+  "chapter_order": 7,
+  "lessons": [
+    {
+      "title": "Notion de circuit électrique",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce qu'un circuit électrique ?",
+          "content": "Un circuit électrique est un ensemble de composants reliés entre eux par des conducteurs et permettant le passage du courant électrique. Un circuit simple peut comprendre une pile, une lampe et des fils de connexion.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les éléments d'un circuit",
+          "content": "Dans un circuit électrique simple, la pile constitue une source d'énergie électrique, la lampe est un récepteur et les fils conducteurs permettent de relier les différents éléments. Un interrupteur peut également être ajouté pour commander le circuit.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Le rôle de chaque élément",
+          "content": "Chaque composant possède une fonction précise. La pile fournit l'énergie électrique, la lampe transforme une partie de cette énergie en lumière et en chaleur, tandis que les fils assurent la liaison électrique entre les composants.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Circuit électrique",
+        "questions": [
+          {
+            "question": "Qu'est-ce qu'un circuit électrique ?",
+            "options": [
+              "Un ensemble de composants reliés permettant le passage du courant",
+              "Un récipient contenant de l'eau",
+              "Un appareil qui mesure la masse",
+              "Un simple morceau de métal"
+            ],
+            "correct_answer": "Un ensemble de composants reliés permettant le passage du courant",
+            "explanation": "Un circuit électrique est constitué de composants reliés électriquement afin de permettre la circulation du courant."
+          },
+          {
+            "question": "Quel composant fournit l'énergie électrique dans un circuit simple ?",
+            "options": [
+              "La pile",
+              "La lampe",
+              "Le fil",
+              "L'interrupteur"
+            ],
+            "correct_answer": "La pile",
+            "explanation": "La pile est le générateur qui fournit l'énergie électrique au circuit."
+          },
+          {
+            "question": "Quel élément permet principalement de relier les composants ?",
+            "options": [
+              "Les fils conducteurs",
+              "La lampe",
+              "La pile uniquement",
+              "Le verre"
+            ],
+            "correct_answer": "Les fils conducteurs",
+            "explanation": "Les fils conducteurs assurent les connexions électriques entre les composants."
+          }
+        ]
+      }
+    },
+    {
+      "title": "La pile et la lampe",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La pile",
+          "content": "La pile est un générateur électrique. Elle possède deux bornes, généralement appelées borne positive et borne négative. Elle fournit l'énergie nécessaire au fonctionnement du circuit.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "La lampe électrique",
+          "content": "La lampe est un récepteur électrique. Lorsqu'elle est correctement reliée à une source d'énergie dans un circuit fermé, elle peut s'allumer et transformer une partie de l'énergie électrique en lumière et en chaleur.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Réaliser un circuit simple",
+          "content": "Pour faire fonctionner une lampe avec une pile, il faut relier les deux bornes de la pile aux deux bornes de la lampe à l'aide de fils conducteurs de manière à former une boucle fermée.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Pile et lampe",
+        "questions": [
+          {
+            "question": "Quel est le rôle principal d'une pile ?",
+            "options": [
+              "Fournir de l'énergie électrique",
+              "Éclairer directement sans circuit",
+              "Mesurer la température",
+              "Mesurer la masse"
+            ],
+            "correct_answer": "Fournir de l'énergie électrique",
+            "explanation": "La pile est un générateur qui fournit l'énergie électrique nécessaire au circuit."
+          },
+          {
+            "question": "La lampe est un...",
+            "options": [
+              "récepteur électrique",
+              "générateur",
+              "conducteur uniquement",
+              "isolant"
+            ],
+            "correct_answer": "récepteur électrique",
+            "explanation": "La lampe reçoit l'énergie électrique et la transforme notamment en lumière et en chaleur."
+          },
+          {
+            "question": "Pour qu'une lampe s'allume avec une pile, il faut notamment...",
+            "options": [
+              "former une boucle électrique fermée",
+              "laisser le circuit ouvert",
+              "retirer tous les fils",
+              "débrancher la pile"
+            ],
+            "correct_answer": "former une boucle électrique fermée",
+            "explanation": "Le circuit doit être fermé pour permettre la circulation du courant électrique."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Circuit ouvert et circuit fermé",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le circuit fermé",
+          "content": "Un circuit est fermé lorsque tous les composants sont correctement reliés et que le chemin électrique est continu. Dans un circuit fermé contenant une pile et une lampe correctement branchées, la lampe peut s'allumer.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le circuit ouvert",
+          "content": "Un circuit est ouvert lorsqu'une coupure empêche la continuité du chemin électrique. Dans ce cas, le courant ne peut pas circuler dans l'ensemble du circuit et la lampe ne s'allume pas.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Le rôle de l'interrupteur",
+          "content": "L'interrupteur permet d'ouvrir ou de fermer un circuit. Lorsqu'il est fermé, le circuit est continu. Lorsqu'il est ouvert, le circuit est interrompu. Il permet donc de commander le fonctionnement d'un récepteur comme une lampe.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Circuit ouvert et fermé",
+        "questions": [
+          {
+            "question": "Dans quel cas le courant peut-il circuler dans un circuit simple ?",
+            "options": [
+              "Lorsque le circuit est fermé",
+              "Lorsque le circuit est coupé",
+              "Lorsque la pile est retirée",
+              "Lorsque tous les fils sont débranchés"
+            ],
+            "correct_answer": "Lorsque le circuit est fermé",
+            "explanation": "Un circuit fermé possède un chemin électrique continu permettant la circulation du courant."
+          },
+          {
+            "question": "Que se passe-t-il lorsque le circuit est ouvert ?",
+            "options": [
+              "La lampe ne s'allume pas",
+              "La lampe devient automatiquement plus brillante",
+              "La pile disparaît",
+              "Le circuit fonctionne normalement"
+            ],
+            "correct_answer": "La lampe ne s'allume pas",
+            "explanation": "Une coupure dans le circuit empêche la circulation du courant."
+          },
+          {
+            "question": "Quel composant permet d'ouvrir ou de fermer le circuit ?",
+            "options": [
+              "L'interrupteur",
+              "La pile",
+              "La lampe",
+              "Le fil uniquement"
+            ],
+            "correct_answer": "L'interrupteur",
+            "explanation": "L'interrupteur permet de commander l'ouverture et la fermeture du circuit."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les conducteurs et les isolants",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les matériaux conducteurs",
+          "content": "Un matériau conducteur permet au courant électrique de circuler relativement facilement. Les métaux comme le cuivre et l'aluminium sont de bons conducteurs électriques. C'est pourquoi les fils électriques utilisent généralement une partie métallique conductrice.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les matériaux isolants",
+          "content": "Un matériau isolant s'oppose fortement au passage du courant électrique dans les conditions usuelles. Le plastique, le verre et le caoutchouc sont des exemples courants d'isolants.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Pourquoi les fils sont-ils recouverts ?",
+          "content": "Les fils électriques sont souvent constitués d'un conducteur métallique entouré d'une gaine isolante. Le métal permet la circulation du courant tandis que la gaine contribue à protéger l'utilisateur contre les contacts électriques accidentels.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Conducteurs et isolants",
+        "questions": [
+          {
+            "question": "Le cuivre est généralement un...",
+            "options": [
+              "bon conducteur électrique",
+              "isolant parfait",
+              "liquide isolant",
+              "gaz"
+            ],
+            "correct_answer": "bon conducteur électrique",
+            "explanation": "Le cuivre est un métal qui conduit bien le courant électrique."
+          },
+          {
+            "question": "Le plastique est généralement considéré comme...",
+            "options": [
+              "un isolant",
+              "un bon conducteur métallique",
+              "un générateur",
+              "un récepteur"
+            ],
+            "correct_answer": "un isolant",
+            "explanation": "Le plastique s'oppose fortement au passage du courant dans les conditions usuelles."
+          },
+          {
+            "question": "Pourquoi un fil électrique possède-t-il souvent une gaine en plastique ?",
+            "options": [
+              "Pour isoler et protéger contre les contacts électriques",
+              "Pour augmenter la masse de la pile",
+              "Pour produire de la lumière",
+              "Pour remplacer la source d'énergie"
+            ],
+            "correct_answer": "Pour isoler et protéger contre les contacts électriques",
+            "explanation": "La gaine isolante protège notamment l'utilisateur et évite des contacts électriques indésirables."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Schématisation d'un circuit électrique",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Pourquoi schématiser ?",
+          "content": "Un schéma électrique permet de représenter simplement un circuit sans avoir à dessiner les composants dans leur apparence réelle. Il facilite la lecture, la construction et l'étude d'un circuit électrique.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Symboles électriques",
+          "content": "Chaque composant possède un symbole conventionnel. La pile, la lampe, l'interrupteur et les connexions sont représentés par des symboles permettant de reconnaître rapidement leur rôle dans le circuit.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Règles d'un schéma",
+          "content": "Dans un schéma électrique, les connexions sont représentées clairement et les composants sont reliés selon leur disposition dans le circuit. Il faut utiliser les symboles conventionnels et éviter les dessins réalistes inutiles.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Schématisation",
+        "questions": [
+          {
+            "question": "Pourquoi utilise-t-on un schéma électrique ?",
+            "options": [
+              "Pour représenter simplement un circuit",
+              "Pour mesurer directement la masse",
+              "Pour remplacer tous les composants",
+              "Pour produire de l'électricité"
+            ],
+            "correct_answer": "Pour représenter simplement un circuit",
+            "explanation": "Le schéma permet de représenter clairement les composants et leurs connexions."
+          },
+          {
+            "question": "Comment représente-t-on les composants électriques dans un schéma ?",
+            "options": [
+              "Avec des symboles conventionnels",
+              "Avec des photographies uniquement",
+              "Avec des dessins au hasard",
+              "Avec des textes uniquement"
+            ],
+            "correct_answer": "Avec des symboles conventionnels",
+            "explanation": "Les symboles conventionnels facilitent la lecture et la compréhension des schémas électriques."
+          },
+          {
+            "question": "Que doit-on représenter clairement dans un schéma électrique ?",
+            "options": [
+              "Les connexions entre les composants",
+              "La couleur de la table",
+              "La taille réelle de la pièce",
+              "Le poids de chaque fil"
+            ],
+            "correct_answer": "Les connexions entre les composants",
+            "explanation": "Les connexions permettent de comprendre comment les composants sont reliés dans le circuit."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Réalisation et diagnostic d'un circuit simple",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Construire un circuit",
+          "content": "Pour réaliser un circuit simple, on identifie d'abord les composants nécessaires : une pile, une lampe et des fils conducteurs. On relie ensuite correctement les composants afin de former un circuit fermé.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Pourquoi une lampe ne s'allume-t-elle pas ?",
+          "content": "Si la lampe ne s'allume pas, plusieurs causes sont possibles : circuit ouvert, mauvais contact, pile déchargée, lampe défectueuse ou mauvaise connexion. Il faut vérifier chaque élément méthodiquement.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": "Un circuit simple comprend une source d'énergie, un ou plusieurs récepteurs et des conducteurs. Pour permettre la circulation du courant, le circuit doit être fermé. Les schémas utilisent des symboles conventionnels pour représenter les composants et leurs connexions.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Circuit simple",
+        "questions": [
+          {
+            "question": "Quels éléments sont nécessaires pour réaliser un circuit simple avec une lampe ?",
+            "options": [
+              "Une pile, une lampe et des fils conducteurs",
+              "Un thermomètre et une balance",
+              "Une éprouvette et une règle",
+              "De l'eau et du sel uniquement"
+            ],
+            "correct_answer": "Une pile, une lampe et des fils conducteurs",
+            "explanation": "Ces éléments permettent de constituer un circuit électrique simple."
+          },
+          {
+            "question": "Une lampe ne s'allume pas. Quelle vérification faut-il faire en premier parmi ces propositions ?",
+            "options": [
+              "Vérifier que le circuit est fermé et correctement connecté",
+              "Changer immédiatement la lampe sans vérifier",
+              "Ajouter de l'eau au circuit",
+              "Mesurer la température de la pile"
+            ],
+            "correct_answer": "Vérifier que le circuit est fermé et correctement connecté",
+            "explanation": "Une mauvaise connexion ou un circuit ouvert est une cause fréquente de dysfonctionnement."
+          },
+          {
+            "question": "Quelle condition est essentielle pour permettre la circulation du courant dans un circuit simple ?",
+            "options": [
+              "Un chemin électrique fermé",
+              "Un circuit complètement débranché",
+              "Une lampe sans pile",
+              "Un fil coupé"
+            ],
+            "correct_answer": "Un chemin électrique fermé",
+            "explanation": "Le circuit doit former une boucle électrique continue."
+          }
+        ]
+      }
+    }
+  ]
+}

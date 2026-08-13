@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Triangles",
+  "chapter_order": 12,
+  "lessons": [
+    {
+      "title": "Reconnaître et construire un triangle",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du triangle",
+          "content": {
+            "text": "Un triangle est un polygone qui possède trois côtés, trois sommets et trois angles. On désigne un triangle par les lettres de ses sommets. Par exemple, le triangle ayant pour sommets A, B et C se note triangle ABC ou △ABC."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Construire un triangle",
+          "content": {
+            "text": "Pour construire un triangle à partir de trois points A, B et C non alignés, on relie A à B, B à C et C à A. Les segments [AB], [BC] et [CA] sont les trois côtés du triangle. La longueur de chaque côté peut être mesurée avec une règle graduée."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Nommer un triangle",
+          "content": {
+            "text": "Pour nommer correctement un triangle, on utilise les trois lettres de ses sommets. Il existe plusieurs façons de nommer le même triangle : ABC, BCA ou CAB désignent le même triangle si les sommets correspondent à la même figure."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Reconnaître un triangle",
+        "questions": [
+          {
+            "question": "Combien de côtés possède un triangle ?",
+            "options": [
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "correct_answer": "3",
+            "explanation": "Un triangle possède exactement trois côtés."
+          },
+          {
+            "question": "Combien de sommets possède un triangle ?",
+            "options": [
+              "2",
+              "3",
+              "4",
+              "6"
+            ],
+            "correct_answer": "3",
+            "explanation": "Un triangle possède trois sommets."
+          },
+          {
+            "question": "Comment peut-on noter un triangle dont les sommets sont A, B et C ?",
+            "options": [
+              "△ABC",
+              "(ABC)",
+              "[ABC]",
+              "AB"
+            ],
+            "correct_answer": "△ABC",
+            "explanation": "Un triangle peut être désigné par les trois lettres de ses sommets, par exemple △ABC."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les différents types de triangles",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Triangles selon leurs côtés",
+          "content": {
+            "text": "On peut classer les triangles selon la longueur de leurs côtés. Un triangle équilatéral possède trois côtés de même longueur. Un triangle isocèle possède deux côtés de même longueur. Un triangle quelconque ne possède pas nécessairement de côtés de même longueur."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Triangles selon leurs angles",
+          "content": {
+            "text": "On peut aussi classer les triangles selon leurs angles. Un triangle rectangle possède un angle droit de 90°. Un triangle obtus possède un angle obtus, c'est-à-dire supérieur à 90°. Un triangle acutangle possède trois angles aigus, chacun inférieur à 90°."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Combiner les classifications",
+          "content": {
+            "text": "Un même triangle peut appartenir à deux classifications. Par exemple, un triangle peut être à la fois isocèle et rectangle. Pour identifier un triangle, il faut donc observer ses côtés et ses angles."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Types de triangles",
+        "questions": [
+          {
+            "question": "Comment appelle-t-on un triangle dont les trois côtés sont égaux ?",
+            "options": [
+              "Isocèle",
+              "Rectangle",
+              "Équilatéral",
+              "Obtus"
+            ],
+            "correct_answer": "Équilatéral",
+            "explanation": "Un triangle équilatéral possède trois côtés de même longueur."
+          },
+          {
+            "question": "Comment appelle-t-on un triangle qui possède deux côtés de même longueur ?",
+            "options": [
+              "Équilatéral",
+              "Isocèle",
+              "Rectangle",
+              "Quelconque"
+            ],
+            "correct_answer": "Isocèle",
+            "explanation": "Un triangle isocèle possède deux côtés de même longueur."
+          },
+          {
+            "question": "Quel triangle possède un angle de 90° ?",
+            "options": [
+              "Triangle rectangle",
+              "Triangle équilatéral uniquement",
+              "Triangle obtus",
+              "Triangle aigu uniquement"
+            ],
+            "correct_answer": "Triangle rectangle",
+            "explanation": "Un triangle rectangle possède un angle droit de 90°."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Somme des angles d’un triangle",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La somme des angles",
+          "content": {
+            "text": "Dans tout triangle, la somme des mesures des trois angles est égale à 180°. Cette propriété est fondamentale pour calculer un angle inconnu lorsque les deux autres angles sont connus."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Calculer un angle inconnu",
+          "content": {
+            "text": "Exemple : dans un triangle ABC, si l'angle A mesure 50° et l'angle B mesure 60°, alors l'angle C mesure 180° − 50° − 60° = 70°. Les trois angles mesurent donc 50°, 60° et 70°."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Cas particuliers",
+          "content": {
+            "text": "Dans un triangle équilatéral, les trois angles sont égaux. Comme leur somme vaut 180°, chaque angle mesure 180° ÷ 3 = 60°. Dans un triangle rectangle, les deux angles aigus ont ensemble une mesure de 90°."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Angles d’un triangle",
+        "questions": [
+          {
+            "question": "Quelle est la somme des angles d'un triangle ?",
+            "options": [
+              "90°",
+              "120°",
+              "180°",
+              "360°"
+            ],
+            "correct_answer": "180°",
+            "explanation": "La somme des trois angles de tout triangle est toujours égale à 180°."
+          },
+          {
+            "question": "Un triangle possède des angles de 50° et 60°. Combien mesure le troisième angle ?",
+            "options": [
+              "60°",
+              "70°",
+              "80°",
+              "90°"
+            ],
+            "correct_answer": "70°",
+            "explanation": "180° − 50° − 60° = 70°."
+          },
+          {
+            "question": "Combien mesure chaque angle d'un triangle équilatéral ?",
+            "options": [
+              "30°",
+              "45°",
+              "60°",
+              "90°"
+            ],
+            "correct_answer": "60°",
+            "explanation": "Les trois angles sont égaux et leur somme vaut 180°. Donc 180° ÷ 3 = 60°."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire un triangle avec des longueurs données",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Tracer le premier côté",
+          "content": {
+            "text": "Pour construire un triangle dont les trois côtés ont des longueurs données, on utilise une règle graduée et un compas. Par exemple, pour construire un triangle ABC tel que AB = 5 cm, AC = 4 cm et BC = 3 cm, on commence par tracer [AB] de 5 cm."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Utiliser le compas",
+          "content": {
+            "text": "On ouvre ensuite le compas à 4 cm et on trace un arc de cercle de centre A. Puis on ouvre le compas à 3 cm et on trace un arc de cercle de centre B. Le point d'intersection des deux arcs est le sommet C. On relie ensuite A à C et B à C."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Vérifier l'inégalité triangulaire",
+          "content": {
+            "text": "La construction n'est possible que si les trois longueurs peuvent former un triangle. La longueur de chaque côté doit être inférieure à la somme des deux autres côtés. Cette condition est appelée inégalité triangulaire."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Construire un triangle",
+        "questions": [
+          {
+            "question": "Quels instruments permettent de construire un triangle à partir de trois longueurs ?",
+            "options": [
+              "Règle graduée et compas",
+              "Rapporteur uniquement",
+              "Gomme et règle",
+              "Équerre uniquement"
+            ],
+            "correct_answer": "Règle graduée et compas",
+            "explanation": "La règle permet de tracer le premier côté et le compas permet de reporter les longueurs."
+          },
+          {
+            "question": "Peut-on construire un triangle de côtés 3 cm, 4 cm et 5 cm ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement avec un rapporteur",
+              "Seulement avec une équerre"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "Ces trois longueurs respectent l'inégalité triangulaire. Le triangle 3-4-5 est notamment un triangle rectangle."
+          },
+          {
+            "question": "Peut-on construire un triangle de côtés 2 cm, 3 cm et 6 cm ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement avec une règle",
+              "Toujours"
+            ],
+            "correct_answer": "Non",
+            "explanation": "2 + 3 = 5, qui est inférieur à 6. Ces trois longueurs ne peuvent donc pas former un triangle."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Médiatrice et propriétés du triangle",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de la médiatrice",
+          "content": {
+            "text": "La médiatrice d'un segment est la droite perpendiculaire à ce segment qui passe par son milieu. Elle partage donc le segment en deux parties de même longueur. Pour construire une médiatrice, on peut utiliser une règle et un compas."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Propriété de la médiatrice",
+          "content": {
+            "text": "Tout point situé sur la médiatrice d'un segment est à égale distance des deux extrémités du segment. Par exemple, si M appartient à la médiatrice de [AB], alors MA = MB. Cette propriété est très utile dans les constructions géométriques."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Médiatrices d'un triangle",
+          "content": {
+            "text": "Dans un triangle, les médiatrices des trois côtés se coupent en un même point appelé centre du cercle circonscrit. Ce point est à égale distance des trois sommets du triangle. Cette propriété permet notamment de construire un cercle passant par les trois sommets."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Médiatrice et triangle",
+        "questions": [
+          {
+            "question": "La médiatrice d'un segment est...",
+            "options": [
+              "une droite parallèle au segment",
+              "une droite perpendiculaire au segment passant par son milieu",
+              "une droite passant par une extrémité uniquement",
+              "un cercle"
+            ],
+            "correct_answer": "une droite perpendiculaire au segment passant par son milieu",
+            "explanation": "C'est la définition de la médiatrice d'un segment."
+          },
+          {
+            "question": "Si M appartient à la médiatrice de [AB], quelle relation est vraie ?",
+            "options": [
+              "MA = AB",
+              "MB = AB",
+              "MA = MB",
+              "MA = 0"
+            ],
+            "correct_answer": "MA = MB",
+            "explanation": "Tout point de la médiatrice est à égale distance des extrémités du segment."
+          },
+          {
+            "question": "Les trois médiatrices d'un triangle se coupent en...",
+            "options": [
+              "un même point",
+              "trois points différents obligatoirement",
+              "un côté",
+              "un sommet uniquement"
+            ],
+            "correct_answer": "un même point",
+            "explanation": "Les trois médiatrices des côtés d'un triangle sont concourantes en un même point."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Problèmes et constructions sur les triangles",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Analyser un problème",
+          "content": {
+            "text": "Pour résoudre un problème sur les triangles, il faut identifier les informations connues : longueurs des côtés, mesures des angles ou nature du triangle. On choisit ensuite la propriété adaptée. La somme des angles, les propriétés des triangles particuliers et l'inégalité triangulaire sont notamment utiles."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Calculer un angle inconnu",
+          "content": {
+            "text": "Exemple : un triangle ABC est rectangle en A. L'angle B mesure 35°. Comme l'angle A mesure 90° et que la somme des angles vaut 180°, l'angle C vaut 180° − 90° − 35° = 55°."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Vérifier une construction",
+          "content": {
+            "text": "Dans une construction, il faut respecter les mesures données et utiliser les instruments adaptés. Une fois la figure construite, il est conseillé de vérifier les longueurs et les angles. Une construction géométrique réussie doit respecter toutes les conditions du problème."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Problèmes sur les triangles",
+        "questions": [
+          {
+            "question": "Un triangle est rectangle en A et l'angle B mesure 35°. Combien mesure l'angle C ?",
+            "options": [
+              "45°",
+              "50°",
+              "55°",
+              "65°"
+            ],
+            "correct_answer": "55°",
+            "explanation": "C = 180° − 90° − 35° = 55°."
+          },
+          {
+            "question": "Un triangle isocèle possède deux côtés égaux. Que peut-on dire des angles opposés à ces côtés ?",
+            "options": [
+              "Ils sont égaux",
+              "Ils sont toujours droits",
+              "Ils sont toujours différents",
+              "Ils mesurent toujours 180°"
+            ],
+            "correct_answer": "Ils sont égaux",
+            "explanation": "Dans un triangle isocèle, les angles à la base sont égaux."
+          },
+          {
+            "question": "Quelle propriété permet de vérifier si trois longueurs peuvent former un triangle ?",
+            "options": [
+              "La propriété des angles droits",
+              "L'inégalité triangulaire",
+              "La propriété des nombres pairs",
+              "La règle de trois"
+            ],
+            "correct_answer": "L'inégalité triangulaire",
+            "explanation": "Chaque côté doit être inférieur à la somme des deux autres côtés."
+          }
+        ]
+      }
+    }
+  ]
+}

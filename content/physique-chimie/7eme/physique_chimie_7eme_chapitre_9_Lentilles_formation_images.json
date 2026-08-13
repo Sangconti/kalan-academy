@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Lentilles et formation des images",
+  "chapter_order": 9,
+  "lessons": [
+    {
+      "lesson_order": 1,
+      "title": "Découverte des lentilles",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Une lentille est un objet transparent, généralement en verre ou en matière plastique, dont les surfaces sont courbes ou dont l’une au moins est courbe. Une lentille peut modifier la direction de propagation de la lumière qui la traverse. Les lentilles sont utilisées dans de nombreux instruments optiques."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "On distingue principalement deux grandes familles de lentilles : les lentilles convergentes et les lentilles divergentes. Une lentille convergente est généralement plus épaisse au centre qu’aux bords. Une lentille divergente est généralement plus mince au centre qu’aux bords."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Les lentilles sont présentes dans la vie quotidienne. On en trouve notamment dans certaines lunettes, les appareils photographiques, les microscopes et les loupes. Leur rôle est de modifier le trajet des rayons lumineux afin de permettre l’observation ou la formation d’images."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Découverte des lentilles",
+        "questions": [
+          {
+            "question": "Qu’est-ce qu’une lentille ?",
+            "options": [
+              "Un objet transparent qui peut modifier la propagation de la lumière",
+              "Un objet toujours opaque",
+              "Une source de chaleur",
+              "Un objet qui bloque toute lumière"
+            ],
+            "correct_answer": "Un objet transparent qui peut modifier la propagation de la lumière",
+            "explanation": "Une lentille est un objet transparent qui dévie les rayons lumineux lorsqu’ils la traversent."
+          },
+          {
+            "question": "Quelles sont les deux grandes familles de lentilles étudiées en optique ?",
+            "options": [
+              "Convergentes et divergentes",
+              "Solides et liquides",
+              "Chaudes et froides",
+              "Naturelles et électriques"
+            ],
+            "correct_answer": "Convergentes et divergentes",
+            "explanation": "Les lentilles sont principalement classées en lentilles convergentes et divergentes selon leur effet sur les rayons lumineux."
+          },
+          {
+            "question": "Quel instrument peut utiliser une lentille ?",
+            "options": [
+              "Une loupe",
+              "Une pierre ordinaire",
+              "Un mur",
+              "Une casserole sans dispositif optique"
+            ],
+            "correct_answer": "Une loupe",
+            "explanation": "Une loupe utilise une lentille convergente pour produire une image agrandie d’un objet placé dans certaines conditions."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 2,
+      "title": "Les lentilles convergentes",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Une lentille convergente est généralement plus épaisse au centre qu’aux bords. Lorsqu’un faisceau de rayons lumineux parallèles à l’axe principal traverse une lentille convergente, les rayons sont déviés de manière à se rapprocher les uns des autres."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Après avoir traversé une lentille convergente, les rayons parallèles à l’axe principal se rencontrent, dans le modèle simplifié, en un point appelé foyer principal image. La distance entre le centre optique de la lentille et ce foyer est appelée distance focale."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Le caractère convergent d’une lentille explique son utilisation dans une loupe. Lorsque l’objet est placé à une distance appropriée, la lentille peut produire une image agrandie. Les lentilles convergentes sont également utilisées dans de nombreux instruments optiques."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Lentilles convergentes",
+        "questions": [
+          {
+            "question": "Comment est généralement une lentille convergente ?",
+            "options": [
+              "Plus épaisse au centre qu’aux bords",
+              "Plus mince au centre qu’aux bords",
+              "Toujours parfaitement plate",
+              "Toujours opaque"
+            ],
+            "correct_answer": "Plus épaisse au centre qu’aux bords",
+            "explanation": "Une lentille convergente est généralement plus épaisse au centre qu’aux bords."
+          },
+          {
+            "question": "Que font les rayons parallèles à l’axe principal après avoir traversé une lentille convergente ?",
+            "options": [
+              "Ils se rapprochent et convergent vers le foyer",
+              "Ils deviennent toujours parallèles dans la même direction",
+              "Ils s’arrêtent dans la lentille",
+              "Ils disparaissent"
+            ],
+            "correct_answer": "Ils se rapprochent et convergent vers le foyer",
+            "explanation": "Une lentille convergente dévie les rayons parallèles de manière qu’ils se rapprochent et se rencontrent au foyer dans le modèle étudié."
+          },
+          {
+            "question": "Quel instrument courant utilise une lentille convergente pour agrandir un objet ?",
+            "options": [
+              "Une loupe",
+              "Une règle",
+              "Un miroir plan uniquement",
+              "Un thermomètre"
+            ],
+            "correct_answer": "Une loupe",
+            "explanation": "Une loupe est constituée principalement d’une lentille convergente utilisée pour obtenir une image agrandie."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 3,
+      "title": "Les lentilles divergentes",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Une lentille divergente est généralement plus mince au centre qu’aux bords. Lorsqu’un faisceau de rayons parallèles traverse une lentille divergente, les rayons sont déviés de manière à s’écarter les uns des autres après leur passage dans la lentille."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Les rayons sortant d’une lentille divergente semblent provenir d’un point situé du côté de la source lumineuse. Ce point est appelé foyer principal objet dans le modèle de l’optique géométrique. Contrairement à une lentille convergente, une lentille divergente ne fait pas converger directement un faisceau parallèle vers un point réel situé après la lentille."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Les lentilles divergentes sont utilisées notamment dans certains systèmes optiques et dans certaines corrections de la vision. Elles ont donc un rôle différent des lentilles convergentes. Pour les distinguer, on peut observer leur forme et l’effet qu’elles produisent sur un faisceau de rayons parallèles."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Lentilles divergentes",
+        "questions": [
+          {
+            "question": "Comment est généralement une lentille divergente ?",
+            "options": [
+              "Plus mince au centre qu’aux bords",
+              "Plus épaisse au centre qu’aux bords",
+              "Toujours opaque",
+              "Toujours parfaitement plate"
+            ],
+            "correct_answer": "Plus mince au centre qu’aux bords",
+            "explanation": "Une lentille divergente est généralement plus mince au centre et plus épaisse vers les bords."
+          },
+          {
+            "question": "Que font des rayons parallèles après avoir traversé une lentille divergente ?",
+            "options": [
+              "Ils s’écartent les uns des autres",
+              "Ils convergent directement vers un foyer réel situé après la lentille",
+              "Ils s’arrêtent",
+              "Ils deviennent opaques"
+            ],
+            "correct_answer": "Ils s’écartent les uns des autres",
+            "explanation": "Une lentille divergente dévie les rayons parallèles de façon à les faire diverger."
+          },
+          {
+            "question": "Quelle caractéristique permet notamment de distinguer une lentille convergente d’une lentille divergente ?",
+            "options": [
+              "Leur forme et leur effet sur les rayons lumineux",
+              "Leur couleur uniquement",
+              "Leur masse uniquement",
+              "La température de la pièce"
+            ],
+            "correct_answer": "Leur forme et leur effet sur les rayons lumineux",
+            "explanation": "La forme de la lentille et son comportement vis-à-vis des rayons lumineux permettent de distinguer les deux types."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 4,
+      "title": "Formation d’une image par une lentille",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Lorsqu’un objet est placé devant une lentille, les rayons lumineux provenant de chaque point de l’objet traversent la lentille et sont déviés. Dans certaines conditions, les rayons issus d’un même point de l’objet se rencontrent après la lentille : leur intersection permet de localiser le point correspondant de l’image."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour construire simplement l’image donnée par une lentille convergente, on peut utiliser quelques rayons particuliers. Un rayon passant par le centre optique d’une lentille mince est considéré comme non dévié dans le modèle simplifié. Un rayon parallèle à l’axe principal est dévié en passant par le foyer image."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La position et les caractéristiques de l’image dépendent de la position de l’objet par rapport à la lentille et à son foyer. Une même lentille peut donc produire des images différentes selon la distance entre l’objet et la lentille. C’est ce principe qui est exploité dans plusieurs instruments optiques."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Formation d’une image",
+        "questions": [
+          {
+            "question": "Que se passe-t-il lorsqu’un objet est placé devant une lentille ?",
+            "options": [
+              "Les rayons provenant de l’objet traversent la lentille et sont déviés",
+              "La lumière disparaît toujours",
+              "L’objet devient nécessairement transparent",
+              "La lentille produit de la matière"
+            ],
+            "correct_answer": "Les rayons provenant de l’objet traversent la lentille et sont déviés",
+            "explanation": "Une lentille modifie la direction des rayons lumineux provenant de l’objet, ce qui permet la formation d’une image."
+          },
+          {
+            "question": "Dans le modèle simplifié d’une lentille mince, que fait un rayon passant par le centre optique ?",
+            "options": [
+              "Il est considéré comme non dévié",
+              "Il est toujours absorbé",
+              "Il devient parallèle à l’axe",
+              "Il retourne vers la source"
+            ],
+            "correct_answer": "Il est considéré comme non dévié",
+            "explanation": "Dans le modèle de la lentille mince, un rayon passant par le centre optique est considéré comme ne changeant pas de direction."
+          },
+          {
+            "question": "De quoi dépend notamment la position de l’image formée par une lentille convergente ?",
+            "options": [
+              "De la position de l’objet par rapport à la lentille",
+              "Uniquement de la couleur de l’objet",
+              "Uniquement de la température",
+              "De la masse de l’objet uniquement"
+            ],
+            "correct_answer": "De la position de l’objet par rapport à la lentille",
+            "explanation": "La position de l’objet par rapport à la lentille et à son foyer influence fortement la position et les caractéristiques de l’image."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 5,
+      "title": "Les caractéristiques des images",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Une image formée par une lentille peut avoir différentes caractéristiques. Elle peut être plus grande ou plus petite que l’objet, droite ou renversée. Elle peut également être réelle ou virtuelle. Ces caractéristiques dépendent notamment de la position de l’objet par rapport à la lentille convergente."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Une image réelle correspond à une situation dans laquelle les rayons lumineux issus d’un même point de l’objet se rencontrent réellement en un point après la lentille. Une image réelle peut, dans les conditions appropriées, être recueillie sur un écran. Une image virtuelle correspond à une situation où les rayons ne se rencontrent pas réellement au point apparent de l’image."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Lorsque l’objet est placé entre une lentille convergente et son foyer, la lentille peut produire une image virtuelle, droite et agrandie. C’est le principe utilisé par une loupe. Lorsque l’objet est placé au-delà du foyer, une lentille convergente peut former une image réelle, avec des caractéristiques qui dépendent de la position exacte de l’objet."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Caractéristiques des images",
+        "questions": [
+          {
+            "question": "Une image réelle peut-elle être recueillie sur un écran ?",
+            "options": [
+              "Oui, dans les conditions appropriées",
+              "Jamais",
+              "Seulement si l’objet est opaque",
+              "Seulement dans l’obscurité totale"
+            ],
+            "correct_answer": "Oui, dans les conditions appropriées",
+            "explanation": "Une image réelle correspond à une convergence réelle des rayons lumineux et peut être recueillie sur un écran correctement placé."
+          },
+          {
+            "question": "Avec une lentille convergente utilisée comme loupe, l’objet est placé :",
+            "options": [
+              "Entre la lentille et son foyer",
+              "Toujours très loin derrière la lentille",
+              "Au-delà de l’infini",
+              "Dans la lentille elle-même"
+            ],
+            "correct_answer": "Entre la lentille et son foyer",
+            "explanation": "Pour obtenir avec une loupe une image virtuelle, droite et agrandie, l’objet est placé entre la lentille convergente et son foyer."
+          },
+          {
+            "question": "Une image peut notamment être caractérisée par :",
+            "options": [
+              "Sa taille, son orientation et son caractère réel ou virtuel",
+              "Uniquement sa couleur",
+              "Uniquement sa température",
+              "Uniquement sa masse"
+            ],
+            "correct_answer": "Sa taille, son orientation et son caractère réel ou virtuel",
+            "explanation": "Les caractéristiques d’une image comprennent notamment sa taille, son orientation et le fait qu’elle soit réelle ou virtuelle."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 6,
+      "title": "Les applications des lentilles",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Les lentilles sont utilisées dans de nombreux instruments optiques. Une loupe utilise une lentille convergente pour obtenir une image agrandie d’un objet. Les lunettes peuvent utiliser différentes combinaisons de lentilles afin de corriger certains défauts de la vision."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Un appareil photo utilise un système optique comportant des lentilles pour former une image sur un capteur. Un microscope utilise également des lentilles afin d’obtenir une image fortement agrandie de petits objets. Les jumelles et certains télescopes utilisent eux aussi des systèmes de lentilles."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans la vie quotidienne au Mali, on peut rencontrer des lentilles dans les lunettes, les appareils photo des téléphones, les loupes utilisées pour observer de petits détails et certains instruments scientifiques présents dans les établissements scolaires ou les centres de santé. Comprendre le fonctionnement général des lentilles permet donc de mieux comprendre de nombreux outils modernes."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Applications des lentilles",
+        "questions": [
+          {
+            "question": "Quel instrument utilise une lentille convergente pour agrandir un objet proche ?",
+            "options": [
+              "Une loupe",
+              "Une règle",
+              "Une balance",
+              "Un thermomètre"
+            ],
+            "correct_answer": "Une loupe",
+            "explanation": "Une loupe utilise une lentille convergente pour produire une image virtuelle, droite et agrandie lorsque l’objet est placé dans les bonnes conditions."
+          },
+          {
+            "question": "Quel dispositif utilise des lentilles pour former une image sur un capteur ?",
+            "options": [
+              "Un appareil photo",
+              "Une casserole",
+              "Une règle graduée",
+              "Un récipient"
+            ],
+            "correct_answer": "Un appareil photo",
+            "explanation": "L’objectif d’un appareil photo contient un système optique qui utilise des lentilles pour former une image sur le capteur."
+          },
+          {
+            "question": "Pourquoi utilise-t-on des lentilles dans un microscope ?",
+            "options": [
+              "Pour obtenir une image agrandie de petits objets",
+              "Pour produire de l’électricité",
+              "Pour refroidir les objets",
+              "Pour mesurer directement la température"
+            ],
+            "correct_answer": "Pour obtenir une image agrandie de petits objets",
+            "explanation": "Le microscope utilise plusieurs systèmes de lentilles pour obtenir une image fortement agrandie de petits objets."
+          }
+        ]
+      }
+    }
+  ]
+}

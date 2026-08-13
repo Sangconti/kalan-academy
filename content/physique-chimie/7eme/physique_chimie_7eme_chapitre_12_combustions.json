@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Combustions",
+  "chapter_order": 12,
+  "lessons": [
+    {
+      "title": "Qu'est-ce qu'une combustion ?",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition",
+          "content": "Une combustion est une transformation chimique au cours de laquelle un combustible réagit avec un comburant en produisant de l'énergie, souvent sous forme de chaleur et parfois de lumière. Le dioxygène de l'air est un comburant très courant.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le combustible et le comburant",
+          "content": "Le combustible est la substance qui brûle. Le comburant est la substance qui permet la combustion. Dans une combustion courante dans l'air, le combustible réagit avec le dioxygène de l'air.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemples de combustions",
+          "content": "La combustion du bois, du charbon, du gaz de cuisson ou d'une bougie sont des exemples de combustions. Dans tous ces cas, le combustible réagit avec le dioxygène et libère de l'énergie.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — La combustion",
+        "questions": [
+          {
+            "question": "Qu'est-ce qu'une combustion ?",
+            "options": [
+              "Une transformation chimique avec dégagement d'énergie",
+              "Une simple dissolution",
+              "Une fusion toujours réversible",
+              "Un changement de forme sans transformation"
+            ],
+            "correct_answer": "Une transformation chimique avec dégagement d'énergie",
+            "explanation": "Une combustion est une transformation chimique qui libère généralement de la chaleur et parfois de la lumière."
+          },
+          {
+            "question": "Dans une combustion ordinaire dans l'air, quel gaz joue le rôle de comburant ?",
+            "options": [
+              "Le dioxygène",
+              "Le diazote",
+              "Le dioxyde de carbone",
+              "La vapeur d'eau"
+            ],
+            "correct_answer": "Le dioxygène",
+            "explanation": "Le dioxygène de l'air permet à de nombreuses combustions de se produire."
+          },
+          {
+            "question": "Le bois qui brûle est un exemple de...",
+            "options": [
+              "combustion",
+              "dissolution",
+              "solidification",
+              "fusion"
+            ],
+            "correct_answer": "combustion",
+            "explanation": "Le bois réagit avec le dioxygène lors de sa combustion."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les conditions nécessaires à une combustion",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le triangle du feu",
+          "content": "Pour qu'une combustion se produise, trois éléments sont nécessaires : un combustible, un comburant et une source d'énergie suffisante pour déclencher la combustion. Ces trois éléments sont souvent représentés par le triangle du feu.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "La source d'énergie",
+          "content": "Un combustible ne commence pas toujours à brûler spontanément. Il faut souvent fournir une énergie initiale, par exemple avec une flamme, une étincelle ou une source de chaleur. Cette énergie permet d'amorcer la combustion.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Comment arrêter une combustion ?",
+          "content": "Pour arrêter une combustion, on peut supprimer l'un des éléments nécessaires. Par exemple, couvrir une petite flamme peut limiter son contact avec le dioxygène. On peut aussi refroidir le combustible ou supprimer son alimentation en combustible.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Conditions de combustion",
+        "questions": [
+          {
+            "question": "Quels sont les trois éléments du triangle du feu ?",
+            "options": [
+              "Combustible, comburant et énergie d'activation",
+              "Eau, sel et sable",
+              "Air, eau et lumière uniquement",
+              "Métal, verre et bois"
+            ],
+            "correct_answer": "Combustible, comburant et énergie d'activation",
+            "explanation": "Ces trois éléments sont nécessaires pour amorcer et maintenir une combustion."
+          },
+          {
+            "question": "Pourquoi une allumette doit-elle être frottée avant de brûler ?",
+            "options": [
+              "Pour fournir l'énergie nécessaire au déclenchement de la combustion",
+              "Pour retirer tout le dioxygène",
+              "Pour transformer le bois en eau",
+              "Pour supprimer le combustible"
+            ],
+            "correct_answer": "Pour fournir l'énergie nécessaire au déclenchement de la combustion",
+            "explanation": "Le frottement produit suffisamment de chaleur pour amorcer la combustion."
+          },
+          {
+            "question": "Comment peut-on arrêter une combustion ?",
+            "options": [
+              "En supprimant un élément nécessaire à la combustion",
+              "En ajoutant toujours du combustible",
+              "En augmentant systématiquement la température",
+              "En ajoutant du dioxygène"
+            ],
+            "correct_answer": "En supprimant un élément nécessaire à la combustion",
+            "explanation": "Supprimer le combustible, le comburant ou suffisamment de chaleur peut arrêter la combustion."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Combustion du carbone",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le carbone",
+          "content": "Le carbone est présent dans de nombreux combustibles, notamment le charbon de bois. Lorsqu'il brûle suffisamment dans le dioxygène, il peut former du dioxyde de carbone.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Formation du dioxyde de carbone",
+          "content": "Lors d'une combustion complète du carbone dans le dioxygène, le carbone réagit avec le dioxygène et forme du dioxyde de carbone. On peut représenter cette transformation par : carbone + dioxygène → dioxyde de carbone.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Mise en évidence du dioxyde de carbone",
+          "content": "Le dioxyde de carbone peut être mis en évidence à l'aide de l'eau de chaux. Lorsque du dioxyde de carbone est introduit dans l'eau de chaux, celle-ci devient trouble.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Combustion du carbone",
+        "questions": [
+          {
+            "question": "Quel gaz est formé lors de la combustion complète du carbone ?",
+            "options": [
+              "Le dioxyde de carbone",
+              "Le dioxygène",
+              "Le diazote",
+              "L'hydrogène"
+            ],
+            "correct_answer": "Le dioxyde de carbone",
+            "explanation": "La combustion complète du carbone dans le dioxygène produit du dioxyde de carbone."
+          },
+          {
+            "question": "Comment peut-on mettre en évidence le dioxyde de carbone ?",
+            "options": [
+              "Avec de l'eau de chaux qui devient trouble",
+              "Avec de l'eau qui devient bleue",
+              "Avec du papier qui devient métallique",
+              "Avec du sel qui disparaît"
+            ],
+            "correct_answer": "Avec de l'eau de chaux qui devient trouble",
+            "explanation": "Le dioxyde de carbone trouble l'eau de chaux."
+          },
+          {
+            "question": "La combustion complète du carbone produit notamment...",
+            "options": [
+              "du dioxyde de carbone",
+              "du chlorure de sodium",
+              "de l'eau salée",
+              "du diazote uniquement"
+            ],
+            "correct_answer": "du dioxyde de carbone",
+            "explanation": "Le carbone et le dioxygène réagissent pour former du dioxyde de carbone lors d'une combustion complète."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Combustion des hydrocarbures",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les hydrocarbures",
+          "content": "Les hydrocarbures sont des substances constituées principalement de carbone et d'hydrogène. Le gaz de cuisson, certains carburants et d'autres combustibles contiennent des hydrocarbures.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Combustion complète",
+          "content": "Lorsqu'un hydrocarbure brûle avec suffisamment de dioxygène, la combustion complète produit principalement du dioxyde de carbone et de l'eau. Elle libère également de l'énergie sous forme de chaleur et souvent de lumière.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Flamme et quantité de dioxygène",
+          "content": "Une bonne arrivée de dioxygène favorise une combustion complète. Lorsque l'apport en dioxygène est insuffisant, la combustion peut devenir incomplète et produire notamment du monoxyde de carbone et des particules de carbone.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Hydrocarbures",
+        "questions": [
+          {
+            "question": "Les hydrocarbures sont constitués principalement de...",
+            "options": [
+              "carbone et hydrogène",
+              "sodium et chlore",
+              "oxygène et azote uniquement",
+              "calcium et fer"
+            ],
+            "correct_answer": "carbone et hydrogène",
+            "explanation": "Un hydrocarbure est une substance constituée de carbone et d'hydrogène."
+          },
+          {
+            "question": "Une combustion complète d'un hydrocarbure produit principalement...",
+            "options": [
+              "du dioxyde de carbone et de l'eau",
+              "du sel et du sable",
+              "du diazote et du fer",
+              "uniquement du dioxygène"
+            ],
+            "correct_answer": "du dioxyde de carbone et de l'eau",
+            "explanation": "En présence suffisante de dioxygène, les hydrocarbures produisent principalement du dioxyde de carbone et de l'eau."
+          },
+          {
+            "question": "Que peut produire une combustion incomplète ?",
+            "options": [
+              "Du monoxyde de carbone",
+              "Uniquement du dioxygène",
+              "Du chlorure de sodium",
+              "De l'eau pure uniquement"
+            ],
+            "correct_answer": "Du monoxyde de carbone",
+            "explanation": "Une combustion incomplète peut produire du monoxyde de carbone, un gaz dangereux."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Dangers liés aux combustions",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le monoxyde de carbone",
+          "content": "Le monoxyde de carbone est un gaz très dangereux qui peut être produit lors d'une combustion incomplète. Il est particulièrement dangereux parce qu'il est difficile à détecter sans appareil spécialisé et peut provoquer une intoxication.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les fumées",
+          "content": "Certaines combustions produisent des fumées contenant des particules et différents gaz. L'inhalation de ces fumées peut être dangereuse pour la santé. Il faut éviter de respirer directement les fumées d'une combustion.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Prévention",
+          "content": "Pour limiter les risques, les appareils utilisant un combustible doivent être correctement utilisés et entretenus. Les lieux où se produisent des combustions doivent être suffisamment ventilés. Il ne faut jamais utiliser un appareil à combustion dans un espace fermé sans ventilation adaptée.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Dangers des combustions",
+        "questions": [
+          {
+            "question": "Pourquoi le monoxyde de carbone est-il dangereux ?",
+            "options": [
+              "Il peut provoquer une intoxication",
+              "Il transforme toujours l'eau en glace",
+              "Il est toujours visible",
+              "Il est un solide très lourd"
+            ],
+            "correct_answer": "Il peut provoquer une intoxication",
+            "explanation": "Le monoxyde de carbone est un gaz toxique qui peut provoquer une intoxication grave."
+          },
+          {
+            "question": "Que faut-il éviter lors d'une combustion ?",
+            "options": [
+              "Respirer directement les fumées",
+              "Assurer une ventilation adaptée",
+              "Entretenir les appareils",
+              "Utiliser correctement les équipements"
+            ],
+            "correct_answer": "Respirer directement les fumées",
+            "explanation": "Les fumées peuvent contenir des gaz et particules nocifs pour la santé."
+          },
+          {
+            "question": "Pourquoi la ventilation est-elle importante ?",
+            "options": [
+              "Elle permet notamment de renouveler l'air et de limiter l'accumulation de certains gaz",
+              "Elle supprime tout combustible",
+              "Elle transforme les gaz en solides",
+              "Elle empêche toute combustion"
+            ],
+            "correct_answer": "Elle permet notamment de renouveler l'air et de limiter l'accumulation de certains gaz",
+            "explanation": "Une ventilation adaptée contribue à limiter l'accumulation de gaz dangereux dans un espace."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Combustions et sécurité au quotidien",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Combustions dans la vie quotidienne",
+          "content": "Les combustions sont utilisées pour la cuisson, le chauffage, le transport et certaines activités industrielles. Elles fournissent une énergie utile mais doivent être maîtrisées pour éviter les incendies et les intoxications.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Comment réagir face à un incendie ?",
+          "content": "En cas d'incendie, il faut s'éloigner du danger et prévenir rapidement les personnes responsables ou les services compétents. Il ne faut pas prendre de risques inutiles pour tenter d'éteindre un feu important.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Bilan",
+          "content": "Une combustion est une transformation chimique entre un combustible et un comburant. Dans l'air, le dioxygène joue généralement le rôle de comburant. Les combustions produisent de l'énergie et peuvent former de nouvelles substances. Une combustion incomplète peut produire du monoxyde de carbone, ce qui présente un danger important.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Bilan des combustions",
+        "questions": [
+          {
+            "question": "Quels sont les principaux éléments nécessaires à une combustion ?",
+            "options": [
+              "Un combustible, un comburant et une énergie d'activation",
+              "De l'eau, du sable et du sel",
+              "Uniquement de l'eau",
+              "Uniquement du dioxygène"
+            ],
+            "correct_answer": "Un combustible, un comburant et une énergie d'activation",
+            "explanation": "Ces trois éléments constituent le principe du triangle du feu."
+          },
+          {
+            "question": "Quel produit dangereux peut apparaître lors d'une combustion incomplète ?",
+            "options": [
+              "Le monoxyde de carbone",
+              "Le chlorure de sodium",
+              "Le diazote pur",
+              "Le calcium"
+            ],
+            "correct_answer": "Le monoxyde de carbone",
+            "explanation": "Une combustion incomplète peut produire du monoxyde de carbone, un gaz toxique."
+          },
+          {
+            "question": "Quelle attitude est correcte face à un incendie important ?",
+            "options": [
+              "S'éloigner du danger et alerter rapidement",
+              "Entrer dans le feu sans protection",
+              "Respirer les fumées pour vérifier leur composition",
+              "Ajouter du combustible"
+            ],
+            "correct_answer": "S'éloigner du danger et alerter rapidement",
+            "explanation": "La priorité est de se protéger et d'alerter les personnes ou services compétents."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Droites et angles",
+  "chapter_order": 22,
+  "lessons": [
+    {
+      "title": "Droites, segments et demi-droites",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La droite",
+          "content": {
+            "text": "En géométrie, une droite est une ligne qui se prolonge indéfiniment dans les deux directions. On la désigne généralement par une lettre minuscule ou par deux points qui lui appartiennent. Par exemple, la droite (AB) est la droite passant par les points A et B."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le segment",
+          "content": {
+            "text": "Un segment est une partie de droite limitée par deux points appelés extrémités. Le segment dont les extrémités sont A et B se note [AB]. Sa longueur se note AB. Contrairement à une droite, un segment possède une longueur finie."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "La demi-droite",
+          "content": {
+            "text": "Une demi-droite est une partie de droite qui possède une origine et se prolonge indéfiniment dans une seule direction. La demi-droite d'origine A passant par B se note [AB). Il est important de distinguer la droite (AB), le segment [AB] et la demi-droite [AB)."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Droites, segments et demi-droites",
+        "questions": [
+          {
+            "question": "Quelle figure se prolonge indéfiniment dans les deux directions ?",
+            "options": [
+              "Un segment",
+              "Une demi-droite",
+              "Une droite",
+              "Un angle"
+            ],
+            "correct_answer": "Une droite",
+            "explanation": "Une droite se prolonge indéfiniment dans les deux directions."
+          },
+          {
+            "question": "Comment note-t-on le segment ayant pour extrémités A et B ?",
+            "options": [
+              "(AB)",
+              "[AB]",
+              "[AB)",
+              "(AB]"
+            ],
+            "correct_answer": "[AB]",
+            "explanation": "Le segment d'extrémités A et B se note [AB]."
+          },
+          {
+            "question": "Que représente [AB) ?",
+            "options": [
+              "La droite AB",
+              "Le segment AB",
+              "La demi-droite d'origine A passant par B",
+              "La demi-droite d'origine B passant par A"
+            ],
+            "correct_answer": "La demi-droite d'origine A passant par B",
+            "explanation": "Dans [AB), le premier point A est l'origine de la demi-droite."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Droites parallèles et perpendiculaires",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les droites parallèles",
+          "content": {
+            "text": "Deux droites sont parallèles lorsqu'elles sont dans le même plan et ne se rencontrent jamais, même si on les prolonge indéfiniment. On utilise le symbole // pour indiquer le parallélisme. Par exemple, (d) // (d')."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les droites perpendiculaires",
+          "content": {
+            "text": "Deux droites sont perpendiculaires lorsqu'elles se coupent en formant un angle droit. On utilise le symbole ⟂. Par exemple, (d) ⟂ (d'). L'angle formé mesure 90°."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Construire des parallèles et des perpendiculaires",
+          "content": {
+            "text": "Pour vérifier qu'une droite est perpendiculaire à une autre, on peut utiliser une équerre. Pour tracer une parallèle ou une perpendiculaire, on utilise généralement une règle et une équerre. Ces instruments permettent de réaliser des constructions précises."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Parallèles et perpendiculaires",
+        "questions": [
+          {
+            "question": "Deux droites parallèles...",
+            "options": [
+              "se coupent toujours",
+              "ne se rencontrent jamais dans le même plan",
+              "forment toujours un angle droit",
+              "ont toujours une longueur différente"
+            ],
+            "correct_answer": "ne se rencontrent jamais dans le même plan",
+            "explanation": "Deux droites parallèles d'un même plan ne se rencontrent jamais."
+          },
+          {
+            "question": "Deux droites perpendiculaires forment un angle de...",
+            "options": [
+              "45°",
+              "60°",
+              "90°",
+              "180°"
+            ],
+            "correct_answer": "90°",
+            "explanation": "Deux droites perpendiculaires se coupent en formant un angle droit de 90°."
+          },
+          {
+            "question": "Quel instrument permet de vérifier un angle droit ?",
+            "options": [
+              "Une équerre",
+              "Un compas uniquement",
+              "Une gomme",
+              "Un rapporteur uniquement"
+            ],
+            "correct_answer": "Une équerre",
+            "explanation": "L'équerre possède un angle droit et permet de vérifier ou tracer des perpendiculaires."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les angles et leur mesure",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'un angle",
+          "content": {
+            "text": "Un angle est formé par deux demi-droites ayant la même origine. Cette origine est appelée le sommet de l'angle. Les deux demi-droites sont les côtés de l'angle. Un angle peut être noté avec trois lettres, en plaçant le sommet au milieu."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Mesure d'un angle",
+          "content": {
+            "text": "La mesure d'un angle s'exprime généralement en degrés, notés °. Pour mesurer un angle, on utilise un rapporteur. On place le centre du rapporteur sur le sommet de l'angle et l'une de ses lignes de référence sur un côté de l'angle."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Lire la mesure sur un rapporteur",
+          "content": {
+            "text": "Il faut ensuite lire la bonne graduation du rapporteur, celle qui commence à 0° sur le côté de départ de l'angle. Par exemple, si le deuxième côté arrive sur la graduation 60°, alors la mesure de l'angle est 60°."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Angles et mesure",
+        "questions": [
+          {
+            "question": "Comment appelle-t-on le point commun aux deux côtés d'un angle ?",
+            "options": [
+              "Le centre",
+              "Le sommet",
+              "Le rayon",
+              "L'extrémité"
+            ],
+            "correct_answer": "Le sommet",
+            "explanation": "Les deux côtés d'un angle ont une même origine appelée sommet."
+          },
+          {
+            "question": "Quelle unité utilise-t-on pour mesurer les angles ?",
+            "options": [
+              "Le mètre",
+              "Le kilogramme",
+              "Le degré",
+              "Le litre"
+            ],
+            "correct_answer": "Le degré",
+            "explanation": "La mesure des angles s'exprime généralement en degrés, notés °."
+          },
+          {
+            "question": "Quel instrument utilise-t-on pour mesurer précisément un angle ?",
+            "options": [
+              "Une règle",
+              "Un rapporteur",
+              "Une équerre uniquement",
+              "Un compas uniquement"
+            ],
+            "correct_answer": "Un rapporteur",
+            "explanation": "Le rapporteur est l'instrument utilisé pour mesurer les angles."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire et reconnaître les angles",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Première étape de construction",
+          "content": {
+            "text": "Pour construire un angle de mesure donnée, on commence par tracer une demi-droite. On place ensuite le centre du rapporteur sur le sommet et on aligne le zéro avec le premier côté. On repère la graduation correspondant à la mesure demandée et on marque un point."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Tracer le deuxième côté",
+          "content": {
+            "text": "On retire ensuite le rapporteur et on trace la deuxième demi-droite passant par le sommet et le point marqué. Par exemple, pour construire un angle de 70°, on marque précisément la graduation 70° puis on trace le deuxième côté."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Choisir la bonne graduation",
+          "content": {
+            "text": "Lorsqu'on utilise un rapporteur, il faut vérifier que l'on lit la bonne échelle. Un rapporteur possède généralement deux séries de graduations. On choisit celle qui commence à 0° du côté où commence l'angle."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Construction des angles",
+        "questions": [
+          {
+            "question": "Quelle est la première étape pour construire un angle de 70° ?",
+            "options": [
+              "Tracer une demi-droite",
+              "Effacer le sommet",
+              "Mesurer un segment de 70 cm",
+              "Tracer un cercle"
+            ],
+            "correct_answer": "Tracer une demi-droite",
+            "explanation": "On commence par tracer un premier côté de l'angle sous forme de demi-droite."
+          },
+          {
+            "question": "Où place-t-on le centre du rapporteur ?",
+            "options": [
+              "Sur l'extrémité de la feuille",
+              "Sur le sommet de l'angle",
+              "À 10 cm du sommet",
+              "Sur le deuxième côté uniquement"
+            ],
+            "correct_answer": "Sur le sommet de l'angle",
+            "explanation": "Le centre du rapporteur doit être placé exactement sur le sommet."
+          },
+          {
+            "question": "Pourquoi faut-il choisir la bonne graduation du rapporteur ?",
+            "options": [
+              "Pour éviter de mesurer en mètres",
+              "Parce que le rapporteur possède deux échelles graduées",
+              "Parce que le sommet change",
+              "Pour rendre le papier plus propre"
+            ],
+            "correct_answer": "Parce que le rapporteur possède deux échelles graduées",
+            "explanation": "Il faut lire l'échelle qui commence à 0° sur le côté de départ de l'angle."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Angles particuliers",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "L'angle aigu",
+          "content": {
+            "text": "Un angle aigu mesure moins de 90°. Par exemple, un angle de 35° est aigu. Un angle droit mesure exactement 90°. Il est reconnaissable à l'aide d'une équerre ou du petit carré placé au sommet dans une figure géométrique."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "L'angle obtus et l'angle plat",
+          "content": {
+            "text": "Un angle obtus mesure plus de 90° et moins de 180°. Par exemple, 120° est un angle obtus. Un angle plat mesure exactement 180° et correspond à deux demi-droites opposées ayant le même sommet."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Reconnaître les angles particuliers",
+          "content": {
+            "text": "Pour reconnaître un angle, on peut donc comparer sa mesure à 90° et à 180°. Si sa mesure est inférieure à 90°, il est aigu ; si elle vaut 90°, il est droit ; si elle est comprise entre 90° et 180°, il est obtus ; si elle vaut 180°, il est plat."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Angles particuliers",
+        "questions": [
+          {
+            "question": "Un angle de 45° est...",
+            "options": [
+              "aigu",
+              "droit",
+              "obtus",
+              "plat"
+            ],
+            "correct_answer": "aigu",
+            "explanation": "45° est inférieur à 90°, donc l'angle est aigu."
+          },
+          {
+            "question": "Un angle de 90° est...",
+            "options": [
+              "aigu",
+              "droit",
+              "obtus",
+              "plat"
+            ],
+            "correct_answer": "droit",
+            "explanation": "Un angle droit mesure exactement 90°."
+          },
+          {
+            "question": "Un angle de 135° est...",
+            "options": [
+              "aigu",
+              "droit",
+              "obtus",
+              "plat"
+            ],
+            "correct_answer": "obtus",
+            "explanation": "135° est supérieur à 90° et inférieur à 180°, donc l'angle est obtus."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exercices et problèmes sur les droites et les angles",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Identifier les objets géométriques",
+          "content": {
+            "text": "Dans les problèmes de géométrie, il faut d'abord identifier les objets géométriques présents : droites, segments, demi-droites et angles. Ensuite, on utilise les propriétés connues pour effectuer les constructions ou les calculs demandés."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Utiliser les propriétés des angles",
+          "content": {
+            "text": "Exemple : une droite (d) est perpendiculaire à une droite (d'). L'angle formé par ces deux droites mesure donc 90°. Si un autre angle adjacent mesure 40°, on peut utiliser les propriétés des angles pour déterminer les mesures recherchées."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Utiliser correctement les instruments",
+          "content": {
+            "text": "Pour une construction, il faut utiliser les instruments correctement : la règle pour tracer des droites et des segments, l'équerre pour les perpendiculaires et le rapporteur pour mesurer ou construire les angles. La précision des tracés est importante en géométrie."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse droites et angles",
+        "questions": [
+          {
+            "question": "Deux droites perpendiculaires forment un angle de...",
+            "options": [
+              "45°",
+              "60°",
+              "90°",
+              "180°"
+            ],
+            "correct_answer": "90°",
+            "explanation": "La perpendicularité correspond à un angle droit de 90°."
+          },
+          {
+            "question": "Quel instrument est principalement utilisé pour construire un angle de 65° ?",
+            "options": [
+              "Un rapporteur",
+              "Une gomme",
+              "Une règle seule",
+              "Un compas seul"
+            ],
+            "correct_answer": "Un rapporteur",
+            "explanation": "Le rapporteur permet de mesurer et construire un angle de mesure donnée."
+          },
+          {
+            "question": "Un angle de 180° est appelé...",
+            "options": [
+              "angle aigu",
+              "angle droit",
+              "angle obtus",
+              "angle plat"
+            ],
+            "correct_answer": "angle plat",
+            "explanation": "Un angle plat mesure exactement 180°."
+          }
+        ]
+      }
+    }
+  ]
+}

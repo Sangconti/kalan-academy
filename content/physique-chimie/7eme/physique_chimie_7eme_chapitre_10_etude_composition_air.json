@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Étude et composition de l'air",
+  "chapter_order": 10,
+  "lessons": [
+    {
+      "title": "L'air qui nous entoure",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce que l'air ?",
+          "content": "L'air est un mélange de plusieurs gaz qui nous entoure. Il est présent dans l'atmosphère et occupe l'espace autour de nous. Même s'il est généralement invisible, l'air est bien une matière.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "L'air est-il de la matière ?",
+          "content": "L'air possède une masse et occupe un volume. On peut mettre de l'air dans un ballon, dans une bouteille ou dans une seringue. Ces expériences simples montrent que l'air est une matière.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Présence de l'air",
+          "content": "L'air est présent partout autour de nous. Il remplit les espaces qui semblent vides. On le trouve également dans les poumons des êtres humains et des animaux, dans les sols et dans certains objets poreux.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — L'air",
+        "questions": [
+          {
+            "question": "Qu'est-ce que l'air ?",
+            "options": [
+              "Un mélange de plusieurs gaz",
+              "Un gaz unique",
+              "Un liquide",
+              "Un solide"
+            ],
+            "correct_answer": "Un mélange de plusieurs gaz",
+            "explanation": "L'air atmosphérique est principalement constitué de diazote et de dioxygène, avec de petites quantités d'autres gaz."
+          },
+          {
+            "question": "L'air occupe-t-il un volume ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement lorsqu'il est froid",
+              "Seulement lorsqu'il est comprimé"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "Comme toute matière, l'air occupe un espace et donc un volume."
+          },
+          {
+            "question": "Pourquoi peut-on dire que l'air est une matière ?",
+            "options": [
+              "Il possède une masse et occupe un volume",
+              "Il est toujours visible",
+              "Il est toujours liquide",
+              "Il n'occupe aucun espace"
+            ],
+            "correct_answer": "Il possède une masse et occupe un volume",
+            "explanation": "La masse et le volume sont deux propriétés permettant de montrer que l'air est une matière."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les principaux constituants de l'air",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le diazote",
+          "content": "Le diazote est le gaz majoritaire de l'air. Il représente environ 78 % de l'air sec. Son symbole moléculaire est N₂. Il est présent en grande quantité dans l'atmosphère.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le dioxygène",
+          "content": "Le dioxygène représente environ 21 % de l'air sec. Son symbole moléculaire est O₂. Il joue un rôle essentiel dans la respiration des êtres vivants et intervient également dans les combustions.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Les autres gaz",
+          "content": "Le pourcentage restant est constitué de petites quantités d'autres gaz, notamment l'argon et le dioxyde de carbone, ainsi que de la vapeur d'eau dont la quantité varie selon les conditions atmosphériques.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Composition de l'air",
+        "questions": [
+          {
+            "question": "Quel gaz est majoritaire dans l'air ?",
+            "options": [
+              "Le diazote",
+              "Le dioxygène",
+              "Le dioxyde de carbone",
+              "L'hydrogène"
+            ],
+            "correct_answer": "Le diazote",
+            "explanation": "Le diazote représente environ 78 % de l'air sec."
+          },
+          {
+            "question": "Quelle est approximativement la proportion de dioxygène dans l'air sec ?",
+            "options": [
+              "21 %",
+              "78 %",
+              "50 %",
+              "1 %"
+            ],
+            "correct_answer": "21 %",
+            "explanation": "Le dioxygène représente environ 21 % de l'air sec."
+          },
+          {
+            "question": "Quelle est la formule du dioxygène ?",
+            "options": [
+              "O₂",
+              "N₂",
+              "CO₂",
+              "H₂O"
+            ],
+            "correct_answer": "O₂",
+            "explanation": "Une molécule de dioxygène est constituée de deux atomes d'oxygène : O₂."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mise en évidence du dioxygène",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le rôle du dioxygène",
+          "content": "Le dioxygène est indispensable à la respiration de nombreux êtres vivants. Il permet également à de nombreuses combustions de se poursuivre. Sans dioxygène, une flamme ordinaire ne peut pas continuer à brûler.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Une expérience simple",
+          "content": "On peut mettre en évidence le rôle du dioxygène avec une bougie allumée placée sous un récipient retourné. La flamme finit par s'éteindre lorsque le dioxygène disponible diminue suffisamment.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Interprétation",
+          "content": "L'extinction de la flamme montre que la combustion nécessite le dioxygène présent dans l'air. Le dioxygène est donc un constituant de l'air qui joue un rôle important dans les combustions.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Dioxygène",
+        "questions": [
+          {
+            "question": "Quel gaz de l'air permet à une combustion ordinaire de se poursuivre ?",
+            "options": [
+              "Le dioxygène",
+              "Le diazote",
+              "L'argon",
+              "La vapeur d'eau uniquement"
+            ],
+            "correct_answer": "Le dioxygène",
+            "explanation": "Le dioxygène est nécessaire à de nombreuses combustions."
+          },
+          {
+            "question": "Que peut-il arriver à une bougie placée sous un récipient fermé ?",
+            "options": [
+              "La flamme finit par s'éteindre",
+              "La flamme brûle indéfiniment",
+              "La bougie devient de l'eau immédiatement",
+              "Le récipient disparaît"
+            ],
+            "correct_answer": "La flamme finit par s'éteindre",
+            "explanation": "Le dioxygène disponible dans le récipient diminue progressivement, ce qui finit par empêcher la combustion de continuer."
+          },
+          {
+            "question": "Que montre cette expérience ?",
+            "options": [
+              "Le dioxygène de l'air participe à la combustion",
+              "Le diazote brûle facilement",
+              "L'air ne contient aucun gaz",
+              "La flamme produit du dioxygène"
+            ],
+            "correct_answer": "Le dioxygène de l'air participe à la combustion",
+            "explanation": "L'expérience met en évidence le rôle du dioxygène dans la combustion."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Propriétés de l'air",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "L'air peut être comprimé",
+          "content": "L'air peut être comprimé, c'est-à-dire que son volume peut être diminué en exerçant une pression. Une seringue bouchée contenant de l'air permet de mettre en évidence cette propriété.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "L'air peut se dilater",
+          "content": "L'air peut également se dilater lorsque les conditions changent, notamment lorsqu'il est chauffé. Son volume peut alors augmenter s'il dispose d'un espace disponible.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "L'air exerce une pression",
+          "content": "L'air exerce une pression sur les objets qui l'entourent. Cette pression est liée au poids de l'atmosphère et aux mouvements des molécules de gaz. Elle peut être mise en évidence par différentes expériences.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Propriétés de l'air",
+        "questions": [
+          {
+            "question": "Peut-on comprimer l'air ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement l'air froid",
+              "Seulement l'air humide"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "L'air est compressible : son volume peut être réduit lorsqu'on exerce une pression."
+          },
+          {
+            "question": "Que peut faire l'air lorsqu'il est chauffé ?",
+            "options": [
+              "Il peut se dilater",
+              "Il devient automatiquement solide",
+              "Il disparaît",
+              "Il devient du métal"
+            ],
+            "correct_answer": "Il peut se dilater",
+            "explanation": "Un gaz chauffé peut se dilater lorsque les conditions permettent son expansion."
+          },
+          {
+            "question": "L'air exerce-t-il une pression ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Uniquement sous l'eau",
+              "Uniquement dans un ballon"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "L'atmosphère exerce une pression sur les surfaces qui l'entourent."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Air et respiration",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Respiration des êtres vivants",
+          "content": "De nombreux êtres vivants utilisent le dioxygène de l'air pour leur respiration. Chez l'être humain, l'air inspiré arrive dans les poumons où le dioxygène peut passer vers le sang.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le dioxyde de carbone rejeté",
+          "content": "Lors de la respiration, l'organisme produit notamment du dioxyde de carbone, qui est rejeté dans l'air expiré. L'air inspiré et l'air expiré n'ont donc pas exactement la même composition.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Importance de l'air propre",
+          "content": "La qualité de l'air est importante pour la santé. Les fumées, poussières et certains gaz polluants peuvent être nocifs lorsqu'ils sont inhalés. Il est donc important de limiter la pollution de l'air et d'assurer une bonne ventilation des espaces de vie.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Air et respiration",
+        "questions": [
+          {
+            "question": "Quel gaz de l'air est utilisé par l'organisme lors de la respiration ?",
+            "options": [
+              "Le dioxygène",
+              "Le diazote uniquement",
+              "Le dioxyde de carbone uniquement",
+              "L'argon uniquement"
+            ],
+            "correct_answer": "Le dioxygène",
+            "explanation": "Le dioxygène est utilisé par les organismes lors de la respiration."
+          },
+          {
+            "question": "Quel gaz est notamment rejeté lors de la respiration humaine ?",
+            "options": [
+              "Le dioxyde de carbone",
+              "Le dioxygène uniquement",
+              "Le diazote uniquement",
+              "L'argon uniquement"
+            ],
+            "correct_answer": "Le dioxyde de carbone",
+            "explanation": "Le dioxyde de carbone est produit par l'organisme et rejeté notamment lors de l'expiration."
+          },
+          {
+            "question": "Pourquoi faut-il préserver la qualité de l'air ?",
+            "options": [
+              "Parce que nous respirons l'air et que certains polluants peuvent être nocifs",
+              "Parce que l'air est toujours solide",
+              "Parce que l'air ne contient aucun gaz",
+              "Parce que l'air sert uniquement à gonfler les ballons"
+            ],
+            "correct_answer": "Parce que nous respirons l'air et que certains polluants peuvent être nocifs",
+            "explanation": "La pollution atmosphérique peut avoir des effets négatifs sur la santé."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Pollution de l'air et bilan",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les sources de pollution",
+          "content": "L'air peut être pollué par les fumées des véhicules, certaines industries, la combustion des déchets, les feux et d'autres activités. Les particules et les gaz rejetés peuvent modifier la qualité de l'air.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Préserver la qualité de l'air",
+          "content": "Pour réduire la pollution de l'air, il est important d'éviter les brûlages inutiles, de limiter les émissions polluantes et de favoriser des pratiques respectueuses de l'environnement. Une bonne gestion des déchets contribue également à réduire certaines fumées.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": "L'air est un mélange de gaz. Il contient principalement environ 78 % de diazote et 21 % de dioxygène, ainsi que de faibles quantités d'autres gaz. Le dioxygène intervient dans la respiration et les combustions. L'air possède une masse, occupe un volume, peut être comprimé et exerce une pression.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse sur l'air",
+        "questions": [
+          {
+            "question": "Quelle est la composition approximative de l'air sec ?",
+            "options": [
+              "78 % de diazote et 21 % de dioxygène",
+              "50 % de diazote et 50 % de dioxygène",
+              "100 % de dioxygène",
+              "21 % de diazote et 78 % de dioxygène"
+            ],
+            "correct_answer": "78 % de diazote et 21 % de dioxygène",
+            "explanation": "L'air sec contient approximativement 78 % de diazote et 21 % de dioxygène, avec environ 1 % d'autres gaz."
+          },
+          {
+            "question": "Quel gaz joue un rôle essentiel dans les combustions ?",
+            "options": [
+              "Le dioxygène",
+              "Le diazote",
+              "L'argon",
+              "La vapeur d'eau uniquement"
+            ],
+            "correct_answer": "Le dioxygène",
+            "explanation": "Le dioxygène est nécessaire à de nombreuses combustions."
+          },
+          {
+            "question": "Laquelle de ces propositions est vraie ?",
+            "options": [
+              "L'air possède une masse et occupe un volume",
+              "L'air n'occupe aucun espace",
+              "L'air est un liquide",
+              "L'air est constitué d'un seul gaz"
+            ],
+            "correct_answer": "L'air possède une masse et occupe un volume",
+            "explanation": "L'air est une matière gazeuse constituée de plusieurs gaz et possède notamment une masse et un volume."
+          }
+        ]
+      }
+    }
+  ]
+}

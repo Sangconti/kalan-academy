@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Vaporisation et liquéfaction",
+  "chapter_order": 6,
+  "lessons": [
+    {
+      "lesson_order": 1,
+      "title": "La vaporisation",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "La vaporisation est le changement d’état d’une substance qui passe de l’état liquide à l’état gazeux. Pour provoquer ou accélérer cette transformation, un liquide peut recevoir de l’énergie thermique. L’eau liquide peut ainsi se transformer en vapeur d’eau."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La vaporisation peut se produire de deux façons principales : par évaporation ou par ébullition. L’évaporation se produit à la surface du liquide et peut avoir lieu à différentes températures. L’ébullition se produit dans tout le liquide lorsque celui-ci atteint sa température d’ébullition dans les conditions considérées."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans la vie quotidienne au Mali, on observe la vaporisation lorsqu’une quantité d’eau diminue progressivement dans un récipient laissé à l’air libre, ou lorsque l’eau chauffée produit de la vapeur. La vaporisation est donc un phénomène courant qui participe notamment au séchage et à la cuisson."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — La vaporisation",
+        "questions": [
+          {
+            "question": "Qu’est-ce que la vaporisation ?",
+            "options": [
+              "Le passage de l’état liquide à l’état gazeux",
+              "Le passage de l’état gazeux à l’état liquide",
+              "Le passage de l’état solide à l’état liquide",
+              "Le passage de l’état liquide à l’état solide"
+            ],
+            "correct_answer": "Le passage de l’état liquide à l’état gazeux",
+            "explanation": "La vaporisation correspond au passage d’une substance de l’état liquide à l’état gazeux."
+          },
+          {
+            "question": "Quelles sont les deux principales formes de vaporisation ?",
+            "options": [
+              "Évaporation et ébullition",
+              "Fusion et solidification",
+              "Liquéfaction et fusion",
+              "Compression et dilatation"
+            ],
+            "correct_answer": "Évaporation et ébullition",
+            "explanation": "La vaporisation peut se produire par évaporation ou par ébullition."
+          },
+          {
+            "question": "Que devient l’eau lorsqu’elle se transforme en vapeur ?",
+            "options": [
+              "Elle passe de l’état liquide à l’état gazeux",
+              "Elle devient solide",
+              "Elle devient un métal",
+              "Elle disparaît définitivement"
+            ],
+            "correct_answer": "Elle passe de l’état liquide à l’état gazeux",
+            "explanation": "La vapeur d’eau correspond à l’eau à l’état gazeux."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 2,
+      "title": "L’évaporation",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "L’évaporation est une vaporisation lente qui se produit à la surface d’un liquide. Elle peut avoir lieu sans que tout le liquide atteigne sa température d’ébullition. Par exemple, une petite quantité d’eau laissée dans une assiette ouverte finit progressivement par disparaître de la surface."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Lors de l’évaporation, certaines particules situées à la surface du liquide quittent progressivement le liquide et passent dans l’air sous forme gazeuse. L’évaporation peut donc se produire même lorsque le liquide est loin de son point d’ébullition."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Au Mali, le séchage du linge après le lavage constitue un exemple courant d’évaporation. L’eau présente dans les vêtements passe progressivement dans l’air. Le linge sèche généralement plus rapidement lorsqu’il fait chaud et lorsqu’il y a une bonne circulation de l’air."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — L’évaporation",
+        "questions": [
+          {
+            "question": "Où se produit principalement l’évaporation ?",
+            "options": [
+              "À la surface du liquide",
+              "Uniquement au fond du récipient",
+              "Dans le solide uniquement",
+              "Dans le récipient vide uniquement"
+            ],
+            "correct_answer": "À la surface du liquide",
+            "explanation": "L’évaporation est une vaporisation qui se produit à la surface d’un liquide."
+          },
+          {
+            "question": "L’évaporation nécessite-t-elle que le liquide soit en ébullition ?",
+            "options": [
+              "Non",
+              "Oui, toujours",
+              "Seulement pour l’eau",
+              "Seulement dans un congélateur"
+            ],
+            "correct_answer": "Non",
+            "explanation": "L’évaporation peut se produire à des températures inférieures à la température d’ébullition."
+          },
+          {
+            "question": "Le séchage du linge est principalement lié à quel phénomène ?",
+            "options": [
+              "L’évaporation de l’eau",
+              "La solidification de l’eau",
+              "La fusion du tissu",
+              "La liquéfaction du coton"
+            ],
+            "correct_answer": "L’évaporation de l’eau",
+            "explanation": "L’eau contenue dans le linge passe progressivement de l’état liquide à l’état gazeux."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 3,
+      "title": "L’ébullition",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "L’ébullition est une vaporisation rapide qui se produit dans tout le liquide. Lorsqu’un liquide atteint sa température d’ébullition dans des conditions données, des bulles de gaz se forment dans le liquide et remontent vers la surface. Pour l’eau pure à la pression atmosphérique normale, la température d’ébullition est d’environ 100 °C."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "L’ébullition est différente de l’évaporation. L’évaporation se produit principalement à la surface et peut avoir lieu à différentes températures. L’ébullition concerne tout le liquide et se produit lorsque la température d’ébullition est atteinte dans les conditions considérées."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Au quotidien, l’ébullition de l’eau est utilisée pour préparer des aliments et certaines boissons chaudes. Par exemple, lors de la cuisson, l’eau chauffée peut atteindre son point d’ébullition et produire de nombreuses bulles de vapeur. Il faut rester prudent autour d’un liquide bouillant afin d’éviter les brûlures."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — L’ébullition",
+        "questions": [
+          {
+            "question": "Où se produit l’ébullition dans un liquide ?",
+            "options": [
+              "Dans tout le liquide",
+              "Uniquement à la surface",
+              "Uniquement dans le récipient",
+              "Uniquement dans l’air"
+            ],
+            "correct_answer": "Dans tout le liquide",
+            "explanation": "Lors de l’ébullition, des bulles de vapeur se forment dans tout le liquide et remontent vers la surface."
+          },
+          {
+            "question": "Quelle est approximativement la température d’ébullition de l’eau pure à la pression atmosphérique normale ?",
+            "options": [
+              "0 °C",
+              "50 °C",
+              "100 °C",
+              "200 °C"
+            ],
+            "correct_answer": "100 °C",
+            "explanation": "À la pression atmosphérique normale, l’eau pure bout à environ 100 °C."
+          },
+          {
+            "question": "Quelle différence essentielle existe entre évaporation et ébullition ?",
+            "options": [
+              "L’évaporation se produit à la surface tandis que l’ébullition se produit dans tout le liquide",
+              "L’évaporation ne concerne jamais les liquides",
+              "L’ébullition se produit uniquement dans les solides",
+              "Les deux phénomènes sont exactement identiques"
+            ],
+            "correct_answer": "L’évaporation se produit à la surface tandis que l’ébullition se produit dans tout le liquide",
+            "explanation": "L’évaporation est une vaporisation de surface, alors que l’ébullition implique tout le liquide."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 4,
+      "title": "Les facteurs qui influencent l’évaporation",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Plusieurs facteurs peuvent modifier la vitesse d’évaporation d’un liquide. Une température plus élevée accélère généralement l’évaporation. Une grande surface de liquide exposée à l’air favorise également une évaporation plus rapide."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La circulation de l’air peut aussi accélérer l’évaporation. Lorsque l’air se renouvelle au-dessus d’un liquide, la vapeur d’eau est davantage évacuée et l’évaporation peut être plus rapide. La nature du liquide intervient également : tous les liquides ne s’évaporent pas à la même vitesse dans les mêmes conditions."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Prenons l’exemple de deux morceaux de tissu mouillés. Celui qui est étendu sur une grande surface et placé dans un endroit chaud et ventilé peut sécher plus rapidement qu’un tissu humide laissé en boule dans un endroit peu ventilé. Ces observations permettent de comprendre les facteurs qui favorisent l’évaporation."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Facteurs de l’évaporation",
+        "questions": [
+          {
+            "question": "Lequel de ces facteurs peut accélérer l’évaporation de l’eau ?",
+            "options": [
+              "Une température plus élevée",
+              "Une température toujours plus basse",
+              "La suppression de toute surface exposée",
+              "L’absence totale d’air"
+            ],
+            "correct_answer": "Une température plus élevée",
+            "explanation": "Une température plus élevée favorise généralement l’évaporation."
+          },
+          {
+            "question": "Pourquoi étendre un vêtement mouillé peut-il accélérer son séchage ?",
+            "options": [
+              "La surface exposée à l’air est plus grande",
+              "Le vêtement devient solide",
+              "L’eau devient immédiatement de la glace",
+              "La masse du vêtement disparaît"
+            ],
+            "correct_answer": "La surface exposée à l’air est plus grande",
+            "explanation": "Une plus grande surface de liquide exposée à l’air favorise généralement l’évaporation."
+          },
+          {
+            "question": "Quel effet peut avoir une bonne circulation de l’air sur l’évaporation ?",
+            "options": [
+              "Elle peut accélérer l’évaporation",
+              "Elle empêche toujours l’évaporation",
+              "Elle transforme l’eau en solide",
+              "Elle supprime la température"
+            ],
+            "correct_answer": "Elle peut accélérer l’évaporation",
+            "explanation": "Le renouvellement de l’air au-dessus du liquide peut favoriser l’évacuation de la vapeur et accélérer l’évaporation."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 5,
+      "title": "La liquéfaction",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "La liquéfaction est le passage d’une substance de l’état gazeux à l’état liquide. Elle peut être provoquée par un refroidissement du gaz et, selon les conditions et la substance, par une augmentation de la pression. La vapeur d’eau peut ainsi redevenir de l’eau liquide lorsqu’elle se refroidit suffisamment."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "On peut observer la liquéfaction lorsqu’une surface froide est mise en présence d’air contenant de la vapeur d’eau. Des gouttelettes d’eau peuvent apparaître sur cette surface. L’eau liquide provient alors de la vapeur d’eau présente dans l’air qui s’est transformée en liquide."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La liquéfaction ne doit pas être confondue avec la solidification. La liquéfaction correspond au passage du gaz au liquide, tandis que la solidification correspond au passage du liquide au solide. Ces changements d’état ont donc des sens différents."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — La liquéfaction",
+        "questions": [
+          {
+            "question": "Qu’est-ce que la liquéfaction ?",
+            "options": [
+              "Le passage de l’état gazeux à l’état liquide",
+              "Le passage du liquide au solide",
+              "Le passage du solide au liquide",
+              "Le passage du liquide au gaz"
+            ],
+            "correct_answer": "Le passage de l’état gazeux à l’état liquide",
+            "explanation": "La liquéfaction correspond au passage d’une substance de l’état gazeux à l’état liquide."
+          },
+          {
+            "question": "Que peut devenir la vapeur d’eau lorsqu’elle se refroidit suffisamment ?",
+            "options": [
+              "De l’eau liquide",
+              "Du métal",
+              "De la glace immédiatement dans tous les cas",
+              "Du sable"
+            ],
+            "correct_answer": "De l’eau liquide",
+            "explanation": "Lorsqu’elle se refroidit suffisamment dans les conditions appropriées, la vapeur d’eau peut se liquéfier et former de l’eau liquide."
+          },
+          {
+            "question": "Quelle transformation est l’inverse de la liquéfaction ?",
+            "options": [
+              "La vaporisation",
+              "La solidification",
+              "La fusion",
+              "La congélation"
+            ],
+            "correct_answer": "La vaporisation",
+            "explanation": "La liquéfaction est le passage du gaz au liquide, tandis que la vaporisation est le passage du liquide au gaz."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 6,
+      "title": "Vaporisation et liquéfaction dans la vie quotidienne",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "La vaporisation et la liquéfaction sont présentes dans de nombreuses situations quotidiennes. Le séchage du linge met en jeu l’évaporation de l’eau. La cuisson de l’eau met en jeu l’ébullition. Ces phénomènes montrent que l’eau peut passer de l’état liquide à l’état gazeux."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La liquéfaction est également observable dans notre environnement. Par exemple, des gouttelettes peuvent apparaître sur la surface extérieure d’un récipient très froid. La vapeur d’eau présente dans l’air se refroidit au contact de cette surface et peut se transformer en eau liquide."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans les régions chaudes comme le Mali, l’évaporation joue un rôle important dans le séchage des vêtements, des céréales et de nombreux produits. À l’inverse, lorsque de l’air humide rencontre une surface suffisamment froide, la liquéfaction peut produire des gouttelettes. Comprendre ces phénomènes permet de mieux expliquer plusieurs observations du quotidien."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Vaporisation et liquéfaction au quotidien",
+        "questions": [
+          {
+            "question": "Le séchage d’un vêtement mouillé est principalement dû à :",
+            "options": [
+              "L’évaporation de l’eau",
+              "La solidification de l’eau",
+              "La fusion du tissu",
+              "La liquéfaction de l’eau"
+            ],
+            "correct_answer": "L’évaporation de l’eau",
+            "explanation": "L’eau présente dans le vêtement passe progressivement de l’état liquide à l’état gazeux."
+          },
+          {
+            "question": "Des gouttelettes apparaissent sur une surface froide exposée à de l’air humide. Quel phénomène peut expliquer leur formation ?",
+            "options": [
+              "La liquéfaction de la vapeur d’eau",
+              "La fusion de la surface",
+              "La solidification de l’air",
+              "La combustion de l’eau"
+            ],
+            "correct_answer": "La liquéfaction de la vapeur d’eau",
+            "explanation": "La vapeur d’eau présente dans l’air peut se refroidir au contact de la surface et se transformer en eau liquide."
+          },
+          {
+            "question": "Quel couple de changements d’état est correctement associé ?",
+            "options": [
+              "Liquide → gaz : vaporisation ; gaz → liquide : liquéfaction",
+              "Liquide → gaz : fusion ; gaz → liquide : solidification",
+              "Solide → liquide : liquéfaction ; liquide → solide : vaporisation",
+              "Gaz → liquide : fusion ; liquide → gaz : solidification"
+            ],
+            "correct_answer": "Liquide → gaz : vaporisation ; gaz → liquide : liquéfaction",
+            "explanation": "La vaporisation est le passage du liquide au gaz, tandis que la liquéfaction est le passage du gaz au liquide."
+          }
+        ]
+      }
+    }
+  ]
+}

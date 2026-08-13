@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Ampoules en série et en parallèle",
+  "chapter_order": 8,
+  "lessons": [
+    {
+      "title": "Montage en série",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce qu'un montage en série ?",
+          "content": "Dans un montage en série, les récepteurs sont placés les uns à la suite des autres sur un même chemin électrique. Le courant dispose ainsi d'un seul chemin pour circuler à travers les différents composants.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Deux ampoules en série",
+          "content": "Lorsque deux ampoules sont branchées en série avec une pile, le courant traverse successivement la première ampoule puis la deuxième. Les deux ampoules appartiennent au même circuit et sont parcourues successivement par le courant.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Éclairage des ampoules",
+          "content": "Dans un montage en série, l'éclat des ampoules dépend notamment des caractéristiques des ampoules et de la source d'alimentation. Deux ampoules identiques peuvent généralement éclairer moins fortement que lorsqu'une seule ampoule est branchée dans certaines conditions.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Montage en série",
+        "questions": [
+          {
+            "question": "Dans un montage en série, les ampoules sont...",
+            "options": [
+              "placées les unes à la suite des autres sur un même chemin",
+              "toujours complètement séparées",
+              "branchées uniquement aux bornes d'un thermomètre",
+              "sans connexion entre elles"
+            ],
+            "correct_answer": "placées les unes à la suite des autres sur un même chemin",
+            "explanation": "Dans un montage en série, les récepteurs sont disposés successivement sur un même chemin électrique."
+          },
+          {
+            "question": "Combien de chemins principaux le courant possède-t-il dans un montage en série ?",
+            "options": [
+              "Un seul",
+              "Deux obligatoirement",
+              "Trois obligatoirement",
+              "Aucun"
+            ],
+            "correct_answer": "Un seul",
+            "explanation": "Un montage en série possède un seul chemin pour le courant."
+          },
+          {
+            "question": "Dans un montage en série, le courant traverse-t-il successivement les ampoules ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement si les ampoules sont éteintes",
+              "Uniquement avec une pile vide"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "Les ampoules sont placées successivement sur le même chemin électrique."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Interruption d'un circuit en série",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Une ampoule débranchée",
+          "content": "Dans un montage en série, si une ampoule est retirée ou si une connexion est interrompue, le chemin électrique est coupé. Le courant ne peut alors plus circuler dans le circuit.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Conséquence sur les autres ampoules",
+          "content": "Comme il n'existe qu'un seul chemin dans un montage en série, l'interruption provoquée par une ampoule défectueuse empêche également les autres ampoules du circuit de fonctionner.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique",
+          "content": "Si deux ampoules sont montées en série et que la première grille ou est retirée, le circuit est ouvert. La deuxième ampoule s'éteint également. Cette propriété permet de distinguer facilement un montage en série d'un montage en parallèle.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Interruption en série",
+        "questions": [
+          {
+            "question": "Que se passe-t-il si une ampoule est retirée d'un montage en série ?",
+            "options": [
+              "Le circuit est interrompu",
+              "Les autres ampoules deviennent automatiquement plus brillantes",
+              "Le circuit devient parallèle",
+              "La pile disparaît"
+            ],
+            "correct_answer": "Le circuit est interrompu",
+            "explanation": "Le retrait d'une ampoule coupe l'unique chemin électrique du montage en série."
+          },
+          {
+            "question": "Si une ampoule grille dans un montage en série, les autres ampoules...",
+            "options": [
+              "s'éteignent également",
+              "restent toujours allumées",
+              "produisent de l'électricité",
+              "deviennent des piles"
+            ],
+            "correct_answer": "s'éteignent également",
+            "explanation": "Une ampoule défectueuse ouvre le circuit et empêche le courant de circuler dans les autres ampoules."
+          },
+          {
+            "question": "Pourquoi une interruption affecte-t-elle tout le montage en série ?",
+            "options": [
+              "Parce qu'il n'y a qu'un seul chemin électrique",
+              "Parce qu'il y a plusieurs piles",
+              "Parce que les ampoules sont isolées",
+              "Parce que les fils ne conduisent pas"
+            ],
+            "correct_answer": "Parce qu'il n'y a qu'un seul chemin électrique",
+            "explanation": "L'unique chemin du montage est interrompu, ce qui empêche le courant de circuler."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Montage en parallèle",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce qu'un montage en parallèle ?",
+          "content": "Dans un montage en parallèle, les ampoules sont placées sur des branches différentes du circuit. Le courant dispose alors de plusieurs chemins possibles pour circuler.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Deux ampoules en parallèle",
+          "content": "Pour brancher deux ampoules en parallèle, chaque ampoule est placée sur une branche reliée aux mêmes deux points du circuit. Les deux ampoules sont ainsi connectées en dérivation.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Fonctionnement des branches",
+          "content": "Dans un montage en parallèle, chaque branche constitue un chemin électrique. Le fonctionnement d'une branche peut donc être indépendant de celui des autres branches, si les connexions principales restent correctes.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Montage en parallèle",
+        "questions": [
+          {
+            "question": "Dans un montage en parallèle, les ampoules sont placées...",
+            "options": [
+              "sur des branches différentes",
+              "obligatoirement l'une derrière l'autre",
+              "sans aucun fil",
+              "dans un seul composant"
+            ],
+            "correct_answer": "sur des branches différentes",
+            "explanation": "Un montage en parallèle possède plusieurs branches électriques."
+          },
+          {
+            "question": "Combien de chemins électriques principaux peut-on avoir dans un montage en parallèle ?",
+            "options": [
+              "Plusieurs",
+              "Un seul obligatoirement",
+              "Aucun",
+              "Uniquement trois"
+            ],
+            "correct_answer": "Plusieurs",
+            "explanation": "Le montage en parallèle offre plusieurs branches, donc plusieurs chemins possibles."
+          },
+          {
+            "question": "Dans un montage en parallèle, les ampoules sont-elles sur des branches différentes ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement si elles sont éteintes",
+              "Seulement sans pile"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "C'est une caractéristique essentielle du montage en parallèle."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Panne d'une ampoule en parallèle",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Une branche interrompue",
+          "content": "Dans un montage en parallèle, si une ampoule est retirée ou si sa branche est interrompue, le courant ne peut plus circuler dans cette branche. Les autres branches peuvent cependant rester fermées.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les autres ampoules restent allumées",
+          "content": "Si deux ampoules sont montées en parallèle et qu'une seule grille, l'autre peut continuer à fonctionner si sa propre branche reste correctement reliée à la source.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple dans une habitation",
+          "content": "Les installations électriques des habitations utilisent généralement des circuits en parallèle pour les différents appareils et points lumineux. Ainsi, l'arrêt d'un appareil n'entraîne pas normalement l'arrêt de tous les autres appareils du logement.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Panne en parallèle",
+        "questions": [
+          {
+            "question": "Si une ampoule grille dans un montage en parallèle, que peut-il se passer pour les autres ampoules ?",
+            "options": [
+              "Elles peuvent rester allumées",
+              "Elles s'éteignent obligatoirement toutes",
+              "Elles deviennent des générateurs",
+              "La pile disparaît"
+            ],
+            "correct_answer": "Elles peuvent rester allumées",
+            "explanation": "Les autres branches peuvent continuer à former des circuits fermés."
+          },
+          {
+            "question": "Pourquoi une autre ampoule peut-elle continuer à fonctionner ?",
+            "options": [
+              "Parce qu'elle possède sa propre branche",
+              "Parce qu'elle n'a pas besoin de circuit",
+              "Parce qu'elle devient une pile",
+              "Parce que le courant disparaît"
+            ],
+            "correct_answer": "Parce qu'elle possède sa propre branche",
+            "explanation": "Chaque branche peut constituer un chemin électrique indépendant."
+          },
+          {
+            "question": "Quel type de montage est généralement utilisé pour les appareils d'une habitation ?",
+            "options": [
+              "Le montage en parallèle",
+              "Le montage en série uniquement",
+              "Aucun montage",
+              "Un montage sans source d'énergie"
+            ],
+            "correct_answer": "Le montage en parallèle",
+            "explanation": "Les installations domestiques sont généralement conçues avec des appareils branchés en parallèle."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparer série et parallèle",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Nombre de chemins",
+          "content": "Dans un montage en série, le courant dispose d'un seul chemin. Dans un montage en parallèle, il existe plusieurs branches et donc plusieurs chemins possibles pour le courant.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Effet d'une panne",
+          "content": "Dans un montage en série, une interruption d'un composant peut interrompre tout le circuit. Dans un montage en parallèle, une interruption sur une branche n'empêche pas nécessairement le fonctionnement des autres branches.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Reconnaître un montage",
+          "content": "Pour identifier un montage, il faut observer les connexions. Si tous les récepteurs sont placés successivement sur le même chemin, il s'agit d'un montage en série. S'ils sont répartis sur plusieurs branches, il s'agit d'un montage en parallèle.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Série ou parallèle ?",
+        "questions": [
+          {
+            "question": "Quel montage possède un seul chemin électrique ?",
+            "options": [
+              "Le montage en série",
+              "Le montage en parallèle",
+              "Les deux toujours",
+              "Aucun"
+            ],
+            "correct_answer": "Le montage en série",
+            "explanation": "Dans un montage en série, les composants sont sur un seul chemin."
+          },
+          {
+            "question": "Dans quel montage une panne d'une branche peut-elle laisser fonctionner les autres branches ?",
+            "options": [
+              "Le montage en parallèle",
+              "Le montage en série",
+              "Aucun montage",
+              "Uniquement un circuit ouvert"
+            ],
+            "correct_answer": "Le montage en parallèle",
+            "explanation": "Les différentes branches peuvent fonctionner indépendamment si elles restent fermées."
+          },
+          {
+            "question": "Deux ampoules placées sur deux branches différentes sont montées...",
+            "options": [
+              "en parallèle",
+              "en série",
+              "sans circuit",
+              "en court-circuit obligatoirement"
+            ],
+            "correct_answer": "en parallèle",
+            "explanation": "Des branches différentes caractérisent un montage en parallèle."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Schématisation et applications",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Schéma d'un montage en série",
+          "content": "Pour représenter deux ampoules en série, on utilise les symboles conventionnels des deux lampes et on les place successivement sur la même boucle reliée au générateur. Le schéma doit montrer clairement l'unique chemin électrique.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Schéma d'un montage en parallèle",
+          "content": "Pour représenter deux ampoules en parallèle, on dessine deux branches distinctes entre les mêmes points du circuit. Chaque branche contient une ampoule et est reliée à la source d'énergie.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Bilan",
+          "content": "Un montage en série possède un seul chemin électrique et une interruption peut affecter tout le circuit. Un montage en parallèle possède plusieurs branches et une panne sur une branche peut laisser les autres fonctionner. Savoir reconnaître et schématiser ces deux montages est essentiel pour comprendre les circuits électriques.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse série et parallèle",
+        "questions": [
+          {
+            "question": "Comment représente-t-on deux ampoules en parallèle ?",
+            "options": [
+              "Sur deux branches différentes du circuit",
+              "Sur un seul chemin successif",
+              "Sans aucun fil",
+              "En retirant la pile"
+            ],
+            "correct_answer": "Sur deux branches différentes du circuit",
+            "explanation": "Le montage en parallèle est constitué de plusieurs branches."
+          },
+          {
+            "question": "Quel montage est caractérisé par un seul chemin électrique ?",
+            "options": [
+              "Le montage en série",
+              "Le montage en parallèle",
+              "Les deux",
+              "Aucun"
+            ],
+            "correct_answer": "Le montage en série",
+            "explanation": "Les composants d'un montage en série sont placés sur le même chemin."
+          },
+          {
+            "question": "Quel est l'avantage essentiel du montage en parallèle étudié ici ?",
+            "options": [
+              "Une panne sur une branche peut ne pas arrêter les autres branches",
+              "Une seule panne arrête toujours tout",
+              "Il ne nécessite aucune source d'énergie",
+              "Il ne comporte aucun fil"
+            ],
+            "correct_answer": "Une panne sur une branche peut ne pas arrêter les autres branches",
+            "explanation": "Les branches d'un montage en parallèle constituent plusieurs chemins électriques."
+          }
+        ]
+      }
+    }
+  ]
+}

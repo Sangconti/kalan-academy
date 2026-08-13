@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Caractères de divisibilité",
+  "chapter_order": 17,
+  "lessons": [
+    {
+      "title": "Comprendre la divisibilité",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de la divisibilité",
+          "content": {
+            "text": "Un nombre entier naturel a est divisible par un nombre entier naturel b non nul lorsqu'il existe un entier naturel k tel que a = b × k. Dans ce cas, on dit aussi que b est un diviseur de a et que a est un multiple de b. Par exemple, 24 est divisible par 6 car 24 = 6 × 4."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Division avec un reste nul",
+          "content": {
+            "text": "Lorsqu'une division donne un reste égal à zéro, le dividende est divisible par le diviseur. Par exemple, 35 ÷ 5 = 7 avec un reste de 0. On peut donc dire que 35 est divisible par 5, que 5 est un diviseur de 35 et que 35 est un multiple de 5."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Division avec un reste non nul",
+          "content": {
+            "text": "Si une division laisse un reste différent de zéro, le nombre n'est pas divisible par le diviseur. Par exemple, 26 ÷ 5 donne 5 reste 1. Donc 26 n'est pas divisible par 5. Comprendre cette notion permet ensuite d'utiliser des critères de divisibilité sans effectuer toute la division."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Comprendre la divisibilité",
+        "questions": [
+          {
+            "question": "Quand dit-on qu'un nombre est divisible par un autre nombre ?",
+            "options": [
+              "Lorsque la division donne un reste nul",
+              "Lorsque la division donne toujours un reste de 1",
+              "Lorsque le dividende est plus petit",
+              "Lorsque les deux nombres sont égaux"
+            ],
+            "correct_answer": "Lorsque la division donne un reste nul",
+            "explanation": "Un nombre est divisible par un autre lorsque la division euclidienne donne un reste égal à zéro."
+          },
+          {
+            "question": "24 est-il divisible par 6 ?",
+            "options": [
+              "Oui, car 24 = 6 × 4",
+              "Non, car 24 est plus grand que 6",
+              "Non, car 24 est pair",
+              "Impossible à déterminer"
+            ],
+            "correct_answer": "Oui, car 24 = 6 × 4",
+            "explanation": "24 ÷ 6 = 4 avec un reste nul."
+          },
+          {
+            "question": "26 est-il divisible par 5 ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement par 10",
+              "Toujours"
+            ],
+            "correct_answer": "Non",
+            "explanation": "26 ÷ 5 donne un reste de 1, donc 26 n'est pas divisible par 5."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Divisibilité par 2, 5 et 10",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Critère de divisibilité par 2",
+          "content": {
+            "text": "Un nombre entier naturel est divisible par 2 lorsqu'il est pair, c'est-à-dire lorsque son chiffre des unités est 0, 2, 4, 6 ou 8. Par exemple, 348 est divisible par 2 car il se termine par 8."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Critère de divisibilité par 5",
+          "content": {
+            "text": "Un nombre est divisible par 5 lorsque son chiffre des unités est 0 ou 5. Par exemple, 125 et 340 sont divisibles par 5, tandis que 123 ne l'est pas."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Critère de divisibilité par 10",
+          "content": {
+            "text": "Un nombre est divisible par 10 lorsqu'il se termine par 0. Par exemple, 70, 250 et 1 000 sont divisibles par 10. Tout nombre divisible par 10 est également divisible par 2 et par 5."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Divisibilité par 2, 5 et 10",
+        "questions": [
+          {
+            "question": "Lequel de ces nombres est divisible par 2 ?",
+            "options": [
+              "135",
+              "247",
+              "368",
+              "451"
+            ],
+            "correct_answer": "368",
+            "explanation": "368 se termine par 8, donc il est divisible par 2."
+          },
+          {
+            "question": "Lequel de ces nombres est divisible par 5 ?",
+            "options": [
+              "124",
+              "237",
+              "315",
+              "428"
+            ],
+            "correct_answer": "315",
+            "explanation": "315 se termine par 5, donc il est divisible par 5."
+          },
+          {
+            "question": "Quel est le critère de divisibilité par 10 ?",
+            "options": [
+              "Le nombre se termine par 2",
+              "Le nombre se termine par 5",
+              "Le nombre se termine par 0",
+              "La somme des chiffres vaut 10"
+            ],
+            "correct_answer": "Le nombre se termine par 0",
+            "explanation": "Un nombre est divisible par 10 si son chiffre des unités est 0."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Divisibilité par 3 et 9",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Critère de divisibilité par 3",
+          "content": {
+            "text": "Pour savoir si un nombre est divisible par 3, on additionne ses chiffres. Si la somme obtenue est divisible par 3, alors le nombre initial est divisible par 3. Par exemple, pour 372, on calcule 3 + 7 + 2 = 12. Comme 12 est divisible par 3, 372 est divisible par 3."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Critère de divisibilité par 9",
+          "content": {
+            "text": "Pour savoir si un nombre est divisible par 9, on additionne également ses chiffres. Si la somme est divisible par 9, alors le nombre initial est divisible par 9. Par exemple, 729 donne 7 + 2 + 9 = 18. Comme 18 est divisible par 9, 729 est divisible par 9."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Lien entre divisibilité par 3 et 9",
+          "content": {
+            "text": "Un nombre divisible par 9 est toujours divisible par 3, car tout multiple de 9 est aussi un multiple de 3. En revanche, un nombre divisible par 3 n'est pas forcément divisible par 9. Par exemple, 12 est divisible par 3 mais pas par 9."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Divisibilité par 3 et 9",
+        "questions": [
+          {
+            "question": "Pour tester la divisibilité par 3, que fait-on ?",
+            "options": [
+              "On regarde uniquement le dernier chiffre",
+              "On additionne les chiffres",
+              "On multiplie les chiffres",
+              "On enlève le premier chiffre"
+            ],
+            "correct_answer": "On additionne les chiffres",
+            "explanation": "La somme des chiffres permet de déterminer la divisibilité par 3."
+          },
+          {
+            "question": "372 est-il divisible par 3 ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement par 9",
+              "Impossible"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "3 + 7 + 2 = 12 et 12 est divisible par 3."
+          },
+          {
+            "question": "729 est-il divisible par 9 ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement par 3",
+              "Seulement par 2"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "7 + 2 + 9 = 18 et 18 est divisible par 9."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Divisibilité par 4 et 25",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Critère de divisibilité par 4",
+          "content": {
+            "text": "Un nombre entier naturel est divisible par 4 lorsque le nombre formé par ses deux derniers chiffres est divisible par 4. Par exemple, 316 est divisible par 4 car 16 est divisible par 4. Cette règle permet de vérifier rapidement la divisibilité sans effectuer toute la division."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Critère de divisibilité par 25",
+          "content": {
+            "text": "Un nombre est divisible par 25 lorsque ses deux derniers chiffres sont 00, 25, 50 ou 75. Par exemple, 1 250 est divisible par 25 car ses deux derniers chiffres sont 50. En revanche, 1 240 n'est pas divisible par 25."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Application des critères 4 et 25",
+          "content": {
+            "text": "Ces critères sont particulièrement pratiques pour les grands nombres. Par exemple, pour 4 732, on regarde seulement 32 : comme 32 est divisible par 4, 4 732 est divisible par 4. Pour 6 375, les deux derniers chiffres sont 75, donc le nombre est divisible par 25."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Divisibilité par 4 et 25",
+        "questions": [
+          {
+            "question": "Quel nombre est divisible par 4 ?",
+            "options": [
+              "314",
+              "316",
+              "318",
+              "322"
+            ],
+            "correct_answer": "316",
+            "explanation": "Les deux derniers chiffres de 316 sont 16, et 16 est divisible par 4."
+          },
+          {
+            "question": "Quels sont les deux derniers chiffres possibles pour un nombre divisible par 25 ?",
+            "options": [
+              "10, 20, 30, 40",
+              "15, 35, 55, 95",
+              "00, 25, 50, 75",
+              "12, 24, 36, 48"
+            ],
+            "correct_answer": "00, 25, 50, 75",
+            "explanation": "Ce sont les quatre possibilités pour les deux derniers chiffres d'un multiple de 25."
+          },
+          {
+            "question": "6 375 est-il divisible par 25 ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement par 4",
+              "Impossible"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "Le nombre se termine par 75, donc il est divisible par 25."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Divisibilité par 6 et 15",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Critère de divisibilité par 6",
+          "content": {
+            "text": "Un nombre est divisible par 6 lorsqu'il est à la fois divisible par 2 et par 3. Il doit donc être pair et la somme de ses chiffres doit être divisible par 3. Par exemple, 246 est pair et 2 + 4 + 6 = 12, donc 246 est divisible par 6."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Critère de divisibilité par 15",
+          "content": {
+            "text": "Un nombre est divisible par 15 lorsqu'il est à la fois divisible par 3 et par 5. Il doit donc se terminer par 0 ou 5 et la somme de ses chiffres doit être divisible par 3. Par exemple, 345 est divisible par 15 car 345 est divisible par 3 et par 5."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Vérifier plusieurs conditions",
+          "content": {
+            "text": "Pour appliquer ces critères, il faut vérifier toutes les conditions nécessaires. Par exemple, 124 est divisible par 2 mais pas par 3, donc il n'est pas divisible par 6. De même, 125 est divisible par 5 mais pas par 3, donc il n'est pas divisible par 15."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Divisibilité par 6 et 15",
+        "questions": [
+          {
+            "question": "Pour être divisible par 6, un nombre doit être divisible par...",
+            "options": [
+              "2 et 3",
+              "2 et 5",
+              "3 et 5",
+              "4 et 6"
+            ],
+            "correct_answer": "2 et 3",
+            "explanation": "Un nombre est divisible par 6 s'il est divisible à la fois par 2 et par 3."
+          },
+          {
+            "question": "345 est-il divisible par 15 ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement par 5",
+              "Seulement par 2"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "345 se termine par 5 et 3 + 4 + 5 = 12, donc il est divisible par 5 et par 3, donc par 15."
+          },
+          {
+            "question": "124 est-il divisible par 6 ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement par 3",
+              "Seulement par 6"
+            ],
+            "correct_answer": "Non",
+            "explanation": "124 est divisible par 2 mais 1 + 2 + 4 = 7 n'est pas divisible par 3."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exercices et problèmes de divisibilité",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Choisir le bon critère",
+          "content": {
+            "text": "Pour résoudre un problème de divisibilité, il faut identifier le ou les critères utiles. On peut vérifier le dernier chiffre pour 2, 5 et 10, la somme des chiffres pour 3 et 9, les deux derniers chiffres pour 4 et 25, ou combiner plusieurs critères pour 6 et 15."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple de recherche de multiples",
+          "content": {
+            "text": "Exemple : parmi 120, 135, 248 et 375, cherchons les nombres divisibles par 5. On regarde le chiffre des unités : 120 se termine par 0, 135 par 5 et 375 par 5. Ils sont donc tous divisibles par 5, tandis que 248 ne l'est pas."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Application dans la vie quotidienne",
+          "content": {
+            "text": "Dans un problème réel, ces critères peuvent aider à organiser des objets en groupes égaux. Par exemple, si une école possède 360 cahiers et veut les répartir également entre 6 classes, la divisibilité de 360 par 6 permet de savoir que la répartition est possible sans reste."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Problèmes de divisibilité",
+        "questions": [
+          {
+            "question": "Lequel de ces nombres est divisible par 10 ?",
+            "options": [
+              "125",
+              "240",
+              "315",
+              "427"
+            ],
+            "correct_answer": "240",
+            "explanation": "240 se termine par 0, donc il est divisible par 10."
+          },
+          {
+            "question": "360 est-il divisible par 6 ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement par 5",
+              "Impossible"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "360 est pair et 3 + 6 + 0 = 9, qui est divisible par 3. Il est donc divisible par 6."
+          },
+          {
+            "question": "Une école possède 360 cahiers à répartir également entre 6 classes. Peut-elle faire cette répartition sans reste ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement entre 5 classes",
+              "Impossible à savoir"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "360 est divisible par 6. Chaque classe peut recevoir 360 ÷ 6 = 60 cahiers."
+          }
+        ]
+      }
+    }
+  ]
+}

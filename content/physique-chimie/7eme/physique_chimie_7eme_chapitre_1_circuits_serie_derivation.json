@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Circuits en série et circuits en dérivation",
+  "chapter_order": 1,
+  "lessons": [
+    {
+      "lesson_order": 1,
+      "title": "Les éléments d’un circuit électrique",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Un circuit électrique est un ensemble d’éléments reliés entre eux permettant au courant électrique de circuler. Les principaux éléments sont le générateur, les récepteurs, les fils conducteurs et l’interrupteur. Dans un circuit simple, une pile peut jouer le rôle de générateur et une lampe celui de récepteur."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Le générateur fournit l’énergie électrique au circuit. La lampe, le moteur ou la sonnerie sont des récepteurs : ils utilisent l’énergie électrique pour fonctionner. Les fils conducteurs permettent de relier les différents éléments. L’interrupteur permet d’ouvrir ou de fermer le circuit."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Par exemple, avec une pile, une petite lampe, des fils et un interrupteur, on peut réaliser un circuit simple. Si tous les éléments sont correctement reliés et que l’interrupteur est fermé, la lampe peut s’allumer. Dans la vie quotidienne, on retrouve le même principe dans les lampes, les jouets électriques et de nombreux appareils."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les éléments d’un circuit électrique",
+        "questions": [
+          {
+            "question": "Quel élément fournit l’énergie électrique dans un circuit simple ?",
+            "options": [
+              "La lampe",
+              "La pile",
+              "Le fil",
+              "L’interrupteur"
+            ],
+            "correct_answer": "La pile",
+            "explanation": "La pile est un générateur. Elle fournit l’énergie électrique nécessaire au fonctionnement du circuit."
+          },
+          {
+            "question": "Quel est le rôle des fils conducteurs ?",
+            "options": [
+              "Produire de la lumière",
+              "Fournir l’énergie",
+              "Relier les éléments du circuit",
+              "Ouvrir automatiquement le circuit"
+            ],
+            "correct_answer": "Relier les éléments du circuit",
+            "explanation": "Les fils conducteurs assurent la liaison électrique entre les différents éléments du circuit."
+          },
+          {
+            "question": "Quel élément permet d’ouvrir ou de fermer un circuit ?",
+            "options": [
+              "La pile",
+              "La lampe",
+              "L’interrupteur",
+              "Le moteur"
+            ],
+            "correct_answer": "L’interrupteur",
+            "explanation": "L’interrupteur commande le passage du courant en ouvrant ou en fermant le circuit."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 2,
+      "title": "Circuit ouvert et circuit fermé",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour qu’une lampe puisse fonctionner dans un circuit simple, le circuit doit former un chemin électrique continu. Lorsque tous les éléments sont correctement reliés et que l’interrupteur est fermé, on parle de circuit fermé. Le courant peut alors circuler dans le circuit."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Lorsque le chemin électrique est interrompu, le circuit est ouvert. Cela peut arriver lorsque l’interrupteur est ouvert, lorsqu’un fil est débranché ou lorsqu’une connexion est rompue. Dans ce cas, le courant ne circule plus et la lampe ne s’allume pas."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans une installation électrique domestique, l’interrupteur permet justement de commander un circuit. Quand on appuie sur l’interrupteur d’une lampe, on ferme ou on ouvre le circuit selon le type d’interrupteur. Il faut toujours éviter de manipuler directement des installations électriques dangereuses."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Circuit ouvert et circuit fermé",
+        "questions": [
+          {
+            "question": "Dans un circuit fermé, que peut faire le courant électrique ?",
+            "options": [
+              "Il peut circuler",
+              "Il disparaît",
+              "Il reste toujours immobile",
+              "Il produit automatiquement une pile"
+            ],
+            "correct_answer": "Il peut circuler",
+            "explanation": "Un circuit fermé constitue un chemin électrique continu permettant la circulation du courant."
+          },
+          {
+            "question": "Que se passe-t-il si un fil est débranché dans un circuit simple alimentant une lampe ?",
+            "options": [
+              "La lampe devient plus brillante",
+              "Le circuit est interrompu",
+              "La pile devient un récepteur",
+              "Le courant augmente forcément"
+            ],
+            "correct_answer": "Le circuit est interrompu",
+            "explanation": "Un fil débranché rompt le chemin électrique. Le circuit devient alors ouvert."
+          },
+          {
+            "question": "Une lampe reliée correctement à une pile ne s’allume pas lorsque l’interrupteur est ouvert. Pourquoi ?",
+            "options": [
+              "Le circuit est ouvert",
+              "La lampe produit trop d’électricité",
+              "La pile devient un fil",
+              "Le courant circule mieux"
+            ],
+            "correct_answer": "Le circuit est ouvert",
+            "explanation": "Lorsque l’interrupteur est ouvert, le chemin électrique est interrompu et le courant ne peut pas circuler dans le circuit."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 3,
+      "title": "Le circuit en série",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans un circuit en série, les différents récepteurs sont placés les uns à la suite des autres sur un même trajet électrique. Il n’existe qu’un seul chemin principal pour la circulation du courant. Par exemple, deux lampes peuvent être montées en série avec une pile et un interrupteur."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans un montage en série, les récepteurs sont dépendants les uns des autres pour le fonctionnement du circuit. Si le circuit est interrompu à un endroit, le courant ne peut plus circuler dans le trajet unique. Ainsi, si une lampe est retirée ou si une connexion est rompue, les autres lampes du même circuit s’éteignent également."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Le montage en série peut être observé dans certaines guirlandes ou montages scolaires simples. Il permet de comprendre facilement le principe d’un trajet unique du courant. Cependant, pour de nombreuses installations, on préfère le montage en dérivation car les récepteurs peuvent alors fonctionner de manière plus indépendante."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Le circuit en série",
+        "questions": [
+          {
+            "question": "Dans un circuit en série, combien y a-t-il de trajets principaux pour le courant ?",
+            "options": [
+              "Un seul",
+              "Deux obligatoirement",
+              "Trois obligatoirement",
+              "Aucun"
+            ],
+            "correct_answer": "Un seul",
+            "explanation": "Dans un circuit en série, les récepteurs sont placés sur un même trajet : le circuit ne possède qu’un seul chemin principal."
+          },
+          {
+            "question": "Deux lampes sont montées en série. Une lampe est retirée du circuit. Que se passe-t-il ?",
+            "options": [
+              "L’autre lampe continue toujours à fonctionner",
+              "Le circuit est interrompu et l’autre lampe s’éteint",
+              "La pile devient une lampe",
+              "Les deux lampes deviennent plus brillantes"
+            ],
+            "correct_answer": "Le circuit est interrompu et l’autre lampe s’éteint",
+            "explanation": "Le retrait d’une lampe ouvre le trajet unique du circuit en série. Le courant ne peut donc plus circuler."
+          },
+          {
+            "question": "Quelle caractéristique décrit correctement un montage en série ?",
+            "options": [
+              "Les récepteurs sont placés sur des branches différentes",
+              "Les récepteurs sont placés les uns à la suite des autres",
+              "Chaque récepteur possède toujours sa propre pile",
+              "Il n’y a jamais d’interrupteur"
+            ],
+            "correct_answer": "Les récepteurs sont placés les uns à la suite des autres",
+            "explanation": "Dans un montage en série, les récepteurs sont disposés successivement sur le même trajet électrique."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 4,
+      "title": "Le circuit en dérivation",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans un circuit en dérivation, les récepteurs sont placés sur plusieurs branches. Le courant dispose donc de plusieurs chemins possibles dans le circuit. Par exemple, deux lampes peuvent être installées sur deux branches différentes reliées aux mêmes points du circuit."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "L’un des avantages du montage en dérivation est que les récepteurs peuvent fonctionner de manière indépendante. Si une branche contenant une lampe est interrompue, les autres branches peuvent continuer à fonctionner, à condition que le reste du circuit soit correctement fermé."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Les installations électriques des maisons utilisent principalement des montages en dérivation. Cela permet, par exemple, d’allumer une lampe dans une pièce sans empêcher les autres appareils ou lampes correctement alimentés de fonctionner. Les installations domestiques doivent cependant être réalisées et entretenues avec des dispositifs de sécurité adaptés."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Le circuit en dérivation",
+        "questions": [
+          {
+            "question": "Quelle est la principale caractéristique d’un circuit en dérivation ?",
+            "options": [
+              "Il ne possède qu’un seul trajet",
+              "Il possède plusieurs branches",
+              "Il ne possède aucun récepteur",
+              "Il fonctionne sans générateur"
+            ],
+            "correct_answer": "Il possède plusieurs branches",
+            "explanation": "Un circuit en dérivation comporte plusieurs branches permettant au courant de suivre différents chemins."
+          },
+          {
+            "question": "Deux lampes sont montées en dérivation. Une branche est interrompue. Que peut-il se passer ?",
+            "options": [
+              "Toutes les branches sont forcément interrompues",
+              "Les autres branches peuvent continuer à fonctionner",
+              "La pile disparaît",
+              "Le circuit devient automatiquement un circuit en série"
+            ],
+            "correct_answer": "Les autres branches peuvent continuer à fonctionner",
+            "explanation": "Dans un montage en dérivation, chaque branche constitue un trajet distinct. Une interruption sur une branche n’interrompt pas nécessairement les autres."
+          },
+          {
+            "question": "Quel type de montage est principalement utilisé dans les installations électriques des maisons ?",
+            "options": [
+              "Le montage en dérivation",
+              "Le montage sans fil",
+              "Le montage ouvert",
+              "Le montage sans générateur"
+            ],
+            "correct_answer": "Le montage en dérivation",
+            "explanation": "Les installations domestiques sont organisées principalement en dérivation afin que les différents récepteurs puissent fonctionner de manière indépendante."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 5,
+      "title": "Comparer le circuit en série et le circuit en dérivation",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Le circuit en série et le circuit en dérivation se distinguent principalement par l’organisation des trajets électriques. Dans le montage en série, les récepteurs sont sur un même trajet. Dans le montage en dérivation, ils sont répartis sur plusieurs branches."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans un montage en série, une interruption sur le trajet unique peut arrêter le fonctionnement de tous les récepteurs situés dans ce circuit. Dans un montage en dérivation, une interruption sur une branche peut laisser les autres branches fonctionner. Cette différence est importante pour comprendre pourquoi les installations domestiques sont généralement réalisées en dérivation."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Prenons l’exemple de deux lampes utilisées dans une salle de classe au Mali. Si elles sont montées en série et qu’une lampe ou sa connexion est défaillante, l’autre peut également s’éteindre. Dans un montage en dérivation correctement réalisé, une panne sur une branche n’empêche généralement pas l’autre lampe de fonctionner."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Série ou dérivation ?",
+        "questions": [
+          {
+            "question": "Quelle différence essentielle existe entre les deux montages ?",
+            "options": [
+              "Le montage en série possède un trajet principal tandis que le montage en dérivation possède plusieurs branches",
+              "Le montage en série n’utilise jamais de pile",
+              "Le montage en dérivation ne peut contenir aucune lampe",
+              "Il n’existe aucune différence"
+            ],
+            "correct_answer": "Le montage en série possède un trajet principal tandis que le montage en dérivation possède plusieurs branches",
+            "explanation": "C’est l’organisation des trajets électriques qui permet principalement de distinguer les deux montages."
+          },
+          {
+            "question": "Pourquoi le montage en dérivation est-il adapté aux installations domestiques ?",
+            "options": [
+              "Parce que tous les appareils doivent s’éteindre ensemble",
+              "Parce que les récepteurs peuvent fonctionner de manière plus indépendante",
+              "Parce qu’il ne nécessite aucun fil",
+              "Parce qu’il fonctionne sans générateur"
+            ],
+            "correct_answer": "Parce que les récepteurs peuvent fonctionner de manière plus indépendante",
+            "explanation": "Le montage en dérivation permet aux différents récepteurs d’être placés sur des branches distinctes."
+          },
+          {
+            "question": "Dans un montage en série, une rupture du trajet électrique peut-elle arrêter tous les récepteurs ?",
+            "options": [
+              "Oui",
+              "Non, jamais",
+              "Seulement lorsqu’il n’y a pas de pile",
+              "Seulement pendant la journée"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "Comme le montage en série possède un trajet unique, une rupture peut interrompre la circulation du courant dans tout le circuit."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 6,
+      "title": "Réaliser et lire un schéma électrique",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Un schéma électrique représente un circuit à l’aide de symboles normalisés. La pile, la lampe, l’interrupteur et les fils sont représentés par des symboles qui permettent de comprendre rapidement l’organisation du circuit. Le schéma évite d’avoir à dessiner les objets réels avec tous leurs détails."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour lire un schéma, on commence par identifier le générateur, puis les récepteurs, les interrupteurs et les connexions. On cherche ensuite à déterminer si les récepteurs sont placés sur un même trajet ou sur plusieurs branches. On peut ainsi reconnaître un montage en série ou un montage en dérivation."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour réaliser un circuit simple en classe, on peut utiliser une pile, une lampe, un interrupteur et des fils de connexion. Il faut vérifier que les connexions sont correctes et que le circuit peut être fermé. Pour les activités scolaires, on utilise du matériel basse tension adapté. Les élèves ne doivent pas manipuler directement les installations électriques du secteur."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Lire et réaliser un schéma électrique",
+        "questions": [
+          {
+            "question": "Pourquoi utilise-t-on des symboles dans un schéma électrique ?",
+            "options": [
+              "Pour représenter simplement les différents éléments du circuit",
+              "Pour supprimer les fils",
+              "Pour remplacer la pile",
+              "Pour empêcher le courant de circuler"
+            ],
+            "correct_answer": "Pour représenter simplement les différents éléments du circuit",
+            "explanation": "Les symboles normalisés permettent de représenter clairement les composants électriques sans dessiner leur apparence réelle."
+          },
+          {
+            "question": "Pour identifier un montage en dérivation sur un schéma, que doit-on rechercher ?",
+            "options": [
+              "Plusieurs branches",
+              "Une seule pile obligatoirement",
+              "L’absence de lampe",
+              "Un circuit toujours ouvert"
+            ],
+            "correct_answer": "Plusieurs branches",
+            "explanation": "Un montage en dérivation se reconnaît à la présence de plusieurs branches dans lesquelles peuvent être placés les récepteurs."
+          },
+          {
+            "question": "Quel matériel est adapté à une activité scolaire simple sur les circuits électriques ?",
+            "options": [
+              "Une installation domestique sous tension",
+              "Une pile et du matériel scolaire basse tension adapté",
+              "Une prise électrique ouverte",
+              "Un câble électrique du réseau public"
+            ],
+            "correct_answer": "Une pile et du matériel scolaire basse tension adapté",
+            "explanation": "Les activités scolaires doivent utiliser du matériel basse tension prévu pour l’apprentissage. Les installations électriques du secteur présentent des risques et ne doivent pas être manipulées par les élèves."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Intensité du courant électrique",
+  "chapter_order": 2,
+  "lessons": [
+    {
+      "lesson_order": 1,
+      "title": "Découvrir l’intensité du courant électrique",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "L’intensité du courant électrique indique la quantité de courant qui traverse un circuit pendant une durée donnée. Elle permet de caractériser le courant qui circule dans un circuit électrique. Plus l’intensité est grande, plus le courant électrique est important."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "L’intensité est une grandeur physique que l’on mesure avec un appareil appelé ampèremètre. Son unité principale est l’ampère, dont le symbole est A. Dans les petits circuits utilisés en classe, les valeurs d’intensité sont souvent exprimées en milliampères, notés mA."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Par exemple, une petite lampe alimentée par une pile peut être traversée par un courant de quelques centaines de milliampères. Pour étudier ce courant en classe, on utilise des générateurs basse tension et du matériel électrique adapté. Il ne faut jamais mesurer directement le courant d’une installation domestique avec du matériel scolaire."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Découvrir l’intensité",
+        "questions": [
+          {
+            "question": "Que représente l’intensité du courant électrique ?",
+            "options": [
+              "Une grandeur qui caractérise le courant électrique",
+              "La masse d’une lampe",
+              "La longueur d’un fil",
+              "La température d’une pile"
+            ],
+            "correct_answer": "Une grandeur qui caractérise le courant électrique",
+            "explanation": "L’intensité est une grandeur physique qui permet de caractériser le courant qui circule dans un circuit."
+          },
+          {
+            "question": "Quelle est l’unité principale de l’intensité électrique ?",
+            "options": [
+              "Le volt",
+              "L’ampère",
+              "Le watt",
+              "Le mètre"
+            ],
+            "correct_answer": "L’ampère",
+            "explanation": "L’intensité du courant électrique se mesure en ampères, dont le symbole est A."
+          },
+          {
+            "question": "Quel appareil permet de mesurer l’intensité du courant ?",
+            "options": [
+              "Le voltmètre",
+              "Le thermomètre",
+              "L’ampèremètre",
+              "La balance"
+            ],
+            "correct_answer": "L’ampèremètre",
+            "explanation": "L’ampèremètre est l’appareil utilisé pour mesurer l’intensité du courant électrique."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 2,
+      "title": "L’ampère et les unités de l’intensité",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "L’unité internationale de l’intensité du courant électrique est l’ampère, de symbole A. Dans les circuits de faible intensité, on utilise souvent le milliampère, de symbole mA. Le préfixe milli signifie un millième : 1 mA = 0,001 A."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour convertir des milliampères en ampères, il faut diviser par 1 000. Par exemple, 500 mA correspondent à 0,5 A. À l’inverse, pour convertir des ampères en milliampères, on multiplie par 1 000 : 2 A correspondent à 2 000 mA."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Le microampère, symbole µA, est une unité encore plus petite. Un microampère correspond à un millionième d’ampère. Dans les activités de physique de 7ème année, les élèves rencontreront surtout l’ampère et le milliampère. Il faut toujours vérifier l’unité avant de comparer deux intensités."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les unités de l’intensité",
+        "questions": [
+          {
+            "question": "Quelle relation est correcte ?",
+            "options": [
+              "1 A = 10 mA",
+              "1 A = 100 mA",
+              "1 A = 1 000 mA",
+              "1 A = 10 000 mA"
+            ],
+            "correct_answer": "1 A = 1 000 mA",
+            "explanation": "Un ampère correspond à mille milliampères."
+          },
+          {
+            "question": "À combien correspondent 500 mA ?",
+            "options": [
+              "0,05 A",
+              "0,5 A",
+              "5 A",
+              "50 A"
+            ],
+            "correct_answer": "0,5 A",
+            "explanation": "Pour passer de mA à A, on divise par 1 000 : 500 ÷ 1 000 = 0,5 A."
+          },
+          {
+            "question": "À combien correspondent 2 A ?",
+            "options": [
+              "20 mA",
+              "200 mA",
+              "2 000 mA",
+              "20 000 mA"
+            ],
+            "correct_answer": "2 000 mA",
+            "explanation": "Pour passer de A à mA, on multiplie par 1 000 : 2 × 1 000 = 2 000 mA."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 3,
+      "title": "L’ampèremètre",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "L’ampèremètre est un appareil utilisé pour mesurer l’intensité du courant électrique. Sur un appareil de mesure, l’intensité peut être indiquée par la lettre I. L’unité affichée peut être l’ampère (A) ou le milliampère (mA), selon le calibre et la mesure effectuée."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour mesurer l’intensité qui traverse un récepteur, l’ampèremètre doit être placé en série avec ce récepteur. Cela signifie que le courant qui traverse le récepteur doit également traverser l’ampèremètre. Un branchement incorrect peut donner une mauvaise mesure ou endommager l’appareil."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Un multimètre peut également mesurer une intensité lorsqu’il est réglé sur la fonction appropriée et branché correctement. Avant toute mesure, il faut choisir un calibre adapté et respecter les bornes indiquées par l’appareil. En classe, les mesures doivent être réalisées sur des circuits basse tension prévus pour les expériences."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — L’ampèremètre",
+        "questions": [
+          {
+            "question": "Quel appareil mesure l’intensité du courant ?",
+            "options": [
+              "L’ampèremètre",
+              "Le voltmètre",
+              "Le thermomètre",
+              "La balance"
+            ],
+            "correct_answer": "L’ampèremètre",
+            "explanation": "L’ampèremètre est spécialement destiné à mesurer l’intensité du courant électrique."
+          },
+          {
+            "question": "Comment branche-t-on normalement un ampèremètre pour mesurer l’intensité dans un circuit ?",
+            "options": [
+              "En série",
+              "En parallèle uniquement",
+              "Sans le relier au circuit",
+              "À la place de la pile"
+            ],
+            "correct_answer": "En série",
+            "explanation": "L’ampèremètre se branche en série afin que le courant à mesurer le traverse."
+          },
+          {
+            "question": "Avant d’utiliser un multimètre pour mesurer une intensité, que faut-il faire ?",
+            "options": [
+              "Choisir la fonction et un calibre adaptés",
+              "Le plonger dans l’eau",
+              "Le brancher directement sur une prise secteur",
+              "Retirer tous les fils du circuit"
+            ],
+            "correct_answer": "Choisir la fonction et un calibre adaptés",
+            "explanation": "Le réglage correct de la fonction et du calibre est indispensable pour effectuer une mesure sûre et correcte."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 4,
+      "title": "Mesurer une intensité électrique",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour mesurer une intensité, on ouvre le circuit à l’endroit choisi puis on insère l’ampèremètre en série. Le courant doit entrer par la borne adaptée de l’appareil et sortir par l’autre borne. Une fois le branchement vérifié, on ferme le circuit et on lit la valeur indiquée."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Le choix du calibre est important. Si l’on ne connaît pas approximativement la valeur de l’intensité, on commence généralement avec un calibre suffisamment élevé, puis on peut choisir un calibre plus précis si les conditions de l’appareil le permettent. Il faut respecter les indications du matériel utilisé."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Exemple : un ampèremètre indique 0,25 A dans un circuit scolaire. Cette valeur correspond à 250 mA. Pour effectuer correctement une mesure, il faut toujours utiliser du matériel adapté à la tension et à l’intensité du circuit. Les élèves ne doivent pas intervenir directement sur une installation électrique domestique."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Mesurer une intensité",
+        "questions": [
+          {
+            "question": "Que faut-il faire pour insérer un ampèremètre dans un circuit ?",
+            "options": [
+              "Ouvrir le circuit à l’endroit choisi et l’insérer en série",
+              "Le placer sans couper le circuit",
+              "Le mettre à la place du générateur",
+              "Le déconnecter complètement"
+            ],
+            "correct_answer": "Ouvrir le circuit à l’endroit choisi et l’insérer en série",
+            "explanation": "L’ampèremètre doit être traversé par le courant mesuré. Il est donc inséré en série dans le circuit."
+          },
+          {
+            "question": "Une mesure donne 0,25 A. Quelle est cette valeur en milliampères ?",
+            "options": [
+              "2,5 mA",
+              "25 mA",
+              "250 mA",
+              "2 500 mA"
+            ],
+            "correct_answer": "250 mA",
+            "explanation": "0,25 A × 1 000 = 250 mA."
+          },
+          {
+            "question": "Pourquoi faut-il choisir un calibre adapté ?",
+            "options": [
+              "Pour obtenir une mesure correcte et protéger l’appareil",
+              "Pour augmenter automatiquement la tension",
+              "Pour fabriquer du courant",
+              "Pour supprimer la pile"
+            ],
+            "correct_answer": "Pour obtenir une mesure correcte et protéger l’appareil",
+            "explanation": "Le calibre doit être adapté à la valeur attendue afin de permettre une mesure correcte et d’éviter une utilisation inappropriée de l’appareil."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 5,
+      "title": "Intensité dans un circuit en série",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans un circuit en série, les récepteurs sont placés sur un seul trajet. L’intensité du courant est la même en différents points d’un même circuit en série. Ainsi, si on mesure l’intensité avant une lampe puis après cette lampe, on obtient la même valeur dans les conditions normales du circuit."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Par exemple, si un circuit en série est parcouru par une intensité de 0,30 A avant la première lampe, l’intensité est également de 0,30 A entre les lampes et après la deuxième lampe. Cette propriété permet de comprendre le comportement du courant dans un trajet unique."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Cette règle concerne l’intensité du courant dans un circuit en série. Elle ne signifie pas que toutes les grandeurs électriques sont identiques partout. La tension électrique, étudiée dans un prochain chapitre, obéit à des relations différentes. Il faut donc bien distinguer intensité et tension."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Intensité en série",
+        "questions": [
+          {
+            "question": "Dans un circuit en série, comment est l’intensité en différents points du circuit ?",
+            "options": [
+              "Elle est la même",
+              "Elle est toujours nulle",
+              "Elle double à chaque lampe",
+              "Elle disparaît après la première lampe"
+            ],
+            "correct_answer": "Elle est la même",
+            "explanation": "Dans un circuit en série, l’intensité du courant est la même en différents points du circuit."
+          },
+          {
+            "question": "Un circuit en série présente une intensité de 0,30 A avant une lampe. Quelle intensité mesure-t-on après cette lampe ?",
+            "options": [
+              "0,03 A",
+              "0,15 A",
+              "0,30 A",
+              "3 A"
+            ],
+            "correct_answer": "0,30 A",
+            "explanation": "Dans un circuit en série, l’intensité est la même en différents points : elle reste donc égale à 0,30 A."
+          },
+          {
+            "question": "Quelle grandeur ne faut-il pas confondre avec l’intensité ?",
+            "options": [
+              "La tension électrique",
+              "La distance",
+              "La masse",
+              "La durée"
+            ],
+            "correct_answer": "La tension électrique",
+            "explanation": "L’intensité et la tension sont deux grandeurs électriques différentes. Elles sont mesurées avec des appareils et des unités différents."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 6,
+      "title": "Intensité dans un circuit en dérivation",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans un circuit en dérivation, le courant peut circuler dans plusieurs branches. L’intensité du courant dans la branche principale est égale à la somme des intensités dans les différentes branches. Cette relation permet de déterminer une intensité inconnue."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Par exemple, si le courant dans la branche principale a une intensité de 0,50 A et qu’une première branche est parcourue par 0,20 A, alors la deuxième branche est parcourue par 0,30 A, car 0,20 A + 0,30 A = 0,50 A. Cette relation est appelée loi des nœuds."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour mesurer les intensités dans un circuit en dérivation, l’ampèremètre est placé en série dans la partie du circuit où l’on souhaite effectuer la mesure. Il faut donc réaliser une mesure différente pour chaque branche étudiée. Cette méthode permet de vérifier expérimentalement la relation entre l’intensité principale et les intensités des branches."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Intensité en dérivation",
+        "questions": [
+          {
+            "question": "Dans un circuit en dérivation, à quoi est égale l’intensité dans la branche principale ?",
+            "options": [
+              "À la somme des intensités des branches",
+              "Toujours à zéro",
+              "Toujours à l’intensité de la plus petite branche",
+              "À la tension du générateur"
+            ],
+            "correct_answer": "À la somme des intensités des branches",
+            "explanation": "Dans un circuit en dérivation, l’intensité dans la branche principale est égale à la somme des intensités dans les différentes branches."
+          },
+          {
+            "question": "La branche principale est parcourue par 0,50 A et une première branche par 0,20 A. Quelle est l’intensité dans la deuxième branche ?",
+            "options": [
+              "0,10 A",
+              "0,20 A",
+              "0,30 A",
+              "0,70 A"
+            ],
+            "correct_answer": "0,30 A",
+            "explanation": "On utilise 0,50 = 0,20 + I. Donc I = 0,30 A."
+          },
+          {
+            "question": "Comment placer l’ampèremètre pour mesurer l’intensité dans une branche ?",
+            "options": [
+              "En série dans la branche",
+              "En parallèle sans modifier le circuit",
+              "À côté du circuit sans connexion",
+              "À la place de toutes les lampes"
+            ],
+            "correct_answer": "En série dans la branche",
+            "explanation": "Pour mesurer l’intensité d’une branche, l’ampèremètre doit être traversé par le courant de cette branche. Il se place donc en série."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -21,17 +21,40 @@ import {
 } from "lucide-react";
 
 
-export default function UserMenu() {
+// =====================================================
+// COMPOSANT
+// =====================================================
+
+export default function UserMenu({ onClose }) {
 
   const navigate =
     useNavigate();
 
 
-  // =====================================================
+  // ===================================================
+  // NAVIGATION
+  // ===================================================
+
+  function handleNavigate(path) {
+
+    if (onClose) {
+      onClose();
+    }
+
+    navigate(path);
+
+  }
+
+
+  // ===================================================
   // DÉCONNEXION
-  // =====================================================
+  // ===================================================
 
   async function logout() {
+
+    if (onClose) {
+      onClose();
+    }
 
     try {
 
@@ -40,13 +63,9 @@ export default function UserMenu() {
       } =
         await supabase.auth.signOut();
 
-
       if (error) {
-
         throw error;
-
       }
-
 
       navigate("/login");
 
@@ -62,9 +81,9 @@ export default function UserMenu() {
   }
 
 
-  // =====================================================
-  // STYLE
-  // =====================================================
+  // ===================================================
+  // STYLE DES ÉLÉMENTS
+  // ===================================================
 
   const itemClass = `
     flex
@@ -72,42 +91,41 @@ export default function UserMenu() {
     gap-3
     p-3
     rounded-lg
-    hover:bg-gray-100
     transition
-    text-gray-800
+    theme-text
+    theme-hover
   `;
 
 
-  // =====================================================
+  // ===================================================
   // AFFICHAGE
-  // =====================================================
+  // ===================================================
 
   return (
 
     <div
       className="
-        bg-white
-        text-gray-800
         rounded-xl
         shadow-xl
         p-4
         space-y-2
         border
-        border-gray-100
+        theme-surface
+        theme-border
       "
     >
-
 
       {/* PROFIL */}
 
       <Link
         to="/profile"
+        onClick={onClose}
         className={itemClass}
       >
 
         <User
           size={20}
-          className="text-blue-600"
+          className="theme-accent-text"
         />
 
         <span>
@@ -121,12 +139,13 @@ export default function UserMenu() {
 
       <Link
         to="/dashboard"
+        onClick={onClose}
         className={itemClass}
       >
 
         <LayoutDashboard
           size={20}
-          className="text-green-600"
+          className="theme-accent-text"
         />
 
         <span>
@@ -140,12 +159,13 @@ export default function UserMenu() {
 
       <Link
         to="/profile"
+        onClick={onClose}
         className={itemClass}
       >
 
         <Award
           size={20}
-          className="text-yellow-500"
+          className="theme-accent-text"
         />
 
         <span>
@@ -159,12 +179,13 @@ export default function UserMenu() {
 
       <Link
         to="/downloads"
+        onClick={onClose}
         className={itemClass}
       >
 
         <Download
           size={20}
-          className="text-purple-600"
+          className="theme-accent-text"
         />
 
         <span>
@@ -178,12 +199,13 @@ export default function UserMenu() {
 
       <Link
         to="/settings"
+        onClick={onClose}
         className={itemClass}
       >
 
         <Settings
           size={20}
-          className="text-gray-600"
+          className="theme-accent-text"
         />
 
         <span>
@@ -212,7 +234,9 @@ export default function UserMenu() {
         "
       >
 
-        <LogOut size={20} />
+        <LogOut
+          size={20}
+        />
 
         <span>
           Déconnexion
@@ -220,10 +244,8 @@ export default function UserMenu() {
 
       </button>
 
-
     </div>
 
   );
 
 }
-

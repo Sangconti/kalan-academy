@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Tension électrique",
+  "chapter_order": 3,
+  "lessons": [
+    {
+      "lesson_order": 1,
+      "title": "Découvrir la tension électrique",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "La tension électrique est une grandeur qui caractérise l’état électrique entre deux points d’un circuit. Elle est souvent notée U. Un générateur, comme une pile, établit une tension entre ses bornes et permet ainsi d’alimenter les récepteurs du circuit."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La tension se mesure entre deux points. Par exemple, on peut mesurer la tension entre les deux bornes d’une pile ou entre les deux bornes d’une lampe. La tension permet notamment de savoir quelle différence électrique existe entre ces deux points."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans une activité scolaire, une pile de 1,5 V possède une tension nominale de 1,5 volt. Une batterie ou un générateur peut avoir une autre valeur. Il faut toujours vérifier la tension prévue pour un appareil avant de le connecter afin d’éviter un fonctionnement incorrect ou une détérioration."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Découvrir la tension électrique",
+        "questions": [
+          {
+            "question": "Que représente la tension électrique ?",
+            "options": [
+              "Une grandeur électrique entre deux points",
+              "La masse d’un générateur",
+              "La longueur d’un fil",
+              "La température d’une lampe"
+            ],
+            "correct_answer": "Une grandeur électrique entre deux points",
+            "explanation": "La tension électrique caractérise une différence électrique entre deux points d’un circuit."
+          },
+          {
+            "question": "Quelle lettre est généralement utilisée pour représenter la tension électrique ?",
+            "options": [
+              "U",
+              "I",
+              "A",
+              "R"
+            ],
+            "correct_answer": "U",
+            "explanation": "En physique, la tension électrique est généralement notée U."
+          },
+          {
+            "question": "Quel élément peut établir une tension dans un circuit ?",
+            "options": [
+              "Une pile",
+              "Un fil seul",
+              "Un interrupteur ouvert seul",
+              "Une lampe éteinte seule"
+            ],
+            "correct_answer": "Une pile",
+            "explanation": "Une pile est un générateur qui établit une tension entre ses bornes et peut alimenter un circuit."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 2,
+      "title": "Le volt et les unités de tension",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "L’unité internationale de la tension électrique est le volt, dont le symbole est V. Dans certains circuits, on utilise des valeurs plus petites exprimées en millivolts (mV) ou des valeurs plus grandes exprimées en kilovolts (kV)."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Un volt correspond à 1 000 millivolts : 1 V = 1 000 mV. Pour convertir des volts en millivolts, on multiplie par 1 000. Par exemple, 1,5 V correspondent à 1 500 mV. À l’inverse, 500 mV correspondent à 0,5 V."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Le kilovolt est utilisé pour les tensions élevées. Un kilovolt correspond à 1 000 volts : 1 kV = 1 000 V. En 7ème année, les conversions simples entre volts et millivolts sont particulièrement utiles pour lire et comparer les mesures effectuées avec des appareils électriques."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les unités de tension",
+        "questions": [
+          {
+            "question": "Quelle est l’unité principale de la tension électrique ?",
+            "options": [
+              "L’ampère",
+              "Le volt",
+              "Le watt",
+              "Le mètre"
+            ],
+            "correct_answer": "Le volt",
+            "explanation": "La tension électrique se mesure en volts, dont le symbole est V."
+          },
+          {
+            "question": "À combien correspondent 1,5 V en millivolts ?",
+            "options": [
+              "15 mV",
+              "150 mV",
+              "1 500 mV",
+              "15 000 mV"
+            ],
+            "correct_answer": "1 500 mV",
+            "explanation": "1 V = 1 000 mV, donc 1,5 V = 1 500 mV."
+          },
+          {
+            "question": "À combien correspondent 500 mV ?",
+            "options": [
+              "0,05 V",
+              "0,5 V",
+              "5 V",
+              "50 V"
+            ],
+            "correct_answer": "0,5 V",
+            "explanation": "Pour passer de millivolts à volts, on divise par 1 000 : 500 mV = 0,5 V."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 3,
+      "title": "Le voltmètre",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Le voltmètre est l’appareil utilisé pour mesurer une tension électrique entre deux points. Sur un appareil de mesure, la tension est généralement indiquée par la lettre U et l’unité de mesure est le volt (V). Un multimètre peut également mesurer une tension lorsqu’il est réglé sur la fonction appropriée."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Contrairement à l’ampèremètre, le voltmètre se branche en dérivation, c’est-à-dire en parallèle, aux bornes du dipôle dont on veut mesurer la tension. Pour mesurer la tension d’une lampe, on place donc les deux bornes du voltmètre de part et d’autre de la lampe."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Lors d’une mesure, il faut choisir la fonction et le calibre adaptés. Les appareils scolaires doivent être utilisés sur des circuits basse tension prévus pour les expériences. Une mesure électrique doit être réalisée avec précaution et conformément aux indications du matériel."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Le voltmètre",
+        "questions": [
+          {
+            "question": "Quel appareil permet de mesurer une tension électrique ?",
+            "options": [
+              "L’ampèremètre",
+              "Le voltmètre",
+              "La balance",
+              "Le thermomètre"
+            ],
+            "correct_answer": "Le voltmètre",
+            "explanation": "Le voltmètre est l’appareil destiné à mesurer la tension électrique entre deux points."
+          },
+          {
+            "question": "Comment branche-t-on un voltmètre pour mesurer la tension aux bornes d’une lampe ?",
+            "options": [
+              "En série avec la lampe",
+              "En dérivation aux bornes de la lampe",
+              "À la place de la pile",
+              "Sans le relier au circuit"
+            ],
+            "correct_answer": "En dérivation aux bornes de la lampe",
+            "explanation": "Un voltmètre mesure une différence de potentiel entre deux points. Il se branche donc en dérivation aux bornes du dipôle."
+          },
+          {
+            "question": "Quelle unité lit-on généralement sur un voltmètre ?",
+            "options": [
+              "Le volt",
+              "L’ampère",
+              "Le kilogramme",
+              "Le mètre"
+            ],
+            "correct_answer": "Le volt",
+            "explanation": "La tension électrique se mesure en volts, symbole V."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 4,
+      "title": "Mesurer une tension électrique",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour mesurer la tension aux bornes d’un dipôle, on utilise un voltmètre réglé sur la fonction tension. Les deux bornes du voltmètre sont reliées aux deux bornes du dipôle. Le circuit peut rester fermé pendant la mesure si le montage est correctement réalisé."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Le choix du calibre doit être adapté à la tension que l’on souhaite mesurer. Si la valeur est inconnue, on utilise d’abord un calibre suffisamment élevé lorsque l’appareil le permet, puis on peut choisir un calibre plus précis. Il faut toujours respecter les instructions du matériel utilisé."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Exemple : un voltmètre indique 1,5 V aux bornes d’une pile. Cette mesure correspond à 1 500 mV. Une tension doit toujours être mesurée entre deux points précis. Dans une expérience scolaire, il est important d’identifier les deux points avant de brancher le voltmètre."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Mesurer une tension",
+        "questions": [
+          {
+            "question": "Où branche-t-on les deux bornes du voltmètre pour mesurer la tension d’une lampe ?",
+            "options": [
+              "Aux deux bornes de la lampe",
+              "Sur un seul fil",
+              "À la place de l’interrupteur uniquement",
+              "Sans aucune connexion"
+            ],
+            "correct_answer": "Aux deux bornes de la lampe",
+            "explanation": "Le voltmètre mesure la différence électrique entre deux points. Il doit donc être connecté aux deux bornes du dipôle."
+          },
+          {
+            "question": "Un voltmètre indique 1,5 V. Quelle valeur cela représente-t-il en millivolts ?",
+            "options": [
+              "15 mV",
+              "150 mV",
+              "1 500 mV",
+              "15 000 mV"
+            ],
+            "correct_answer": "1 500 mV",
+            "explanation": "1,5 × 1 000 = 1 500 mV."
+          },
+          {
+            "question": "Pourquoi faut-il choisir un calibre adapté sur un appareil de mesure ?",
+            "options": [
+              "Pour effectuer une mesure correcte et utiliser l’appareil dans ses limites",
+              "Pour augmenter automatiquement la tension",
+              "Pour fabriquer de l’électricité",
+              "Pour remplacer le générateur"
+            ],
+            "correct_answer": "Pour effectuer une mesure correcte et utiliser l’appareil dans ses limites",
+            "explanation": "Le calibre doit être adapté à la grandeur mesurée afin d'obtenir une mesure correcte et de respecter les limites de l'appareil."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 5,
+      "title": "Tension dans un circuit en dérivation",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans un circuit en dérivation, les différentes branches sont reliées aux mêmes deux points principaux du circuit. Les dipôles placés sur ces branches ont donc la même tension à leurs bornes, lorsque leurs bornes sont reliées aux mêmes points du circuit."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Par exemple, si une pile fournit une tension de 6 V et que deux lampes sont placées en dérivation directement aux bornes de cette pile, la tension aux bornes de chaque lampe est de 6 V dans ce montage idéal. Cette propriété permet de comprendre pourquoi les récepteurs domestiques sont généralement branchés en dérivation."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour vérifier cette propriété expérimentalement, on peut mesurer successivement la tension aux bornes de chaque branche avec un voltmètre. Il faut placer le voltmètre en dérivation aux bornes du dipôle étudié et effectuer les mesures avec un générateur basse tension adapté."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Tension en dérivation",
+        "questions": [
+          {
+            "question": "Dans un circuit en dérivation, quelle relation existe entre les tensions de branches reliées aux mêmes deux points ?",
+            "options": [
+              "Elles sont égales",
+              "Elles sont toujours nulles",
+              "Elles sont toujours différentes",
+              "Elles sont toujours dix fois plus grandes"
+            ],
+            "correct_answer": "Elles sont égales",
+            "explanation": "Les dipôles reliés aux mêmes deux points d’un circuit en dérivation ont la même tension à leurs bornes."
+          },
+          {
+            "question": "Une pile de 6 V alimente deux lampes montées en dérivation directement à ses bornes. Quelle est la tension aux bornes de chaque lampe dans le modèle idéal ?",
+            "options": [
+              "1 V",
+              "3 V",
+              "6 V",
+              "12 V"
+            ],
+            "correct_answer": "6 V",
+            "explanation": "En dérivation, les deux lampes sont reliées aux mêmes bornes du générateur : leur tension est donc de 6 V dans le modèle idéal."
+          },
+          {
+            "question": "Comment mesure-t-on la tension d’une branche ?",
+            "options": [
+              "Avec un voltmètre branché en dérivation",
+              "Avec un ampèremètre branché en série uniquement",
+              "Avec une balance",
+              "Sans appareil de mesure"
+            ],
+            "correct_answer": "Avec un voltmètre branché en dérivation",
+            "explanation": "La tension se mesure entre deux points avec un voltmètre branché en dérivation aux bornes du dipôle."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 6,
+      "title": "Tension dans un circuit en série",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans un circuit en série, les récepteurs sont placés les uns à la suite des autres. La tension du générateur se répartit entre les différents récepteurs. La somme des tensions aux bornes des récepteurs est égale à la tension du générateur lorsque le circuit est correctement étudié dans les conditions habituelles."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Par exemple, une pile de 9 V alimente deux récepteurs en série. Si la tension aux bornes du premier récepteur est de 4 V, la tension aux bornes du second est de 5 V, car 4 V + 5 V = 9 V. Cette relation permet de calculer une tension inconnue."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour vérifier cette relation, on peut mesurer la tension du générateur puis les tensions aux bornes de chaque récepteur avec un voltmètre. Le voltmètre est toujours branché en dérivation aux bornes de l’élément étudié. Cette expérience permet de distinguer clairement la tension de l’intensité : la tension se mesure en volts avec un voltmètre, tandis que l’intensité se mesure en ampères avec un ampèremètre."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Tension en série",
+        "questions": [
+          {
+            "question": "Dans un circuit en série, comment se répartit la tension du générateur ?",
+            "options": [
+              "Elle se répartit entre les différents récepteurs",
+              "Elle disparaît avant les récepteurs",
+              "Elle est toujours nulle",
+              "Elle devient automatiquement une intensité"
+            ],
+            "correct_answer": "Elle se répartit entre les différents récepteurs",
+            "explanation": "Dans un circuit en série, la tension du générateur est égale à la somme des tensions aux bornes des différents récepteurs."
+          },
+          {
+            "question": "Un générateur de 9 V alimente deux récepteurs en série. Le premier a une tension de 4 V. Quelle est la tension du second ?",
+            "options": [
+              "3 V",
+              "4 V",
+              "5 V",
+              "13 V"
+            ],
+            "correct_answer": "5 V",
+            "explanation": "On utilise la relation 9 V = 4 V + U. Donc U = 5 V."
+          },
+          {
+            "question": "Quel couple appareil-unité est correct ?",
+            "options": [
+              "Voltmètre — volt",
+              "Ampèremètre — volt",
+              "Voltmètre — ampère",
+              "Thermomètre — volt"
+            ],
+            "correct_answer": "Voltmètre — volt",
+            "explanation": "Le voltmètre mesure la tension et l’unité de la tension est le volt (V)."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Puissances d'un entier naturel",
+  "chapter_order": 16,
+  "lessons": [
+    {
+      "title": "Comprendre la puissance",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'une puissance",
+          "content": {
+            "text": "Une puissance permet d'écrire plus simplement une multiplication répétée d'un même nombre. Par exemple, 5 × 5 × 5 peut s'écrire 5³. Le nombre 5 est appelé la base et 3 est appelé l'exposant."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Base et exposant",
+          "content": {
+            "text": "Dans l'écriture aⁿ, a est la base et n est l'exposant. Lorsque n est un entier naturel, aⁿ signifie que l'on multiplie n fois le nombre a par lui-même. Ainsi, 4⁴ = 4 × 4 × 4 × 4."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Attention à la signification de l'exposant",
+          "content": {
+            "text": "Il faut distinguer une puissance d'une multiplication. Par exemple, 3² signifie 3 × 3 = 9 et non 3 × 2 = 6. L'exposant indique combien de fois la base apparaît comme facteur."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Comprendre la puissance",
+        "questions": [
+          {
+            "question": "Dans 7³, quel est l'exposant ?",
+            "options": [
+              "3",
+              "7",
+              "10",
+              "21"
+            ],
+            "correct_answer": "3",
+            "explanation": "Dans 7³, 7 est la base et 3 est l'exposant."
+          },
+          {
+            "question": "Que signifie 4³ ?",
+            "options": [
+              "4 + 4 + 4",
+              "4 × 3",
+              "4 × 4 × 4",
+              "3 × 3 × 3 × 3"
+            ],
+            "correct_answer": "4 × 4 × 4",
+            "explanation": "L'exposant 3 signifie que la base 4 apparaît trois fois comme facteur."
+          },
+          {
+            "question": "Quelle est la valeur de 3² ?",
+            "options": [
+              "5",
+              "6",
+              "9",
+              "12"
+            ],
+            "correct_answer": "9",
+            "explanation": "3² = 3 × 3 = 9."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Écrire et lire une puissance",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Lire une puissance",
+          "content": {
+            "text": "Une puissance se lit en utilisant la base et l'exposant. Par exemple, 2⁵ se lit « deux puissance cinq » ou « deux exposant cinq ». Les expressions 2² et 2³ peuvent aussi se lire « deux au carré » et « deux au cube »."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Transformer une multiplication en puissance",
+          "content": {
+            "text": "Pour transformer une multiplication répétée en puissance, on compte le nombre de fois où le même facteur apparaît. Par exemple, 6 × 6 × 6 × 6 = 6⁴. De même, 10 × 10 × 10 = 10³."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Développer une puissance",
+          "content": {
+            "text": "Pour développer une puissance, on remplace l'écriture exponentielle par une multiplication répétée. Par exemple, 8³ = 8 × 8 × 8. Il est important de ne pas multiplier directement la base par l'exposant."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Lire et écrire une puissance",
+        "questions": [
+          {
+            "question": "Comment lit-on 5² ?",
+            "options": [
+              "Cinq multiplié par deux",
+              "Cinq au carré",
+              "Deux au carré",
+              "Cinq plus deux"
+            ],
+            "correct_answer": "Cinq au carré",
+            "explanation": "Une puissance 2 se lit « au carré »."
+          },
+          {
+            "question": "Comment écrire 9 × 9 × 9 sous forme de puissance ?",
+            "options": [
+              "9²",
+              "3⁹",
+              "9³",
+              "27⁹"
+            ],
+            "correct_answer": "9³",
+            "explanation": "Le facteur 9 apparaît trois fois, donc 9 × 9 × 9 = 9³."
+          },
+          {
+            "question": "Quelle est l'écriture développée de 10⁴ ?",
+            "options": [
+              "10 × 4",
+              "10 + 10 + 10 + 10",
+              "10 × 10 × 10 × 10",
+              "4 × 4 × 4 × 4"
+            ],
+            "correct_answer": "10 × 10 × 10 × 10",
+            "explanation": "L'exposant 4 indique quatre facteurs égaux à 10."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Calculer une puissance",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Calcul par multiplication répétée",
+          "content": {
+            "text": "Pour calculer une puissance, on effectue la multiplication répétée indiquée par l'exposant. Par exemple, 2⁴ = 2 × 2 × 2 × 2 = 16. De même, 5³ = 5 × 5 × 5 = 125."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Quelques puissances à connaître",
+          "content": {
+            "text": "Les puissances de petits nombres doivent être connues progressivement. On peut retenir notamment : 2² = 4, 2³ = 8, 2⁴ = 16, 3² = 9, 3³ = 27, 4² = 16, 5² = 25 et 10² = 100."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Éviter les erreurs de calcul",
+          "content": {
+            "text": "Pour éviter les erreurs, il faut respecter l'exposant. Par exemple, 4³ n'est pas égal à 12 : 4³ = 4 × 4 × 4 = 64. La puissance représente donc une multiplication répétée et non une multiplication simple."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Calculer une puissance",
+        "questions": [
+          {
+            "question": "Quelle est la valeur de 2⁵ ?",
+            "options": [
+              "10",
+              "16",
+              "25",
+              "32"
+            ],
+            "correct_answer": "32",
+            "explanation": "2⁵ = 2 × 2 × 2 × 2 × 2 = 32."
+          },
+          {
+            "question": "Quelle est la valeur de 5³ ?",
+            "options": [
+              "15",
+              "25",
+              "125",
+              "150"
+            ],
+            "correct_answer": "125",
+            "explanation": "5³ = 5 × 5 × 5 = 125."
+          },
+          {
+            "question": "Quelle est la valeur de 4³ ?",
+            "options": [
+              "12",
+              "16",
+              "32",
+              "64"
+            ],
+            "correct_answer": "64",
+            "explanation": "4³ = 4 × 4 × 4 = 64."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Propriétés simples des puissances",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Produit de puissances de même base",
+          "content": {
+            "text": "Lorsque l'on multiplie deux puissances ayant la même base, on peut additionner les exposants : aᵐ × aⁿ = aᵐ⁺ⁿ. Par exemple, 2³ × 2² = 2⁵ = 32. Cette propriété permet de simplifier certains calculs."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Quotient de puissances de même base",
+          "content": {
+            "text": "Lorsque l'on divise deux puissances ayant la même base et que le diviseur est non nul, on peut soustraire les exposants : aᵐ ÷ aⁿ = aᵐ⁻ⁿ lorsque m est supérieur ou égal à n. Par exemple, 5⁴ ÷ 5² = 5² = 25."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Puissance d'une puissance",
+          "content": {
+            "text": "Une puissance d'une puissance peut également être simplifiée : (aᵐ)ⁿ = aᵐ×ⁿ. Par exemple, (2²)³ = 2⁶ = 64. Ces propriétés doivent être utilisées uniquement lorsque les conditions sont respectées."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Propriétés des puissances",
+        "questions": [
+          {
+            "question": "Comment simplifier 2³ × 2² ?",
+            "options": [
+              "2⁵",
+              "2⁶",
+              "4⁵",
+              "2¹"
+            ],
+            "correct_answer": "2⁵",
+            "explanation": "Pour une multiplication de puissances de même base, on additionne les exposants : 3 + 2 = 5."
+          },
+          {
+            "question": "Quelle est la valeur de 5⁴ ÷ 5² ?",
+            "options": [
+              "5²",
+              "5⁶",
+              "5⁸",
+              "5¹"
+            ],
+            "correct_answer": "5²",
+            "explanation": "On soustrait les exposants : 4 - 2 = 2."
+          },
+          {
+            "question": "Comment simplifier (3²)³ ?",
+            "options": [
+              "3⁵",
+              "3⁶",
+              "6³",
+              "9³"
+            ],
+            "correct_answer": "3⁶",
+            "explanation": "Pour une puissance d'une puissance, on multiplie les exposants : 2 × 3 = 6."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Puissances de 10",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les premières puissances de 10",
+          "content": {
+            "text": "Les puissances de 10 sont particulièrement utiles pour écrire et comprendre les grands nombres. On a 10¹ = 10, 10² = 100, 10³ = 1 000, 10⁴ = 10 000 et 10⁵ = 100 000."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Compter les zéros",
+          "content": {
+            "text": "Pour une puissance entière positive de 10, le nombre 1 est suivi d'autant de zéros que l'exposant. Ainsi, 10⁶ = 1 000 000. Cette propriété permet d'écrire facilement de très grands nombres."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Utilisations dans la vie courante",
+          "content": {
+            "text": "Les puissances de 10 sont utilisées dans de nombreuses situations pratiques : compter de grandes quantités, exprimer des distances, des populations ou des mesures. Par exemple, 1 million s'écrit 1 000 000 = 10⁶."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Puissances de 10",
+        "questions": [
+          {
+            "question": "Quelle est la valeur de 10³ ?",
+            "options": [
+              "100",
+              "1 000",
+              "10 000",
+              "30"
+            ],
+            "correct_answer": "1 000",
+            "explanation": "10³ = 10 × 10 × 10 = 1 000."
+          },
+          {
+            "question": "Quelle puissance de 10 correspond à 100 000 ?",
+            "options": [
+              "10²",
+              "10³",
+              "10⁴",
+              "10⁵"
+            ],
+            "correct_answer": "10⁵",
+            "explanation": "100 000 contient cinq zéros : 100 000 = 10⁵."
+          },
+          {
+            "question": "Combien de zéros possède 10⁶ ?",
+            "options": [
+              "4",
+              "5",
+              "6",
+              "7"
+            ],
+            "correct_answer": "6",
+            "explanation": "10⁶ = 1 000 000, donc il y a six zéros."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Problèmes et exercices sur les puissances",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode pour résoudre un problème",
+          "content": {
+            "text": "Pour résoudre un problème avec des puissances, il faut d'abord identifier la multiplication répétée ou la puissance présente dans l'énoncé. Ensuite, on choisit de développer la puissance ou d'utiliser une propriété adaptée."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple d'application",
+          "content": {
+            "text": "Exemple : une classe possède 4 rangées de 4 tables, et chaque table possède 4 places. Le nombre total de places peut être écrit 4 × 4 × 4 = 4³ = 64. La puissance permet ici d'écrire simplement une multiplication répétée."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Conseils pour réussir les exercices",
+          "content": {
+            "text": "Pour réussir les exercices, il faut distinguer la base et l'exposant, développer correctement les puissances et vérifier les calculs. Il faut également connaître les puissances de 10 et les principales propriétés étudiées."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Applications des puissances",
+        "questions": [
+          {
+            "question": "Comment écrire 6 × 6 × 6 × 6 sous forme de puissance ?",
+            "options": [
+              "6²",
+              "6³",
+              "6⁴",
+              "4⁶"
+            ],
+            "correct_answer": "6⁴",
+            "explanation": "Le facteur 6 apparaît quatre fois, donc l'écriture est 6⁴."
+          },
+          {
+            "question": "Une quantité est égale à 3⁴. Quelle est sa valeur ?",
+            "options": [
+              "12",
+              "27",
+              "64",
+              "81"
+            ],
+            "correct_answer": "81",
+            "explanation": "3⁴ = 3 × 3 × 3 × 3 = 81."
+          },
+          {
+            "question": "Une classe possède 4 rangées de 4 tables avec 4 places par table. Combien y a-t-il de places ?",
+            "options": [
+              "16",
+              "32",
+              "64",
+              "128"
+            ],
+            "correct_answer": "64",
+            "explanation": "4 × 4 × 4 = 4³ = 64 places."
+          }
+        ]
+      }
+    }
+  ]
+}

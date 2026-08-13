@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Cercle et disque",
+  "chapter_order": 14,
+  "lessons": [
+    {
+      "title": "Vocabulaire du cercle",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du cercle",
+          "content": {
+            "text": "Un cercle est une ligne courbe fermée dont tous les points sont situés à la même distance d'un point fixe appelé centre. Cette distance est appelée rayon. On peut noter le cercle de centre O et de rayon r par (O, r)."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Centre et rayon",
+          "content": {
+            "text": "Le centre est le point situé au milieu du cercle. Le rayon est un segment qui relie le centre à un point du cercle. Tous les rayons d'un même cercle ont la même longueur. Par exemple, si le rayon d'un cercle est 5 cm, tous ses rayons mesurent 5 cm."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Cercle et disque",
+          "content": {
+            "text": "Il faut distinguer le cercle du disque. Le cercle correspond uniquement à la ligne qui délimite la figure, tandis que le disque comprend toute la surface située à l'intérieur du cercle."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Vocabulaire du cercle",
+        "questions": [
+          {
+            "question": "Comment appelle-t-on le point situé à égale distance de tous les points du cercle ?",
+            "options": [
+              "Le rayon",
+              "Le centre",
+              "Le diamètre",
+              "La corde"
+            ],
+            "correct_answer": "Le centre",
+            "explanation": "Le centre est le point à partir duquel tous les points du cercle sont à la même distance."
+          },
+          {
+            "question": "Comment appelle-t-on la distance entre le centre et un point du cercle ?",
+            "options": [
+              "Le diamètre",
+              "Le rayon",
+              "La corde",
+              "Le périmètre"
+            ],
+            "correct_answer": "Le rayon",
+            "explanation": "Le rayon est la distance entre le centre et n'importe quel point du cercle."
+          },
+          {
+            "question": "Quelle différence existe entre le cercle et le disque ?",
+            "options": [
+              "Le cercle est une surface et le disque une ligne",
+              "Le cercle est la ligne et le disque comprend la surface intérieure",
+              "Ils sont exactement identiques",
+              "Le disque ne possède pas de centre"
+            ],
+            "correct_answer": "Le cercle est la ligne et le disque comprend la surface intérieure",
+            "explanation": "Le cercle désigne la frontière tandis que le disque comprend toute la région intérieure."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire un cercle au compas",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Utilisation du compas",
+          "content": {
+            "text": "Pour tracer un cercle, on utilise principalement un compas. Le compas permet de conserver une distance constante entre sa pointe et sa mine. Cette distance correspond au rayon du cercle que l'on souhaite construire."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Étapes de construction",
+          "content": {
+            "text": "Pour construire un cercle de centre O et de rayon 4 cm, on place la pointe du compas sur O, on ouvre le compas jusqu'à 4 cm à l'aide d'une règle, puis on fait tourner le compas autour du point O sans modifier son ouverture."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Précision du tracé",
+          "content": {
+            "text": "La précision du tracé dépend du maintien correct de la pointe du compas au centre et de l'ouverture constante du compas. Si l'ouverture change pendant le tracé, on n'obtient pas un cercle correct."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Construction d'un cercle",
+        "questions": [
+          {
+            "question": "Quel instrument utilise-t-on principalement pour tracer un cercle ?",
+            "options": [
+              "Une équerre",
+              "Un compas",
+              "Un rapporteur",
+              "Une gomme"
+            ],
+            "correct_answer": "Un compas",
+            "explanation": "Le compas permet de tracer une courbe dont tous les points sont à la même distance du centre."
+          },
+          {
+            "question": "Pour tracer un cercle de rayon 4 cm, l'ouverture du compas doit être de...",
+            "options": [
+              "2 cm",
+              "3 cm",
+              "4 cm",
+              "8 cm"
+            ],
+            "correct_answer": "4 cm",
+            "explanation": "L'ouverture du compas correspond au rayon du cercle."
+          },
+          {
+            "question": "Pendant le tracé, l'ouverture du compas doit...",
+            "options": [
+              "changer constamment",
+              "rester constante",
+              "être nulle",
+              "être doublée à chaque tour"
+            ],
+            "correct_answer": "rester constante",
+            "explanation": "Une ouverture constante permet de garder la même distance entre le centre et tous les points du cercle."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Rayon, diamètre et corde",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du diamètre",
+          "content": {
+            "text": "Le diamètre d'un cercle est un segment qui passe par le centre et dont les deux extrémités sont sur le cercle. Le diamètre mesure deux fois le rayon. La relation est donc d = 2r. Si le rayon mesure 5 cm, le diamètre mesure 10 cm."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Définition de la corde",
+          "content": {
+            "text": "Une corde est un segment dont les deux extrémités appartiennent au cercle. Contrairement au diamètre, une corde ne passe pas nécessairement par le centre. Tout diamètre est donc une corde particulière, mais toute corde n'est pas un diamètre."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Calculer le rayon avec le diamètre",
+          "content": {
+            "text": "Pour retrouver le rayon à partir du diamètre, on divise le diamètre par 2 : r = d/2. Par exemple, si le diamètre d'un cercle est 14 cm, son rayon est 7 cm."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Rayon, diamètre et corde",
+        "questions": [
+          {
+            "question": "Un cercle a un rayon de 5 cm. Quel est son diamètre ?",
+            "options": [
+              "2,5 cm",
+              "5 cm",
+              "10 cm",
+              "15 cm"
+            ],
+            "correct_answer": "10 cm",
+            "explanation": "Le diamètre est égal à deux fois le rayon : d = 2 × 5 = 10 cm."
+          },
+          {
+            "question": "Un cercle a un diamètre de 14 cm. Quel est son rayon ?",
+            "options": [
+              "5 cm",
+              "7 cm",
+              "14 cm",
+              "28 cm"
+            ],
+            "correct_answer": "7 cm",
+            "explanation": "Le rayon est la moitié du diamètre : r = 14 ÷ 2 = 7 cm."
+          },
+          {
+            "question": "Quelle affirmation est correcte ?",
+            "options": [
+              "Toute corde est un diamètre",
+              "Tout diamètre est une corde",
+              "Un diamètre ne touche pas le cercle",
+              "Une corde doit toujours passer par le centre"
+            ],
+            "correct_answer": "Tout diamètre est une corde",
+            "explanation": "Un diamètre est une corde particulière qui passe par le centre du cercle."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Cercle et disque",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Différence entre cercle et disque",
+          "content": {
+            "text": "Le cercle est la frontière d'une figure circulaire, tandis que le disque est la région intérieure délimitée par le cercle. Lorsque l'on parle de la longueur du bord, on s'intéresse au cercle. Lorsque l'on parle de la surface intérieure, on s'intéresse au disque."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Points du cercle et du disque",
+          "content": {
+            "text": "Le disque de centre O et de rayon r contient tous les points dont la distance au centre O est inférieure ou égale à r. Le cercle correspond aux points dont la distance au centre est exactement égale à r."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemples dans la vie quotidienne",
+          "content": {
+            "text": "Dans la vie quotidienne, une pièce de monnaie, une assiette ou une roue peuvent aider à visualiser ces notions. Le bord circulaire représente le cercle, tandis que la surface intérieure représente le disque."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Cercle et disque",
+        "questions": [
+          {
+            "question": "Quelle figure comprend toute la surface intérieure ?",
+            "options": [
+              "Le cercle",
+              "Le disque",
+              "Le diamètre",
+              "La corde"
+            ],
+            "correct_answer": "Le disque",
+            "explanation": "Le disque comprend la surface intérieure délimitée par le cercle."
+          },
+          {
+            "question": "Le bord d'une assiette circulaire peut représenter...",
+            "options": [
+              "un cercle",
+              "un disque uniquement",
+              "un rayon uniquement",
+              "un diamètre uniquement"
+            ],
+            "correct_answer": "un cercle",
+            "explanation": "Le bord correspond à la ligne circulaire qui délimite le disque."
+          },
+          {
+            "question": "Sur le cercle, la distance entre le centre et un point du cercle est...",
+            "options": [
+              "toujours égale au rayon",
+              "toujours égale à zéro",
+              "toujours égale au diamètre",
+              "variable sans règle"
+            ],
+            "correct_answer": "toujours égale au rayon",
+            "explanation": "Tous les points d'un cercle sont à la même distance du centre : cette distance est le rayon."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Longueur du cercle",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Formule de la longueur du cercle",
+          "content": {
+            "text": "La longueur du cercle, appelée aussi circonférence, est la longueur du contour du cercle. Elle se calcule avec la formule L = 2 × π × r, où r est le rayon et π est approximativement égal à 3,14."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Utiliser le diamètre",
+          "content": {
+            "text": "Comme le diamètre d est égal à 2r, on peut aussi utiliser la formule L = π × d. Par exemple, pour un cercle de rayon 5 cm, sa longueur est approximativement L = 2 × 3,14 × 5 = 31,4 cm."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Attention aux unités",
+          "content": {
+            "text": "Dans les exercices, il faut faire attention à l'unité. Si le rayon est donné en mètres, la longueur du cercle sera obtenue en mètres. Pour une valeur exacte, on peut conserver π dans le résultat lorsque cela est demandé."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Longueur du cercle",
+        "questions": [
+          {
+            "question": "Quelle formule permet de calculer la longueur d'un cercle à partir du rayon ?",
+            "options": [
+              "L = πr",
+              "L = 2πr",
+              "L = r²",
+              "L = 4r"
+            ],
+            "correct_answer": "L = 2πr",
+            "explanation": "La circonférence d'un cercle de rayon r est L = 2 × π × r."
+          },
+          {
+            "question": "Quelle est approximativement la longueur d'un cercle de rayon 5 cm ?",
+            "options": [
+              "15,7 cm",
+              "31,4 cm",
+              "62,8 cm",
+              "78,5 cm"
+            ],
+            "correct_answer": "31,4 cm",
+            "explanation": "L = 2 × 3,14 × 5 = 31,4 cm."
+          },
+          {
+            "question": "Quelle autre formule peut-on utiliser avec le diamètre d ?",
+            "options": [
+              "L = πd",
+              "L = 2πd",
+              "L = d²",
+              "L = d/2"
+            ],
+            "correct_answer": "L = πd",
+            "explanation": "Comme d = 2r, on peut calculer la longueur avec L = π × d."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Problèmes et exercices de synthèse sur le cercle",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Identifier les données",
+          "content": {
+            "text": "Pour résoudre un problème sur un cercle, il faut d'abord identifier les données : rayon, diamètre ou longueur du cercle. Si le diamètre est connu, on peut trouver le rayon en divisant par 2. Si le rayon est connu, on peut calculer le diamètre en le multipliant par 2."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple avec une roue",
+          "content": {
+            "text": "Exemple : une roue possède un diamètre de 60 cm. Son rayon est donc 30 cm. En prenant π ≈ 3,14, la longueur de son contour est L = 3,14 × 60 = 188,4 cm."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Applications pratiques",
+          "content": {
+            "text": "Dans une situation pratique, comme la fabrication d'une roue, d'une table ronde ou d'un bassin circulaire, ces calculs permettent de déterminer la longueur nécessaire pour entourer la figure. Il faut toujours vérifier les unités et choisir la formule adaptée."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse cercle et disque",
+        "questions": [
+          {
+            "question": "Une roue possède un diamètre de 60 cm. Quel est son rayon ?",
+            "options": [
+              "15 cm",
+              "20 cm",
+              "30 cm",
+              "60 cm"
+            ],
+            "correct_answer": "30 cm",
+            "explanation": "Le rayon est la moitié du diamètre : 60 ÷ 2 = 30 cm."
+          },
+          {
+            "question": "Avec un diamètre de 60 cm et π ≈ 3,14, quelle est la longueur du contour de la roue ?",
+            "options": [
+              "94,2 cm",
+              "120 cm",
+              "188,4 cm",
+              "376,8 cm"
+            ],
+            "correct_answer": "188,4 cm",
+            "explanation": "L = π × d = 3,14 × 60 = 188,4 cm."
+          },
+          {
+            "question": "Pour calculer la longueur du contour d'un cercle, on utilise principalement...",
+            "options": [
+              "son rayon ou son diamètre",
+              "uniquement sa surface",
+              "uniquement sa couleur",
+              "le nombre de sommets"
+            ],
+            "correct_answer": "son rayon ou son diamètre",
+            "explanation": "La longueur du cercle se calcule avec L = 2πr ou L = πd."
+          }
+        ]
+      }
+    }
+  ]
+}

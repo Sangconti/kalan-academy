@@ -81,6 +81,17 @@ try {
     formatted
   );
 
+console.table(
+  formatted.map((q, index) => ({
+    question: index + 1,
+    texte: q.question,
+    choix: q.choices.join(" | "),
+    correct_index: q.correct_index,
+    correct_reponse:
+      q.choices[q.correct_index]
+  }))
+);
+
   setQuestions(formatted);
 
 }

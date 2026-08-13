@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Masse d'un corps",
+  "chapter_order": 3,
+  "lessons": [
+    {
+      "title": "Notion de masse",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce que la masse ?",
+          "content": "La masse d'un corps caractérise la quantité de matière qu'il contient. Elle est une grandeur physique que l'on peut mesurer. Plus un corps contient de matière, plus sa masse est généralement importante.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "La masse dans la vie quotidienne",
+          "content": "Dans la vie courante, on utilise la masse pour connaître la quantité de matière d'un produit ou d'un objet. Par exemple, un sac de riz peut avoir une masse de 5 kg, tandis qu'un petit objet peut avoir une masse de quelques grammes.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Masse et poids",
+          "content": "La masse et le poids sont deux grandeurs différentes. La masse se mesure en kilogrammes et le poids est une force qui se mesure en newtons. Il ne faut donc pas confondre la masse d'un objet avec son poids.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Notion de masse",
+        "questions": [
+          {
+            "question": "Que représente principalement la masse d'un corps ?",
+            "options": [
+              "La quantité de matière qu'il contient",
+              "Sa température",
+              "Son volume uniquement",
+              "Sa couleur"
+            ],
+            "correct_answer": "La quantité de matière qu'il contient",
+            "explanation": "La masse caractérise la quantité de matière contenue dans un corps."
+          },
+          {
+            "question": "Quelle grandeur ne doit pas être confondue avec la masse ?",
+            "options": [
+              "Le poids",
+              "La longueur",
+              "La couleur",
+              "La température uniquement"
+            ],
+            "correct_answer": "Le poids",
+            "explanation": "La masse et le poids sont deux grandeurs physiques différentes."
+          },
+          {
+            "question": "Un sac de riz de 5 kg possède une masse de...",
+            "options": [
+              "5 kg",
+              "5 N",
+              "50 L",
+              "0,5 kg"
+            ],
+            "correct_answer": "5 kg",
+            "explanation": "La masse du sac est donnée directement en kilogrammes."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les unités de masse",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le kilogramme",
+          "content": "L'unité courante de masse est le kilogramme, noté kg. Dans le système international, le kilogramme est l'unité de base de la masse. On utilise aussi d'autres unités selon la quantité de matière à mesurer.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Grammes et kilogrammes",
+          "content": "Le gramme, noté g, est souvent utilisé pour mesurer la masse de petits objets ou de petites quantités. La relation fondamentale est 1 kg = 1 000 g. Ainsi, 2 kg correspondent à 2 000 g.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Milligramme et tonne",
+          "content": "Pour des masses très petites, on peut utiliser le milligramme (mg). Pour des masses très grandes, on peut utiliser la tonne (t). On a notamment 1 g = 1 000 mg et 1 t = 1 000 kg.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Unités de masse",
+        "questions": [
+          {
+            "question": "Quelle est l'unité de base de la masse dans le système international ?",
+            "options": [
+              "Le kilogramme",
+              "Le gramme",
+              "Le litre",
+              "Le newton"
+            ],
+            "correct_answer": "Le kilogramme",
+            "explanation": "Le kilogramme, symbole kg, est l'unité de base de la masse dans le système international."
+          },
+          {
+            "question": "1 kg correspond à...",
+            "options": [
+              "1 000 g",
+              "100 g",
+              "10 g",
+              "10 000 g"
+            ],
+            "correct_answer": "1 000 g",
+            "explanation": "Un kilogramme contient 1 000 grammes."
+          },
+          {
+            "question": "1 tonne correspond à...",
+            "options": [
+              "1 000 kg",
+              "100 kg",
+              "10 kg",
+              "10 000 kg"
+            ],
+            "correct_answer": "1 000 kg",
+            "explanation": "Une tonne correspond à 1 000 kilogrammes."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mesurer une masse avec une balance",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La balance",
+          "content": "La masse d'un corps se mesure avec une balance. Il existe différents types de balances : balance électronique, balance de laboratoire ou balance à plateaux. La balance permet de comparer ou de déterminer la masse d'un objet.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Utilisation d'une balance électronique",
+          "content": "Pour mesurer une masse avec une balance électronique, on place la balance sur une surface stable, on la met à zéro si nécessaire, puis on dépose l'objet sur le plateau. L'écran indique alors la valeur de la masse.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Précautions de mesure",
+          "content": "Pour obtenir une mesure correcte, la balance doit être utilisée sur une surface stable et propre. Il faut vérifier l'unité affichée et éviter de dépasser la capacité maximale de la balance.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Mesure de la masse",
+        "questions": [
+          {
+            "question": "Avec quel instrument mesure-t-on la masse ?",
+            "options": [
+              "Une balance",
+              "Un thermomètre",
+              "Une éprouvette",
+              "Un dynamomètre"
+            ],
+            "correct_answer": "Une balance",
+            "explanation": "La balance est l'instrument utilisé pour mesurer une masse."
+          },
+          {
+            "question": "Avant de mesurer avec une balance électronique, il faut notamment...",
+            "options": [
+              "vérifier ou régler le zéro",
+              "ajouter de l'eau",
+              "chauffer l'objet",
+              "secouer la balance"
+            ],
+            "correct_answer": "vérifier ou régler le zéro",
+            "explanation": "Le réglage du zéro permet d'obtenir une mesure correcte de la masse."
+          },
+          {
+            "question": "Quelle information faut-il vérifier sur une balance électronique ?",
+            "options": [
+              "L'unité de mesure",
+              "La couleur de l'objet",
+              "La température de la pièce uniquement",
+              "La hauteur de la table"
+            ],
+            "correct_answer": "L'unité de mesure",
+            "explanation": "Il faut vérifier l'unité affichée pour interpréter correctement la mesure."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mesurer la masse d'un liquide",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Masse d'un récipient contenant un liquide",
+          "content": "Pour déterminer la masse d'un liquide, on peut utiliser une balance. On mesure d'abord la masse du récipient vide, puis la masse du récipient contenant le liquide.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Calcul de la masse du liquide",
+          "content": "La masse du liquide est obtenue en soustrayant la masse du récipient vide de la masse du récipient contenant le liquide : masse du liquide = masse du récipient plein - masse du récipient vide.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple avec de l'eau",
+          "content": "Un récipient vide a une masse de 150 g. Le même récipient contenant de l'eau a une masse de 650 g. La masse de l'eau est donc 650 - 150 = 500 g.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Masse d'un liquide",
+        "questions": [
+          {
+            "question": "Comment peut-on déterminer la masse d'un liquide placé dans un récipient ?",
+            "options": [
+              "En soustrayant la masse du récipient vide de celle du récipient plein",
+              "En additionnant uniquement les deux masses",
+              "En mesurant uniquement son volume",
+              "Avec un thermomètre"
+            ],
+            "correct_answer": "En soustrayant la masse du récipient vide de celle du récipient plein",
+            "explanation": "La différence entre les deux mesures donne la masse du liquide."
+          },
+          {
+            "question": "Un récipient vide pèse 200 g et plein 700 g. Quelle est la masse du liquide ?",
+            "options": [
+              "500 g",
+              "900 g",
+              "700 g",
+              "200 g"
+            ],
+            "correct_answer": "500 g",
+            "explanation": "700 - 200 = 500 g."
+          },
+          {
+            "question": "Pour mesurer la masse d'un liquide, utilise-t-on principalement...",
+            "options": [
+              "une balance",
+              "une éprouvette seule",
+              "un thermomètre",
+              "une règle"
+            ],
+            "correct_answer": "une balance",
+            "explanation": "La balance permet de mesurer directement la masse du récipient et de son contenu."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Masse et conservation de la matière",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Conservation de la masse",
+          "content": "Lorsqu'une transformation physique se produit dans un système fermé, la masse totale de la matière reste la même. Par exemple, lorsqu'un glaçon fond dans un récipient fermé, l'eau obtenue possède la même masse que le glaçon initial.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple d'un changement d'état",
+          "content": "Si 200 g de glace fondent complètement dans un récipient fermé, on obtient 200 g d'eau. Le changement d'état modifie l'état physique de la matière mais ne crée ni ne détruit la matière.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Importance de la mesure",
+          "content": "La mesure de la masse permet de vérifier expérimentalement certaines transformations. Il est donc important de réaliser les mesures correctement et de comparer les résultats avant et après une transformation.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Conservation de la masse",
+        "questions": [
+          {
+            "question": "Lorsqu'un glaçon fond dans un récipient fermé, sa masse...",
+            "options": [
+              "reste la même",
+              "disparaît",
+              "double toujours",
+              "devient nulle"
+            ],
+            "correct_answer": "reste la même",
+            "explanation": "Un changement d'état physique ne modifie pas la quantité de matière dans un système fermé."
+          },
+          {
+            "question": "Si 300 g de glace fondent complètement dans un récipient fermé, quelle masse d'eau obtient-on ?",
+            "options": [
+              "300 g",
+              "600 g",
+              "30 g",
+              "3 g"
+            ],
+            "correct_answer": "300 g",
+            "explanation": "La masse est conservée lors du changement d'état dans un système fermé."
+          },
+          {
+            "question": "La mesure de la masse permet notamment de...",
+            "options": [
+              "comparer la quantité de matière avant et après une transformation",
+              "mesurer directement la température",
+              "déterminer uniquement la couleur",
+              "remplacer toutes les autres mesures"
+            ],
+            "correct_answer": "comparer la quantité de matière avant et après une transformation",
+            "explanation": "La masse permet de suivre la conservation de la matière dans de nombreuses transformations."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Conversions et exercices sur la masse",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Convertir les masses",
+          "content": "Pour résoudre correctement un problème, il faut parfois convertir les unités de masse. On utilise les relations 1 kg = 1 000 g et 1 g = 1 000 mg. Par exemple, 3,5 kg correspondent à 3 500 g.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple de calcul",
+          "content": "Un commerçant possède 2 kg de riz et ajoute 500 g de riz. En convertissant 2 kg en grammes, on obtient 2 000 g. La masse totale est donc 2 000 + 500 = 2 500 g, soit 2,5 kg.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": "La masse mesure la quantité de matière d'un corps. Elle se mesure avec une balance et s'exprime principalement en kilogrammes, grammes ou milligrammes. La masse est différente du poids. Pour comparer ou additionner des masses, il faut utiliser la même unité.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse sur la masse",
+        "questions": [
+          {
+            "question": "3,5 kg correspondent à...",
+            "options": [
+              "3 500 g",
+              "350 g",
+              "35 g",
+              "35 000 g"
+            ],
+            "correct_answer": "3 500 g",
+            "explanation": "3,5 × 1 000 = 3 500 g."
+          },
+          {
+            "question": "Une personne possède 2 kg de riz et ajoute 500 g. Quelle est la masse totale ?",
+            "options": [
+              "2,5 kg",
+              "2,05 kg",
+              "7 kg",
+              "1,5 kg"
+            ],
+            "correct_answer": "2,5 kg",
+            "explanation": "2 kg = 2 000 g ; 2 000 + 500 = 2 500 g = 2,5 kg."
+          },
+          {
+            "question": "Quel instrument permet de mesurer une masse ?",
+            "options": [
+              "Une balance",
+              "Une éprouvette graduée",
+              "Un thermomètre",
+              "Une règle"
+            ],
+            "correct_answer": "Une balance",
+            "explanation": "La balance est l'instrument adapté à la mesure de la masse."
+          }
+        ]
+      }
+    }
+  ]
+}

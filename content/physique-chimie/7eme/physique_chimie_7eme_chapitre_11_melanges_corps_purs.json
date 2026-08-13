@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Mélanges et corps purs",
+  "chapter_order": 11,
+  "lessons": [
+    {
+      "title": "Corps pur et mélange",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce qu'un corps pur ?",
+          "content": "Un corps pur est une substance constituée d'une seule espèce chimique. Par exemple, de l'eau distillée contient essentiellement une seule espèce chimique : l'eau. Un corps pur possède une composition bien définie.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Qu'est-ce qu'un mélange ?",
+          "content": "Un mélange contient plusieurs espèces chimiques différentes. Par exemple, l'eau salée contient de l'eau et du sel. L'air est également un mélange puisqu'il contient principalement du diazote et du dioxygène ainsi que d'autres gaz.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemples de la vie quotidienne",
+          "content": "De nombreux produits utilisés quotidiennement sont des mélanges : l'eau minérale, le jus de fruits, le lait et l'air. Identifier si une substance est un corps pur ou un mélange est une étape importante en chimie.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Corps pur et mélange",
+        "questions": [
+          {
+            "question": "Qu'est-ce qu'un corps pur ?",
+            "options": [
+              "Une substance constituée d'une seule espèce chimique",
+              "Une substance contenant toujours plusieurs liquides",
+              "Un mélange de plusieurs gaz",
+              "Une substance contenant obligatoirement de l'eau"
+            ],
+            "correct_answer": "Une substance constituée d'une seule espèce chimique",
+            "explanation": "Un corps pur contient une seule espèce chimique."
+          },
+          {
+            "question": "L'eau salée est-elle un corps pur ?",
+            "options": [
+              "Non, c'est un mélange",
+              "Oui, toujours",
+              "Oui, parce qu'elle est liquide",
+              "Oui, parce qu'elle est transparente"
+            ],
+            "correct_answer": "Non, c'est un mélange",
+            "explanation": "L'eau salée contient au moins de l'eau et du sel : c'est donc un mélange."
+          },
+          {
+            "question": "L'air est principalement...",
+            "options": [
+              "un mélange de plusieurs gaz",
+              "un corps pur",
+              "un liquide",
+              "un solide"
+            ],
+            "correct_answer": "un mélange de plusieurs gaz",
+            "explanation": "L'air contient principalement du diazote et du dioxygène ainsi que d'autres gaz."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mélanges homogènes et hétérogènes",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le mélange homogène",
+          "content": "Un mélange homogène présente un aspect uniforme à l'œil nu. On ne distingue pas les différents constituants du mélange. L'eau salée bien mélangée est un exemple de mélange homogène.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le mélange hétérogène",
+          "content": "Un mélange hétérogène présente plusieurs parties ou constituants que l'on peut distinguer à l'œil nu. Par exemple, un mélange d'eau et de sable est hétérogène car le sable reste visible.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Comment les reconnaître ?",
+          "content": "Pour distinguer les deux types de mélanges, on observe leur aspect. Si le mélange paraît uniforme et qu'on ne distingue pas ses constituants, il est homogène. Si plusieurs constituants sont visibles, il est hétérogène.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Mélanges homogènes et hétérogènes",
+        "questions": [
+          {
+            "question": "Un mélange homogène présente généralement...",
+            "options": [
+              "un aspect uniforme",
+              "plusieurs couches toujours visibles",
+              "uniquement des solides",
+              "uniquement des gaz"
+            ],
+            "correct_answer": "un aspect uniforme",
+            "explanation": "Dans un mélange homogène, les constituants ne sont pas distinguables à l'œil nu."
+          },
+          {
+            "question": "Un mélange d'eau et de sable est...",
+            "options": [
+              "hétérogène",
+              "homogène",
+              "un corps pur",
+              "un élément chimique"
+            ],
+            "correct_answer": "hétérogène",
+            "explanation": "Le sable reste visible dans l'eau, ce qui permet de distinguer les constituants."
+          },
+          {
+            "question": "L'eau salée bien mélangée est généralement...",
+            "options": [
+              "homogène",
+              "hétérogène",
+              "un corps pur",
+              "un solide"
+            ],
+            "correct_answer": "homogène",
+            "explanation": "Lorsque le sel est complètement dissous, on ne distingue plus ses grains à l'œil nu."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Dissolution et solubilité",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La dissolution",
+          "content": "La dissolution est le phénomène au cours duquel une substance, appelée soluté, se disperse dans un liquide appelé solvant pour former une solution. Par exemple, lorsque du sel est ajouté à l'eau et disparaît visuellement, il se dissout dans l'eau.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Soluté et solvant",
+          "content": "Dans une solution d'eau salée, l'eau est le solvant et le sel est le soluté. Le soluté est la substance dissoute, tandis que le solvant est le liquide qui permet cette dissolution.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Dissoudre n'est pas faire disparaître",
+          "content": "Lorsqu'un solide se dissout dans l'eau, il ne disparaît pas réellement. Ses particules se répartissent dans le liquide. On peut récupérer le sel d'une eau salée par évaporation de l'eau.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Dissolution",
+        "questions": [
+          {
+            "question": "Dans une eau salée, le sel est le...",
+            "options": [
+              "soluté",
+              "solvant",
+              "gaz",
+              "corps pur liquide"
+            ],
+            "correct_answer": "soluté",
+            "explanation": "Le sel est la substance qui se dissout dans l'eau."
+          },
+          {
+            "question": "Dans une eau salée, l'eau est le...",
+            "options": [
+              "solvant",
+              "soluté",
+              "gaz dissous uniquement",
+              "solide"
+            ],
+            "correct_answer": "solvant",
+            "explanation": "L'eau est le liquide qui dissout le sel."
+          },
+          {
+            "question": "Lorsqu'un sel se dissout dans l'eau, il...",
+            "options": [
+              "se répartit dans l'eau sous forme de particules",
+              "disparaît complètement de la matière",
+              "se transforme nécessairement en gaz",
+              "devient automatiquement un nouvel élément chimique"
+            ],
+            "correct_answer": "se répartit dans l'eau sous forme de particules",
+            "explanation": "La dissolution disperse les particules du soluté dans le solvant."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Séparation des mélanges par décantation et filtration",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La décantation",
+          "content": "La décantation permet de séparer certains constituants d'un mélange hétérogène en laissant reposer le mélange. Les particules solides plus denses peuvent se déposer au fond du récipient.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "La filtration",
+          "content": "La filtration permet de séparer un solide insoluble d'un liquide à l'aide d'un filtre. Le liquide qui traverse le filtre est appelé filtrat, tandis que le solide retenu est le résidu.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple eau et sable",
+          "content": "Pour séparer un mélange d'eau et de sable, on peut d'abord laisser le sable se déposer par décantation puis utiliser une filtration. Ces techniques permettent de récupérer une eau débarrassée d'une partie des particules solides.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Décantation et filtration",
+        "questions": [
+          {
+            "question": "Que permet principalement la décantation ?",
+            "options": [
+              "De laisser certaines particules se déposer",
+              "De dissoudre tous les solides",
+              "De transformer un liquide en gaz",
+              "De créer un nouveau corps pur"
+            ],
+            "correct_answer": "De laisser certaines particules se déposer",
+            "explanation": "La décantation utilise notamment la différence de densité pour séparer certains constituants."
+          },
+          {
+            "question": "Que retient le filtre lors d'une filtration d'eau sableuse ?",
+            "options": [
+              "Les particules solides de sable",
+              "Toute l'eau",
+              "Le solvant uniquement",
+              "Tous les gaz"
+            ],
+            "correct_answer": "Les particules solides de sable",
+            "explanation": "Le filtre retient les particules solides insolubles tandis que le liquide traverse le filtre."
+          },
+          {
+            "question": "Le liquide qui traverse le filtre est appelé...",
+            "options": [
+              "filtrat",
+              "résidu",
+              "soluté",
+              "dépôt"
+            ],
+            "correct_answer": "filtrat",
+            "explanation": "Le liquide récupéré après son passage à travers le filtre est appelé filtrat."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Séparation par évaporation et distillation",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "L'évaporation",
+          "content": "L'évaporation permet de séparer un soluté dissous d'un liquide en faisant passer le solvant à l'état gazeux. Par exemple, en évaporant l'eau d'une solution d'eau salée, on peut récupérer le sel.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "La distillation",
+          "content": "La distillation permet de récupérer un liquide en utilisant les différences de températures d'ébullition des constituants. Le liquide est vaporisé puis la vapeur est refroidie afin de redevenir liquide.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Choisir une technique",
+          "content": "La technique de séparation dépend de la nature du mélange. La filtration convient notamment aux solides insolubles dans un liquide. L'évaporation peut permettre de récupérer un soluté dissous. La distillation permet notamment de récupérer un liquide séparé d'autres constituants.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Évaporation et distillation",
+        "questions": [
+          {
+            "question": "Que peut-on récupérer en évaporant l'eau d'une eau salée ?",
+            "options": [
+              "Le sel",
+              "Uniquement l'air",
+              "Le filtre",
+              "Le récipient"
+            ],
+            "correct_answer": "Le sel",
+            "explanation": "L'eau s'évapore tandis que le sel dissous peut rester dans le récipient."
+          },
+          {
+            "question": "La distillation utilise notamment...",
+            "options": [
+              "les différences de températures d'ébullition",
+              "uniquement la couleur des substances",
+              "la masse du récipient",
+              "la forme du filtre"
+            ],
+            "correct_answer": "les différences de températures d'ébullition",
+            "explanation": "La distillation repose sur la vaporisation puis la condensation des constituants selon leurs propriétés physiques."
+          },
+          {
+            "question": "Quelle technique convient notamment pour séparer du sable de l'eau ?",
+            "options": [
+              "La filtration",
+              "La fusion",
+              "La combustion",
+              "La solidification"
+            ],
+            "correct_answer": "La filtration",
+            "explanation": "Le sable est insoluble dans l'eau et peut être retenu par un filtre."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Identifier et séparer des mélanges",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Observer avant de séparer",
+          "content": "Avant de choisir une technique de séparation, il faut observer le mélange et identifier ses constituants. On peut déterminer s'il est homogène ou hétérogène et vérifier si les constituants sont solides, liquides ou dissous.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemples de choix",
+          "content": "Pour séparer de l'eau et du sable, la filtration est adaptée. Pour récupérer du sel dissous dans l'eau, l'évaporation peut être utilisée. Pour séparer certains liquides ayant des températures d'ébullition différentes, la distillation peut être utilisée.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Bilan",
+          "content": "Un corps pur contient une seule espèce chimique, tandis qu'un mélange en contient plusieurs. Les mélanges peuvent être homogènes ou hétérogènes. Plusieurs techniques permettent de les séparer : décantation, filtration, évaporation et distillation.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Bilan mélanges et corps purs",
+        "questions": [
+          {
+            "question": "Un mélange contient...",
+            "options": [
+              "plusieurs espèces chimiques",
+              "toujours une seule espèce chimique",
+              "uniquement des solides",
+              "uniquement des liquides"
+            ],
+            "correct_answer": "plusieurs espèces chimiques",
+            "explanation": "Un mélange est constitué de plusieurs espèces chimiques différentes."
+          },
+          {
+            "question": "Quelle technique permet notamment de séparer un solide insoluble d'un liquide ?",
+            "options": [
+              "La filtration",
+              "La combustion",
+              "La fusion",
+              "La condensation uniquement"
+            ],
+            "correct_answer": "La filtration",
+            "explanation": "La filtration permet de retenir le solide insoluble grâce à un filtre."
+          },
+          {
+            "question": "Quelle technique peut permettre de récupérer le sel d'une eau salée ?",
+            "options": [
+              "L'évaporation",
+              "La filtration simple",
+              "La décantation seule",
+              "La solidification du sel"
+            ],
+            "correct_answer": "L'évaporation",
+            "explanation": "L'évaporation de l'eau laisse le sel dissous dans le récipient."
+          }
+        ]
+      }
+    }
+  ]
+}

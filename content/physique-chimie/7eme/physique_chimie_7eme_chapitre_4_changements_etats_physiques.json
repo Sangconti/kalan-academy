@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Changements d'états physiques",
+  "chapter_order": 4,
+  "lessons": [
+    {
+      "title": "Les différents états physiques de la matière",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Solide, liquide et gaz",
+          "content": "La matière peut se présenter principalement sous trois états physiques : solide, liquide et gazeux. Dans la vie quotidienne, l'eau permet d'observer facilement ces trois états : la glace est solide, l'eau est liquide et la vapeur d'eau est gazeuse.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Propriétés des solides",
+          "content": "Un solide possède généralement une forme propre et un volume propre. Un morceau de bois, une pierre ou un glaçon sont des exemples de solides. Un solide peut être rigide ou déformable selon sa nature.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Propriétés des liquides et des gaz",
+          "content": "Un liquide possède un volume propre mais prend la forme du récipient qui le contient. Un gaz ne possède ni forme propre ni volume propre : il occupe l'espace disponible dans le récipient.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — États physiques",
+        "questions": [
+          {
+            "question": "Quels sont les trois états physiques courants de la matière ?",
+            "options": [
+              "Solide, liquide et gazeux",
+              "Solide, chaud et froid",
+              "Liquide, lourd et léger",
+              "Dur, mou et brillant"
+            ],
+            "correct_answer": "Solide, liquide et gazeux",
+            "explanation": "La matière peut notamment se trouver à l'état solide, liquide ou gazeux."
+          },
+          {
+            "question": "La glace est de l'eau à l'état...",
+            "options": [
+              "solide",
+              "liquide",
+              "gazeux",
+              "plasma uniquement"
+            ],
+            "correct_answer": "solide",
+            "explanation": "La glace est l'état solide de l'eau."
+          },
+          {
+            "question": "Un liquide prend généralement...",
+            "options": [
+              "la forme du récipient qui le contient",
+              "toujours la forme d'un cube",
+              "toujours la forme d'une sphère",
+              "la forme de la source lumineuse"
+            ],
+            "correct_answer": "la forme du récipient qui le contient",
+            "explanation": "Un liquide n'a pas de forme propre."
+          }
+        ]
+      }
+    },
+    {
+      "title": "La fusion et la solidification",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La fusion",
+          "content": "La fusion est le passage de l'état solide à l'état liquide. Par exemple, lorsqu'un glaçon est chauffé suffisamment, il fond et devient de l'eau liquide. La fusion nécessite généralement un apport d'énergie thermique.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "La solidification",
+          "content": "La solidification est le passage de l'état liquide à l'état solide. Par exemple, lorsque de l'eau est suffisamment refroidie, elle se transforme en glace.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple de l'eau",
+          "content": "Dans des conditions usuelles, l'eau peut passer de l'état solide à l'état liquide par fusion et de l'état liquide à l'état solide par solidification. Ces deux changements d'état sont inverses l'un de l'autre.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Fusion et solidification",
+        "questions": [
+          {
+            "question": "Comment appelle-t-on le passage du solide au liquide ?",
+            "options": [
+              "La fusion",
+              "La solidification",
+              "La liquéfaction",
+              "La condensation"
+            ],
+            "correct_answer": "La fusion",
+            "explanation": "La fusion correspond au passage de l'état solide à l'état liquide."
+          },
+          {
+            "question": "Comment appelle-t-on le passage du liquide au solide ?",
+            "options": [
+              "La solidification",
+              "La fusion",
+              "La vaporisation",
+              "La sublimation"
+            ],
+            "correct_answer": "La solidification",
+            "explanation": "La solidification correspond au passage de l'état liquide à l'état solide."
+          },
+          {
+            "question": "Que devient un glaçon lorsqu'il fond ?",
+            "options": [
+              "De l'eau liquide",
+              "Un gaz immédiatement",
+              "Du métal",
+              "De la vapeur uniquement"
+            ],
+            "correct_answer": "De l'eau liquide",
+            "explanation": "Lors de la fusion, la glace passe de l'état solide à l'état liquide."
+          }
+        ]
+      }
+    },
+    {
+      "title": "La vaporisation",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de la vaporisation",
+          "content": "La vaporisation est le passage de l'état liquide à l'état gazeux. L'eau liquide peut ainsi devenir de la vapeur d'eau. La vaporisation peut se produire de différentes manières, notamment par évaporation ou par ébullition.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "L'évaporation",
+          "content": "L'évaporation est une vaporisation lente qui peut se produire à la surface d'un liquide. Par exemple, du linge humide sèche progressivement au soleil parce que l'eau s'évapore.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "L'ébullition",
+          "content": "L'ébullition est une vaporisation rapide qui se produit dans tout le liquide lorsqu'il atteint sa température d'ébullition dans les conditions considérées. L'eau en ébullition produit de nombreuses bulles de vapeur dans le liquide.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Vaporisation",
+        "questions": [
+          {
+            "question": "Quel est le passage de l'état liquide à l'état gazeux ?",
+            "options": [
+              "La vaporisation",
+              "La fusion",
+              "La solidification",
+              "La condensation solide"
+            ],
+            "correct_answer": "La vaporisation",
+            "explanation": "La vaporisation correspond au passage du liquide vers le gaz."
+          },
+          {
+            "question": "Le séchage progressif du linge humide au soleil est principalement dû à...",
+            "options": [
+              "l'évaporation",
+              "la solidification",
+              "la fusion",
+              "la congélation"
+            ],
+            "correct_answer": "l'évaporation",
+            "explanation": "L'eau présente sur le linge s'évapore progressivement."
+          },
+          {
+            "question": "L'ébullition est une vaporisation...",
+            "options": [
+              "rapide qui se produit dans tout le liquide",
+              "qui se produit uniquement à la surface",
+              "qui transforme le liquide en solide",
+              "qui ne nécessite jamais de chauffage"
+            ],
+            "correct_answer": "rapide qui se produit dans tout le liquide",
+            "explanation": "Lors de l'ébullition, des bulles de vapeur se forment dans tout le liquide."
+          }
+        ]
+      }
+    },
+    {
+      "title": "La liquéfaction et la condensation",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Passage du gaz au liquide",
+          "content": "Le passage de l'état gazeux à l'état liquide est appelé liquéfaction. Dans certains contextes scolaires, le terme condensation est également utilisé pour décrire la formation d'un liquide à partir d'un gaz. Ce phénomène peut être observé lorsque la vapeur d'eau se refroidit.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple de la vapeur d'eau",
+          "content": "Lorsqu'une vapeur d'eau rencontre une surface suffisamment froide, elle peut se transformer en petites gouttes d'eau liquide. On peut observer ce phénomène sur une bouteille froide sortie d'un réfrigérateur.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Cycle des changements d'état",
+          "content": "L'eau peut subir plusieurs changements d'état : la glace fond pour devenir liquide, l'eau liquide peut se vaporiser, puis la vapeur peut redevenir liquide. Ces transformations sont physiques : la substance reste de l'eau.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Liquéfaction",
+        "questions": [
+          {
+            "question": "Le passage du gaz au liquide est appelé...",
+            "options": [
+              "liquéfaction",
+              "fusion",
+              "solidification",
+              "vaporisation"
+            ],
+            "correct_answer": "liquéfaction",
+            "explanation": "La liquéfaction correspond au passage de l'état gazeux à l'état liquide."
+          },
+          {
+            "question": "Pourquoi des gouttes peuvent-elles apparaître sur une bouteille froide ?",
+            "options": [
+              "Parce que la vapeur d'eau de l'air se transforme en eau liquide",
+              "Parce que la bouteille produit de l'eau",
+              "Parce que le verre fond",
+              "Parce que l'air devient solide"
+            ],
+            "correct_answer": "Parce que la vapeur d'eau de l'air se transforme en eau liquide",
+            "explanation": "La vapeur d'eau présente dans l'air peut se condenser au contact d'une surface froide."
+          },
+          {
+            "question": "Lors d'un changement d'état physique de l'eau, la substance reste...",
+            "options": [
+              "de l'eau",
+              "du métal",
+              "du sel",
+              "de l'air"
+            ],
+            "correct_answer": "de l'eau",
+            "explanation": "Un changement d'état physique ne transforme pas l'eau en une autre substance."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Température et changements d'état",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Rôle de la température",
+          "content": "La température joue un rôle important dans les changements d'état. Lorsqu'un corps reçoit ou perd de l'énergie thermique, son état physique peut changer dans certaines conditions.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Chauffer et refroidir",
+          "content": "Le chauffage peut provoquer la fusion d'un solide ou la vaporisation d'un liquide. Le refroidissement peut provoquer la solidification d'un liquide ou la liquéfaction d'un gaz.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Cas de l'eau",
+          "content": "Dans les conditions usuelles, la glace fond autour de 0 °C et l'eau bout autour de 100 °C à la pression atmosphérique normale. Ces valeurs permettent de comprendre certains changements d'état de l'eau.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Température et changements d'état",
+        "questions": [
+          {
+            "question": "Que peut provoquer un chauffage suffisamment important ?",
+            "options": [
+              "Une fusion ou une vaporisation selon l'état initial",
+              "Toujours une solidification",
+              "Toujours une liquéfaction",
+              "Aucun changement possible"
+            ],
+            "correct_answer": "Une fusion ou une vaporisation selon l'état initial",
+            "explanation": "Le chauffage peut faire passer un solide vers le liquide ou un liquide vers le gaz."
+          },
+          {
+            "question": "Le refroidissement de l'eau peut provoquer...",
+            "options": [
+              "sa solidification",
+              "toujours sa vaporisation",
+              "sa combustion",
+              "sa transformation en métal"
+            ],
+            "correct_answer": "sa solidification",
+            "explanation": "Lorsque l'eau est suffisamment refroidie, elle peut passer de l'état liquide à l'état solide."
+          },
+          {
+            "question": "Dans les conditions usuelles, la glace fond autour de...",
+            "options": [
+              "0 °C",
+              "50 °C",
+              "100 °C",
+              "200 °C"
+            ],
+            "correct_answer": "0 °C",
+            "explanation": "À la pression atmosphérique normale, la température de fusion de la glace est proche de 0 °C."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bilan des changements d'états",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les six changements possibles",
+          "content": "Les principaux changements d'état sont : fusion (solide vers liquide), solidification (liquide vers solide), vaporisation (liquide vers gaz), liquéfaction (gaz vers liquide), sublimation (solide vers gaz) et condensation solide ou sublimation inverse (gaz vers solide).",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Transformations physiques",
+          "content": "Les changements d'état sont des transformations physiques. La nature de la substance ne change pas. Par exemple, la glace, l'eau liquide et la vapeur d'eau sont trois états physiques de la même substance : l'eau.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": "La matière peut changer d'état sous l'action du chauffage ou du refroidissement. Il faut connaître le sens de chaque changement d'état et savoir donner des exemples dans la vie quotidienne. L'eau constitue un exemple simple pour étudier ces transformations.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse des changements d'état",
+        "questions": [
+          {
+            "question": "Quel changement correspond au passage du liquide au gaz ?",
+            "options": [
+              "La vaporisation",
+              "La fusion",
+              "La solidification",
+              "La liquéfaction"
+            ],
+            "correct_answer": "La vaporisation",
+            "explanation": "La vaporisation est le passage de l'état liquide à l'état gazeux."
+          },
+          {
+            "question": "Quel changement correspond au passage du gaz au liquide ?",
+            "options": [
+              "La liquéfaction",
+              "La fusion",
+              "La solidification",
+              "La vaporisation"
+            ],
+            "correct_answer": "La liquéfaction",
+            "explanation": "La liquéfaction correspond au passage de l'état gazeux à l'état liquide."
+          },
+          {
+            "question": "Les changements d'état de l'eau sont-ils des transformations physiques ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement lorsque l'eau est glacée",
+              "Seulement lorsque l'eau bout"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "Lors d'un changement d'état, la substance reste la même : l'eau."
+          }
+        ]
+      }
+    }
+  ]
+}

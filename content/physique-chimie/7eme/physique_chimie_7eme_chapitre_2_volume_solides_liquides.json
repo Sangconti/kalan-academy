@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Volume des solides et des liquides",
+  "chapter_order": 2,
+  "lessons": [
+    {
+      "title": "Notion de volume",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce que le volume ?",
+          "content": "Le volume d'un corps représente l'espace qu'il occupe. Tout corps matériel occupe une certaine place dans l'espace. Le volume peut être mesuré pour les solides, les liquides et les gaz.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Unités de volume",
+          "content": "L'unité internationale de volume est le mètre cube, noté m³. Dans la vie courante et au laboratoire, on utilise aussi le litre (L), le décimètre cube (dm³), le centimètre cube (cm³) et le millilitre (mL).",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Quelques équivalences",
+          "content": "On a notamment : 1 L = 1 dm³ et 1 mL = 1 cm³. Ces relations permettent de convertir facilement certaines mesures de volume. Par exemple, 500 mL correspondent à 500 cm³ et à 0,5 L.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Notion de volume",
+        "questions": [
+          {
+            "question": "Que représente le volume d'un corps ?",
+            "options": [
+              "L'espace qu'il occupe",
+              "Sa température",
+              "Sa masse uniquement",
+              "Sa couleur"
+            ],
+            "correct_answer": "L'espace qu'il occupe",
+            "explanation": "Le volume mesure l'espace occupé par un corps."
+          },
+          {
+            "question": "Quelle est l'unité internationale du volume ?",
+            "options": [
+              "Le mètre cube",
+              "Le kilogramme",
+              "Le litre uniquement",
+              "Le newton"
+            ],
+            "correct_answer": "Le mètre cube",
+            "explanation": "L'unité internationale du volume est le mètre cube, noté m³."
+          },
+          {
+            "question": "À combien de centimètres cubes correspond 1 mL ?",
+            "options": [
+              "1 cm³",
+              "10 cm³",
+              "100 cm³",
+              "0,1 cm³"
+            ],
+            "correct_answer": "1 cm³",
+            "explanation": "On a l'équivalence 1 mL = 1 cm³."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mesurer le volume d'un liquide",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La mesure d'un liquide",
+          "content": "Le volume d'un liquide peut être mesuré à l'aide d'un récipient gradué. En laboratoire ou en classe, on utilise notamment une éprouvette graduée. Le liquide doit être placé dans le récipient sans débordement.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Lire une graduation",
+          "content": "Pour mesurer correctement le volume d'un liquide, il faut placer l'œil au niveau de la graduation et lire la valeur correspondant au niveau du liquide. Cette méthode permet de limiter les erreurs de lecture.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple de mesure",
+          "content": "Si le niveau d'eau atteint la graduation 250 mL d'une éprouvette graduée, le volume d'eau est de 250 mL, soit 250 cm³ ou encore 0,25 L.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Volume des liquides",
+        "questions": [
+          {
+            "question": "Quel instrument peut être utilisé pour mesurer le volume d'un liquide ?",
+            "options": [
+              "Une éprouvette graduée",
+              "Une balance",
+              "Un thermomètre",
+              "Une règle uniquement"
+            ],
+            "correct_answer": "Une éprouvette graduée",
+            "explanation": "L'éprouvette graduée permet de mesurer le volume d'un liquide."
+          },
+          {
+            "question": "Pour lire correctement une graduation, l'œil doit être...",
+            "options": [
+              "au niveau de la graduation",
+              "très loin du récipient",
+              "toujours au-dessus du récipient",
+              "fermé"
+            ],
+            "correct_answer": "au niveau de la graduation",
+            "explanation": "Placer l'œil au niveau de la graduation permet de réduire les erreurs de lecture."
+          },
+          {
+            "question": "250 mL correspondent à...",
+            "options": [
+              "250 cm³",
+              "25 cm³",
+              "2 500 cm³",
+              "0,025 cm³"
+            ],
+            "correct_answer": "250 cm³",
+            "explanation": "Puisque 1 mL = 1 cm³, 250 mL = 250 cm³."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Volume d'un solide régulier",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Solides de forme géométrique",
+          "content": "Certains solides ont une forme géométrique régulière. Leur volume peut être calculé à partir de leurs dimensions. On peut par exemple calculer le volume d'un pavé droit à partir de sa longueur, de sa largeur et de sa hauteur.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Volume d'un pavé droit",
+          "content": "Le volume d'un pavé droit se calcule avec la relation V = L × l × h, où L est la longueur, l la largeur et h la hauteur. Si les dimensions sont exprimées en centimètres, le volume obtenu est en cm³.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple de calcul",
+          "content": "Un pavé droit mesure 5 cm de longueur, 3 cm de largeur et 2 cm de hauteur. Son volume est V = 5 × 3 × 2 = 30 cm³.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Volume d'un solide régulier",
+        "questions": [
+          {
+            "question": "Quelle formule permet de calculer le volume d'un pavé droit ?",
+            "options": [
+              "V = L × l × h",
+              "V = L + l + h",
+              "V = L × l",
+              "V = L ÷ h"
+            ],
+            "correct_answer": "V = L × l × h",
+            "explanation": "Le volume d'un pavé droit est égal au produit de sa longueur, de sa largeur et de sa hauteur."
+          },
+          {
+            "question": "Quel est le volume d'un pavé de 4 cm × 3 cm × 2 cm ?",
+            "options": [
+              "24 cm³",
+              "9 cm³",
+              "12 cm³",
+              "6 cm³"
+            ],
+            "correct_answer": "24 cm³",
+            "explanation": "V = 4 × 3 × 2 = 24 cm³."
+          },
+          {
+            "question": "Si les dimensions sont en centimètres, le volume est exprimé en...",
+            "options": [
+              "cm³",
+              "cm",
+              "kg",
+              "L uniquement"
+            ],
+            "correct_answer": "cm³",
+            "explanation": "Le produit de trois longueurs exprimées en centimètres donne un volume en cm³."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mesurer le volume d'un solide irrégulier",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Solide de forme irrégulière",
+          "content": "Lorsqu'un solide n'a pas une forme géométrique simple, son volume peut être déterminé par une méthode expérimentale. On peut utiliser une éprouvette graduée contenant une quantité connue d'eau.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Méthode par déplacement d'eau",
+          "content": "On relève d'abord le volume initial de l'eau. On plonge ensuite complètement le solide dans l'eau, sans perte de liquide, puis on relève le nouveau volume. Le volume du solide est égal à la différence entre le volume final et le volume initial.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple",
+          "content": "Une éprouvette contient initialement 100 mL d'eau. Après immersion complète d'une petite pierre, le niveau atteint 135 mL. Le volume de la pierre est donc 135 - 100 = 35 mL, soit 35 cm³.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Volume d'un solide irrégulier",
+        "questions": [
+          {
+            "question": "Quelle méthode peut permettre de mesurer le volume d'une pierre ?",
+            "options": [
+              "Le déplacement d'eau",
+              "La lecture d'un thermomètre",
+              "La mesure de sa température uniquement",
+              "Une mesure de couleur"
+            ],
+            "correct_answer": "Le déplacement d'eau",
+            "explanation": "Le déplacement d'eau permet de mesurer le volume d'un solide irrégulier qui peut être immergé."
+          },
+          {
+            "question": "Le volume du solide est égal à...",
+            "options": [
+              "Vfinal - Vinitial",
+              "Vfinal + Vinitial",
+              "Vinitial - Vfinal toujours",
+              "Vinitial × Vfinal"
+            ],
+            "correct_answer": "Vfinal - Vinitial",
+            "explanation": "L'augmentation du niveau d'eau correspond au volume du solide immergé."
+          },
+          {
+            "question": "Si l'eau passe de 80 mL à 110 mL après immersion d'un objet, son volume est...",
+            "options": [
+              "30 mL",
+              "190 mL",
+              "80 mL",
+              "110 mL"
+            ],
+            "correct_answer": "30 mL",
+            "explanation": "V = 110 - 80 = 30 mL, soit 30 cm³."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Conversions de volumes",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Unités usuelles",
+          "content": "Les unités de volume couramment utilisées sont le mètre cube, le décimètre cube, le centimètre cube et le millimètre cube. Pour les liquides, le litre, le décilitre, le centilitre et le millilitre sont également utilisés.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Relations importantes",
+          "content": "On utilise notamment les relations suivantes : 1 dm³ = 1 L, 1 cm³ = 1 mL et 1 m³ = 1 000 L. Ces relations permettent de passer d'une unité à une autre.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemples de conversion",
+          "content": "Pour convertir 2 L en mL, on obtient 2 000 mL. Pour convertir 750 mL en L, on obtient 0,75 L. Pour convertir 3 dm³ en litres, on obtient 3 L.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Conversions de volume",
+        "questions": [
+          {
+            "question": "1 L correspond à...",
+            "options": [
+              "1 dm³",
+              "10 dm³",
+              "100 dm³",
+              "0,1 dm³"
+            ],
+            "correct_answer": "1 dm³",
+            "explanation": "L'équivalence fondamentale est 1 L = 1 dm³."
+          },
+          {
+            "question": "2 L correspondent à...",
+            "options": [
+              "2 000 mL",
+              "200 mL",
+              "20 mL",
+              "20 000 mL"
+            ],
+            "correct_answer": "2 000 mL",
+            "explanation": "1 L = 1 000 mL, donc 2 L = 2 000 mL."
+          },
+          {
+            "question": "750 mL correspondent à...",
+            "options": [
+              "0,75 L",
+              "7,5 L",
+              "75 L",
+              "0,075 L"
+            ],
+            "correct_answer": "0,75 L",
+            "explanation": "750 ÷ 1 000 = 0,75 L."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exercices de synthèse sur le volume",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Mesurer ou calculer",
+          "content": "Pour déterminer le volume d'un corps, on choisit une méthode adaptée à sa forme. Pour un liquide, on peut utiliser un récipient gradué. Pour un solide régulier, on peut utiliser une formule géométrique. Pour un solide irrégulier immergeable, on peut utiliser le déplacement d'eau.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple complet",
+          "content": "Un récipient contient 150 mL d'eau. Après immersion complète d'un objet, le niveau atteint 190 mL. Le volume de l'objet est 190 - 150 = 40 mL, soit 40 cm³. La méthode utilisée est celle du déplacement d'eau.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": "Le volume mesure l'espace occupé par un corps. Il peut être exprimé en m³, dm³, cm³, L ou mL. Pour un solide régulier, on peut calculer le volume à partir de ses dimensions. Pour un solide irrégulier, le déplacement d'eau permet de mesurer son volume.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse sur le volume",
+        "questions": [
+          {
+            "question": "Quel instrument est adapté pour mesurer le volume d'un liquide ?",
+            "options": [
+              "Une éprouvette graduée",
+              "Une balance",
+              "Un thermomètre",
+              "Un dynamomètre"
+            ],
+            "correct_answer": "Une éprouvette graduée",
+            "explanation": "Une éprouvette graduée permet de lire directement le volume d'un liquide."
+          },
+          {
+            "question": "Un objet fait passer le niveau d'eau de 120 mL à 155 mL. Quel est son volume ?",
+            "options": [
+              "35 cm³",
+              "275 cm³",
+              "120 cm³",
+              "155 cm³"
+            ],
+            "correct_answer": "35 cm³",
+            "explanation": "Le volume est 155 - 120 = 35 mL, soit 35 cm³."
+          },
+          {
+            "question": "Quel est le volume d'un pavé de 5 cm × 2 cm × 3 cm ?",
+            "options": [
+              "30 cm³",
+              "10 cm³",
+              "15 cm³",
+              "20 cm³"
+            ],
+            "correct_answer": "30 cm³",
+            "explanation": "V = 5 × 2 × 3 = 30 cm³."
+          }
+        ]
+      }
+    }
+  ]
+}

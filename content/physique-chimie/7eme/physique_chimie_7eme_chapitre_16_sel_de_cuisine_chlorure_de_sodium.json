@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Sel de cuisine / chlorure de sodium",
+  "chapter_order": 16,
+  "lessons": [
+    {
+      "title": "Découverte du sel de cuisine",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le sel de cuisine",
+          "content": "Le sel de cuisine est une substance très utilisée dans l'alimentation. En chimie, le sel de cuisine est principalement constitué de chlorure de sodium, dont la formule chimique est NaCl. À l'état solide, il se présente généralement sous forme de petits cristaux blancs.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le chlorure de sodium",
+          "content": "Le chlorure de sodium est un corps pur composé constitué des éléments sodium et chlore. Sa formule NaCl indique la présence de sodium représenté par Na et de chlore représenté par Cl.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Utilisation quotidienne",
+          "content": "Le chlorure de sodium est principalement utilisé comme sel alimentaire. Il intervient également dans différentes activités industrielles. Dans la vie quotidienne, on le rencontre notamment sous forme de sel de cuisine.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Découverte du sel",
+        "questions": [
+          {
+            "question": "Quelle est la formule chimique du chlorure de sodium ?",
+            "options": [
+              "NaCl",
+              "H₂O",
+              "CO₂",
+              "O₂"
+            ],
+            "correct_answer": "NaCl",
+            "explanation": "Le chlorure de sodium a pour formule chimique NaCl."
+          },
+          {
+            "question": "Le sel de cuisine est principalement constitué de...",
+            "options": [
+              "chlorure de sodium",
+              "dioxygène",
+              "dioxyde de carbone",
+              "fer"
+            ],
+            "correct_answer": "chlorure de sodium",
+            "explanation": "Le principal constituant du sel de cuisine est le chlorure de sodium."
+          },
+          {
+            "question": "Le chlorure de sodium est un corps pur...",
+            "options": [
+              "composé",
+              "simple",
+              "gazeux",
+              "métallique"
+            ],
+            "correct_answer": "composé",
+            "explanation": "NaCl contient deux éléments chimiques différents : le sodium et le chlore."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Composition du chlorure de sodium",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les éléments sodium et chlore",
+          "content": "Le chlorure de sodium est formé à partir de deux éléments chimiques : le sodium et le chlore. Le symbole du sodium est Na et celui du chlore est Cl.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Comprendre la formule NaCl",
+          "content": "Dans la formule NaCl, Na représente le sodium et Cl représente le chlore. L'écriture NaCl montre que le chlorure de sodium est constitué de ces deux éléments associés chimiquement.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Un corps pur composé",
+          "content": "Le chlorure de sodium est un corps pur composé car il contient deux éléments chimiques différents associés. Il ne faut pas le confondre avec une solution d'eau salée, qui est un mélange contenant de l'eau et du sel dissous.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Composition du chlorure de sodium",
+        "questions": [
+          {
+            "question": "Quels éléments constituent le chlorure de sodium ?",
+            "options": [
+              "Sodium et chlore",
+              "Hydrogène et oxygène",
+              "Carbone et oxygène",
+              "Fer et cuivre"
+            ],
+            "correct_answer": "Sodium et chlore",
+            "explanation": "NaCl est constitué des éléments sodium et chlore."
+          },
+          {
+            "question": "Quel est le symbole du sodium ?",
+            "options": [
+              "Na",
+              "S",
+              "So",
+              "N"
+            ],
+            "correct_answer": "Na",
+            "explanation": "Na est le symbole chimique du sodium."
+          },
+          {
+            "question": "Quel est le symbole du chlore ?",
+            "options": [
+              "Cl",
+              "C",
+              "Ch",
+              "Cr"
+            ],
+            "correct_answer": "Cl",
+            "explanation": "Cl est le symbole chimique du chlore."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le sel dans l'eau",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Dissolution du sel",
+          "content": "Lorsque l'on introduit du sel de cuisine dans l'eau et que l'on agite, le sel se dissout progressivement. Le sel semble disparaître, mais il est toujours présent dans l'eau sous une forme dispersée.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "La solution salée",
+          "content": "Après dissolution du sel dans l'eau, on obtient une solution salée. L'eau est le solvant et le sel constitue le soluté. Une solution salée est donc un mélange homogène.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Le sel peut être récupéré",
+          "content": "Si on laisse l'eau d'une solution salée s'évaporer, le sel peut réapparaître sous forme de cristaux. Cette propriété est notamment utilisée pour produire du sel à partir de l'eau de mer dans les régions adaptées.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Sel et eau",
+        "questions": [
+          {
+            "question": "Que se passe-t-il lorsque le sel se mélange à l'eau ?",
+            "options": [
+              "Il se dissout",
+              "Il devient un gaz immédiatement",
+              "Il devient du fer",
+              "Il disparaît définitivement"
+            ],
+            "correct_answer": "Il se dissout",
+            "explanation": "Le sel se dissout dans l'eau et forme une solution salée."
+          },
+          {
+            "question": "Dans une solution salée, l'eau est...",
+            "options": [
+              "le solvant",
+              "le soluté",
+              "un précipité",
+              "un gaz"
+            ],
+            "correct_answer": "le solvant",
+            "explanation": "Le solvant est le liquide qui dissout le soluté. Ici, l'eau dissout le sel."
+          },
+          {
+            "question": "Que peut-on obtenir en faisant évaporer l'eau salée ?",
+            "options": [
+              "Des cristaux de sel",
+              "Du dioxygène uniquement",
+              "Du fer",
+              "Du cuivre"
+            ],
+            "correct_answer": "Des cristaux de sel",
+            "explanation": "Lorsque l'eau s'évapore, le sel dissous peut cristalliser et être récupéré."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Solubilité et saturation",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le sel est soluble dans l'eau",
+          "content": "Le chlorure de sodium est soluble dans l'eau. Cela signifie qu'une certaine quantité de sel peut se dissoudre dans une quantité donnée d'eau. La quantité maximale pouvant se dissoudre dépend notamment de la température et de la quantité de solvant.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Solution saturée",
+          "content": "Lorsqu'on ajoute progressivement du sel dans une quantité limitée d'eau, il arrive un moment où le sel ajouté ne se dissout plus. La solution est alors dite saturée dans les conditions considérées.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Sel non dissous",
+          "content": "Dans une solution saturée à laquelle on ajoute encore du sel, une partie du sel reste au fond du récipient. Le sel non dissous peut être séparé de la solution par filtration, tandis que le sel dissous reste dans l'eau.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Solubilité du sel",
+        "questions": [
+          {
+            "question": "Dire que le sel est soluble dans l'eau signifie qu'il...",
+            "options": [
+              "peut se dissoudre dans l'eau",
+              "devient toujours un gaz",
+              "ne peut jamais être récupéré",
+              "se transforme en métal"
+            ],
+            "correct_answer": "peut se dissoudre dans l'eau",
+            "explanation": "Une substance soluble peut se dissoudre dans un solvant donné."
+          },
+          {
+            "question": "Une solution saturée contient...",
+            "options": [
+              "la quantité maximale de soluté dissous dans les conditions considérées",
+              "aucun soluté",
+              "uniquement de l'eau",
+              "uniquement du sel solide"
+            ],
+            "correct_answer": "la quantité maximale de soluté dissous dans les conditions considérées",
+            "explanation": "Une solution saturée ne peut plus dissoudre davantage de soluté dans les conditions considérées."
+          },
+          {
+            "question": "Que peut-on observer si l'on ajoute trop de sel à une solution saturée ?",
+            "options": [
+              "Du sel reste non dissous au fond",
+              "Tout le sel devient un gaz",
+              "L'eau devient du fer",
+              "Le sel disparaît"
+            ],
+            "correct_answer": "Du sel reste non dissous au fond",
+            "explanation": "Lorsque la solution est saturée, le sel supplémentaire ne se dissout plus et peut rester au fond."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Obtenir du sel à partir d'une solution",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Évaporation de l'eau",
+          "content": "Une solution salée contient du sel dissous dans l'eau. Pour récupérer le sel, on peut faire évaporer l'eau. Lorsque l'eau quitte progressivement la solution sous forme de vapeur, le sel reste et peut former des cristaux.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Production du sel marin",
+          "content": "Dans certaines régions, notamment dans les zones côtières, l'eau de mer peut être conduite dans des bassins peu profonds appelés marais salants. Sous l'action du soleil et du vent, l'eau s'évapore progressivement et le sel peut cristalliser.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Séparation par évaporation",
+          "content": "L'évaporation permet donc de séparer un solide dissous d'un liquide. Cette méthode est particulièrement utile lorsque le solide ne s'évapore pas dans les mêmes conditions que le liquide.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Récupération du sel",
+        "questions": [
+          {
+            "question": "Quelle méthode permet de récupérer le sel dissous dans l'eau ?",
+            "options": [
+              "L'évaporation de l'eau",
+              "La combustion du sel",
+              "La fusion du fer",
+              "La congélation du cuivre"
+            ],
+            "correct_answer": "L'évaporation de l'eau",
+            "explanation": "L'eau peut s'évaporer tandis que le sel reste et peut cristalliser."
+          },
+          {
+            "question": "Dans les marais salants, l'évaporation de l'eau est favorisée notamment par...",
+            "options": [
+              "le soleil et le vent",
+              "le fer et le cuivre",
+              "le froid uniquement",
+              "le sel lui-même"
+            ],
+            "correct_answer": "le soleil et le vent",
+            "explanation": "Le soleil chauffe l'eau et le vent favorise son évaporation."
+          },
+          {
+            "question": "Après évaporation complète de l'eau salée, on peut obtenir...",
+            "options": [
+              "des cristaux de sel",
+              "uniquement du dioxygène",
+              "du fer liquide",
+              "du cuivre gazeux"
+            ],
+            "correct_answer": "des cristaux de sel",
+            "explanation": "Le sel dissous reste après l'évaporation de l'eau et peut cristalliser."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Propriétés et bilan du chlorure de sodium",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Quelques propriétés",
+          "content": "Le chlorure de sodium est un solide cristallin à température ordinaire. Il est généralement blanc lorsqu'il est suffisamment pur et il est soluble dans l'eau. Sous forme de solution aqueuse, il permet le passage du courant électrique grâce aux espèces chargées présentes dans la solution.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Précautions alimentaires",
+          "content": "Le sel est utile à l'organisme en quantité adaptée, mais une consommation excessive de sel peut être mauvaise pour la santé. Il est donc recommandé de ne pas en consommer en excès et de respecter les recommandations alimentaires.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Bilan du chapitre",
+          "content": "Le sel de cuisine est principalement constitué de chlorure de sodium, de formule NaCl. Le chlorure de sodium est un corps pur composé formé des éléments sodium et chlore. Il se dissout dans l'eau pour former une solution salée. Le sel peut être récupéré par évaporation de l'eau et peut se présenter sous forme de cristaux.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Bilan sur le chlorure de sodium",
+        "questions": [
+          {
+            "question": "Quelle est la formule du chlorure de sodium ?",
+            "options": [
+              "NaCl",
+              "CO₂",
+              "H₂O",
+              "O₂"
+            ],
+            "correct_answer": "NaCl",
+            "explanation": "NaCl est la formule chimique du chlorure de sodium."
+          },
+          {
+            "question": "Comment peut-on récupérer le sel dissous dans l'eau ?",
+            "options": [
+              "Par évaporation de l'eau",
+              "Par combustion",
+              "Par fusion du sel",
+              "Par ajout de cuivre"
+            ],
+            "correct_answer": "Par évaporation de l'eau",
+            "explanation": "L'évaporation de l'eau permet au sel dissous de rester puis de cristalliser."
+          },
+          {
+            "question": "Le chlorure de sodium est constitué de...",
+            "options": [
+              "sodium et chlore",
+              "hydrogène et oxygène",
+              "carbone et oxygène",
+              "fer et cuivre"
+            ],
+            "correct_answer": "sodium et chlore",
+            "explanation": "NaCl est composé des éléments sodium et chlore."
+          }
+        ]
+      }
+    }
+  ]
+}

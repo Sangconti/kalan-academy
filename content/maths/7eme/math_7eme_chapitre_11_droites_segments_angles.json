@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Droites, segments et angles",
+  "chapter_order": 11,
+  "lessons": [
+    {
+      "title": "Points, droites et segments",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition du point et de la droite",
+          "content": {
+            "text": "En géométrie, un point représente une position. On le désigne généralement par une lettre majuscule, comme A, B ou C. Une droite est une ligne qui se prolonge indéfiniment dans les deux directions. Une droite passant par les points A et B se note (AB)."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le segment",
+          "content": {
+            "text": "Un segment est une portion de droite limitée par deux points appelés extrémités. Le segment dont les extrémités sont A et B se note [AB]. Contrairement à une droite, un segment possède une longueur que l'on peut mesurer avec une règle graduée."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Points alignés",
+          "content": {
+            "text": "Lorsque plusieurs points sont situés sur une même droite, on dit qu'ils sont alignés. Par exemple, si A, B et C appartiennent à la même droite, les points A, B et C sont alignés. Pour tracer correctement une droite ou un segment, on utilise une règle."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Points, droites et segments",
+        "questions": [
+          {
+            "question": "Comment désigne-t-on généralement un point ?",
+            "options": [
+              "Par une lettre majuscule",
+              "Par un nombre décimal",
+              "Par une lettre minuscule uniquement",
+              "Par une mesure"
+            ],
+            "correct_answer": "Par une lettre majuscule",
+            "explanation": "En géométrie, les points sont généralement désignés par des lettres majuscules : A, B, C..."
+          },
+          {
+            "question": "Comment note-t-on le segment ayant pour extrémités A et B ?",
+            "options": [
+              "(AB)",
+              "[AB]",
+              "AB)",
+              "{AB}"
+            ],
+            "correct_answer": "[AB]",
+            "explanation": "Le segment d'extrémités A et B se note [AB]."
+          },
+          {
+            "question": "Quand dit-on que plusieurs points sont alignés ?",
+            "options": [
+              "Lorsqu'ils ont la même longueur",
+              "Lorsqu'ils appartiennent à une même droite",
+              "Lorsqu'ils forment un angle droit",
+              "Lorsqu'ils sont tous à égale distance"
+            ],
+            "correct_answer": "Lorsqu'ils appartiennent à une même droite",
+            "explanation": "Des points sont alignés lorsqu'ils appartiennent à une même droite."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Demi-droites et longueur d'un segment",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La demi-droite",
+          "content": {
+            "text": "Une demi-droite est une partie de droite qui possède une origine et qui se prolonge indéfiniment dans une seule direction. La demi-droite d'origine A passant par B se note [AB). Le point A est l'origine de la demi-droite."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Mesurer un segment",
+          "content": {
+            "text": "La longueur d'un segment se mesure avec une règle graduée. Elle est généralement exprimée en millimètres, centimètres ou mètres. Par exemple, si la distance entre A et B mesurée avec une règle est de 6 cm, on écrit AB = 6 cm."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Méthode de mesure",
+          "content": {
+            "text": "Pour mesurer correctement un segment, on place le zéro de la règle sur une extrémité du segment et on lit la graduation correspondant à l'autre extrémité. Il faut utiliser une unité adaptée à la situation et ne pas confondre la longueur du segment avec la notation du segment."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Demi-droites et longueurs",
+        "questions": [
+          {
+            "question": "Une demi-droite possède...",
+            "options": [
+              "Deux origines",
+              "Une origine et se prolonge dans une direction",
+              "Deux extrémités",
+              "Aucune origine"
+            ],
+            "correct_answer": "Une origine et se prolonge dans une direction",
+            "explanation": "Une demi-droite commence en un point appelé origine et se prolonge indéfiniment dans une seule direction."
+          },
+          {
+            "question": "Avec quel instrument mesure-t-on généralement un segment ?",
+            "options": [
+              "Un compas uniquement",
+              "Une règle graduée",
+              "Un rapporteur",
+              "Une équerre uniquement"
+            ],
+            "correct_answer": "Une règle graduée",
+            "explanation": "La règle graduée permet de mesurer la longueur d'un segment."
+          },
+          {
+            "question": "Si un segment mesure 8 cm, comment écrit-on sa longueur ?",
+            "options": [
+              "AB = 8 cm",
+              "[AB] = 8 cm",
+              "(AB) = 8 cm",
+              "A = 8 cm"
+            ],
+            "correct_answer": "AB = 8 cm",
+            "explanation": "La longueur du segment [AB] se note AB. On écrit donc AB = 8 cm."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Droites parallèles et droites perpendiculaires",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Droites parallèles",
+          "content": {
+            "text": "Deux droites sont parallèles lorsqu'elles sont dans un même plan et ne se rencontrent jamais, même si on les prolonge. On note que les droites (d) et (d') sont parallèles par d // d'. Dans un cahier, les lignes horizontales peuvent donner un exemple de droites parallèles."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Droites perpendiculaires",
+          "content": {
+            "text": "Deux droites sont perpendiculaires lorsqu'elles se coupent en formant quatre angles droits. On note d ⟂ d'. Pour vérifier qu'un angle est droit, on peut utiliser une équerre. L'angle droit mesure 90°."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Tracer des parallèles et des perpendiculaires",
+          "content": {
+            "text": "Pour tracer une parallèle ou une perpendiculaire, on utilise notamment la règle et l'équerre. Il faut maintenir correctement les instruments afin que le tracé soit précis. Ces constructions sont très importantes pour les figures géométriques et les plans."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Parallèles et perpendiculaires",
+        "questions": [
+          {
+            "question": "Deux droites parallèles...",
+            "options": [
+              "se coupent toujours",
+              "ne se rencontrent pas",
+              "forment toujours un angle droit",
+              "ont toujours une longueur"
+            ],
+            "correct_answer": "ne se rencontrent pas",
+            "explanation": "Deux droites parallèles ne se rencontrent jamais lorsqu'on les prolonge."
+          },
+          {
+            "question": "Combien mesure un angle droit ?",
+            "options": [
+              "45°",
+              "60°",
+              "90°",
+              "180°"
+            ],
+            "correct_answer": "90°",
+            "explanation": "Un angle droit mesure exactement 90°."
+          },
+          {
+            "question": "Quel instrument facilite le tracé d'une droite perpendiculaire ?",
+            "options": [
+              "Une règle non graduée uniquement",
+              "Une équerre",
+              "Un compas uniquement",
+              "Une gomme"
+            ],
+            "correct_answer": "Une équerre",
+            "explanation": "L'équerre possède un angle droit et permet de tracer des droites perpendiculaires."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les angles et leur mesure",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'un angle",
+          "content": {
+            "text": "Un angle est formé par deux demi-droites ayant la même origine. Le point commun est appelé sommet de l'angle. Les deux demi-droites sont les côtés de l'angle. Un angle peut être désigné par trois lettres, avec le sommet au milieu, par exemple l'angle ABC."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Mesurer un angle",
+          "content": {
+            "text": "On mesure un angle avec un rapporteur. L'unité utilisée est le degré, noté °. Pour mesurer correctement un angle, on place le centre du rapporteur sur le sommet et on aligne le zéro avec l'un des côtés de l'angle."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Les différents types d'angles",
+          "content": {
+            "text": "On distingue notamment l'angle aigu, dont la mesure est inférieure à 90°, l'angle droit qui mesure 90°, l'angle obtus dont la mesure est supérieure à 90° et inférieure à 180°, et l'angle plat qui mesure 180°."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Mesurer les angles",
+        "questions": [
+          {
+            "question": "Avec quel instrument mesure-t-on un angle ?",
+            "options": [
+              "Une règle graduée",
+              "Un rapporteur",
+              "Une équerre uniquement",
+              "Un compas uniquement"
+            ],
+            "correct_answer": "Un rapporteur",
+            "explanation": "Le rapporteur permet de mesurer les angles en degrés."
+          },
+          {
+            "question": "Un angle de 60° est un angle...",
+            "options": [
+              "droit",
+              "aigu",
+              "obtus",
+              "plat"
+            ],
+            "correct_answer": "aigu",
+            "explanation": "Un angle aigu mesure moins de 90°. Comme 60° < 90°, il est aigu."
+          },
+          {
+            "question": "Un angle de 120° est un angle...",
+            "options": [
+              "aigu",
+              "droit",
+              "obtus",
+              "plat"
+            ],
+            "correct_answer": "obtus",
+            "explanation": "Un angle obtus est supérieur à 90° et inférieur à 180°. 120° est donc obtus."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire et reconnaître les angles",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Construire un angle donné",
+          "content": {
+            "text": "Pour construire un angle de mesure donnée, on commence par tracer une demi-droite qui représente le premier côté. On place ensuite le centre du rapporteur sur le sommet et on repère la graduation correspondant à la mesure souhaitée. On trace enfin la deuxième demi-droite passant par cette graduation."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Bien utiliser le rapporteur",
+          "content": {
+            "text": "Il faut faire attention à choisir la bonne graduation du rapporteur. Le zéro doit être placé du côté du premier côté de l'angle. Par exemple, pour construire un angle de 70°, on repère 70° à partir du zéro correctement placé, puis on trace le deuxième côté."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Reconnaître un angle",
+          "content": {
+            "text": "On peut aussi reconnaître un angle à partir de sa mesure. Un angle de 35° est aigu, un angle de 90° est droit, un angle de 145° est obtus et un angle de 180° est plat. La mesure permet donc de classer les angles."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Construire les angles",
+        "questions": [
+          {
+            "question": "Pour construire un angle, où place-t-on le centre du rapporteur ?",
+            "options": [
+              "Sur l'extrémité de la feuille",
+              "Sur le sommet de l'angle",
+              "Au milieu d'un côté",
+              "N'importe où"
+            ],
+            "correct_answer": "Sur le sommet de l'angle",
+            "explanation": "Le centre du rapporteur doit être placé exactement sur le sommet de l'angle."
+          },
+          {
+            "question": "Quel type d'angle mesure 35° ?",
+            "options": [
+              "Aigu",
+              "Droit",
+              "Obtus",
+              "Plat"
+            ],
+            "correct_answer": "Aigu",
+            "explanation": "35° est inférieur à 90°, donc c'est un angle aigu."
+          },
+          {
+            "question": "Quel type d'angle mesure 180° ?",
+            "options": [
+              "Aigu",
+              "Droit",
+              "Obtus",
+              "Plat"
+            ],
+            "correct_answer": "Plat",
+            "explanation": "Un angle plat mesure exactement 180°."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Problèmes et constructions géométriques",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de construction",
+          "content": {
+            "text": "Les constructions géométriques permettent de réaliser des figures précises à l'aide d'instruments. Pour réussir une construction, il faut lire attentivement les données, identifier les objets géométriques demandés et suivre les étapes dans l'ordre."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Construire une perpendiculaire",
+          "content": {
+            "text": "Exemple : on demande de tracer un segment [AB] de 6 cm, puis de construire en A une droite perpendiculaire à (AB). On commence par tracer [AB] avec une règle graduée, puis on utilise l'équerre pour tracer la perpendiculaire passant par A."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Construire un angle de 60°",
+          "content": {
+            "text": "Dans une autre construction, on peut demander de tracer un angle de 60° à partir d'un point donné. On utilise alors une demi-droite et un rapporteur. Il faut contrôler la mesure et la position des points avant de considérer la construction terminée."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Constructions géométriques",
+        "questions": [
+          {
+            "question": "Quel instrument utilise-t-on pour tracer un segment de longueur donnée ?",
+            "options": [
+              "Une règle graduée",
+              "Un rapporteur uniquement",
+              "Une gomme",
+              "Un compas uniquement"
+            ],
+            "correct_answer": "Une règle graduée",
+            "explanation": "La règle graduée permet de mesurer et de tracer un segment de longueur donnée."
+          },
+          {
+            "question": "Pour tracer une perpendiculaire, quel instrument est particulièrement utile ?",
+            "options": [
+              "Une équerre",
+              "Un rapporteur uniquement",
+              "Une gomme",
+              "Une règle sans repère"
+            ],
+            "correct_answer": "Une équerre",
+            "explanation": "L'équerre permet de construire un angle droit et donc une droite perpendiculaire."
+          },
+          {
+            "question": "Pour construire un angle de 60°, quel instrument utilise-t-on pour repérer précisément la mesure ?",
+            "options": [
+              "Une règle graduée",
+              "Un rapporteur",
+              "Une gomme",
+              "Une règle seule"
+            ],
+            "correct_answer": "Un rapporteur",
+            "explanation": "Le rapporteur permet de mesurer et de construire un angle de 60°."
+          }
+        ]
+      }
+    }
+  ]
+}

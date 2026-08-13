@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Nombres décimaux",
+  "chapter_order": 7,
+  "lessons": [
+    {
+      "title": "Écriture et lecture des nombres décimaux",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'un nombre décimal",
+          "content": {
+            "text": "Un nombre décimal est un nombre qui peut s'écrire avec une partie entière et une partie décimale séparées par une virgule. Par exemple, dans 12,45, le nombre 12 est la partie entière et 45 est la partie décimale. La virgule sépare les deux parties."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les dixièmes, centièmes et millièmes",
+          "content": {
+            "text": "Après la virgule, chaque chiffre a une valeur précise. Le premier chiffre représente les dixièmes, le deuxième les centièmes et le troisième les millièmes. Ainsi, dans 7,325, le 3 représente 3 dixièmes, le 2 représente 2 centièmes et le 5 représente 5 millièmes."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Lire et écrire un nombre décimal",
+          "content": {
+            "text": "Pour lire 14,28, on peut dire « quatorze virgule vingt-huit » ou « quatorze unités et vingt-huit centièmes ». Un nombre décimal peut aussi être écrit sous forme de fraction décimale : 14,28 = 1428/100."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Lire les nombres décimaux",
+        "questions": [
+          {
+            "question": "Dans 23,47, quel chiffre représente les dixièmes ?",
+            "options": [
+              "2",
+              "3",
+              "4",
+              "7"
+            ],
+            "correct_answer": "4",
+            "explanation": "Le premier chiffre après la virgule représente les dixièmes. Dans 23,47, c'est donc 4."
+          },
+          {
+            "question": "Dans 8,256, quel chiffre représente les centièmes ?",
+            "options": [
+              "2",
+              "5",
+              "6",
+              "8"
+            ],
+            "correct_answer": "5",
+            "explanation": "Dans 8,256, le 2 est le chiffre des dixièmes, le 5 celui des centièmes et le 6 celui des millièmes."
+          },
+          {
+            "question": "Comment écrire 4,35 sous forme de fraction décimale ?",
+            "options": [
+              "435/10",
+              "435/100",
+              "43/5",
+              "4/35"
+            ],
+            "correct_answer": "435/100",
+            "explanation": "Il y a deux chiffres après la virgule, donc le dénominateur est 100. Ainsi 4,35 = 435/100."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparer et ranger les nombres décimaux",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comparer les parties entières",
+          "content": {
+            "text": "Pour comparer deux nombres décimaux, on compare d'abord leurs parties entières. Si les parties entières sont différentes, le plus grand nombre est celui qui possède la plus grande partie entière. Par exemple, 8,4 > 7,9 car 8 > 7."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Comparer les parties décimales",
+          "content": {
+            "text": "Si les parties entières sont égales, on compare les chiffres après la virgule, en commençant par les dixièmes, puis les centièmes et enfin les millièmes. Par exemple, 5,37 > 5,29 car les parties entières sont égales et 3 dixièmes est supérieur à 2 dixièmes."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Utiliser les zéros inutiles",
+          "content": {
+            "text": "On peut ajouter des zéros à droite de la partie décimale sans changer la valeur du nombre. Ainsi, 4,5 = 4,50 = 4,500. Cette technique permet de comparer plus facilement des nombres comme 6,7 et 6,65 : on écrit 6,70 et 6,65, puis on constate que 6,70 > 6,65."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Comparer les nombres décimaux",
+        "questions": [
+          {
+            "question": "Lequel est le plus grand ?",
+            "options": [
+              "4,5",
+              "4,8",
+              "4,3",
+              "4,1"
+            ],
+            "correct_answer": "4,8",
+            "explanation": "Les parties entières sont identiques. On compare donc les dixièmes : 8 est le plus grand."
+          },
+          {
+            "question": "Quelle comparaison est correcte ?",
+            "options": [
+              "5,7 < 5,65",
+              "5,7 = 5,65",
+              "5,7 > 5,65",
+              "5,7 < 5,6"
+            ],
+            "correct_answer": "5,7 > 5,65",
+            "explanation": "On peut écrire 5,7 = 5,70. Comme 5,70 > 5,65, on a 5,7 > 5,65."
+          },
+          {
+            "question": "Quelle est la bonne relation ?",
+            "options": [
+              "3,45 > 3,54",
+              "3,45 < 3,54",
+              "3,45 = 3,54",
+              "3,45 > 4,00"
+            ],
+            "correct_answer": "3,45 < 3,54",
+            "explanation": "Les parties entières sont égales. On compare les dixièmes : 4 < 5. Donc 3,45 < 3,54."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Addition et soustraction des nombres décimaux",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Aligner les virgules",
+          "content": {
+            "text": "Pour additionner ou soustraire des nombres décimaux, on aligne les virgules verticalement. Les unités sont alors placées sous les unités, les dixièmes sous les dixièmes et les centièmes sous les centièmes. On effectue ensuite le calcul comme avec les nombres entiers."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Effectuer une addition décimale",
+          "content": {
+            "text": "Exemple : 12,45 + 3,7. On écrit 3,7 sous la forme 3,70. Puis on calcule 12,45 + 3,70 = 16,15. Les zéros ajoutés à droite de la partie décimale ne changent pas la valeur du nombre."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Effectuer une soustraction décimale",
+          "content": {
+            "text": "Pour une soustraction, on procède de la même manière. Exemple : 15,20 − 7,85 = 7,35. Il faut être particulièrement attentif à l'alignement des virgules et aux retenues lors du calcul."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Addition et soustraction",
+        "questions": [
+          {
+            "question": "Quel est le résultat de 12,5 + 3,25 ?",
+            "options": [
+              "15,25",
+              "15,75",
+              "16,25",
+              "16,75"
+            ],
+            "correct_answer": "15,75",
+            "explanation": "12,50 + 3,25 = 15,75."
+          },
+          {
+            "question": "Quel est le résultat de 20,5 − 8,25 ?",
+            "options": [
+              "11,25",
+              "12,25",
+              "12,75",
+              "13,25"
+            ],
+            "correct_answer": "12,25",
+            "explanation": "20,50 − 8,25 = 12,25."
+          },
+          {
+            "question": "Que faut-il aligner pour additionner correctement des nombres décimaux ?",
+            "options": [
+              "Les premiers chiffres uniquement",
+              "Les virgules",
+              "Les derniers chiffres uniquement",
+              "Les nombres à droite de la virgule uniquement"
+            ],
+            "correct_answer": "Les virgules",
+            "explanation": "L'alignement des virgules permet d'aligner correctement unités, dixièmes, centièmes et millièmes."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Multiplier des nombres décimaux",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Multiplier deux nombres décimaux",
+          "content": {
+            "text": "Pour multiplier deux nombres décimaux, on peut d'abord effectuer la multiplication sans tenir compte des virgules. Ensuite, on compte le nombre total de chiffres situés après les virgules dans les deux facteurs et on place la virgule dans le résultat."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple de multiplication décimale",
+          "content": {
+            "text": "Exemple : 2,5 × 1,2. On calcule d'abord 25 × 12 = 300. Il y a deux chiffres après les virgules dans les facteurs : un dans 2,5 et un dans 1,2. Le résultat doit donc avoir deux chiffres après la virgule : 3,00, soit 3."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Multiplier par 10, 100 et 1 000",
+          "content": {
+            "text": "Multiplier un nombre décimal par 10, 100 ou 1 000 permet de déplacer la virgule vers la droite. Par exemple, 4,25 × 10 = 42,5 ; 4,25 × 100 = 425 ; 4,25 × 1 000 = 4 250."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Multiplication des décimaux",
+        "questions": [
+          {
+            "question": "Quel est le résultat de 2,5 × 4 ?",
+            "options": [
+              "6",
+              "8",
+              "10",
+              "12"
+            ],
+            "correct_answer": "10",
+            "explanation": "2,5 × 4 = 10."
+          },
+          {
+            "question": "Quel est le résultat de 1,2 × 2,5 ?",
+            "options": [
+              "2",
+              "3",
+              "3,5",
+              "4"
+            ],
+            "correct_answer": "3",
+            "explanation": "12 × 25 = 300 et il y a deux chiffres après les virgules au total. Donc le résultat est 3,00 = 3."
+          },
+          {
+            "question": "Quel est le résultat de 3,45 × 100 ?",
+            "options": [
+              "34,5",
+              "345",
+              "3 450",
+              "0,345"
+            ],
+            "correct_answer": "345",
+            "explanation": "Multiplier par 100 déplace la virgule de deux rangs vers la droite : 3,45 devient 345."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Diviser des nombres décimaux",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Diviser un nombre décimal par un entier",
+          "content": {
+            "text": "Pour diviser un nombre décimal par un nombre entier, on peut effectuer la division en respectant les rangs décimaux. Par exemple, 12,6 ÷ 3 = 4,2. On peut vérifier le résultat en faisant 4,2 × 3 = 12,6."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Diviser par 10, 100 et 1 000",
+          "content": {
+            "text": "Diviser un nombre décimal par 10, 100 ou 1 000 déplace la virgule vers la gauche. Par exemple, 45,6 ÷ 10 = 4,56 ; 45,6 ÷ 100 = 0,456 ; 45,6 ÷ 1 000 = 0,0456."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Diviser par un nombre décimal",
+          "content": {
+            "text": "Pour une division avec un diviseur décimal, on peut rendre le diviseur entier en multipliant le dividende et le diviseur par 10, 100 ou une autre puissance de 10 adaptée. Par exemple, 7,5 ÷ 2,5 revient à calculer 75 ÷ 25 = 3."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Division des décimaux",
+        "questions": [
+          {
+            "question": "Quel est le résultat de 12,6 ÷ 3 ?",
+            "options": [
+              "3,2",
+              "4,2",
+              "4,6",
+              "5,2"
+            ],
+            "correct_answer": "4,2",
+            "explanation": "3 × 4,2 = 12,6. Donc 12,6 ÷ 3 = 4,2."
+          },
+          {
+            "question": "Quel est le résultat de 35,4 ÷ 10 ?",
+            "options": [
+              "0,354",
+              "3,54",
+              "35,04",
+              "354"
+            ],
+            "correct_answer": "3,54",
+            "explanation": "Diviser par 10 déplace la virgule d'un rang vers la gauche : 35,4 devient 3,54."
+          },
+          {
+            "question": "Quel est le résultat de 7,5 ÷ 2,5 ?",
+            "options": [
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "correct_answer": "3",
+            "explanation": "7,5 ÷ 2,5 = 75 ÷ 25 = 3."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Problèmes avec les nombres décimaux",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Identifier les informations utiles",
+          "content": {
+            "text": "Les nombres décimaux sont utilisés dans de nombreuses situations quotidiennes : prix, distances, masses, volumes et mesures. Pour résoudre un problème, il faut identifier les informations utiles, choisir l'opération adaptée et écrire une réponse avec l'unité appropriée."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Résoudre un problème de prix ou de masse",
+          "content": {
+            "text": "Exemple : un élève achète un cahier à 750 F CFA et un stylo à 250 F CFA. Le prix total est 750 + 250 = 1 000 F CFA. Dans un autre exemple, si un sac de riz pèse 25,5 kg et qu'on retire 3,5 kg, il reste 22 kg."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Résoudre un problème de distance",
+          "content": {
+            "text": "Exemple de mesure : un trajet comporte 12,5 km le matin et 8,75 km l'après-midi. La distance totale est 12,5 + 8,75 = 21,25 km. Il faut toujours vérifier que les nombres sont correctement alignés et que l'unité de la réponse correspond à la situation."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Problèmes avec les décimaux",
+        "questions": [
+          {
+            "question": "Un élève possède 2 500 F CFA et dépense 750 F CFA. Combien lui reste-t-il ?",
+            "options": [
+              "1 500 F CFA",
+              "1 650 F CFA",
+              "1 750 F CFA",
+              "1 850 F CFA"
+            ],
+            "correct_answer": "1 750 F CFA",
+            "explanation": "2 500 − 750 = 1 750 F CFA."
+          },
+          {
+            "question": "Un trajet mesure 7,5 km puis 4,25 km. Quelle est la distance totale ?",
+            "options": [
+              "10,75 km",
+              "11,25 km",
+              "11,75 km",
+              "12,25 km"
+            ],
+            "correct_answer": "11,75 km",
+            "explanation": "7,50 + 4,25 = 11,75 km."
+          },
+          {
+            "question": "Un commerçant possède 15,5 kg de riz et vend 6,75 kg. Quelle quantité reste-t-il ?",
+            "options": [
+              "8,25 kg",
+              "8,50 kg",
+              "8,75 kg",
+              "9,75 kg"
+            ],
+            "correct_answer": "8,75 kg",
+            "explanation": "15,50 − 6,75 = 8,75 kg."
+          }
+        ]
+      }
+    }
+  ]
+}

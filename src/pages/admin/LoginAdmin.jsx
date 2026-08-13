@@ -14,30 +14,121 @@ export default function LoginAdmin() {
   async function handleLogin(e) {
     e.preventDefault();
 
+    console.log("🔐 [LOGIN ADMIN] Tentative de connexion :", email);
+
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      // ==========================================
+      // CONNEXION SUPABASE
+      // ==========================================
 
-    if (error) {
-      setError(error.message);
+      const {
+        data,
+        error: loginError,
+      } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+
+      console.log(
+        "🔐 [LOGIN ADMIN] signIn data =",
+        data
+      );
+
+      console.log(
+        "❌ [LOGIN ADMIN] signIn error =",
+        loginError
+      );
+
+      if (loginError) {
+        setError(loginError.message);
+        return;
+      }
+
+      console.log(
+        "✅ [LOGIN ADMIN] Connexion Supabase réussie"
+      );
+
+      console.log(
+        "👤 [LOGIN ADMIN] user =",
+        data?.user
+      );
+
+      console.log(
+        "🔑 [LOGIN ADMIN] session =",
+        data?.session
+      );
+
+      // ==========================================
+      // VÉRIFICATION ADMIN
+      // ==========================================
+
+      console.log(
+        "👑 [LOGIN ADMIN] Vérification administrateur..."
+      );
+
+      const admin = await getCurrentAdmin();
+
+      console.log(
+        "👑 [LOGIN ADMIN] getCurrentAdmin =",
+        admin
+      );
+
+      if (!admin) {
+        console.log(
+          "🚫 [LOGIN ADMIN] Accès administrateur refusé"
+        );
+
+        await supabase.auth.signOut();
+
+        setError(
+          "Accès administrateur refusé."
+        );
+
+        return;
+      }
+
+      // ==========================================
+      // ADMIN VALIDÉ
+      // ==========================================
+
+      console.log(
+        "✅ [LOGIN ADMIN] ADMIN VALIDÉ"
+      );
+
+      console.log(
+        "👤 [LOGIN ADMIN] Admin =",
+        admin
+      );
+
+      console.log(
+        "➡️ [LOGIN ADMIN] Navigation vers /admin"
+      );
+
+      navigate("/admin", {
+        replace: true,
+      });
+
+    } catch (err) {
+      console.error(
+        "💥 [LOGIN ADMIN] Exception =",
+        err
+      );
+
+      setError(
+        err?.message ||
+        "Une erreur est survenue lors de la connexion."
+      );
+
+    } finally {
       setLoading(false);
-      return;
+
+      console.log(
+        "🏁 [LOGIN ADMIN] handleLogin terminé"
+      );
     }
-
-    const admin = await getCurrentAdmin();
-
-    if (!admin) {
-      await supabase.auth.signOut();
-      setError("Accès administrateur refusé.");
-      setLoading(false);
-      return;
-    }
-
-    navigate("/admin");
   }
 
   return (
@@ -57,6 +148,8 @@ export default function LoginAdmin() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          disabled={loading}
+          required
         />
 
         <input
@@ -65,6 +158,8 @@ export default function LoginAdmin() {
           placeholder="Mot de passe"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          disabled={loading}
+          required
         />
 
         {error && (
@@ -74,10 +169,13 @@ export default function LoginAdmin() {
         )}
 
         <button
-          className="bg-indigo-600 text-white w-full p-3 rounded"
+          type="submit"
+          className="bg-indigo-600 text-white w-full p-3 rounded disabled:opacity-60"
           disabled={loading}
         >
-          {loading ? "Connexion..." : "Connexion"}
+          {loading
+            ? "Connexion..."
+            : "Connexion"}
         </button>
 
       </form>

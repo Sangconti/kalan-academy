@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Fractions et nombres rationnels",
+  "chapter_order": 21,
+  "lessons": [
+    {
+      "title": "Écriture fractionnaire et quotient",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition d'une fraction",
+          "content": {
+            "text": "Une fraction est une écriture de la forme a/b, où a est le numérateur et b est le dénominateur. Le dénominateur doit être différent de zéro. Une fraction représente aussi le quotient de a par b. Par exemple, 3/4 signifie 3 divisé par 4."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Rôle du numérateur et du dénominateur",
+          "content": {
+            "text": "Le numérateur indique le nombre de parts prises et le dénominateur indique en combien de parts égales l'unité a été partagée. Par exemple, si une galette est partagée en 8 parts égales et qu'une personne en prend 3, elle a pris 3/8 de la galette."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Fractions inférieures, égales ou supérieures à 1",
+          "content": {
+            "text": "Une fraction peut être inférieure, égale ou supérieure à 1. Si le numérateur est inférieur au dénominateur, la fraction est inférieure à 1. Si les deux sont égaux, elle vaut 1. Si le numérateur est supérieur au dénominateur, elle est supérieure à 1. Par exemple, 3/5 < 1, 5/5 = 1 et 7/5 > 1."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Écriture fractionnaire",
+        "questions": [
+          {
+            "question": "Dans la fraction 5/8, quel est le numérateur ?",
+            "options": [
+              "5",
+              "8",
+              "13",
+              "3"
+            ],
+            "correct_answer": "5",
+            "explanation": "Le nombre situé au-dessus de la barre est le numérateur."
+          },
+          {
+            "question": "Que représente la fraction 3/4 ?",
+            "options": [
+              "3 + 4",
+              "3 × 4",
+              "3 divisé par 4",
+              "4 divisé par 3"
+            ],
+            "correct_answer": "3 divisé par 4",
+            "explanation": "Une fraction a/b représente le quotient de a par b."
+          },
+          {
+            "question": "La fraction 7/5 est...",
+            "options": [
+              "inférieure à 1",
+              "égale à 1",
+              "supérieure à 1",
+              "égale à 0"
+            ],
+            "correct_answer": "supérieure à 1",
+            "explanation": "Le numérateur 7 est supérieur au dénominateur 5, donc 7/5 > 1."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Fractions égales et simplification",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Fractions égales",
+          "content": {
+            "text": "Deux fractions sont égales lorsqu'elles représentent le même nombre. On peut obtenir une fraction égale à une autre en multipliant ou en divisant le numérateur et le dénominateur par un même nombre non nul. Par exemple, 1/2 = 2/4 = 3/6."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Simplifier une fraction",
+          "content": {
+            "text": "Simplifier une fraction consiste à diviser son numérateur et son dénominateur par un même diviseur commun. Par exemple, 12/18 peut être simplifiée en divisant par 6 : 12/18 = 2/3."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Fraction irréductible",
+          "content": {
+            "text": "Une fraction est irréductible lorsqu'on ne peut plus diviser son numérateur et son dénominateur par un même nombre supérieur à 1. Par exemple, 3/5 est irréductible car 3 et 5 n'ont aucun diviseur commun supérieur à 1."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Fractions égales et simplification",
+        "questions": [
+          {
+            "question": "Quelle fraction est égale à 1/2 ?",
+            "options": [
+              "2/3",
+              "2/4",
+              "3/5",
+              "4/6"
+            ],
+            "correct_answer": "2/4",
+            "explanation": "En multipliant 1 et 2 par 2, on obtient 2/4."
+          },
+          {
+            "question": "Comment simplifier 12/18 ?",
+            "options": [
+              "1/2",
+              "2/3",
+              "3/4",
+              "6/9"
+            ],
+            "correct_answer": "2/3",
+            "explanation": "12 et 18 sont divisibles par 6 : 12/18 = 2/3."
+          },
+          {
+            "question": "La fraction 3/5 est-elle irréductible ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement si elle est supérieure à 1",
+              "Impossible à savoir"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "3 et 5 n'ont aucun diviseur commun supérieur à 1."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparer des fractions",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comparer des fractions de même dénominateur",
+          "content": {
+            "text": "Pour comparer deux fractions ayant le même dénominateur, on compare leurs numérateurs. La fraction qui possède le plus grand numérateur est la plus grande. Par exemple, 5/9 > 2/9."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Comparer des fractions de même numérateur",
+          "content": {
+            "text": "Lorsque deux fractions ont le même numérateur et des dénominateurs positifs, la fraction qui possède le plus petit dénominateur est la plus grande. Par exemple, 3/4 > 3/7, car les quarts sont plus grands que les septièmes."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Comparer avec des dénominateurs différents",
+          "content": {
+            "text": "Pour comparer deux fractions de dénominateurs différents, on peut les réduire au même dénominateur ou utiliser des produits en croix lorsque cela est approprié. Par exemple, pour comparer 2/3 et 3/5, on compare 2 × 5 = 10 et 3 × 3 = 9. Donc 2/3 > 3/5."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Comparaison de fractions",
+        "questions": [
+          {
+            "question": "Laquelle est la plus grande : 5/8 ou 3/8 ?",
+            "options": [
+              "5/8",
+              "3/8",
+              "Elles sont égales",
+              "Impossible"
+            ],
+            "correct_answer": "5/8",
+            "explanation": "Les dénominateurs sont identiques. On compare donc 5 et 3."
+          },
+          {
+            "question": "Laquelle est la plus grande : 3/4 ou 3/7 ?",
+            "options": [
+              "3/4",
+              "3/7",
+              "Elles sont égales",
+              "Impossible"
+            ],
+            "correct_answer": "3/4",
+            "explanation": "Avec le même numérateur positif, le plus petit dénominateur donne la plus grande fraction."
+          },
+          {
+            "question": "Laquelle est la plus grande : 2/3 ou 3/5 ?",
+            "options": [
+              "2/3",
+              "3/5",
+              "Elles sont égales",
+              "Impossible"
+            ],
+            "correct_answer": "2/3",
+            "explanation": "2 × 5 = 10 et 3 × 3 = 9. Comme 10 > 9, 2/3 > 3/5."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Addition et soustraction de fractions",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Additionner des fractions de même dénominateur",
+          "content": {
+            "text": "Pour additionner ou soustraire des fractions ayant le même dénominateur, on conserve le dénominateur et on additionne ou soustrait les numérateurs. Par exemple, 2/7 + 3/7 = 5/7 et 6/9 - 2/9 = 4/9."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Obtenir un dénominateur commun",
+          "content": {
+            "text": "Lorsque les dénominateurs sont différents, il faut d'abord transformer les fractions pour obtenir un dénominateur commun. Par exemple, 1/2 + 1/3 = 3/6 + 2/6 = 5/6."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Simplifier le résultat",
+          "content": {
+            "text": "Après une addition ou une soustraction, il faut vérifier si le résultat peut être simplifié. Par exemple, 1/4 + 1/4 = 2/4 = 1/2. On donne généralement le résultat sous forme irréductible."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Addition et soustraction de fractions",
+        "questions": [
+          {
+            "question": "Quelle est la valeur de 2/7 + 3/7 ?",
+            "options": [
+              "5/7",
+              "5/14",
+              "6/7",
+              "1/7"
+            ],
+            "correct_answer": "5/7",
+            "explanation": "Les dénominateurs sont identiques : 2/7 + 3/7 = 5/7."
+          },
+          {
+            "question": "Quelle est la valeur de 1/2 + 1/3 ?",
+            "options": [
+              "2/5",
+              "1/5",
+              "5/6",
+              "2/6"
+            ],
+            "correct_answer": "5/6",
+            "explanation": "1/2 = 3/6 et 1/3 = 2/6, donc 3/6 + 2/6 = 5/6."
+          },
+          {
+            "question": "Quelle est la forme simplifiée de 1/4 + 1/4 ?",
+            "options": [
+              "2/4",
+              "1/2",
+              "1/8",
+              "2/8"
+            ],
+            "correct_answer": "1/2",
+            "explanation": "1/4 + 1/4 = 2/4, puis 2/4 se simplifie en 1/2."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Multiplication de fractions",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Règle de multiplication des fractions",
+          "content": {
+            "text": "Pour multiplier deux fractions, on multiplie les numérateurs entre eux et les dénominateurs entre eux. Par exemple, 2/3 × 4/5 = (2 × 4)/(3 × 5) = 8/15."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Simplifier avant ou après la multiplication",
+          "content": {
+            "text": "On peut simplifier avant ou après la multiplication lorsque cela est possible. Par exemple, 2/3 × 3/4 = 6/12 = 1/2. On peut aussi simplifier 3 avec 3 avant de multiplier."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Calculer une fraction d'une quantité",
+          "content": {
+            "text": "Multiplier une fraction par un entier revient à multiplier l'entier par le numérateur. Par exemple, 3 × 2/5 = 6/5. Une fraction peut représenter une partie d'une quantité : si 2/5 d'une classe de 30 élèves participent à une activité, on calcule 30 × 2/5 = 12 élèves."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Multiplication de fractions",
+        "questions": [
+          {
+            "question": "Quelle est la valeur de 2/3 × 4/5 ?",
+            "options": [
+              "6/8",
+              "8/15",
+              "6/15",
+              "2/15"
+            ],
+            "correct_answer": "8/15",
+            "explanation": "On multiplie les numérateurs et les dénominateurs : 2 × 4 = 8 et 3 × 5 = 15."
+          },
+          {
+            "question": "Quelle est la forme simplifiée de 2/3 × 3/4 ?",
+            "options": [
+              "6/12",
+              "1/2",
+              "2/7",
+              "3/8"
+            ],
+            "correct_answer": "1/2",
+            "explanation": "2/3 × 3/4 = 6/12 = 1/2."
+          },
+          {
+            "question": "Une classe compte 30 élèves. Les 2/5 participent à une activité. Combien d'élèves participent ?",
+            "options": [
+              "10",
+              "12",
+              "15",
+              "20"
+            ],
+            "correct_answer": "12",
+            "explanation": "30 × 2/5 = 60/5 = 12 élèves."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Problèmes et exercices de synthèse sur les fractions",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Choisir l'opération adaptée",
+          "content": {
+            "text": "Les fractions permettent de représenter des quantités, des parts et des proportions. Pour résoudre un problème, il faut identifier la fraction utilisée et choisir l'opération adaptée : additionner pour réunir des parts, soustraire pour trouver une différence ou multiplier pour calculer une fraction d'une quantité."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Problème de quantité de riz",
+          "content": {
+            "text": "Exemple : Awa possède 3/4 kg de riz et ajoute 1/2 kg. On transforme 1/2 en 2/4, puis 3/4 + 2/4 = 5/4 kg. Elle possède donc 1 kg et 1/4 kg de riz."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Problème de partage d'une parcelle",
+          "content": {
+            "text": "Autre exemple : dans une parcelle, 2/3 de la surface est cultivée en maïs et 1/6 en arachide. La partie cultivée représente 2/3 + 1/6 = 4/6 + 1/6 = 5/6 de la parcelle. Les fractions sont donc utiles pour résoudre des situations concrètes de partage et de mesure."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse sur les fractions",
+        "questions": [
+          {
+            "question": "Awa possède 3/4 kg de riz et ajoute 1/2 kg. Quelle quantité possède-t-elle ?",
+            "options": [
+              "1/4 kg",
+              "1 kg",
+              "5/4 kg",
+              "3/2 kg"
+            ],
+            "correct_answer": "5/4 kg",
+            "explanation": "3/4 + 1/2 = 3/4 + 2/4 = 5/4 kg."
+          },
+          {
+            "question": "Quelle fraction représente 2/3 + 1/6 ?",
+            "options": [
+              "3/9",
+              "4/6",
+              "5/6",
+              "2/6"
+            ],
+            "correct_answer": "5/6",
+            "explanation": "2/3 = 4/6, donc 4/6 + 1/6 = 5/6."
+          },
+          {
+            "question": "Quelle opération utilise-t-on pour calculer les 2/5 de 30 ?",
+            "options": [
+              "30 + 2/5",
+              "30 - 2/5",
+              "30 × 2/5",
+              "30 ÷ 2/5 uniquement"
+            ],
+            "correct_answer": "30 × 2/5",
+            "explanation": "Pour calculer une fraction d'une quantité, on multiplie la quantité par la fraction."
+          }
+        ]
+      }
+    }
+  ]
+}

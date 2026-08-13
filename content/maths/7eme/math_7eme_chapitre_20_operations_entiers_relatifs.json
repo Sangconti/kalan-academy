@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Opérations dans les entiers relatifs ℤ",
+  "chapter_order": 20,
+  "lessons": [
+    {
+      "title": "Addition de deux entiers relatifs",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Addition de nombres de même signe",
+          "content": {
+            "text": "Pour additionner deux entiers relatifs de même signe, on additionne leurs distances à zéro et on conserve le signe commun. Par exemple : (+7) + (+5) = +12 et (-7) + (-5) = -12."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Addition de nombres de signes contraires",
+          "content": {
+            "text": "Pour additionner deux entiers relatifs de signes contraires, on calcule la différence entre leurs valeurs absolues et on donne au résultat le signe du nombre qui possède la plus grande valeur absolue. Par exemple : (+9) + (-4) = +5 et (-9) + (+4) = -5."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Comprendre l'addition avec une droite graduée",
+          "content": {
+            "text": "On peut utiliser une droite graduée pour comprendre l'addition. Pour calculer (-3) + (+5), on part de -3 puis on avance de 5 unités vers la droite. On arrive à +2. Donc (-3) + (+5) = +2."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Addition des entiers relatifs",
+        "questions": [
+          {
+            "question": "Quelle est la valeur de (+7) + (+5) ?",
+            "options": [
+              "-12",
+              "-2",
+              "+2",
+              "+12"
+            ],
+            "correct_answer": "+12",
+            "explanation": "Les deux nombres sont positifs : 7 + 5 = 12."
+          },
+          {
+            "question": "Quelle est la valeur de (-9) + (+4) ?",
+            "options": [
+              "-13",
+              "-5",
+              "+5",
+              "+13"
+            ],
+            "correct_answer": "-5",
+            "explanation": "Les signes sont différents. 9 - 4 = 5 et le plus grand en valeur absolue est -9, donc le résultat est -5."
+          },
+          {
+            "question": "Quelle est la valeur de (-3) + (+5) ?",
+            "options": [
+              "-8",
+              "-2",
+              "+2",
+              "+8"
+            ],
+            "correct_answer": "+2",
+            "explanation": "On part de -3 et on avance de 5 unités : on obtient +2."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Soustraction de deux entiers relatifs",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Transformer une soustraction en addition",
+          "content": {
+            "text": "Pour soustraire un entier relatif, on transforme la soustraction en addition de son opposé. La règle est : a - b = a + (-b). Par exemple : (+8) - (+3) = (+8) + (-3) = +5."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Soustraire un nombre négatif",
+          "content": {
+            "text": "Lorsque le nombre soustrait est négatif, son opposé devient positif. Par exemple : (+6) - (-4) = (+6) + (+4) = +10. Il faut donc être très attentif aux signes présents dans l'expression."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Méthode pour calculer une soustraction",
+          "content": {
+            "text": "Pour calculer une soustraction, on commence par remplacer la soustraction par une addition de l'opposé, puis on applique les règles de l'addition. Par exemple : (-5) - (+7) = (-5) + (-7) = -12 et (-5) - (-7) = (-5) + (+7) = +2."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Soustraction des entiers relatifs",
+        "questions": [
+          {
+            "question": "Quelle expression est équivalente à (+8) - (+3) ?",
+            "options": [
+              "(+8) + (+3)",
+              "(+8) + (-3)",
+              "(-8) + (+3)",
+              "(-8) - (-3)"
+            ],
+            "correct_answer": "(+8) + (-3)",
+            "explanation": "Soustraire +3 revient à ajouter son opposé -3."
+          },
+          {
+            "question": "Quelle est la valeur de (+6) - (-4) ?",
+            "options": [
+              "-10",
+              "-2",
+              "+2",
+              "+10"
+            ],
+            "correct_answer": "+10",
+            "explanation": "(+6) - (-4) = (+6) + (+4) = +10."
+          },
+          {
+            "question": "Quelle est la valeur de (-5) - (+7) ?",
+            "options": [
+              "-12",
+              "-2",
+              "+2",
+              "+12"
+            ],
+            "correct_answer": "-12",
+            "explanation": "(-5) - (+7) = (-5) + (-7) = -12."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Sommes algébriques et calculs avec parenthèses",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définir une somme algébrique",
+          "content": {
+            "text": "Une somme algébrique est une suite d'additions et de soustractions de nombres relatifs. Pour la calculer, on peut transformer toutes les soustractions en additions des opposés. Par exemple : 8 - 5 + (-3) devient 8 + (-5) + (-3)."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Gérer les parenthèses",
+          "content": {
+            "text": "Les parenthèses permettent de distinguer clairement les nombres relatifs et les opérations. Par exemple : (-4) + (+7) - (-2). On transforme d'abord la soustraction : (-4) + (+7) + (+2), puis on calcule de gauche à droite pour obtenir +5."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Méthode pour éviter les erreurs de signes",
+          "content": {
+            "text": "Pour éviter les erreurs, il faut respecter les étapes : identifier l'opération, transformer les soustractions en additions de l'opposé, puis effectuer les calculs en faisant attention aux signes. Exemple : (-10) - (-6) + (-2) = (-10) + (+6) + (-2) = -6."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Sommes algébriques",
+        "questions": [
+          {
+            "question": "Comment transformer 8 - 5 ?",
+            "options": [
+              "8 + 5",
+              "8 + (-5)",
+              "-8 + 5",
+              "-8 - 5"
+            ],
+            "correct_answer": "8 + (-5)",
+            "explanation": "Soustraire 5 revient à ajouter son opposé -5."
+          },
+          {
+            "question": "Quelle est la valeur de (-4) + (+7) - (-2) ?",
+            "options": [
+              "-9",
+              "-1",
+              "+5",
+              "+9"
+            ],
+            "correct_answer": "+5",
+            "explanation": "(-4) + 7 - (-2) = -4 + 7 + 2 = +5."
+          },
+          {
+            "question": "Quelle est la valeur de (-10) - (-6) + (-2) ?",
+            "options": [
+              "-18",
+              "-6",
+              "+6",
+              "+18"
+            ],
+            "correct_answer": "-6",
+            "explanation": "-10 + 6 - 2 = -6."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Multiplication des entiers relatifs",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Règle des signes pour la multiplication",
+          "content": {
+            "text": "Pour multiplier deux entiers relatifs, on multiplie leurs valeurs absolues puis on détermine le signe du résultat. Si les deux facteurs ont le même signe, le produit est positif. Si les facteurs ont des signes différents, le produit est négatif."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Calculer un produit de deux relatifs",
+          "content": {
+            "text": "Exemples : (+4) × (+3) = +12 et (-4) × (-3) = +12 car les signes sont identiques. En revanche, (+4) × (-3) = -12 et (-4) × (+3) = -12 car les signes sont différents."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Produit de plusieurs entiers relatifs",
+          "content": {
+            "text": "Pour multiplier plusieurs nombres relatifs, on applique successivement la règle des signes. Avec un nombre pair de facteurs négatifs, le produit est positif. Avec un nombre impair de facteurs négatifs, le produit est négatif."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Multiplication des relatifs",
+        "questions": [
+          {
+            "question": "Quel est le signe de (-5) × (-4) ?",
+            "options": [
+              "Positif",
+              "Négatif",
+              "Nul",
+              "Impossible à déterminer"
+            ],
+            "correct_answer": "Positif",
+            "explanation": "Le produit de deux nombres négatifs est positif."
+          },
+          {
+            "question": "Quelle est la valeur de (+4) × (-3) ?",
+            "options": [
+              "-12",
+              "-7",
+              "+7",
+              "+12"
+            ],
+            "correct_answer": "-12",
+            "explanation": "Les signes sont différents, donc le produit est négatif : 4 × 3 = 12, donc -12."
+          },
+          {
+            "question": "Quel est le signe de (-2) × (-3) × (-4) ?",
+            "options": [
+              "Positif",
+              "Négatif",
+              "Nul",
+              "Cela dépend des valeurs"
+            ],
+            "correct_answer": "Négatif",
+            "explanation": "Il y a trois facteurs négatifs, donc un nombre impair de signes négatifs : le produit est négatif."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Division exacte dans ℤ",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comprendre la division exacte dans ℤ",
+          "content": {
+            "text": "Lorsqu'une division de deux entiers relatifs donne un entier, on parle de division exacte dans ℤ. Pour déterminer le signe du quotient, on utilise la même règle que pour la multiplication : mêmes signes, quotient positif ; signes différents, quotient négatif."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Appliquer la règle des signes",
+          "content": {
+            "text": "Exemples : (+20) ÷ (+5) = +4 et (-20) ÷ (-5) = +4 car les signes sont identiques. En revanche, (+20) ÷ (-5) = -4 et (-20) ÷ (+5) = -4 car les signes sont différents."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Vérifier une division exacte",
+          "content": {
+            "text": "On ne peut jamais diviser par zéro. Pour vérifier une division, on peut utiliser la multiplication inverse. Par exemple, si (-24) ÷ (+6) = -4, alors (-4) × (+6) = -24. Cette vérification permet de contrôler le résultat."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Division exacte dans ℤ",
+        "questions": [
+          {
+            "question": "Quel est le signe de (-20) ÷ (-5) ?",
+            "options": [
+              "Positif",
+              "Négatif",
+              "Nul",
+              "Impossible"
+            ],
+            "correct_answer": "Positif",
+            "explanation": "Le quotient de deux nombres de même signe est positif."
+          },
+          {
+            "question": "Quelle est la valeur de (+20) ÷ (-5) ?",
+            "options": [
+              "-4",
+              "-15",
+              "+4",
+              "+15"
+            ],
+            "correct_answer": "-4",
+            "explanation": "20 ÷ 5 = 4 et les signes sont différents, donc le quotient est -4."
+          },
+          {
+            "question": "Pourquoi ne peut-on pas diviser par zéro ?",
+            "options": [
+              "Parce que zéro est négatif",
+              "Parce que zéro est trop petit",
+              "Parce qu'une division par zéro n'est pas définie",
+              "Parce que zéro n'est pas un entier"
+            ],
+            "correct_answer": "Parce qu'une division par zéro n'est pas définie",
+            "explanation": "La division par zéro n'est pas définie en mathématiques."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Problèmes et exercices de synthèse dans ℤ",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Choisir l'opération adaptée",
+          "content": {
+            "text": "Les opérations sur les entiers relatifs permettent de résoudre des situations de la vie quotidienne. Une augmentation peut être représentée par un nombre positif, tandis qu'une diminution peut être représentée par un nombre négatif. Il faut choisir correctement l'opération correspondant à la situation."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Résoudre un problème de gains et de pertes",
+          "content": {
+            "text": "Exemple : un commerçant réalise un gain de 15 000 F CFA puis une perte de 6 000 F CFA. Le bilan peut être représenté par (+15 000) + (-6 000) = +9 000. Le gain net est donc de 9 000 F CFA."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Résoudre un problème de température",
+          "content": {
+            "text": "Exemple : une température de -4 °C augmente de 9 °C puis baisse de 3 °C. On calcule (-4) + (+9) + (-3) = +2. La température finale est donc de +2 °C. Il faut toujours écrire les étapes afin de limiter les erreurs de signe."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse des opérations dans ℤ",
+        "questions": [
+          {
+            "question": "Un commerçant gagne 15 000 F CFA puis perd 6 000 F CFA. Quel est son bilan ?",
+            "options": [
+              "-21 000 F CFA",
+              "-9 000 F CFA",
+              "+9 000 F CFA",
+              "+21 000 F CFA"
+            ],
+            "correct_answer": "+9 000 F CFA",
+            "explanation": "(+15 000) + (-6 000) = +9 000 F CFA."
+          },
+          {
+            "question": "Une température de -4 °C augmente de 9 °C puis baisse de 3 °C. Quelle est la température finale ?",
+            "options": [
+              "-16 °C",
+              "-2 °C",
+              "+2 °C",
+              "+16 °C"
+            ],
+            "correct_answer": "+2 °C",
+            "explanation": "(-4) + 9 - 3 = +2 °C."
+          },
+          {
+            "question": "Quel est le résultat de (-6) × (-5) ?",
+            "options": [
+              "-30",
+              "-11",
+              "+11",
+              "+30"
+            ],
+            "correct_answer": "+30",
+            "explanation": "Le produit de deux nombres négatifs est positif et 6 × 5 = 30."
+          }
+        ]
+      }
+    }
+  ]
+}

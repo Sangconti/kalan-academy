@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Notion de température",
+  "chapter_order": 6,
+  "lessons": [
+    {
+      "title": "Notion de température",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce que la température ?",
+          "content": "La température est une grandeur physique qui permet de caractériser l'état thermique d'un corps. Elle permet notamment de savoir si un corps est plus chaud ou plus froid qu'un autre. La température ne doit pas être confondue avec la quantité de chaleur contenue dans un corps.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Température dans la vie quotidienne",
+          "content": "Nous ressentons les différences de température dans notre vie quotidienne. Par exemple, une eau placée au réfrigérateur est plus froide qu'une eau exposée au soleil. Cependant, la sensation de chaud ou de froid ne permet pas de mesurer précisément une température.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Pourquoi mesurer la température ?",
+          "content": "La mesure de la température est importante dans de nombreuses situations : conservation des aliments, cuisson, expériences scientifiques, météo et fonctionnement de certains appareils. Pour obtenir une valeur précise, on utilise un instrument de mesure adapté.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Notion de température",
+        "questions": [
+          {
+            "question": "Que permet notamment de caractériser la température ?",
+            "options": [
+              "L'état thermique d'un corps",
+              "Sa masse uniquement",
+              "Son volume uniquement",
+              "Sa couleur"
+            ],
+            "correct_answer": "L'état thermique d'un corps",
+            "explanation": "La température caractérise l'état thermique d'un corps et permet notamment de comparer son degré de chaud ou de froid."
+          },
+          {
+            "question": "Peut-on mesurer précisément une température uniquement avec la sensation de la main ?",
+            "options": [
+              "Non",
+              "Oui, toujours",
+              "Oui, mais seulement pour l'eau",
+              "Oui, si l'objet est métallique"
+            ],
+            "correct_answer": "Non",
+            "explanation": "La sensation de chaud ou de froid n'est pas une mesure précise. Il faut utiliser un thermomètre."
+          },
+          {
+            "question": "La température est-elle la même chose que la masse ?",
+            "options": [
+              "Non",
+              "Oui",
+              "Seulement pour les liquides",
+              "Seulement pour les gaz"
+            ],
+            "correct_answer": "Non",
+            "explanation": "La température et la masse sont deux grandeurs physiques différentes."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Le thermomètre",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Instrument de mesure",
+          "content": "Le thermomètre est un instrument utilisé pour mesurer la température. Il existe plusieurs types de thermomètres, notamment les thermomètres électroniques et certains thermomètres à liquide.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Principe général",
+          "content": "Un thermomètre possède une grandeur mesurable qui varie avec la température. Dans un thermomètre électronique, un capteur détecte les variations liées à la température et l'appareil affiche une valeur.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Utilisation correcte",
+          "content": "Pour mesurer correctement la température d'un corps ou d'un liquide, il faut utiliser un thermomètre adapté, attendre que la mesure se stabilise et lire correctement la graduation ou l'affichage. Le thermomètre doit être utilisé sans dépasser ses limites de mesure.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Le thermomètre",
+        "questions": [
+          {
+            "question": "Quel instrument sert à mesurer la température ?",
+            "options": [
+              "Le thermomètre",
+              "La balance",
+              "L'éprouvette graduée",
+              "La règle"
+            ],
+            "correct_answer": "Le thermomètre",
+            "explanation": "Le thermomètre est l'instrument utilisé pour mesurer une température."
+          },
+          {
+            "question": "Avant de lire une mesure, il faut généralement...",
+            "options": [
+              "attendre que la mesure se stabilise",
+              "secouer fortement le thermomètre",
+              "chauffer systématiquement le thermomètre",
+              "retirer immédiatement le thermomètre"
+            ],
+            "correct_answer": "attendre que la mesure se stabilise",
+            "explanation": "Il faut laisser le temps au thermomètre de s'adapter à la température du corps ou du milieu."
+          },
+          {
+            "question": "Un thermomètre électronique utilise notamment...",
+            "options": [
+              "un capteur",
+              "une éprouvette",
+              "une balance à plateaux",
+              "une règle graduée"
+            ],
+            "correct_answer": "un capteur",
+            "explanation": "Un thermomètre électronique utilise un capteur pour détecter la température."
+          }
+        ]
+      }
+    },
+    {
+      "title": "L'échelle Celsius",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Le degré Celsius",
+          "content": "Dans la vie courante et à l'école, la température est souvent exprimée en degrés Celsius, notés °C. Cette unité permet de donner une valeur numérique à la température.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Repères de température",
+          "content": "À la pression atmosphérique normale, l'eau gèle autour de 0 °C et bout autour de 100 °C. Ces deux valeurs constituent des repères importants pour comprendre l'échelle Celsius.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Températures positives et négatives",
+          "content": "Une température peut être supérieure ou inférieure à 0 °C. Par exemple, 25 °C est une température positive tandis que -5 °C est une température négative. Le signe moins indique que la température est inférieure à 0 °C.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Échelle Celsius",
+        "questions": [
+          {
+            "question": "Quelle unité utilise-t-on couramment pour exprimer la température ?",
+            "options": [
+              "Le degré Celsius",
+              "Le kilogramme",
+              "Le litre",
+              "Le mètre"
+            ],
+            "correct_answer": "Le degré Celsius",
+            "explanation": "Le degré Celsius, noté °C, est couramment utilisé pour exprimer la température."
+          },
+          {
+            "question": "À la pression atmosphérique normale, l'eau gèle autour de...",
+            "options": [
+              "0 °C",
+              "50 °C",
+              "100 °C",
+              "-100 °C"
+            ],
+            "correct_answer": "0 °C",
+            "explanation": "Dans les conditions usuelles, l'eau se solidifie autour de 0 °C."
+          },
+          {
+            "question": "Que signifie une température de -5 °C ?",
+            "options": [
+              "Elle est inférieure à 0 °C",
+              "Elle est supérieure à 0 °C",
+              "Elle est égale à 5 °C",
+              "Elle est égale à 0 °C"
+            ],
+            "correct_answer": "Elle est inférieure à 0 °C",
+            "explanation": "Le signe négatif indique une température inférieure à 0 °C."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mesurer la température d'un liquide",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Préparer la mesure",
+          "content": "Pour mesurer la température d'un liquide, on choisit un thermomètre adapté. On place la partie sensible du thermomètre dans le liquide sans qu'elle touche inutilement le fond ou les parois du récipient.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Lire la température",
+          "content": "Il faut attendre que la valeur affichée ou la colonne du thermomètre se stabilise. La lecture doit être effectuée correctement, en respectant les graduations de l'instrument.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple expérimental",
+          "content": "On place un thermomètre dans un récipient contenant de l'eau. Après stabilisation, l'écran affiche 28 °C. On peut alors dire que la température mesurée de l'eau est de 28 °C.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Mesure d'un liquide",
+        "questions": [
+          {
+            "question": "Où doit-on placer la partie sensible du thermomètre ?",
+            "options": [
+              "Dans le liquide à mesurer",
+              "Toujours à l'extérieur du récipient",
+              "Sur la table",
+              "Dans la main uniquement"
+            ],
+            "correct_answer": "Dans le liquide à mesurer",
+            "explanation": "La partie sensible doit être en contact avec le liquide dont on veut mesurer la température."
+          },
+          {
+            "question": "Pourquoi faut-il attendre avant de lire la température ?",
+            "options": [
+              "Pour laisser la mesure se stabiliser",
+              "Pour refroidir le thermomètre à zéro",
+              "Pour augmenter la masse du liquide",
+              "Pour modifier le volume"
+            ],
+            "correct_answer": "Pour laisser la mesure se stabiliser",
+            "explanation": "La température affichée peut évoluer avant que le thermomètre atteigne l'équilibre thermique avec le liquide."
+          },
+          {
+            "question": "Un thermomètre affiche 28 °C. Quelle est la température mesurée ?",
+            "options": [
+              "28 °C",
+              "82 °C",
+              "28 kg",
+              "0 °C"
+            ],
+            "correct_answer": "28 °C",
+            "explanation": "La valeur affichée par le thermomètre est 28 °C."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Température et changements d'état",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Influence de la température",
+          "content": "La température joue un rôle important dans les changements d'état de la matière. Lorsqu'un corps est chauffé ou refroidi, son état physique peut changer dans certaines conditions.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Quelques exemples",
+          "content": "Le chauffage d'un glaçon peut provoquer sa fusion. Le refroidissement de l'eau peut provoquer sa solidification. Le chauffage d'un liquide peut provoquer sa vaporisation. Le refroidissement d'un gaz peut favoriser sa liquéfaction.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Repères pour l'eau",
+          "content": "À la pression atmosphérique normale, la glace fond autour de 0 °C et l'eau bout autour de 100 °C. Ces valeurs peuvent varier si la pression change.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Température et états physiques",
+        "questions": [
+          {
+            "question": "Que peut provoquer le chauffage d'un glaçon ?",
+            "options": [
+              "Sa fusion",
+              "Sa solidification",
+              "Sa liquéfaction",
+              "Aucun changement possible"
+            ],
+            "correct_answer": "Sa fusion",
+            "explanation": "Le chauffage peut faire fondre la glace et provoquer son passage de l'état solide à l'état liquide."
+          },
+          {
+            "question": "Que peut provoquer un refroidissement suffisamment important de l'eau ?",
+            "options": [
+              "Sa solidification",
+              "Sa fusion",
+              "Sa vaporisation",
+              "Sa combustion"
+            ],
+            "correct_answer": "Sa solidification",
+            "explanation": "Le refroidissement de l'eau peut provoquer son passage à l'état solide."
+          },
+          {
+            "question": "À la pression atmosphérique normale, l'eau bout autour de...",
+            "options": [
+              "100 °C",
+              "0 °C",
+              "25 °C",
+              "-10 °C"
+            ],
+            "correct_answer": "100 °C",
+            "explanation": "Dans les conditions usuelles, l'eau bout autour de 100 °C."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exercices de synthèse sur la température",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Choisir l'instrument adapté",
+          "content": "La température se mesure avec un thermomètre. La masse se mesure avec une balance et le volume d'un liquide peut être mesuré avec une éprouvette graduée. Chaque grandeur physique nécessite un instrument adapté.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple de lecture",
+          "content": "Un thermomètre mesure successivement 20 °C puis 35 °C. La deuxième température est supérieure à la première de 15 °C. Pour comparer deux températures, on peut donc soustraire la plus petite valeur de la plus grande.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": "La température caractérise l'état thermique d'un corps. Elle se mesure avec un thermomètre et s'exprime couramment en degrés Celsius. Il faut savoir lire une température, comparer des températures et comprendre le lien entre température et changements d'état.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse sur la température",
+        "questions": [
+          {
+            "question": "Avec quel instrument mesure-t-on la température ?",
+            "options": [
+              "Un thermomètre",
+              "Une balance",
+              "Une éprouvette",
+              "Une règle"
+            ],
+            "correct_answer": "Un thermomètre",
+            "explanation": "Le thermomètre est l'instrument de mesure de la température."
+          },
+          {
+            "question": "Quelle température est la plus élevée ?",
+            "options": [
+              "35 °C",
+              "20 °C",
+              "5 °C",
+              "-10 °C"
+            ],
+            "correct_answer": "35 °C",
+            "explanation": "35 °C est supérieure à 20 °C, 5 °C et -10 °C."
+          },
+          {
+            "question": "La température peut-elle être négative ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement pour les liquides",
+              "Seulement pendant la nuit"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "Une température peut être inférieure à 0 °C et s'écrire avec un signe négatif."
+          }
+        ]
+      }
+    }
+  ]
+}

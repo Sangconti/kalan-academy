@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Solidification et fusion",
+  "chapter_order": 5,
+  "lessons": [
+    {
+      "lesson_order": 1,
+      "title": "La fusion",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "La fusion est le changement d’état d’une substance qui passe de l’état solide à l’état liquide. Ce changement d’état se produit lorsqu’un solide reçoit suffisamment d’énergie thermique. Par exemple, un glaçon laissé dans un endroit chaud finit par devenir de l’eau liquide."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Pendant la fusion, la substance change d’état mais reste la même substance. Ainsi, lorsque la glace fond, elle devient de l’eau liquide : il n’y a pas création d’une nouvelle substance. La fusion est donc un changement d’état physique."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans la vie quotidienne au Mali, la fusion de la glace peut être observée lorsqu’on laisse des glaçons dans un récipient pendant une journée chaude. La glace reçoit de l’énergie thermique de son environnement et se transforme progressivement en eau liquide."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — La fusion",
+        "questions": [
+          {
+            "question": "Qu’est-ce que la fusion ?",
+            "options": [
+              "Le passage du solide au liquide",
+              "Le passage du liquide au solide",
+              "Le passage du liquide au gaz",
+              "Le passage du gaz au liquide"
+            ],
+            "correct_answer": "Le passage du solide au liquide",
+            "explanation": "La fusion est le changement d’état d’une substance qui passe de l’état solide à l’état liquide."
+          },
+          {
+            "question": "Que devient un glaçon lorsqu’il fond ?",
+            "options": [
+              "Il devient de l’eau liquide",
+              "Il devient un gaz immédiatement",
+              "Il devient du métal",
+              "Il disparaît sans transformation"
+            ],
+            "correct_answer": "Il devient de l’eau liquide",
+            "explanation": "Lors de la fusion, la glace passe de l’état solide à l’état liquide tout en restant de l’eau."
+          },
+          {
+            "question": "La fusion de la glace est-elle un changement physique ou chimique ?",
+            "options": [
+              "Un changement physique",
+              "Un changement chimique",
+              "Une combustion",
+              "Une réaction nucléaire"
+            ],
+            "correct_answer": "Un changement physique",
+            "explanation": "Lors de la fusion, l’eau change seulement d’état physique. La substance reste de l’eau."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 2,
+      "title": "La solidification",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "La solidification est le changement d’état d’une substance qui passe de l’état liquide à l’état solide. Elle se produit généralement lorsqu’un liquide perd de l’énergie thermique et se refroidit suffisamment. L’eau liquide peut ainsi devenir de la glace."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La solidification est l’inverse de la fusion. Dans les deux cas, la substance ne devient pas une nouvelle substance : seul son état physique change. Pour l’eau, la fusion transforme la glace en eau liquide tandis que la solidification transforme l’eau liquide en glace."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans un congélateur, l’eau placée dans un récipient se refroidit progressivement. Lorsqu’elle atteint les conditions nécessaires à sa solidification, elle forme de la glace. Cette transformation est utilisée quotidiennement pour fabriquer des glaçons et conserver certains aliments."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — La solidification",
+        "questions": [
+          {
+            "question": "Qu’est-ce que la solidification ?",
+            "options": [
+              "Le passage du liquide au solide",
+              "Le passage du solide au liquide",
+              "Le passage du liquide au gaz",
+              "Le passage du gaz au liquide"
+            ],
+            "correct_answer": "Le passage du liquide au solide",
+            "explanation": "La solidification correspond au passage d’une substance de l’état liquide à l’état solide."
+          },
+          {
+            "question": "Que devient l’eau liquide lorsqu’elle se solidifie ?",
+            "options": [
+              "Elle devient de la glace",
+              "Elle devient de l’air",
+              "Elle devient du métal",
+              "Elle disparaît"
+            ],
+            "correct_answer": "Elle devient de la glace",
+            "explanation": "La glace est l’état solide de l’eau. L’eau liquide se solidifie donc en glace."
+          },
+          {
+            "question": "Quel phénomène est l’inverse de la solidification ?",
+            "options": [
+              "La fusion",
+              "La vaporisation",
+              "La liquéfaction",
+              "La compression"
+            ],
+            "correct_answer": "La fusion",
+            "explanation": "La solidification est le passage du liquide au solide, tandis que la fusion est le passage inverse, du solide au liquide."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 3,
+      "title": "Étudier la fusion de la glace",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour étudier la fusion de la glace, on peut placer quelques glaçons dans un récipient et observer leur évolution dans une pièce à température ambiante. Un thermomètre adapté peut être utilisé pour suivre la température pendant l’expérience. La glace reçoit de l’énergie thermique de son environnement."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Au début de l’expérience, on observe de la glace solide. Lorsque la glace commence à fondre, on observe simultanément de la glace et de l’eau liquide. Pour l’eau pure à la pression atmosphérique normale, la fusion se produit à environ 0 °C. Pendant le changement d’état, la température reste constante tant que les deux états coexistent dans les conditions idéales de l’expérience."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Une fois toute la glace fondue, on ne trouve plus que de l’eau liquide. Si l’eau continue à recevoir de l’énergie thermique, sa température peut ensuite augmenter au-dessus de 0 °C. Cette expérience montre que la fusion est un changement d’état qui possède une température caractéristique pour une substance pure dans des conditions données."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Fusion de la glace",
+        "questions": [
+          {
+            "question": "Que reçoit la glace lorsqu’elle fond dans une pièce plus chaude ?",
+            "options": [
+              "De l’énergie thermique",
+              "De la matière solide",
+              "De l’électricité uniquement",
+              "De la lumière uniquement"
+            ],
+            "correct_answer": "De l’énergie thermique",
+            "explanation": "La glace reçoit de l’énergie thermique de son environnement, ce qui permet sa fusion."
+          },
+          {
+            "question": "À quelle température la glace fond-elle approximativement à la pression atmosphérique normale ?",
+            "options": [
+              "-100 °C",
+              "0 °C",
+              "50 °C",
+              "100 °C"
+            ],
+            "correct_answer": "0 °C",
+            "explanation": "Pour l’eau pure à la pression atmosphérique normale, la température de fusion est d’environ 0 °C."
+          },
+          {
+            "question": "Que trouve-t-on pendant la fusion d’un glaçon ?",
+            "options": [
+              "De la glace et de l’eau liquide",
+              "Uniquement de la vapeur",
+              "Uniquement de la glace jusqu’à la fin",
+              "Du métal et de l’eau"
+            ],
+            "correct_answer": "De la glace et de l’eau liquide",
+            "explanation": "Pendant la fusion, les deux états peuvent coexister : la glace solide et l’eau liquide."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 4,
+      "title": "Étudier la solidification de l’eau",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour étudier la solidification, on peut placer de l’eau liquide dans un récipient adapté puis la refroidir. Dans une expérience scolaire, un dispositif approprié permet d’observer progressivement la formation de glace. L’eau liquide perd alors de l’énergie thermique."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour de l’eau pure à la pression atmosphérique normale, la solidification se produit à environ 0 °C. Pendant le changement d’état, de l’eau liquide et de la glace peuvent être présentes simultanément. Dans les conditions idéales, la température reste constante pendant la solidification tant que les deux états coexistent."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Une fois toute l’eau transformée en glace, la température de la glace peut continuer à diminuer si elle perd encore de l’énergie thermique. L’expérience permet ainsi de distinguer le refroidissement d’une substance de son changement d’état."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Solidification de l’eau",
+        "questions": [
+          {
+            "question": "Que fait l’eau liquide lorsqu’elle se solidifie ?",
+            "options": [
+              "Elle perd de l’énergie thermique et devient solide",
+              "Elle gagne toujours de l’énergie et devient gaz",
+              "Elle devient immédiatement du métal",
+              "Elle disparaît"
+            ],
+            "correct_answer": "Elle perd de l’énergie thermique et devient solide",
+            "explanation": "Lors de la solidification, le liquide se refroidit et passe à l’état solide."
+          },
+          {
+            "question": "À quelle température l’eau pure se solidifie-t-elle approximativement à la pression atmosphérique normale ?",
+            "options": [
+              "-50 °C",
+              "0 °C",
+              "50 °C",
+              "100 °C"
+            ],
+            "correct_answer": "0 °C",
+            "explanation": "Pour l’eau pure à la pression atmosphérique normale, la température de solidification est d’environ 0 °C."
+          },
+          {
+            "question": "Pendant la solidification de l’eau, quels états peuvent coexister ?",
+            "options": [
+              "L’eau liquide et la glace",
+              "La vapeur uniquement",
+              "Le métal et la glace",
+              "L’air et le métal"
+            ],
+            "correct_answer": "L’eau liquide et la glace",
+            "explanation": "Pendant la solidification, l’eau liquide et l’eau solide sous forme de glace peuvent être présentes en même temps."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 5,
+      "title": "Température de fusion et de solidification",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "La température de fusion est la température à laquelle une substance pure passe de l’état solide à l’état liquide dans des conditions données. Pour une substance pure donnée, cette température est caractéristique lorsque la pression est fixée. La température de solidification correspond au changement inverse."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Pour l’eau pure à la pression atmosphérique normale, la température de fusion est d’environ 0 °C et sa température de solidification est également d’environ 0 °C. Ces valeurs permettent de distinguer clairement le changement d’état de l’eau d’un simple changement de température."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Il faut cependant distinguer l’eau pure des mélanges. Ajouter du sel à de la glace ou à de l’eau modifie les conditions de changement d’état. C’est pourquoi, en sciences, il est important de préciser la nature de la substance étudiée et les conditions expérimentales lorsqu’on parle d’une température de changement d’état."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Températures de changement d’état",
+        "questions": [
+          {
+            "question": "Quelle est approximativement la température de fusion de l’eau pure à la pression atmosphérique normale ?",
+            "options": [
+              "-100 °C",
+              "0 °C",
+              "50 °C",
+              "100 °C"
+            ],
+            "correct_answer": "0 °C",
+            "explanation": "L’eau pure fond à environ 0 °C à la pression atmosphérique normale."
+          },
+          {
+            "question": "La température de solidification de l’eau pure à la pression atmosphérique normale est approximativement :",
+            "options": [
+              "0 °C",
+              "20 °C",
+              "50 °C",
+              "100 °C"
+            ],
+            "correct_answer": "0 °C",
+            "explanation": "Dans ces conditions, l’eau pure se solidifie à environ 0 °C."
+          },
+          {
+            "question": "Pourquoi faut-il préciser qu’il s’agit d’eau pure lorsqu’on donne sa température de changement d’état ?",
+            "options": [
+              "Parce que la présence d’autres substances peut modifier le comportement du mélange",
+              "Parce que l’eau pure n’a aucune température",
+              "Parce que la glace est toujours chaude",
+              "Parce que tous les mélanges fondent à 0 °C"
+            ],
+            "correct_answer": "Parce que la présence d’autres substances peut modifier le comportement du mélange",
+            "explanation": "Les substances dissoutes peuvent modifier les températures auxquelles un mélange change d’état. Les conditions expérimentales sont donc importantes."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 6,
+      "title": "Fusion et solidification dans la vie quotidienne",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "La fusion et la solidification sont présentes dans de nombreuses situations de la vie quotidienne. La glace qui fond au soleil est un exemple de fusion. L’eau qui devient de la glace dans un congélateur est un exemple de solidification. Ces transformations permettent notamment de conserver et de manipuler certaines substances."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Dans certaines activités artisanales et industrielles, on utilise également la fusion et la solidification de matériaux. Par exemple, certaines matières peuvent être chauffées jusqu’à devenir liquides puis refroidies pour prendre une forme déterminée. Le principe général reste le même : la matière change d’état physique."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Au Mali, où les températures peuvent être élevées pendant certaines périodes de l’année, la fonte rapide de la glace est facilement observable. Pour conserver de la glace plus longtemps, on cherche à limiter les échanges de chaleur avec l’environnement. Comprendre la fusion et la solidification permet donc aussi de mieux comprendre certaines méthodes de conservation par le froid."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Fusion et solidification au quotidien",
+        "questions": [
+          {
+            "question": "Un glaçon qui fond au soleil subit :",
+            "options": [
+              "Une fusion",
+              "Une solidification",
+              "Une liquéfaction",
+              "Une combustion"
+            ],
+            "correct_answer": "Une fusion",
+            "explanation": "Le glaçon passe de l’état solide à l’état liquide : c’est une fusion."
+          },
+          {
+            "question": "L’eau placée dans un congélateur et qui devient de la glace subit :",
+            "options": [
+              "Une fusion",
+              "Une solidification",
+              "Une vaporisation",
+              "Une combustion"
+            ],
+            "correct_answer": "Une solidification",
+            "explanation": "L’eau passe de l’état liquide à l’état solide : il s’agit d’une solidification."
+          },
+          {
+            "question": "Pour conserver de la glace plus longtemps, pourquoi cherche-t-on à limiter les échanges de chaleur avec l’environnement ?",
+            "options": [
+              "Pour ralentir sa fusion",
+              "Pour accélérer sa fusion",
+              "Pour transformer la glace en métal",
+              "Pour supprimer sa masse"
+            ],
+            "correct_answer": "Pour ralentir sa fusion",
+            "explanation": "Limiter les échanges de chaleur réduit l’énergie thermique reçue par la glace et permet de ralentir son passage vers l’état liquide."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Droites parallèles et perpendiculaires",
+  "chapter_order": 27,
+  "lessons": [
+    {
+      "title": "Reconnaître des droites parallèles",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de droites parallèles",
+          "content": {
+            "text": "Deux droites sont parallèles lorsqu'elles sont situées dans un même plan et qu'elles ne se coupent jamais, même si on les prolonge indéfiniment. On note que la droite (d) est parallèle à la droite (d') par (d) // (d'). Deux droites parallèles ont la même direction."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Reconnaître des parallèles",
+          "content": {
+            "text": "Pour vérifier que deux droites sont parallèles, on peut utiliser une règle et une équerre ou observer les propriétés d'une figure. Par exemple, dans un parallélogramme, les côtés opposés sont parallèles deux à deux. Deux droites parallèles restent à distance constante l'une de l'autre."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemples de parallèles",
+          "content": {
+            "text": "Dans la vie quotidienne, les lignes d'un cahier, certains bords d'une table ou certaines lignes d'une route peuvent donner une idée de droites parallèles. Pour reconnaître des droites parallèles, il faut vérifier qu'elles ont la même direction et qu'elles ne se rencontrent pas."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Droites parallèles",
+        "questions": [
+          {
+            "question": "Deux droites parallèles...",
+            "options": [
+              "se coupent toujours",
+              "ne se coupent jamais",
+              "sont toujours perpendiculaires",
+              "ont forcément la même longueur"
+            ],
+            "correct_answer": "ne se coupent jamais",
+            "explanation": "Deux droites parallèles d'un même plan ne se rencontrent jamais, même si on les prolonge."
+          },
+          {
+            "question": "Comment note-t-on que (d) est parallèle à (d') ?",
+            "options": [
+              "(d) ⟂ (d')",
+              "(d) = (d')",
+              "(d) // (d')",
+              "(d) × (d')"
+            ],
+            "correct_answer": "(d) // (d')",
+            "explanation": "Le symbole // signifie « est parallèle à »."
+          },
+          {
+            "question": "Quelle figure possède deux paires de côtés opposés parallèles ?",
+            "options": [
+              "Un triangle",
+              "Un parallélogramme",
+              "Un cercle",
+              "Un angle"
+            ],
+            "correct_answer": "Un parallélogramme",
+            "explanation": "Dans un parallélogramme, les côtés opposés sont parallèles deux à deux."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Reconnaître des droites perpendiculaires",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de droites perpendiculaires",
+          "content": {
+            "text": "Deux droites sont perpendiculaires lorsqu'elles se coupent en formant un angle droit. Un angle droit mesure 90°. On note que la droite (d) est perpendiculaire à la droite (d') par (d) ⟂ (d')."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Vérifier un angle droit",
+          "content": {
+            "text": "Pour vérifier qu'un angle est droit, on utilise principalement une équerre. On place un côté de l'équerre sur une droite et on vérifie que l'autre côté correspond à l'autre droite. Si les deux côtés correspondent, les droites sont perpendiculaires."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Perpendicularité dans les figures",
+          "content": {
+            "text": "Les côtés consécutifs d'un rectangle et d'un carré sont perpendiculaires. Dans ces figures, chaque angle mesure 90°. La perpendicularité est donc une propriété importante pour reconnaître ces quadrilatères."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Droites perpendiculaires",
+        "questions": [
+          {
+            "question": "Deux droites perpendiculaires forment un angle de...",
+            "options": [
+              "45°",
+              "60°",
+              "90°",
+              "180°"
+            ],
+            "correct_answer": "90°",
+            "explanation": "Deux droites perpendiculaires se coupent en formant un angle droit de 90°."
+          },
+          {
+            "question": "Quel instrument permet de vérifier facilement qu'un angle est droit ?",
+            "options": [
+              "Le compas",
+              "L'équerre",
+              "La gomme",
+              "La calculatrice"
+            ],
+            "correct_answer": "L'équerre",
+            "explanation": "L'équerre possède un angle droit qui permet de vérifier ou de construire une perpendicularité."
+          },
+          {
+            "question": "Dans un carré, deux côtés consécutifs sont...",
+            "options": [
+              "parallèles",
+              "perpendiculaires",
+              "toujours confondus",
+              "sans relation"
+            ],
+            "correct_answer": "perpendiculaires",
+            "explanation": "Les quatre angles d'un carré sont droits, donc deux côtés consécutifs sont perpendiculaires."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire des droites parallèles",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Construire une parallèle avec une équerre",
+          "content": {
+            "text": "Pour construire une droite parallèle à une droite donnée passant par un point, on peut utiliser une règle et une équerre. On place un côté de l'équerre contre la droite donnée, puis on fait glisser l'équerre jusqu'au point choisi sans modifier sa direction. On trace alors la nouvelle droite."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Utiliser deux équerres",
+          "content": {
+            "text": "Une autre méthode consiste à utiliser deux équerres. On place une équerre contre la droite donnée et on utilise la seconde pour guider le déplacement. On fait glisser l'ensemble jusqu'au point par lequel doit passer la parallèle, puis on trace la droite."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Vérifier le parallélisme",
+          "content": {
+            "text": "La droite construite doit avoir la même direction que la droite initiale et ne doit pas la rencontrer. On peut vérifier la construction en contrôlant que les deux droites restent à distance constante. Si elles se coupent, la construction n'est pas correcte."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Construction de parallèles",
+        "questions": [
+          {
+            "question": "Pour construire une parallèle avec une règle et une équerre, l'équerre doit pouvoir...",
+            "options": [
+              "glisser le long de la règle",
+              "être cassée",
+              "tourner au hasard",
+              "être utilisée comme compas"
+            ],
+            "correct_answer": "glisser le long de la règle",
+            "explanation": "Le glissement de l'équerre permet de conserver la même direction et donc de construire une droite parallèle."
+          },
+          {
+            "question": "Une droite parallèle à une autre doit avoir...",
+            "options": [
+              "la même direction",
+              "une direction perpendiculaire",
+              "obligatoirement une longueur différente",
+              "un angle droit avec elle"
+            ],
+            "correct_answer": "la même direction",
+            "explanation": "Deux droites parallèles ont la même direction et ne se rencontrent pas."
+          },
+          {
+            "question": "Si deux droites se coupent, peuvent-elles être parallèles ?",
+            "options": [
+              "Oui toujours",
+              "Oui parfois",
+              "Non",
+              "Seulement dans un carré"
+            ],
+            "correct_answer": "Non",
+            "explanation": "Deux droites qui se coupent ne sont pas parallèles."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construire des droites perpendiculaires",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Construire une perpendiculaire avec une équerre",
+          "content": {
+            "text": "Pour construire une droite perpendiculaire à une droite donnée en un point, on utilise une équerre. On place un côté de l'équerre sur la droite donnée et on fait passer l'autre côté par le point choisi. On peut alors tracer la droite perpendiculaire."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Construire une perpendiculaire en un point extérieur",
+          "content": {
+            "text": "Si le point est extérieur à la droite donnée, on place l'équerre de manière que l'un de ses côtés soit aligné avec la droite. On fait ensuite glisser l'équerre jusqu'à ce que l'autre côté passe par le point. On trace alors la perpendiculaire."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Vérifier la perpendicularité",
+          "content": {
+            "text": "Une construction précise nécessite de bien maintenir l'équerre et la règle. Il faut vérifier que les deux droites forment effectivement un angle droit de 90°. Le symbole ⟂ permet d'indiquer que deux droites sont perpendiculaires."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Construction de perpendiculaires",
+        "questions": [
+          {
+            "question": "Quel instrument est principalement utilisé pour construire une perpendiculaire ?",
+            "options": [
+              "Une équerre",
+              "Une gomme",
+              "Un rapporteur uniquement",
+              "Une calculatrice"
+            ],
+            "correct_answer": "Une équerre",
+            "explanation": "L'équerre permet de construire facilement un angle droit."
+          },
+          {
+            "question": "Une droite perpendiculaire à une autre forme un angle de...",
+            "options": [
+              "30°",
+              "45°",
+              "90°",
+              "120°"
+            ],
+            "correct_answer": "90°",
+            "explanation": "La perpendicularité correspond à un angle droit de 90°."
+          },
+          {
+            "question": "Quel symbole indique que deux droites sont perpendiculaires ?",
+            "options": [
+              "//",
+              "⊥",
+              "=",
+              "≈"
+            ],
+            "correct_answer": "⊥",
+            "explanation": "Le symbole ⊥ signifie « est perpendiculaire à »."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Propriétés et reconnaissance",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Parallèle unique par un point",
+          "content": {
+            "text": "Par un point donné qui n'appartient pas à une droite donnée, il existe une seule droite parallèle à cette droite. Cette propriété permet de réaliser des constructions précises et de reconnaître une parallèle passant par un point."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Perpendiculaire unique par un point",
+          "content": {
+            "text": "Par un point donné, il existe une seule droite perpendiculaire à une droite donnée. Cette propriété permet de construire une perpendiculaire de manière précise à l'aide d'une équerre."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Deux perpendiculaires à une même droite",
+          "content": {
+            "text": "Si deux droites sont perpendiculaires à une même droite, alors elles sont parallèles entre elles. De même, si deux droites sont parallèles, toute droite perpendiculaire à l'une est également perpendiculaire à l'autre. Ces propriétés permettent de démontrer des relations entre les droites."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Propriétés des droites",
+        "questions": [
+          {
+            "question": "Par un point donné qui n'appartient pas à une droite donnée, combien peut-on tracer de parallèles à cette droite ?",
+            "options": [
+              "Aucune",
+              "Une seule",
+              "Deux seulement",
+              "Une infinité"
+            ],
+            "correct_answer": "Une seule",
+            "explanation": "Par un point extérieur à une droite donnée, il existe une unique parallèle à cette droite."
+          },
+          {
+            "question": "Si deux droites sont perpendiculaires à une même droite, elles sont...",
+            "options": [
+              "perpendiculaires entre elles",
+              "parallèles entre elles",
+              "toujours confondues",
+              "sécantes uniquement"
+            ],
+            "correct_answer": "parallèles entre elles",
+            "explanation": "Deux droites perpendiculaires à une même droite sont parallèles entre elles."
+          },
+          {
+            "question": "Si deux droites sont parallèles, une droite perpendiculaire à la première est...",
+            "options": [
+              "parallèle à la seconde",
+              "perpendiculaire à la seconde",
+              "confondue avec la seconde",
+              "toujours oblique"
+            ],
+            "correct_answer": "perpendiculaire à la seconde",
+            "explanation": "Deux droites parallèles ont la même direction. Une même perpendiculaire est donc perpendiculaire aux deux."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exercices et problèmes de synthèse",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": {
+            "text": "Pour résoudre un problème sur les droites, il faut d'abord identifier les relations données : parallélisme ou perpendicularité. Ensuite, on applique les propriétés connues et on utilise les instruments de géométrie lorsqu'une construction est demandée."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Utiliser une propriété de parallélisme",
+          "content": {
+            "text": "Exemple : les droites (d1) et (d2) sont toutes les deux perpendiculaires à une droite (d). On peut conclure que (d1) // (d2). Cette propriété permet de démontrer le parallélisme sans mesurer directement la distance entre les deux droites."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Applications dans la vie quotidienne",
+          "content": {
+            "text": "Les notions de parallélisme et de perpendicularité sont utiles dans de nombreuses constructions : murs, cadres, routes, fenêtres, portes et plans. La règle et l'équerre permettent de réaliser des tracés précis et de vérifier les relations entre les droites."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse parallèles et perpendiculaires",
+        "questions": [
+          {
+            "question": "Les droites (d1) et (d2) sont perpendiculaires à (d). Quelle relation existe entre (d1) et (d2) ?",
+            "options": [
+              "(d1) ⟂ (d2)",
+              "(d1) // (d2)",
+              "(d1) = (d2) obligatoirement",
+              "Aucune relation"
+            ],
+            "correct_answer": "(d1) // (d2)",
+            "explanation": "Deux droites perpendiculaires à une même droite sont parallèles entre elles."
+          },
+          {
+            "question": "Quel symbole signifie « perpendiculaire à » ?",
+            "options": [
+              "//",
+              "⊥",
+              "=",
+              "≠"
+            ],
+            "correct_answer": "⊥",
+            "explanation": "Le symbole ⊥ indique que deux droites sont perpendiculaires."
+          },
+          {
+            "question": "Quel instrument est particulièrement adapté pour vérifier un angle droit ?",
+            "options": [
+              "L'équerre",
+              "Le compas uniquement",
+              "La règle seule",
+              "La calculatrice"
+            ],
+            "correct_answer": "L'équerre",
+            "explanation": "L'équerre permet de vérifier et de construire des angles droits."
+          }
+        ]
+      }
+    }
+  ]
+}

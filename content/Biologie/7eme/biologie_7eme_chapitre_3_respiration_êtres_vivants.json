@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Biologie",
+  "curriculum": "Mali",
+  "chapter": "Respiration des êtres vivants",
+  "chapter_order": 3,
+  "lessons": [
+    {
+      "title": "La respiration chez les êtres vivants",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La respiration est une fonction vitale",
+          "content": {
+            "text": "La respiration est une fonction indispensable à la vie. Les êtres vivants ont besoin d'énergie pour réaliser leurs activités. La respiration permet notamment de libérer de l'énergie à partir des substances nutritives utilisées par les cellules."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les échanges gazeux respiratoires",
+          "content": {
+            "text": "Au cours de la respiration, les êtres vivants réalisent des échanges gazeux avec leur milieu. Chez de nombreux êtres vivants, le dioxygène est prélevé dans le milieu et le dioxyde de carbone est rejeté."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "La respiration et les besoins énergétiques",
+          "content": {
+            "text": "L'énergie libérée par la respiration est utilisée pour assurer les différentes fonctions de l'organisme : se déplacer, grandir, se nourrir, se reproduire et maintenir son fonctionnement. La respiration est donc indispensable à l'activité des êtres vivants."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — La respiration",
+        "questions": [
+          {
+            "question": "La respiration est-elle une fonction vitale ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement chez les végétaux",
+              "Seulement chez les poissons"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "La respiration est indispensable au fonctionnement des organismes vivants."
+          },
+          {
+            "question": "Quel gaz est généralement prélevé dans le milieu lors de la respiration ?",
+            "options": [
+              "Le dioxygène",
+              "Le dioxyde de carbone uniquement",
+              "Le diazote uniquement",
+              "La vapeur d'eau uniquement"
+            ],
+            "correct_answer": "Le dioxygène",
+            "explanation": "De nombreux êtres vivants prélèvent du dioxygène dans leur milieu pour réaliser la respiration."
+          },
+          {
+            "question": "Quel gaz est généralement rejeté lors de la respiration ?",
+            "options": [
+              "Le dioxyde de carbone",
+              "Le dioxygène uniquement",
+              "Le diazote uniquement",
+              "L'hydrogène"
+            ],
+            "correct_answer": "Le dioxyde de carbone",
+            "explanation": "Le dioxyde de carbone est un produit des réactions respiratoires et est généralement rejeté dans le milieu."
+          }
+        ]
+      }
+    },
+    {
+      "title": "La respiration chez les animaux terrestres",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La respiration pulmonaire",
+          "content": {
+            "text": "Chez les mammifères, les oiseaux, les reptiles et les amphibiens adultes, les poumons sont des organes respiratoires importants. L'air entre dans les poumons et les échanges gazeux permettent notamment l'entrée du dioxygène dans le sang et la sortie du dioxyde de carbone."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les mouvements respiratoires",
+          "content": {
+            "text": "Chez l'être humain, l'inspiration fait entrer l'air dans les poumons et l'expiration fait sortir l'air. Ces mouvements permettent de renouveler l'air présent dans les poumons et de maintenir les échanges gazeux."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Les échanges entre l'air et le sang",
+          "content": {
+            "text": "Dans les poumons, le dioxygène de l'air passe vers le sang tandis que le dioxyde de carbone passe du sang vers l'air. Le sang transporte ensuite le dioxygène vers les différents organes de l'organisme."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Respiration des animaux terrestres",
+        "questions": [
+          {
+            "question": "Quel organe permet principalement la respiration chez l'être humain ?",
+            "options": [
+              "Les poumons",
+              "L'estomac",
+              "Les reins",
+              "Les os"
+            ],
+            "correct_answer": "Les poumons",
+            "explanation": "Les poumons sont les principaux organes respiratoires de l'être humain."
+          },
+          {
+            "question": "Que se passe-t-il lors de l'inspiration ?",
+            "options": [
+              "L'air entre dans les poumons",
+              "L'air sort des poumons",
+              "Le sang quitte le corps",
+              "La digestion s'arrête"
+            ],
+            "correct_answer": "L'air entre dans les poumons",
+            "explanation": "L'inspiration correspond à l'entrée de l'air dans les poumons."
+          },
+          {
+            "question": "Dans les poumons, le dioxygène passe principalement...",
+            "options": [
+              "de l'air vers le sang",
+              "du sang vers l'air uniquement",
+              "du sang vers l'estomac",
+              "des os vers le sang"
+            ],
+            "correct_answer": "de l'air vers le sang",
+            "explanation": "Les échanges gazeux pulmonaires permettent au dioxygène de passer de l'air vers le sang."
+          }
+        ]
+      }
+    },
+    {
+      "title": "La respiration chez les animaux aquatiques",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La respiration des poissons",
+          "content": {
+            "text": "Les poissons vivent dans l'eau mais ont besoin de dioxygène pour respirer. Ils utilisent principalement leurs branchies pour prélever le dioxygène dissous dans l'eau."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le rôle des branchies",
+          "content": {
+            "text": "Les branchies sont des organes respiratoires adaptés à la vie aquatique. L'eau circule au niveau des branchies et les échanges gazeux permettent au dioxygène dissous dans l'eau de passer dans le sang."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "La qualité de l'eau et la respiration",
+          "content": {
+            "text": "La quantité de dioxygène dissous dans l'eau peut varier. Une eau pauvre en dioxygène peut rendre la respiration difficile pour les poissons. La qualité du milieu aquatique est donc importante pour leur survie."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Respiration des animaux aquatiques",
+        "questions": [
+          {
+            "question": "Quel organe permet principalement au poisson de respirer ?",
+            "options": [
+              "Les branchies",
+              "Les poumons uniquement",
+              "Les pattes",
+              "Les nageoires uniquement"
+            ],
+            "correct_answer": "Les branchies",
+            "explanation": "Les poissons utilisent principalement leurs branchies pour prélever le dioxygène dissous dans l'eau."
+          },
+          {
+            "question": "Que prélève principalement le poisson dans l'eau grâce à ses branchies ?",
+            "options": [
+              "Le dioxygène dissous",
+              "Le sable",
+              "Le sel de cuisine uniquement",
+              "Le dioxyde de carbone uniquement"
+            ],
+            "correct_answer": "Le dioxygène dissous",
+            "explanation": "Les branchies permettent au poisson de prélever le dioxygène dissous dans l'eau."
+          },
+          {
+            "question": "Une eau pauvre en dioxygène peut...",
+            "options": [
+              "rendre la respiration des poissons difficile",
+              "faire respirer les poissons dans l'air sans adaptation",
+              "transformer les poissons en plantes",
+              "augmenter toujours leur croissance"
+            ],
+            "correct_answer": "rendre la respiration des poissons difficile",
+            "explanation": "Les poissons dépendent du dioxygène dissous dans l'eau pour leur respiration."
+          }
+        ]
+      }
+    },
+    {
+      "title": "La respiration chez les végétaux",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les végétaux respirent",
+          "content": {
+            "text": "Les végétaux respirent comme les autres êtres vivants. Ils prélèvent du dioxygène dans leur milieu et rejettent du dioxyde de carbone lors de la respiration. La respiration a lieu dans les cellules vivantes de la plante."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Les échanges gazeux des feuilles",
+          "content": {
+            "text": "Chez de nombreuses plantes, les feuilles réalisent des échanges gazeux avec l'atmosphère. Les stomates permettent notamment l'entrée et la sortie de différents gaz."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Respiration et photosynthèse",
+          "content": {
+            "text": "Il ne faut pas confondre respiration et photosynthèse. La respiration utilise notamment du dioxygène et rejette du dioxyde de carbone. La photosynthèse, réalisée par les végétaux verts en présence de lumière, utilise notamment le dioxyde de carbone et produit du dioxygène."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Respiration des végétaux",
+        "questions": [
+          {
+            "question": "Les végétaux respirent-ils ?",
+            "options": [
+              "Oui",
+              "Non",
+              "Seulement pendant la nuit",
+              "Seulement lorsqu'il pleut"
+            ],
+            "correct_answer": "Oui",
+            "explanation": "Les végétaux sont des êtres vivants et réalisent la respiration."
+          },
+          {
+            "question": "Lors de la respiration, un végétal prélève notamment...",
+            "options": [
+              "du dioxygène",
+              "uniquement du dioxyde de carbone",
+              "du sable",
+              "du sel de cuisine"
+            ],
+            "correct_answer": "du dioxygène",
+            "explanation": "Comme les autres êtres vivants, les végétaux utilisent du dioxygène lors de la respiration."
+          },
+          {
+            "question": "Quelle différence essentielle existe entre respiration et photosynthèse ?",
+            "options": [
+              "La respiration utilise notamment le dioxygène, tandis que la photosynthèse utilise notamment le CO₂ en présence de lumière",
+              "Les deux phénomènes sont exactement identiques",
+              "La respiration ne concerne que les animaux",
+              "La photosynthèse ne concerne jamais les végétaux"
+            ],
+            "correct_answer": "La respiration utilise notamment le dioxygène, tandis que la photosynthèse utilise notamment le CO₂ en présence de lumière",
+            "explanation": "La respiration et la photosynthèse sont deux phénomènes différents qui impliquent des échanges gazeux différents."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les échanges gazeux et le milieu de vie",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Des organes adaptés au milieu",
+          "content": {
+            "text": "Les êtres vivants possèdent des organes respiratoires adaptés à leur milieu de vie. Les animaux terrestres utilisent notamment des poumons ou d'autres structures respiratoires, tandis que de nombreux animaux aquatiques utilisent des branchies."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Le renouvellement du dioxygène",
+          "content": {
+            "text": "Dans un milieu, le dioxygène disponible peut être consommé par les êtres vivants. Dans les milieux aquatiques, sa quantité dissoute peut notamment dépendre de la température, des mouvements de l'eau et de la présence de végétaux."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "L'importance d'un milieu sain",
+          "content": {
+            "text": "La respiration dépend des conditions du milieu. La pollution de l'eau ou de l'air peut perturber les échanges gazeux et mettre en danger certains êtres vivants. La protection des milieux naturels contribue donc à préserver les conditions nécessaires à la respiration."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Respiration et milieu de vie",
+        "questions": [
+          {
+            "question": "Pourquoi les organes respiratoires sont-ils adaptés au milieu de vie ?",
+            "options": [
+              "Pour permettre les échanges gazeux nécessaires à la respiration",
+              "Pour produire des aliments",
+              "Pour fabriquer des roches",
+              "Pour empêcher tout déplacement"
+            ],
+            "correct_answer": "Pour permettre les échanges gazeux nécessaires à la respiration",
+            "explanation": "Les organes respiratoires permettent à l'organisme de réaliser les échanges gazeux avec son milieu."
+          },
+          {
+            "question": "La quantité de dioxygène dissous dans l'eau peut...",
+            "options": [
+              "varier selon les conditions du milieu",
+              "être toujours exactement la même",
+              "être toujours nulle",
+              "ne jamais influencer les poissons"
+            ],
+            "correct_answer": "varier selon les conditions du milieu",
+            "explanation": "Plusieurs facteurs du milieu peuvent influencer la quantité de dioxygène dissous dans l'eau."
+          },
+          {
+            "question": "Pourquoi faut-il protéger la qualité de l'air et de l'eau ?",
+            "options": [
+              "Parce que les êtres vivants en dépendent notamment pour leurs échanges respiratoires",
+              "Uniquement pour changer la couleur de l'eau",
+              "Pour empêcher les végétaux de pousser",
+              "Parce que les animaux n'ont pas besoin de leur milieu"
+            ],
+            "correct_answer": "Parce que les êtres vivants en dépendent notamment pour leurs échanges respiratoires",
+            "explanation": "La qualité du milieu influence les conditions dans lesquelles les êtres vivants réalisent leurs échanges gazeux."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bilan sur la respiration des êtres vivants",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Les principaux échanges respiratoires",
+          "content": {
+            "text": "La respiration nécessite généralement un apport de dioxygène et s'accompagne d'un rejet de dioxyde de carbone. Les organes respiratoires permettent ces échanges entre l'organisme et son milieu."
+          },
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Des modes de respiration différents",
+          "content": {
+            "text": "Les êtres vivants respirent de différentes manières selon leur organisation et leur milieu. Les poumons sont adaptés à la respiration aérienne chez de nombreux animaux terrestres, tandis que les branchies permettent à de nombreux animaux aquatiques d'utiliser le dioxygène dissous dans l'eau."
+          },
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": {
+            "text": "Tous les êtres vivants ont besoin d'énergie pour fonctionner et leur respiration joue un rôle essentiel dans la libération de cette énergie. Les échanges respiratoires sont adaptés au milieu de vie et aux caractéristiques de chaque organisme."
+          },
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Bilan sur la respiration",
+        "questions": [
+          {
+            "question": "Quel gaz est généralement nécessaire à la respiration ?",
+            "options": [
+              "Le dioxygène",
+              "Le dioxyde de carbone uniquement",
+              "Le diazote uniquement",
+              "La vapeur d'eau uniquement"
+            ],
+            "correct_answer": "Le dioxygène",
+            "explanation": "Le dioxygène est utilisé par les cellules lors de la respiration."
+          },
+          {
+            "question": "Quel organe respiratoire utilise principalement le poisson ?",
+            "options": [
+              "Les branchies",
+              "Les poumons uniquement",
+              "Les reins",
+              "L'estomac"
+            ],
+            "correct_answer": "Les branchies",
+            "explanation": "Les branchies permettent au poisson de prélever le dioxygène dissous dans l'eau."
+          },
+          {
+            "question": "Quel gaz est généralement rejeté lors de la respiration ?",
+            "options": [
+              "Le dioxyde de carbone",
+              "Le dioxygène",
+              "Le diazote uniquement",
+              "L'hydrogène"
+            ],
+            "correct_answer": "Le dioxyde de carbone",
+            "explanation": "Le dioxyde de carbone est produit lors des réactions respiratoires et rejeté dans le milieu."
+          }
+        ]
+      }
+    }
+  ]
+}

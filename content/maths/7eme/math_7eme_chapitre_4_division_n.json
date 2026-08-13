@@ -1,0 +1,417 @@
+{
+  "class": "7ème année",
+  "subject": "Mathématiques",
+  "curriculum": "Mali",
+  "chapter": "Division dans ℕ",
+  "chapter_order": 4,
+  "lessons": [
+    {
+      "title": "Comprendre la division",
+      "description": "Comprendre la division comme un partage en parts égales et maîtriser le vocabulaire de base de cette opération.",
+      "duration_minutes": 15,
+      "difficulty": "easy",
+      "order_number": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de la division",
+          "content": {
+            "text": "La division est une opération qui permet de partager une quantité en parts égales ou de rechercher combien de fois un nombre est contenu dans un autre. Par exemple, si 24 mangues doivent être réparties équitablement entre 6 élèves, chaque élève reçoit 4 mangues. On écrit : 24 ÷ 6 = 4."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Vocabulaire de la division",
+          "content": {
+            "text": "Dans une division, le nombre que l'on partage est appelé le dividende. Le nombre par lequel on divise est le diviseur. Le résultat obtenu lorsque la division est exacte est le quotient. Dans 24 ÷ 6 = 4, 24 est le dividende, 6 est le diviseur et 4 est le quotient."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Exemple pratique au Mali",
+          "content": {
+            "text": "Exemple : une classe possède 35 cahiers et veut les répartir également entre 5 groupes. On calcule 35 ÷ 5 = 7. Chaque groupe reçoit donc 7 cahiers. La division permet ainsi de résoudre de nombreux problèmes de partage dans la vie quotidienne."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Comprendre la division",
+        "questions": [
+          {
+            "question": "Dans 36 ÷ 6 = 6, quel est le dividende ?",
+            "options": [
+              "6",
+              "36",
+              "12",
+              "30"
+            ],
+            "correct_index": 1,
+            "explanation": "Le dividende est le nombre que l'on partage ou que l'on divise. Ici, c'est 36."
+          },
+          {
+            "question": "Quel est le résultat de 42 ÷ 7 ?",
+            "options": [
+              "5",
+              "6",
+              "7",
+              "8"
+            ],
+            "correct_index": 1,
+            "explanation": "7 × 6 = 42, donc 42 ÷ 7 = 6."
+          },
+          {
+            "question": "24 mangues sont partagées également entre 4 élèves. Combien chaque élève reçoit-il ?",
+            "options": [
+              "4",
+              "5",
+              "6",
+              "8"
+            ],
+            "correct_index": 2,
+            "explanation": "24 ÷ 4 = 6. Chaque élève reçoit 6 mangues."
+          }
+        ]
+      }
+    },
+    {
+      "title": "La division euclidienne",
+      "description": "Comprendre la division euclidienne, identifier le quotient et le reste et utiliser la relation entre le dividende, le diviseur, le quotient et le reste.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "order_number": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Découvrir la division euclidienne",
+          "content": {
+            "text": "Dans ℕ, une division n'est pas toujours exacte. Lorsqu'un nombre ne peut pas être partagé exactement, il reste une quantité appelée reste. On parle alors de division euclidienne. Par exemple, 17 ÷ 5 ne donne pas un nombre entier exact."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Calculer le quotient et le reste",
+          "content": {
+            "text": "Pour 17 ÷ 5, on cherche le plus grand multiple de 5 inférieur ou égal à 17. C'est 15, car 5 × 3 = 15. Il reste donc 2. On écrit : 17 = 5 × 3 + 2. Le quotient est 3 et le reste est 2."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Propriété du reste",
+          "content": {
+            "text": "Dans toute division euclidienne d'un nombre naturel par un nombre naturel non nul, le reste est toujours inférieur au diviseur. Ainsi, dans 17 = 5 × 3 + 2, on vérifie bien que 2 < 5. Cette règle permet de contrôler si une division euclidienne est correcte."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Division euclidienne",
+        "questions": [
+          {
+            "question": "Dans 23 = 4 × 5 + 3, quel est le reste ?",
+            "options": [
+              "4",
+              "5",
+              "3",
+              "23"
+            ],
+            "correct_index": 2,
+            "explanation": "Le nombre ajouté après le produit est le reste. Ici, le reste est 3."
+          },
+          {
+            "question": "Quel est le quotient de la division euclidienne de 19 par 4 ?",
+            "options": [
+              "3",
+              "4",
+              "5",
+              "6"
+            ],
+            "correct_index": 1,
+            "explanation": "19 = 4 × 4 + 3. Le quotient est donc 4 et le reste est 3."
+          },
+          {
+            "question": "Quel reste peut-on obtenir dans une division par 6 ?",
+            "options": [
+              "6",
+              "7",
+              "5",
+              "8"
+            ],
+            "correct_index": 2,
+            "explanation": "Le reste doit être strictement inférieur au diviseur. Pour un diviseur égal à 6, les restes possibles sont 0, 1, 2, 3, 4 et 5."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Effectuer une division posée",
+      "description": "Apprendre à effectuer une division posée étape par étape et à vérifier le résultat obtenu.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "order_number": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de la division posée",
+          "content": {
+            "text": "Pour effectuer une division posée, on place le dividende à gauche et le diviseur à droite de la potence. On cherche ensuite combien de fois le diviseur peut être pris dans la partie du dividende considérée, sans dépasser cette partie. On écrit le chiffre du quotient, puis on soustrait."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Exemple de division posée",
+          "content": {
+            "text": "Exemple : pour 156 ÷ 12, on cherche combien de fois 12 est contenu dans 15. Il y est 1 fois. On soustrait 12 à 15 et il reste 3. On abaisse ensuite le 6 pour obtenir 36. 12 est contenu 3 fois dans 36. Le quotient est donc 13 et le reste est 0."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Vérifier une division",
+          "content": {
+            "text": "Pour vérifier une division, on utilise la relation : dividende = diviseur × quotient + reste. Pour 156 ÷ 12 = 13, on vérifie : 12 × 13 + 0 = 156. La division est donc correcte."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Division posée",
+        "questions": [
+          {
+            "question": "Quel est le quotient de 144 ÷ 12 ?",
+            "options": [
+              "10",
+              "11",
+              "12",
+              "14"
+            ],
+            "correct_index": 2,
+            "explanation": "12 × 12 = 144, donc 144 ÷ 12 = 12."
+          },
+          {
+            "question": "Quel est le quotient de 125 ÷ 5 ?",
+            "options": [
+              "20",
+              "25",
+              "30",
+              "35"
+            ],
+            "correct_index": 1,
+            "explanation": "5 × 25 = 125, donc le quotient est 25."
+          },
+          {
+            "question": "Comment vérifie-t-on une division euclidienne ?",
+            "options": [
+              "Dividende = diviseur + quotient",
+              "Dividende = diviseur × quotient + reste",
+              "Dividende = quotient − reste",
+              "Diviseur = dividende × reste"
+            ],
+            "correct_index": 1,
+            "explanation": "C'est la relation fondamentale de la division euclidienne."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Quotient et reste",
+      "description": "Distinguer le quotient et le reste dans une division euclidienne et savoir vérifier qu'un reste est correctement déterminé.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "order_number": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comprendre le quotient et le reste",
+          "content": {
+            "text": "Dans une division euclidienne, le quotient indique combien de fois le diviseur est contenu dans le dividende, tandis que le reste représente ce qui n'a pas pu être partagé. Par exemple : 47 = 6 × 7 + 5. Le quotient est 7 et le reste est 5."
+          }
+        },
+        {
+          "type": "text",
+          "title": "La règle sur le reste",
+          "content": {
+            "text": "Le reste doit toujours être inférieur au diviseur. Si le diviseur est 8, un reste de 0, 1, 2, 3, 4, 5, 6 ou 7 est possible. Un reste de 8 ou de 9 est impossible, car on pourrait encore retirer une fois le diviseur."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Vérifier une division avec le reste",
+          "content": {
+            "text": "Exemple : 58 = 9 × 6 + 4. Pour vérifier, on calcule 9 × 6 = 54, puis 54 + 4 = 58. De plus, 4 < 9. La division est donc correcte. Si le reste était supérieur ou égal à 9, le quotient ne serait pas maximal."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Quotient et reste",
+        "questions": [
+          {
+            "question": "Dans 38 = 7 × 5 + 3, quel est le quotient ?",
+            "options": [
+              "3",
+              "5",
+              "7",
+              "38"
+            ],
+            "correct_index": 1,
+            "explanation": "Le quotient est le nombre qui multiplie le diviseur. Ici, 7 × 5, donc le quotient est 5."
+          },
+          {
+            "question": "Dans une division par 9, quel est le plus grand reste possible ?",
+            "options": [
+              "8",
+              "9",
+              "10",
+              "7"
+            ],
+            "correct_index": 0,
+            "explanation": "Le reste doit être inférieur à 9. Le plus grand reste possible est donc 8."
+          },
+          {
+            "question": "Quelle égalité représente correctement une division de 52 par 7 ?",
+            "options": [
+              "52 = 7 × 7 + 3",
+              "52 = 7 × 6 + 10",
+              "52 = 7 × 8 + 4",
+              "52 = 7 × 5 + 17"
+            ],
+            "correct_index": 0,
+            "explanation": "7 × 7 = 49 et 49 + 3 = 52. De plus, 3 < 7."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Divisibilité et divisions exactes",
+      "description": "Comprendre la notion de divisibilité et utiliser les principaux critères de divisibilité par 2, 3, 5 et 10.",
+      "duration_minutes": 15,
+      "difficulty": "medium",
+      "order_number": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Définition de la divisibilité",
+          "content": {
+            "text": "Un nombre naturel est divisible par un autre nombre naturel non nul lorsque la division donne un reste égal à zéro. Par exemple, 36 est divisible par 4 car 36 ÷ 4 = 9 et le reste est 0. On peut aussi dire que 4 est un diviseur de 36."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Critères de divisibilité par 2, 5 et 10",
+          "content": {
+            "text": "Quelques critères simples permettent de reconnaître certaines divisibilités. Un nombre est divisible par 2 lorsqu'il se termine par 0, 2, 4, 6 ou 8. Il est divisible par 5 lorsqu'il se termine par 0 ou 5. Il est divisible par 10 lorsqu'il se termine par 0."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Critère de divisibilité par 3",
+          "content": {
+            "text": "Pour savoir si un nombre est divisible par 3, on additionne ses chiffres. Si la somme est divisible par 3, alors le nombre l'est aussi. Par exemple, 123 est divisible par 3 car 1 + 2 + 3 = 6 et 6 est divisible par 3. Ces critères permettent de vérifier rapidement certaines divisions sans les poser."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Divisibilité",
+        "questions": [
+          {
+            "question": "Lequel de ces nombres est divisible par 5 ?",
+            "options": [
+              "42",
+              "63",
+              "75",
+              "88"
+            ],
+            "correct_index": 2,
+            "explanation": "Un nombre est divisible par 5 lorsqu'il se termine par 0 ou 5. 75 se termine par 5."
+          },
+          {
+            "question": "Pourquoi 246 est-il divisible par 2 ?",
+            "options": [
+              "Il se termine par 6",
+              "La somme de ses chiffres vaut 12",
+              "Il se termine par 4",
+              "Il est supérieur à 200"
+            ],
+            "correct_index": 0,
+            "explanation": "Un nombre naturel est divisible par 2 lorsqu'il se termine par un chiffre pair : 0, 2, 4, 6 ou 8."
+          },
+          {
+            "question": "Le nombre 132 est-il divisible par 3 ?",
+            "options": [
+              "Oui, car 1 + 3 + 2 = 6",
+              "Non, car il est pair",
+              "Non, car il se termine par 2",
+              "Oui, uniquement parce qu'il est supérieur à 100"
+            ],
+            "correct_index": 0,
+            "explanation": "La somme des chiffres de 132 est 6. Comme 6 est divisible par 3, 132 est divisible par 3."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Résoudre des problèmes avec la division",
+      "description": "Utiliser la division pour résoudre des problèmes de partage, de regroupement et de répartition dans des situations concrètes.",
+      "duration_minutes": 15,
+      "difficulty": "hard",
+      "order_number": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Comprendre un problème de division",
+          "content": {
+            "text": "La division permet de résoudre de nombreux problèmes de la vie courante : partage de fournitures scolaires, répartition d'élèves en groupes, distribution de fruits, transport de marchandises ou organisation d'une activité. Il faut d'abord comprendre ce que l'on cherche avant de choisir l'opération."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Exemple de partage exact",
+          "content": {
+            "text": "Exemple : une école dispose de 128 cahiers à distribuer également à 8 classes. On calcule 128 ÷ 8 = 16. Chaque classe reçoit donc 16 cahiers. Comme le reste est 0, la distribution est exacte."
+          }
+        },
+        {
+          "type": "text",
+          "title": "Exemple avec un reste",
+          "content": {
+            "text": "Autre exemple : un enseignant veut mettre 47 élèves en équipes de 6. On calcule 47 = 6 × 7 + 5. On peut former 7 équipes complètes de 6 élèves et il reste 5 élèves. Dans un problème, il faut toujours interpréter le quotient et le reste selon la situation."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Problèmes de division",
+        "questions": [
+          {
+            "question": "Une école possède 96 cahiers et les répartit également entre 12 élèves. Combien de cahiers reçoit chaque élève ?",
+            "options": [
+              "6",
+              "8",
+              "10",
+              "12"
+            ],
+            "correct_index": 1,
+            "explanation": "96 ÷ 12 = 8. Chaque élève reçoit donc 8 cahiers."
+          },
+          {
+            "question": "On veut transporter 53 élèves dans des groupes de 10. Combien de groupes complets peut-on former ?",
+            "options": [
+              "4",
+              "5",
+              "6",
+              "10"
+            ],
+            "correct_index": 1,
+            "explanation": "53 = 10 × 5 + 3. On peut donc former 5 groupes complets de 10 élèves."
+          },
+          {
+            "question": "Un commerçant possède 75 oranges et veut les mettre dans des sacs de 8 oranges. Combien de sacs complets peut-il remplir ?",
+            "options": [
+              "8",
+              "9",
+              "10",
+              "11"
+            ],
+            "correct_index": 1,
+            "explanation": "75 = 8 × 9 + 3. Le commerçant peut remplir 9 sacs complets et il restera 3 oranges."
+          }
+        ]
+      }
+    }
+  ]
+}

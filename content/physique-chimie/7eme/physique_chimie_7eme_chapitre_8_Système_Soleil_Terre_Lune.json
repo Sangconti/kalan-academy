@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Système Soleil–Terre–Lune",
+  "chapter_order": 8,
+  "lessons": [
+    {
+      "lesson_order": 1,
+      "title": "Le Soleil, la Terre et la Lune",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Le Soleil, la Terre et la Lune sont trois astres très importants pour comprendre notre environnement. Le Soleil est une étoile : il produit sa propre lumière. La Terre est une planète qui tourne autour du Soleil. La Lune est le satellite naturel de la Terre."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Le Soleil est beaucoup plus grand que la Terre et la Lune. Il est au centre du Système solaire. La Terre reçoit de lui de la lumière et de l’énergie thermique. Cette énergie joue un rôle essentiel dans de nombreux phénomènes naturels sur notre planète."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La Lune est beaucoup plus petite que la Terre et ne produit pas sa propre lumière visible comme le Soleil. Elle est éclairée par le Soleil et nous observons depuis la Terre la partie de sa surface qui reçoit la lumière solaire. La Lune accompagne la Terre dans son mouvement autour du Soleil."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Soleil, Terre et Lune",
+        "questions": [
+          {
+            "question": "Quelle est la nature du Soleil ?",
+            "options": [
+              "Une étoile",
+              "Une planète",
+              "Un satellite naturel",
+              "Une comète"
+            ],
+            "correct_answer": "Une étoile",
+            "explanation": "Le Soleil est une étoile qui produit sa propre lumière et son énergie."
+          },
+          {
+            "question": "Quel est le satellite naturel de la Terre ?",
+            "options": [
+              "La Lune",
+              "Le Soleil",
+              "Mars",
+              "Jupiter"
+            ],
+            "correct_answer": "La Lune",
+            "explanation": "La Lune est le satellite naturel de la Terre."
+          },
+          {
+            "question": "Pourquoi la Terre reçoit-elle de la lumière du Soleil ?",
+            "options": [
+              "Parce que le Soleil produit de la lumière",
+              "Parce que la Terre produit toute la lumière solaire",
+              "Parce que la Lune éclaire directement la Terre",
+              "Parce que les étoiles entourent la Terre"
+            ],
+            "correct_answer": "Parce que le Soleil produit de la lumière",
+            "explanation": "Le Soleil est une étoile qui produit sa propre lumière. La Terre reçoit une partie de cette lumière."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 2,
+      "title": "La rotation de la Terre et l’alternance jour-nuit",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "La Terre tourne sur elle-même autour d’un axe imaginaire passant approximativement par ses pôles. Ce mouvement est appelé rotation. Une rotation complète de la Terre par rapport aux étoiles dure environ 24 heures, ce qui correspond approximativement à une journée."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La Terre étant éclairée par le Soleil, une moitié de la Terre est éclairée tandis que l’autre est dans l’obscurité à un instant donné. Lorsque la région où se trouve un observateur est tournée vers le Soleil, il fait jour. Lorsqu’elle est tournée à l’opposé du Soleil, il fait nuit."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "L’alternance du jour et de la nuit est donc principalement due à la rotation de la Terre sur elle-même. Au Mali comme dans les autres régions de la Terre, le Soleil semble se déplacer dans le ciel au cours de la journée, mais ce mouvement apparent est lié à la rotation de la Terre."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Rotation de la Terre",
+        "questions": [
+          {
+            "question": "Comment s’appelle le mouvement de la Terre sur elle-même ?",
+            "options": [
+              "La rotation",
+              "La fusion",
+              "La révolution lunaire",
+              "La liquéfaction"
+            ],
+            "correct_answer": "La rotation",
+            "explanation": "Le mouvement de la Terre autour de son propre axe est appelé rotation."
+          },
+          {
+            "question": "Quelle est la principale cause de l’alternance du jour et de la nuit ?",
+            "options": [
+              "La rotation de la Terre sur elle-même",
+              "La rotation du Soleil autour de la Terre",
+              "Les phases de la Lune",
+              "Les éclipses"
+            ],
+            "correct_answer": "La rotation de la Terre sur elle-même",
+            "explanation": "La Terre tourne sur elle-même et présente successivement ses différentes régions à la lumière du Soleil."
+          },
+          {
+            "question": "Lorsqu’une région de la Terre est tournée vers le Soleil, il y fait généralement :",
+            "options": [
+              "Jour",
+              "Nuit",
+              "Toujours une éclipse",
+              "Toujours hiver"
+            ],
+            "correct_answer": "Jour",
+            "explanation": "La partie de la Terre éclairée par le Soleil connaît le jour."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 3,
+      "title": "La Lune et sa lumière",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "La Lune n’est pas une étoile et ne produit pas sa propre lumière visible comme le Soleil. La lumière que nous observons provenant de la Lune est principalement de la lumière solaire réfléchie par sa surface. C’est pourquoi la Lune est visible dans le ciel lorsqu’une partie éclairée de sa surface est orientée vers la Terre."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "À tout instant, environ la moitié de la Lune est éclairée par le Soleil, sauf dans les situations particulières d’éclipse où l’éclairage peut être temporairement modifié. Cependant, depuis la Terre, nous ne voyons pas toujours la même fraction éclairée de la Lune. Cette variation apparente produit les phases lunaires."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Il est donc important de ne pas dire que la Lune s’éclaire elle-même comme une lampe. Elle agit plutôt comme un objet éclairé. Sa surface reçoit la lumière du Soleil et en diffuse une partie vers l’espace, notamment en direction de la Terre."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — La lumière de la Lune",
+        "questions": [
+          {
+            "question": "La Lune produit-elle sa propre lumière visible comme le Soleil ?",
+            "options": [
+              "Non",
+              "Oui, comme une étoile",
+              "Oui, grâce à une flamme",
+              "Seulement pendant la journée"
+            ],
+            "correct_answer": "Non",
+            "explanation": "La Lune est éclairée par le Soleil. La lumière lunaire observée depuis la Terre est principalement de la lumière solaire réfléchie."
+          },
+          {
+            "question": "Pourquoi peut-on voir la Lune depuis la Terre ?",
+            "options": [
+              "Parce qu’elle reçoit et réfléchit la lumière du Soleil",
+              "Parce qu’elle produit une lumière identique à celle du Soleil",
+              "Parce qu’elle est composée de feu",
+              "Parce qu’elle est transparente"
+            ],
+            "correct_answer": "Parce qu’elle reçoit et réfléchit la lumière du Soleil",
+            "explanation": "La Lune est un objet éclairé. Elle reçoit la lumière solaire et en réfléchit une partie vers la Terre."
+          },
+          {
+            "question": "Quelle observation est liée aux différentes positions de la Lune par rapport au Soleil et à la Terre ?",
+            "options": [
+              "Les phases de la Lune",
+              "La fusion des roches",
+              "Les saisons uniquement",
+              "La rotation du Soleil"
+            ],
+            "correct_answer": "Les phases de la Lune",
+            "explanation": "Les phases correspondent aux différentes portions éclairées de la Lune que nous observons depuis la Terre au cours de son cycle."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 4,
+      "title": "Les phases de la Lune",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Les phases de la Lune correspondent aux différents aspects de la partie éclairée de la Lune observée depuis la Terre. Elles résultent principalement des positions relatives du Soleil, de la Terre et de la Lune au cours du mouvement de la Lune autour de la Terre."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Les principales phases sont la nouvelle Lune, le premier quartier, la pleine Lune et le dernier quartier. Entre ces phases principales, on observe également des phases intermédiaires, comme les croissants et les gibbeuses. Le cycle complet des phases se répète approximativement tous les 29,5 jours."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Lors de la pleine Lune, la partie éclairée de la Lune tournée vers la Terre apparaît presque entièrement visible. Lors de la nouvelle Lune, la partie éclairée est principalement orientée à l’opposé de la Terre, ce qui rend la Lune difficile à observer à l’œil nu dans le ciel. Les phases ne sont donc pas dues à l’ombre de la Terre, sauf lors d’une éclipse lunaire."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les phases de la Lune",
+        "questions": [
+          {
+            "question": "Les phases de la Lune sont principalement dues :",
+            "options": [
+              "Aux positions relatives du Soleil, de la Terre et de la Lune",
+              "À la rotation du Soleil uniquement",
+              "À la présence des nuages",
+              "À la couleur du ciel"
+            ],
+            "correct_answer": "Aux positions relatives du Soleil, de la Terre et de la Lune",
+            "explanation": "La portion éclairée de la Lune visible depuis la Terre varie selon les positions relatives des trois astres."
+          },
+          {
+            "question": "Quelle phase présente généralement la Lune comme un disque presque entièrement éclairé ?",
+            "options": [
+              "La pleine Lune",
+              "La nouvelle Lune",
+              "Le premier croissant uniquement",
+              "Le dernier croissant uniquement"
+            ],
+            "correct_answer": "La pleine Lune",
+            "explanation": "Lors de la pleine Lune, la face visible depuis la Terre est presque entièrement éclairée par le Soleil."
+          },
+          {
+            "question": "Environ combien de temps dure le cycle complet des phases lunaires ?",
+            "options": [
+              "Environ 29,5 jours",
+              "Environ 24 heures",
+              "Environ 7 heures",
+              "Environ 365 jours"
+            ],
+            "correct_answer": "Environ 29,5 jours",
+            "explanation": "Le cycle des phases lunaires, appelé mois synodique, dure environ 29,5 jours."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 5,
+      "title": "Les mouvements de la Terre et de la Lune",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "La Terre possède plusieurs mouvements. Elle tourne sur elle-même : c’est la rotation, qui est liée à l’alternance du jour et de la nuit. Elle se déplace également autour du Soleil : ce mouvement est appelé révolution. Une révolution complète de la Terre autour du Soleil dure environ un an."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La Lune tourne autour de la Terre. Elle effectue également une rotation sur elle-même. Les périodes de rotation de la Lune sur elle-même et de révolution autour de la Terre sont très proches, ce qui explique pourquoi nous observons presque toujours la même face de la Lune depuis la Terre."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "La Terre et la Lune sont donc en mouvement permanent. Pour étudier leurs mouvements, les scientifiques utilisent des modèles et des représentations. Il faut distinguer la rotation d’un astre sur lui-même de sa révolution autour d’un autre astre."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les mouvements des astres",
+        "questions": [
+          {
+            "question": "Comment appelle-t-on le mouvement de la Terre autour du Soleil ?",
+            "options": [
+              "La révolution",
+              "La solidification",
+              "La rotation lunaire",
+              "La liquéfaction"
+            ],
+            "correct_answer": "La révolution",
+            "explanation": "La Terre effectue une révolution autour du Soleil en environ un an."
+          },
+          {
+            "question": "Quel mouvement de la Terre est directement lié à l’alternance du jour et de la nuit ?",
+            "options": [
+              "Sa rotation sur elle-même",
+              "Sa révolution autour du Soleil",
+              "Le mouvement de la Lune",
+              "Le mouvement des nuages"
+            ],
+            "correct_answer": "Sa rotation sur elle-même",
+            "explanation": "La rotation de la Terre sur son axe fait alterner les régions éclairées et non éclairées."
+          },
+          {
+            "question": "Pourquoi voit-on presque toujours la même face de la Lune depuis la Terre ?",
+            "options": [
+              "Parce que sa rotation sur elle-même et sa révolution autour de la Terre ont des périodes très proches",
+              "Parce que la Lune ne tourne jamais",
+              "Parce que la Terre ne tourne pas",
+              "Parce que le Soleil bloque une face de la Lune"
+            ],
+            "correct_answer": "Parce que sa rotation sur elle-même et sa révolution autour de la Terre ont des périodes très proches",
+            "explanation": "La Lune effectue une rotation sur elle-même en environ le même temps qu’elle effectue une révolution autour de la Terre, ce qui maintient presque la même face tournée vers nous."
+          }
+        ]
+      }
+    },
+    {
+      "lesson_order": 6,
+      "title": "Les éclipses solaire et lunaire",
+      "blocks": [
+        {
+          "type": "text",
+          "content": {
+            "text": "Une éclipse se produit lorsqu’un alignement particulier du Soleil, de la Terre et de la Lune permet à l’un des astres de passer dans l’ombre d’un autre ou de masquer partiellement un autre astre. Les éclipses sont donc liées à la propagation rectiligne de la lumière et à la formation des ombres."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Lors d’une éclipse solaire, la Lune se trouve entre le Soleil et la Terre. Depuis certaines régions de la Terre, la Lune peut masquer une partie ou la totalité du disque solaire. Lors d’une éclipse lunaire, la Terre se trouve entre le Soleil et la Lune et l’ombre de la Terre peut atteindre la Lune."
+          }
+        },
+        {
+          "type": "text",
+          "content": {
+            "text": "Les éclipses ne se produisent pas à chaque nouvelle Lune ou à chaque pleine Lune, car l’orbite de la Lune est inclinée par rapport au plan de l’orbite terrestre autour du Soleil. Un alignement suffisamment précis est nécessaire. Pour une éclipse solaire, il est dangereux de regarder directement le Soleil sans protection spécialement conçue pour l’observation solaire."
+          }
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Les éclipses",
+        "questions": [
+          {
+            "question": "Lors d’une éclipse solaire, quel astre se trouve entre le Soleil et la Terre ?",
+            "options": [
+              "La Lune",
+              "Mars",
+              "Jupiter",
+              "Une étoile lointaine"
+            ],
+            "correct_answer": "La Lune",
+            "explanation": "Lors d’une éclipse solaire, la Lune passe entre le Soleil et la Terre et peut masquer le Soleil pour certains observateurs."
+          },
+          {
+            "question": "Lors d’une éclipse lunaire, quelle situation est correcte ?",
+            "options": [
+              "La Terre se trouve entre le Soleil et la Lune",
+              "La Lune se trouve entre le Soleil et la Terre",
+              "Le Soleil se trouve entre la Terre et la Lune",
+              "La Terre cesse de tourner"
+            ],
+            "correct_answer": "La Terre se trouve entre le Soleil et la Lune",
+            "explanation": "Lors d’une éclipse lunaire, la Terre se trouve entre le Soleil et la Lune, et la Lune peut entrer dans l’ombre de la Terre."
+          },
+          {
+            "question": "Pourquoi les éclipses ne se produisent-elles pas à chaque nouvelle Lune ou à chaque pleine Lune ?",
+            "options": [
+              "Parce que l’alignement des trois astres n’est généralement pas suffisamment précis",
+              "Parce que la Lune disparaît complètement",
+              "Parce que le Soleil cesse de produire de la lumière",
+              "Parce que la Terre devient transparente"
+            ],
+            "correct_answer": "Parce que l’alignement des trois astres n’est généralement pas suffisamment précis",
+            "explanation": "L’orbite de la Lune est inclinée par rapport au plan orbital de la Terre. Une éclipse nécessite donc un alignement particulier."
+          }
+        ]
+      }
+    }
+  ]
+}

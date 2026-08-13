@@ -1,0 +1,381 @@
+{
+  "class": "7ème année",
+  "subject": "Physique-Chimie",
+  "curriculum": "Mali",
+  "chapter": "Masse volumique",
+  "chapter_order": 5,
+  "lessons": [
+    {
+      "title": "Notion de masse volumique",
+      "lesson_order": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Qu'est-ce que la masse volumique ?",
+          "content": "La masse volumique d'un corps permet de relier sa masse à son volume. Elle indique la masse contenue dans une unité de volume d'une substance. Deux objets de même volume peuvent avoir des masses différentes parce qu'ils sont constitués de matières différentes.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Symbole de la masse volumique",
+          "content": "La masse volumique est généralement représentée par la lettre grecque ρ (rho). Elle dépend de la nature de la substance et, dans certaines situations, des conditions physiques comme la température.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple simple",
+          "content": "Prenons deux cubes de même volume, l'un en bois et l'autre en fer. Ils occupent le même espace, mais le cube en fer possède généralement une masse plus importante. Cela signifie que le fer a une masse volumique plus grande que le bois.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Notion de masse volumique",
+        "questions": [
+          {
+            "question": "Que relie la masse volumique ?",
+            "options": [
+              "La masse et le volume",
+              "La température et le temps",
+              "La longueur et la température",
+              "Le poids et la couleur"
+            ],
+            "correct_answer": "La masse et le volume",
+            "explanation": "La masse volumique relie la masse d'un corps à son volume."
+          },
+          {
+            "question": "Quel symbole représente généralement la masse volumique ?",
+            "options": [
+              "ρ",
+              "V",
+              "m",
+              "T"
+            ],
+            "correct_answer": "ρ",
+            "explanation": "La masse volumique est généralement notée ρ, la lettre grecque rho."
+          },
+          {
+            "question": "Deux objets de même volume peuvent avoir des masses différentes s'ils sont constitués de...",
+            "options": [
+              "matières différentes",
+              "la même matière uniquement",
+              "la même couleur",
+              "la même forme uniquement"
+            ],
+            "correct_answer": "matières différentes",
+            "explanation": "La masse dépend notamment de la nature de la matière et de son volume."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Relation entre masse, volume et masse volumique",
+      "lesson_order": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "La formule",
+          "content": "La masse volumique se calcule à partir de la masse et du volume avec la relation ρ = m / V. Dans cette formule, ρ représente la masse volumique, m la masse du corps et V son volume.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Transformer la formule",
+          "content": "À partir de ρ = m / V, on peut retrouver la masse avec m = ρ × V. On peut également retrouver le volume avec V = m / ρ. Ces trois relations permettent de résoudre différents problèmes.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple de calcul",
+          "content": "Un objet a une masse de 200 g et un volume de 100 cm³. Sa masse volumique est ρ = 200 / 100 = 2 g/cm³.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Formule de la masse volumique",
+        "questions": [
+          {
+            "question": "Quelle est la formule de la masse volumique ?",
+            "options": [
+              "ρ = m / V",
+              "ρ = m × V",
+              "ρ = V / m",
+              "ρ = m + V"
+            ],
+            "correct_answer": "ρ = m / V",
+            "explanation": "La masse volumique est égale à la masse divisée par le volume."
+          },
+          {
+            "question": "Si ρ = 2 g/cm³ et V = 50 cm³, quelle est la masse ?",
+            "options": [
+              "100 g",
+              "25 g",
+              "52 g",
+              "0,04 g"
+            ],
+            "correct_answer": "100 g",
+            "explanation": "m = ρ × V = 2 × 50 = 100 g."
+          },
+          {
+            "question": "Si m = 300 g et ρ = 3 g/cm³, quel est le volume ?",
+            "options": [
+              "100 cm³",
+              "900 cm³",
+              "297 cm³",
+              "3 cm³"
+            ],
+            "correct_answer": "100 cm³",
+            "explanation": "V = m / ρ = 300 / 3 = 100 cm³."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Unités de masse volumique",
+      "lesson_order": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Unités courantes",
+          "content": "L'unité de la masse volumique dépend des unités utilisées pour la masse et le volume. Dans le système international, on utilise le kilogramme par mètre cube (kg/m³). On rencontre aussi le gramme par centimètre cube (g/cm³).",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Relation entre kg/m³ et g/cm³",
+          "content": "Une masse volumique de 1 g/cm³ correspond à 1 000 kg/m³. Il est donc important de vérifier les unités avant d'effectuer un calcul ou une comparaison de masses volumiques.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Choisir les bonnes unités",
+          "content": "Pour éviter les erreurs, la masse et le volume doivent être exprimés dans des unités compatibles avec l'unité de masse volumique utilisée. Par exemple, avec une masse en grammes et un volume en cm³, la masse volumique obtenue est en g/cm³.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Unités de masse volumique",
+        "questions": [
+          {
+            "question": "Quelle est l'unité SI de la masse volumique ?",
+            "options": [
+              "kg/m³",
+              "kg",
+              "m³",
+              "g"
+            ],
+            "correct_answer": "kg/m³",
+            "explanation": "L'unité internationale de la masse volumique est le kilogramme par mètre cube."
+          },
+          {
+            "question": "1 g/cm³ correspond à...",
+            "options": [
+              "1 000 kg/m³",
+              "100 kg/m³",
+              "10 kg/m³",
+              "0,001 kg/m³"
+            ],
+            "correct_answer": "1 000 kg/m³",
+            "explanation": "La conversion donne 1 g/cm³ = 1 000 kg/m³."
+          },
+          {
+            "question": "Si la masse est en grammes et le volume en cm³, la masse volumique est exprimée en...",
+            "options": [
+              "g/cm³",
+              "kg/m³ uniquement",
+              "g",
+              "cm³"
+            ],
+            "correct_answer": "g/cm³",
+            "explanation": "Le rapport grammes sur centimètres cubes donne une masse volumique en g/cm³."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Déterminer la masse volumique d'un solide",
+      "lesson_order": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Mesurer la masse et le volume",
+          "content": "Pour déterminer expérimentalement la masse volumique d'un solide, il faut mesurer sa masse avec une balance et son volume. Pour un solide régulier, le volume peut être calculé à partir de ses dimensions. Pour un solide irrégulier, on peut utiliser le déplacement d'eau.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Calcul expérimental",
+          "content": "Une fois la masse et le volume connus, on utilise la relation ρ = m / V. Il faut conserver des unités cohérentes pendant le calcul.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple",
+          "content": "Une pierre a une masse de 180 g. Son volume mesuré par déplacement d'eau est de 60 cm³. Sa masse volumique est ρ = 180 / 60 = 3 g/cm³.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Masse volumique d'un solide",
+        "questions": [
+          {
+            "question": "Quels sont les deux grandeurs à mesurer pour calculer une masse volumique ?",
+            "options": [
+              "La masse et le volume",
+              "La température et le temps",
+              "La longueur et la température",
+              "La couleur et la forme"
+            ],
+            "correct_answer": "La masse et le volume",
+            "explanation": "La relation ρ = m/V nécessite la masse et le volume."
+          },
+          {
+            "question": "Une pierre a une masse de 120 g et un volume de 40 cm³. Quelle est sa masse volumique ?",
+            "options": [
+              "3 g/cm³",
+              "4 g/cm³",
+              "80 g/cm³",
+              "160 g/cm³"
+            ],
+            "correct_answer": "3 g/cm³",
+            "explanation": "ρ = 120 / 40 = 3 g/cm³."
+          },
+          {
+            "question": "Pour mesurer la masse d'un solide, on utilise...",
+            "options": [
+              "une balance",
+              "un thermomètre",
+              "une éprouvette seule",
+              "une règle uniquement"
+            ],
+            "correct_answer": "une balance",
+            "explanation": "La balance permet de mesurer la masse du solide."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparer des substances grâce à la masse volumique",
+      "lesson_order": 5,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Identifier une substance",
+          "content": "La masse volumique peut aider à identifier ou comparer des substances. Si l'on connaît la masse et le volume d'un échantillon, on peut calculer sa masse volumique et la comparer à des valeurs connues.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Même volume, masses différentes",
+          "content": "Deux volumes identiques de substances différentes peuvent avoir des masses différentes. La substance dont la masse volumique est la plus grande possède la plus grande masse pour un même volume.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "Exemple de comparaison",
+          "content": "Deux cubes ont chacun un volume de 10 cm³. Le premier a une masse de 20 g et le second une masse de 70 g. Leurs masses volumiques sont respectivement 2 g/cm³ et 7 g/cm³. Le second matériau possède donc une masse volumique plus grande.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Comparaison des masses volumiques",
+        "questions": [
+          {
+            "question": "Pour un même volume, quelle substance possède la plus grande masse si sa masse volumique est plus élevée ?",
+            "options": [
+              "La substance de plus grande masse volumique",
+              "Toujours la substance la plus légère",
+              "Les deux ont forcément la même masse",
+              "Impossible à déterminer"
+            ],
+            "correct_answer": "La substance de plus grande masse volumique",
+            "explanation": "Pour un même volume, m = ρ × V : une masse volumique plus grande donne une masse plus grande."
+          },
+          {
+            "question": "Un objet de 10 cm³ a une masse de 20 g. Sa masse volumique est...",
+            "options": [
+              "2 g/cm³",
+              "10 g/cm³",
+              "30 g/cm³",
+              "0,5 g/cm³"
+            ],
+            "correct_answer": "2 g/cm³",
+            "explanation": "ρ = 20 / 10 = 2 g/cm³."
+          },
+          {
+            "question": "Un autre objet de 10 cm³ a une masse de 70 g. Sa masse volumique est...",
+            "options": [
+              "7 g/cm³",
+              "6 g/cm³",
+              "70 g/cm³",
+              "0,7 g/cm³"
+            ],
+            "correct_answer": "7 g/cm³",
+            "explanation": "ρ = 70 / 10 = 7 g/cm³."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exercices de synthèse sur la masse volumique",
+      "lesson_order": 6,
+      "blocks": [
+        {
+          "type": "text",
+          "title": "Méthode de résolution",
+          "content": "Pour résoudre un exercice de masse volumique, il faut d'abord relever les données : masse, volume ou masse volumique. Ensuite, on choisit la relation adaptée parmi ρ = m/V, m = ρ × V et V = m/ρ. Enfin, on vérifie les unités et le résultat.",
+          "block_order": 1
+        },
+        {
+          "type": "text",
+          "title": "Exemple complet",
+          "content": "Un morceau de métal a une masse de 540 g et un volume de 60 cm³. Sa masse volumique est ρ = 540 / 60 = 9 g/cm³. Si un autre morceau de même volume possède une masse de 300 g, sa masse volumique est 5 g/cm³. Le premier métal est donc plus dense.",
+          "block_order": 2
+        },
+        {
+          "type": "text",
+          "title": "À retenir",
+          "content": "La masse volumique caractérise la répartition de la masse dans un volume donné. Elle se calcule avec ρ = m/V. Elle permet de calculer une masse ou un volume et de comparer différentes substances. Les unités doivent toujours être cohérentes.",
+          "block_order": 3
+        }
+      ],
+      "quiz": {
+        "title": "Quiz — Synthèse sur la masse volumique",
+        "questions": [
+          {
+            "question": "Quelle relation permet de calculer la masse à partir de la masse volumique et du volume ?",
+            "options": [
+              "m = ρ × V",
+              "m = ρ / V",
+              "m = V / ρ",
+              "m = ρ + V"
+            ],
+            "correct_answer": "m = ρ × V",
+            "explanation": "En partant de ρ = m/V, on obtient m = ρ × V."
+          },
+          {
+            "question": "Un corps de masse 400 g et de volume 100 cm³ a une masse volumique de...",
+            "options": [
+              "4 g/cm³",
+              "40 g/cm³",
+              "0,25 g/cm³",
+              "500 g/cm³"
+            ],
+            "correct_answer": "4 g/cm³",
+            "explanation": "ρ = 400 / 100 = 4 g/cm³."
+          },
+          {
+            "question": "Pourquoi faut-il vérifier les unités avant un calcul de masse volumique ?",
+            "options": [
+              "Pour obtenir un résultat cohérent",
+              "Pour changer la nature du corps",
+              "Pour modifier la masse",
+              "Pour augmenter le volume"
+            ],
+            "correct_answer": "Pour obtenir un résultat cohérent",
+            "explanation": "Des unités cohérentes sont nécessaires pour obtenir une valeur correcte de masse volumique."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { getCurrentAdmin } from "../services/adminAuthService";
+import { registerUserDevice } from "../services/deviceService";
 
 import {
   BookOpen,
@@ -132,6 +133,51 @@ export default function LoginPage() {
         data?.user?.id
       );
 
+      // ========================================
+      // 🔐 PROTECTION APPAREIL
+      // ========================================
+
+      console.log(
+        "📱 [LOGIN PAGE] Vérification de l'appareil..."
+      );
+
+      const deviceResult = await registerUserDevice();
+
+      console.log(
+        "📱 [LOGIN PAGE] Résultat appareil =",
+        deviceResult
+      );
+
+      // ========================================
+      // APPAREIL NON AUTORISÉ
+      // ========================================
+
+      if (
+        deviceResult?.status === "different_device" ||
+        deviceResult?.status === "device_already_used"
+      ) {
+
+        console.warn(
+          "🚫 [LOGIN PAGE] Appareil non autorisé"
+        );
+
+        await supabase.auth.signOut();
+
+        setError(
+          "Ce compte est déjà associé à un autre appareil. " +
+          "Un seul téléphone peut être utilisé avec ce compte."
+        );
+
+        return;
+      }
+
+      // ========================================
+      // APPAREIL ENREGISTRÉ / AUTORISÉ
+      // ========================================
+
+      console.log(
+        "✅ [LOGIN PAGE] Appareil autorisé"
+      );
       // ========================================
       // VÉRIFICATION DU RÔLE
       // ========================================

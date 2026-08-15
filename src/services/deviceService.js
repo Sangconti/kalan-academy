@@ -1,305 +1,112 @@
 import { Device } from "@capacitor/device";
 import { supabase } from "../lib/supabase";
 
+// ==========================================
+// RÉCUPÉRER L'IDENTIFIANT DE L'APPAREIL
+// ==========================================
 
-// =====================================================
-// INFORMATIONS DE L'APPAREIL
-// =====================================================
-
-export async function getDeviceInfo() {
-
+export async function getDeviceId() {
   try {
-
-    const idInfo = await Device.getId();
-    const deviceInfo = await Device.getInfo();
-
-    const result = {
-
-      deviceId: idInfo.identifier,
-
-      platform: deviceInfo.platform,
-
-      model: deviceInfo.model,
-
-      operatingSystem: deviceInfo.operatingSystem,
-
-      osVersion: deviceInfo.osVersion
-
-    };
+    const info = await Device.getId();
 
     console.log(
-      "📱 [DEVICE] Informations appareil =",
-      result
+      "📱 [DEVICE] deviceId =",
+      info.identifier
     );
 
-    return result;
+    return info.identifier;
 
   } catch (error) {
-
     console.error(
-      "❌ [DEVICE] Impossible d'obtenir les informations de l'appareil =",
+      "❌ [DEVICE] Impossible de récupérer l'identifiant :",
       error
     );
 
-    throw error;
-
+    return null;
   }
-
 }
 
 
-// =====================================================
-// VÉRIFIER / ENREGISTRER L'APPAREIL
-// =====================================================
+// ==========================================
+// ENREGISTRER / VÉRIFIER L'APPAREIL
+// ==========================================
 
-export async function verifyUserDevice(userId) {
-
-  if (!userId) {
-
-    return {
-      allowed: false,
-      reason: "USER_ID_MISSING"
-    };
-
-  }
-
+export async function registerUserDevice() {
 
   try {
 
-    // ================================================
-    // RÉCUPÉRER L'APPAREIL ACTUEL
-    // ================================================
+    // ----------------------------------------
+    // Récupérer l'identifiant du téléphone
+    // ----------------------------------------
 
-    const device = await getDeviceInfo();
+    const deviceId = await getDeviceId();
+
+    if (!deviceId) {
+
+      return {
+        success: false,
+        status: "invalid_device"
+      };
+
+    }
 
 
-    // ================================================
-    // CHERCHER L'APPAREIL DU COMPTE
-    // ================================================
+    console.log(
+      "📱 [DEVICE] Vérification de l'appareil..."
+    );
+
+
+    // ----------------------------------------
+    // Appeler la fonction Supabase sécurisée
+    // ----------------------------------------
 
     const {
-      data: registeredDevice,
-      error: selectError
-    } = await supabase
-
-      .from("user_devices")
-
-      .select(`
-        id,
-        user_id,
-        device_id,
-        device_name,
-        platform,
-        is_active,
-        last_seen_at
-      `)
-
-      .eq(
-        "user_id",
-        userId
-      )
-
-      .maybeSingle();
+      data,
+      error
+    } = await supabase.rpc(
+      "register_user_device",
+      {
+        p_device_id: deviceId
+      }
+    );
 
 
-    if (selectError) {
+    if (error) {
 
       console.error(
-        "❌ [DEVICE] Erreur recherche appareil =",
-        selectError
+        "❌ [DEVICE] Erreur Supabase =",
+        error
       );
 
       return {
-        allowed: false,
-        reason: "DATABASE_ERROR",
-        error: selectError
+        success: false,
+        status: "server_error",
+        error
       };
 
     }
 
 
-    // ================================================
-    // PREMIÈRE CONNEXION
-    // ================================================
-
-    if (!registeredDevice) {
-
-      console.log(
-        "🆕 [DEVICE] Aucun appareil enregistré"
-      );
-
-      const {
-        data: newDevice,
-        error: insertError
-      } = await supabase
-
-        .from("user_devices")
-
-        .insert({
-
-          user_id: userId,
-
-          device_id: device.deviceId,
-
-          device_name: device.model,
-
-          platform: device.platform,
-
-          is_active: true,
-
-          last_seen_at: new Date().toISOString()
-
-        })
-
-        .select()
-
-        .single();
-
-
-      if (insertError) {
-
-        console.error(
-          "❌ [DEVICE] Erreur enregistrement appareil =",
-          insertError
-        );
-
-        return {
-          allowed: false,
-          reason: "DEVICE_REGISTRATION_ERROR",
-          error: insertError
-        };
-
-      }
-
-
-      console.log(
-        "✅ [DEVICE] Premier appareil enregistré =",
-        newDevice
-      );
-
-
-      return {
-
-        allowed: true,
-
-        reason: "DEVICE_REGISTERED",
-
-        device: newDevice
-
-      };
-
-    }
-
-
-    // ================================================
-    // VÉRIFIER L'APPAREIL EXISTANT
-    // ================================================
-
     console.log(
-      "📱 [DEVICE] Appareil enregistré =",
-      registeredDevice.device_id
-    );
-
-    console.log(
-      "📱 [DEVICE] Appareil actuel =",
-      device.deviceId
+      "📱 [DEVICE] Résultat =",
+      data
     );
 
 
-    // ================================================
-    // AUTRE APPAREIL
-    // ================================================
-
-    if (
-      registeredDevice.device_id !==
-      device.deviceId
-    ) {
-
-      console.warn(
-        "🚫 [DEVICE] AUTRE APPAREIL DÉTECTÉ"
-      );
-
-
-      return {
-
-        allowed: false,
-
-        reason: "DIFFERENT_DEVICE",
-
-        device: registeredDevice
-
-      };
-
-    }
-
-
-    // ================================================
-    // MÊME APPAREIL
-    // ================================================
-
-    const {
-      error: updateError
-    } = await supabase
-
-      .from("user_devices")
-
-      .update({
-
-        last_seen_at:
-          new Date().toISOString(),
-
-        is_active: true
-
-      })
-
-      .eq(
-        "id",
-        registeredDevice.id
-      );
-
-
-    if (updateError) {
-
-      console.warn(
-        "⚠️ [DEVICE] Mise à jour last_seen impossible =",
-        updateError
-      );
-
-    }
-
-
-    console.log(
-      "✅ [DEVICE] Appareil autorisé"
-    );
-
-
-    return {
-
-      allowed: true,
-
-      reason: "DEVICE_MATCH",
-
-      device: registeredDevice
-
-    };
+    return data;
 
 
   } catch (error) {
 
     console.error(
-      "💥 [DEVICE] Exception vérification appareil =",
+      "💥 [DEVICE] Exception =",
       error
     );
 
-
     return {
-
-      allowed: false,
-
-      reason: "UNKNOWN_ERROR",
-
+      success: false,
+      status: "server_error",
       error
-
     };
 
   }

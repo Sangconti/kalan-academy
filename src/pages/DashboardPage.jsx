@@ -28,6 +28,130 @@ const XP_PER_LEVEL = 500;
 
 
 // =====================================================
+// CACHE DASHBOARD
+// =====================================================
+
+const DASHBOARD_CACHE_PREFIX =
+  "kalan_dashboard_";
+
+const DASHBOARD_CACHE_DURATION =
+  30 * 1000;
+
+
+// =====================================================
+// OUTILS CACHE
+// =====================================================
+
+function getDashboardCacheKey(userId) {
+
+  return (
+    DASHBOARD_CACHE_PREFIX +
+    userId
+  );
+
+}
+
+
+function getCachedDashboard(userId) {
+
+  try {
+
+    const key =
+      getDashboardCacheKey(userId);
+
+    const raw =
+      sessionStorage.getItem(key);
+
+    if (!raw) {
+      return null;
+    }
+
+
+    const cached =
+      JSON.parse(raw);
+
+
+    if (
+      !cached?.timestamp ||
+      !cached?.data
+    ) {
+
+      sessionStorage.removeItem(key);
+
+      return null;
+
+    }
+
+
+    const age =
+      Date.now() -
+      cached.timestamp;
+
+
+    if (
+      age >
+      DASHBOARD_CACHE_DURATION
+    ) {
+
+      sessionStorage.removeItem(key);
+
+      return null;
+
+    }
+
+
+    return cached.data;
+
+  } catch (err) {
+
+    console.warn(
+      "⚠️ Cache Dashboard inaccessible :",
+      err
+    );
+
+    return null;
+
+  }
+
+}
+
+
+function setCachedDashboard(
+  userId,
+  data
+) {
+
+  try {
+
+    const key =
+      getDashboardCacheKey(userId);
+
+
+    sessionStorage.setItem(
+      key,
+      JSON.stringify({
+
+        timestamp:
+          Date.now(),
+
+        data
+
+      })
+    );
+
+  } catch (err) {
+
+    console.warn(
+      "⚠️ Impossible de sauvegarder le cache Dashboard :",
+      err
+    );
+
+  }
+
+}
+
+
+// =====================================================
 // PAGE DASHBOARD
 // =====================================================
 
@@ -37,24 +161,33 @@ export default function DashboardPage() {
   // STATE
   // ===================================================
 
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] =
+    useState(null);
 
-  const [subjects, setSubjects] = useState({});
+  const [subjects, setSubjects] =
+    useState({});
 
-  const [stats, setStats] = useState({
-    lessons: 0,
-    score: 0,
-    badges: 0,
-    attempts: 0
-  });
+  const [stats, setStats] =
+    useState({
 
-  const [badges, setBadges] = useState([]);
+      lessons: 0,
+      score: 0,
+      badges: 0,
+      attempts: 0
 
-  const [loading, setLoading] = useState(true);
+    });
 
-  const [error, setError] = useState("");
+  const [badges, setBadges] =
+    useState([]);
 
-  const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
+
+  const [refreshing, setRefreshing] =
+    useState(false);
 
 
   // ===================================================
@@ -69,124 +202,299 @@ export default function DashboardPage() {
 
 
   // ===================================================
+  // APPLIQUER LES DONNÉES
+  // ===================================================
+
+  function applyDashboardData(data) {
+
+    if (!data) {
+      return;
+    }
+
+
+    setProfile(
+      data.profile || null
+    );
+
+
+    setSubjects(
+      data.subjects || {}
+    );
+
+
+    setStats(
+      data.stats || {
+
+        lessons: 0,
+        score: 0,
+        badges: 0,
+        attempts: 0
+
+      }
+    );
+
+
+    setBadges(
+      data.badges || []
+    );
+
+  }
+
+
+  // ===================================================
   // CHARGER DASHBOARD
   // ===================================================
 
-  async function loadDashboard(isRefresh = false) {
+  async function loadDashboard(
+    isRefresh = false
+  ) {
 
     try {
 
       if (isRefresh) {
+
         setRefreshing(true);
+
       } else {
+
         setLoading(true);
+
       }
+
 
       setError("");
 
 
       // =================================================
-      // UTILISATEUR
+      // SESSION
       // =================================================
 
       const {
         data: {
-          user
+          session
         },
-        error: userError
-      } = await supabase.auth.getUser();
+        error: sessionError
+      } =
+        await supabase.auth.getSession();
 
 
-      if (userError) {
-        throw userError;
+      if (sessionError) {
+
+        throw sessionError;
+
       }
 
+
+      const user =
+        session?.user;
+
+
+      // =================================================
+      // UTILISATEUR ABSENT
+      // =================================================
 
       if (!user) {
 
         setProfile(null);
+
         setSubjects({});
+
         setBadges([]);
 
         setStats({
+
           lessons: 0,
           score: 0,
           badges: 0,
           attempts: 0
+
         });
+
 
         setError(
           "Tu dois être connecté pour voir ton tableau de bord."
         );
 
         return;
+
       }
+
+
+      // =================================================
+      // CACHE
+      // =================================================
+      //
+      // On utilise le cache uniquement lors du chargement
+      // normal.
+      //
+      // Le bouton "Actualiser" ignore volontairement
+      // le cache et recharge les données depuis Supabase.
+      // =================================================
+
+      if (!isRefresh) {
+
+        const cached =
+          getCachedDashboard(
+            user.id
+          );
+
+
+        if (cached) {
+
+          console.log(
+            "⚡ Dashboard chargé depuis le cache"
+          );
+
+
+          applyDashboardData(
+            cached
+          );
+
+
+          setLoading(false);
+
+          return;
+
+        }
+
+      }
+
+
+      // =================================================
+      // CHARGEMENT PARALLÈLE
+      // =================================================
+
+      const [
+
+        profileResult,
+
+        progressResult,
+
+        attemptsResult,
+
+        badgesResult
+
+      ] = await Promise.all([
+
+
+        // -------------------------------------------------
+        // PROFILE
+        // -------------------------------------------------
+
+        supabase
+          .from("profiles")
+          .select(`
+            id,
+            full_name,
+            xp,
+            level
+          `)
+          .eq(
+            "id",
+            user.id
+          )
+          .single(),
+
+
+        // -------------------------------------------------
+        // PROGRESSION
+        // -------------------------------------------------
+        //
+        // On ne récupère que les champs réellement
+        // nécessaires au Dashboard.
+        // -------------------------------------------------
+
+        supabase
+          .from("user_progress")
+          .select(`
+            completed,
+            lessons(
+              chapters(
+                subjects(
+                  name
+                )
+              )
+            )
+          `)
+          .eq(
+            "user_id",
+            user.id
+          ),
+
+
+        // -------------------------------------------------
+        // TENTATIVES QUIZ
+        // -------------------------------------------------
+        //
+        // Seul score est nécessaire.
+        // -------------------------------------------------
+
+        supabase
+          .from("quiz_attempts")
+          .select(`
+            score
+          `)
+          .eq(
+            "user_id",
+            user.id
+          ),
+
+
+        // -------------------------------------------------
+        // BADGES
+        // -------------------------------------------------
+
+        supabase
+          .from("user_badges")
+          .select(`
+            id,
+            badges(
+              id,
+              name,
+              description,
+              xp_reward,
+              image_url
+            )
+          `)
+          .eq(
+            "user_id",
+            user.id
+          )
+
+      ]);
 
 
       // =================================================
       // PROFILE
       // =================================================
 
-      const {
-        data: profileData,
-        error: profileError
-      } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .single();
+      if (profileResult.error) {
 
+        throw profileResult.error;
 
-      if (profileError) {
-        throw profileError;
       }
 
 
-      setProfile(profileData);
+      const profileData =
+        profileResult.data;
 
 
       // =================================================
       // PROGRESSION
       // =================================================
 
-      const {
-        data: progress,
-        error: progressError
-      } = await supabase
-        .from("user_progress")
-        .select(`
-          id,
-          completed,
-          last_score,
-          completion_percentage,
-          lessons(
-            id,
-            title,
-            chapter_id,
-            chapters(
-              id,
-              subject_id,
-              subjects(
-                id,
-                name
-              )
-            )
-          )
-        `)
-        .eq("user_id", user.id);
-
-
-      if (progressError) {
+      if (progressResult.error) {
 
         console.error(
           "Erreur progression :",
-          progressError
+          progressResult.error
         );
 
       }
 
 
-      const progressData = progress || [];
+      const progressData =
+        progressResult.data || [];
 
 
       // =================================================
@@ -194,9 +502,24 @@ export default function DashboardPage() {
       // =================================================
 
       const completedLessons =
-        progressData.filter(
-          item => item.completed === true
-        ).length;
+        progressData.reduce(
+          (
+            total,
+            item
+          ) => {
+
+            return (
+              total +
+              (
+                item?.completed === true
+                  ? 1
+                  : 0
+              )
+            );
+
+          },
+          0
+        );
 
 
       // =================================================
@@ -206,16 +529,22 @@ export default function DashboardPage() {
       const subjectsProgress = {};
 
 
-      progressData.forEach(item => {
+      for (
+        const item
+        of progressData
+      ) {
 
         const subject =
-          item?.lessons
+          item
+            ?.lessons
             ?.chapters
             ?.subjects;
 
 
         if (!subject?.name) {
-          return;
+
+          continue;
+
         }
 
 
@@ -223,84 +552,93 @@ export default function DashboardPage() {
           subject.name;
 
 
-        if (!subjectsProgress[subjectName]) {
+        if (
+          !subjectsProgress[
+            subjectName
+          ]
+        ) {
 
-          subjectsProgress[subjectName] = {
+          subjectsProgress[
+            subjectName
+          ] = {
+
             total: 0,
+
             completed: 0,
+
             percent: 0
+
           };
 
         }
 
 
-        subjectsProgress[subjectName].total += 1;
+        subjectsProgress[
+          subjectName
+        ].total += 1;
 
 
-        if (item.completed === true) {
+        if (
+          item.completed === true
+        ) {
 
-          subjectsProgress[subjectName].completed += 1;
+          subjectsProgress[
+            subjectName
+          ].completed += 1;
 
         }
 
-      });
+      }
 
 
       // =================================================
       // POURCENTAGES
       // =================================================
 
-      Object.keys(subjectsProgress).forEach(
-        subjectName => {
+      for (
+        const subjectName
+        of Object.keys(
+          subjectsProgress
+        )
+      ) {
 
-          const data =
-            subjectsProgress[subjectName];
+        const data =
+          subjectsProgress[
+            subjectName
+          ];
 
 
-          if (data.total > 0) {
+        if (data.total > 0) {
 
-            data.percent =
-              Math.round(
-                (
-                  data.completed /
-                  data.total
-                ) * 100
-              );
-
-          }
+          data.percent =
+            Math.round(
+              (
+                data.completed /
+                data.total
+              ) * 100
+            );
 
         }
-      );
 
-
-      setSubjects(subjectsProgress);
+      }
 
 
       // =================================================
       // TENTATIVES QUIZ
       // =================================================
 
-      const {
-        data: attempts,
-        error: attemptsError
-      } = await supabase
-        .from("quiz_attempts")
-        .select("id, score")
-        .eq("user_id", user.id);
-
-
-      if (attemptsError) {
+      if (attemptsResult.error) {
 
         console.error(
           "Erreur quiz attempts :",
-          attemptsError
+          attemptsResult.error
         );
 
       }
 
 
       const attemptsData =
-        attempts || [];
+        attemptsResult.data || [];
 
 
       // =================================================
@@ -310,15 +648,22 @@ export default function DashboardPage() {
       let averageScore = 0;
 
 
-      if (attemptsData.length > 0) {
+      if (
+        attemptsData.length > 0
+      ) {
 
         const totalScore =
           attemptsData.reduce(
-            (total, attempt) => {
+            (
+              total,
+              attempt
+            ) => {
 
               return (
                 total +
-                Number(attempt.score || 0)
+                Number(
+                  attempt?.score || 0
+                )
               );
 
             },
@@ -339,60 +684,76 @@ export default function DashboardPage() {
       // BADGES
       // =================================================
 
-      const {
-        data: userBadges,
-        error: badgeError
-      } = await supabase
-        .from("user_badges")
-        .select(`
-          id,
-          badges(
-            id,
-            name,
-            description,
-            xp_reward,
-            image_url
-          )
-        `)
-        .eq("user_id", user.id);
-
-
-      if (badgeError) {
+      if (badgesResult.error) {
 
         console.error(
           "Erreur badges :",
-          badgeError
+          badgesResult.error
         );
 
       }
 
 
       const badgeData =
-        userBadges || [];
-
-
-      setBadges(badgeData);
+        badgesResult.data || [];
 
 
       // =================================================
-      // STATS
+      // DONNÉES FINALES
       // =================================================
 
-      setStats({
+      const dashboardData = {
 
-        lessons:
-          completedLessons,
+        profile:
+          profileData,
 
-        score:
-          averageScore,
+        subjects:
+          subjectsProgress,
 
         badges:
-          badgeData.length,
+          badgeData,
 
-        attempts:
-          attemptsData.length
+        stats: {
 
-      });
+          lessons:
+            completedLessons,
+
+          score:
+            averageScore,
+
+          badges:
+            badgeData.length,
+
+          attempts:
+            attemptsData.length
+
+        }
+
+      };
+
+
+      // =================================================
+      // APPLIQUER
+      // =================================================
+
+      applyDashboardData(
+        dashboardData
+      );
+
+
+      // =================================================
+      // SAUVEGARDE CACHE
+      // =================================================
+
+      setCachedDashboard(
+        user.id,
+        dashboardData
+      );
+
+
+      console.log(
+        "✅ Dashboard chargé depuis Supabase"
+      );
 
     }
 
@@ -414,6 +775,7 @@ export default function DashboardPage() {
     finally {
 
       setLoading(false);
+
       setRefreshing(false);
 
     }
@@ -552,7 +914,9 @@ export default function DashboardPage() {
 
           <button
             type="button"
-            onClick={() => loadDashboard(true)}
+            onClick={() =>
+              loadDashboard(true)
+            }
             className="
               mt-6
               inline-flex
@@ -570,7 +934,9 @@ export default function DashboardPage() {
             "
           >
 
-            <RefreshCw size={18} />
+            <RefreshCw
+              size={18}
+            />
 
             Réessayer
 
@@ -701,23 +1067,39 @@ export default function DashboardPage() {
   // RANG
   // ===================================================
 
-  let rank = "Débutant";
+  let rank =
+    "Débutant";
 
 
   if (xp >= 500) {
-    rank = "Apprenti";
+
+    rank =
+      "Apprenti";
+
   }
+
 
   if (xp >= 1500) {
-    rank = "Élève confirmé";
+
+    rank =
+      "Élève confirmé";
+
   }
+
 
   if (xp >= 3000) {
-    rank = "Expert";
+
+    rank =
+      "Expert";
+
   }
 
+
   if (xp >= 5000) {
-    rank = "Maître Kalan";
+
+    rank =
+      "Maître Kalan";
+
   }
 
 
@@ -754,7 +1136,6 @@ export default function DashboardPage() {
           space-y-6
         "
       >
-
 
         {/* =================================================
             HEADER
@@ -813,7 +1194,9 @@ export default function DashboardPage() {
 
           <button
             type="button"
-            onClick={() => loadDashboard(true)}
+            onClick={() =>
+              loadDashboard(true)
+            }
             disabled={refreshing}
             className="
               inline-flex
@@ -869,8 +1252,6 @@ export default function DashboardPage() {
           "
         >
 
-          {/* DÉCORATION */}
-
           <div
             className="
               absolute
@@ -905,8 +1286,6 @@ export default function DashboardPage() {
               z-10
             "
           >
-
-            {/* NIVEAU */}
 
             <div
               className="
@@ -965,8 +1344,6 @@ export default function DashboardPage() {
             </div>
 
 
-            {/* XP + RANG */}
-
             <div
               className="
                 grid
@@ -974,8 +1351,6 @@ export default function DashboardPage() {
                 gap-6
               "
             >
-
-              {/* XP TOTAL */}
 
               <div>
 
@@ -1019,8 +1394,6 @@ export default function DashboardPage() {
               </div>
 
 
-              {/* RANG */}
-
               <div
                 className="
                   sm:text-right
@@ -1054,8 +1427,6 @@ export default function DashboardPage() {
 
             </div>
 
-
-            {/* PROGRESSION */}
 
             <div className="mt-7">
 
@@ -1103,7 +1474,8 @@ export default function DashboardPage() {
                     duration-500
                   "
                   style={{
-                    width: `${progressXP}%`
+                    width:
+                      `${progressXP}%`
                   }}
                 />
 
@@ -1154,8 +1526,6 @@ export default function DashboardPage() {
             gap-4
           "
         >
-
-          {/* LEÇONS */}
 
           <div
             className="
@@ -1212,8 +1582,6 @@ export default function DashboardPage() {
           </div>
 
 
-          {/* SCORE */}
-
           <div
             className="
               theme-surface
@@ -1269,8 +1637,6 @@ export default function DashboardPage() {
           </div>
 
 
-          {/* BADGES */}
-
           <div
             className="
               theme-surface
@@ -1325,8 +1691,6 @@ export default function DashboardPage() {
 
           </div>
 
-
-          {/* QUIZ */}
 
           <div
             className="
@@ -1570,7 +1934,8 @@ export default function DashboardPage() {
                           duration-500
                         "
                         style={{
-                          width: `${data.percent}%`
+                          width:
+                            `${data.percent}%`
                         }}
                       />
 
@@ -1584,12 +1949,18 @@ export default function DashboardPage() {
                         mt-2
                       "
                     >
+
                       {data.completed} leçon
-                      {data.completed > 1 ? "s" : ""}
+                      {data.completed > 1
+                        ? "s"
+                        : ""}
                       {" "}terminée
-                      {data.completed > 1 ? "s" : ""}
+                      {data.completed > 1
+                        ? "s"
+                        : ""}
                       {" "}sur{" "}
                       {data.total}
+
                     </p>
 
                   </div>
@@ -1723,7 +2094,8 @@ export default function DashboardPage() {
 
               {badges.map(item => {
 
-                const badge = item.badges;
+                const badge =
+                  item.badges;
 
 
                 return (
@@ -1765,7 +2137,9 @@ export default function DashboardPage() {
                         {badge?.image_url ? (
 
                           <img
-                            src={badge.image_url}
+                            src={
+                              badge.image_url
+                            }
                             alt={
                               badge.name ||
                               "Badge"
@@ -1800,7 +2174,10 @@ export default function DashboardPage() {
                             text-gray-950
                           "
                         >
-                          {badge?.name || "Badge"}
+                          {
+                            badge?.name ||
+                            "Badge"
+                          }
                         </h3>
 
 
@@ -1811,8 +2188,10 @@ export default function DashboardPage() {
                             mt-1
                           "
                         >
-                          {badge?.description ||
-                            "Badge obtenu sur Kalan Academy."}
+                          {
+                            badge?.description ||
+                            "Badge obtenu sur Kalan Academy."
+                          }
                         </p>
 
 
@@ -1846,7 +2225,6 @@ export default function DashboardPage() {
           )}
 
         </section>
-
 
       </div>
 

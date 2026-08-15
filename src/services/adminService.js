@@ -192,6 +192,7 @@ export async function getAdminUsers() {
       full_name,
       avatar_url,
       role,
+      access_status,
       class_id,
       is_premium,
       xp,
@@ -253,6 +254,70 @@ export async function updateUserRole(
 
   return true;
 
+}
+
+// ==========================
+// ACTIVER / DÉSACTIVER UN UTILISATEUR
+// ==========================
+
+export async function updateUserAccess(
+  userId,
+  accessStatus
+) {
+
+  const {
+    error
+  } = await supabase
+
+    .from("profiles")
+
+    .update({
+      access_status: accessStatus
+    })
+
+    .eq(
+      "id",
+      userId
+    );
+
+  if (error) {
+    throw error;
+  }
+
+  return true;
+}
+
+
+// ==========================
+// MODIFIER L'ACCÈS UTILISATEUR
+// ==========================
+
+export async function updateUserAccessStatus(
+  userId,
+  accessStatus
+) {
+  const {
+    error
+  } = await supabase
+    .from("profiles")
+    .update({
+      access_status: accessStatus
+    })
+    .eq(
+      "id",
+      userId
+    );
+
+  if (error) {
+    console.error(
+      "Erreur modification access_status :",
+      error
+    );
+
+    throw error;
+  }
+
+  return true;
 }
 
 

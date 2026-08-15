@@ -588,3 +588,92 @@ select {
 * {
   border-color: var(--app-border);
 }
+
+
+/* =========================================================
+   CHAPTER PAGE — CARTES DES LEÇONS EN MODE SOMBRE
+========================================================= */
+
+/*
+ * Les cartes Leçon 1 et Leçon 4 utilisent bg-blue-50.
+ * On force ici toutes les cartes de leçons à conserver
+ * un fond sombre cohérent en mode sombre, quelle que soit
+ * leur couleur d'accent.
+ */
+
+html.dark button.group {
+  color: #f9fafb !important;
+}
+
+
+/* Texte des titres */
+
+html.dark button.group h3 {
+  color: #f9fafb !important;
+}
+
+
+/* Informations : durée + numéro de leçon */
+
+html.dark button.group .text-gray-600 {
+  color: #d1d5db !important;
+}
+
+
+/* Flèche */
+
+html.dark button.group .text-gray-400 {
+  color: #9ca3af !important;
+}
+
+
+/* Hover de la flèche */
+
+html.dark button.group:hover .group-hover\:text-gray-700 {
+  color: #f3f4f6 !important;
+}
+
+
+/* =========================================================
+   FONDS DES CARTES
+========================================================= */
+
+/* Carte bleue */
+
+html.dark button.group.bg-blue-50 {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+
+/* Carte verte */
+
+html.dark button.group.bg-green-50 {
+  background-color: #17251d !important;
+  border-color: #315238 !important;
+}
+
+
+/* Carte violette */
+
+html.dark button.group.bg-purple-50 {
+  background-color: #241b30 !important;
+  border-color: #4a3760 !important;
+}
+
+
+/* =========================================================
+   ICÔNES
+========================================================= */
+
+html.dark button.group .bg-blue-100 {
+  background-color: #263b5c !important;
+}
+
+html.dark button.group .bg-green-100 {
+  background-color: #25452f !important;
+}
+
+html.dark button.group .bg-purple-100 {
+  background-color: #493064 !important;
+}

@@ -12,6 +12,7 @@
   "dependencies": {
     "@capacitor/android": "^8.5.0",
     "@capacitor/core": "^8.5.0",
+    "@capacitor/device": "^8.0.3",
     "@capacitor/filesystem": "^8.1.2",
     "@supabase/supabase-js": "^2.111.0",
     "dexie": "^4.4.4",

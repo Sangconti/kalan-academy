@@ -10,10 +10,11 @@ import UserFilters from "../../components/admin/UserFilters";
 
 
 import {
-getAdminUsers,
-updateUserRole
-}
-from "../../services/adminService";
+  getAdminUsers,
+  updateUserRole,
+  updateUserAccess,
+  updateUserAccessStatus
+} from "../../services/adminService";
 
 
 
@@ -62,6 +63,38 @@ load();
 
 }
 
+async function changeAccess(
+  id,
+  newStatus
+){
+
+  await updateUserAccess(
+    id,
+    newStatus
+  );
+
+  load();
+}
+
+async function changeAccessStatus(
+  id,
+  newStatus
+) {
+  try {
+    await updateUserAccessStatus(
+      id,
+      newStatus
+    );
+
+    await load();
+
+  } catch (error) {
+    console.error(
+      "Erreur changement accès utilisateur :",
+      error
+    );
+  }
+}
 
 
 const filtered =
@@ -123,11 +156,10 @@ setRole={setRole}
 
 
 <UserTable
-
-users={filtered}
-
-onRoleChange={changeRole}
-
+  users={filtered}
+  onRoleChange={changeRole}
+  onAccessChange={changeAccess}
+  onAccessStatusChange={changeAccessStatus}
 />
 
 

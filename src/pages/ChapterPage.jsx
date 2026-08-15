@@ -210,7 +210,10 @@ export default function ChapterPage() {
 
     };
 
-  }, [chapterId, isOnline]);
+  }, [
+    chapterId,
+    isOnline
+  ]);
 
 
   // =====================================================
@@ -218,13 +221,6 @@ export default function ChapterPage() {
   // =====================================================
 
   function goBack() {
-
-    /*
-      Si chapter.class_id existe,
-      on retourne directement à la classe.
-
-      Sinon, on utilise l'historique du navigateur.
-    */
 
     if (chapter?.class_id) {
 
@@ -282,23 +278,30 @@ export default function ChapterPage() {
         justify-center
       ">
 
-        <div className="text-center">
+        <div className="
+          text-center
+        ">
 
           <div className="
-            w-10
-            h-10
+            w-12
+            h-12
             mx-auto
             mb-4
-            border-4
-            border-blue-200
-            border-t-blue-600
             rounded-full
+            border-4
+            border-accent-soft
+            border-t-accent
             animate-spin
           " />
 
 
-          <p className="text-gray-500">
+          <p className="
+            theme-text-secondary
+            font-medium
+          ">
+
             Chargement des leçons...
+
           </p>
 
         </div>
@@ -318,7 +321,10 @@ export default function ChapterPage() {
 
     return (
 
-      <div className="p-4 md:p-6">
+      <div className="
+        p-4
+        md:p-6
+      ">
 
         <button
           onClick={goBack}
@@ -326,14 +332,16 @@ export default function ChapterPage() {
             flex
             items-center
             gap-2
-            text-gray-600
-            hover:text-blue-600
+            theme-text-secondary
+            hover:text-accent
             mb-5
             transition
           "
         >
 
-          <ArrowLeft size={18} />
+          <ArrowLeft
+            size={18}
+          />
 
           Retour
 
@@ -342,19 +350,24 @@ export default function ChapterPage() {
 
         <div className="
           bg-red-50
+          dark:bg-red-950/40
           border
           border-red-200
-          rounded-2xl
+          dark:border-red-900
+          rounded-3xl
           p-6
           text-center
         ">
 
           <p className="
             text-red-600
+            dark:text-red-400
             font-medium
             mb-4
           ">
+
             {error}
+
           </p>
 
 
@@ -365,15 +378,17 @@ export default function ChapterPage() {
             className="
               px-5
               py-2.5
-              bg-blue-600
+              bg-red-600
               text-white
               rounded-xl
               font-medium
-              hover:bg-blue-700
+              hover:bg-red-700
               transition
             "
           >
+
             Réessayer
+
           </button>
 
         </div>
@@ -393,7 +408,10 @@ export default function ChapterPage() {
 
     <div className="
       min-h-screen
-      bg-gray-50
+      theme-bg
+      px-4
+      py-5
+      pb-24
     ">
 
 
@@ -407,15 +425,33 @@ export default function ChapterPage() {
           flex
           items-center
           gap-2
-          text-gray-600
-          hover:text-blue-600
+          theme-text-secondary
+          hover:text-accent
           mb-5
           transition
           font-medium
         "
       >
 
-        <ArrowLeft size={19} />
+        <div className="
+          w-9
+          h-9
+          rounded-full
+          theme-surface
+          border
+          theme-border
+          shadow-sm
+          flex
+          items-center
+          justify-center
+        ">
+
+          <ArrowLeft
+            size={18}
+          />
+
+        </div>
+
 
         Retour aux chapitres
 
@@ -427,78 +463,199 @@ export default function ChapterPage() {
       ================================================= */}
 
       <div className="
-        bg-white
+        relative
+        overflow-hidden
+        theme-surface
         rounded-3xl
         shadow-sm
         border
-        border-gray-100
-        p-5
+        theme-border
+        p-6
         md:p-7
-        mb-6
+        mb-7
       ">
 
+
+        {/* CERCLES DÉCORATIFS */}
+
         <div className="
-          flex
-          items-start
-          gap-4
+          absolute
+          -right-12
+          -top-12
+          w-36
+          h-36
+          rounded-full
+          bg-accent
+          opacity-10
+        " />
+
+
+        <div className="
+          absolute
+          -left-10
+          -bottom-14
+          w-28
+          h-28
+          rounded-full
+          bg-accent
+          opacity-10
+        " />
+
+
+        <div className="
+          relative
+          z-10
         ">
 
-
           <div className="
-            w-14
-            h-14
-            md:w-16
-            md:h-16
-            shrink-0
-            rounded-2xl
-            bg-blue-100
             flex
-            items-center
-            justify-center
+            items-start
+            gap-4
           ">
 
-            <BookOpen
-              size={30}
-              className="text-blue-600"
-            />
+
+            {/* ICÔNE */}
+
+            <div className="
+              w-14
+              h-14
+              md:w-16
+              md:h-16
+              shrink-0
+              rounded-2xl
+              bg-accent-soft
+              flex
+              items-center
+              justify-center
+            ">
+
+              <BookOpen
+                size={30}
+                className="text-accent"
+              />
+
+            </div>
+
+
+            {/* TITRE */}
+
+            <div className="
+              min-w-0
+            ">
+
+              <p className="
+                text-sm
+                font-medium
+                text-accent
+                mb-1
+              ">
+
+                Chapitre
+
+              </p>
+
+
+              <h1 className="
+                text-2xl
+                md:text-3xl
+                font-bold
+                theme-text
+                leading-tight
+              ">
+
+                {chapter?.title}
+
+              </h1>
+
+
+              {chapter?.description && (
+
+                <p className="
+                  mt-2
+                  theme-text-secondary
+                  leading-relaxed
+                ">
+
+                  {chapter.description}
+
+                </p>
+
+              )}
+
+            </div>
 
           </div>
 
 
-          <div className="min-w-0">
+          {/* INFORMATIONS */}
 
-            <p className="
-              text-sm
-              font-medium
-              text-blue-600
-              mb-1
-            ">
-              Chapitre
-            </p>
+          <div className="
+            mt-6
+            pt-4
+            border-t
+            theme-border
+            flex
+            items-center
+            justify-between
+          ">
 
-
-            <h1 className="
-              text-2xl
-              md:text-3xl
-              font-bold
-              text-gray-900
-              leading-tight
-            ">
-              {chapter?.title}
-            </h1>
-
-
-            {chapter?.description && (
+            <div>
 
               <p className="
-                mt-2
-                text-gray-500
-                leading-relaxed
+                text-xs
+                theme-text-secondary
+                font-medium
+                uppercase
+                tracking-wide
               ">
-                {chapter.description}
+
+                Contenu
+
               </p>
 
-            )}
+
+              <p className="
+                theme-text
+                font-bold
+                mt-1
+              ">
+
+                Leçons disponibles
+
+              </p>
+
+            </div>
+
+
+            <div className="
+              text-right
+            ">
+
+              <p className="
+                text-xs
+                theme-text-secondary
+                font-medium
+                uppercase
+                tracking-wide
+              ">
+
+                Leçons
+
+              </p>
+
+
+              <p className="
+                text-lg
+                font-bold
+                text-accent
+                mt-1
+              ">
+
+                {lessons.length}
+
+              </p>
+
+            </div>
 
           </div>
 
@@ -512,22 +669,23 @@ export default function ChapterPage() {
       ================================================= */}
 
       <div className="
+        flex
+        items-center
+        justify-between
         mb-5
-        px-1
       ">
 
         <div className="
           flex
           items-center
           gap-3
-          mb-1
         ">
 
           <div className="
-            w-10
-            h-10
+            w-11
+            h-11
             rounded-xl
-            bg-green-100
+            bg-accent-soft
             flex
             items-center
             justify-center
@@ -535,30 +693,60 @@ export default function ChapterPage() {
 
             <BookOpen
               size={21}
-              className="text-green-600"
+              className="text-accent"
             />
 
           </div>
 
 
-          <h2 className="
-            text-xl
-            md:text-2xl
-            font-bold
-            text-gray-900
-          ">
-            Leçons
-          </h2>
+          <div>
+
+            <h2 className="
+              text-xl
+              md:text-2xl
+              font-bold
+              theme-text
+            ">
+
+              Leçons
+
+            </h2>
+
+
+            <p className="
+              text-sm
+              theme-text-secondary
+              mt-1
+            ">
+
+              Choisis une leçon pour apprendre.
+
+            </p>
+
+          </div>
 
         </div>
 
 
-        <p className="
-          text-gray-500
-          ml-[52px]
-        ">
-          Choisis une leçon pour apprendre.
-        </p>
+        {lessons.length > 0 && (
+
+          <span className="
+            shrink-0
+            ml-3
+            px-3
+            py-1.5
+            rounded-full
+            bg-accent-soft
+            text-accent
+            text-xs
+            font-bold
+          ">
+
+            {lessons.length}
+
+          </span>
+
+        )}
 
       </div>
 
@@ -570,32 +758,47 @@ export default function ChapterPage() {
       {lessons.length === 0 ? (
 
         <div className="
-          bg-white
-          rounded-2xl
+          theme-surface
+          rounded-3xl
           border
-          border-gray-100
+          theme-border
           shadow-sm
           p-8
           text-center
         ">
 
-          <BookOpen
-            size={42}
-            className="
-              mx-auto
-              mb-3
-              text-gray-300
-            "
-          />
+          <div className="
+            w-14
+            h-14
+            mx-auto
+            mb-4
+            rounded-2xl
+            bg-accent-soft
+            flex
+            items-center
+            justify-center
+          ">
+
+            <BookOpen
+              size={28}
+              className="text-accent"
+            />
+
+          </div>
 
 
-          <p className="text-gray-500">
+          <p className="
+            theme-text-secondary
+          ">
+
             Aucune leçon disponible.
+
           </p>
 
         </div>
 
       ) : (
+
 
         /* =================================================
            LISTE DES LEÇONS
@@ -610,169 +813,186 @@ export default function ChapterPage() {
         ">
 
           {lessons.map(
-            (lesson, index) => {
+            (lesson, index) => (
 
-              const backgrounds = [
-
-                "bg-blue-50 border-blue-100",
-
-                "bg-green-50 border-green-100",
-
-                "bg-purple-50 border-purple-100"
-
-              ];
-
-
-              const iconBackgrounds = [
-
-                "bg-blue-100",
-
-                "bg-green-100",
-
-                "bg-purple-100"
-
-              ];
-
-
-              const iconColors = [
-
-                "text-blue-600",
-
-                "text-green-600",
-
-                "text-purple-600"
-
-              ];
+              <button
+                key={lesson.id}
+                onClick={() =>
+                  openLesson(lesson)
+                }
+                className="
+                  group
+                  relative
+                  w-full
+                  text-left
+                  overflow-hidden
+                  theme-surface
+                  rounded-3xl
+                  border
+                  theme-border
+                  p-5
+                  shadow-sm
+                  hover:shadow-lg
+                  hover:-translate-y-1
+                  hover:border-accent
+                  transition-all
+                  duration-200
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-accent
+                "
+              >
 
 
-              const position =
-                index % 3;
+                {/* BARRE ACCENT */}
+
+                <div className="
+                  absolute
+                  left-0
+                  top-0
+                  right-0
+                  h-1
+                  bg-accent
+                " />
 
 
-              return (
+                {/* CERCLE DÉCORATIF */}
 
-                <button
-                  key={lesson.id}
-                  onClick={() =>
-                    openLesson(lesson)
-                  }
-                  className={`
-                    group
-                    w-full
-                    text-left
-                    rounded-2xl
-                    border
-                    ${backgrounds[position]}
-                    p-5
-                    shadow-sm
-                    hover:shadow-lg
-                    hover:-translate-y-1
-                    transition-all
-                    duration-200
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-blue-400
-                  `}
-                >
+                <div className="
+                  absolute
+                  -right-8
+                  -top-8
+                  w-24
+                  h-24
+                  rounded-full
+                  bg-accent
+                  opacity-[0.06]
+                  group-hover:opacity-10
+                  transition
+                " />
 
-                  {/* ICÔNE + FLÈCHE */}
+
+                {/* ICÔNE + FLÈCHE */}
+
+                <div className="
+                  relative
+                  z-10
+                  flex
+                  items-center
+                  justify-between
+                  mb-5
+                ">
+
 
                   <div className="
+                    w-12
+                    h-12
+                    rounded-2xl
+                    bg-accent-soft
                     flex
                     items-center
-                    justify-between
-                    mb-4
+                    justify-center
                   ">
 
-                    <div className={`
-                      w-12
-                      h-12
-                      rounded-xl
-                      ${iconBackgrounds[position]}
-                      flex
-                      items-center
-                      justify-center
-                    `}>
-
-                      <PlayCircle
-                        size={27}
-                        className={
-                          iconColors[position]
-                        }
-                      />
-
-                    </div>
-
-
-                    <ChevronRight
-                      size={22}
-                      className="
-                        text-gray-400
-                        group-hover:text-gray-700
-                        group-hover:translate-x-1
-                        transition
-                      "
+                    <PlayCircle
+                      size={27}
+                      className="text-accent"
                     />
 
                   </div>
 
 
-                  {/* TITRE */}
-
-                  <h3 className="
-                    font-bold
-                    text-gray-900
-                    text-lg
-                    leading-snug
-                    mb-4
-                  ">
-                    {lesson.title}
-                  </h3>
-
-
-                  {/* INFORMATIONS */}
-
                   <div className="
+                    w-10
+                    h-10
+                    rounded-full
+                    bg-accent-soft
+                    text-accent
                     flex
-                    flex-wrap
-                    gap-3
-                    text-sm
-                    text-gray-600
+                    items-center
+                    justify-center
+                    group-hover:bg-accent
+                    group-hover:text-white
+                    group-hover:translate-x-1
+                    transition
                   ">
 
-                    <span className="
-                      flex
-                      items-center
-                      gap-1.5
-                    ">
-
-                      <Clock size={15} />
-
-                      {lesson.duration_minutes || 0}
-                      {" "}min
-
-                    </span>
-
-
-                    <span className="
-                      flex
-                      items-center
-                      gap-1.5
-                    ">
-
-                      <BookOpen size={15} />
-
-                      Leçon {index + 1}
-
-                    </span>
+                    <ChevronRight
+                      size={21}
+                    />
 
                   </div>
 
-                </button>
+                </div>
 
-              );
 
-            }
+                {/* TITRE */}
+
+                <h3 className="
+                  relative
+                  z-10
+                  font-bold
+                  theme-text
+                  text-lg
+                  leading-snug
+                  mb-4
+                ">
+
+                  {lesson.title}
+
+                </h3>
+
+
+                {/* INFORMATIONS */}
+
+                <div className="
+                  relative
+                  z-10
+                  flex
+                  flex-wrap
+                  gap-3
+                  text-sm
+                  theme-text-secondary
+                ">
+
+
+                  <span className="
+                    flex
+                    items-center
+                    gap-1.5
+                  ">
+
+                    <Clock
+                      size={15}
+                      className="text-accent"
+                    />
+
+                    {lesson.duration_minutes || 0}
+                    {" "}min
+
+                  </span>
+
+
+                  <span className="
+                    flex
+                    items-center
+                    gap-1.5
+                  ">
+
+                    <BookOpen
+                      size={15}
+                      className="text-accent"
+                    />
+
+                    Leçon {index + 1}
+
+                  </span>
+
+                </div>
+
+              </button>
+
+            )
           )}
 
         </div>

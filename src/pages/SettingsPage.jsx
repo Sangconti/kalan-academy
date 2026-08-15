@@ -14,6 +14,8 @@ import {
   Moon,
   Monitor,
   Check,
+  AlertTriangle,
+  Loader2,
 } from "lucide-react";
 
 import {
@@ -36,12 +38,23 @@ import {
   useTheme,
 } from "../hooks/useTheme";
 
+import {
+  db,
+} from "../offline/db";
+
 
 // =====================================================
 // VERSION APPLICATION
 // =====================================================
 
 const APP_VERSION = "1.0.0";
+
+
+// =====================================================
+// XP CACHE
+// =====================================================
+
+const XP_CACHE_PREFIX = "kalan_xp_cache_";
 
 
 // =====================================================
@@ -111,6 +124,7 @@ export default function SettingsPage() {
 
   const navigate = useNavigate();
 
+
   const {
     isOnline,
   } = useNetwork();
@@ -130,12 +144,54 @@ export default function SettingsPage() {
   ] = useState(false);
 
 
+  const [
+    clearingCache,
+    setClearingCache,
+  ] = useState(false);
+
+
+  const [
+    resettingProgress,
+    setResettingProgress,
+  ] = useState(false);
+
+
+  const [
+    message,
+    setMessage,
+  ] = useState(null);
+
+
   // ===================================================
   // PROFIL
   // ===================================================
 
   function openProfile() {
     navigate("/profile");
+  }
+
+
+  // ===================================================
+  // MESSAGE
+  // ===================================================
+
+  function showMessage(
+    type,
+    text
+  ) {
+
+    setMessage({
+      type,
+      text,
+    });
+
+
+    window.setTimeout(() => {
+
+      setMessage(null);
+
+    }, 4000);
+
   }
 
 
@@ -204,6 +260,332 @@ export default function SettingsPage() {
 
 
   // ===================================================
+  // VIDER LE CACHE PÉDAGOGIQUE
+  // ===================================================
+
+  async function clearCache() {
+
+    if (clearingCache) {
+      return;
+    }
+
+
+    const confirmed =
+      window.confirm(
+
+        "Vider le cache ?\n\n" +
+
+        "Les cours, chapitres, leçons, quiz et " +
+        "données pédagogiques stockés localement " +
+        "seront supprimés.\n\n" +
+
+        "Ta progression, tes tentatives de quiz " +
+        "et les données en attente de synchronisation " +
+        "seront conservées.\n\n" +
+
+        "Cette action ne supprime pas ton compte."
+
+      );
+
+
+    if (!confirmed) {
+      return;
+    }
+
+
+    try {
+
+      setClearingCache(true);
+
+      setMessage(null);
+
+
+      /*
+       * IMPORTANT :
+       *
+       * On supprime uniquement le cache
+       * pédagogique.
+       *
+       * Les données utilisateur sont conservées :
+       *
+       * - userProgress
+       * - quizAttempts
+       * - syncQueue
+       *
+       * Le cache XP est également conservé.
+       */
+
+
+      await db.transaction(
+
+        "rw",
+
+        [
+          db.classes,
+          db.subjects,
+          db.chapters,
+          db.lessons,
+          db.lessonBlocks,
+          db.exercises,
+          db.quizzes,
+          db.quizQuestions,
+          db.badges,
+          db.downloads,
+        ],
+
+        async () => {
+
+          await Promise.all([
+
+            db.classes.clear(),
+
+            db.subjects.clear(),
+
+            db.chapters.clear(),
+
+            db.lessons.clear(),
+
+            db.lessonBlocks.clear(),
+
+            db.exercises.clear(),
+
+            db.quizzes.clear(),
+
+            db.quizQuestions.clear(),
+
+            db.badges.clear(),
+
+            db.downloads.clear(),
+
+          ]);
+
+        }
+
+      );
+
+
+      showMessage(
+        "success",
+        "Le cache pédagogique a été vidé avec succès."
+      );
+
+
+      console.log(
+        "🗑️ Cache pédagogique Kalan Academy supprimé."
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "❌ Impossible de vider le cache :",
+        error
+      );
+
+
+      showMessage(
+        "error",
+        "Impossible de vider le cache."
+      );
+
+
+    } finally {
+
+      setClearingCache(false);
+
+    }
+
+  }
+
+
+  // ===================================================
+  // RÉINITIALISER LA PROGRESSION
+  // ===================================================
+
+  async function resetProgress() {
+
+    if (resettingProgress) {
+      return;
+    }
+
+
+    const confirmed =
+      window.confirm(
+
+        "Réinitialiser ta progression ?\n\n" +
+
+        "Cette action supprimera localement :\n" +
+
+        "• ta progression des leçons\n" +
+        "• tes tentatives de quiz\n" +
+        "• ton cache XP local\n\n" +
+
+        "Les données déjà synchronisées avec " +
+        "le serveur ne seront PAS supprimées " +
+        "automatiquement.\n\n" +
+
+        "Cette action est irréversible."
+
+      );
+
+
+    if (!confirmed) {
+      return;
+    }
+
+
+    try {
+
+      setResettingProgress(true);
+
+      setMessage(null);
+
+
+      /*
+       * Récupération de la session actuelle.
+       */
+
+      const {
+        data: sessionData,
+      } = await supabase.auth.getSession();
+
+
+      const userId =
+        sessionData?.session?.user?.id;
+
+
+      /*
+       * -----------------------------------------
+       * SUPPRESSION PROGRESSION LOCALE
+       * -----------------------------------------
+       */
+
+      if (userId) {
+
+        await db.userProgress
+          .where("user_id")
+          .equals(userId)
+          .delete();
+
+
+        /*
+         * Suppression des tentatives de quiz
+         * appartenant à l'utilisateur.
+         */
+
+        await db.quizAttempts
+          .where("user_id")
+          .equals(userId)
+          .delete();
+
+      }
+
+
+      /*
+       * -----------------------------------------
+       * SUPPRESSION DU CACHE XP
+       * -----------------------------------------
+       */
+
+      if (userId) {
+
+        try {
+
+          localStorage.removeItem(
+            `${XP_CACHE_PREFIX}${userId}`
+          );
+
+        } catch (error) {
+
+          console.warn(
+            "⚠️ Impossible de supprimer le cache XP :",
+            error
+          );
+
+        }
+
+      }
+
+
+      /*
+       * -----------------------------------------
+       * SUPPRESSION DES ÉLÉMENTS DE SYNC
+       * -----------------------------------------
+       *
+       * IMPORTANT :
+       *
+       * Les éléments de sync concernant
+       * user_progress / quiz_attempts / XP
+       * sont supprimés afin d'éviter qu'une
+       * ancienne progression soit resynchronisée.
+       *
+       * Les autres éléments de synchronisation
+       * sont conservés.
+       */
+
+      await db.syncQueue
+        .filter(
+          item =>
+
+            item.table_name ===
+              "user_progress"
+
+            ||
+
+            item.table_name ===
+              "quiz_attempts"
+
+            ||
+
+            (
+              item.table_name ===
+                "profiles"
+
+              &&
+
+              item.action ===
+                "xp"
+            )
+
+        )
+        .delete();
+
+
+      showMessage(
+        "success",
+        "Ta progression locale a été réinitialisée."
+      );
+
+
+      console.log(
+        "🔄 Progression locale Kalan Academy réinitialisée."
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "❌ Impossible de réinitialiser la progression :",
+        error
+      );
+
+
+      showMessage(
+        "error",
+        "Impossible de réinitialiser la progression."
+      );
+
+
+    } finally {
+
+      setResettingProgress(false);
+
+    }
+
+  }
+
+
+  // ===================================================
   // AFFICHAGE
   // ===================================================
 
@@ -218,6 +600,56 @@ export default function SettingsPage() {
         pb-10
       "
     >
+
+      {/* =================================================
+          MESSAGE
+      ================================================= */}
+
+      {message && (
+
+        <div
+          className={`
+            mb-5
+            rounded-2xl
+            border
+            px-4
+            py-3
+            flex
+            items-center
+            gap-3
+            ${
+              message.type === "success"
+                ? "bg-green-50 border-green-200 text-green-700"
+                : "bg-red-50 border-red-200 text-red-700"
+            }
+          `}
+        >
+
+          {message.type === "success" ? (
+
+            <Check
+              size={18}
+              className="shrink-0"
+            />
+
+          ) : (
+
+            <AlertTriangle
+              size={18}
+              className="shrink-0"
+            />
+
+          )}
+
+
+          <p className="text-sm font-medium">
+            {message.text}
+          </p>
+
+        </div>
+
+      )}
+
 
       {/* =================================================
           EN-TÊTE
@@ -241,7 +673,10 @@ export default function SettingsPage() {
 
           <Settings
             size={25}
-            className="text-blue-600 theme-accent-text"
+            className="
+              text-blue-600
+              theme-accent-text
+            "
           />
 
         </div>
@@ -576,7 +1011,13 @@ export default function SettingsPage() {
               "
             >
               Couleur sélectionnée :{" "}
-              <span className="font-semibold theme-accent-text">
+
+              <span
+                className="
+                  font-semibold
+                  theme-accent-text
+                "
+              >
                 {
                   COLOR_OPTIONS.find(
                     (color) =>
@@ -584,6 +1025,7 @@ export default function SettingsPage() {
                   )?.label
                 }
               </span>
+
             </p>
 
           </div>
@@ -709,7 +1151,13 @@ export default function SettingsPage() {
           </button>
 
 
-          <div className="border-t border-gray-100 theme-border" />
+          <div
+            className="
+              border-t
+              border-gray-100
+              theme-border
+            "
+          />
 
 
           {/* DÉCONNEXION */}
@@ -744,10 +1192,24 @@ export default function SettingsPage() {
               "
             >
 
-              <LogOut
-                size={20}
-                className="text-red-600"
-              />
+              {loggingOut ? (
+
+                <Loader2
+                  size={20}
+                  className="
+                    text-red-600
+                    animate-spin
+                  "
+                />
+
+              ) : (
+
+                <LogOut
+                  size={20}
+                  className="text-red-600"
+                />
+
+              )}
 
             </div>
 
@@ -892,7 +1354,13 @@ export default function SettingsPage() {
           </div>
 
 
-          <div className="border-t border-gray-100 theme-border" />
+          <div
+            className="
+              border-t
+              border-gray-100
+              theme-border
+            "
+          />
 
 
           {/* LANGUE */}
@@ -1084,12 +1552,35 @@ export default function SettingsPage() {
           </div>
 
 
-          <div className="border-t border-gray-100 theme-border" />
+          <div
+            className="
+              border-t
+              border-gray-100
+              theme-border
+            "
+          />
 
 
-          {/* CACHE */}
+          {/* VIDER LE CACHE */}
 
-          <div className="flex items-center gap-4 p-5">
+          <button
+            type="button"
+            onClick={clearCache}
+            disabled={clearingCache}
+            className="
+              w-full
+              flex
+              items-center
+              gap-4
+              p-5
+              text-left
+              hover:bg-gray-50
+              transition
+              disabled:opacity-60
+              disabled:cursor-not-allowed
+              theme-hover
+            "
+          >
 
             <div
               className="
@@ -1104,10 +1595,24 @@ export default function SettingsPage() {
               "
             >
 
-              <Trash2
-                size={20}
-                className="text-gray-500"
-              />
+              {clearingCache ? (
+
+                <Loader2
+                  size={20}
+                  className="
+                    text-gray-500
+                    animate-spin
+                  "
+                />
+
+              ) : (
+
+                <Trash2
+                  size={20}
+                  className="text-gray-500"
+                />
+
+              )}
 
             </div>
 
@@ -1121,7 +1626,10 @@ export default function SettingsPage() {
                   theme-text
                 "
               >
-                Vider le cache
+                {clearingCache
+                  ? "Vidage du cache..."
+                  : "Vider le cache"
+                }
               </h3>
 
 
@@ -1133,28 +1641,27 @@ export default function SettingsPage() {
                   theme-text-secondary
                 "
               >
-                Cette fonction sera activée
-                avec le gestionnaire de cache.
+                Supprimer les données pédagogiques
+                stockées localement sans supprimer
+                ta progression.
               </p>
 
             </div>
 
 
-            <span
-              className="
-                text-xs
-                font-medium
-                text-gray-400
-                bg-gray-100
-                px-2.5
-                py-1
-                rounded-full
-              "
-            >
-              Bientôt
-            </span>
+            {!clearingCache && (
 
-          </div>
+              <ChevronRight
+                size={20}
+                className="
+                  text-gray-400
+                  theme-text-secondary
+                "
+              />
+
+            )}
+
+          </button>
 
         </div>
 
@@ -1196,14 +1703,32 @@ export default function SettingsPage() {
           "
         >
 
-          <div className="flex items-center gap-4 p-5">
+          {/* RÉINITIALISER PROGRESSION */}
+
+          <button
+            type="button"
+            onClick={resetProgress}
+            disabled={resettingProgress}
+            className="
+              w-full
+              flex
+              items-center
+              gap-4
+              p-5
+              text-left
+              hover:bg-orange-50
+              transition
+              disabled:opacity-60
+              disabled:cursor-not-allowed
+            "
+          >
 
             <div
               className="
                 w-11
                 h-11
                 rounded-xl
-                bg-gray-100
+                bg-orange-50
                 flex
                 items-center
                 justify-center
@@ -1211,10 +1736,24 @@ export default function SettingsPage() {
               "
             >
 
-              <RotateCcw
-                size={20}
-                className="text-gray-500"
-              />
+              {resettingProgress ? (
+
+                <Loader2
+                  size={20}
+                  className="
+                    text-orange-600
+                    animate-spin
+                  "
+                />
+
+              ) : (
+
+                <RotateCcw
+                  size={20}
+                  className="text-orange-600"
+                />
+
+              )}
 
             </div>
 
@@ -1228,7 +1767,10 @@ export default function SettingsPage() {
                   theme-text
                 "
               >
-                Réinitialiser ma progression
+                {resettingProgress
+                  ? "Réinitialisation..."
+                  : "Réinitialiser ma progression"
+                }
               </h3>
 
 
@@ -1240,28 +1782,26 @@ export default function SettingsPage() {
                   theme-text-secondary
                 "
               >
-                Cette fonction sera activée après
-                sécurisation du service de progression.
+                Supprimer ma progression locale,
+                mes tentatives de quiz et mon cache XP.
               </p>
 
             </div>
 
 
-            <span
-              className="
-                text-xs
-                font-medium
-                text-gray-400
-                bg-gray-100
-                px-2.5
-                py-1
-                rounded-full
-              "
-            >
-              Bientôt
-            </span>
+            {!resettingProgress && (
 
-          </div>
+              <ChevronRight
+                size={20}
+                className="
+                  text-gray-400
+                  theme-text-secondary
+                "
+              />
+
+            )}
+
+          </button>
 
         </div>
 
@@ -1302,6 +1842,8 @@ export default function SettingsPage() {
             theme-border
           "
         >
+
+          {/* VERSION */}
 
           <div
             className="
@@ -1380,6 +1922,8 @@ export default function SettingsPage() {
 
           </div>
 
+
+          {/* KALAN ACADEMY */}
 
           <div className="flex items-center gap-4 p-5">
 

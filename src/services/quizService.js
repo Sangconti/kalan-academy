@@ -9,6 +9,8 @@ import {
 
   saveQuizAttempt,
 
+  saveProgress,
+
   markQuizAttemptSynced,
 
   addToSyncQueue

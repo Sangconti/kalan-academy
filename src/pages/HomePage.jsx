@@ -106,8 +106,7 @@ export default function HomePage() {
 
           <p
             className="
-              text-gray-500
-              dark:text-gray-400
+              theme-text-secondary
               font-medium
             "
           >
@@ -240,8 +239,7 @@ export default function HomePage() {
 
           <p
             className="
-              text-gray-600
-              dark:text-gray-300
+              theme-text-secondary
               mt-3
               max-w-2xl
               leading-relaxed
@@ -276,8 +274,7 @@ export default function HomePage() {
               text-xl
               md:text-2xl
               font-bold
-              text-gray-900
-              dark:text-white
+              theme-text
             "
           >
             Choisis ta classe
@@ -286,8 +283,7 @@ export default function HomePage() {
           <p
             className="
               text-sm
-              text-gray-500
-              dark:text-gray-400
+              theme-text-secondary
               mt-1
             "
           >
@@ -350,8 +346,7 @@ export default function HomePage() {
 
           <p
             className="
-              text-gray-500
-              dark:text-gray-400
+              theme-text-secondary
             "
           >
             Aucune classe disponible.
@@ -472,8 +467,7 @@ export default function HomePage() {
                   mt-5
                   text-xl
                   font-bold
-                  text-gray-900
-                  dark:text-white
+                  theme-text
                 "
               >
                 {classe.name}
@@ -487,8 +481,7 @@ export default function HomePage() {
                 <p
                   className="
                     text-sm
-                    text-gray-500
-                    dark:text-gray-400
+                    theme-text-secondary
                     mt-2
                     line-clamp-2
                   "

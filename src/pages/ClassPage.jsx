@@ -15,7 +15,9 @@ import {
 } from "../services/educationService";
 
 import {
-  ArrowLeft
+  ArrowLeft,
+  ArrowRight,
+  BookOpen
 } from "lucide-react";
 
 
@@ -246,19 +248,19 @@ export default function ClassPage() {
         <div className="text-center">
 
           <div className="
-            w-10
-            h-10
+            w-12
+            h-12
             mx-auto
             mb-4
-            border-4
-            border-blue-200
-            border-t-blue-600
             rounded-full
+            border-4
+            border-accent-soft
+            border-t-accent
             animate-spin
           " />
 
           <p className="
-            text-gray-600
+            theme-text-secondary
             font-medium
           ">
             Chargement des matières...
@@ -281,17 +283,29 @@ export default function ClassPage() {
 
     return (
 
-      <div className="p-4 md:p-6">
+      <div className="
+        p-4
+        md:p-6
+      ">
 
         <button
-          onClick={() => navigate("/")}
+          onClick={() =>
+            navigate("/")
+          }
           className="
-            flex
+            inline-flex
             items-center
             gap-2
-            text-gray-600
-            hover:text-blue-600
             mb-5
+            px-4
+            py-2.5
+            rounded-xl
+            theme-surface
+            border
+            theme-border
+            shadow-sm
+            theme-text-secondary
+            hover:text-accent
             transition
           "
         >
@@ -304,22 +318,38 @@ export default function ClassPage() {
 
 
         <div className="
-          bg-red-50
+          theme-surface
+          rounded-3xl
           border
           border-red-200
-          rounded-2xl
+          dark:border-red-900
+          shadow-sm
           p-6
+          md:p-8
           text-center
         ">
 
-          <div className="text-4xl mb-3">
+          <div className="
+            w-14
+            h-14
+            mx-auto
+            mb-4
+            rounded-2xl
+            bg-red-50
+            dark:bg-red-950/40
+            flex
+            items-center
+            justify-center
+            text-2xl
+          ">
             ⚠️
           </div>
 
 
           <h2 className="
             font-bold
-            text-red-800
+            text-red-700
+            dark:text-red-300
           ">
             Impossible de charger les matières
           </h2>
@@ -327,8 +357,9 @@ export default function ClassPage() {
 
           <p className="
             text-sm
-            text-red-700
-            mt-1
+            text-red-600
+            dark:text-red-400
+            mt-2
           ">
             {error}
           </p>
@@ -339,13 +370,15 @@ export default function ClassPage() {
               window.location.reload()
             }
             className="
-              mt-4
-              w-full
+              mt-5
+              px-5
               py-3
               rounded-xl
-              bg-red-600
+              bg-accent
               text-white
               font-semibold
+              shadow-sm
+              hover:opacity-90
               active:scale-[0.98]
               transition
             "
@@ -369,8 +402,7 @@ export default function ClassPage() {
   return (
 
     <div className="
-      min-h-screen
-      bg-gray-50
+      pb-10
     ">
 
 
@@ -379,19 +411,28 @@ export default function ClassPage() {
       ================================================= */}
 
       <button
-        onClick={() => navigate("/")}
+        onClick={() =>
+          navigate("/")
+        }
         className="
-          flex
+          inline-flex
           items-center
           gap-2
-          text-gray-600
-          hover:text-blue-600
-          mb-5
+          mb-6
+          px-4
+          py-2.5
+          rounded-xl
+          theme-surface
+          border
+          theme-border
+          shadow-sm
+          theme-text-secondary
+          hover:text-accent
           transition
         "
       >
 
-        <ArrowLeft size={19} />
+        <ArrowLeft size={18} />
 
         Retour à l'accueil
 
@@ -402,36 +443,93 @@ export default function ClassPage() {
           EN-TÊTE
       ================================================= */}
 
-      <div className="mb-7">
+      <section className="
+        relative
+        overflow-hidden
+        rounded-3xl
+        bg-accent-soft
+        border
+        border-accent-soft
+        px-6
+        py-7
+        md:px-8
+        md:py-8
+        mb-8
+      ">
 
-        <p className="
-          text-sm
-          font-medium
-          text-blue-600
-          mb-1
+
+        {/* DÉCORATION */}
+
+        <div className="
+          absolute
+          -right-10
+          -top-10
+          w-32
+          h-32
+          rounded-full
+          bg-accent
+          opacity-10
+        " />
+
+
+        <div className="
+          absolute
+          -left-8
+          -bottom-12
+          w-28
+          h-28
+          rounded-full
+          bg-accent
+          opacity-10
+        " />
+
+
+        <div className="
+          relative
+          z-10
         ">
-          Kalan Academy
-        </p>
+
+          <div className="
+            inline-flex
+            items-center
+            gap-2
+            text-sm
+            font-semibold
+            text-accent
+            mb-2
+          ">
+
+            <BookOpen size={17} />
+
+            Kalan Academy
+
+          </div>
 
 
-        <h1 className="
-          text-3xl
-          font-extrabold
-          text-gray-900
-        ">
-          Matières
-        </h1>
+          <h1 className="
+            text-3xl
+            md:text-4xl
+            font-extrabold
+            tracking-tight
+            theme-text
+          ">
+            Matières
+          </h1>
 
 
-        <p className="
-          text-gray-500
-          mt-2
-        ">
-          Choisis une matière pour commencer
-          ton apprentissage.
-        </p>
+          <p className="
+            theme-text-secondary
+            mt-2
+            max-w-2xl
+            leading-relaxed
+          ">
+            Choisis une matière pour commencer
+            ton apprentissage.
+          </p>
 
-      </div>
+        </div>
+
+      </section>
 
 
       {/* =================================================
@@ -441,23 +539,35 @@ export default function ClassPage() {
       {subjects.length === 0 ? (
 
         <div className="
-          bg-white
-          rounded-2xl
+          theme-surface
+          rounded-3xl
           border
-          border-gray-200
-          p-6
-          text-center
+          theme-border
           shadow-sm
+          p-8
+          text-center
         ">
 
-          <div className="text-4xl mb-3">
+          <div className="
+            w-16
+            h-16
+            mx-auto
+            mb-4
+            rounded-2xl
+            bg-accent-soft
+            flex
+            items-center
+            justify-center
+            text-3xl
+          ">
             📚
           </div>
 
 
           <h2 className="
             font-bold
-            text-gray-800
+            text-lg
+            theme-text
           ">
             Aucune matière disponible
           </h2>
@@ -465,8 +575,8 @@ export default function ClassPage() {
 
           <p className="
             text-sm
-            text-gray-500
-            mt-1
+            theme-text-secondary
+            mt-2
           ">
             Aucune matière n'est disponible
             pour cette classe.
@@ -476,7 +586,13 @@ export default function ClassPage() {
 
       ) : (
 
-        <div className="grid gap-4">
+        <div className="
+          grid
+          grid-cols-1
+          sm:grid-cols-2
+          lg:grid-cols-3
+          gap-4
+        ">
 
           {subjects.map(
             (subject, index) => {
@@ -496,25 +612,49 @@ export default function ClassPage() {
                   }
                   className="
                     group
-                    w-full
-                    bg-white
-                    rounded-2xl
+                    relative
+                    overflow-hidden
+
+                    theme-surface
+
+                    rounded-3xl
+
                     border
-                    border-gray-100
-                    shadow-sm
+                    theme-border
+
                     p-5
+                    md:p-6
+
                     text-left
+
+                    shadow-sm
+
+                    hover:shadow-xl
+                    hover:-translate-y-1
+
                     transition-all
-                    duration-200
-                    hover:shadow-lg
-                    hover:-translate-y-0.5
-                    active:scale-[0.98]
+
+                    hover:border-accent
                   "
                 >
 
+
+                  {/* BARRE ACCENT */}
+
+                  <div className="
+                    absolute
+                    left-0
+                    top-0
+                    right-0
+                    h-1.5
+                    bg-accent
+                  " />
+
+
                   <div className="
                     flex
-                    items-center
+                    items-start
+                    justify-between
                     gap-4
                   ">
 
@@ -522,79 +662,17 @@ export default function ClassPage() {
                     {/* ICÔNE */}
 
                     <div className="
-                      w-16
-                      h-16
-                      shrink-0
+                      w-14
+                      h-14
                       rounded-2xl
-                      bg-blue-50
+                      bg-accent-soft
                       flex
                       items-center
                       justify-center
                       text-3xl
+                      shrink-0
                     ">
                       {icon}
-                    </div>
-
-
-                    {/* CONTENU */}
-
-                    <div className="
-                      flex-1
-                      min-w-0
-                    ">
-
-                      <div className="
-                        flex
-                        items-center
-                        gap-2
-                        mb-1
-                      ">
-
-                        <span className="
-                          text-xs
-                          font-bold
-                          text-blue-600
-                        ">
-                          MATIÈRE {index + 1}
-                        </span>
-
-                      </div>
-
-
-                      <h2 className="
-                        text-lg
-                        font-bold
-                        text-gray-900
-                        truncate
-                      ">
-                        {subject.name}
-                      </h2>
-
-
-                      {subject.description ? (
-
-                        <p className="
-                          text-sm
-                          text-gray-500
-                          mt-1
-                          line-clamp-2
-                        ">
-                          {subject.description}
-                        </p>
-
-                      ) : (
-
-                        <p className="
-                          text-sm
-                          text-gray-400
-                          mt-1
-                        ">
-                          Découvre les chapitres
-                          de cette matière.
-                        </p>
-
-                      )}
-
                     </div>
 
 
@@ -603,25 +681,109 @@ export default function ClassPage() {
                     <div className="
                       w-10
                       h-10
-                      shrink-0
                       rounded-full
-                      bg-gray-50
+                      theme-bg
                       flex
                       items-center
                       justify-center
-                      text-gray-400
-                      group-hover:bg-blue-50
-                      group-hover:text-blue-600
+                      theme-text-secondary
+                      group-hover:bg-accent-soft
+                      group-hover:text-accent
                       transition
                     ">
 
-                      <span className="text-xl">
-                        →
-                      </span>
+                      <ArrowRight
+                        size={19}
+                        className="
+                          group-hover:translate-x-0.5
+                          transition
+                        "
+                      />
 
                     </div>
 
                   </div>
+
+
+                  {/* NUMÉRO */}
+
+                  <div className="
+                    mt-5
+                    text-xs
+                    font-bold
+                    text-accent
+                  ">
+                    MATIÈRE {index + 1}
+                  </div>
+
+
+                  {/* NOM */}
+
+                  <h2 className="
+                    mt-1
+                    text-xl
+                    font-bold
+                    theme-text
+                    truncate
+                  ">
+                    {subject.name}
+                  </h2>
+
+
+                  {/* DESCRIPTION */}
+
+                  {subject.description ? (
+
+                    <p className="
+                      text-sm
+                      theme-text-secondary
+                      mt-2
+                      line-clamp-2
+                      leading-relaxed
+                    ">
+                      {subject.description}
+                    </p>
+
+                  ) : (
+
+                    <p className="
+                      text-sm
+                      theme-text-secondary
+                      mt-2
+                      line-clamp-2
+                      leading-relaxed
+                    ">
+                      Découvre les chapitres
+                      de cette matière.
+                    </p>
+
+                  )}
+
+
+                  {/* ACTION */}
+
+                  <div className="
+                    mt-5
+                    flex
+                    items-center
+                    gap-1.5
+                    text-sm
+                    font-semibold
+                    text-accent
+                  ">
+
+                    Commencer
+
+                    <ArrowRight
+                      size={16}
+                      className="
+                        group-hover:translate-x-1
+                        transition
+                      "
+                    />
+
+                  </div>
+
 
                 </button>
 

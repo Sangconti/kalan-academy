@@ -22,6 +22,10 @@ import SettingsPage from './pages/SettingsPage'
 import CoursesPage from './pages/CoursesPage'
 
 import Layout from './components/Layout'
+import ProtectedStudentRoute from './components/ProtectedStudentRoute'
+
+import AccessPendingPage from './pages/AccessPendingPage'
+import AccessBlockedPage from './pages/AccessBlockedPage'
 
 // ===============================
 // ADMIN
@@ -86,6 +90,25 @@ function App() {
       <Route
         path="/admin/login"
         element={<LoginAdmin />}
+      />
+
+
+      <Route
+        path="/access-pending"
+        element={
+          user
+            ? <AccessPendingPage />
+            : <Navigate to="/login" replace />
+        }
+      />
+
+      <Route
+        path="/access-blocked"
+        element={
+          user
+            ? <AccessBlockedPage />
+            : <Navigate to="/login" replace />
+        }
       />
 
 
@@ -288,118 +311,118 @@ function App() {
 
 
       {/* =====================================================
-          APPLICATION UTILISATEUR
+          APPLICATION UTILISATEUR — ACCÈS PROTÉGÉ
       ===================================================== */}
 
-      <Route element={<Layout />}>
+      <Route
+        element={
+          user ? (
+            <ProtectedStudentRoute user={user}>
+              <Layout />
+            </ProtectedStudentRoute>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      >
 
-        {/* Accueil */}
+        {/* =====================================================
+            ACCUEIL
+        ===================================================== */}
+
         <Route
           path="/"
-          element={
-            user
-              ? <HomePage />
-              : <Navigate to="/login" replace />
-          }
+          element={<HomePage />}
         />
 
 
-        {/* Classe */}
+        {/* =====================================================
+            CLASSE
+        ===================================================== */}
+
         <Route
           path="/class/:classId"
-          element={
-            user
-              ? <ClassPage />
-              : <Navigate to="/login" replace />
-          }
+          element={<ClassPage />}
         />
 
 
-        {/* Matière */}
+        {/* =====================================================
+            MATIÈRE
+        ===================================================== */}
+
         <Route
           path="/subject/:subjectId"
-          element={
-            user
-              ? <SubjectPage />
-              : <Navigate to="/login" replace />
-          }
+          element={<SubjectPage />}
         />
 
 
-        {/* Chapitre */}
+        {/* =====================================================
+            CHAPITRE
+        ===================================================== */}
+
         <Route
           path="/chapter/:chapterId"
-          element={
-            user
-              ? <ChapterPage />
-              : <Navigate to="/login" replace />
-          }
+          element={<ChapterPage />}
         />
 
 
-        {/* Leçon */}
+        {/* =====================================================
+            LEÇON
+        ===================================================== */}
+
         <Route
           path="/lesson/:lessonId"
-          element={
-            user
-              ? <LessonPage />
-              : <Navigate to="/login" replace />
-          }
+          element={<LessonPage />}
         />
 
 
-        {/* Exercices / Quiz */}
+        {/* =====================================================
+            EXERCICES / QUIZ
+        ===================================================== */}
+
         <Route
           path="/exercise/:lessonId"
-          element={
-            user
-              ? <ExercisePage />
-              : <Navigate to="/login" replace />
-          }
+          element={<ExercisePage />}
         />
 
 
-        {/* Dashboard élève */}
+        {/* =====================================================
+            DASHBOARD ÉLÈVE
+        ===================================================== */}
+
         <Route
           path="/dashboard"
-          element={
-            user
-              ? <DashboardPage />
-              : <Navigate to="/login" replace />
-          }
+          element={<DashboardPage />}
         />
 
 
-        {/* Téléchargements */}
+        {/* =====================================================
+            TÉLÉCHARGEMENTS
+        ===================================================== */}
+
         <Route
           path="/downloads"
-          element={
-            user
-              ? <DownloadsPage />
-              : <Navigate to="/login" replace />
-          }
+          element={<DownloadsPage />}
         />
 
 
-        {/* Profil */}
+        {/* =====================================================
+            PROFIL
+        ===================================================== */}
+
         <Route
           path="/profile"
-          element={
-            user
-              ? <ProfilePage />
-              : <Navigate to="/login" replace />
-          }
+          element={<ProfilePage />}
         />
 
 
-        {/* Paramètres élève */}
+        {/* =====================================================
+            PARAMÈTRES ÉLÈVE
+        ===================================================== */}
+
         <Route
           path="/settings"
-          element={
-            user
-              ? <SettingsPage />
-              : <Navigate to="/login" replace />
-          }
+          element={<SettingsPage />}
         />
 
       </Route>
@@ -412,9 +435,13 @@ function App() {
       <Route
         path="/courses"
         element={
-          user
-            ? <CoursesPage />
-            : <Navigate to="/login" replace />
+          user ? (
+            <ProtectedStudentRoute user={user}>
+              <CoursesPage />
+            </ProtectedStudentRoute>
+          ) : (
+            <Navigate to="/login" replace />
+          )
         }
       />
 

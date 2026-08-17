@@ -320,6 +320,91 @@ export async function updateUserAccessStatus(
   return true;
 }
 
+export async function deleteAdminUser(userId) {
+
+  const {
+    data,
+    error
+  } = await supabase.functions.invoke(
+    "delete-user",
+    {
+      body: {
+        userId
+      }
+    }
+  );
+
+  if (error) {
+
+    console.error(
+      "❌ Erreur Edge Function :",
+      error
+    );
+
+    console.error(
+      "❌ Type erreur :",
+      error?.constructor?.name
+    );
+
+    console.error(
+      "❌ Message :",
+      error?.message
+    );
+
+    // Lire la vraie réponse JSON de l'Edge Function
+    if (error.context) {
+
+      try {
+
+        const details =
+          await error.context.json();
+
+        console.error(
+          "🔥 RÉPONSE DELETE-USER :",
+          details
+        );
+
+        throw new Error(
+          details?.error ||
+          details?.message ||
+          "Erreur lors de la suppression."
+        );
+
+      } catch (readError) {
+
+        // Si readError est notre propre erreur,
+        // on la remonte directement.
+        if (
+          readError instanceof Error &&
+          readError.message
+        ) {
+          throw readError;
+        }
+
+        console.error(
+          "Impossible de lire la réponse Edge Function :",
+          readError
+        );
+
+      }
+
+    }
+
+    throw error;
+  }
+
+  if (!data?.success) {
+
+    throw new Error(
+      data?.error ||
+      "La suppression n'a pas été confirmée."
+    );
+
+  }
+
+  return true;
+}
+
 
 // ==========================
 // CLASSES

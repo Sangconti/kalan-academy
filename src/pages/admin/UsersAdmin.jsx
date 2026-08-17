@@ -13,12 +13,34 @@ import {
   getAdminUsers,
   updateUserRole,
   updateUserAccess,
+  deleteAdminUser,
   updateUserAccessStatus
 } from "../../services/adminService";
 
 
 
 export default function UsersAdmin(){
+
+    async function deleteUser(id) {
+
+      try {
+
+        await deleteAdminUser(id);
+
+        await load();
+
+      } catch (error) {
+
+        console.error(
+          "Erreur suppression utilisateur :",
+          error
+        );
+
+        throw error;
+
+      }
+
+    }
 
 
 const [users,setUsers]=useState([]);
@@ -160,6 +182,7 @@ setRole={setRole}
   onRoleChange={changeRole}
   onAccessChange={changeAccess}
   onAccessStatusChange={changeAccessStatus}
+  onDelete={deleteUser}
 />
 
 

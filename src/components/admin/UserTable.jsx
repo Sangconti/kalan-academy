@@ -1,8 +1,72 @@
+import { supabase } from "../../lib/supabase";
+
 export default function UserTable({
   users,
   onRoleChange,
-  onAccessStatusChange
+  onAccessStatusChange,
+  onDelete
 }) {
+
+  async function handleDelete(user) {
+
+    // =====================================
+    // VÉRIFIER L'UTILISATEUR CONNECTÉ
+    // =====================================
+
+    const {
+      data: { user: currentUser }
+    } = await supabase.auth.getUser();
+
+    // =====================================
+    // PROTECTION AUTO-SUPPRESSION
+    // =====================================
+
+    if (currentUser?.id === user.id) {
+      alert(
+        "Vous ne pouvez pas supprimer votre propre compte."
+      );
+
+      return;
+    }
+
+    // =====================================
+    // CONFIRMATION
+    // =====================================
+
+    const confirmed = window.confirm(
+      `Voulez-vous vraiment supprimer définitivement ${
+        user.full_name || "cet utilisateur"
+      } ?\n\nCette action supprimera son compte et ses données de profil.`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    // =====================================
+    // SUPPRESSION
+    // =====================================
+
+    try {
+
+      await onDelete(user.id);
+
+    } catch (error) {
+
+      console.error(
+        "Erreur suppression utilisateur :",
+        error
+      );
+
+      alert(
+        error?.message ||
+        "Impossible de supprimer cet utilisateur."
+      );
+
+    }
+
+  }
+
 
   return (
 
@@ -45,6 +109,10 @@ export default function UserTable({
 
             <th className="p-4">
               Niveau
+            </th>
+
+            <th className="p-4">
+              Actions
             </th>
 
           </tr>
@@ -235,6 +303,38 @@ export default function UserTable({
               ">
 
                 {user.level || 1}
+
+              </td>
+
+
+              {/* ==========================
+                  ACTIONS
+              ========================== */}
+
+              <td className="
+                p-4
+                text-center
+              ">
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleDelete(user)
+                  }
+                  className="
+                    px-3
+                    py-2
+                    rounded-lg
+                    bg-red-100
+                    text-red-700
+                    hover:bg-red-200
+                    transition
+                    font-medium
+                    text-sm
+                  "
+                >
+                  🗑️ Supprimer
+                </button>
 
               </td>
 

@@ -1,105 +1,148 @@
 import useAdmin from "../../hooks/useAdmin";
-
 import { supabase } from "../../lib/supabase";
 
+export default function AdminHeader() {
+  const { admin } = useAdmin();
 
-export default function AdminHeader(){
+  async function logout() {
+    await supabase.auth.signOut();
 
+    window.location.href = "/admin/login";
+  }
 
-const {admin}=useAdmin();
+  return (
+    <header
+      className="
+        min-h-16
+        w-full
 
+        bg-white
+        border-b
 
+        flex
+        items-center
+        justify-between
 
-async function logout(){
+        gap-3
 
-await supabase.auth.signOut();
+        px-4
+        sm:px-6
 
-window.location.href="/admin/login";
+        py-3
+      "
+    >
 
-}
+      {/* ==========================================
+          TITRE
+      ========================================== */}
 
-
-
-return (
-
-<header className="
-h-16
-bg-white
-border-b
-flex
-items-center
-justify-between
-px-6
-">
-
-
-<div>
-
-<h2 className="font-semibold">
-
-Administration
-
-</h2>
-
-</div>
-
-
-
-<div className="
-flex
-items-center
-gap-5
-">
-
-
-<div className="text-right">
-
-
-<p className="font-medium">
-
-{admin?.profile?.full_name}
-
-</p>
+      <div
+        className="
+          min-w-0
+          pl-12
+          md:pl-0
+        "
+      >
+        <h2
+          className="
+            font-semibold
+            text-gray-900
+            truncate
+          "
+        >
+          Administration
+        </h2>
+      </div>
 
 
-<p className="
-text-xs
-text-gray-500
-">
+      {/* ==========================================
+          ADMIN + DÉCONNEXION
+      ========================================== */}
 
-{admin?.profile?.role}
+      <div
+        className="
+          flex
+          items-center
+          gap-2
+          sm:gap-5
 
-</p>
+          min-w-0
+        "
+      >
+
+        {/* ========================================
+            INFORMATIONS ADMIN
+        ======================================== */}
+
+        <div
+          className="
+            text-right
+            min-w-0
+            hidden
+            xs:block
+          "
+        >
+
+          <p
+            className="
+              font-medium
+              text-gray-900
+
+              truncate
+              max-w-[120px]
+              sm:max-w-[180px]
+            "
+          >
+            {admin?.profile?.full_name || "Administrateur"}
+          </p>
+
+          <p
+            className="
+              text-xs
+              text-gray-500
+              truncate
+            "
+          >
+            {admin?.profile?.role || ""}
+          </p>
+
+        </div>
 
 
-</div>
+        {/* ========================================
+            DÉCONNEXION
+        ======================================== */}
 
+        <button
+          type="button"
+          onClick={logout}
+          className="
+            bg-red-500
+            text-white
 
+            px-3
+            sm:px-4
 
-<button
+            py-2
 
-onClick={logout}
+            rounded-lg
 
-className="
-bg-red-500
-text-white
-px-4
-py-2
-rounded-lg
-"
+            text-sm
+            sm:text-base
 
->
+            whitespace-nowrap
 
-Déconnexion
+            hover:bg-red-600
+            active:scale-95
 
-</button>
+            transition
+          "
+        >
+          Déconnexion
+        </button>
 
+      </div>
 
-</div>
-
-
-</header>
-
-)
-
+    </header>
+  );
 }

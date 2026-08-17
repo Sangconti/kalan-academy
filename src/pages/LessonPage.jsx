@@ -47,6 +47,101 @@ export default function LessonPage() {
     useNetwork();
 
 
+  // =====================================================
+  // 🔒 PROTECTION DU CONTENU PÉDAGOGIQUE
+  // =====================================================
+
+  useEffect(() => {
+
+    const preventContextMenu = (event) => {
+      event.preventDefault();
+    };
+
+    const preventCopy = (event) => {
+      event.preventDefault();
+    };
+
+    const preventCut = (event) => {
+      event.preventDefault();
+    };
+
+    const preventDrag = (event) => {
+      event.preventDefault();
+    };
+
+    const preventKeyboardCopy = (event) => {
+
+      const key =
+        event.key?.toLowerCase();
+
+      const isCopyShortcut =
+        (event.ctrlKey || event.metaKey) &&
+        ["c", "x", "a", "s", "u"].includes(key);
+
+      if (isCopyShortcut) {
+        event.preventDefault();
+      }
+
+    };
+
+
+    document.addEventListener(
+      "contextmenu",
+      preventContextMenu
+    );
+
+    document.addEventListener(
+      "copy",
+      preventCopy
+    );
+
+    document.addEventListener(
+      "cut",
+      preventCut
+    );
+
+    document.addEventListener(
+      "dragstart",
+      preventDrag
+    );
+
+    document.addEventListener(
+      "keydown",
+      preventKeyboardCopy
+    );
+
+
+    return () => {
+
+      document.removeEventListener(
+        "contextmenu",
+        preventContextMenu
+      );
+
+      document.removeEventListener(
+        "copy",
+        preventCopy
+      );
+
+      document.removeEventListener(
+        "cut",
+        preventCut
+      );
+
+      document.removeEventListener(
+        "dragstart",
+        preventDrag
+      );
+
+      document.removeEventListener(
+        "keydown",
+        preventKeyboardCopy
+      );
+
+    };
+
+  }, []);
+
   const [lesson, setLesson] =
     useState(null);
 
@@ -315,6 +410,11 @@ export default function LessonPage() {
         max-w-5xl
         mx-auto
       "
+      style={{
+        userSelect: "none",
+        WebkitUserSelect: "none",
+        WebkitTouchCallout: "none"
+      }}
     >
 
 

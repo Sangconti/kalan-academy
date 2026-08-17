@@ -1,3 +1,5 @@
+// src/pages/SettingsPage.jsx
+
 import {
   Settings,
   User,
@@ -24,6 +26,7 @@ import {
 
 import {
   useState,
+  useEffect,
 } from "react";
 
 import {
@@ -68,12 +71,14 @@ const THEME_OPTIONS = [
     description: "Utiliser le thème clair.",
     icon: Sun,
   },
+
   {
     id: "dark",
     label: "Sombre",
     description: "Utiliser le thème sombre.",
     icon: Moon,
   },
+
   {
     id: "system",
     label: "Système",
@@ -93,21 +98,25 @@ const COLOR_OPTIONS = [
     label: "Bleu",
     className: "bg-blue-500",
   },
+
   {
     id: "green",
     label: "Vert",
     className: "bg-green-500",
   },
+
   {
     id: "purple",
     label: "Violet",
     className: "bg-purple-500",
   },
+
   {
     id: "orange",
     label: "Orange",
     className: "bg-orange-500",
   },
+
   {
     id: "pink",
     label: "Rose",
@@ -124,11 +133,9 @@ export default function SettingsPage() {
 
   const navigate = useNavigate();
 
-
   const {
     isOnline,
   } = useNetwork();
-
 
   const {
     theme,
@@ -138,23 +145,24 @@ export default function SettingsPage() {
   } = useTheme();
 
 
+  // ===================================================
+  // ÉTATS
+  // ===================================================
+
   const [
     loggingOut,
     setLoggingOut,
   ] = useState(false);
-
 
   const [
     clearingCache,
     setClearingCache,
   ] = useState(false);
 
-
   const [
     resettingProgress,
     setResettingProgress,
   ] = useState(false);
-
 
   const [
     message,
@@ -163,11 +171,37 @@ export default function SettingsPage() {
 
 
   // ===================================================
+  // NETTOYAGE MESSAGE
+  // ===================================================
+
+  useEffect(() => {
+
+    if (!message) {
+      return;
+    }
+
+    const timer =
+      window.setTimeout(() => {
+
+        setMessage(null);
+
+      }, 4000);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+
+  }, [message]);
+
+
+  // ===================================================
   // PROFIL
   // ===================================================
 
   function openProfile() {
+
     navigate("/profile");
+
   }
 
 
@@ -175,22 +209,12 @@ export default function SettingsPage() {
   // MESSAGE
   // ===================================================
 
-  function showMessage(
-    type,
-    text
-  ) {
+  function showMessage(type, text) {
 
     setMessage({
       type,
       text,
     });
-
-
-    window.setTimeout(() => {
-
-      setMessage(null);
-
-    }, 4000);
 
   }
 
@@ -205,10 +229,11 @@ export default function SettingsPage() {
       return;
     }
 
-
     try {
 
       setLoggingOut(true);
+
+      setMessage(null);
 
 
       const {
@@ -225,18 +250,34 @@ export default function SettingsPage() {
           error
         );
 
+        /*
+         * En mode hors connexion, la session locale
+         * peut quand même être supprimée.
+         */
 
         if (!isOnline) {
-          navigate("/login");
+
+          navigate("/login", {
+            replace: true,
+          });
+
+          return;
+
         }
 
+        showMessage(
+          "error",
+          "Impossible de se déconnecter."
+        );
 
         return;
-
       }
 
 
-      navigate("/login");
+      navigate("/login", {
+        replace: true,
+      });
+
 
     } catch (error) {
 
@@ -247,12 +288,49 @@ export default function SettingsPage() {
 
 
       if (!isOnline) {
-        navigate("/login");
+
+        navigate("/login", {
+          replace: true,
+        });
+
+        return;
+
       }
+
+
+      showMessage(
+        "error",
+        "Impossible de se déconnecter."
+      );
+
 
     } finally {
 
       setLoggingOut(false);
+
+    }
+
+  }
+
+
+  // ===================================================
+  // CONFIRMATION COMPATIBLE WEB + APK
+  // ===================================================
+
+  function confirmAction(message) {
+
+    try {
+
+      return window.confirm(message);
+
+    } catch (error) {
+
+      console.warn(
+        "⚠️ Confirmation native indisponible :",
+        error
+      );
+
+      return true;
 
     }
 
@@ -271,7 +349,7 @@ export default function SettingsPage() {
 
 
     const confirmed =
-      window.confirm(
+      confirmAction(
 
         "Vider le cache ?\n\n" +
 
@@ -301,25 +379,20 @@ export default function SettingsPage() {
 
 
       /*
-       * IMPORTANT :
+       * IMPORTANT
        *
-       * On supprime uniquement le cache
-       * pédagogique.
+       * On supprime uniquement les tables
+       * contenant le contenu pédagogique.
        *
-       * Les données utilisateur sont conservées :
+       * On conserve :
        *
        * - userProgress
        * - quizAttempts
        * - syncQueue
-       *
-       * Le cache XP est également conservé.
        */
 
-
       await db.transaction(
-
         "rw",
-
         [
           db.classes,
           db.subjects,
@@ -332,35 +405,29 @@ export default function SettingsPage() {
           db.badges,
           db.downloads,
         ],
-
         async () => {
 
-          await Promise.all([
+          await db.classes.clear();
 
-            db.classes.clear(),
+          await db.subjects.clear();
 
-            db.subjects.clear(),
+          await db.chapters.clear();
 
-            db.chapters.clear(),
+          await db.lessons.clear();
 
-            db.lessons.clear(),
+          await db.lessonBlocks.clear();
 
-            db.lessonBlocks.clear(),
+          await db.exercises.clear();
 
-            db.exercises.clear(),
+          await db.quizzes.clear();
 
-            db.quizzes.clear(),
+          await db.quizQuestions.clear();
 
-            db.quizQuestions.clear(),
+          await db.badges.clear();
 
-            db.badges.clear(),
-
-            db.downloads.clear(),
-
-          ]);
+          await db.downloads.clear();
 
         }
-
       );
 
 
@@ -410,7 +477,7 @@ export default function SettingsPage() {
 
 
     const confirmed =
-      window.confirm(
+      confirmAction(
 
         "Réinitialiser ta progression ?\n\n" +
 
@@ -441,115 +508,118 @@ export default function SettingsPage() {
       setMessage(null);
 
 
-      /*
-       * Récupération de la session actuelle.
-       */
+      // =================================================
+      // RÉCUPÉRER L'UTILISATEUR
+      // =================================================
 
       const {
-        data: sessionData,
+        data,
+        error: sessionError,
       } = await supabase.auth.getSession();
 
 
+      if (sessionError) {
+
+        console.warn(
+          "⚠️ Impossible de récupérer la session :",
+          sessionError
+        );
+
+      }
+
+
       const userId =
-        sessionData?.session?.user?.id;
+        data?.session?.user?.id;
 
 
-      /*
-       * -----------------------------------------
-       * SUPPRESSION PROGRESSION LOCALE
-       * -----------------------------------------
-       */
+      if (!userId) {
 
-      if (userId) {
+        showMessage(
+          "error",
+          "Utilisateur non identifié."
+        );
 
-        await db.userProgress
-          .where("user_id")
-          .equals(userId)
-          .delete();
-
-
-        /*
-         * Suppression des tentatives de quiz
-         * appartenant à l'utilisateur.
-         */
-
-        await db.quizAttempts
-          .where("user_id")
-          .equals(userId)
-          .delete();
+        return;
 
       }
 
 
-      /*
-       * -----------------------------------------
-       * SUPPRESSION DU CACHE XP
-       * -----------------------------------------
-       */
+      // =================================================
+      // PROGRESSION
+      // =================================================
 
-      if (userId) {
+      await db.userProgress
+        .where("user_id")
+        .equals(userId)
+        .delete();
 
-        try {
 
-          localStorage.removeItem(
-            `${XP_CACHE_PREFIX}${userId}`
-          );
+      // =================================================
+      // TENTATIVES QUIZ
+      // =================================================
 
-        } catch (error) {
+      await db.quizAttempts
+        .where("user_id")
+        .equals(userId)
+        .delete();
 
-          console.warn(
-            "⚠️ Impossible de supprimer le cache XP :",
-            error
-          );
 
-        }
+      // =================================================
+      // CACHE XP
+      // =================================================
+
+      try {
+
+        localStorage.removeItem(
+          `${XP_CACHE_PREFIX}${userId}`
+        );
+
+      } catch (error) {
+
+        console.warn(
+          "⚠️ Impossible de supprimer le cache XP :",
+          error
+        );
 
       }
 
 
-      /*
-       * -----------------------------------------
-       * SUPPRESSION DES ÉLÉMENTS DE SYNC
-       * -----------------------------------------
-       *
-       * IMPORTANT :
-       *
-       * Les éléments de sync concernant
-       * user_progress / quiz_attempts / XP
-       * sont supprimés afin d'éviter qu'une
-       * ancienne progression soit resynchronisée.
-       *
-       * Les autres éléments de synchronisation
-       * sont conservés.
-       */
+      // =================================================
+      // FILE D'ATTENTE DE SYNCHRONISATION
+      // =================================================
 
       await db.syncQueue
         .filter(
-          item =>
+          item => {
 
-            item.table_name ===
-              "user_progress"
-
-            ||
-
-            item.table_name ===
-              "quiz_attempts"
-
-            ||
-
-            (
+            const isProgress =
               item.table_name ===
-                "profiles"
+              "user_progress";
 
-              &&
+            const isQuiz =
+              item.table_name ===
+              "quiz_attempts";
 
+            const isXP =
+              item.table_name ===
+                "profiles" &&
               item.action ===
-                "xp"
-            )
+                "xp";
 
+            return (
+              isProgress ||
+              isQuiz ||
+              isXP
+            );
+
+          }
         )
         .delete();
 
+
+      // =================================================
+      // SUCCÈS
+      // =================================================
 
       showMessage(
         "success",
@@ -595,6 +665,7 @@ export default function SettingsPage() {
       className="
         max-w-3xl
         mx-auto
+        w-full
         px-4
         py-6
         pb-10
@@ -617,6 +688,7 @@ export default function SettingsPage() {
             flex
             items-center
             gap-3
+
             ${
               message.type === "success"
                 ? "bg-green-50 border-green-200 text-green-700"
@@ -640,7 +712,6 @@ export default function SettingsPage() {
             />
 
           )}
-
 
           <p className="text-sm font-medium">
             {message.text}
@@ -756,8 +827,6 @@ export default function SettingsPage() {
           "
         >
 
-          {/* THÈME */}
-
           <div className="p-5">
 
             <div className="mb-4">
@@ -771,7 +840,6 @@ export default function SettingsPage() {
               >
                 Thème
               </h3>
-
 
               <p
                 className="
@@ -798,7 +866,8 @@ export default function SettingsPage() {
 
               {THEME_OPTIONS.map((option) => {
 
-                const Icon = option.icon;
+                const Icon =
+                  option.icon;
 
                 const selected =
                   theme === option.id;
@@ -809,7 +878,9 @@ export default function SettingsPage() {
                   <button
                     key={option.id}
                     type="button"
-                    onClick={() => setTheme(option.id)}
+                    onClick={() =>
+                      setTheme(option.id)
+                    }
                     className={`
                       relative
                       flex
@@ -821,6 +892,7 @@ export default function SettingsPage() {
                       rounded-xl
                       border
                       transition-all
+
                       ${
                         selected
                           ? "theme-option-selected"
@@ -908,8 +980,6 @@ export default function SettingsPage() {
           />
 
 
-          {/* COULEUR */}
-
           <div className="p-5">
 
             <div className="mb-4">
@@ -923,7 +993,6 @@ export default function SettingsPage() {
               >
                 Couleur principale
               </h3>
-
 
               <p
                 className="
@@ -962,7 +1031,9 @@ export default function SettingsPage() {
                       setAccentColor(color.id)
                     }
                     title={color.label}
-                    aria-label={`Couleur ${color.label}`}
+                    aria-label={
+                      `Couleur ${color.label}`
+                    }
                     className={`
                       relative
                       w-12
@@ -970,6 +1041,7 @@ export default function SettingsPage() {
                       rounded-full
                       ${color.className}
                       transition-all
+
                       ${
                         selected
                           ? "ring-4 ring-offset-2 ring-gray-300 scale-110"
@@ -1020,8 +1092,9 @@ export default function SettingsPage() {
               >
                 {
                   COLOR_OPTIONS.find(
-                    (color) =>
-                      color.id === accentColor
+                    color =>
+                      color.id ===
+                      accentColor
                   )?.label
                 }
               </span>
@@ -1070,8 +1143,6 @@ export default function SettingsPage() {
           "
         >
 
-          {/* PROFIL */}
-
           <button
             type="button"
             onClick={openProfile}
@@ -1113,7 +1184,7 @@ export default function SettingsPage() {
             </div>
 
 
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
 
               <h3
                 className="
@@ -1145,6 +1216,7 @@ export default function SettingsPage() {
               className="
                 text-gray-400
                 theme-text-secondary
+                shrink-0
               "
             />
 
@@ -1159,8 +1231,6 @@ export default function SettingsPage() {
             "
           />
 
-
-          {/* DÉCONNEXION */}
 
           <button
             type="button"
@@ -1214,7 +1284,7 @@ export default function SettingsPage() {
             </div>
 
 
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
 
               <h3
                 className="
@@ -1222,9 +1292,10 @@ export default function SettingsPage() {
                   text-red-600
                 "
               >
-                {loggingOut
-                  ? "Déconnexion..."
-                  : "Déconnexion"
+                {
+                  loggingOut
+                    ? "Déconnexion..."
+                    : "Déconnexion"
                 }
               </h3>
 
@@ -1284,8 +1355,6 @@ export default function SettingsPage() {
           "
         >
 
-          {/* NOTIFICATIONS */}
-
           <div className="flex items-center gap-4 p-5">
 
             <div
@@ -1309,7 +1378,7 @@ export default function SettingsPage() {
             </div>
 
 
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
 
               <h3
                 className="
@@ -1346,6 +1415,7 @@ export default function SettingsPage() {
                 px-2.5
                 py-1
                 rounded-full
+                shrink-0
               "
             >
               Bientôt
@@ -1362,8 +1432,6 @@ export default function SettingsPage() {
             "
           />
 
-
-          {/* LANGUE */}
 
           <div className="flex items-center gap-4 p-5">
 
@@ -1496,7 +1564,7 @@ export default function SettingsPage() {
             </div>
 
 
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
 
               <h3
                 className="
@@ -1536,6 +1604,7 @@ export default function SettingsPage() {
                 px-2.5
                 py-1
                 rounded-full
+                shrink-0
                 ${
                   isOnline
                     ? "bg-green-100 text-green-700"
@@ -1561,7 +1630,7 @@ export default function SettingsPage() {
           />
 
 
-          {/* VIDER LE CACHE */}
+          {/* VIDER CACHE */}
 
           <button
             type="button"
@@ -1617,7 +1686,7 @@ export default function SettingsPage() {
             </div>
 
 
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
 
               <h3
                 className="
@@ -1626,9 +1695,10 @@ export default function SettingsPage() {
                   theme-text
                 "
               >
-                {clearingCache
-                  ? "Vidage du cache..."
-                  : "Vider le cache"
+                {
+                  clearingCache
+                    ? "Vidage du cache..."
+                    : "Vider le cache"
                 }
               </h3>
 
@@ -1656,6 +1726,7 @@ export default function SettingsPage() {
                 className="
                   text-gray-400
                   theme-text-secondary
+                  shrink-0
                 "
               />
 
@@ -1702,8 +1773,6 @@ export default function SettingsPage() {
             theme-border
           "
         >
-
-          {/* RÉINITIALISER PROGRESSION */}
 
           <button
             type="button"
@@ -1758,7 +1827,7 @@ export default function SettingsPage() {
             </div>
 
 
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
 
               <h3
                 className="
@@ -1767,9 +1836,10 @@ export default function SettingsPage() {
                   theme-text
                 "
               >
-                {resettingProgress
-                  ? "Réinitialisation..."
-                  : "Réinitialiser ma progression"
+                {
+                  resettingProgress
+                    ? "Réinitialisation..."
+                    : "Réinitialiser ma progression"
                 }
               </h3>
 
@@ -1796,6 +1866,7 @@ export default function SettingsPage() {
                 className="
                   text-gray-400
                   theme-text-secondary
+                  shrink-0
                 "
               />
 
@@ -1843,8 +1914,6 @@ export default function SettingsPage() {
           "
         >
 
-          {/* VERSION */}
-
           <div
             className="
               flex
@@ -1882,7 +1951,7 @@ export default function SettingsPage() {
             </div>
 
 
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
 
               <h3
                 className="
@@ -1915,6 +1984,7 @@ export default function SettingsPage() {
                 font-semibold
                 text-gray-600
                 theme-text-secondary
+                shrink-0
               "
             >
               {APP_VERSION}
@@ -1922,8 +1992,6 @@ export default function SettingsPage() {
 
           </div>
 
-
-          {/* KALAN ACADEMY */}
 
           <div className="flex items-center gap-4 p-5">
 

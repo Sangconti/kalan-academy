@@ -14,38 +14,32 @@ import {
   useNavigate
 } from "react-router-dom";
 
-
 const menu = [
   {
     name: "Dashboard",
     path: "/admin",
     icon: LayoutDashboard
   },
-
   {
     name: "Utilisateurs",
     path: "/admin/users",
     icon: Users
   },
-
   {
     name: "Matières",
     path: "/admin/subjects",
     icon: BookOpen
   },
-
   {
     name: "Vidéos",
     path: "/admin/videos",
     icon: Video
   },
-
   {
     name: "Statistiques",
     path: "/admin/stats",
     icon: BarChart3
   },
-
   {
     name: "Paramètres",
     path: "/admin/settings",
@@ -53,62 +47,49 @@ const menu = [
   }
 ];
 
-
 export default function AdminSidebar({
   open = false,
   onClose
 }) {
-
   const navigate = useNavigate();
 
-
   // ==========================================
-  // FERMER LE MENU
+  // FERMER
   // ==========================================
 
   function handleClose() {
-
     if (onClose) {
-
       onClose();
-
     }
-
   }
-
 
   // ==========================================
   // NAVIGATION
   // ==========================================
 
   function handleNavigation() {
-
-    // Sur mobile uniquement,
-    // le parent fermera la sidebar.
-
     handleClose();
-
   }
 
-
   return (
-
     <>
-
-
       {/* ==========================================
           OVERLAY MOBILE
       ========================================== */}
 
       <div
         onClick={handleClose}
+        aria-hidden="true"
         className={`
           fixed
           inset-0
-          bg-black/50
           z-40
+
+          bg-black/50
+
           transition-opacity
           duration-300
+
           md:hidden
 
           ${
@@ -117,9 +98,7 @@ export default function AdminSidebar({
               : "opacity-0 invisible pointer-events-none"
           }
         `}
-        aria-hidden="true"
       />
-
 
       {/* ==========================================
           SIDEBAR
@@ -130,14 +109,19 @@ export default function AdminSidebar({
           fixed
           inset-y-0
           left-0
+
           z-50
+
           w-64
+
           bg-slate-900
           text-white
-          min-h-screen
+
           p-5
+
           flex
           flex-col
+
           shadow-2xl
 
           transform
@@ -145,43 +129,44 @@ export default function AdminSidebar({
           duration-300
           ease-in-out
 
-          md:static
-          md:translate-x-0
-          md:shadow-none
-
           ${
             open
               ? "translate-x-0"
               : "-translate-x-full"
           }
+
+          md:translate-x-0
+          md:shadow-none
         `}
       >
 
-
         {/* ==========================================
-            EN-TÊTE SIDEBAR
+            EN-TÊTE
         ========================================== */}
 
-        <div className="
-          flex
-          items-center
-          justify-between
-          mb-8
-        ">
+        <div
+          className="
+            flex
+            items-center
+            justify-between
 
+            mb-8
+          "
+        >
 
           <h1
             className="
-              text-2xl
+              text-xl
+              sm:text-2xl
               font-bold
+              whitespace-nowrap
             "
           >
             Kalan Admin
           </h1>
 
-
           {/* ========================================
-              BOUTON FERMER MOBILE
+              FERMER MOBILE
           ======================================== */}
 
           <button
@@ -192,24 +177,26 @@ export default function AdminSidebar({
               flex
               items-center
               justify-center
+
               w-9
               h-9
+
               rounded-lg
+
               text-slate-300
+
               hover:bg-slate-700
               hover:text-white
+
               transition
+
               md:hidden
             "
           >
-
             <X size={22} />
-
           </button>
 
-
         </div>
-
 
         {/* ==========================================
             MENU
@@ -217,14 +204,10 @@ export default function AdminSidebar({
 
         <nav className="space-y-2">
 
-
           {menu.map((item) => {
-
             const Icon = item.icon;
 
-
             return (
-
               <NavLink
                 key={item.name}
                 to={item.path}
@@ -234,8 +217,11 @@ export default function AdminSidebar({
                   flex
                   items-center
                   gap-3
+
                   p-3
+
                   rounded-lg
+
                   transition
 
                   ${
@@ -248,64 +234,53 @@ export default function AdminSidebar({
 
                 <Icon size={20} />
 
-
                 <span>
                   {item.name}
                 </span>
 
-
               </NavLink>
-
             );
-
           })}
 
-
         </nav>
-
 
         {/* ==========================================
             ESPACE ÉLÈVE
         ========================================== */}
 
-        <div className="
-          mt-auto
-          pt-6
-        ">
+        <div className="mt-auto pt-6">
 
+          <div
+            className="
+              border-t
+              border-slate-700
 
-          <div className="
-            border-t
-            border-slate-700
-            pt-5
-          ">
-
+              pt-5
+            "
+          >
 
             <button
               type="button"
               onClick={() => {
-
-                console.log(
-                  "🎓 [ADMIN SIDEBAR] Navigation vers l'application élève"
-                );
-
-
                 handleClose();
-
-
                 navigate("/");
-
               }}
               className="
                 w-full
+
                 flex
                 items-center
                 gap-3
+
                 p-3
+
                 rounded-lg
+
                 transition
+
                 text-left
                 text-slate-200
+
                 hover:bg-slate-700
                 hover:text-white
               "
@@ -313,26 +288,17 @@ export default function AdminSidebar({
 
               <GraduationCap size={20} />
 
-
               <span>
                 Voir l'application élève
               </span>
 
-
             </button>
-
 
           </div>
 
-
         </div>
 
-
       </aside>
-
-
     </>
-
   );
-
 }

@@ -17,13 +17,13 @@ export const db = new Dexie("KalanAcademyDB");
 /*
   Version 7
 
-  Cette version conserve la structure actuelle mais permet
-  de repartir proprement avec le nouveau système de cache.
+  Cette version conserve la structure actuelle.
 
   IMPORTANT :
-  - Les données pédagogiques sont remplacées lors d'une
-    synchronisation complète réussie.
-  - Les données utilisateur sont conservées.
+  - Les données pédagogiques sont stockées localement.
+  - Les données utilisateur sont conservées séparément.
+  - La progression et les tentatives de quiz peuvent
+    être synchronisées ultérieurement.
 */
 
 db.version(7).stores({
@@ -67,6 +67,14 @@ db.version(7).stores({
   userProgress:
     "++id, user_id, lesson_id, score, completed, completed_at, synced, updated_at",
 
+  /*
+   * IMPORTANT
+   *
+   * Cette table était utilisée par SettingsPage
+   * mais n'était pas déclarée dans le schéma.
+   *
+   * Elle est maintenant correctement déclarée.
+   */
   quizAttempts:
     "++id, user_id, quiz_id, lesson_id, score, total_questions, correct_answers, passed, completed_at, synced",
 
@@ -84,7 +92,9 @@ db.version(7).stores({
 // ======================================================
 
 function now() {
+
   return new Date().toISOString();
+
 }
 
 
@@ -95,6 +105,7 @@ function now() {
 export async function getStorageUsedMB() {
 
   let bytes = 0;
+
 
   for (const table of db.tables) {
 
@@ -117,6 +128,7 @@ export async function getStorageUsedMB() {
 
   }
 
+
   return Number(
     (bytes / 1024 / 1024).toFixed(2)
   );
@@ -135,6 +147,7 @@ export async function cacheClasses(list) {
       ...item,
       cached_at: now()
     }));
+
 
   if (rows.length > 0) {
 
@@ -166,6 +179,7 @@ export async function cacheSubjects(list) {
       cached_at: now()
     }));
 
+
   if (rows.length > 0) {
 
     await db.subjects.bulkPut(rows);
@@ -177,8 +191,12 @@ export async function cacheSubjects(list) {
 
 export async function getCachedSubjects(classId) {
 
-  if (!classId)
+  if (!classId) {
+
     return [];
+
+  }
+
 
   const data =
     await db.subjects
@@ -186,11 +204,13 @@ export async function getCachedSubjects(classId) {
       .equals(classId)
       .toArray();
 
+
   data.sort(
     (a, b) =>
       (Number(a.order_number) || 0) -
       (Number(b.order_number) || 0)
   );
+
 
   return data;
 
@@ -209,6 +229,7 @@ export async function cacheChapters(list) {
       cached_at: now()
     }));
 
+
   if (rows.length > 0) {
 
     await db.chapters.bulkPut(rows);
@@ -220,8 +241,12 @@ export async function cacheChapters(list) {
 
 export async function getCachedChapters(subjectId) {
 
-  if (!subjectId)
+  if (!subjectId) {
+
     return [];
+
+  }
+
 
   const data =
     await db.chapters
@@ -229,11 +254,13 @@ export async function getCachedChapters(subjectId) {
       .equals(subjectId)
       .toArray();
 
+
   data.sort(
     (a, b) =>
       (Number(a.order_number) || 0) -
       (Number(b.order_number) || 0)
   );
+
 
   return data;
 
@@ -242,12 +269,19 @@ export async function getCachedChapters(subjectId) {
 
 export async function cacheChapter(chapter) {
 
-  if (!chapter?.id)
+  if (!chapter?.id) {
+
     return;
 
+  }
+
+
   await db.chapters.put({
+
     ...chapter,
+
     cached_at: now()
+
   });
 
 }
@@ -255,8 +289,12 @@ export async function cacheChapter(chapter) {
 
 export async function getCachedChapter(id) {
 
-  if (!id)
+  if (!id) {
+
     return null;
+
+  }
+
 
   return await db.chapters.get(id);
 
@@ -275,6 +313,7 @@ export async function cacheLessons(list) {
       cached_at: now()
     }));
 
+
   if (rows.length > 0) {
 
     await db.lessons.bulkPut(rows);
@@ -286,12 +325,19 @@ export async function cacheLessons(list) {
 
 export async function cacheLesson(lesson) {
 
-  if (!lesson?.id)
+  if (!lesson?.id) {
+
     return;
 
+  }
+
+
   await db.lessons.put({
+
     ...lesson,
+
     cached_at: now()
+
   });
 
 }
@@ -299,8 +345,12 @@ export async function cacheLesson(lesson) {
 
 export async function getCachedLessons(chapterId) {
 
-  if (!chapterId)
+  if (!chapterId) {
+
     return [];
+
+  }
+
 
   const data =
     await db.lessons
@@ -308,11 +358,13 @@ export async function getCachedLessons(chapterId) {
       .equals(chapterId)
       .toArray();
 
+
   data.sort(
     (a, b) =>
       (Number(a.order_number) || 0) -
       (Number(b.order_number) || 0)
   );
+
 
   return data;
 
@@ -321,8 +373,12 @@ export async function getCachedLessons(chapterId) {
 
 export async function getCachedLesson(id) {
 
-  if (!id)
+  if (!id) {
+
     return null;
+
+  }
+
 
   return await db.lessons.get(id);
 
@@ -338,15 +394,22 @@ export async function updateLessonVideoPath(
   path
 ) {
 
-  if (!id)
+  if (!id) {
+
     return;
 
+  }
+
+
   await db.lessons.update(
+
     id,
+
     {
       local_video_path:
         path || null
     }
+
   );
 
 }
@@ -354,15 +417,23 @@ export async function updateLessonVideoPath(
 
 export async function removeLessonLocal(id) {
 
-  if (!id)
+  if (!id) {
+
     return;
 
+  }
+
+
   await db.lessons.update(
+
     id,
+
     {
       local_video_path: null
     }
+
   );
+
 
   await db.downloads
     .where("lesson_id")
@@ -384,6 +455,7 @@ export async function cacheLessonBlocks(list) {
       cached_at: now()
     }));
 
+
   if (rows.length > 0) {
 
     await db.lessonBlocks.bulkPut(rows);
@@ -397,8 +469,12 @@ export async function getCachedLessonBlocks(
   lessonId
 ) {
 
-  if (!lessonId)
+  if (!lessonId) {
+
     return [];
+
+  }
+
 
   const data =
     await db.lessonBlocks
@@ -406,11 +482,13 @@ export async function getCachedLessonBlocks(
       .equals(lessonId)
       .toArray();
 
+
   data.sort(
     (a, b) =>
       (Number(a.order_number) || 0) -
       (Number(b.order_number) || 0)
   );
+
 
   return data;
 
@@ -429,6 +507,7 @@ export async function cacheExercises(list) {
       cached_at: now()
     }));
 
+
   if (rows.length > 0) {
 
     await db.exercises.bulkPut(rows);
@@ -442,8 +521,12 @@ export async function getCachedExercises(
   lessonId
 ) {
 
-  if (!lessonId)
+  if (!lessonId) {
+
     return [];
+
+  }
+
 
   const data =
     await db.exercises
@@ -451,11 +534,13 @@ export async function getCachedExercises(
       .equals(lessonId)
       .toArray();
 
+
   data.sort(
     (a, b) =>
       (Number(a.order_number) || 0) -
       (Number(b.order_number) || 0)
   );
+
 
   return data;
 
@@ -474,6 +559,7 @@ export async function cacheQuizzes(list) {
       cached_at: now()
     }));
 
+
   if (rows.length > 0) {
 
     await db.quizzes.bulkPut(rows);
@@ -487,16 +573,17 @@ export async function getCachedQuizzes(
   lessonId
 ) {
 
-  if (!lessonId)
+  if (!lessonId) {
+
     return [];
 
-  const data =
-    await db.quizzes
-      .where("lesson_id")
-      .equals(lessonId)
-      .toArray();
+  }
 
-  return data;
+
+  return await db.quizzes
+    .where("lesson_id")
+    .equals(lessonId)
+    .toArray();
 
 }
 
@@ -513,6 +600,7 @@ export async function cacheQuizQuestions(list) {
       cached_at: now()
     }));
 
+
   if (rows.length > 0) {
 
     await db.quizQuestions.bulkPut(rows);
@@ -526,8 +614,12 @@ export async function getCachedQuizQuestions(
   quizId
 ) {
 
-  if (!quizId)
+  if (!quizId) {
+
     return [];
+
+  }
+
 
   return await db.quizQuestions
     .where("quiz_id")
@@ -548,6 +640,7 @@ export async function cacheBadges(list) {
       ...item,
       cached_at: now()
     }));
+
 
   if (rows.length > 0) {
 
@@ -571,11 +664,18 @@ export async function getCachedBadges() {
 
 export async function saveProgress(progress) {
 
-  if (!progress?.user_id)
+  if (!progress?.user_id) {
+
     return null;
 
-  if (!progress?.lesson_id)
+  }
+
+
+  if (!progress?.lesson_id) {
+
     return null;
+
+  }
 
 
   const existing =
@@ -634,14 +734,24 @@ export async function getUnsyncedProgress() {
 
 export async function markProgressSynced(id) {
 
-  if (id === undefined || id === null)
+  if (
+    id === undefined ||
+    id === null
+  ) {
+
     return;
 
+  }
+
+
   await db.userProgress.update(
+
     id,
+
     {
       synced: true
     }
+
   );
 
 }
@@ -652,8 +762,12 @@ export async function getCachedProgress(
   lessonId
 ) {
 
-  if (!userId || !lessonId)
+  if (!userId || !lessonId) {
+
     return null;
+
+  }
+
 
   return await db.userProgress
     .where("user_id")
@@ -676,11 +790,18 @@ export async function saveQuizAttempt(
   attempt
 ) {
 
-  if (!attempt?.user_id)
+  if (!attempt?.user_id) {
+
     return null;
 
-  if (!attempt?.quiz_id)
+  }
+
+
+  if (!attempt?.quiz_id) {
+
     return null;
+
+  }
 
 
   return await db.quizAttempts.add({
@@ -716,14 +837,24 @@ export async function markQuizAttemptSynced(
   id
 ) {
 
-  if (id === undefined || id === null)
+  if (
+    id === undefined ||
+    id === null
+  ) {
+
     return;
 
+  }
+
+
   await db.quizAttempts.update(
+
     id,
+
     {
       synced: true
     }
+
   );
 
 }
@@ -735,8 +866,11 @@ export async function markQuizAttemptSynced(
 
 export async function addToSyncQueue(item) {
 
-  if (!item)
+  if (!item) {
+
     return null;
+
+  }
 
 
   if (
@@ -789,8 +923,15 @@ export async function getSyncQueue() {
 
 export async function removeFromSyncQueue(id) {
 
-  if (id === undefined || id === null)
+  if (
+    id === undefined ||
+    id === null
+  ) {
+
     return;
+
+  }
+
 
   await db.syncQueue.delete(id);
 
@@ -821,55 +962,66 @@ export async function debugOffline() {
     await db.classes.toArray()
   );
 
+
   console.log(
     "SUBJECTS:",
     await db.subjects.toArray()
   );
+
 
   console.log(
     "CHAPTERS:",
     await db.chapters.toArray()
   );
 
+
   console.log(
     "LESSONS:",
     await db.lessons.toArray()
   );
+
 
   console.log(
     "LESSON BLOCKS:",
     await db.lessonBlocks.toArray()
   );
 
+
   console.log(
     "EXERCISES:",
     await db.exercises.toArray()
   );
+
 
   console.log(
     "QUIZZES:",
     await db.quizzes.toArray()
   );
 
+
   console.log(
     "QUIZ QUESTIONS:",
     await db.quizQuestions.toArray()
   );
+
 
   console.log(
     "BADGES:",
     await db.badges.toArray()
   );
 
+
   console.log(
     "USER PROGRESS:",
     await db.userProgress.toArray()
   );
 
+
   console.log(
     "QUIZ ATTEMPTS:",
     await db.quizAttempts.toArray()
   );
+
 
   console.log(
     "SYNC QUEUE:",
@@ -903,13 +1055,16 @@ if (typeof window !== "undefined") {
 
         await db.delete();
 
+
         console.log(
           "🗑️ Cache Kalan Academy supprimé"
         );
 
+
         console.log(
           "🔄 Rechargement..."
         );
+
 
         window.location.reload();
 

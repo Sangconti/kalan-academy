@@ -1,13 +1,6 @@
-// src/pages/DashboardPage.jsx
+import { useEffect, useState } from "react";
 
-import {
-  useEffect,
-  useState
-} from "react";
-
-import {
-  supabase
-} from "../lib/supabase";
+import { supabase } from "../lib/supabase";
 
 import {
   Award,
@@ -21,323 +14,220 @@ import {
 
 
 // =====================================================
-// CONSTANTES XP
+// CONSTANTES
 // =====================================================
 
 const XP_PER_LEVEL = 500;
 
+const DASHBOARD_CACHE_PREFIX = "kalan_dashboard_";
 
-// =====================================================
-// CACHE DASHBOARD
-// =====================================================
-
-const DASHBOARD_CACHE_PREFIX =
-  "kalan_dashboard_";
-
-const DASHBOARD_CACHE_DURATION =
-  30 * 1000;
+const DASHBOARD_CACHE_DURATION = 30 * 1000;
 
 
 // =====================================================
-// OUTILS CACHE
+// CACHE
 // =====================================================
 
 function getDashboardCacheKey(userId) {
-
-  return (
-    DASHBOARD_CACHE_PREFIX +
-    userId
-  );
-
+  return `${DASHBOARD_CACHE_PREFIX}${userId}`;
 }
 
 
-function getCachedDashboard(userId) {
-
+function getCachedDashboard(
+  userId,
+  allowExpired = false
+) {
   try {
-
-    const key =
-      getDashboardCacheKey(userId);
-
-    const raw =
-      sessionStorage.getItem(key);
+    const raw = sessionStorage.getItem(
+      getDashboardCacheKey(userId)
+    );
 
     if (!raw) {
       return null;
     }
 
+    const cached = JSON.parse(raw);
 
-    const cached =
-      JSON.parse(raw);
-
-
-    if (
-      !cached?.timestamp ||
-      !cached?.data
-    ) {
-
-      sessionStorage.removeItem(key);
+    if (!cached?.timestamp || !cached?.data) {
+      sessionStorage.removeItem(
+        getDashboardCacheKey(userId)
+      );
 
       return null;
-
     }
-
 
     const age =
-      Date.now() -
-      cached.timestamp;
-
+      Date.now() - Number(cached.timestamp);
 
     if (
-      age >
-      DASHBOARD_CACHE_DURATION
+      !allowExpired &&
+      age > DASHBOARD_CACHE_DURATION
     ) {
-
-      sessionStorage.removeItem(key);
+      sessionStorage.removeItem(
+        getDashboardCacheKey(userId)
+      );
 
       return null;
-
     }
-
 
     return cached.data;
 
-  } catch (err) {
-
+  } catch (error) {
     console.warn(
       "⚠️ Cache Dashboard inaccessible :",
-      err
+      error
     );
 
     return null;
-
   }
-
 }
 
 
-function setCachedDashboard(
-  userId,
-  data
-) {
-
+function setCachedDashboard(userId, data) {
   try {
-
-    const key =
-      getDashboardCacheKey(userId);
-
-
     sessionStorage.setItem(
-      key,
+      getDashboardCacheKey(userId),
       JSON.stringify({
-
-        timestamp:
-          Date.now(),
-
+        timestamp: Date.now(),
         data
-
       })
     );
-
-  } catch (err) {
-
+  } catch (error) {
     console.warn(
       "⚠️ Impossible de sauvegarder le cache Dashboard :",
-      err
+      error
     );
-
   }
-
 }
 
 
 // =====================================================
-// PAGE DASHBOARD
+// PAGE
 // =====================================================
 
 export default function DashboardPage() {
 
-  // ===================================================
-  // STATE
-  // ===================================================
+  const [profile, setProfile] = useState(null);
 
-  const [profile, setProfile] =
-    useState(null);
+  const [subjects, setSubjects] = useState({});
 
-  const [subjects, setSubjects] =
-    useState({});
+  const [stats, setStats] = useState({
+    lessons: 0,
+    score: 0,
+    badges: 0,
+    attempts: 0
+  });
 
-  const [stats, setStats] =
-    useState({
+  const [badges, setBadges] = useState([]);
 
-      lessons: 0,
-      score: 0,
-      badges: 0,
-      attempts: 0
+  const [loading, setLoading] = useState(true);
 
-    });
+  const [error, setError] = useState("");
 
-  const [badges, setBadges] =
-    useState([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
-
-  const [refreshing, setRefreshing] =
-    useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
 
   // ===================================================
-  // CHARGEMENT INITIAL
+  // INITIALISATION
   // ===================================================
 
   useEffect(() => {
-
     loadDashboard();
-
   }, []);
 
 
   // ===================================================
-  // APPLIQUER LES DONNÉES
+  // APPLICATION DONNÉES
   // ===================================================
 
   function applyDashboardData(data) {
-
     if (!data) {
       return;
     }
 
+    setProfile(data.profile || null);
 
-    setProfile(
-      data.profile || null
-    );
-
-
-    setSubjects(
-      data.subjects || {}
-    );
-
+    setSubjects(data.subjects || {});
 
     setStats(
       data.stats || {
-
         lessons: 0,
         score: 0,
         badges: 0,
         attempts: 0
-
       }
     );
 
-
-    setBadges(
-      data.badges || []
-    );
-
+    setBadges(data.badges || []);
   }
 
 
   // ===================================================
-  // CHARGER DASHBOARD
+  // CHARGEMENT
   // ===================================================
 
-  async function loadDashboard(
-    isRefresh = false
-  ) {
+  async function loadDashboard(isRefresh = false) {
 
     try {
 
       if (isRefresh) {
-
         setRefreshing(true);
-
       } else {
-
         setLoading(true);
-
       }
-
 
       setError("");
 
 
-      // =================================================
+      // -------------------------------------------------
       // SESSION
-      // =================================================
+      // -------------------------------------------------
 
       const {
-        data: {
-          session
-        },
+        data: { session },
         error: sessionError
-      } =
-        await supabase.auth.getSession();
-
+      } = await supabase.auth.getSession();
 
       if (sessionError) {
-
         throw sessionError;
-
       }
 
-
-      const user =
-        session?.user;
+      const user = session?.user;
 
 
-      // =================================================
+      // -------------------------------------------------
       // UTILISATEUR ABSENT
-      // =================================================
+      // -------------------------------------------------
 
       if (!user) {
 
         setProfile(null);
-
         setSubjects({});
-
         setBadges([]);
 
         setStats({
-
           lessons: 0,
           score: 0,
           badges: 0,
           attempts: 0
-
         });
-
 
         setError(
           "Tu dois être connecté pour voir ton tableau de bord."
         );
 
         return;
-
       }
 
 
-      // =================================================
+      // -------------------------------------------------
       // CACHE
-      // =================================================
-      //
-      // On utilise le cache uniquement lors du chargement
-      // normal.
-      //
-      // Le bouton "Actualiser" ignore volontairement
-      // le cache et recharge les données depuis Supabase.
-      // =================================================
+      // -------------------------------------------------
 
       if (!isRefresh) {
 
         const cached =
-          getCachedDashboard(
-            user.id
-          );
-
+          getCachedDashboard(user.id);
 
         if (cached) {
 
@@ -345,41 +235,57 @@ export default function DashboardPage() {
             "⚡ Dashboard chargé depuis le cache"
           );
 
-
-          applyDashboardData(
-            cached
-          );
-
+          applyDashboardData(cached);
 
           setLoading(false);
 
           return;
-
         }
 
+
+        // -------------------------------------------------
+        // OFFLINE
+        // -------------------------------------------------
+
+        if (
+          typeof navigator !== "undefined" &&
+          navigator.onLine === false
+        ) {
+
+          const offlineCache =
+            getCachedDashboard(
+              user.id,
+              true
+            );
+
+          if (offlineCache) {
+
+            console.log(
+              "📴 Dashboard offline chargé depuis le cache"
+            );
+
+            applyDashboardData(
+              offlineCache
+            );
+
+            setLoading(false);
+
+            return;
+          }
+        }
       }
 
 
-      // =================================================
-      // CHARGEMENT PARALLÈLE
-      // =================================================
+      // -------------------------------------------------
+      // SUPABASE
+      // -------------------------------------------------
 
       const [
-
         profileResult,
-
         progressResult,
-
         attemptsResult,
-
         badgesResult
-
       ] = await Promise.all([
-
-
-        // -------------------------------------------------
-        // PROFILE
-        // -------------------------------------------------
 
         supabase
           .from("profiles")
@@ -389,20 +295,8 @@ export default function DashboardPage() {
             xp,
             level
           `)
-          .eq(
-            "id",
-            user.id
-          )
+          .eq("id", user.id)
           .single(),
-
-
-        // -------------------------------------------------
-        // PROGRESSION
-        // -------------------------------------------------
-        //
-        // On ne récupère que les champs réellement
-        // nécessaires au Dashboard.
-        // -------------------------------------------------
 
         supabase
           .from("user_progress")
@@ -416,33 +310,14 @@ export default function DashboardPage() {
               )
             )
           `)
-          .eq(
-            "user_id",
-            user.id
-          ),
-
-
-        // -------------------------------------------------
-        // TENTATIVES QUIZ
-        // -------------------------------------------------
-        //
-        // Seul score est nécessaire.
-        // -------------------------------------------------
+          .eq("user_id", user.id),
 
         supabase
           .from("quiz_attempts")
           .select(`
             score
           `)
-          .eq(
-            "user_id",
-            user.id
-          ),
-
-
-        // -------------------------------------------------
-        // BADGES
-        // -------------------------------------------------
+          .eq("user_id", user.id),
 
         supabase
           .from("user_badges")
@@ -456,157 +331,104 @@ export default function DashboardPage() {
               image_url
             )
           `)
-          .eq(
-            "user_id",
-            user.id
-          )
+          .eq("user_id", user.id)
 
       ]);
 
 
-      // =================================================
+      // -------------------------------------------------
       // PROFILE
-      // =================================================
+      // -------------------------------------------------
 
       if (profileResult.error) {
-
         throw profileResult.error;
-
       }
-
 
       const profileData =
         profileResult.data;
 
 
-      // =================================================
+      // -------------------------------------------------
       // PROGRESSION
-      // =================================================
-
-      if (progressResult.error) {
-
-        console.error(
-          "Erreur progression :",
-          progressResult.error
-        );
-
-      }
-
+      // -------------------------------------------------
 
       const progressData =
         progressResult.data || [];
 
+      if (progressResult.error) {
+        console.error(
+          "Erreur progression :",
+          progressResult.error
+        );
+      }
 
-      // =================================================
+
+      // -------------------------------------------------
       // LEÇONS TERMINÉES
-      // =================================================
+      // -------------------------------------------------
 
       const completedLessons =
         progressData.reduce(
-          (
-            total,
-            item
-          ) => {
-
-            return (
-              total +
-              (
-                item?.completed === true
-                  ? 1
-                  : 0
-              )
-            );
-
-          },
+          (total, item) =>
+            total +
+            (
+              item?.completed === true
+                ? 1
+                : 0
+            ),
           0
         );
 
 
-      // =================================================
-      // PROGRESSION PAR MATIÈRE
-      // =================================================
+      // -------------------------------------------------
+      // PROGRESSION MATIÈRES
+      // -------------------------------------------------
 
       const subjectsProgress = {};
 
-
-      for (
-        const item
-        of progressData
-      ) {
+      for (const item of progressData) {
 
         const subject =
-          item
-            ?.lessons
-            ?.chapters
-            ?.subjects;
-
+          item?.lessons?.chapters?.subjects;
 
         if (!subject?.name) {
-
           continue;
-
         }
-
 
         const subjectName =
           subject.name;
 
+        if (!subjectsProgress[subjectName]) {
 
-        if (
-          !subjectsProgress[
-            subjectName
-          ]
-        ) {
-
-          subjectsProgress[
-            subjectName
-          ] = {
-
+          subjectsProgress[subjectName] = {
             total: 0,
-
             completed: 0,
-
             percent: 0
-
           };
 
         }
-
 
         subjectsProgress[
           subjectName
         ].total += 1;
 
-
-        if (
-          item.completed === true
-        ) {
+        if (item.completed === true) {
 
           subjectsProgress[
             subjectName
           ].completed += 1;
 
         }
-
       }
 
 
-      // =================================================
+      // -------------------------------------------------
       // POURCENTAGES
-      // =================================================
+      // -------------------------------------------------
 
-      for (
-        const subjectName
-        of Object.keys(
-          subjectsProgress
-        )
-      ) {
-
-        const data =
-          subjectsProgress[
-            subjectName
-          ];
-
+      Object.values(
+        subjectsProgress
+      ).forEach(data => {
 
         if (data.total > 0) {
 
@@ -620,98 +442,72 @@ export default function DashboardPage() {
 
         }
 
-      }
+      });
 
 
-      // =================================================
-      // TENTATIVES QUIZ
-      // =================================================
-
-      if (attemptsResult.error) {
-
-        console.error(
-          "Erreur quiz attempts :",
-          attemptsResult.error
-        );
-
-      }
-
+      // -------------------------------------------------
+      // QUIZ
+      // -------------------------------------------------
 
       const attemptsData =
         attemptsResult.data || [];
 
+      if (attemptsResult.error) {
+        console.error(
+          "Erreur quiz attempts :",
+          attemptsResult.error
+        );
+      }
 
-      // =================================================
-      // SCORE MOYEN
-      // =================================================
 
       let averageScore = 0;
 
-
-      if (
-        attemptsData.length > 0
-      ) {
+      if (attemptsData.length > 0) {
 
         const totalScore =
           attemptsData.reduce(
-            (
-              total,
-              attempt
-            ) => {
-
-              return (
-                total +
-                Number(
-                  attempt?.score || 0
-                )
-              );
-
-            },
+            (total, attempt) =>
+              total +
+              Number(
+                attempt?.score || 0
+              ),
             0
           );
-
 
         averageScore =
           Math.round(
             totalScore /
             attemptsData.length
           );
-
       }
 
 
-      // =================================================
+      // -------------------------------------------------
       // BADGES
-      // =================================================
-
-      if (badgesResult.error) {
-
-        console.error(
-          "Erreur badges :",
-          badgesResult.error
-        );
-
-      }
-
+      // -------------------------------------------------
 
       const badgeData =
         badgesResult.data || [];
 
+      if (badgesResult.error) {
+        console.error(
+          "Erreur badges :",
+          badgesResult.error
+        );
+      }
 
-      // =================================================
+
+      // -------------------------------------------------
       // DONNÉES FINALES
-      // =================================================
+      // -------------------------------------------------
 
       const dashboardData = {
 
-        profile:
-          profileData,
+        profile: profileData,
 
-        subjects:
-          subjectsProgress,
+        subjects: subjectsProgress,
 
-        badges:
-          badgeData,
+        badges: badgeData,
 
         stats: {
 
@@ -726,24 +522,22 @@ export default function DashboardPage() {
 
           attempts:
             attemptsData.length
-
         }
-
       };
 
 
-      // =================================================
-      // APPLIQUER
-      // =================================================
+      // -------------------------------------------------
+      // APPLICATION
+      // -------------------------------------------------
 
       applyDashboardData(
         dashboardData
       );
 
 
-      // =================================================
-      // SAUVEGARDE CACHE
-      // =================================================
+      // -------------------------------------------------
+      // CACHE
+      // -------------------------------------------------
 
       setCachedDashboard(
         user.id,
@@ -755,14 +549,56 @@ export default function DashboardPage() {
         "✅ Dashboard chargé depuis Supabase"
       );
 
-    }
-
-    catch (err) {
+    } catch (err) {
 
       console.error(
-        "Erreur Dashboard :",
+        "❌ Erreur Dashboard :",
         err
       );
+
+
+      // -------------------------------------------------
+      // FALLBACK CACHE
+      // -------------------------------------------------
+
+      try {
+
+        const {
+          data: { session }
+        } = await supabase.auth.getSession();
+
+        const userId =
+          session?.user?.id;
+
+        if (userId) {
+
+          const cached =
+            getCachedDashboard(
+              userId,
+              true
+            );
+
+          if (cached) {
+
+            console.log(
+              "📴 Fallback Dashboard depuis le cache"
+            );
+
+            applyDashboardData(
+              cached
+            );
+
+            return;
+          }
+        }
+
+      } catch (cacheError) {
+
+        console.warn(
+          "⚠️ Fallback cache impossible :",
+          cacheError
+        );
+      }
 
 
       setError(
@@ -770,16 +606,12 @@ export default function DashboardPage() {
         "Impossible de charger ton tableau de bord."
       );
 
-    }
-
-    finally {
+    } finally {
 
       setLoading(false);
-
       setRefreshing(false);
 
     }
-
   }
 
 
@@ -790,30 +622,25 @@ export default function DashboardPage() {
   if (loading) {
 
     return (
+      <div className="
+        min-h-[60vh]
+        flex
+        flex-col
+        items-center
+        justify-center
+        px-6
+      ">
 
-      <div
-        className="
-          min-h-[60vh]
+        <div className="
+          w-14
+          h-14
+          rounded-2xl
+          bg-accent-soft
           flex
-          flex-col
           items-center
           justify-center
-          px-6
-        "
-      >
-
-        <div
-          className="
-            w-14
-            h-14
-            rounded-2xl
-            bg-accent-soft
-            flex
-            items-center
-            justify-center
-            mb-4
-          "
-        >
+          mb-4
+        ">
 
           <TrendingUp
             size={28}
@@ -822,21 +649,16 @@ export default function DashboardPage() {
 
         </div>
 
-
-        <p
-          className="
-            text-gray-700
-            dark:text-gray-300
-            font-semibold
-          "
-        >
+        <p className="
+          text-gray-700
+          dark:text-gray-300
+          font-semibold
+        ">
           Chargement de ton tableau de bord...
         </p>
 
       </div>
-
     );
-
   }
 
 
@@ -847,76 +669,58 @@ export default function DashboardPage() {
   if (error) {
 
     return (
+      <div className="
+        max-w-2xl
+        mx-auto
+        px-5
+        py-10
+      ">
 
-      <div
-        className="
-          max-w-2xl
-          mx-auto
-          px-5
-          py-10
-        "
-      >
+        <div className="
+          theme-surface
+          rounded-3xl
+          border
+          theme-border
+          shadow-sm
+          p-8
+          text-center
+        ">
 
-        <div
-          className="
-            theme-surface
-            rounded-3xl
-            border
-            theme-border
-            shadow-sm
-            p-8
-            text-center
-          "
-        >
-
-          <div
-            className="
-              w-14
-              h-14
-              mx-auto
-              rounded-2xl
-              bg-red-50
-              flex
-              items-center
-              justify-center
-              mb-4
-            "
-          >
-
+          <div className="
+            w-14
+            h-14
+            mx-auto
+            rounded-2xl
+            bg-red-50
+            flex
+            items-center
+            justify-center
+            mb-4
+          ">
             ⚠️
-
           </div>
 
-
-          <h2
-            className="
-              text-xl
-              font-bold
-              text-gray-900
-              dark:text-white
-            "
-          >
+          <h2 className="
+            text-xl
+            font-bold
+            text-gray-900
+            dark:text-white
+          ">
             Impossible de charger le dashboard
           </h2>
 
-
-          <p
-            className="
-              text-sm
-              text-gray-600
-              dark:text-gray-400
-              mt-2
-            "
-          >
+          <p className="
+            text-sm
+            text-gray-600
+            dark:text-gray-400
+            mt-2
+          ">
             {error}
           </p>
 
-
           <button
             type="button"
-            onClick={() =>
-              loadDashboard(true)
-            }
+            onClick={() => loadDashboard(true)}
             className="
               mt-6
               inline-flex
@@ -934,9 +738,7 @@ export default function DashboardPage() {
             "
           >
 
-            <RefreshCw
-              size={18}
-            />
+            <RefreshCw size={18} />
 
             Réessayer
 
@@ -945,9 +747,7 @@ export default function DashboardPage() {
         </div>
 
       </div>
-
     );
-
   }
 
 
@@ -958,61 +758,49 @@ export default function DashboardPage() {
   if (!profile) {
 
     return (
+      <div className="
+        max-w-2xl
+        mx-auto
+        px-5
+        py-10
+        text-center
+      ">
 
-      <div
-        className="
-          max-w-2xl
-          mx-auto
-          px-5
-          py-10
-          text-center
-        "
-      >
+        <div className="
+          theme-surface
+          rounded-3xl
+          border
+          theme-border
+          shadow-sm
+          p-8
+        ">
 
-        <div
-          className="
-            theme-surface
-            rounded-3xl
-            border
-            theme-border
-            shadow-sm
-            p-8
-          "
-        >
-
-          <h2
-            className="
-              text-xl
-              font-bold
-              text-gray-900
-              dark:text-white
-            "
-          >
+          <h2 className="
+            text-xl
+            font-bold
+            text-gray-900
+            dark:text-white
+          ">
             Profil introuvable
           </h2>
 
-
-          <p
-            className="
-              text-gray-600
-              dark:text-gray-400
-              mt-2
-            "
-          >
+          <p className="
+            text-gray-600
+            dark:text-gray-400
+            mt-2
+          ">
             Ton profil Kalan Academy n'a pas encore été trouvé.
           </p>
 
         </div>
 
       </div>
-
     );
-
   }
 
 
   // ===================================================
-  // XP / NIVEAU
+  // XP
   // ===================================================
 
   const xp =
@@ -1021,34 +809,28 @@ export default function DashboardPage() {
       0
     );
 
-
   const level =
     Math.floor(
       xp / XP_PER_LEVEL
     ) + 1;
 
-
   const currentLevelXP =
     (level - 1) *
     XP_PER_LEVEL;
-
 
   const nextLevelXP =
     level *
     XP_PER_LEVEL;
 
-
   const xpInCurrentLevel =
     xp -
     currentLevelXP;
-
 
   const xpRemaining =
     Math.max(
       nextLevelXP - xp,
       0
     );
-
 
   const progressXP =
     Math.min(
@@ -1067,45 +849,24 @@ export default function DashboardPage() {
   // RANG
   // ===================================================
 
-  let rank =
-    "Débutant";
-
+  let rank = "Débutant";
 
   if (xp >= 500) {
-
-    rank =
-      "Apprenti";
-
+    rank = "Apprenti";
   }
-
 
   if (xp >= 1500) {
-
-    rank =
-      "Élève confirmé";
-
+    rank = "Élève confirmé";
   }
-
 
   if (xp >= 3000) {
-
-    rank =
-      "Expert";
-
+    rank = "Expert";
   }
-
 
   if (xp >= 5000) {
-
-    rank =
-      "Maître Kalan";
-
+    rank = "Maître Kalan";
   }
 
-
-  // ===================================================
-  // NOM
-  // ===================================================
 
   const studentName =
     profile.full_name ||
@@ -1118,74 +879,60 @@ export default function DashboardPage() {
 
   return (
 
-    <div
-      className="
-        min-h-screen
-        bg-white
-        px-5
-        py-6
-        md:px-8
-        md:py-8
-      "
-    >
+    <div className="
+      min-h-screen
+      bg-white
+      dark:bg-gray-950
+      px-5
+      py-6
+      md:px-8
+      md:py-8
+    ">
 
-      <div
-        className="
-          max-w-6xl
-          mx-auto
-          space-y-6
-        "
-      >
+      <div className="
+        max-w-6xl
+        mx-auto
+        space-y-6
+      ">
 
-        {/* =================================================
-            HEADER
-        ================================================= */}
 
-        <div
-          className="
-            flex
-            flex-col
-            sm:flex-row
-            sm:items-center
-            sm:justify-between
-            gap-4
-          "
-        >
+        {/* HEADER */}
+
+        <div className="
+          flex
+          flex-col
+          sm:flex-row
+          sm:items-center
+          sm:justify-between
+          gap-4
+        ">
 
           <div>
 
-            <p
-              className="
-                text-sm
-                font-bold
-                text-accent
-              "
-            >
+            <p className="
+              text-sm
+              font-bold
+              text-accent
+            ">
               Kalan Academy
             </p>
 
-
-            <h1
-              className="
-                text-2xl
-                md:text-3xl
-                font-extrabold
-                text-gray-950
-                dark:text-gray-950
-                mt-1
-              "
-            >
+            <h1 className="
+              text-2xl
+              md:text-3xl
+              font-extrabold
+              text-gray-950
+              dark:text-white
+              mt-1
+            ">
               Bonjour {studentName} 👋
             </h1>
 
-
-            <p
-              className="
-                text-gray-600
-                dark:text-gray-600
-                mt-1
-              "
-            >
+            <p className="
+              text-gray-600
+              dark:text-gray-400
+              mt-1
+            ">
               Voici ta progression et tes résultats.
             </p>
 
@@ -1194,9 +941,7 @@ export default function DashboardPage() {
 
           <button
             type="button"
-            onClick={() =>
-              loadDashboard(true)
-            }
+            onClick={() => loadDashboard(true)}
             disabled={refreshing}
             className="
               inline-flex
@@ -1204,15 +949,18 @@ export default function DashboardPage() {
               justify-center
               gap-2
               bg-white
+              dark:bg-gray-900
               border
               theme-border
               text-gray-800
+              dark:text-gray-200
               px-4
               py-2.5
               rounded-xl
               font-semibold
               shadow-sm
               hover:bg-gray-50
+              dark:hover:bg-gray-800
               transition
               disabled:opacity-50
             "
@@ -1234,108 +982,85 @@ export default function DashboardPage() {
         </div>
 
 
-        {/* =================================================
-            CARTE XP
-        ================================================= */}
+        {/* XP */}
 
-        <div
-          className="
+        <div className="
+          relative
+          overflow-hidden
+          rounded-3xl
+          bg-accent-soft
+          border
+          border-accent
+          p-6
+          md:p-8
+          shadow-xl
+        ">
+
+          <div className="
+            absolute
+            -right-16
+            -top-16
+            w-48
+            h-48
+            rounded-full
+            bg-accent
+            opacity-10
+          " />
+
+          <div className="
+            absolute
+            right-10
+            -bottom-24
+            w-56
+            h-56
+            rounded-full
+            bg-accent
+            opacity-5
+          " />
+
+          <div className="
             relative
-            overflow-hidden
-            rounded-3xl
-            bg-accent-soft
-            border
-            border-accent
-            p-6
-            md:p-8
-            shadow-xl
-          "
-        >
+            z-10
+          ">
 
-          <div
-            className="
-              absolute
-              -right-16
-              -top-16
-              w-48
-              h-48
-              rounded-full
-              bg-accent
-              opacity-10
-            "
-          />
+            <div className="
+              flex
+              items-center
+              gap-3
+              mb-6
+            ">
 
-
-          <div
-            className="
-              absolute
-              right-10
-              -bottom-24
-              w-56
-              h-56
-              rounded-full
-              bg-accent
-              opacity-10
-            "
-          />
-
-
-          <div
-            className="
-              relative
-              z-10
-            "
-          >
-
-            <div
-              className="
+              <div className="
+                w-12
+                h-12
+                rounded-2xl
+                bg-accent
+                text-white
                 flex
                 items-center
-                gap-3
-                mb-6
-              "
-            >
-
-              <div
-                className="
-                  w-12
-                  h-12
-                  rounded-2xl
-                  bg-accent
-                  text-white
-                  flex
-                  items-center
-                  justify-center
-                  shrink-0
-                "
-              >
-
+                justify-center
+                shrink-0
+              ">
                 <Star size={25} />
-
               </div>
-
 
               <div>
 
-                <p
-                  className="
-                    text-accent
-                    text-sm
-                    font-medium
-                  "
-                >
+                <p className="
+                  text-accent
+                  text-sm
+                  font-medium
+                ">
                   Ton niveau
                 </p>
 
-
-                <h2
-                  className="
-                    text-2xl
-                    md:text-3xl
-                    font-extrabold
-                    text-gray-950
-                  "
-                >
+                <h2 className="
+                  text-2xl
+                  md:text-3xl
+                  font-extrabold
+                  text-gray-950
+                  dark:text-white
+                ">
                   Niveau {level}
                 </h2>
 
@@ -1344,48 +1069,40 @@ export default function DashboardPage() {
             </div>
 
 
-            <div
-              className="
-                grid
-                sm:grid-cols-2
-                gap-6
-              "
-            >
+            <div className="
+              grid
+              sm:grid-cols-2
+              gap-6
+            ">
 
               <div>
 
-                <p
-                  className="
-                    text-accent
-                    text-sm
-                    font-medium
-                  "
-                >
+                <p className="
+                  text-accent
+                  text-sm
+                  font-medium
+                ">
                   XP total
                 </p>
 
-
-                <p
-                  className="
-                    text-4xl
-                    md:text-5xl
-                    font-extrabold
-                    mt-1
-                    tracking-tight
-                    text-gray-950
-                  "
-                >
+                <p className="
+                  text-4xl
+                  md:text-5xl
+                  font-extrabold
+                  mt-1
+                  tracking-tight
+                  text-gray-950
+                  dark:text-white
+                ">
 
                   {xp}
 
-                  <span
-                    className="
-                      text-lg
-                      font-semibold
-                      text-accent
-                      ml-2
-                    "
-                  >
+                  <span className="
+                    text-lg
+                    font-semibold
+                    text-accent
+                    ml-2
+                  ">
                     XP
                   </span>
 
@@ -1394,32 +1111,26 @@ export default function DashboardPage() {
               </div>
 
 
-              <div
-                className="
-                  sm:text-right
-                "
-              >
+              <div className="
+                sm:text-right
+              ">
 
-                <p
-                  className="
-                    text-accent
-                    text-sm
-                    font-medium
-                  "
-                >
+                <p className="
+                  text-accent
+                  text-sm
+                  font-medium
+                ">
                   Rang
                 </p>
 
-
-                <p
-                  className="
-                    text-xl
-                    md:text-2xl
-                    font-extrabold
-                    mt-1
-                    text-gray-950
-                  "
-                >
+                <p className="
+                  text-xl
+                  md:text-2xl
+                  font-extrabold
+                  mt-1
+                  text-gray-950
+                  dark:text-white
+                ">
                   {rank}
                 </p>
 
@@ -1430,24 +1141,22 @@ export default function DashboardPage() {
 
             <div className="mt-7">
 
-              <div
-                className="
-                  flex
-                  flex-col
-                  sm:flex-row
-                  sm:items-center
-                  sm:justify-between
-                  gap-1
-                  text-sm
-                  text-gray-700
-                  mb-2
-                "
-              >
+              <div className="
+                flex
+                flex-col
+                sm:flex-row
+                sm:items-center
+                sm:justify-between
+                gap-1
+                text-sm
+                text-gray-700
+                dark:text-gray-300
+                mb-2
+              ">
 
                 <span className="font-medium">
                   Progression vers le niveau {level + 1}
                 </span>
-
 
                 <span className="font-bold">
                   {xpInCurrentLevel} / {XP_PER_LEVEL} XP
@@ -1456,14 +1165,13 @@ export default function DashboardPage() {
               </div>
 
 
-              <div
-                className="
-                  h-3
-                  bg-white/70
-                  rounded-full
-                  overflow-hidden
-                "
-              >
+              <div className="
+                h-3
+                bg-white/70
+                dark:bg-gray-900/50
+                rounded-full
+                overflow-hidden
+              ">
 
                 <div
                   className="
@@ -1474,32 +1182,29 @@ export default function DashboardPage() {
                     duration-500
                   "
                   style={{
-                    width:
-                      `${progressXP}%`
+                    width: `${progressXP}%`
                   }}
                 />
 
               </div>
 
 
-              <div
-                className="
-                  flex
-                  flex-col
-                  sm:flex-row
-                  sm:items-center
-                  sm:justify-between
-                  gap-1
-                  mt-2
-                  text-xs
-                  text-gray-600
-                "
-              >
+              <div className="
+                flex
+                flex-col
+                sm:flex-row
+                sm:items-center
+                sm:justify-between
+                gap-1
+                mt-2
+                text-xs
+                text-gray-600
+                dark:text-gray-400
+              ">
 
                 <span>
                   {xpInCurrentLevel} XP gagnés dans ce niveau
                 </span>
-
 
                 <span>
                   Encore {xpRemaining} XP
@@ -1514,294 +1219,136 @@ export default function DashboardPage() {
         </div>
 
 
-        {/* =================================================
-            STATISTIQUES
-        ================================================= */}
+        {/* STATISTIQUES */}
 
-        <div
-          className="
-            grid
-            grid-cols-2
-            lg:grid-cols-4
-            gap-4
-          "
-        >
+        <div className="
+          grid
+          grid-cols-2
+          lg:grid-cols-4
+          gap-4
+        ">
 
-          <div
-            className="
-              theme-surface
-              rounded-2xl
-              border
-              theme-border
-              shadow-sm
-              p-5
-            "
-          >
+          {[
+            {
+              icon: BookOpen,
+              label: "Leçons terminées",
+              value: stats.lessons
+            },
+            {
+              icon: Star,
+              label: "Score moyen",
+              value: `${stats.score}%`
+            },
+            {
+              icon: Award,
+              label: "Badges",
+              value: stats.badges
+            },
+            {
+              icon: Target,
+              label: "Quiz réalisés",
+              value: stats.attempts
+            }
+          ].map(
+            ({
+              icon: Icon,
+              label,
+              value
+            }) => (
 
-            <div
-              className="
-                w-10
-                h-10
-                rounded-xl
-                bg-accent-soft
-                text-accent
-                flex
-                items-center
-                justify-center
-                mb-4
-              "
-            >
+              <div
+                key={label}
+                className="
+                  theme-surface
+                  rounded-2xl
+                  border
+                  theme-border
+                  shadow-sm
+                  p-5
+                "
+              >
 
-              <BookOpen size={21} />
+                <div className="
+                  w-10
+                  h-10
+                  rounded-xl
+                  bg-accent-soft
+                  text-accent
+                  flex
+                  items-center
+                  justify-center
+                  mb-4
+                ">
+                  <Icon size={21} />
+                </div>
 
-            </div>
+                <p className="
+                  text-sm
+                  text-gray-600
+                  dark:text-gray-400
+                ">
+                  {label}
+                </p>
 
+                <p className="
+                  text-2xl
+                  font-extrabold
+                  text-gray-950
+                  dark:text-white
+                  mt-1
+                ">
+                  {value}
+                </p>
 
-            <p
-              className="
-                text-sm
-                text-gray-600
-                dark:text-gray-600
-              "
-            >
-              Leçons terminées
-            </p>
+              </div>
 
-
-            <p
-              className="
-                text-2xl
-                font-extrabold
-                text-gray-950
-                mt-1
-              "
-            >
-              {stats.lessons}
-            </p>
-
-          </div>
-
-
-          <div
-            className="
-              theme-surface
-              rounded-2xl
-              border
-              theme-border
-              shadow-sm
-              p-5
-            "
-          >
-
-            <div
-              className="
-                w-10
-                h-10
-                rounded-xl
-                bg-accent-soft
-                text-accent
-                flex
-                items-center
-                justify-center
-                mb-4
-              "
-            >
-
-              <Star size={21} />
-
-            </div>
-
-
-            <p
-              className="
-                text-sm
-                text-gray-600
-                dark:text-gray-600
-              "
-            >
-              Score moyen
-            </p>
-
-
-            <p
-              className="
-                text-2xl
-                font-extrabold
-                text-gray-950
-                mt-1
-              "
-            >
-              {stats.score}%
-            </p>
-
-          </div>
-
-
-          <div
-            className="
-              theme-surface
-              rounded-2xl
-              border
-              theme-border
-              shadow-sm
-              p-5
-            "
-          >
-
-            <div
-              className="
-                w-10
-                h-10
-                rounded-xl
-                bg-accent-soft
-                text-accent
-                flex
-                items-center
-                justify-center
-                mb-4
-              "
-            >
-
-              <Award size={21} />
-
-            </div>
-
-
-            <p
-              className="
-                text-sm
-                text-gray-600
-                dark:text-gray-600
-              "
-            >
-              Badges
-            </p>
-
-
-            <p
-              className="
-                text-2xl
-                font-extrabold
-                text-gray-950
-                mt-1
-              "
-            >
-              {stats.badges}
-            </p>
-
-          </div>
-
-
-          <div
-            className="
-              theme-surface
-              rounded-2xl
-              border
-              theme-border
-              shadow-sm
-              p-5
-            "
-          >
-
-            <div
-              className="
-                w-10
-                h-10
-                rounded-xl
-                bg-accent-soft
-                text-accent
-                flex
-                items-center
-                justify-center
-                mb-4
-              "
-            >
-
-              <Target size={21} />
-
-            </div>
-
-
-            <p
-              className="
-                text-sm
-                text-gray-600
-                dark:text-gray-600
-              "
-            >
-              Quiz réalisés
-            </p>
-
-
-            <p
-              className="
-                text-2xl
-                font-extrabold
-                text-gray-950
-                mt-1
-              "
-            >
-              {stats.attempts}
-            </p>
-
-          </div>
+            )
+          )}
 
         </div>
 
 
-        {/* =================================================
-            PROGRESSION PAR MATIÈRE
-        ================================================= */}
+        {/* PROGRESSION */}
 
         <section>
 
-          <div
-            className="
+          <div className="
+            flex
+            items-center
+            gap-3
+            mb-4
+          ">
+
+            <div className="
+              w-10
+              h-10
+              rounded-xl
+              bg-accent-soft
+              text-accent
               flex
               items-center
-              gap-3
-              mb-4
-            "
-          >
-
-            <div
-              className="
-                w-10
-                h-10
-                rounded-xl
-                bg-accent-soft
-                text-accent
-                flex
-                items-center
-                justify-center
-              "
-            >
-
+              justify-center
+            ">
               <TrendingUp size={20} />
-
             </div>
-
 
             <div>
 
-              <h2
-                className="
-                  text-xl
-                  font-bold
-                  text-gray-950
-                "
-              >
+              <h2 className="
+                text-xl
+                font-bold
+                text-gray-950
+                dark:text-white
+              ">
                 Progression par matière
               </h2>
 
-
-              <p
-                className="
-                  text-sm
-                  text-gray-600
-                  mt-1
-                "
-              >
+              <p className="
+                text-sm
+                text-gray-600
+                dark:text-gray-400
+                mt-1
+              ">
                 Suis ton avancement dans chaque matière.
               </p>
 
@@ -1812,45 +1359,40 @@ export default function DashboardPage() {
 
           {Object.keys(subjects).length === 0 ? (
 
-            <div
-              className="
-                theme-surface
-                rounded-2xl
-                border
-                theme-border
-                shadow-sm
-                p-8
-                text-center
-              "
-            >
+            <div className="
+              theme-surface
+              rounded-2xl
+              border
+              theme-border
+              shadow-sm
+              p-8
+              text-center
+            ">
 
               <BookOpen
                 size={36}
                 className="
                   mx-auto
                   text-gray-300
+                  dark:text-gray-600
                   mb-3
                 "
               />
 
-
-              <h3
-                className="
-                  font-bold
-                  text-gray-800
-                "
-              >
+              <h3 className="
+                font-bold
+                text-gray-800
+                dark:text-white
+              ">
                 Pas encore de progression
               </h3>
 
-
-              <p
-                className="
-                  text-sm
-                  text-gray-600
-                  mt-1
-                "
-              >
+              <p className="
+                text-sm
+                text-gray-600
+                dark:text-gray-400
+                mt-1
+              ">
                 Commence une leçon pour voir ta progression ici.
               </p>
 
@@ -1858,14 +1400,12 @@ export default function DashboardPage() {
 
           ) : (
 
-            <div
-              className="
-                grid
-                md:grid-cols-2
-                lg:grid-cols-3
-                gap-4
-              "
-            >
+            <div className="
+              grid
+              md:grid-cols-2
+              lg:grid-cols-3
+              gap-4
+            ">
 
               {Object.entries(subjects).map(
                 ([name, data]) => (
@@ -1882,48 +1422,41 @@ export default function DashboardPage() {
                     "
                   >
 
-                    <div
-                      className="
-                        flex
-                        items-center
-                        justify-between
-                        gap-3
-                      "
-                    >
+                    <div className="
+                      flex
+                      items-center
+                      justify-between
+                      gap-3
+                    ">
 
-                      <h3
-                        className="
-                          font-bold
-                          text-gray-950
-                          truncate
-                        "
-                      >
+                      <h3 className="
+                        font-bold
+                        text-gray-950
+                        dark:text-white
+                        truncate
+                      ">
                         {name}
                       </h3>
 
-
-                      <span
-                        className="
-                          text-sm
-                          font-bold
-                          text-accent
-                        "
-                      >
+                      <span className="
+                        text-sm
+                        font-bold
+                        text-accent
+                      ">
                         {data.percent}%
                       </span>
 
                     </div>
 
 
-                    <div
-                      className="
-                        h-3
-                        bg-gray-100
-                        rounded-full
-                        overflow-hidden
-                        mt-4
-                      "
-                    >
+                    <div className="
+                      h-3
+                      bg-gray-100
+                      dark:bg-gray-800
+                      rounded-full
+                      overflow-hidden
+                      mt-4
+                    ">
 
                       <div
                         className="
@@ -1934,30 +1467,24 @@ export default function DashboardPage() {
                           duration-500
                         "
                         style={{
-                          width:
-                            `${data.percent}%`
+                          width: `${data.percent}%`
                         }}
                       />
 
                     </div>
 
 
-                    <p
-                      className="
-                        text-xs
-                        text-gray-600
-                        mt-2
-                      "
-                    >
+                    <p className="
+                      text-xs
+                      text-gray-600
+                      dark:text-gray-400
+                      mt-2
+                    ">
 
                       {data.completed} leçon
-                      {data.completed > 1
-                        ? "s"
-                        : ""}
+                      {data.completed > 1 ? "s" : ""}
                       {" "}terminée
-                      {data.completed > 1
-                        ? "s"
-                        : ""}
+                      {data.completed > 1 ? "s" : ""}
                       {" "}sur{" "}
                       {data.total}
 
@@ -1975,58 +1502,46 @@ export default function DashboardPage() {
         </section>
 
 
-        {/* =================================================
-            BADGES
-        ================================================= */}
+        {/* BADGES */}
 
         <section>
 
-          <div
-            className="
+          <div className="
+            flex
+            items-center
+            gap-3
+            mb-4
+          ">
+
+            <div className="
+              w-10
+              h-10
+              rounded-xl
+              bg-accent-soft
+              text-accent
               flex
               items-center
-              gap-3
-              mb-4
-            "
-          >
-
-            <div
-              className="
-                w-10
-                h-10
-                rounded-xl
-                bg-accent-soft
-                text-accent
-                flex
-                items-center
-                justify-center
-              "
-            >
-
+              justify-center
+            ">
               <Trophy size={21} />
-
             </div>
-
 
             <div>
 
-              <h2
-                className="
-                  text-xl
-                  font-bold
-                  text-gray-950
-                "
-              >
+              <h2 className="
+                text-xl
+                font-bold
+                text-gray-950
+                dark:text-white
+              ">
                 Mes badges
               </h2>
 
-
-              <p
-                className="
-                  text-sm
-                  text-gray-600
-                "
-              >
+              <p className="
+                text-sm
+                text-gray-600
+                dark:text-gray-400
+              ">
                 Les récompenses que tu as obtenues.
               </p>
 
@@ -2037,45 +1552,37 @@ export default function DashboardPage() {
 
           {badges.length === 0 ? (
 
-            <div
-              className="
-                theme-surface
-                rounded-2xl
-                border
-                theme-border
-                shadow-sm
-                p-8
-                text-center
-              "
-            >
+            <div className="
+              theme-surface
+              rounded-2xl
+              border
+              theme-border
+              shadow-sm
+              p-8
+              text-center
+            ">
 
-              <div
-                className="
-                  text-4xl
-                  mb-3
-                "
-              >
+              <div className="
+                text-4xl
+                mb-3
+              ">
                 🏆
               </div>
 
-
-              <h3
-                className="
-                  font-bold
-                  text-gray-800
-                "
-              >
+              <h3 className="
+                font-bold
+                text-gray-800
+                dark:text-white
+              ">
                 Aucun badge pour le moment
               </h3>
 
-
-              <p
-                className="
-                  text-sm
-                  text-gray-600
-                  mt-1
-                "
-              >
+              <p className="
+                text-sm
+                text-gray-600
+                dark:text-gray-400
+                mt-1
+              ">
                 Réussis tes quiz et progresse dans tes leçons pour gagner des badges.
               </p>
 
@@ -2083,20 +1590,16 @@ export default function DashboardPage() {
 
           ) : (
 
-            <div
-              className="
-                grid
-                sm:grid-cols-2
-                lg:grid-cols-3
-                gap-4
-              "
-            >
+            <div className="
+              grid
+              sm:grid-cols-2
+              lg:grid-cols-3
+              gap-4
+            ">
 
               {badges.map(item => {
 
-                const badge =
-                  item.badges;
-
+                const badge = item.badges;
 
                 return (
 
@@ -2112,38 +1615,29 @@ export default function DashboardPage() {
                     "
                   >
 
-                    <div
-                      className="
-                        flex
-                        items-start
-                        gap-4
-                      "
-                    >
+                    <div className="
+                      flex
+                      items-start
+                      gap-4
+                    ">
 
-                      <div
-                        className="
-                          w-14
-                          h-14
-                          shrink-0
-                          rounded-2xl
-                          bg-accent-soft
-                          flex
-                          items-center
-                          justify-center
-                          overflow-hidden
-                        "
-                      >
+                      <div className="
+                        w-14
+                        h-14
+                        shrink-0
+                        rounded-2xl
+                        bg-accent-soft
+                        flex
+                        items-center
+                        justify-center
+                        overflow-hidden
+                      ">
 
                         {badge?.image_url ? (
 
                           <img
-                            src={
-                              badge.image_url
-                            }
-                            alt={
-                              badge.name ||
-                              "Badge"
-                            }
+                            src={badge.image_url}
+                            alt={badge.name || "Badge"}
                             className="
                               w-full
                               h-full
@@ -2162,49 +1656,34 @@ export default function DashboardPage() {
                       </div>
 
 
-                      <div
-                        className="
-                          min-w-0
-                        "
-                      >
+                      <div className="min-w-0">
 
-                        <h3
-                          className="
-                            font-bold
-                            text-gray-950
-                          "
-                        >
-                          {
-                            badge?.name ||
-                            "Badge"
-                          }
+                        <h3 className="
+                          font-bold
+                          text-gray-950
+                          dark:text-white
+                        ">
+                          {badge?.name || "Badge"}
                         </h3>
 
-
-                        <p
-                          className="
-                            text-sm
-                            text-gray-600
-                            mt-1
-                          "
-                        >
-                          {
-                            badge?.description ||
-                            "Badge obtenu sur Kalan Academy."
-                          }
+                        <p className="
+                          text-sm
+                          text-gray-600
+                          dark:text-gray-400
+                          mt-1
+                        ">
+                          {badge?.description ||
+                            "Badge obtenu sur Kalan Academy."}
                         </p>
-
 
                         {badge?.xp_reward ? (
 
-                          <p
-                            className="
-                              text-sm
-                              font-semibold
-                              text-accent
-                              mt-2
-                            "
-                          >
+                          <p className="
+                            text-sm
+                            font-semibold
+                            text-accent
+                            mt-2
+                          ">
                             +{badge.xp_reward} XP
                           </p>
 
@@ -2217,7 +1696,6 @@ export default function DashboardPage() {
                   </div>
 
                 );
-
               })}
 
             </div>
@@ -2229,7 +1707,5 @@ export default function DashboardPage() {
       </div>
 
     </div>
-
   );
-
 }

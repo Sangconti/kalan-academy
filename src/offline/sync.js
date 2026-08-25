@@ -1,31 +1,18 @@
-// src/offline/sync.js
-
 import { supabase } from "../lib/supabase";
 
 import {
-
   db,
-
   getSyncQueue,
   removeFromSyncQueue,
-
   getUnsyncedProgress,
   markProgressSynced,
-
   getUnsyncedQuizAttempts,
   markQuizAttemptSynced,
-
   addToSyncQueue
-
 } from "./db";
 
 
-// ======================================================
-// ÉTAT
-// ======================================================
-
 let syncing = false;
-
 let educationSyncing = false;
 
 
@@ -34,35 +21,26 @@ let educationSyncing = false;
 // ======================================================
 
 function isOnline() {
-
-  if (
-    typeof navigator === "undefined"
-  ) {
-
+  if (typeof navigator === "undefined") {
     return true;
-
   }
 
   return navigator.onLine === true;
-
 }
 
 
 function now() {
-
   return new Date().toISOString();
-
 }
 
 
 // ======================================================
-// SYNCHRONISATION DONNÉES UTILISATEUR
+// SYNCHRONISATION UTILISATEUR
 // ======================================================
 
 export async function syncPendingData() {
 
   if (syncing) {
-
     console.log(
       "⏳ Synchronisation utilisateur déjà en cours"
     );
@@ -71,12 +49,10 @@ export async function syncPendingData() {
       success: true,
       skipped: true
     };
-
   }
 
 
   if (!isOnline()) {
-
     console.log(
       "📴 Pas de connexion → synchronisation utilisateur ignorée"
     );
@@ -85,7 +61,6 @@ export async function syncPendingData() {
       success: false,
       offline: true
     };
-
   }
 
 
@@ -99,23 +74,10 @@ export async function syncPendingData() {
     );
 
 
-    // --------------------------------------
-    // 1. PROGRESSIONS
-    // --------------------------------------
-
     await queueUnsyncedProgress();
-
-
-    // --------------------------------------
-    // 2. TENTATIVES QUIZ
-    // --------------------------------------
 
     await queueUnsyncedQuizAttempts();
 
-
-    // --------------------------------------
-    // 3. QUEUE
-    // --------------------------------------
 
     const queue =
       await getSyncQueue();
@@ -127,13 +89,23 @@ export async function syncPendingData() {
 
 
     let success = 0;
-
     let errors = 0;
 
 
     for (const item of queue) {
 
       try {
+
+        if (!isOnline()) {
+          console.log(
+            "📴 Connexion perdue pendant la synchronisation"
+          );
+
+          errors++;
+
+          break;
+        }
+
 
         const result =
           await processQueueItem(item);
@@ -147,17 +119,13 @@ export async function syncPendingData() {
 
           success++;
 
-        }
-
-        else {
+        } else {
 
           errors++;
 
         }
 
-      }
-
-      catch (error) {
+      } catch (error) {
 
         errors++;
 
@@ -166,9 +134,7 @@ export async function syncPendingData() {
           item,
           error
         );
-
       }
-
     }
 
 
@@ -196,20 +162,12 @@ export async function syncPendingData() {
 
 
     return {
-
-      success:
-        errors === 0,
-
-      operations:
-        success,
-
+      success: errors === 0,
+      operations: success,
       errors
-
     };
 
-  }
-
-  catch (error) {
+  } catch (error) {
 
     console.error(
       "❌ Erreur synchronisation utilisateur :",
@@ -217,23 +175,16 @@ export async function syncPendingData() {
     );
 
     return {
-
       success: false,
-
       errors: 1,
-
       error
-
     };
 
-  }
-
-  finally {
+  } finally {
 
     syncing = false;
 
   }
-
 }
 
 
@@ -247,8 +198,21 @@ async function queueUnsyncedProgress() {
     await getUnsyncedProgress();
 
 
-  if (!list.length)
+  if (!list.length) {
     return;
+  }
+
+
+  const existingQueue =
+    await getSyncQueue();
+
+
+  const existingKeys =
+    new Set(
+      existingQueue.map(item =>
+        `${item.table_name}:${item.action}:${item.local_record_id}`
+      )
+    );
 
 
   console.log(
@@ -258,19 +222,24 @@ async function queueUnsyncedProgress() {
 
   for (const progress of list) {
 
+    const key =
+      `user_progress:upsert:${progress.id}`;
+
+
+    if (existingKeys.has(key)) {
+      continue;
+    }
+
+
     await addToSyncQueue({
 
-      table_name:
-        "user_progress",
+      table_name: "user_progress",
 
-      record_id:
-        progress.id,
+      record_id: progress.id,
 
-      action:
-        "upsert",
+      action: "upsert",
 
-      local_record_id:
-        progress.id,
+      local_record_id: progress.id,
 
       payload: {
 
@@ -288,13 +257,13 @@ async function queueUnsyncedProgress() {
 
         completed_at:
           progress.completed_at || null
-
       }
 
     });
 
-  }
 
+    existingKeys.add(key);
+  }
 }
 
 
@@ -308,8 +277,21 @@ async function queueUnsyncedQuizAttempts() {
     await getUnsyncedQuizAttempts();
 
 
-  if (!list.length)
+  if (!list.length) {
     return;
+  }
+
+
+  const existingQueue =
+    await getSyncQueue();
+
+
+  const existingKeys =
+    new Set(
+      existingQueue.map(item =>
+        `${item.table_name}:${item.action}:${item.local_record_id}`
+      )
+    );
 
 
   console.log(
@@ -318,6 +300,15 @@ async function queueUnsyncedQuizAttempts() {
 
 
   for (const attempt of list) {
+
+    const key =
+      `quiz_attempts:insert:${attempt.id}`;
+
+
+    if (existingKeys.has(key)) {
+      continue;
+    }
+
 
     await addToSyncQueue({
 
@@ -364,13 +355,13 @@ async function queueUnsyncedQuizAttempts() {
 
         completed_at:
           attempt.completed_at || now()
-
       }
 
     });
 
-  }
 
+    existingKeys.add(key);
+  }
 }
 
 
@@ -381,21 +372,16 @@ async function queueUnsyncedQuizAttempts() {
 async function processQueueItem(item) {
 
   const {
-
     table_name,
-
     action,
-
     payload,
-
     local_record_id
-
   } = item;
 
 
-  // ======================================
+  // ====================================================
   // XP
-  // ======================================
+  // ====================================================
 
   if (
     table_name === "profiles" &&
@@ -403,30 +389,28 @@ async function processQueueItem(item) {
   ) {
 
     return await syncXP(payload);
-
   }
 
 
-  // ======================================
+  // ====================================================
   // USER PROGRESS
-  // ======================================
+  // ====================================================
 
   if (
     table_name === "user_progress" &&
     action === "upsert"
   ) {
 
-    const {
-      error
-    } = await supabase
-      .from("user_progress")
-      .upsert(
-        payload,
-        {
-          onConflict:
-            "user_id,lesson_id"
-        }
-      );
+    const { error } =
+      await supabase
+        .from("user_progress")
+        .upsert(
+          payload,
+          {
+            onConflict:
+              "user_id,lesson_id"
+          }
+        );
 
 
     if (error) {
@@ -437,7 +421,6 @@ async function processQueueItem(item) {
       );
 
       return false;
-
     }
 
 
@@ -449,7 +432,6 @@ async function processQueueItem(item) {
       await markProgressSynced(
         local_record_id
       );
-
     }
 
 
@@ -457,33 +439,28 @@ async function processQueueItem(item) {
       "☁️ Progression synchronisée"
     );
 
-
     return true;
-
   }
 
 
-  // ======================================
+  // ====================================================
   // QUIZ ATTEMPT
-  // ======================================
+  // ====================================================
 
   if (
     table_name === "quiz_attempts" &&
     action === "insert"
   ) {
 
-    const {
-      error
-    } = await supabase
-      .from("quiz_attempts")
-      .insert(payload);
+    const { error } =
+      await supabase
+        .from("quiz_attempts")
+        .insert(payload);
 
 
     if (error) {
 
-      if (
-        error.code === "23505"
-      ) {
+      if (error.code === "23505") {
 
         console.warn(
           "⚠️ Tentative quiz déjà présente"
@@ -498,12 +475,10 @@ async function processQueueItem(item) {
           await markQuizAttemptSynced(
             local_record_id
           );
-
         }
 
 
         return true;
-
       }
 
 
@@ -513,7 +488,6 @@ async function processQueueItem(item) {
       );
 
       return false;
-
     }
 
 
@@ -525,7 +499,6 @@ async function processQueueItem(item) {
       await markQuizAttemptSynced(
         local_record_id
       );
-
     }
 
 
@@ -533,32 +506,29 @@ async function processQueueItem(item) {
       "☁️ Tentative quiz synchronisée"
     );
 
-
     return true;
-
   }
 
 
-  // ======================================
+  // ====================================================
   // USER BADGES
-  // ======================================
+  // ====================================================
 
   if (
     table_name === "user_badges" &&
     action === "insert"
   ) {
 
-    const {
-      error
-    } = await supabase
-      .from("user_badges")
-      .upsert(
-        payload,
-        {
-          onConflict:
-            "user_id,badge_id"
-        }
-      );
+    const { error } =
+      await supabase
+        .from("user_badges")
+        .upsert(
+          payload,
+          {
+            onConflict:
+              "user_id,badge_id"
+          }
+        );
 
 
     if (error) {
@@ -569,7 +539,6 @@ async function processQueueItem(item) {
       );
 
       return false;
-
     }
 
 
@@ -578,39 +547,31 @@ async function processQueueItem(item) {
       payload?.badge_id
     );
 
-
     return true;
-
   }
 
 
-  // ======================================
+  // ====================================================
   // INSERT
-  // ======================================
+  // ====================================================
 
-  if (
-    action === "insert"
-  ) {
+  if (action === "insert") {
 
-    const {
-      error
-    } = await supabase
-      .from(table_name)
-      .insert(payload);
+    const { error } =
+      await supabase
+        .from(table_name)
+        .insert(payload);
 
 
     if (error) {
 
-      if (
-        error.code === "23505"
-      ) {
+      if (error.code === "23505") {
 
         console.warn(
           `⚠️ ${table_name} déjà présent`
         );
 
         return true;
-
       }
 
 
@@ -620,22 +581,18 @@ async function processQueueItem(item) {
       );
 
       return false;
-
     }
 
 
     return true;
-
   }
 
 
-  // ======================================
+  // ====================================================
   // UPDATE
-  // ======================================
+  // ====================================================
 
-  if (
-    action === "update"
-  ) {
+  if (action === "update") {
 
     if (!payload?.id) {
 
@@ -644,19 +601,17 @@ async function processQueueItem(item) {
       );
 
       return false;
-
     }
 
 
-    const {
-      error
-    } = await supabase
-      .from(table_name)
-      .update(payload)
-      .eq(
-        "id",
-        payload.id
-      );
+    const { error } =
+      await supabase
+        .from(table_name)
+        .update(payload)
+        .eq(
+          "id",
+          payload.id
+        );
 
 
     if (error) {
@@ -667,22 +622,18 @@ async function processQueueItem(item) {
       );
 
       return false;
-
     }
 
 
     return true;
-
   }
 
 
-  // ======================================
+  // ====================================================
   // DELETE
-  // ======================================
+  // ====================================================
 
-  if (
-    action === "delete"
-  ) {
+  if (action === "delete") {
 
     if (!payload?.id) {
 
@@ -691,19 +642,17 @@ async function processQueueItem(item) {
       );
 
       return false;
-
     }
 
 
-    const {
-      error
-    } = await supabase
-      .from(table_name)
-      .delete()
-      .eq(
-        "id",
-        payload.id
-      );
+    const { error } =
+      await supabase
+        .from(table_name)
+        .delete()
+        .eq(
+          "id",
+          payload.id
+        );
 
 
     if (error) {
@@ -714,12 +663,10 @@ async function processQueueItem(item) {
       );
 
       return false;
-
     }
 
 
     return true;
-
   }
 
 
@@ -728,9 +675,7 @@ async function processQueueItem(item) {
     item
   );
 
-
   return false;
-
 }
 
 
@@ -743,21 +688,18 @@ async function syncXP(payload) {
   const userId =
     payload?.user_id;
 
-
   const amount =
     Number(payload?.amount) || 0;
 
 
-  if (!userId || amount <= 0)
+  if (!userId || amount <= 0) {
     return true;
+  }
 
 
   const {
-
     data: profile,
-
     error: getError
-
   } = await supabase
     .from("profiles")
     .select("xp, level")
@@ -773,17 +715,14 @@ async function syncXP(payload) {
     );
 
     return false;
-
   }
 
 
   const currentXP =
     Number(profile?.xp) || 0;
 
-
   const newXP =
     currentXP + amount;
-
 
   const newLevel =
     Math.floor(
@@ -791,23 +730,17 @@ async function syncXP(payload) {
     ) + 1;
 
 
-  const {
-    error: updateError
-  } = await supabase
-    .from("profiles")
-    .update({
-
-      xp:
-        newXP,
-
-      level:
-        newLevel
-
-    })
-    .eq(
-      "id",
-      userId
-    );
+  const { error: updateError } =
+    await supabase
+      .from("profiles")
+      .update({
+        xp: newXP,
+        level: newLevel
+      })
+      .eq(
+        "id",
+        userId
+      );
 
 
   if (updateError) {
@@ -818,34 +751,21 @@ async function syncXP(payload) {
     );
 
     return false;
-
   }
 
 
   try {
 
     localStorage.setItem(
-
       `kalan_xp_cache_${userId}`,
-
       JSON.stringify({
-
-        xp:
-          newXP,
-
-        level:
-          newLevel
-
+        xp: newXP,
+        level: newLevel
       })
-
     );
 
-  }
-
-  catch {
-
+  } catch {
     // Rien à faire
-
   }
 
 
@@ -853,112 +773,65 @@ async function syncXP(payload) {
     `☁️ XP synchronisé : +${amount} → ${newXP} XP`
   );
 
-
   return true;
-
 }
 
 
 // ======================================================
-// REMPLACEMENT ATOMIQUE DU CACHE PÉDAGOGIQUE
+// REMPLACEMENT CACHE PÉDAGOGIQUE
 // ======================================================
 
 async function replaceEducationCache({
-
   classes,
-
   subjects,
-
   chapters,
-
   lessons,
-
   blocks,
-
   quizzes,
-
   questions,
-
   badges,
-
   badgesLoaded
-
 }) {
 
   const cachedAt =
     now();
 
 
-  const classesRows =
-    (classes || []).map(item => ({
-      ...item,
-      cached_at: cachedAt
-    }));
+  const addCacheDate =
+    rows =>
+      (rows || []).map(item => ({
+        ...item,
+        cached_at: cachedAt
+      }));
 
+
+  const classesRows =
+    addCacheDate(classes);
 
   const subjectsRows =
-    (subjects || []).map(item => ({
-      ...item,
-      cached_at: cachedAt
-    }));
-
+    addCacheDate(subjects);
 
   const chaptersRows =
-    (chapters || []).map(item => ({
-      ...item,
-      cached_at: cachedAt
-    }));
-
+    addCacheDate(chapters);
 
   const lessonsRows =
-    (lessons || []).map(item => ({
-      ...item,
-      cached_at: cachedAt
-    }));
-
+    addCacheDate(lessons);
 
   const blocksRows =
-    (blocks || []).map(item => ({
-      ...item,
-      cached_at: cachedAt
-    }));
-
+    addCacheDate(blocks);
 
   const quizzesRows =
-    (quizzes || []).map(item => ({
-      ...item,
-      cached_at: cachedAt
-    }));
-
+    addCacheDate(quizzes);
 
   const questionsRows =
-    (questions || []).map(item => ({
-      ...item,
-      cached_at: cachedAt
-    }));
-
+    addCacheDate(questions);
 
   const badgesRows =
-    (badges || []).map(item => ({
-      ...item,
-      cached_at: cachedAt
-    }));
+    addCacheDate(badges);
 
-
-  /*
-    IMPORTANT :
-
-    Toutes les tables pédagogiques sont remplacées
-    dans UNE transaction Dexie.
-
-    Si la transaction échoue :
-    l'ancien cache reste intact.
-  */
 
   await db.transaction(
-
     "rw",
-
     db.classes,
     db.subjects,
     db.chapters,
@@ -967,93 +840,63 @@ async function replaceEducationCache({
     db.quizzes,
     db.quizQuestions,
     db.badges,
-
     async () => {
 
       await db.classes.clear();
-
       await db.subjects.clear();
-
       await db.chapters.clear();
-
       await db.lessons.clear();
-
       await db.lessonBlocks.clear();
-
       await db.quizzes.clear();
-
       await db.quizQuestions.clear();
 
 
       if (badgesLoaded) {
-
         await db.badges.clear();
-
       }
 
 
       if (classesRows.length) {
-
         await db.classes.bulkPut(
           classesRows
         );
-
       }
 
-
       if (subjectsRows.length) {
-
         await db.subjects.bulkPut(
           subjectsRows
         );
-
       }
 
-
       if (chaptersRows.length) {
-
         await db.chapters.bulkPut(
           chaptersRows
         );
-
       }
 
-
       if (lessonsRows.length) {
-
         await db.lessons.bulkPut(
           lessonsRows
         );
-
       }
 
-
       if (blocksRows.length) {
-
         await db.lessonBlocks.bulkPut(
           blocksRows
         );
-
       }
 
-
       if (quizzesRows.length) {
-
         await db.quizzes.bulkPut(
           quizzesRows
         );
-
       }
 
-
       if (questionsRows.length) {
-
         await db.quizQuestions.bulkPut(
           questionsRows
         );
-
       }
-
 
       if (
         badgesLoaded &&
@@ -1063,53 +906,33 @@ async function replaceEducationCache({
         await db.badges.bulkPut(
           badgesRows
         );
-
       }
-
     }
-
   );
-
 }
 
 
 // ======================================================
-// SYNCHRONISATION CONTENU PÉDAGOGIQUE
+// SYNCHRONISATION CONTENU
 // ======================================================
 
 export async function syncEducationContent() {
 
   if (educationSyncing) {
 
-    console.log(
-      "⏳ Synchronisation pédagogique déjà en cours"
-    );
-
     return {
-
       success: true,
-
       skipped: true
-
     };
-
   }
 
 
   if (!isOnline()) {
 
-    console.log(
-      "📴 Hors ligne → aucun appel Supabase pour le contenu"
-    );
-
     return {
-
       success: false,
-
       offline: true
-
     };
-
   }
 
 
@@ -1119,21 +942,9 @@ export async function syncEducationContent() {
   try {
 
     console.log(
-      "================================="
-    );
-
-    console.log(
       "📚 SYNCHRONISATION CONTENU"
     );
 
-    console.log(
-      "================================="
-    );
-
-
-    // ==================================
-    // CLASSES
-    // ==================================
 
     const {
       data: classes,
@@ -1143,20 +954,10 @@ export async function syncEducationContent() {
       .select("*")
       .order("order_number");
 
-
-    if (classesError)
+    if (classesError) {
       throw classesError;
+    }
 
-
-    console.log(
-      "CLASSES :",
-      classes?.length || 0
-    );
-
-
-    // ==================================
-    // SUBJECTS
-    // ==================================
 
     const {
       data: subjects,
@@ -1166,20 +967,10 @@ export async function syncEducationContent() {
       .select("*")
       .order("order_number");
 
-
-    if (subjectsError)
+    if (subjectsError) {
       throw subjectsError;
+    }
 
-
-    console.log(
-      "SUBJECTS :",
-      subjects?.length || 0
-    );
-
-
-    // ==================================
-    // CHAPTERS
-    // ==================================
 
     const {
       data: chapters,
@@ -1189,20 +980,10 @@ export async function syncEducationContent() {
       .select("*")
       .order("order_number");
 
-
-    if (chaptersError)
+    if (chaptersError) {
       throw chaptersError;
+    }
 
-
-    console.log(
-      "CHAPTERS :",
-      chapters?.length || 0
-    );
-
-
-    // ==================================
-    // LESSONS
-    // ==================================
 
     const {
       data: lessons,
@@ -1212,20 +993,10 @@ export async function syncEducationContent() {
       .select("*")
       .order("order_number");
 
-
-    if (lessonsError)
+    if (lessonsError) {
       throw lessonsError;
+    }
 
-
-    console.log(
-      "LESSONS :",
-      lessons?.length || 0
-    );
-
-
-    // ==================================
-    // BLOCKS
-    // ==================================
 
     const {
       data: blocks,
@@ -1235,20 +1006,10 @@ export async function syncEducationContent() {
       .select("*")
       .order("order_number");
 
-
-    if (blocksError)
+    if (blocksError) {
       throw blocksError;
+    }
 
-
-    console.log(
-      "LESSON BLOCKS :",
-      blocks?.length || 0
-    );
-
-
-    // ==================================
-    // QUIZZES
-    // ==================================
 
     const {
       data: quizzes,
@@ -1257,20 +1018,10 @@ export async function syncEducationContent() {
       .from("quizzes")
       .select("*");
 
-
-    if (quizzesError)
+    if (quizzesError) {
       throw quizzesError;
+    }
 
-
-    console.log(
-      "QUIZZES :",
-      quizzes?.length || 0
-    );
-
-
-    // ==================================
-    // QUESTIONS
-    // ==================================
 
     const {
       data: questions,
@@ -1280,23 +1031,12 @@ export async function syncEducationContent() {
       .select("*")
       .order("order_number");
 
-
-    if (questionsError)
+    if (questionsError) {
       throw questionsError;
+    }
 
-
-    console.log(
-      "QUIZ QUESTIONS :",
-      questions?.length || 0
-    );
-
-
-    // ==================================
-    // BADGES
-    // ==================================
 
     let badges = [];
-
     let badgesLoaded = false;
 
 
@@ -1313,147 +1053,66 @@ export async function syncEducationContent() {
       badges =
         badgeData || [];
 
-      badgesLoaded =
-        true;
+      badgesLoaded = true;
 
-    }
-
-    else {
+    } else {
 
       console.warn(
         "⚠️ Badges non synchronisés :",
         badgesError
       );
-
     }
 
 
-    // ==================================
+    // -------------------------------------------------
     // VALIDATION
-    // ==================================
+    // -------------------------------------------------
 
-    if (!Array.isArray(classes))
-      throw new Error(
-        "Réponse classes invalide"
-      );
-
-
-    if (!Array.isArray(subjects))
-      throw new Error(
-        "Réponse subjects invalide"
-      );
-
-
-    if (!Array.isArray(chapters))
-      throw new Error(
-        "Réponse chapters invalide"
-      );
+    const collections = [
+      ["classes", classes],
+      ["subjects", subjects],
+      ["chapters", chapters],
+      ["lessons", lessons],
+      ["lesson_blocks", blocks],
+      ["quizzes", quizzes],
+      ["quiz_questions", questions]
+    ];
 
 
-    if (!Array.isArray(lessons))
-      throw new Error(
-        "Réponse lessons invalide"
-      );
+    for (const [name, data] of collections) {
+
+      if (!Array.isArray(data)) {
+
+        throw new Error(
+          `Réponse ${name} invalide`
+        );
+      }
+    }
 
 
-    if (!Array.isArray(blocks))
-      throw new Error(
-        "Réponse lesson_blocks invalide"
-      );
-
-
-    if (!Array.isArray(quizzes))
-      throw new Error(
-        "Réponse quizzes invalide"
-      );
-
-
-    if (!Array.isArray(questions))
-      throw new Error(
-        "Réponse quiz_questions invalide"
-      );
-
-
-    // ==================================
-    // REMPLACEMENT CACHE
-    // ==================================
-
-    console.log(
-      "💾 Remplacement du cache offline..."
-    );
-
+    // -------------------------------------------------
+    // IMPORTANT
+    // -------------------------------------------------
+    //
+    // Aucun clear avant cette étape.
+    // Si Supabase échoue, l'ancien cache reste intact.
+    //
 
     await replaceEducationCache({
-
       classes,
-
       subjects,
-
       chapters,
-
       lessons,
-
       blocks,
-
       quizzes,
-
       questions,
-
       badges,
-
       badgesLoaded
-
     });
 
 
-    // ==================================
-    // DIAGNOSTIC RELATIONS
-    // ==================================
-
-    console.log(
-      "================================="
-    );
-
-    console.log(
-      "📊 DIAGNOSTIC CACHE"
-    );
-
-    console.log(
-      "================================="
-    );
-
-
-    for (const subject of subjects) {
-
-      const count =
-        chapters.filter(
-          chapter =>
-            String(chapter.subject_id) ===
-            String(subject.id)
-        ).length;
-
-
-      console.log(
-        `📘 ${subject.name} → ${count} chapitre(s)`
-      );
-
-    }
-
-
-    // ==================================
-    // RÉSULTAT
-    // ==================================
-
-    console.log(
-      "================================="
-    );
-
     console.log(
       "✅ CONTENU OFFLINE SYNCHRONISÉ"
-    );
-
-    console.log(
-      "================================="
     );
 
 
@@ -1484,22 +1143,9 @@ export async function syncEducationContent() {
 
       badges:
         badges.length
-
     };
 
-  }
-
-  catch (error) {
-
-    /*
-      IMPORTANT :
-
-      Aucun clear() n'a été effectué avant que toutes
-      les données Supabase soient récupérées.
-
-      Donc si Internet tombe ici, le cache précédent
-      reste intact.
-    */
+  } catch (error) {
 
     console.error(
       "❌ ERREUR SYNCHRO EDUCATION :",
@@ -1508,52 +1154,31 @@ export async function syncEducationContent() {
 
 
     return {
-
       success: false,
-
       error
-
     };
 
-  }
-
-  finally {
+  } finally {
 
     educationSyncing = false;
-
   }
-
 }
 
 
 // ======================================================
-// TÉLÉCHARGEMENT D'UNE LEÇON
+// TÉLÉCHARGEMENT LEÇON
 // ======================================================
 
 export async function downloadLessonContent(
   lessonId
 ) {
 
-  if (!lessonId)
+  if (!lessonId || !isOnline()) {
     return null;
-
-
-  if (!isOnline()) {
-
-    console.log(
-      "📴 Offline → téléchargement impossible"
-    );
-
-    return null;
-
   }
 
 
   try {
-
-    // ----------------------------------
-    // LEÇON
-    // ----------------------------------
 
     const {
       data: lesson,
@@ -1565,13 +1190,10 @@ export async function downloadLessonContent(
       .single();
 
 
-    if (lessonError)
+    if (lessonError) {
       throw lessonError;
+    }
 
-
-    // ----------------------------------
-    // BLOCKS
-    // ----------------------------------
 
     const {
       data: blocks,
@@ -1583,13 +1205,10 @@ export async function downloadLessonContent(
       .order("order_number");
 
 
-    if (blocksError)
+    if (blocksError) {
       throw blocksError;
+    }
 
-
-    // ----------------------------------
-    // QUIZZES
-    // ----------------------------------
 
     const {
       data: quizzes,
@@ -1600,21 +1219,15 @@ export async function downloadLessonContent(
       .eq("lesson_id", lessonId);
 
 
-    if (quizzesError)
+    if (quizzesError) {
       throw quizzesError;
+    }
 
-
-    // ----------------------------------
-    // QUESTIONS
-    // ----------------------------------
 
     let questions = [];
 
 
-    if (
-      quizzes &&
-      quizzes.length > 0
-    ) {
+    if (quizzes?.length) {
 
       const quizIds =
         quizzes.map(
@@ -1635,33 +1248,24 @@ export async function downloadLessonContent(
         .order("order_number");
 
 
-      if (questionsError)
+      if (questionsError) {
         throw questionsError;
+      }
 
 
       questions =
         quizQuestions || [];
-
     }
 
 
     return {
-
       lesson,
-
-      blocks:
-        blocks || [],
-
-      quizzes:
-        quizzes || [],
-
+      blocks: blocks || [],
+      quizzes: quizzes || [],
       questions
-
     };
 
-  }
-
-  catch (error) {
+  } catch (error) {
 
     console.error(
       "❌ Erreur téléchargement leçon :",
@@ -1669,9 +1273,7 @@ export async function downloadLessonContent(
     );
 
     return null;
-
   }
-
 }
 
 
@@ -1684,23 +1286,18 @@ export function enableAutoSync() {
   if (
     typeof window === "undefined"
   ) {
-
     return;
-
   }
 
 
   if (
     window.__kalanAutoSyncEnabled
   ) {
-
     return;
-
   }
 
 
-  window.__kalanAutoSyncEnabled =
-    true;
+  window.__kalanAutoSyncEnabled = true;
 
 
   window.addEventListener(
@@ -1712,16 +1309,7 @@ export function enableAutoSync() {
       );
 
 
-      // --------------------------------
-      // DONNÉES UTILISATEUR
-      // --------------------------------
-
       await syncPendingData();
-
-
-      // --------------------------------
-      // CONTENU PÉDAGOGIQUE
-      // --------------------------------
 
       await syncEducationContent();
 
@@ -1729,7 +1317,6 @@ export function enableAutoSync() {
       console.log(
         "🔄 Synchronisation complète terminée"
       );
-
     }
   );
 
@@ -1737,12 +1324,11 @@ export function enableAutoSync() {
   console.log(
     "✅ Auto-sync Kalan Academy activé"
   );
-
 }
 
 
 // ======================================================
-// GLOBAL DEBUG
+// DEBUG
 // ======================================================
 
 if (
@@ -1757,5 +1343,4 @@ if (
 
   window.enableKalanAutoSync =
     enableAutoSync;
-
 }

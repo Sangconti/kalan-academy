@@ -6,12 +6,44 @@ import {
   getAdminStats
 } from "../../services/adminService";
 
+import {
+  generateUserDeviceRecoveryCode
+} from "../../services/deviceService";
+
+import { supabase } from "../../lib/supabase";
+
 
 export default function DashboardAdmin() {
 
   const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState(null);
+
+  // ==========================================
+  // RÉCUPÉRATION APPAREIL
+  // ==========================================
+
+  const [students, setStudents] =
+    useState([]);
+
+  const [studentsLoading, setStudentsLoading] =
+    useState(true);
+
+  const [selectedStudentId, setSelectedStudentId] =
+    useState("");
+
+  const [recoveryCode, setRecoveryCode] =
+    useState("");
+
+  const [recoveryStudent, setRecoveryStudent] =
+    useState(null);
+
+  const [generatingRecoveryCode, setGeneratingRecoveryCode] =
+    useState(false);
 
 
   // ==========================================
@@ -25,7 +57,8 @@ export default function DashboardAdmin() {
       setLoading(true);
       setError(null);
 
-      const data = await getAdminStats();
+      const data =
+        await getAdminStats();
 
       setStats(data);
 
@@ -50,6 +83,378 @@ export default function DashboardAdmin() {
 
 
   // ==========================================
+  // CHARGER LES ÉLÈVES
+  // ==========================================
+
+  async function loadStudents() {
+
+    console.log(
+      "👨‍🎓 [ADMIN] Chargement des élèves..."
+    );
+
+    try {
+
+      setStudentsLoading(true);
+
+      const {
+        data,
+        error: studentsError
+      } = await supabase
+        .from("profiles")
+        .select(
+          "id, full_name, role"
+        )
+        .eq(
+          "role",
+          "student"
+        )
+        .order(
+          "full_name",
+          {
+            ascending: true
+          }
+        );
+
+
+      if (studentsError) {
+
+        console.error(
+          "❌ [ADMIN] Erreur chargement élèves =",
+          studentsError
+        );
+
+        throw studentsError;
+      }
+
+
+      console.log(
+        "👨‍🎓 [ADMIN] Élèves récupérés =",
+        data
+      );
+
+
+      setStudents(
+        data || []
+      );
+
+
+      // ======================================
+      // SI L'ÉLÈVE SÉLECTIONNÉ N'EXISTE PLUS
+      // ======================================
+
+      if (
+        selectedStudentId &&
+        !(data || []).some(
+          (student) =>
+            student.id === selectedStudentId
+        )
+      ) {
+
+        setSelectedStudentId("");
+        setRecoveryCode("");
+        setRecoveryStudent(null);
+
+      }
+
+
+    } catch (err) {
+
+      console.error(
+        "💥 [ADMIN] Exception chargement élèves =",
+        err
+      );
+
+      setError(
+        "Impossible de charger la liste des élèves."
+      );
+
+    } finally {
+
+      setStudentsLoading(false);
+
+    }
+
+  }
+
+
+  // ==========================================
+  // GÉNÉRER LE CODE DE RÉCUPÉRATION
+  // POUR L'ÉLÈVE SÉLECTIONNÉ
+  // ==========================================
+
+  async function handleGenerateRecoveryCode() {
+
+    console.log(
+      "🔐 [ADMIN] Demande de génération du code..."
+    );
+
+
+    // ========================================
+    // VÉRIFIER LA SÉLECTION
+    // ========================================
+
+    if (!selectedStudentId) {
+
+      setError(
+        "Sélectionne d'abord un élève."
+      );
+
+      return;
+    }
+
+
+    const selectedStudent =
+      students.find(
+        (student) =>
+          student.id === selectedStudentId
+      );
+
+
+    if (!selectedStudent) {
+
+      setError(
+        "L'élève sélectionné est introuvable."
+      );
+
+      return;
+    }
+
+
+    console.log(
+      "👤 [ADMIN] Élève sélectionné =",
+      selectedStudent
+    );
+
+    console.log(
+      "🆔 [ADMIN] ID élève =",
+      selectedStudent.id
+    );
+
+
+    setGeneratingRecoveryCode(true);
+
+    setError(null);
+
+    setRecoveryCode("");
+
+    setRecoveryStudent(null);
+
+
+    try {
+
+      // ======================================
+      // APPEL DE LA FONCTION ADMIN
+      // ======================================
+
+      const result =
+        await generateUserDeviceRecoveryCode(
+          selectedStudent.id
+        );
+
+
+      console.log(
+        "📱 [ADMIN] Résultat génération code =",
+        result
+      );
+
+
+      // ======================================
+      // ERREUR
+      // ======================================
+
+      if (!result?.success) {
+
+        let message =
+          result?.message ||
+          `Impossible de générer le code. Statut : ${
+            result?.status ||
+            "inconnu"
+          }`;
+
+
+        if (
+          result?.status ===
+          "not_authenticated"
+        ) {
+
+          message =
+            "Ta session administrateur a expiré. Reconnecte-toi.";
+
+        }
+
+
+        if (
+          result?.status ===
+          "not_authorized"
+        ) {
+
+          message =
+            "Tu n'es pas autorisé à générer un code de récupération.";
+
+        }
+
+
+        if (
+          result?.status ===
+          "user_not_found"
+        ) {
+
+          message =
+            "Cet élève n'existe plus.";
+
+        }
+
+
+        setError(message);
+
+        return;
+      }
+
+
+      // ======================================
+      // CODE GÉNÉRÉ
+      // ======================================
+
+      if (
+        result?.status ===
+        "code_generated"
+      ) {
+
+        console.log(
+          "✅ [ADMIN] CODE DE RÉCUPÉRATION =",
+          result.code
+        );
+
+
+        setRecoveryCode(
+          result.code
+        );
+
+
+        setRecoveryStudent(
+          selectedStudent
+        );
+
+
+        return;
+      }
+
+
+      // ======================================
+      // RÉPONSE INATTENDUE
+      // ======================================
+
+      setError(
+        "Réponse inattendue du serveur."
+      );
+
+
+    } catch (err) {
+
+      console.error(
+        "💥 [ADMIN] Erreur génération code =",
+        err
+      );
+
+
+      setError(
+        err?.message ||
+        "Impossible de générer le code de récupération."
+      );
+
+
+    } finally {
+
+      setGeneratingRecoveryCode(false);
+
+
+      console.log(
+        "🏁 [ADMIN] Génération du code terminée."
+      );
+
+    }
+
+  }
+
+
+  // ==========================================
+  // COPIER LE CODE
+  // ==========================================
+
+  async function handleCopyRecoveryCode() {
+
+    if (!recoveryCode) {
+      return;
+    }
+
+
+    try {
+
+      await navigator.clipboard.writeText(
+        recoveryCode
+      );
+
+
+      console.log(
+        "📋 [ADMIN] Code copié"
+      );
+
+
+      setError(null);
+
+
+    } catch (err) {
+
+      console.error(
+        "❌ [ADMIN] Impossible de copier le code =",
+        err
+      );
+
+
+      setError(
+        "Impossible de copier le code automatiquement."
+      );
+
+    }
+
+  }
+
+
+  // ==========================================
+  // CHANGEMENT D'ÉLÈVE
+  // ==========================================
+
+  function handleStudentChange(event) {
+
+    const userId =
+      event.target.value;
+
+
+    console.log(
+      "👤 [ADMIN] Nouvel élève sélectionné =",
+      userId
+    );
+
+
+    setSelectedStudentId(
+      userId
+    );
+
+
+    // ========================================
+    // EFFACER L'ANCIEN CODE
+    // ========================================
+
+    setRecoveryCode("");
+
+    setRecoveryStudent(null);
+
+    setError(null);
+
+  }
+
+
+  // ==========================================
   // CHARGEMENT INITIAL
   // ==========================================
 
@@ -57,8 +462,14 @@ export default function DashboardAdmin() {
 
     loadStats();
 
+    loadStudents();
+
   }, []);
 
+
+  // ==========================================
+  // INTERFACE
+  // ==========================================
 
   return (
 
@@ -91,9 +502,7 @@ export default function DashboardAdmin() {
         "
       >
 
-        {/* ========================================
-            TITRE
-        ======================================== */}
+        {/* TITRE */}
 
         <div className="min-w-0">
 
@@ -101,22 +510,19 @@ export default function DashboardAdmin() {
             className="
               text-2xl
               sm:text-3xl
-
               font-bold
-
               text-gray-900
-
               break-words
             "
           >
             Dashboard Kalan Academy
           </h1>
 
+
           <p
             className="
               text-gray-500
               mt-1
-
               text-sm
               sm:text-base
             "
@@ -127,14 +533,18 @@ export default function DashboardAdmin() {
         </div>
 
 
-        {/* ========================================
-            BOUTON ACTUALISER
-        ======================================== */}
+        {/* ACTUALISER */}
 
         <button
           type="button"
-          onClick={loadStats}
-          disabled={loading}
+          onClick={() => {
+            loadStats();
+            loadStudents();
+          }}
+          disabled={
+            loading ||
+            studentsLoading
+          }
           className="
             w-full
             md:w-auto
@@ -158,7 +568,7 @@ export default function DashboardAdmin() {
           "
         >
 
-          {loading
+          {loading || studentsLoading
             ? "Actualisation..."
             : "Actualiser"
           }
@@ -197,13 +607,378 @@ export default function DashboardAdmin() {
             Erreur
           </p>
 
-          <p className="text-sm mt-1 break-words">
+
+          <p
+            className="
+              text-sm
+              mt-1
+              break-words
+            "
+          >
             {error}
           </p>
 
         </div>
 
       )}
+
+
+      {/* ==========================================
+          RÉCUPÉRATION APPAREIL
+      ========================================== */}
+
+      <div
+        className="
+          mb-8
+
+          bg-orange-50
+
+          border
+          border-orange-200
+
+          rounded-2xl
+
+          p-5
+
+          w-full
+          min-w-0
+        "
+      >
+
+        {/* ========================================
+            TITRE
+        ======================================== */}
+
+        <div className="mb-5">
+
+          <h2
+            className="
+              text-lg
+              font-bold
+              text-gray-900
+            "
+          >
+            🔐 Récupération d'un appareil
+          </h2>
+
+
+          <p
+            className="
+              text-sm
+              text-gray-600
+              mt-1
+              leading-relaxed
+            "
+          >
+            Génère un code de récupération pour
+            transférer le compte d'un élève vers
+            un nouveau téléphone.
+          </p>
+
+        </div>
+
+
+        {/* ========================================
+            SÉLECTION DE L'ÉLÈVE
+        ======================================== */}
+
+        <div
+          className="
+            flex
+            flex-col
+            lg:flex-row
+
+            gap-4
+
+            lg:items-end
+          "
+        >
+
+          <div className="flex-1 min-w-0">
+
+            <label
+              htmlFor="recovery-student"
+              className="
+                block
+                text-sm
+                font-semibold
+                text-gray-700
+                mb-2
+              "
+            >
+              Élève concerné
+            </label>
+
+
+            <select
+              id="recovery-student"
+              value={selectedStudentId}
+              onChange={
+                handleStudentChange
+              }
+              disabled={
+                studentsLoading ||
+                generatingRecoveryCode
+              }
+              className="
+                w-full
+
+                px-4
+                py-3
+
+                rounded-xl
+
+                border
+                border-gray-200
+
+                bg-white
+
+                text-gray-900
+
+                outline-none
+
+                focus:border-orange-500
+                focus:ring-4
+                focus:ring-orange-100
+
+                disabled:bg-gray-100
+                disabled:cursor-not-allowed
+
+                transition
+              "
+            >
+
+              <option value="">
+                {studentsLoading
+                  ? "Chargement des élèves..."
+                  : students.length === 0
+                    ? "Aucun élève disponible"
+                    : "Sélectionner un élève"
+                }
+              </option>
+
+
+              {students.map(
+                (student) => (
+
+                  <option
+                    key={student.id}
+                    value={student.id}
+                  >
+                    {student.full_name ||
+                      "Élève sans nom"}
+                  </option>
+
+                )
+              )}
+
+            </select>
+
+          </div>
+
+
+          {/* ======================================
+              BOUTON GÉNÉRER
+          ====================================== */}
+
+          <button
+            type="button"
+            onClick={
+              handleGenerateRecoveryCode
+            }
+            disabled={
+              studentsLoading ||
+              generatingRecoveryCode ||
+              !selectedStudentId
+            }
+            className="
+              w-full
+              lg:w-auto
+
+              px-5
+              py-3
+
+              rounded-xl
+
+              bg-orange-500
+              text-white
+
+              font-semibold
+
+              hover:bg-orange-600
+
+              active:bg-orange-700
+
+              transition
+
+              disabled:opacity-60
+              disabled:cursor-not-allowed
+
+              whitespace-nowrap
+            "
+          >
+
+            {generatingRecoveryCode
+              ? "Génération..."
+              : "🔐 Générer le code"
+            }
+
+          </button>
+
+        </div>
+
+
+        {/* ========================================
+            CODE GÉNÉRÉ
+        ======================================== */}
+
+        {recoveryCode && (
+
+          <div
+            className="
+              mt-5
+
+              bg-white
+
+              border
+              border-orange-200
+
+              rounded-xl
+
+              p-4
+            "
+          >
+
+            {/* UTILISATEUR */}
+
+            <div className="mb-4">
+
+              <p
+                className="
+                  text-sm
+                  font-semibold
+                  text-gray-700
+                "
+              >
+                Code généré pour :
+              </p>
+
+
+              <p
+                className="
+                  text-base
+                  font-bold
+                  text-gray-900
+                  mt-1
+                "
+              >
+                👤{" "}
+                {recoveryStudent?.full_name ||
+                  "Élève sélectionné"}
+              </p>
+
+            </div>
+
+
+            {/* CODE + COPIER */}
+
+            <div
+              className="
+                flex
+                flex-col
+                sm:flex-row
+
+                gap-3
+
+                sm:items-center
+              "
+            >
+
+              <div
+                className="
+                  flex-1
+
+                  px-4
+                  py-3
+
+                  rounded-xl
+
+                  bg-gray-50
+
+                  border
+                  border-gray-200
+
+                  text-center
+
+                  font-mono
+                  font-bold
+
+                  tracking-widest
+
+                  text-lg
+
+                  text-gray-900
+
+                  select-all
+
+                  min-w-0
+                "
+              >
+                {recoveryCode}
+              </div>
+
+
+              <button
+                type="button"
+                onClick={
+                  handleCopyRecoveryCode
+                }
+                className="
+                  px-4
+                  py-3
+
+                  rounded-xl
+
+                  bg-gray-900
+                  text-white
+
+                  font-semibold
+
+                  hover:bg-gray-700
+
+                  transition
+
+                  whitespace-nowrap
+                "
+              >
+                📋 Copier
+              </button>
+
+            </div>
+
+
+            {/* AVERTISSEMENT */}
+
+            <p
+              className="
+                text-xs
+                text-orange-700
+                mt-3
+                leading-relaxed
+              "
+            >
+              ⚠️ Ce code permet à l'élève de
+              récupérer son compte sur un nouveau
+              téléphone. Conserve-le dans un endroit
+              sûr et transmets-le uniquement à
+              l'élève concerné.
+            </p>
+
+          </div>
+
+        )}
+
+      </div>
 
 
       {/* ==========================================
@@ -335,9 +1110,7 @@ export default function DashboardAdmin() {
         "
       >
 
-        {/* ========================================
-            EN-TÊTE
-        ======================================== */}
+        {/* EN-TÊTE */}
 
         <div
           className="
@@ -397,9 +1170,7 @@ export default function DashboardAdmin() {
         </div>
 
 
-        {/* ========================================
-            INFORMATIONS PLATEFORME
-        ======================================== */}
+        {/* INFORMATIONS */}
 
         <div
           className="
@@ -416,16 +1187,13 @@ export default function DashboardAdmin() {
           "
         >
 
-          {/* CONTENU PÉDAGOGIQUE */}
+          {/* CONTENU */}
 
           <div
             className="
               border
-
               rounded-xl
-
               p-4
-
               min-w-0
             "
           >
@@ -438,6 +1206,7 @@ export default function DashboardAdmin() {
             >
               Contenu pédagogique
             </p>
+
 
             <p
               className="
@@ -467,11 +1236,8 @@ export default function DashboardAdmin() {
           <div
             className="
               border
-
               rounded-xl
-
               p-4
-
               min-w-0
             "
           >
@@ -484,6 +1250,7 @@ export default function DashboardAdmin() {
             >
               Évaluations
             </p>
+
 
             <p
               className="
@@ -508,16 +1275,13 @@ export default function DashboardAdmin() {
           </div>
 
 
-          {/* UTILISATEURS PREMIUM */}
+          {/* PREMIUM */}
 
           <div
             className="
               border
-
               rounded-xl
-
               p-4
-
               min-w-0
             "
           >
@@ -530,6 +1294,7 @@ export default function DashboardAdmin() {
             >
               Utilisateurs premium
             </p>
+
 
             <p
               className="
@@ -559,11 +1324,8 @@ export default function DashboardAdmin() {
           <div
             className="
               border
-
               rounded-xl
-
               p-4
-
               min-w-0
             "
           >
@@ -576,6 +1338,7 @@ export default function DashboardAdmin() {
             >
               XP distribuée
             </p>
+
 
             <p
               className="

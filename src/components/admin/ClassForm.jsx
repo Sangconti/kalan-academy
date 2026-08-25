@@ -10,13 +10,9 @@ export default function ClassForm({
   loading = false,
 }) {
   const [name, setName] = useState("");
-
   const [code, setCode] = useState("");
-
   const [order, setOrder] = useState(1);
-
   const [error, setError] = useState("");
-
 
   // =====================================================
   // SOUMISSION
@@ -27,11 +23,8 @@ export default function ClassForm({
 
     setError("");
 
-    const cleanName =
-      name.trim();
-
-    const cleanCode =
-      code.trim().toUpperCase();
+    const cleanName = name.trim();
+    const cleanCode = code.trim().toUpperCase();
 
     if (!cleanName) {
       setError(
@@ -42,12 +35,10 @@ export default function ClassForm({
     }
 
     try {
-
       await onSubmit({
         name: cleanName,
         code: cleanCode,
-        order_number:
-          Number(order) || 1,
+        order_number: Number(order) || 1,
       });
 
       setName("");
@@ -55,7 +46,6 @@ export default function ClassForm({
       setOrder(1);
 
     } catch (err) {
-
       console.error(
         "Erreur formulaire classe :",
         err
@@ -68,39 +58,53 @@ export default function ClassForm({
     }
   }
 
-
   return (
-
     <form
       onSubmit={submit}
-      className="space-y-4"
+      className="
+        w-full
+        max-w-full
+        min-w-0
+        space-y-4
+      "
     >
 
-      {/* ERREUR */}
+      {/* =====================================================
+          ERREUR
+      ===================================================== */}
 
       {error && (
-
         <div
           className="
+            w-full
+            min-w-0
+
             bg-red-50
             border
             border-red-200
+
             text-red-700
+
             rounded-lg
+
             px-4
             py-3
+
             text-sm
+
+            break-words
           "
         >
           {error}
         </div>
-
       )}
 
 
-      {/* NOM */}
+      {/* =====================================================
+          NOM
+      ===================================================== */}
 
-      <div>
+      <div className="w-full min-w-0">
 
         <label
           className="
@@ -124,22 +128,36 @@ export default function ClassForm({
           disabled={loading}
           className="
             w-full
+            min-w-0
+
             border
+            border-gray-300
+
             p-3
+
             rounded-lg
+
             outline-none
+
             focus:ring-2
             focus:ring-blue-500
+            focus:border-blue-500
+
             disabled:bg-gray-100
+            disabled:cursor-not-allowed
+
+            transition
           "
         />
 
       </div>
 
 
-      {/* CODE */}
+      {/* =====================================================
+          CODE
+      ===================================================== */}
 
-      <div>
+      <div className="w-full min-w-0">
 
         <label
           className="
@@ -165,23 +183,38 @@ export default function ClassForm({
           disabled={loading}
           className="
             w-full
+            min-w-0
+
             border
+            border-gray-300
+
             p-3
+
             rounded-lg
+
             uppercase
+
             outline-none
+
             focus:ring-2
             focus:ring-blue-500
+            focus:border-blue-500
+
             disabled:bg-gray-100
+            disabled:cursor-not-allowed
+
+            transition
           "
         />
 
       </div>
 
 
-      {/* ORDRE */}
+      {/* =====================================================
+          ORDRE
+      ===================================================== */}
 
-      <div>
+      <div className="w-full min-w-0">
 
         <label
           className="
@@ -200,44 +233,83 @@ export default function ClassForm({
           min="1"
           value={order}
           onChange={(e) =>
-            setOrder(
-              e.target.value
-            )
+            setOrder(e.target.value)
           }
           disabled={loading}
           className="
+            w-full
+            sm:w-32
+
             border
+            border-gray-300
+
             p-3
+
             rounded-lg
-            w-32
+
             outline-none
+
             focus:ring-2
             focus:ring-blue-500
+            focus:border-blue-500
+
             disabled:bg-gray-100
+            disabled:cursor-not-allowed
+
+            transition
           "
         />
 
       </div>
 
 
-      {/* BOUTONS */}
+      {/* =====================================================
+          BOUTONS
+      ===================================================== */}
 
-      <div className="flex gap-3 pt-2">
+      <div
+        className="
+          flex
+          flex-col
+          sm:flex-row
+
+          gap-3
+
+          pt-2
+
+          w-full
+        "
+      >
+
+        {/* AJOUTER */}
 
         <button
           type="submit"
           disabled={loading}
           className="
+            w-full
+            sm:w-auto
+
             flex
             items-center
+            justify-center
+
             gap-2
+
             bg-blue-600
             hover:bg-blue-700
+
             text-white
+
             px-5
             py-3
+
             rounded-lg
+
             disabled:opacity-50
+            disabled:cursor-not-allowed
+
+            transition
           "
         >
 
@@ -245,28 +317,45 @@ export default function ClassForm({
 
           {loading
             ? "Enregistrement..."
-            : "Ajouter"}
+            : "Ajouter"
+          }
 
         </button>
 
 
-        {onCancel && (
+        {/* ANNULER */}
 
+        {onCancel && (
           <button
             type="button"
             onClick={onCancel}
             disabled={loading}
             className="
+              w-full
+              sm:w-auto
+
               flex
               items-center
+              justify-center
+
               gap-2
+
               border
+              border-gray-300
+
               px-5
               py-3
+
               rounded-lg
+
               text-gray-700
+
               hover:bg-gray-50
+
               disabled:opacity-50
+              disabled:cursor-not-allowed
+
+              transition
             "
           >
 
@@ -275,7 +364,6 @@ export default function ClassForm({
             Annuler
 
           </button>
-
         )}
 
       </div>

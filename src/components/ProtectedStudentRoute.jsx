@@ -2,55 +2,128 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
-export default function ProtectedStudentRoute({ user, children }) {
+export default function ProtectedStudentRoute({
+  user,
+  children,
+}) {
   const [loading, setLoading] = useState(true);
-  const [accessStatus, setAccessStatus] = useState(null);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
+    let mounted = true;
+
     async function checkAccess() {
+      console.log(
+        "🛡️ [PROTECTED STUDENT] Vérification accès..."
+      );
+
+      // ==========================================
+      // PAS CONNECTÉ
+      // ==========================================
+
       if (!user) {
-        setLoading(false);
+        console.log(
+          "🚫 [PROTECTED STUDENT] Aucun utilisateur"
+        );
+
+        if (mounted) {
+          setProfile(null);
+          setLoading(false);
+        }
+
         return;
       }
 
+      console.log(
+        "👤 [PROTECTED STUDENT] User ID =",
+        user.id
+      );
+
       try {
-        const { data, error } = await supabase
+        // ==========================================
+        // RÉCUPÉRER LE PROFIL
+        // ==========================================
+
+        const {
+          data,
+          error,
+        } = await supabase
           .from("profiles")
-          .select("role, access_status")
+          .select(
+            "id, full_name, role, access_status"
+          )
           .eq("id", user.id)
           .single();
 
-        if (error) {
-          console.error(
-            "❌ [PROTECTED STUDENT] Erreur profil =",
-            error
-          );
-
-          setAccessStatus(null);
-          setLoading(false);
-          return;
-        }
-
         console.log(
-          "👤 [PROTECTED STUDENT] profil =",
+          "👤 [PROTECTED STUDENT] Profil =",
           data
         );
 
-        setAccessStatus(data?.access_status || null);
+        console.log(
+          "❌ [PROTECTED STUDENT] Erreur profil =",
+          error
+        );
+
+        if (!mounted) {
+          return;
+        }
+
+        if (error || !data) {
+
+          console.error(
+            "🚫 [PROTECTED STUDENT] Profil introuvable"
+          );
+
+          setProfile(null);
+          setLoading(false);
+
+          return;
+        }
+
+        // ==========================================
+        // STOCKER LE PROFIL
+        // ==========================================
+
+        setProfile(data);
         setLoading(false);
 
+        // ==========================================
+        // LOG DIAGNOSTIC
+        // ==========================================
+
+        console.log(
+          "🎭 [PROTECTED STUDENT] role =",
+          data.role
+        );
+
+        console.log(
+          "🔐 [PROTECTED STUDENT] access_status =",
+          data.access_status
+        );
+
       } catch (error) {
+
         console.error(
           "💥 [PROTECTED STUDENT] Exception =",
           error
         );
 
-        setAccessStatus(null);
+        if (!mounted) {
+          return;
+        }
+
+        setProfile(null);
         setLoading(false);
       }
     }
 
     checkAccess();
+
+    return () => {
+      mounted = false;
+    };
+
   }, [user]);
 
   // ==========================================
@@ -61,11 +134,13 @@ export default function ProtectedStudentRoute({ user, children }) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
+
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto mb-4"></div>
 
           <p className="text-gray-600">
             Vérification de ton accès...
           </p>
+
         </div>
       </div>
     );
@@ -76,6 +151,10 @@ export default function ProtectedStudentRoute({ user, children }) {
   // ==========================================
 
   if (!user) {
+    console.log(
+      "🚫 [PROTECTED STUDENT] Pas de user → /login"
+    );
+
     return (
       <Navigate
         to="/login"
@@ -85,49 +164,95 @@ export default function ProtectedStudentRoute({ user, children }) {
   }
 
   // ==========================================
-  // ACCÈS REFUSÉ
+  // PROFIL INTROUVABLE
   // ==========================================
 
-  if (accessStatus !== "active") {
+  if (!profile) {
+    console.log(
+      "🚫 [PROTECTED STUDENT] Profil absent → /login"
+    );
+
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-5">
-        <div className="w-full max-w-md bg-white rounded-3xl border border-gray-100 shadow-sm p-8 text-center">
-
-          <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-yellow-50 text-yellow-600 flex items-center justify-center text-3xl">
-            🔒
-          </div>
-
-          <h1 className="text-2xl font-bold text-gray-900">
-            Accès en attente
-          </h1>
-
-          <p className="text-gray-500 mt-3 leading-relaxed">
-            Ton compte a bien été créé, mais ton accès à Kalan Academy
-            doit encore être activé par un administrateur.
-          </p>
-
-          <p className="text-sm text-gray-400 mt-4">
-            Tu pourras accéder aux cours dès que ton compte sera activé.
-          </p>
-
-          <button
-            type="button"
-            onClick={async () => {
-              await supabase.auth.signOut();
-            }}
-            className="mt-6 w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 rounded-xl transition"
-          >
-            Se déconnecter
-          </button>
-
-        </div>
-      </div>
+      <Navigate
+        to="/login"
+        replace
+      />
     );
   }
 
   // ==========================================
-  // ACCÈS AUTORISÉ
+  // ADMIN / SUPER ADMIN
   // ==========================================
+
+  if (
+    profile.role === "admin" ||
+    profile.role === "super_admin"
+  ) {
+
+    console.log(
+      "🛡️ [PROTECTED STUDENT] Compte administrateur détecté"
+    );
+
+    console.log(
+      "➡️ [PROTECTED STUDENT] Redirection vers /admin"
+    );
+
+    return (
+      <Navigate
+        to="/admin"
+        replace
+      />
+    );
+  }
+
+  // ==========================================
+  // COMPTE BLOQUÉ
+  // ==========================================
+
+  if (
+    profile.access_status === "blocked"
+  ) {
+
+    console.log(
+      "🚫 [PROTECTED STUDENT] Compte bloqué"
+    );
+
+    return (
+      <Navigate
+        to="/access-blocked"
+        replace
+      />
+    );
+  }
+
+  // ==========================================
+  // ACCÈS NON ACTIF
+  // ==========================================
+
+  if (
+    profile.access_status !== "active"
+  ) {
+
+    console.log(
+      "⏳ [PROTECTED STUDENT] Accès non actif =",
+      profile.access_status
+    );
+
+    return (
+      <Navigate
+        to="/access-pending"
+        replace
+      />
+    );
+  }
+
+  // ==========================================
+  // ÉLÈVE AUTORISÉ
+  // ==========================================
+
+  console.log(
+    "✅ [PROTECTED STUDENT] Accès élève autorisé"
+  );
 
   return children;
 }

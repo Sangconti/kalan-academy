@@ -1,147 +1,215 @@
-import { useState, useEffect, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback
+} from "react";
+
 
 const CHECK_INTERVAL = 15000;
 const CHECK_TIMEOUT = 5000;
 
+
+// =====================================================
+// HOOK NETWORK
+// =====================================================
+
 export function useNetwork() {
-  const [isOnline, setIsOnline] = useState(
-    typeof navigator !== "undefined"
-      ? navigator.onLine
-      : true
-  );
 
-  const checkInternetConnection = useCallback(
-    async () => {
-      if (
-        typeof navigator !== "undefined" &&
-        !navigator.onLine
-      ) {
-        setIsOnline(false);
-        return false;
-      }
+  const [isOnline, setIsOnline] =
+    useState(
+      typeof navigator !== "undefined"
+        ? navigator.onLine
+        : true
+    );
 
-      const supabaseUrl =
-        import.meta.env.VITE_SUPABASE_URL;
 
-      if (!supabaseUrl) {
-        setIsOnline(
-          typeof navigator !== "undefined"
-            ? navigator.onLine
-            : true
-        );
+  // ===================================================
+  // VÉRIFICATION INTERNET RÉEL
+  // ===================================================
 
-        return (
-          typeof navigator !== "undefined"
-            ? navigator.onLine
-            : true
-        );
-      }
+  const checkInternetConnection =
+    useCallback(
+      async () => {
 
-      const controller = new AbortController();
+        if (
+          typeof navigator !== "undefined" &&
+          !navigator.onLine
+        ) {
 
-      const timeout = setTimeout(() => {
-        controller.abort();
-      }, CHECK_TIMEOUT);
+          setIsOnline(false);
 
-      try {
-        /*
-         * On vérifie réellement l'accès au serveur Supabase.
-         *
-         * Même si Supabase retourne une réponse HTTP comme
-         * 401 ou 404, cela signifie que l'Internet est accessible.
-         *
-         * Ce qui nous intéresse ici est l'existence ou non
-         * d'une connexion réseau.
-         */
-        await fetch(
-          `${supabaseUrl}/rest/v1/`,
-          {
-            method: "HEAD",
-            cache: "no-store",
-            signal: controller.signal
+          return false;
+        }
+
+
+        const supabaseUrl =
+          import.meta.env.VITE_SUPABASE_URL;
+
+
+        if (!supabaseUrl) {
+
+          const status =
+            typeof navigator !== "undefined"
+              ? navigator.onLine
+              : true;
+
+          setIsOnline(status);
+
+          return status;
+        }
+
+
+        const controller =
+          new AbortController();
+
+
+        const timeout =
+          setTimeout(
+            () => controller.abort(),
+            CHECK_TIMEOUT
+          );
+
+
+        try {
+
+          const response =
+            await fetch(
+              `${supabaseUrl}/rest/v1/`,
+              {
+                method: "HEAD",
+                cache: "no-store",
+                signal: controller.signal
+              }
+            );
+
+
+          /*
+           * Une réponse HTTP signifie que le réseau
+           * est accessible.
+           *
+           * 200, 401, 403, 404, etc. :
+           * Internet fonctionne.
+           */
+
+          if (
+            response ||
+            response === null
+          ) {
+
+            setIsOnline(true);
+
+            return true;
           }
-        );
 
-        setIsOnline(true);
 
-        return true;
-      } catch (error) {
-        /*
-         * AbortError = délai dépassé.
-         * Dans les deux cas, on considère la connexion
-         * Internet comme indisponible.
-         */
-        console.warn(
-          "🌐 Vérification réseau échouée :",
-          error?.message || error
-        );
+          setIsOnline(true);
 
-        setIsOnline(false);
+          return true;
 
-        return false;
-      } finally {
-        clearTimeout(timeout);
-      }
-    },
-    []
-  );
+        } catch (error) {
+
+          console.warn(
+            "🌐 Vérification réseau échouée :",
+            error?.message || error
+          );
+
+
+          setIsOnline(false);
+
+          return false;
+
+        } finally {
+
+          clearTimeout(timeout);
+        }
+      },
+      []
+    );
+
+
+  // ===================================================
+  // EVENTS
+  // ===================================================
 
   useEffect(() => {
-    // Vérification immédiate
-    checkInternetConnection();
 
-    // ================================================
-    // ÉVÉNEMENT ONLINE
-    // ================================================
+    let mounted = true;
+
+
+    const initialCheck =
+      async () => {
+
+        const result =
+          await checkInternetConnection();
+
+        if (!mounted) {
+          return;
+        }
+
+        setIsOnline(result);
+      };
+
+
+    initialCheck();
+
 
     function handleOnline() {
-      /*
-       * navigator.onLine vient de repasser à true.
-       * On vérifie quand même l'accès Internet réel.
-       */
+
       checkInternetConnection();
     }
 
-    // ================================================
-    // ÉVÉNEMENT OFFLINE
-    // ================================================
 
     function handleOffline() {
+
       setIsOnline(false);
     }
+
 
     window.addEventListener(
       "online",
       handleOnline
     );
 
+
     window.addEventListener(
       "offline",
       handleOffline
     );
 
-    // ================================================
-    // VÉRIFICATION PÉRIODIQUE
-    // ================================================
 
-    const interval = setInterval(() => {
-      checkInternetConnection();
-    }, CHECK_INTERVAL);
+    const interval =
+      setInterval(
+        () => {
+          checkInternetConnection();
+        },
+        CHECK_INTERVAL
+      );
+
 
     return () => {
+
+      mounted = false;
+
+
       window.removeEventListener(
         "online",
         handleOnline
       );
+
 
       window.removeEventListener(
         "offline",
         handleOffline
       );
 
+
       clearInterval(interval);
     };
-  }, [checkInternetConnection]);
+
+  }, [
+    checkInternetConnection
+  ]);
+
 
   return {
     isOnline,

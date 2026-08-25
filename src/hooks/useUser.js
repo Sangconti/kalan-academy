@@ -1,57 +1,97 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 
-export const useUser = () => {
+// =====================================================
+// HOOK UTILISATEUR
+// =====================================================
+
+export function useUser() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("🟢 [USE USER] useEffect démarré");
-
     let mounted = true;
 
-    // ==========================================
-    // SESSION INITIALE
-    // ==========================================
+    // =================================================
+    // CHARGEMENT INITIAL DE LA SESSION
+    // =================================================
 
-    supabase.auth
-      .getSession()
-      .then(({ data: { session }, error }) => {
-        console.log("🔐 [USE USER] getSession terminé");
-        console.log("👤 [USE USER] session =", session);
-        console.log("❌ [USE USER] getSession error =", error);
+    async function loadSession() {
+      console.log("🔄 [USE USER] Chargement de la session...");
+
+      try {
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+
+        console.log(
+          "🔐 [USE USER] Session initiale =",
+          session
+        );
+
+        console.log(
+          "❌ [USE USER] Session error =",
+          error
+        );
 
         if (!mounted) {
           return;
         }
 
-        setUser(session?.user ?? null);
+        if (error) {
+          console.error(
+            "❌ [USE USER] Erreur récupération session =",
+            error
+          );
+
+          setUser(null);
+          setLoading(false);
+
+          return;
+        }
+
+        if (session?.user) {
+          console.log(
+            "👤 [USE USER] Utilisateur session =",
+            session.user.id
+          );
+
+          setUser(session.user);
+        } else {
+          console.log(
+            "🚫 [USE USER] Aucune session utilisateur"
+          );
+
+          setUser(null);
+        }
+
         setLoading(false);
 
-        console.log(
-          "✅ [USE USER] état initial appliqué"
-        );
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(
-          "💥 [USE USER] getSession exception =",
+          "💥 [USE USER] Exception chargement session =",
           error
         );
 
-        if (mounted) {
-          setUser(null);
-          setLoading(false);
+        if (!mounted) {
+          return;
         }
-      });
 
-    // ==========================================
-    // ÉCOUTE AUTH
-    // ==========================================
+        setUser(null);
+        setLoading(false);
+      }
+    }
+
+    // =================================================
+    // ÉCOUTE DES CHANGEMENTS D'AUTHENTIFICATION
+    // =================================================
 
     const {
-      data: { subscription }
+      data: { subscription },
     } = supabase.auth.onAuthStateChange(
       (event, session) => {
+
         console.log(
           "🔄 [USE USER] auth event =",
           event
@@ -66,36 +106,125 @@ export const useUser = () => {
           return;
         }
 
-        setUser(session?.user ?? null);
-        setLoading(false);
+        // =============================================
+        // SESSION ACTIVE
+        // =============================================
 
-        console.log(
-          "✅ [USE USER] user mis à jour"
-        );
+        if (
+          event === "INITIAL_SESSION" ||
+          event === "SIGNED_IN" ||
+          event === "TOKEN_REFRESHED" ||
+          event === "USER_UPDATED"
+        ) {
+
+          if (session?.user) {
+
+            console.log(
+              "👤 [USE USER] user mis à jour =",
+              session.user.id
+            );
+
+            setUser(session.user);
+
+          } else {
+
+            console.log(
+              "🚫 [USE USER] Aucun utilisateur dans la session"
+            );
+
+            setUser(null);
+          }
+
+          setLoading(false);
+
+          return;
+        }
+
+        // =============================================
+        // DÉCONNEXION
+        // =============================================
+
+        if (event === "SIGNED_OUT") {
+
+          console.log(
+            "🚪 [USE USER] SIGNED_OUT → user = null"
+          );
+
+          setUser(null);
+          setLoading(false);
+
+          return;
+        }
+
+        // =============================================
+        // SÉCURITÉ
+        // =============================================
+
+        if (!session?.user) {
+
+          console.log(
+            "🚫 [USE USER] Pas de session → user = null"
+          );
+
+          setUser(null);
+
+        } else {
+
+          console.log(
+            "👤 [USE USER] Session active → user =",
+            session.user.id
+          );
+
+          setUser(session.user);
+        }
+
+        setLoading(false);
       }
     );
 
-    console.log(
-      "👂 [USE USER] listener auth installé"
-    );
+    // =================================================
+    // LANCER LE CHARGEMENT INITIAL
+    // =================================================
+
+    loadSession();
+
+    // =================================================
+    // NETTOYAGE
+    // =================================================
 
     return () => {
-      console.log(
-        "🧹 [USE USER] nettoyage listener"
-      );
 
       mounted = false;
+
+      console.log(
+        "🧹 [USE USER] Nettoyage auth listener"
+      );
+
       subscription.unsubscribe();
     };
+
   }, []);
 
-  console.log("📊 [USE USER] state =", {
-    loading,
-    user
-  });
+  // ===================================================
+  // LOG ÉTAT
+  // ===================================================
+
+  console.log(
+    "📊 [USE USER] state =",
+    {
+      loading,
+      user,
+    }
+  );
+
+  // ===================================================
+  // RETOUR
+  // ===================================================
 
   return {
     user,
-    loading
+    loading,
   };
-};
+}
+
+export default useUser;

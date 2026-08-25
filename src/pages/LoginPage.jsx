@@ -1,10 +1,15 @@
 // src/pages/LoginPage.jsx
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { getCurrentAdmin } from "../services/adminAuthService";
-import { registerUserDevice } from "../services/deviceService";
+import {
+  getDeviceId,
+  registerUserDevice,
+  recoverUserDevice,
+  generateDeviceRecoveryCode
+} from "../services/deviceService";
 
 import {
   BookOpen,
@@ -13,7 +18,10 @@ import {
   LogIn,
   UserPlus,
   GraduationCap,
-  Loader2
+  Loader2,
+  Smartphone,
+  KeyRound,
+  ArrowLeft
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -25,9 +33,304 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
 
+  // ==========================================
+  // PROTECTION CONTRE UN SUBMIT PARASITE
+  // APRÈS LE RETOUR DE RÉCUPÉRATION
+  // ==========================================
+
+  const skipNextSubmitRef = useRef(false);
+
+  // ==========================================
+  // RÉCUPÉRATION APPAREIL
+  // ==========================================
+
+  const [recoveryRequired, setRecoveryRequired] =
+    useState(false);
+
+  const [recoveryCode, setRecoveryCode] =
+    useState("");
+
+  // ==========================================
+  // ÉTAT
+  // ==========================================
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  // ==========================================
+  // REDIRECTION APRÈS CONNEXION
+  // ==========================================
+
+  async function continueAfterDeviceAuthorization() {
+    console.log(
+      "👑 [LOGIN PAGE] Vérification du rôle..."
+    );
+
+    const admin = await getCurrentAdmin();
+
+    console.log(
+      "👑 [LOGIN PAGE] getCurrentAdmin =",
+      admin
+    );
+
+    // ========================================
+    // ADMIN / SUPER ADMIN
+    // ========================================
+
+    if (admin) {
+      console.log(
+        "✅ [LOGIN PAGE] Utilisateur administrateur détecté"
+      );
+
+      console.log(
+        "🎭 [LOGIN PAGE] role =",
+        admin.profile?.role
+      );
+
+      console.log(
+        "➡️ [LOGIN PAGE] Redirection vers /admin"
+      );
+
+      navigate("/admin", {
+        replace: true
+      });
+
+      return;
+    }
+
+    // ========================================
+    // UTILISATEUR ÉLÈVE
+    // ========================================
+
+    console.log(
+      "👨‍🎓 [LOGIN PAGE] Utilisateur élève détecté"
+    );
+
+    console.log(
+      "➡️ [LOGIN PAGE] Redirection vers /"
+    );
+
+    navigate("/", {
+      replace: true
+    });
+  }
+
+  // ==========================================
+  // RÉCUPÉRER L'APPAREIL AVEC LE CODE
+  // ==========================================
+
+  async function handleDeviceRecovery(e) {
+    e.preventDefault();
+
+    console.log(
+      "🔐 [RECOVERY] Début récupération appareil"
+    );
+
+    const normalizedCode =
+      recoveryCode.trim().toUpperCase();
+
+    if (!normalizedCode) {
+      setError(
+        "Entre ton code de récupération."
+      );
+
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      // ========================================
+      // VÉRIFIER LA SESSION
+      // ========================================
+
+      const {
+        data: sessionData,
+        error: sessionError
+      } = await supabase.auth.getSession();
+
+      if (sessionError) {
+        throw sessionError;
+      }
+
+      const session =
+        sessionData?.session;
+
+      console.log(
+        "🔐 [RECOVERY] Session présente =",
+        !!session
+      );
+
+      console.log(
+        "👤 [RECOVERY] User ID =",
+        session?.user?.id
+      );
+
+      if (!session?.user) {
+        setRecoveryRequired(false);
+
+        throw new Error(
+          "Ta session a expiré. Reconnecte-toi avec ton adresse e-mail et ton mot de passe."
+        );
+      }
+
+      // ========================================
+      // RÉCUPÉRER L'IDENTIFIANT DU NOUVEAU
+      // TÉLÉPHONE
+      // ========================================
+
+      console.log(
+        "📱 [RECOVERY] Récupération du nouvel appareil..."
+      );
+
+      const deviceId =
+        await getDeviceId();
+
+      console.log(
+        "📱 [RECOVERY] Nouvel deviceId =",
+        deviceId
+      );
+
+      if (!deviceId) {
+        throw new Error(
+          "Impossible d'identifier ce téléphone."
+        );
+      }
+
+      // ========================================
+      // RPC DE RÉCUPÉRATION
+      // ========================================
+
+      console.log(
+        "🔐 [RECOVERY] Appel recover_user_device..."
+      );
+
+      const {
+        data,
+        error: recoveryError
+      } = await supabase.rpc(
+        "recover_user_device",
+        {
+          p_recovery_code:
+            normalizedCode,
+          p_device_id:
+            deviceId
+        }
+      );
+
+      console.log(
+        "📱 [RECOVERY] Résultat RAW =",
+        data
+      );
+
+      if (recoveryError) {
+        console.error(
+          "❌ [RECOVERY] Erreur RPC =",
+          recoveryError
+        );
+
+        throw recoveryError;
+      }
+
+      // ========================================
+      // CODE INVALIDE
+      // ========================================
+
+      if (
+        data?.status === "invalid_code"
+      ) {
+        setError(
+          "❌ Code de récupération incorrect ou déjà utilisé."
+        );
+
+        return;
+      }
+
+      // ========================================
+      // SESSION NON AUTHENTIFIÉE
+      // ========================================
+
+      if (
+        data?.status === "not_authenticated"
+      ) {
+        setRecoveryRequired(false);
+
+        setError(
+          "Ta session a expiré. Reconnecte-toi avant de récupérer ton compte."
+        );
+
+        return;
+      }
+
+      // ========================================
+      // AUTRE ERREUR
+      // ========================================
+
+      if (!data?.success) {
+        console.error(
+          "❌ [RECOVERY] Échec récupération =",
+          data
+        );
+
+        throw new Error(
+          data?.message ||
+          "Impossible de récupérer cet appareil."
+        );
+      }
+
+      // ========================================
+      // SUCCÈS
+      // ========================================
+
+      if (
+        data?.status === "device_recovered"
+      ) {
+        console.log(
+          "✅ [RECOVERY] Appareil récupéré avec succès"
+        );
+
+        setSuccess(
+          "📱 Ton compte est maintenant associé à ce nouveau téléphone."
+        );
+
+        setRecoveryRequired(false);
+        setRecoveryCode("");
+
+        // ======================================
+        // CONTINUER LA CONNEXION NORMALE
+        // ======================================
+
+        await continueAfterDeviceAuthorization();
+
+        return;
+      }
+
+      throw new Error(
+        "Réponse inattendue du serveur."
+      );
+
+    } catch (err) {
+      console.error(
+        "💥 [RECOVERY] Erreur récupération appareil =",
+        err
+      );
+
+      setError(
+        err?.message ||
+        "Impossible de récupérer ton compte sur ce téléphone."
+      );
+
+    } finally {
+      setLoading(false);
+
+      console.log(
+        "🏁 [RECOVERY] handleDeviceRecovery terminé"
+      );
+    }
+  }
 
   // ==========================================
   // CONNEXION / INSCRIPTION
@@ -36,11 +339,35 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("🔐 [LOGIN PAGE] Soumission du formulaire");
-    console.log("📧 [LOGIN PAGE] email =", email.trim());
+      // ========================================
+      // IGNORER LE SUBMIT ÉVENTUELLEMENT DÉCLENCHÉ
+      // APRÈS "RETOUR À LA CONNEXION"
+      // ========================================
+
+      if (skipNextSubmitRef.current) {
+        console.log(
+          "🛑 [LOGIN PAGE] Submit ignoré après annulation récupération"
+        );
+
+        skipNextSubmitRef.current = false;
+
+        return;
+      }
+
+    console.log(
+      "🔐 [LOGIN PAGE] Soumission du formulaire"
+    );
+
+    console.log(
+      "📧 [LOGIN PAGE] email =",
+      email.trim()
+    );
+
     console.log(
       "🎯 [LOGIN PAGE] mode =",
-      isSignUp ? "INSCRIPTION" : "CONNEXION"
+      isSignUp
+        ? "INSCRIPTION"
+        : "CONNEXION"
     );
 
     setLoading(true);
@@ -53,7 +380,9 @@ export default function LoginPage() {
       // ========================================
 
       if (isSignUp) {
-        console.log("📝 [LOGIN PAGE] Début inscription");
+        console.log(
+          "📝 [LOGIN PAGE] Début inscription"
+        );
 
         const {
           data,
@@ -63,7 +392,8 @@ export default function LoginPage() {
           password,
           options: {
             data: {
-              full_name: fullName.trim()
+              full_name:
+                fullName.trim()
             }
           }
         });
@@ -141,7 +471,8 @@ export default function LoginPage() {
         "📱 [LOGIN PAGE] Vérification de l'appareil..."
       );
 
-      const deviceResult = await registerUserDevice();
+      const deviceResult =
+        await registerUserDevice();
 
       console.log(
         "📱 [LOGIN PAGE] Résultat appareil =",
@@ -153,19 +484,36 @@ export default function LoginPage() {
       // ========================================
 
       if (
-        deviceResult?.status === "different_device" ||
-        deviceResult?.status === "device_already_used"
+        deviceResult?.status ===
+          "different_device" ||
+        deviceResult?.status ===
+          "device_already_used"
       ) {
 
         console.warn(
-          "🚫 [LOGIN PAGE] Appareil non autorisé"
+          "🚫 [LOGIN PAGE] Autre appareil détecté"
         );
 
-        await supabase.auth.signOut();
+        /*
+          IMPORTANT :
 
-        setError(
-          "Ce compte est déjà associé à un autre appareil. " +
-          "Un seul téléphone peut être utilisé avec ce compte."
+          NE PAS faire signOut ici.
+
+          recover_user_device() utilise
+          auth.uid() pour retrouver le
+          compte actuellement connecté.
+
+          On garde donc temporairement
+          la session active pendant que
+          l'utilisateur saisit son code.
+        */
+
+        setRecoveryRequired(true);
+
+        setError("");
+
+        setSuccess(
+          "Ton compte est déjà associé à un autre téléphone."
         );
 
         return;
@@ -175,64 +523,41 @@ export default function LoginPage() {
       // APPAREIL ENREGISTRÉ / AUTORISÉ
       // ========================================
 
-      console.log(
-        "✅ [LOGIN PAGE] Appareil autorisé"
-      );
-      // ========================================
-      // VÉRIFICATION DU RÔLE
-      // ========================================
-
-      console.log(
-        "👑 [LOGIN PAGE] Vérification du rôle..."
-      );
-
-      const admin = await getCurrentAdmin();
-
-      console.log(
-        "👑 [LOGIN PAGE] getCurrentAdmin =",
-        admin
-      );
-
-      // ========================================
-      // ADMIN / SUPER ADMIN
-      // ========================================
-
-      if (admin) {
-        console.log(
-          "✅ [LOGIN PAGE] Utilisateur administrateur détecté"
-        );
+      if (
+        deviceResult?.success === true &&
+        (
+          deviceResult?.status ===
+            "registered" ||
+          deviceResult?.status ===
+            "authorized"
+        )
+      ) {
 
         console.log(
-          "🎭 [LOGIN PAGE] role =",
-          admin.profile?.role
+          "✅ [LOGIN PAGE] Appareil autorisé"
         );
 
-        console.log(
-          "➡️ [LOGIN PAGE] Redirection vers /admin"
-        );
-
-        navigate("/admin", {
-          replace: true
-        });
+        await continueAfterDeviceAuthorization();
 
         return;
       }
 
       // ========================================
-      // UTILISATEUR ÉLÈVE
+      // ERREUR APPAREIL
       // ========================================
 
-      console.log(
-        "👨‍🎓 [LOGIN PAGE] Utilisateur élève détecté"
+      console.error(
+        "❌ [LOGIN PAGE] Réponse appareil inattendue =",
+        deviceResult
       );
 
-      console.log(
-        "➡️ [LOGIN PAGE] Redirection vers /"
-      );
-
-      navigate("/", {
-        replace: true
-      });
+     throw new Error(
+       deviceResult?.error?.message ||
+       deviceResult?.message ||
+       `Impossible de vérifier cet appareil. Statut reçu : ${
+         deviceResult?.status || "inconnu"
+       }`
+     );
 
     } catch (err) {
       console.error(
@@ -255,13 +580,215 @@ export default function LoginPage() {
   };
 
   // ==========================================
+  // ANNULER RÉCUPÉRATION
+  // ==========================================
+
+  // ==========================================
+  // ANNULER RÉCUPÉRATION
+  // ==========================================
+
+  async function cancelRecovery(e) {
+    // ========================================
+    // EMPÊCHER TOUT COMPORTEMENT DU BOUTON
+    // ========================================
+
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    console.log(
+      "🚪 [RECOVERY] Retour à la connexion demandé"
+    );
+
+    // ========================================
+    // BLOQUER UN ÉVENTUEL SUBMIT PARASITE
+    // ========================================
+
+    skipNextSubmitRef.current = true;
+
+    // ========================================
+    // SORTIR IMMÉDIATEMENT DU MODE RÉCUPÉRATION
+    // ========================================
+
+    setRecoveryRequired(false);
+    setRecoveryCode("");
+    setError("");
+    setSuccess("");
+    setLoading(false);
+
+    console.log(
+      "🔐 [RECOVERY] Préparation de la déconnexion..."
+    );
+
+    try {
+      // ========================================
+      // SIGN OUT
+      // ========================================
+
+      const {
+        error: signOutError
+      } = await supabase.auth.signOut();
+
+      if (signOutError) {
+        console.error(
+          "❌ [RECOVERY] Erreur signOut =",
+          signOutError
+        );
+      } else {
+        console.log(
+          "✅ [RECOVERY] Déconnexion réussie"
+        );
+      }
+
+      // ========================================
+      // VÉRIFICATION
+      // ========================================
+
+      const {
+        data,
+        error: sessionError
+      } = await supabase.auth.getSession();
+
+      console.log(
+        "🔐 [RECOVERY] Session après annulation =",
+        data?.session?.user?.id || null
+      );
+
+      if (sessionError) {
+        console.error(
+          "❌ [RECOVERY] Erreur vérification session =",
+          sessionError
+        );
+      }
+
+    } catch (error) {
+      console.error(
+        "💥 [RECOVERY] Exception déconnexion =",
+        error
+      );
+
+    } finally {
+      console.log(
+        "🏁 [RECOVERY] Retour à l'écran de connexion terminé"
+      );
+    }
+  }
+
+
+// ==========================================
+// TEST — GÉNÉRER CODE DE RÉCUPÉRATION
+// ==========================================
+
+async function handleGenerateRecoveryCodeTest() {
+  console.log(
+    "🔐 [TEST RECOVERY] Demande de génération du code..."
+  );
+
+  setLoading(true);
+  setError("");
+  setSuccess("");
+
+  try {
+    const {
+      data: sessionData,
+      error: sessionError
+    } = await supabase.auth.getSession();
+
+    console.log(
+      "🔐 [TEST RECOVERY] Session =",
+      sessionData?.session
+    );
+
+    if (sessionError) {
+      throw sessionError;
+    }
+
+    if (!sessionData?.session?.user) {
+      setError(
+        "Aucun utilisateur connecté. Connecte-toi d'abord."
+      );
+
+      return;
+    }
+
+    console.log(
+      "👤 [TEST RECOVERY] User ID =",
+      sessionData.session.user.id
+    );
+
+    const result =
+      await generateDeviceRecoveryCode();
+
+    console.log(
+      "📱 [TEST RECOVERY] Résultat =",
+      result
+    );
+
+    if (!result?.success) {
+      setError(
+        result?.message ||
+        `Impossible de générer le code. Statut : ${
+          result?.status || "inconnu"
+        }`
+      );
+
+      return;
+    }
+
+    if (
+      result?.status ===
+      "code_generated"
+    ) {
+      console.log(
+        "✅ [TEST RECOVERY] CODE GÉNÉRÉ =",
+        result.code
+      );
+
+      setSuccess(
+        `🔐 Code de récupération : ${result.code}`
+      );
+
+      return;
+    }
+
+    setError(
+      "Réponse inattendue du serveur."
+    );
+
+  } catch (error) {
+    console.error(
+      "💥 [TEST RECOVERY] Exception =",
+      error
+    );
+
+    setError(
+      error?.message ||
+      "Impossible de générer le code de récupération."
+    );
+
+  } finally {
+    setLoading(false);
+
+    console.log(
+      "🏁 [TEST RECOVERY] Génération terminée"
+    );
+  }
+}
+
+  // ==========================================
   // CHANGER MODE
   // ==========================================
 
   function toggleMode() {
-    setIsSignUp((previous) => !previous);
+    setIsSignUp(
+      (previous) => !previous
+    );
+
     setError("");
     setSuccess("");
+    setRecoveryRequired(false);
+    setRecoveryCode("");
   }
 
   // ==========================================
@@ -271,9 +798,12 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
 
-      {/* HEADER */}
+      {/* ======================================
+          HEADER
+      ====================================== */}
 
       <header className="bg-white border-b border-gray-100 px-5 py-4">
+
         <div className="max-w-5xl mx-auto flex items-center justify-between">
 
           <button
@@ -281,11 +811,15 @@ export default function LoginPage() {
             onClick={() => navigate("/")}
             className="flex items-center gap-3 group"
           >
+
             <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:bg-blue-700 transition">
+
               <GraduationCap size={23} />
+
             </div>
 
             <div className="text-left">
+
               <p className="text-base font-bold text-gray-900 leading-none">
                 Kalan Academy
               </p>
@@ -293,259 +827,543 @@ export default function LoginPage() {
               <p className="text-xs text-gray-500 mt-1">
                 Apprendre. Progresser. Réussir.
               </p>
+
             </div>
+
           </button>
 
         </div>
+
       </header>
 
-      {/* CONTENU */}
+
+      {/* ======================================
+          CONTENU
+      ====================================== */}
 
       <main className="flex-1 flex items-center justify-center px-5 py-10">
 
         <div className="w-full max-w-md">
 
-          {/* INTRODUCTION */}
+          {/* ==================================
+              INTRODUCTION
+          ================================== */}
 
           <div className="text-center mb-7">
 
             <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
-              <BookOpen size={28} />
+
+              {recoveryRequired ? (
+                <Smartphone size={28} />
+              ) : (
+                <BookOpen size={28} />
+              )}
+
             </div>
 
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-              {isSignUp
-                ? "Créer ton compte"
-                : "Bienvenue sur Kalan Academy"}
+
+              {recoveryRequired
+                ? "Nouveau téléphone"
+                : isSignUp
+                  ? "Créer ton compte"
+                  : "Bienvenue sur Kalan Academy"}
+
             </h1>
 
             <p className="text-gray-500 mt-2 text-sm leading-relaxed">
-              {isSignUp
-                ? "Crée ton compte et commence ton apprentissage."
-                : "Connecte-toi pour continuer ton apprentissage."}
+
+              {recoveryRequired
+                ? "Récupère ton compte avec ton code de récupération."
+                : isSignUp
+                  ? "Crée ton compte et commence ton apprentissage."
+                  : "Connecte-toi pour continuer ton apprentissage."}
+
             </p>
 
           </div>
 
-          {/* CARTE */}
+
+          {/* ==================================
+              CARTE
+          ================================== */}
 
           <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 sm:p-8">
 
-            {/* MODE */}
 
-            <div className="flex bg-gray-50 rounded-xl p-1 mb-6">
+            {/* =================================
+                MODE CONNEXION / INSCRIPTION
+            ================================= */}
 
-              <button
-                type="button"
-                onClick={() => {
-                  setIsSignUp(false);
-                  setError("");
-                  setSuccess("");
-                }}
-                className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition ${
-                  !isSignUp
-                    ? "bg-white text-blue-600 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                Se connecter
-              </button>
+            {!recoveryRequired && (
 
-              <button
-                type="button"
-                onClick={() => {
-                  setIsSignUp(true);
-                  setError("");
-                  setSuccess("");
-                }}
-                className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition ${
-                  isSignUp
-                    ? "bg-white text-blue-600 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                S'inscrire
-              </button>
+              <div className="flex bg-gray-50 rounded-xl p-1 mb-6">
 
-            </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsSignUp(false);
+                    setError("");
+                    setSuccess("");
+                  }}
+                  className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition ${
+                    !isSignUp
+                      ? "bg-white text-blue-600 shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  Se connecter
+                </button>
 
-            {/* ERREUR */}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsSignUp(true);
+                    setError("");
+                    setSuccess("");
+                  }}
+                  className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition ${
+                    isSignUp
+                      ? "bg-white text-blue-600 shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  S'inscrire
+                </button>
+
+              </div>
+
+            )}
+
+
+            {/* =================================
+                ERREUR
+            ================================= */}
 
             {error && (
+
               <div className="mb-5 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600">
+
                 {error}
+
               </div>
+
             )}
 
-            {/* SUCCÈS */}
+
+            {/* =================================
+                SUCCÈS
+            ================================= */}
 
             {success && (
+
               <div className="mb-5 rounded-xl border border-green-100 bg-green-50 px-4 py-3 text-sm text-green-700">
+
                 {success}
+
               </div>
+
             )}
 
-            {/* FORMULAIRE */}
 
-            <form
-              onSubmit={handleSubmit}
-              className="space-y-5"
-            >
+            {/* =================================
+                RÉCUPÉRATION APPAREIL
+            ================================= */}
 
-            {/* NOM COMPLET */}
+            {recoveryRequired ? (
 
-            {isSignUp && (
-              <div>
+              <form
+                onSubmit={handleDeviceRecovery}
+                className="space-y-5"
+              >
 
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Nom complet
-                </label>
+                <div className="rounded-2xl bg-blue-50 border border-blue-100 p-4">
 
-                <input
-                  type="text"
-                  placeholder="Exemple : Abdoulaye Sangaré"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  <div className="flex items-start gap-3">
+
+                    <div className="w-10 h-10 shrink-0 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+
+                      <Smartphone size={20} />
+
+                    </div>
+
+                    <div>
+
+                      <p className="font-bold text-blue-900">
+                        Ton ancien téléphone est encore associé
+                      </p>
+
+                      <p className="text-sm text-blue-700 mt-1 leading-relaxed">
+                        Si tu as perdu ton ancien téléphone,
+                        tu peux transférer ton compte sur ce
+                        nouveau téléphone avec ton code de
+                        récupération.
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+                {/* CODE */}
+
+                <div>
+
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+
+                    Code de récupération
+
+                  </label>
+
+                  <div className="relative">
+
+                    <KeyRound
+                      size={19}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                    />
+
+                    <input
+                      type="text"
+                      placeholder="Exemple : A7F2-91BC-4D8E"
+                      value={recoveryCode}
+                      onChange={(e) =>
+                        setRecoveryCode(
+                          e.target.value.toUpperCase()
+                        )
+                      }
+                      disabled={loading}
+                      required
+                      autoComplete="off"
+                      autoFocus
+                      maxLength={14}
+                      className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 tracking-widest font-semibold uppercase outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50 disabled:bg-gray-50"
+                    />
+
+                  </div>
+
+                  <p className="text-xs text-gray-400 mt-2">
+
+                    Entre le code que tu avais enregistré
+                    avant de perdre ton ancien téléphone.
+
+                  </p>
+
+                </div>
+
+
+                {/* BOUTON RÉCUPÉRATION */}
+
+                <button
+                  type="submit"
+                  disabled={
+                    loading ||
+                    !recoveryCode.trim()
+                  }
+                  className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3.5 px-5 rounded-xl shadow-sm transition disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+
+                  {loading ? (
+
+                    <>
+                      <Loader2
+                        size={19}
+                        className="animate-spin"
+                      />
+
+                      Récupération...
+
+                    </>
+
+                  ) : (
+
+                    <>
+                      <Smartphone size={19} />
+
+                      Récupérer mon compte
+
+                    </>
+
+                  )}
+
+                </button>
+
+
+                {/* ANNULER */}
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    cancelRecovery(e);
+                  }}
                   disabled={loading}
-                  required
-                  autoComplete="name"
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50 disabled:bg-gray-50"
-                />
+                  className="w-full flex items-center justify-center gap-2 text-gray-500 hover:text-gray-700 py-2.5 rounded-xl font-semibold transition disabled:opacity-50"
+                >
 
-              </div>
-            )}
+                  <ArrowLeft size={17} />
 
-              {/* EMAIL */}
+                  Retour à la connexion
 
-              <div>
+                </button>
 
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Adresse e-mail
-                </label>
+              </form>
 
-                <div className="relative">
+            ) : (
 
-                  <Mail
-                    size={19}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
-                  />
+              /* =================================
+                 FORMULAIRE CONNEXION / INSCRIPTION
+              ================================= */
 
-                  <input
-                    type="email"
-                    placeholder="exemple@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={loading}
-                    required
-                    autoComplete="email"
-                    className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50 disabled:bg-gray-50"
-                  />
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-5"
+              >
 
-                </div>
-
-              </div>
-
-              {/* MOT DE PASSE */}
-
-              <div>
-
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Mot de passe
-                </label>
-
-                <div className="relative">
-
-                  <Lock
-                    size={19}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
-                  />
-
-                  <input
-                    type="password"
-                    placeholder="Ton mot de passe"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={loading}
-                    required
-                    minLength={6}
-                    autoComplete={
-                      isSignUp
-                        ? "new-password"
-                        : "current-password"
-                    }
-                    className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50 disabled:bg-gray-50"
-                  />
-
-                </div>
+                {/* NOM COMPLET */}
 
                 {isSignUp && (
-                  <p className="text-xs text-gray-400 mt-2">
-                    Le mot de passe doit contenir au moins 6 caractères.
-                  </p>
+
+                  <div>
+
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+
+                      Nom complet
+
+                    </label>
+
+                    <input
+                      type="text"
+                      placeholder="Exemple : Abdoulaye Sangaré"
+                      value={fullName}
+                      onChange={(e) =>
+                        setFullName(
+                          e.target.value
+                        )
+                      }
+                      disabled={loading}
+                      required
+                      autoComplete="name"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50 disabled:bg-gray-50"
+                    />
+
+                  </div>
+
                 )}
+
+
+                {/* EMAIL */}
+
+                <div>
+
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+
+                    Adresse e-mail
+
+                  </label>
+
+                  <div className="relative">
+
+                    <Mail
+                      size={19}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                    />
+
+                    <input
+                      type="email"
+                      placeholder="exemple@email.com"
+                      value={email}
+                      onChange={(e) =>
+                        setEmail(
+                          e.target.value
+                        )
+                      }
+                      disabled={loading}
+                      required
+                      autoComplete="email"
+                      className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50 disabled:bg-gray-50"
+                    />
+
+                  </div>
+
+                </div>
+
+
+                {/* MOT DE PASSE */}
+
+                <div>
+
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+
+                    Mot de passe
+
+                  </label>
+
+                  <div className="relative">
+
+                    <Lock
+                      size={19}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                    />
+
+                    <input
+                      type="password"
+                      placeholder="Ton mot de passe"
+                      value={password}
+                      onChange={(e) =>
+                        setPassword(
+                          e.target.value
+                        )
+                      }
+                      disabled={loading}
+                      required
+                      minLength={6}
+                      autoComplete={
+                        isSignUp
+                          ? "new-password"
+                          : "current-password"
+                      }
+                      className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50 disabled:bg-gray-50"
+                    />
+
+                  </div>
+
+                  {isSignUp && (
+
+                    <p className="text-xs text-gray-400 mt-2">
+
+                      Le mot de passe doit contenir
+                      au moins 6 caractères.
+
+                    </p>
+
+                  )}
+
+                </div>
+
+
+                {/* BOUTON */}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3.5 px-5 rounded-xl shadow-sm transition disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+
+                  {loading ? (
+
+                    <>
+                      <Loader2
+                        size={19}
+                        className="animate-spin"
+                      />
+
+                      Chargement...
+
+                    </>
+
+                  ) : isSignUp ? (
+
+                    <>
+                      <UserPlus size={19} />
+
+                      Créer mon compte
+
+                    </>
+
+                  ) : (
+
+                    <>
+                      <LogIn size={19} />
+
+                      Se connecter
+
+                    </>
+
+                  )}
+
+                </button>
+
+              </form>
+
+            )}
+
+
+            {/* =================================
+                TEST TEMPORAIRE RÉCUPÉRATION
+            ================================= */}
+
+            {!recoveryRequired && !isSignUp && (
+
+              <div className="mt-6 pt-5 border-t border-orange-100">
+
+                <p className="text-xs text-orange-600 text-center mb-3">
+                  🧪 Test temporaire — récupération appareil
+                </p>
+
+                <button
+                  type="button"
+                  onClick={handleGenerateRecoveryCodeTest}
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-5 rounded-xl transition disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <KeyRound size={18} />
+
+                  Générer mon code de récupération
+                </button>
 
               </div>
 
-              {/* BOUTON */}
+            )}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3.5 px-5 rounded-xl shadow-sm transition disabled:opacity-60 disabled:cursor-not-allowed"
-              >
+            {/* =================================
+                BAS DE CARTE
+            ================================= */}
 
-                {loading ? (
-                  <>
-                    <Loader2
-                      size={19}
-                      className="animate-spin"
-                    />
-                    Chargement...
-                  </>
-                ) : isSignUp ? (
-                  <>
-                    <UserPlus size={19} />
-                    Créer mon compte
-                  </>
-                ) : (
-                  <>
-                    <LogIn size={19} />
-                    Se connecter
-                  </>
-                )}
+            {!recoveryRequired && (
 
-              </button>
+              <div className="mt-6 pt-5 border-t border-gray-100 text-center">
 
-            </form>
+                <p className="text-sm text-gray-500">
 
-            {/* BAS DE CARTE */}
+                  {isSignUp
+                    ? "Tu as déjà un compte ?"
+                    : "Tu n'as pas encore de compte ?"}
 
-            <div className="mt-6 pt-5 border-t border-gray-100 text-center">
+                </p>
 
-              <p className="text-sm text-gray-500">
-                {isSignUp
-                  ? "Tu as déjà un compte ?"
-                  : "Tu n'as pas encore de compte ?"}
-              </p>
+                <button
+                  type="button"
+                  onClick={toggleMode}
+                  className="mt-1 text-sm font-semibold text-blue-600 hover:text-blue-700 hover:underline transition"
+                >
 
-              <button
-                type="button"
-                onClick={toggleMode}
-                className="mt-1 text-sm font-semibold text-blue-600 hover:text-blue-700 hover:underline transition"
-              >
-                {isSignUp
-                  ? "Se connecter"
-                  : "Créer un compte"}
-              </button>
+                  {isSignUp
+                    ? "Se connecter"
+                    : "Créer un compte"}
 
-            </div>
+                </button>
+
+              </div>
+
+            )}
 
           </div>
 
-          {/* FOOTER */}
+
+          {/* ==================================
+              FOOTER
+          ================================== */}
 
           <p className="text-center text-xs text-gray-400 mt-6">
-            Apprends partout, même hors ligne avec Kalan Academy.
+
+            Apprends partout, même hors ligne
+            avec Kalan Academy.
+
           </p>
 
         </div>

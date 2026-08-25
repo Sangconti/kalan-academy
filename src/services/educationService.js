@@ -3,189 +3,549 @@
 import { supabase } from "../lib/supabase";
 
 import {
+  db,
+
   cacheClasses,
-  getCachedClasses,
-
   cacheSubjects,
-  getCachedSubjects,
-
   cacheChapters,
-  getCachedChapters,
-
-  cacheChapter,
-  getCachedChapter,
-
   cacheLessons,
-  getCachedLessons,
-
-  cacheLesson,
-  getCachedLesson,
-
   cacheLessonBlocks,
-  getCachedLessonBlocks,
-
   cacheExercises,
-  getCachedExercises,
-
   cacheQuizzes,
-  getCachedQuizzes,
-
   cacheQuizQuestions,
-  getCachedQuizQuestions
+  cacheBadges,
+
+  getCachedClasses,
+  getCachedSubjects,
+  getCachedChapters,
+  getCachedLessons,
+  getCachedLesson,
+  getCachedLessonBlocks,
+  getCachedExercises,
+  getCachedQuizzes,
+  getCachedQuizQuestions,
+  getCachedBadges
 } from "../offline/db";
 
 
-// =====================================================
-// NETWORK / SUPABASE AVAILABILITY
-// =====================================================
+// ======================================================
+// NETWORK
+// ======================================================
 
-let supabaseAvailable = true;
+let networkStatus = null;
+
+let networkCheckedAt = 0;
+
+const NETWORK_CACHE_DURATION = 5000;
+
+const NETWORK_TIMEOUT = 1500;
 
 
-// =====================================================
-// REQUEST DEDUPLICATION
-// =====================================================
+// ------------------------------------------------------
+// URL SUPABASE
+// ------------------------------------------------------
+//
+// IMPORTANT
+//
+// src/lib/supabase.js utilise actuellement une URL
+// Supabase écrite directement dans le fichier.
+//
+// educationService.js utilisait auparavant :
+//
+// import.meta.env.VITE_SUPABASE_URL
+//
+// ce qui provoquait :
+//
+// ⚠️ VITE_SUPABASE_URL introuvable
+//
+// On utilise donc la même URL ici.
+//
+// ------------------------------------------------------
 
-const pendingRequests = new Map();
+const SUPABASE_URL =
+  "https://gchimptswrhchpdtemni.supabase.co";
 
 
-// =====================================================
-// BROWSER / WEBVIEW NETWORK STATUS
-// =====================================================
+// ------------------------------------------------------
+// Vérifie réellement si Supabase est accessible
+// ------------------------------------------------------
 
-function isOnline() {
-  if (typeof navigator === "undefined") {
+async function checkSupabaseConnection() {
+
+  const now = Date.now();
+
+
+  // ----------------------------------------------------
+  // Utiliser le résultat récent
+  // ----------------------------------------------------
+
+  if (
+    networkStatus !== null &&
+    now - networkCheckedAt <
+      NETWORK_CACHE_DURATION
+  ) {
+
+    return networkStatus;
+
+  }
+
+
+  // ----------------------------------------------------
+  // navigator.onLine = false
+  // ----------------------------------------------------
+
+  if (
+    typeof navigator !== "undefined" &&
+    navigator.onLine === false
+  ) {
+
+    networkStatus = false;
+
+    networkCheckedAt = now;
+
     return false;
+
   }
 
-  return navigator.onLine === true;
-}
+
+  // ----------------------------------------------------
+  // Vérification réelle
+  // ----------------------------------------------------
+
+  const supabaseUrl =
+    SUPABASE_URL;
 
 
-// =====================================================
-// SUPABASE AVAILABILITY
-// =====================================================
+  if (!supabaseUrl) {
 
-function isSupabaseAvailable() {
-  return isOnline() && supabaseAvailable;
-}
-
-
-// =====================================================
-// SUPABASE OFFLINE
-// =====================================================
-
-function markSupabaseOffline(error) {
-  if (supabaseAvailable) {
     console.warn(
-      "📴 Supabase inaccessible. Passage temporaire en mode offline.",
-      error
+      "⚠️ URL Supabase introuvable"
     );
+
+    networkStatus = false;
+
+    networkCheckedAt = now;
+
+    return false;
+
   }
 
-  supabaseAvailable = false;
+
+  const controller =
+    new AbortController();
+
+
+  const timeout =
+    setTimeout(
+      () => controller.abort(),
+      NETWORK_TIMEOUT
+    );
+
+
+  try {
+
+    const response =
+      await fetch(
+        `${supabaseUrl}/rest/v1/`,
+        {
+          method: "HEAD",
+          signal: controller.signal
+        }
+      );
+
+
+    clearTimeout(timeout);
+
+
+    /*
+     * Selon la configuration Supabase,
+     * /rest/v1/ peut retourner différents codes.
+     *
+     * Le but ici est uniquement de savoir si
+     * le serveur est joignable.
+     */
+
+    networkStatus =
+      response.ok ||
+      response.status === 401 ||
+      response.status === 404;
+
+
+    networkCheckedAt =
+      Date.now();
+
+
+    if (networkStatus) {
+
+      console.log(
+        "🌐 Supabase accessible"
+      );
+
+    }
+
+
+    return networkStatus;
+
+  } catch (error) {
+
+    clearTimeout(timeout);
+
+
+    networkStatus = false;
+
+    networkCheckedAt =
+      Date.now();
+
+
+    console.warn(
+      "📴 Supabase inaccessible → mode offline",
+      error?.message || error
+    );
+
+
+    return false;
+
+  }
+
 }
 
 
-// =====================================================
-// SUPABASE ONLINE
-// =====================================================
+// ------------------------------------------------------
+// Fonction utilisée par les services
+// ------------------------------------------------------
 
-function markSupabaseOnline() {
-  if (!supabaseAvailable) {
-    console.log(
-      "🌐 Réseau détecté. Nouvelle tentative Supabase autorisée."
-    );
-  }
+async function isOnline() {
 
-  supabaseAvailable = true;
+  return await checkSupabaseConnection();
+
 }
 
 
-// =====================================================
-// NETWORK EVENTS
-// =====================================================
+// ------------------------------------------------------
+// Réinitialisation lorsque la connexion change
+// ------------------------------------------------------
 
-if (typeof window !== "undefined") {
+if (
+  typeof window !== "undefined"
+) {
+
   window.addEventListener(
     "online",
-    markSupabaseOnline
+    () => {
+
+      networkStatus = null;
+
+      networkCheckedAt = 0;
+
+      console.log(
+        "🌐 Réseau détecté → vérification Supabase réinitialisée"
+      );
+
+    }
   );
+
 
   window.addEventListener(
     "offline",
     () => {
+
+      networkStatus = false;
+
+      networkCheckedAt =
+        Date.now();
+
       console.log(
-        "📴 Événement offline détecté."
+        "📴 Appareil hors ligne"
       );
 
-      supabaseAvailable = false;
     }
   );
+
 }
 
 
-// =====================================================
-// REQUEST HELPER
-// =====================================================
+// ======================================================
+// HELPERS
+// ======================================================
 
-function runOnce(key, callback) {
-  if (pendingRequests.has(key)) {
-    return pendingRequests.get(key);
-  }
+function sortByOrder(a, b) {
 
-  const promise = Promise.resolve()
-    .then(callback)
-    .finally(() => {
-      pendingRequests.delete(key);
-    });
-
-  pendingRequests.set(
-    key,
-    promise
+  return (
+    (Number(a?.order_number) || 0) -
+    (Number(b?.order_number) || 0)
   );
 
-  return promise;
 }
 
 
-// =====================================================
-// CLASSES
-// =====================================================
+function normalizeCode(value) {
 
-export async function getClasses() {
-  return await runOnce(
-    "classes",
-    async () => {
-      let cached = [];
+  return String(value || "")
+    .trim()
+    .toLowerCase();
+
+}
+
+
+// ======================================================
+// DÉDUPLICATION DES MATIÈRES
+// ======================================================
+
+/*
+ * Déduplication logique des matières.
+ *
+ * Clé :
+ *
+ *     class_id + code
+ *
+ * Exemple :
+ *
+ * Mathématiques A → 0 chapitre
+ * Mathématiques B → 24 chapitres
+ *
+ * On conserve B.
+ *
+ * Cette fonction ne supprime rien directement dans Dexie.
+ */
+
+async function deduplicateSubjects(subjects) {
+
+  if (!Array.isArray(subjects)) {
+
+    return [];
+
+  }
+
+
+  const groups =
+    new Map();
+
+
+  // ----------------------------------------------------
+  // Regrouper
+  // ----------------------------------------------------
+
+  for (const subject of subjects) {
+
+    if (!subject?.id) {
+
+      continue;
+
+    }
+
+
+    const classId =
+      String(
+        subject.class_id || ""
+      );
+
+
+    const logicalCode =
+      normalizeCode(
+        subject.code ||
+        subject.subject_code ||
+        subject.name
+      );
+
+
+    const key =
+      `${classId}::${logicalCode}`;
+
+
+    if (!groups.has(key)) {
+
+      groups.set(
+        key,
+        []
+      );
+
+    }
+
+
+    groups
+      .get(key)
+      .push(subject);
+
+  }
+
+
+  const result = [];
+
+
+  // ----------------------------------------------------
+  // Choisir le meilleur candidat
+  // ----------------------------------------------------
+
+  for (
+    const [
+      key,
+      group
+    ]
+    of groups.entries()
+  ) {
+
+    if (group.length === 1) {
+
+      result.push(
+        group[0]
+      );
+
+      continue;
+
+    }
+
+
+    const candidates = [];
+
+
+    for (const subject of group) {
+
+      let chapterCount = 0;
+
 
       try {
-        cached = await getCachedClasses();
+
+        chapterCount =
+          await db.chapters
+            .where("subject_id")
+            .equals(subject.id)
+            .count();
+
       } catch (error) {
+
         console.warn(
-          "⚠️ Impossible de lire les classes depuis Dexie :",
+          "⚠️ Impossible de compter les chapitres de la matière :",
+          subject.name,
           error
         );
+
       }
 
-      if (cached && cached.length > 0) {
-        console.log(
-          "📦 CLASSES DEPUIS DEXIE :",
-          cached.length
-        );
 
-        if (isSupabaseAvailable()) {
-          refreshClassesInBackground();
+      candidates.push({
+
+        subject,
+
+        chapterCount
+
+      });
+
+    }
+
+
+    // --------------------------------------------------
+    // Priorités
+    //
+    // 1. plus de chapitres
+    // 2. order_number
+    // 3. ID stable
+    // --------------------------------------------------
+
+    candidates.sort(
+      (a, b) => {
+
+        if (
+          b.chapterCount !==
+          a.chapterCount
+        ) {
+
+          return (
+            b.chapterCount -
+            a.chapterCount
+          );
+
         }
 
-        return cached;
-      }
 
-      if (!isSupabaseAvailable()) {
-        return [];
+        const orderDifference =
+          sortByOrder(
+            a.subject,
+            b.subject
+          );
+
+
+        if (
+          orderDifference !== 0
+        ) {
+
+          return orderDifference;
+
+        }
+
+
+        return String(
+          a.subject.id
+        ).localeCompare(
+          String(
+            b.subject.id
+          )
+        );
+
       }
+    );
+
+
+    const winner =
+      candidates[0];
+
+
+    console.warn(
+      "⚠️ DOUBLON MATIÈRE DÉTECTÉ",
+      {
+        key,
+
+        winner:
+          winner.subject.id,
+
+        candidates:
+          candidates.map(
+            item => ({
+              id:
+                item.subject.id,
+
+              name:
+                item.subject.name,
+
+              code:
+                item.subject.code,
+
+              chapters:
+                item.chapterCount
+            })
+          )
+      }
+    );
+
+
+    result.push(
+      winner.subject
+    );
+
+  }
+
+
+  result.sort(
+    sortByOrder
+  );
+
+
+  return result;
+
+}
+
+
+// ======================================================
+// CLASSES
+// ======================================================
+
+export async function getClasses() {
+
+  try {
+
+    if (await isOnline()) {
 
       try {
+
         const {
           data,
           error
@@ -199,132 +559,78 @@ export async function getClasses() {
             }
           );
 
+
         if (error) {
-          console.error(
-            "❌ Erreur getClasses :",
-            error
-          );
 
-          markSupabaseOffline(error);
+          throw error;
 
-          return [];
         }
+
 
         await cacheClasses(
           data || []
         );
 
-        console.log(
-          "🌐 CLASSES SUPABASE :",
-          data?.length || 0
-        );
 
         return data || [];
+
       } catch (error) {
-        console.error(
-          "❌ Exception getClasses :",
+
+        console.warn(
+          "⚠️ Erreur réseau classes → fallback Dexie",
           error
         );
 
-        markSupabaseOffline(error);
-
-        return [];
       }
+
     }
-  );
+
+
+    return await getCachedClasses();
+
+  } catch (error) {
+
+    console.error(
+      "❌ getClasses:",
+      error
+    );
+
+
+    return await getCachedClasses();
+
+  }
+
 }
 
 
-// =====================================================
-// BACKGROUND REFRESH CLASSES
-// =====================================================
+// ======================================================
+// SUBJECTS
+// ======================================================
 
-async function refreshClassesInBackground() {
-  if (!isSupabaseAvailable()) {
-    return;
+export async function getSubjects(
+  classId
+) {
+
+  if (!classId) {
+
+    return [];
+
   }
+
 
   try {
-    const {
-      data,
-      error
-    } = await supabase
-      .from("classes")
-      .select("*")
-      .order(
-        "order_number",
-        {
-          ascending: true
-        }
-      );
 
-    if (error) {
-      markSupabaseOffline(error);
-      return;
-    }
-
-    if (data) {
-      await cacheClasses(data);
-
-      console.log(
-        "🔄 CLASSES Dexie actualisées en arrière-plan :",
-        data.length
-      );
-    }
-  } catch (error) {
-    markSupabaseOffline(error);
-  }
-}
+    let subjects = [];
 
 
-// =====================================================
-// SUBJECTS
-// =====================================================
+    // ==================================================
+    // ONLINE
+    // ==================================================
 
-export async function getSubjects(classId) {
-  if (!classId) {
-    return [];
-  }
-
-  return await runOnce(
-    `subjects:${classId}`,
-    async () => {
-      let cached = [];
+    if (await isOnline()) {
 
       try {
-        cached = await getCachedSubjects(
-          classId
-        );
-      } catch (error) {
-        console.warn(
-          "⚠️ Erreur lecture subjects Dexie :",
-          error
-        );
-      }
 
-      if (
-        cached &&
-        cached.length > 0
-      ) {
-        console.log(
-          "📦 MATIÈRES DEPUIS DEXIE :",
-          cached.length
-        );
-
-        if (isSupabaseAvailable()) {
-          refreshSubjectsInBackground(
-            classId
-          );
-        }
-
-        return cached;
-      }
-
-      if (!isSupabaseAvailable()) {
-        return [];
-      }
-
-      try {
         const {
           data,
           error
@@ -342,538 +648,518 @@ export async function getSubjects(classId) {
             }
           );
 
+
         if (error) {
-          console.error(
-            "❌ Erreur getSubjects :",
-            error
-          );
 
-          markSupabaseOffline(error);
+          throw error;
 
-          return [];
         }
+
+
+        subjects =
+          data || [];
+
 
         await cacheSubjects(
-          data || []
+          subjects
         );
 
-        console.log(
-          "🌐 MATIÈRES SUPABASE :",
-          data?.length || 0
-        );
-
-        return data || [];
       } catch (error) {
-        console.error(
-          "❌ Exception getSubjects :",
+
+        console.warn(
+          "⚠️ Erreur réseau subjects → fallback Dexie",
           error
         );
 
-        markSupabaseOffline(error);
 
-        return [];
+        subjects =
+          await getCachedSubjects(
+            classId
+          );
+
       }
+
     }
-  );
-}
+
+    // ==================================================
+    // OFFLINE
+    // ==================================================
+
+    else {
+
+      subjects =
+        await getCachedSubjects(
+          classId
+        );
+
+    }
 
 
-// =====================================================
-// BACKGROUND REFRESH SUBJECTS
-// =====================================================
+    // ==================================================
+    // FILTRE DE SÉCURITÉ
+    // ==================================================
 
-async function refreshSubjectsInBackground(classId) {
-  if (!isSupabaseAvailable()) {
-    return;
-  }
+    subjects =
+      (subjects || [])
+        .filter(
+          subject =>
+            String(
+              subject.class_id
+            ) ===
+            String(classId)
+        );
 
-  try {
-    const {
-      data,
-      error
-    } = await supabase
-      .from("subjects")
-      .select("*")
-      .eq(
-        "class_id",
-        classId
-      )
-      .order(
-        "order_number",
-        {
-          ascending: true
-        }
+
+    // ==================================================
+    // DÉDUPLICATION
+    // ==================================================
+
+    subjects =
+      await deduplicateSubjects(
+        subjects
       );
 
-    if (error) {
-      markSupabaseOffline(error);
-      return;
-    }
 
-    if (data) {
-      await cacheSubjects(data);
+    // ==================================================
+    // TRI FINAL
+    // ==================================================
 
-      console.log(
-        "🔄 MATIÈRES Dexie actualisées :",
-        data.length
-      );
-    }
+    subjects.sort(
+      sortByOrder
+    );
+
+
+    console.log(
+      "📚 SUBJECTS FINAUX :",
+      subjects
+    );
+
+
+    return subjects;
+
   } catch (error) {
-    markSupabaseOffline(error);
+
+    console.error(
+      "❌ getSubjects:",
+      error
+    );
+
+
+    // --------------------------------------------------
+    // Dernier fallback Dexie
+    // --------------------------------------------------
+
+    try {
+
+      const cached =
+        await getCachedSubjects(
+          classId
+        );
+
+
+      const filtered =
+        cached.filter(
+          subject =>
+            String(
+              subject.class_id
+            ) ===
+            String(classId)
+        );
+
+
+      return await deduplicateSubjects(
+        filtered
+      );
+
+    } catch (dexieError) {
+
+      console.error(
+        "❌ Impossible de récupérer les matières offline :",
+        dexieError
+      );
+
+
+      return [];
+
+    }
+
   }
+
 }
 
 
-// =====================================================
+// ======================================================
 // CHAPTERS
-// =====================================================
+// ======================================================
 
-export async function getChapters(subjectId) {
+export async function getChapters(
+  subjectId
+) {
+
   if (!subjectId) {
+
     return [];
+
   }
 
-  return await runOnce(
-    `chapters:${subjectId}`,
-    async () => {
-      let cached = [];
-
-      try {
-        cached = await getCachedChapters(
-          subjectId
-        );
-      } catch (error) {
-        console.warn(
-          "⚠️ Erreur lecture chapitres Dexie :",
-          error
-        );
-      }
-
-      if (
-        cached &&
-        cached.length > 0
-      ) {
-        console.log(
-          "📦 CHAPITRES DEPUIS DEXIE :",
-          cached.length
-        );
-
-        if (isSupabaseAvailable()) {
-          refreshChaptersInBackground(
-            subjectId
-          );
-        }
-
-        return cached;
-      }
-
-      if (!isSupabaseAvailable()) {
-        return [];
-      }
-
-      try {
-        const {
-          data,
-          error
-        } = await supabase
-          .from("chapters")
-          .select("*")
-          .eq(
-            "subject_id",
-            subjectId
-          )
-          .order(
-            "order_number",
-            {
-              ascending: true
-            }
-          );
-
-        if (error) {
-          console.error(
-            "❌ Erreur getChapters :",
-            error
-          );
-
-          markSupabaseOffline(error);
-
-          return [];
-        }
-
-        await cacheChapters(
-          data || []
-        );
-
-        console.log(
-          "🌐 CHAPITRES SUPABASE :",
-          data?.length || 0
-        );
-
-        return data || [];
-      } catch (error) {
-        console.error(
-          "❌ Exception getChapters :",
-          error
-        );
-
-        markSupabaseOffline(error);
-
-        return [];
-      }
-    }
-  );
-}
-
-
-// =====================================================
-// BACKGROUND REFRESH CHAPTERS
-// =====================================================
-
-async function refreshChaptersInBackground(subjectId) {
-  if (!isSupabaseAvailable()) {
-    return;
-  }
 
   try {
-    const {
-      data,
-      error
-    } = await supabase
-      .from("chapters")
-      .select("*")
-      .eq(
-        "subject_id",
+
+    // ==================================================
+    // 1. DEXIE PRIORITAIRE
+    // ==================================================
+
+    const cached =
+      await getCachedChapters(
         subjectId
-      )
-      .order(
-        "order_number",
-        {
-          ascending: true
-        }
       );
 
-    if (error) {
-      markSupabaseOffline(error);
-      return;
-    }
 
-    if (data) {
-      await cacheChapters(data);
+    if (
+      Array.isArray(cached) &&
+      cached.length > 0
+    ) {
+
+      cached.sort(
+        sortByOrder
+      );
+
 
       console.log(
-        "🔄 CHAPITRES Dexie actualisés :",
-        data.length
+        "📦 CHAPTERS → DEXIE",
+        cached.length
       );
+
+
+      return cached;
+
     }
+
+
+    // ==================================================
+    // 2. SUPABASE SI CACHE VIDE
+    // ==================================================
+
+    if (
+      !(await isOnline())
+    ) {
+
+      console.log(
+        "📴 Chapters : offline et cache vide"
+      );
+
+
+      return [];
+
+    }
+
+
+    try {
+
+      const {
+        data,
+        error
+      } = await supabase
+        .from("chapters")
+        .select("*")
+        .eq(
+          "subject_id",
+          subjectId
+        )
+        .order(
+          "order_number",
+          {
+            ascending: true
+          }
+        );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      const chapters =
+        data || [];
+
+
+      await cacheChapters(
+        chapters
+      );
+
+
+      chapters.sort(
+        sortByOrder
+      );
+
+
+      return chapters;
+
+    } catch (error) {
+
+      console.warn(
+        "⚠️ Chapters réseau indisponibles",
+        error
+      );
+
+
+      return [];
+
+    }
+
   } catch (error) {
-    markSupabaseOffline(error);
+
+    console.error(
+      "❌ getChapters:",
+      error
+    );
+
+
+    return [];
+
   }
+
 }
 
 
-// =====================================================
-// ONE CHAPTER
-// =====================================================
+// ======================================================
+// SINGLE CHAPTER
+// ======================================================
 
-export async function getChapter(chapterId) {
+export async function getChapter(
+  chapterId
+) {
+
   if (!chapterId) {
+
     return null;
+
   }
 
-  return await runOnce(
-    `chapter:${chapterId}`,
-    async () => {
-      let cached = null;
+
+  try {
+
+    if (
+      await isOnline()
+    ) {
 
       try {
-        cached = await getCachedChapter(
-          chapterId
-        );
-      } catch (error) {
-        console.warn(
-          "⚠️ Erreur lecture chapitre Dexie :",
-          error
-        );
-      }
 
-      if (cached) {
-        if (isSupabaseAvailable()) {
-          refreshChapterInBackground(
-            chapterId
-          );
-        }
-
-        return cached;
-      }
-
-      if (!isSupabaseAvailable()) {
-        return null;
-      }
-
-      try {
         const {
           data,
           error
         } = await supabase
           .from("chapters")
-          .select(`
-            id,
-            title,
-            description,
-            subject_id,
-            order_number
-          `)
+          .select("*")
           .eq(
             "id",
             chapterId
           )
-          .single();
+          .maybeSingle();
+
 
         if (error) {
-          console.error(
-            "❌ Erreur getChapter :",
-            error
-          );
 
-          markSupabaseOffline(error);
+          throw error;
 
-          return null;
         }
+
 
         if (data) {
-          await cacheChapter(data);
+
+          await db.chapters.put({
+
+            ...data,
+
+            cached_at:
+              new Date().toISOString()
+
+          });
+
+
+          return data;
+
         }
 
-        return data;
       } catch (error) {
-        console.error(
-          "❌ Exception getChapter :",
-          error
-        );
 
-        markSupabaseOffline(error);
-
-        return null;
-      }
-    }
-  );
-}
-
-
-// =====================================================
-// BACKGROUND REFRESH ONE CHAPTER
-// =====================================================
-
-async function refreshChapterInBackground(chapterId) {
-  if (!isSupabaseAvailable()) {
-    return;
-  }
-
-  try {
-    const {
-      data,
-      error
-    } = await supabase
-      .from("chapters")
-      .select(`
-        id,
-        title,
-        description,
-        subject_id,
-        order_number
-      `)
-      .eq(
-        "id",
-        chapterId
-      )
-      .single();
-
-    if (error) {
-      markSupabaseOffline(error);
-      return;
-    }
-
-    if (data) {
-      await cacheChapter(data);
-    }
-  } catch (error) {
-    markSupabaseOffline(error);
-  }
-}
-
-
-// =====================================================
-// LESSONS
-// =====================================================
-
-export async function getLessons(chapterId) {
-  if (!chapterId) {
-    return [];
-  }
-
-  return await runOnce(
-    `lessons:${chapterId}`,
-    async () => {
-      let cached = [];
-
-      try {
-        cached = await getCachedLessons(
-          chapterId
-        );
-      } catch (error) {
         console.warn(
-          "⚠️ Erreur lecture lessons Dexie :",
-          error
-        );
-      }
-
-      if (
-        cached &&
-        cached.length > 0
-      ) {
-        if (isSupabaseAvailable()) {
-          refreshLessonsInBackground(
-            chapterId
-          );
-        }
-
-        return cached;
-      }
-
-      if (!isSupabaseAvailable()) {
-        return [];
-      }
-
-      try {
-        const {
-          data,
-          error
-        } = await supabase
-          .from("lessons")
-          .select("*")
-          .eq(
-            "chapter_id",
-            chapterId
-          )
-          .order(
-            "order_number",
-            {
-              ascending: true
-            }
-          );
-
-        if (error) {
-          console.error(
-            "❌ Erreur getLessons :",
-            error
-          );
-
-          markSupabaseOffline(error);
-
-          return [];
-        }
-
-        await cacheLessons(
-          data || []
-        );
-
-        return data || [];
-      } catch (error) {
-        console.error(
-          "❌ Exception getLessons :",
+          "⚠️ getChapter réseau → Dexie",
           error
         );
 
-        markSupabaseOffline(error);
-
-        return [];
       }
-    }
-  );
-}
 
-
-// =====================================================
-// BACKGROUND REFRESH LESSONS
-// =====================================================
-
-async function refreshLessonsInBackground(chapterId) {
-  if (!isSupabaseAvailable()) {
-    return;
-  }
-
-  try {
-    const {
-      data,
-      error
-    } = await supabase
-      .from("lessons")
-      .select("*")
-      .eq(
-        "chapter_id",
-        chapterId
-      )
-      .order(
-        "order_number",
-        {
-          ascending: true
-        }
-      );
-
-    if (error) {
-      markSupabaseOffline(error);
-      return;
     }
 
-    if (data) {
-      await cacheLessons(data);
-    }
+
+    return await db.chapters.get(
+      chapterId
+    );
+
   } catch (error) {
-    markSupabaseOffline(error);
-  }
-}
+
+    console.error(
+      "❌ getChapter:",
+      error
+    );
 
 
-// =====================================================
-// ONE LESSON
-// =====================================================
-
-export async function getLesson(lessonId) {
-  if (!lessonId) {
     return null;
+
   }
 
-  return await runOnce(
-    `lesson:${lessonId}`,
-    async () => {
-      let cached = null;
+}
+
+
+// ======================================================
+// LESSONS
+// ======================================================
+
+export async function getLessons(
+  chapterId
+) {
+
+  if (!chapterId) {
+
+    return [];
+
+  }
+
+
+  try {
+
+    const cached =
+      await getCachedLessons(
+        chapterId
+      );
+
+
+    if (
+      Array.isArray(cached) &&
+      cached.length > 0
+    ) {
+
+      cached.sort(
+        sortByOrder
+      );
+
+
+      console.log(
+        "📦 LESSONS → DEXIE",
+        cached.length
+      );
+
+
+      return cached;
+
+    }
+
+
+    if (
+      !(await isOnline())
+    ) {
+
+      return [];
+
+    }
+
+
+    try {
+
+      const {
+        data,
+        error
+      } = await supabase
+        .from("lessons")
+        .select("*")
+        .eq(
+          "chapter_id",
+          chapterId
+        )
+        .order(
+          "order_number",
+          {
+            ascending: true
+          }
+        );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      const lessons =
+        data || [];
+
+
+      await cacheLessons(
+        lessons
+      );
+
+
+      lessons.sort(
+        sortByOrder
+      );
+
+
+      return lessons;
+
+    } catch (error) {
+
+      console.warn(
+        "⚠️ Lessons réseau indisponibles",
+        error
+      );
+
+
+      return [];
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "❌ getLessons:",
+      error
+    );
+
+
+    return [];
+
+  }
+
+}
+
+
+// ======================================================
+// SINGLE LESSON
+// ======================================================
+
+export async function getLesson(
+  lessonId
+) {
+
+  if (!lessonId) {
+
+    return null;
+
+  }
+
+
+  try {
+
+    if (
+      await isOnline()
+    ) {
 
       try {
-        cached = await getCachedLesson(
-          lessonId
-        );
-      } catch (error) {
-        console.warn(
-          "⚠️ Erreur lecture lesson Dexie :",
-          error
-        );
-      }
 
-      if (cached) {
-        if (isSupabaseAvailable()) {
-          refreshLessonInBackground(
-            lessonId
-          );
-        }
-
-        return cached;
-      }
-
-      if (!isSupabaseAvailable()) {
-        return null;
-      }
-
-      try {
         const {
           data,
           error
@@ -884,250 +1170,202 @@ export async function getLesson(lessonId) {
             "id",
             lessonId
           )
-          .single();
+          .maybeSingle();
+
 
         if (error) {
-          console.error(
-            "❌ Erreur getLesson :",
-            error
-          );
 
-          markSupabaseOffline(error);
+          throw error;
 
-          return null;
         }
+
 
         if (data) {
-          await cacheLesson(data);
+
+          await cacheLessons([
+            data
+          ]);
+
+
+          return data;
+
         }
 
-        return data;
       } catch (error) {
-        console.error(
-          "❌ Exception getLesson :",
-          error
-        );
 
-        markSupabaseOffline(error);
-
-        return null;
-      }
-    }
-  );
-}
-
-
-// =====================================================
-// BACKGROUND REFRESH LESSON
-// =====================================================
-
-async function refreshLessonInBackground(lessonId) {
-  if (!isSupabaseAvailable()) {
-    return;
-  }
-
-  try {
-    const {
-      data,
-      error
-    } = await supabase
-      .from("lessons")
-      .select("*")
-      .eq(
-        "id",
-        lessonId
-      )
-      .single();
-
-    if (error) {
-      markSupabaseOffline(error);
-      return;
-    }
-
-    if (data) {
-      await cacheLesson(data);
-    }
-  } catch (error) {
-    markSupabaseOffline(error);
-  }
-}
-
-
-// =====================================================
-// LESSON BLOCKS
-// =====================================================
-
-export async function getLessonBlocks(lessonId) {
-  if (!lessonId) {
-    return [];
-  }
-
-  return await runOnce(
-    `lessonBlocks:${lessonId}`,
-    async () => {
-      let cached = [];
-
-      try {
-        cached = await getCachedLessonBlocks(
-          lessonId
-        );
-      } catch (error) {
         console.warn(
-          "⚠️ Erreur lecture blocks Dexie :",
-          error
-        );
-      }
-
-      if (
-        cached &&
-        cached.length > 0
-      ) {
-        if (isSupabaseAvailable()) {
-          refreshLessonBlocksInBackground(
-            lessonId
-          );
-        }
-
-        return cached;
-      }
-
-      if (!isSupabaseAvailable()) {
-        return [];
-      }
-
-      try {
-        const {
-          data,
-          error
-        } = await supabase
-          .from("lesson_blocks")
-          .select("*")
-          .eq(
-            "lesson_id",
-            lessonId
-          )
-          .order(
-            "order_number",
-            {
-              ascending: true
-            }
-          );
-
-        if (error) {
-          console.error(
-            "❌ Erreur getLessonBlocks :",
-            error
-          );
-
-          markSupabaseOffline(error);
-
-          return [];
-        }
-
-        await cacheLessonBlocks(
-          data || []
-        );
-
-        return data || [];
-      } catch (error) {
-        console.error(
-          "❌ Exception getLessonBlocks :",
+          "⚠️ getLesson réseau → Dexie",
           error
         );
 
-        markSupabaseOffline(error);
-
-        return [];
       }
+
     }
-  );
+
+
+    return await getCachedLesson(
+      lessonId
+    );
+
+  } catch (error) {
+
+    console.error(
+      "❌ getLesson:",
+      error
+    );
+
+
+    return null;
+
+  }
+
 }
 
 
-// =====================================================
-// BACKGROUND REFRESH BLOCKS
-// =====================================================
+// ======================================================
+// LESSON BLOCKS
+// ======================================================
 
-async function refreshLessonBlocksInBackground(lessonId) {
-  if (!isSupabaseAvailable()) {
-    return;
+export async function getLessonBlocks(
+  lessonId
+) {
+
+  if (!lessonId) {
+
+    return [];
+
   }
 
+
   try {
-    const {
-      data,
-      error
-    } = await supabase
-      .from("lesson_blocks")
-      .select("*")
-      .eq(
-        "lesson_id",
+
+    const cached =
+      await getCachedLessonBlocks(
         lessonId
-      )
-      .order(
-        "order_number",
-        {
-          ascending: true
-        }
       );
 
-    if (error) {
-      markSupabaseOffline(error);
-      return;
+
+    if (
+      Array.isArray(cached) &&
+      cached.length > 0
+    ) {
+
+      console.log(
+        "📦 LESSON BLOCKS → DEXIE",
+        cached.length
+      );
+
+
+      return cached;
+
     }
 
-    if (data) {
-      await cacheLessonBlocks(data);
+
+    if (
+      !(await isOnline())
+    ) {
+
+      return [];
+
     }
+
+
+    try {
+
+      const {
+        data,
+        error
+      } = await supabase
+        .from("lesson_blocks")
+        .select("*")
+        .eq(
+          "lesson_id",
+          lessonId
+        )
+        .order(
+          "order_number",
+          {
+            ascending: true
+          }
+        );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      const blocks =
+        data || [];
+
+
+      await cacheLessonBlocks(
+        blocks
+      );
+
+
+      blocks.sort(
+        sortByOrder
+      );
+
+
+      return blocks;
+
+    } catch (error) {
+
+      console.warn(
+        "⚠️ Lesson blocks réseau indisponibles",
+        error
+      );
+
+
+      return [];
+
+    }
+
   } catch (error) {
-    markSupabaseOffline(error);
+
+    console.error(
+      "❌ getLessonBlocks:",
+      error
+    );
+
+
+    return [];
+
   }
+
 }
 
 
-// =====================================================
+// ======================================================
 // EXERCISES
-// =====================================================
+// ======================================================
 
-export async function getExercises(lessonId) {
+export async function getExercises(
+  lessonId
+) {
+
   if (!lessonId) {
+
     return [];
+
   }
 
-  return await runOnce(
-    `exercises:${lessonId}`,
-    async () => {
-      let cached = [];
+
+  try {
+
+    let exercises = [];
+
+
+    if (
+      await isOnline()
+    ) {
 
       try {
-        cached = await getCachedExercises(
-          lessonId
-        );
-      } catch (error) {
-        console.warn(
-          "⚠️ Erreur lecture exercises Dexie :",
-          error
-        );
-      }
 
-      if (
-        cached &&
-        cached.length > 0
-      ) {
-        if (isSupabaseAvailable()) {
-          refreshExercisesInBackground(
-            lessonId
-          );
-        }
-
-        return cached;
-      }
-
-      if (!isSupabaseAvailable()) {
-        return [];
-      }
-
-      try {
         const {
           data,
           error
@@ -1145,121 +1383,97 @@ export async function getExercises(lessonId) {
             }
           );
 
+
         if (error) {
-          console.error(
-            "❌ Erreur getExercises :",
-            error
-          );
 
-          markSupabaseOffline(error);
+          throw error;
 
-          return [];
         }
+
+
+        exercises =
+          data || [];
+
 
         await cacheExercises(
-          data || []
+          exercises
         );
 
-        return data || [];
       } catch (error) {
-        console.error(
-          "❌ Exception getExercises :",
+
+        console.warn(
+          "⚠️ Erreur réseau exercises → Dexie",
           error
         );
 
-        markSupabaseOffline(error);
 
-        return [];
+        exercises =
+          await getCachedExercises(
+            lessonId
+          );
+
       }
-    }
-  );
-}
 
+    } else {
 
-// =====================================================
-// BACKGROUND REFRESH EXERCISES
-// =====================================================
-
-async function refreshExercisesInBackground(lessonId) {
-  if (!isSupabaseAvailable()) {
-    return;
-  }
-
-  try {
-    const {
-      data,
-      error
-    } = await supabase
-      .from("exercises")
-      .select("*")
-      .eq(
-        "lesson_id",
-        lessonId
-      )
-      .order(
-        "order_number",
-        {
-          ascending: true
-        }
-      );
-
-    if (error) {
-      markSupabaseOffline(error);
-      return;
-    }
-
-    if (data) {
-      await cacheExercises(data);
-    }
-  } catch (error) {
-    markSupabaseOffline(error);
-  }
-}
-
-
-// =====================================================
-// QUIZZES
-// =====================================================
-
-export async function getQuizzes(lessonId) {
-  if (!lessonId) {
-    return [];
-  }
-
-  return await runOnce(
-    `quizzes:${lessonId}`,
-    async () => {
-      let cached = [];
-
-      try {
-        cached = await getCachedQuizzes(
+      exercises =
+        await getCachedExercises(
           lessonId
         );
-      } catch (error) {
-        console.warn(
-          "⚠️ Erreur lecture quizzes Dexie :",
-          error
-        );
-      }
 
-      if (
-        cached &&
-        cached.length > 0
-      ) {
-        if (isSupabaseAvailable()) {
-          refreshQuizzesInBackground(
-            lessonId
-          );
-        }
+    }
 
-        return cached;
-      }
 
-      if (!isSupabaseAvailable()) {
-        return [];
-      }
+    exercises.sort(
+      sortByOrder
+    );
+
+
+    return exercises;
+
+  } catch (error) {
+
+    console.error(
+      "❌ getExercises:",
+      error
+    );
+
+
+    return await getCachedExercises(
+      lessonId
+    );
+
+  }
+
+}
+
+
+// ======================================================
+// QUIZZES
+// ======================================================
+
+export async function getQuizzes(
+  lessonId
+) {
+
+  if (!lessonId) {
+
+    return [];
+
+  }
+
+
+  try {
+
+    let quizzes = [];
+
+
+    if (
+      await isOnline()
+    ) {
 
       try {
+
         const {
           data,
           error
@@ -1271,604 +1485,420 @@ export async function getQuizzes(lessonId) {
             lessonId
           );
 
+
         if (error) {
-          console.error(
-            "❌ Erreur getQuizzes :",
-            error
-          );
 
-          markSupabaseOffline(error);
+          throw error;
 
-          return [];
         }
+
+
+        quizzes =
+          data || [];
+
 
         await cacheQuizzes(
-          data || []
+          quizzes
         );
 
-        return data || [];
       } catch (error) {
-        console.error(
-          "❌ Exception getQuizzes :",
-          error
-        );
 
-        markSupabaseOffline(error);
-
-        return [];
-      }
-    }
-  );
-}
-
-
-// =====================================================
-// BACKGROUND REFRESH QUIZZES
-// =====================================================
-
-async function refreshQuizzesInBackground(lessonId) {
-  if (!isSupabaseAvailable()) {
-    return;
-  }
-
-  try {
-    const {
-      data,
-      error
-    } = await supabase
-      .from("quizzes")
-      .select("*")
-      .eq(
-        "lesson_id",
-        lessonId
-      );
-
-    if (error) {
-      markSupabaseOffline(error);
-      return;
-    }
-
-    if (data) {
-      await cacheQuizzes(data);
-    }
-  } catch (error) {
-    markSupabaseOffline(error);
-  }
-}
-
-
-// =====================================================
-// QUIZ QUESTIONS
-// =====================================================
-
-export async function getQuizQuestions(quizId) {
-  if (!quizId) {
-    return [];
-  }
-
-  return await runOnce(
-    `quizQuestions:${quizId}`,
-    async () => {
-      let cached = [];
-
-      try {
-        cached =
-          await getCachedQuizQuestions(
-            quizId
-          );
-      } catch (error) {
         console.warn(
-          "⚠️ Erreur lecture questions Dexie :",
-          error
-        );
-      }
-
-      if (
-        cached &&
-        cached.length > 0
-      ) {
-        if (isSupabaseAvailable()) {
-          refreshQuizQuestionsInBackground(
-            quizId
-          );
-        }
-
-        return cached;
-      }
-
-      if (!isSupabaseAvailable()) {
-        return [];
-      }
-
-      try {
-        const {
-          data,
-          error
-        } = await supabase
-          .from("quiz_questions")
-          .select("*")
-          .eq(
-            "quiz_id",
-            quizId
-          )
-          .order(
-            "order_number",
-            {
-              ascending: true
-            }
-          );
-
-        if (error) {
-          console.error(
-            "❌ Erreur getQuizQuestions :",
-            error
-          );
-
-          markSupabaseOffline(error);
-
-          return [];
-        }
-
-        await cacheQuizQuestions(
-          data || []
-        );
-
-        return data || [];
-      } catch (error) {
-        console.error(
-          "❌ Exception getQuizQuestions :",
+          "⚠️ Erreur réseau quizzes → Dexie",
           error
         );
 
-        markSupabaseOffline(error);
 
-        return [];
+        quizzes =
+          await getCachedQuizzes(
+            lessonId
+          );
+
       }
-    }
-  );
-}
 
+    } else {
 
-// =====================================================
-// BACKGROUND REFRESH QUIZ QUESTIONS
-// =====================================================
+      quizzes =
+        await getCachedQuizzes(
+          lessonId
+        );
 
-async function refreshQuizQuestionsInBackground(quizId) {
-  if (!isSupabaseAvailable()) {
-    return;
-  }
-
-  try {
-    const {
-      data,
-      error
-    } = await supabase
-      .from("quiz_questions")
-      .select("*")
-      .eq(
-        "quiz_id",
-        quizId
-      )
-      .order(
-        "order_number",
-        {
-          ascending: true
-        }
-      );
-
-    if (error) {
-      markSupabaseOffline(error);
-      return;
     }
 
-    if (data) {
-      await cacheQuizQuestions(data);
-    }
+
+    return quizzes || [];
+
   } catch (error) {
-    markSupabaseOffline(error);
+
+    console.error(
+      "❌ getQuizzes:",
+      error
+    );
+
+
+    return await getCachedQuizzes(
+      lessonId
+    );
+
   }
+
 }
 
 
-// =====================================================
-// COMPLETE QUIZ
-// =====================================================
+// ======================================================
+// QUIZ BY LESSON
+// ======================================================
 
-export async function getQuizByLesson(lessonId) {
+export async function getQuizByLesson(
+  lessonId
+) {
+
   if (!lessonId) {
+
     return null;
+
   }
 
-  return await runOnce(
-    `quizByLesson:${lessonId}`,
-    async () => {
-
-      // -------------------------------------------------
-      // CACHE FIRST
-      // -------------------------------------------------
-
-      let cachedQuiz = null;
-
-      try {
-        cachedQuiz =
-          await getQuizByLessonOffline(
-            lessonId
-          );
-      } catch (error) {
-        console.warn(
-          "⚠️ Erreur lecture quiz complet depuis Dexie :",
-          error
-        );
-      }
-
-
-      // -------------------------------------------------
-      // CACHE DISPONIBLE
-      // -------------------------------------------------
-
-      if (cachedQuiz) {
-        if (isSupabaseAvailable()) {
-          refreshQuizByLessonInBackground(
-            lessonId
-          );
-        }
-
-        return cachedQuiz;
-      }
-
-
-      // -------------------------------------------------
-      // OFFLINE SANS CACHE
-      // -------------------------------------------------
-
-      if (!isSupabaseAvailable()) {
-        return null;
-      }
-
-
-      // -------------------------------------------------
-      // SUPABASE
-      // -------------------------------------------------
-
-      try {
-        const {
-          data: quizzes,
-          error
-        } = await supabase
-          .from("quizzes")
-          .select("*")
-          .eq(
-            "lesson_id",
-            lessonId
-          )
-          .limit(1);
-
-        if (error) {
-          console.error(
-            "❌ Erreur getQuizByLesson :",
-            error
-          );
-
-          markSupabaseOffline(error);
-
-          return null;
-        }
-
-        if (
-          !quizzes ||
-          quizzes.length === 0
-        ) {
-          return null;
-        }
-
-        const quiz = quizzes[0];
-
-
-        // -------------------------------------------------
-        // QUESTIONS
-        // -------------------------------------------------
-
-        const {
-          data: questions,
-          error: questionsError
-        } = await supabase
-          .from("quiz_questions")
-          .select("*")
-          .eq(
-            "quiz_id",
-            quiz.id
-          )
-          .order(
-            "order_number",
-            {
-              ascending: true
-            }
-          );
-
-        if (questionsError) {
-          console.error(
-            "❌ Erreur questions quiz :",
-            questionsError
-          );
-
-          markSupabaseOffline(
-            questionsError
-          );
-
-          return null;
-        }
-
-
-        // -------------------------------------------------
-        // CACHE
-        // -------------------------------------------------
-
-        await cacheQuizzes([
-          quiz
-        ]);
-
-        await cacheQuizQuestions(
-          questions || []
-        );
-
-
-        // -------------------------------------------------
-        // RESULTAT
-        // -------------------------------------------------
-
-        return {
-          ...quiz,
-
-          quiz_questions:
-            questions || []
-        };
-
-      } catch (error) {
-        console.error(
-          "❌ Exception getQuizByLesson :",
-          error
-        );
-
-        markSupabaseOffline(
-          error
-        );
-
-        return null;
-      }
-    }
-  );
-}
-
-
-// =====================================================
-// QUIZ OFFLINE
-// =====================================================
-
-async function getQuizByLessonOffline(lessonId) {
-  let quizzes = [];
 
   try {
-    quizzes =
+
+    const cached =
       await getCachedQuizzes(
         lessonId
       );
-  } catch (error) {
-    console.warn(
-      "⚠️ Impossible de lire les quizzes Dexie :",
-      error
-    );
 
-    return null;
-  }
-
-
-  if (
-    !quizzes ||
-    quizzes.length === 0
-  ) {
-    return null;
-  }
-
-
-  const quiz = quizzes[0];
-
-
-  let questions = [];
-
-  try {
-    questions =
-      await getCachedQuizQuestions(
-        quiz.id
-      );
-  } catch (error) {
-    console.warn(
-      "⚠️ Impossible de lire les questions du quiz depuis Dexie :",
-      error
-    );
-
-    questions = [];
-  }
-
-
-  return {
-    ...quiz,
-
-    quiz_questions:
-      questions || []
-  };
-}
-
-
-// =====================================================
-// BACKGROUND REFRESH COMPLETE QUIZ
-// =====================================================
-
-async function refreshQuizByLessonInBackground(lessonId) {
-  if (!isSupabaseAvailable()) {
-    return;
-  }
-
-  try {
-    const {
-      data: quizzes,
-      error
-    } = await supabase
-      .from("quizzes")
-      .select("*")
-      .eq(
-        "lesson_id",
-        lessonId
-      )
-      .limit(1);
-
-    if (error) {
-      markSupabaseOffline(error);
-      return;
-    }
 
     if (
-      !quizzes ||
-      quizzes.length === 0
+      Array.isArray(cached) &&
+      cached.length > 0
     ) {
-      return;
-    }
-
-    const quiz = quizzes[0];
-
-
-    const {
-      data: questions,
-      error: questionsError
-    } = await supabase
-      .from("quiz_questions")
-      .select("*")
-      .eq(
-        "quiz_id",
-        quiz.id
-      )
-      .order(
-        "order_number",
-        {
-          ascending: true
-        }
-      );
-
-    if (questionsError) {
-      markSupabaseOffline(
-        questionsError
-      );
-
-      return;
-    }
-
-
-    await cacheQuizzes([
-      quiz
-    ]);
-
-    await cacheQuizQuestions(
-      questions || []
-    );
-
-  } catch (error) {
-    markSupabaseOffline(
-      error
-    );
-  }
-}
-
-
-// =====================================================
-// DEBUG
-// =====================================================
-
-export async function debugEducationCache() {
-  console.log(
-    "===================================="
-  );
-
-  console.log(
-    "📦 KALAN ACADEMY EDUCATION CACHE"
-  );
-
-  console.log(
-    "===================================="
-  );
-
-  try {
-    const classes =
-      await getCachedClasses();
-
-    console.log(
-      "📚 CLASSES :",
-      classes
-    );
-
-
-    for (
-      const classItem of classes
-    ) {
-      const subjects =
-        await getCachedSubjects(
-          classItem.id
-        );
 
       console.log(
-        `📘 SUBJECTS ${classItem.name} :`,
-        subjects
+        "📦 QUIZ → DEXIE"
       );
 
 
-      for (
-        const subject of subjects
-      ) {
-        const chapters =
-          await getCachedChapters(
-            subject.id
-          );
+      return cached[0] || null;
 
-        console.log(
-          `📖 CHAPTERS ${subject.name} :`,
-          chapters
-        );
+    }
+
+
+    if (
+      !(await isOnline())
+    ) {
+
+      return null;
+
+    }
+
+
+    try {
+
+      const {
+        data,
+        error
+      } = await supabase
+        .from("quizzes")
+        .select("*")
+        .eq(
+          "lesson_id",
+          lessonId
+        )
+        .maybeSingle();
+
+
+      if (error) {
+
+        throw error;
+
       }
+
+
+      if (!data) {
+
+        return null;
+
+      }
+
+
+      await cacheQuizzes([
+        data
+      ]);
+
+
+      return data;
+
+    } catch (error) {
+
+      console.warn(
+        "⚠️ Quiz réseau indisponible",
+        error
+      );
+
+
+      return null;
+
     }
 
   } catch (error) {
+
     console.error(
-      "❌ Erreur debugEducationCache :",
+      "❌ getQuizByLesson:",
       error
     );
+
+
+    return null;
+
   }
+
 }
 
 
-// =====================================================
-// GLOBAL DEBUG
-// =====================================================
+// ======================================================
+// QUIZ QUESTIONS
+// ======================================================
+
+export async function getQuizQuestions(
+  quizId
+) {
+
+  if (!quizId) {
+
+    return [];
+
+  }
+
+
+  try {
+
+    const cached =
+      await getCachedQuizQuestions(
+        quizId
+      );
+
+
+    if (
+      Array.isArray(cached) &&
+      cached.length > 0
+    ) {
+
+      console.log(
+        "📦 QUIZ QUESTIONS → DEXIE",
+        cached.length
+      );
+
+
+      return cached;
+
+    }
+
+
+    if (
+      !(await isOnline())
+    ) {
+
+      return [];
+
+    }
+
+
+    try {
+
+      const {
+        data,
+        error
+      } = await supabase
+        .from("quiz_questions")
+        .select("*")
+        .eq(
+          "quiz_id",
+          quizId
+        )
+        .order(
+          "order_number",
+          {
+            ascending: true
+          }
+        );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      const questions =
+        data || [];
+
+
+      await cacheQuizQuestions(
+        questions
+      );
+
+
+      questions.sort(
+        sortByOrder
+      );
+
+
+      return questions;
+
+    } catch (error) {
+
+      console.warn(
+        "⚠️ Quiz questions réseau indisponibles",
+        error
+      );
+
+
+      return [];
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "❌ getQuizQuestions:",
+      error
+    );
+
+
+    return [];
+
+  }
+
+}
+
+
+// ======================================================
+// BADGES
+// ======================================================
+
+export async function getBadges() {
+
+  try {
+
+    if (
+      await isOnline()
+    ) {
+
+      try {
+
+        const {
+          data,
+          error
+        } = await supabase
+          .from("badges")
+          .select("*");
+
+
+        if (error) {
+
+          throw error;
+
+        }
+
+
+        const badges =
+          data || [];
+
+
+        await cacheBadges(
+          badges
+        );
+
+
+        return badges;
+
+      } catch (error) {
+
+        console.warn(
+          "⚠️ Erreur réseau badges → Dexie",
+          error
+        );
+
+      }
+
+    }
+
+
+    return await getCachedBadges();
+
+  } catch (error) {
+
+    console.error(
+      "❌ getBadges:",
+      error
+    );
+
+
+    return await getCachedBadges();
+
+  }
+
+}
+
+
+// ======================================================
+// DEBUG NETWORK
+// ======================================================
+
+export async function checkNetwork() {
+
+  const result =
+    await checkSupabaseConnection();
+
+
+  console.log(
+    "🌐 SUPABASE ACCESSIBLE :",
+    result
+  );
+
+
+  return result;
+
+}
+
+
+// ======================================================
+// EXPORTS DEBUG
+// ======================================================
 
 if (
   typeof window !== "undefined"
 ) {
 
-  window.debugEducationCache =
-    debugEducationCache;
+  window.kalanEducation = {
 
+    getClasses,
 
-  window.getEducationNetworkStatus =
-    function () {
-      return {
-        navigatorOnline:
-          typeof navigator !== "undefined"
-            ? navigator.onLine
-            : false,
+    getSubjects,
 
-        supabaseAvailable,
+    getChapters,
 
-        pendingRequests:
-          Array.from(
-            pendingRequests.keys()
-          )
-      };
-    };
+    getChapter,
+
+    getLessons,
+
+    getLesson,
+
+    getLessonBlocks,
+
+    getExercises,
+
+    getQuizzes,
+
+    getQuizByLesson,
+
+    getQuizQuestions,
+
+    getBadges,
+
+    checkNetwork
+
+  };
+
 }

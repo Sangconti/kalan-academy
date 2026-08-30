@@ -3,6 +3,8 @@ useEffect,
 useState
 } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import { supabase } from "../../lib/supabase";
 
 import UserTable from "../../components/admin/UserTable";
@@ -21,6 +23,18 @@ import {
 
 
 export default function UsersAdmin(){
+
+    const navigate = useNavigate();
+
+    function viewStudent(studentId) {
+        console.log(
+            "👁️ [ADMIN] Consultation élève :",
+            studentId
+            );
+        navigate( `/admin/student/${studentId}`
+            );
+
+        }
 
     async function deleteUser(id) {
 
@@ -292,6 +306,7 @@ setRole={setRole}
   onAccessStatusChange={changeAccessStatus}
   onDelete={deleteUser}
   onDeviceReset={resetUserDevice}
+  onViewStudent={viewStudent}
 />
 
 

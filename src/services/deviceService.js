@@ -699,3 +699,191 @@ export async function generateUserDeviceRecoveryCode(
     };
   }
 }
+
+// ==========================================
+// RÉINITIALISER L'APPAREIL D'UN UTILISATEUR
+// — ADMIN
+// ==========================================
+//
+// Cette fonction permet à un admin de libérer
+// l'appareil actuellement associé au compte.
+//
+// La sécurité est assurée côté Supabase par
+// la RPC reset_user_device(p_user_id).
+//
+// Après réinitialisation, l'élève pourra
+// associer un nouveau téléphone.
+// ==========================================
+
+export async function resetUserDevice(userId) {
+  try {
+
+    console.log(
+      "🔄 [ADMIN DEVICE] Début réinitialisation..."
+    );
+
+    // ----------------------------------------
+    // Vérifier l'ID utilisateur
+    // ----------------------------------------
+
+    if (!userId) {
+
+      console.warn(
+        "⚠️ [ADMIN DEVICE] Aucun userId fourni"
+      );
+
+      return {
+        success: false,
+        status: "invalid_user"
+      };
+    }
+
+    console.log(
+      "👤 [ADMIN DEVICE] Utilisateur cible =",
+      userId
+    );
+
+
+    // ----------------------------------------
+    // Vérifier la session admin
+    // ----------------------------------------
+
+    const {
+      data: sessionData,
+      error: sessionError
+    } = await supabase.auth.getSession();
+
+    console.log(
+      "🔐 [ADMIN DEVICE] Session =",
+      sessionData?.session
+    );
+
+    if (sessionError) {
+
+      console.error(
+        "❌ [ADMIN DEVICE] Erreur session =",
+        sessionError
+      );
+
+      return {
+        success: false,
+        status: "session_error",
+        error: sessionError
+      };
+    }
+
+    if (!sessionData?.session?.user) {
+
+      console.warn(
+        "🚫 [ADMIN DEVICE] Aucun administrateur connecté"
+      );
+
+      return {
+        success: false,
+        status: "not_authenticated"
+      };
+    }
+
+
+    // ----------------------------------------
+    // Vérifier l'utilisateur connecté
+    // ----------------------------------------
+
+    const {
+      data: {
+        user: currentUser
+      },
+      error: userError
+    } = await supabase.auth.getUser();
+
+    console.log(
+      "👑 [ADMIN DEVICE] Administrateur connecté =",
+      currentUser?.id
+    );
+
+    if (userError) {
+
+      console.error(
+        "❌ [ADMIN DEVICE] Erreur utilisateur =",
+        userError
+      );
+
+      return {
+        success: false,
+        status: "user_error",
+        error: userError
+      };
+    }
+
+    if (!currentUser) {
+
+      return {
+        success: false,
+        status: "not_authenticated"
+      };
+    }
+
+
+    // ----------------------------------------
+    // APPEL RPC
+    // ----------------------------------------
+
+    console.log(
+      "🔐 [ADMIN DEVICE] Appel reset_user_device..."
+    );
+
+    const {
+      data,
+      error
+    } = await supabase.rpc(
+      "reset_user_device",
+      {
+        p_user_id: userId
+      }
+    );
+
+
+    // ----------------------------------------
+    // ERREUR SUPABASE
+    // ----------------------------------------
+
+    if (error) {
+
+      console.error(
+        "❌ [ADMIN DEVICE] Erreur RPC =",
+        error
+      );
+
+      return {
+        success: false,
+        status: "server_error",
+        error
+      };
+    }
+
+
+    // ----------------------------------------
+    // RÉSULTAT
+    // ----------------------------------------
+
+    console.log(
+      "📱 [ADMIN DEVICE] Résultat réinitialisation =",
+      data
+    );
+
+    return data;
+
+  } catch (error) {
+
+    console.error(
+      "💥 [ADMIN DEVICE] Exception =",
+      error
+    );
+
+    return {
+      success: false,
+      status: "server_error",
+      error
+    };
+  }
+}

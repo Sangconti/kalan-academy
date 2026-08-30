@@ -115,7 +115,6 @@ export default function AdminLayout({ children }) {
       <div
         className={`
           min-h-screen
-          w-full
 
           transition-[margin]
           duration-300
@@ -209,9 +208,9 @@ export default function AdminLayout({ children }) {
             overflow-x-hidden
           "
         >
-
-          {children}
-
+          <div className="w-full max-w-7xl mx-auto">
+            {children}
+          </div>
         </main>
 
       </div>

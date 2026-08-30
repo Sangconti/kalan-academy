@@ -542,3 +542,306 @@ export async function deleteClass(
   return true;
 
 }
+
+// ==========================
+// VUE ADMIN D'UN ÉLÈVE
+// ==========================
+
+export async function getAdminStudentView(studentId) {
+
+  if (!studentId) {
+    throw new Error(
+      "Identifiant élève manquant."
+    );
+  }
+
+  const [
+    profileResult,
+    progressResult,
+    attemptsResult,
+    badgesResult
+  ] = await Promise.all([
+
+    // -----------------------------------------
+    // PROFIL
+    // -----------------------------------------
+
+    supabase
+      .from("profiles")
+      .select(`
+        id,
+        full_name,
+        avatar_url,
+        role,
+        access_status,
+        class_id,
+        is_premium,
+        xp,
+        level,
+        created_at
+      `)
+      .eq("id", studentId)
+      .single(),
+
+    // -----------------------------------------
+    // PROGRESSION
+    // -----------------------------------------
+
+    supabase
+      .from("user_progress")
+      .select(`
+        completed,
+        lessons(
+          id,
+          title,
+          chapters(
+            id,
+            title,
+            subjects(
+              id,
+              name
+            )
+          )
+        )
+      `)
+      .eq("user_id", studentId),
+
+    // -----------------------------------------
+    // QUIZ
+    // -----------------------------------------
+
+    supabase
+      .from("quiz_attempts")
+      .select(`
+        score
+      `)
+      .eq("user_id", studentId),
+
+    // -----------------------------------------
+    // BADGES
+    // -----------------------------------------
+
+    supabase
+      .from("user_badges")
+      .select(`
+        id,
+        badge_id,
+        earned_at,
+        badges(
+          id,
+          name,
+          description,
+          image_url,
+          xp_reward
+        )
+      `)
+      .eq("user_id", studentId)
+
+  ]);
+
+  // -----------------------------------------
+  // VÉRIFICATION PROFIL
+  // -----------------------------------------
+
+  if (profileResult.error) {
+
+    console.error(
+      "❌ [ADMIN STUDENT] Erreur profil :",
+      profileResult.error
+    );
+
+    throw profileResult.error;
+
+  }
+
+  if (!profileResult.data) {
+
+    throw new Error(
+      "Élève introuvable."
+    );
+
+  }
+
+  // -----------------------------------------
+  // PROGRESSION
+  // -----------------------------------------
+
+  if (progressResult.error) {
+
+    console.error(
+      "❌ [ADMIN STUDENT] Erreur progression :",
+      progressResult.error
+    );
+
+  }
+
+  const progressData =
+    progressResult.data || [];
+
+  // -----------------------------------------
+  // LEÇONS TERMINÉES
+  // -----------------------------------------
+
+  const completedLessons =
+    progressData.reduce(
+      (total, item) =>
+        total +
+        (
+          item?.completed === true
+            ? 1
+            : 0
+        ),
+      0
+    );
+
+  // -----------------------------------------
+  // PROGRESSION PAR MATIÈRE
+  // -----------------------------------------
+
+  const subjectsProgress = {};
+
+  for (const item of progressData) {
+
+    const subject =
+      item?.lessons?.chapters?.subjects;
+
+    if (!subject?.name) {
+      continue;
+    }
+
+    const subjectName =
+      subject.name;
+
+    if (!subjectsProgress[subjectName]) {
+
+      subjectsProgress[subjectName] = {
+        total: 0,
+        completed: 0,
+        percent: 0
+      };
+
+    }
+
+    subjectsProgress[
+      subjectName
+    ].total += 1;
+
+    if (item.completed === true) {
+
+      subjectsProgress[
+        subjectName
+      ].completed += 1;
+
+    }
+
+  }
+
+  // -----------------------------------------
+  // POURCENTAGES
+  // -----------------------------------------
+
+  Object.values(
+    subjectsProgress
+  ).forEach(subject => {
+
+    if (subject.total > 0) {
+
+      subject.percent =
+        Math.round(
+          (
+            subject.completed /
+            subject.total
+          ) * 100
+        );
+
+    }
+
+  });
+
+  // -----------------------------------------
+  // QUIZ
+  // -----------------------------------------
+
+  if (attemptsResult.error) {
+
+    console.error(
+      "❌ [ADMIN STUDENT] Erreur quiz :",
+      attemptsResult.error
+    );
+
+  }
+
+  const attemptsData =
+    attemptsResult.data || [];
+
+  let averageScore = 0;
+
+  if (attemptsData.length > 0) {
+
+    const totalScore =
+      attemptsData.reduce(
+        (total, attempt) =>
+          total +
+          Number(
+            attempt?.score || 0
+          ),
+        0
+      );
+
+    averageScore =
+      Math.round(
+        totalScore /
+        attemptsData.length
+      );
+
+  }
+
+  // -----------------------------------------
+  // BADGES
+  // -----------------------------------------
+
+  if (badgesResult.error) {
+
+    console.error(
+      "❌ [ADMIN STUDENT] Erreur badges :",
+      badgesResult.error
+    );
+
+  }
+
+  const badges =
+    badgesResult.data || [];
+
+  // -----------------------------------------
+  // RÉSULTAT FINAL
+  // -----------------------------------------
+
+  return {
+
+    profile:
+      profileResult.data,
+
+    subjects:
+      subjectsProgress,
+
+    stats: {
+
+      lessons:
+        completedLessons,
+
+      score:
+        averageScore,
+
+      badges:
+        badges.length,
+
+      attempts:
+        attemptsData.length
+
+    },
+
+    badges
+
+  };
+
+}

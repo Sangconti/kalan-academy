@@ -58,6 +58,7 @@ import AdminQuiz from "./pages/admin/AdminQuiz";
 import AdminVideos from "./pages/admin/AdminVideos";
 import AdminStats from "./pages/admin/AdminStats";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminStudentPage from "./pages/admin/AdminStudentPage";
 
 // =====================================================
 // APP
@@ -203,6 +204,22 @@ function App() {
           </ProtectedAdminRoute>
         }
       />
+
+      {/* =================================================
+          ADMIN — CONSULTATION D'UN ÉLÈVE
+      ================================================= */}
+
+      <Route
+        path="/admin/student/:studentId"
+        element={
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminStudentPage />
+            </AdminLayout>
+          </ProtectedAdminRoute>
+        }
+      />
+
 
       {/* =================================================
           ADMIN — CLASSES

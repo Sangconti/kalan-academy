@@ -7,7 +7,8 @@ export default function UserTable({
   onRoleChange,
   onAccessStatusChange,
   onDelete,
-  onDeviceReset
+  onDeviceReset,
+  onViewStudent
 }) {
 
   // ==========================================
@@ -502,6 +503,24 @@ export default function UserTable({
                       gap-2
                     "
                   >
+
+                  {/* VOIR LA PAGE DE L'ÉLÈVE */} <button type="button" onClick={() => onViewStudent(user.id) }
+                      className="
+                      min-w-[120px]
+                      px-3
+                      py-2
+                      rounded-lg
+                      bg-purple-100
+                      text-purple-700
+                      hover:bg-purple-200
+                      transition
+                      font-medium
+                      text-sm
+                      whitespace-nowrap "
+
+                       >
+                       👁️ Voir la page
+                       </button>
 
                     {/* RÉINITIALISER APPAREIL */}
 

@@ -59,7 +59,7 @@ export default function LoginPage() {
   const [success, setSuccess] = useState("");
 
   // ==========================================
-  // REDIRECTION APRÈS CONNEXION
+  // REDIRECTION APRÈS AUTORISATION APPAREIL
   // ==========================================
 
   async function continueAfterDeviceAuthorization() {
@@ -339,20 +339,20 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-      // ========================================
-      // IGNORER LE SUBMIT ÉVENTUELLEMENT DÉCLENCHÉ
-      // APRÈS "RETOUR À LA CONNEXION"
-      // ========================================
+    // ========================================
+    // IGNORER LE SUBMIT ÉVENTUELLEMENT DÉCLENCHÉ
+    // APRÈS "RETOUR À LA CONNEXION"
+    // ========================================
 
-      if (skipNextSubmitRef.current) {
-        console.log(
-          "🛑 [LOGIN PAGE] Submit ignoré après annulation récupération"
-        );
+    if (skipNextSubmitRef.current) {
+      console.log(
+        "🛑 [LOGIN PAGE] Submit ignoré après annulation récupération"
+      );
 
-        skipNextSubmitRef.current = false;
+      skipNextSubmitRef.current = false;
 
-        return;
-      }
+      return;
+    }
 
     console.log(
       "🔐 [LOGIN PAGE] Soumission du formulaire"
@@ -464,7 +464,62 @@ export default function LoginPage() {
       );
 
       // ========================================
-      // 🔐 PROTECTION APPAREIL
+      // 👑 VÉRIFICATION ADMIN IMMÉDIATE
+      // ========================================
+      //
+      // IMPORTANT :
+      //
+      // Les comptes admin et super_admin ne
+      // doivent pas être bloqués par la protection
+      // d'appareil des élèves.
+      //
+      // On vérifie donc le rôle immédiatement
+      // après la connexion Supabase.
+      //
+      // Si l'utilisateur est admin ou super_admin,
+      // il est envoyé directement vers /admin.
+      //
+      // ========================================
+
+      console.log(
+        "👑 [LOGIN PAGE] Vérification du rôle administrateur..."
+      );
+
+      const admin =
+        await getCurrentAdmin();
+
+      console.log(
+        "👑 [LOGIN PAGE] Résultat getCurrentAdmin =",
+        admin
+      );
+
+      if (admin) {
+        console.log(
+          "✅ [LOGIN PAGE] Administrateur autorisé"
+        );
+
+        console.log(
+          "🎭 [LOGIN PAGE] role =",
+          admin.profile?.role
+        );
+
+        console.log(
+          "➡️ [LOGIN PAGE] Redirection directe vers /admin"
+        );
+
+        navigate("/admin", {
+          replace: true
+        });
+
+        return;
+      }
+
+      console.log(
+        "👨‍🎓 [LOGIN PAGE] Aucun rôle administrateur détecté"
+      );
+
+      // ========================================
+      // 🔐 PROTECTION APPAREIL — ÉLÈVES
       // ========================================
 
       console.log(
@@ -551,13 +606,13 @@ export default function LoginPage() {
         deviceResult
       );
 
-     throw new Error(
-       deviceResult?.error?.message ||
-       deviceResult?.message ||
-       `Impossible de vérifier cet appareil. Statut reçu : ${
-         deviceResult?.status || "inconnu"
-       }`
-     );
+      throw new Error(
+        deviceResult?.error?.message ||
+        deviceResult?.message ||
+        `Impossible de vérifier cet appareil. Statut reçu : ${
+          deviceResult?.status || "inconnu"
+        }`
+      );
 
     } catch (err) {
       console.error(
@@ -578,10 +633,6 @@ export default function LoginPage() {
       );
     }
   };
-
-  // ==========================================
-  // ANNULER RÉCUPÉRATION
-  // ==========================================
 
   // ==========================================
   // ANNULER RÉCUPÉRATION
@@ -675,106 +726,105 @@ export default function LoginPage() {
     }
   }
 
+  // ==========================================
+  // TEST — GÉNÉRER CODE DE RÉCUPÉRATION
+  // ==========================================
 
-// ==========================================
-// TEST — GÉNÉRER CODE DE RÉCUPÉRATION
-// ==========================================
-
-async function handleGenerateRecoveryCodeTest() {
-  console.log(
-    "🔐 [TEST RECOVERY] Demande de génération du code..."
-  );
-
-  setLoading(true);
-  setError("");
-  setSuccess("");
-
-  try {
-    const {
-      data: sessionData,
-      error: sessionError
-    } = await supabase.auth.getSession();
-
+  async function handleGenerateRecoveryCodeTest() {
     console.log(
-      "🔐 [TEST RECOVERY] Session =",
-      sessionData?.session
+      "🔐 [TEST RECOVERY] Demande de génération du code..."
     );
 
-    if (sessionError) {
-      throw sessionError;
-    }
+    setLoading(true);
+    setError("");
+    setSuccess("");
 
-    if (!sessionData?.session?.user) {
-      setError(
-        "Aucun utilisateur connecté. Connecte-toi d'abord."
-      );
+    try {
+      const {
+        data: sessionData,
+        error: sessionError
+      } = await supabase.auth.getSession();
 
-      return;
-    }
-
-    console.log(
-      "👤 [TEST RECOVERY] User ID =",
-      sessionData.session.user.id
-    );
-
-    const result =
-      await generateDeviceRecoveryCode();
-
-    console.log(
-      "📱 [TEST RECOVERY] Résultat =",
-      result
-    );
-
-    if (!result?.success) {
-      setError(
-        result?.message ||
-        `Impossible de générer le code. Statut : ${
-          result?.status || "inconnu"
-        }`
-      );
-
-      return;
-    }
-
-    if (
-      result?.status ===
-      "code_generated"
-    ) {
       console.log(
-        "✅ [TEST RECOVERY] CODE GÉNÉRÉ =",
-        result.code
+        "🔐 [TEST RECOVERY] Session =",
+        sessionData?.session
       );
 
-      setSuccess(
-        `🔐 Code de récupération : ${result.code}`
+      if (sessionError) {
+        throw sessionError;
+      }
+
+      if (!sessionData?.session?.user) {
+        setError(
+          "Aucun utilisateur connecté. Connecte-toi d'abord."
+        );
+
+        return;
+      }
+
+      console.log(
+        "👤 [TEST RECOVERY] User ID =",
+        sessionData.session.user.id
       );
 
-      return;
+      const result =
+        await generateDeviceRecoveryCode();
+
+      console.log(
+        "📱 [TEST RECOVERY] Résultat =",
+        result
+      );
+
+      if (!result?.success) {
+        setError(
+          result?.message ||
+          `Impossible de générer le code. Statut : ${
+            result?.status || "inconnu"
+          }`
+        );
+
+        return;
+      }
+
+      if (
+        result?.status ===
+        "code_generated"
+      ) {
+        console.log(
+          "✅ [TEST RECOVERY] CODE GÉNÉRÉ =",
+          result.code
+        );
+
+        setSuccess(
+          `🔐 Code de récupération : ${result.code}`
+        );
+
+        return;
+      }
+
+      setError(
+        "Réponse inattendue du serveur."
+      );
+
+    } catch (error) {
+      console.error(
+        "💥 [TEST RECOVERY] Exception =",
+        error
+      );
+
+      setError(
+        error?.message ||
+        "Impossible de générer le code de récupération."
+      );
+
+    } finally {
+      setLoading(false);
+
+      console.log(
+        "🏁 [TEST RECOVERY] Génération terminée"
+      );
     }
-
-    setError(
-      "Réponse inattendue du serveur."
-    );
-
-  } catch (error) {
-    console.error(
-      "💥 [TEST RECOVERY] Exception =",
-      error
-    );
-
-    setError(
-      error?.message ||
-      "Impossible de générer le code de récupération."
-    );
-
-  } finally {
-    setLoading(false);
-
-    console.log(
-      "🏁 [TEST RECOVERY] Génération terminée"
-    );
   }
-}
 
   // ==========================================
   // CHANGER MODE
@@ -890,7 +940,6 @@ async function handleGenerateRecoveryCodeTest() {
 
           <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 sm:p-8">
 
-
             {/* =================================
                 MODE CONNEXION / INSCRIPTION
             ================================= */}
@@ -915,7 +964,6 @@ async function handleGenerateRecoveryCodeTest() {
                   Se connecter
                 </button>
 
-
                 <button
                   type="button"
                   onClick={() => {
@@ -936,7 +984,6 @@ async function handleGenerateRecoveryCodeTest() {
 
             )}
 
-
             {/* =================================
                 ERREUR
             ================================= */}
@@ -944,13 +991,10 @@ async function handleGenerateRecoveryCodeTest() {
             {error && (
 
               <div className="mb-5 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600">
-
                 {error}
-
               </div>
 
             )}
-
 
             {/* =================================
                 SUCCÈS
@@ -959,13 +1003,10 @@ async function handleGenerateRecoveryCodeTest() {
             {success && (
 
               <div className="mb-5 rounded-xl border border-green-100 bg-green-50 px-4 py-3 text-sm text-green-700">
-
                 {success}
-
               </div>
 
             )}
-
 
             {/* =================================
                 RÉCUPÉRATION APPAREIL
@@ -1007,15 +1048,12 @@ async function handleGenerateRecoveryCodeTest() {
 
                 </div>
 
-
                 {/* CODE */}
 
                 <div>
 
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-
                     Code de récupération
-
                   </label>
 
                   <div className="relative">
@@ -1045,14 +1083,11 @@ async function handleGenerateRecoveryCodeTest() {
                   </div>
 
                   <p className="text-xs text-gray-400 mt-2">
-
                     Entre le code que tu avais enregistré
                     avant de perdre ton ancien téléphone.
-
                   </p>
 
                 </div>
-
 
                 {/* BOUTON RÉCUPÉRATION */}
 
@@ -1074,7 +1109,6 @@ async function handleGenerateRecoveryCodeTest() {
                       />
 
                       Récupération...
-
                     </>
 
                   ) : (
@@ -1083,13 +1117,11 @@ async function handleGenerateRecoveryCodeTest() {
                       <Smartphone size={19} />
 
                       Récupérer mon compte
-
                     </>
 
                   )}
 
                 </button>
-
 
                 {/* ANNULER */}
 
@@ -1131,9 +1163,7 @@ async function handleGenerateRecoveryCodeTest() {
                   <div>
 
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-
                       Nom complet
-
                     </label>
 
                     <input
@@ -1155,15 +1185,12 @@ async function handleGenerateRecoveryCodeTest() {
 
                 )}
 
-
                 {/* EMAIL */}
 
                 <div>
 
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-
                     Adresse e-mail
-
                   </label>
 
                   <div className="relative">
@@ -1192,15 +1219,12 @@ async function handleGenerateRecoveryCodeTest() {
 
                 </div>
 
-
                 {/* MOT DE PASSE */}
 
                 <div>
 
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-
                     Mot de passe
-
                   </label>
 
                   <div className="relative">
@@ -1235,16 +1259,13 @@ async function handleGenerateRecoveryCodeTest() {
                   {isSignUp && (
 
                     <p className="text-xs text-gray-400 mt-2">
-
                       Le mot de passe doit contenir
                       au moins 6 caractères.
-
                     </p>
 
                   )}
 
                 </div>
-
 
                 {/* BOUTON */}
 
@@ -1263,7 +1284,6 @@ async function handleGenerateRecoveryCodeTest() {
                       />
 
                       Chargement...
-
                     </>
 
                   ) : isSignUp ? (
@@ -1272,7 +1292,6 @@ async function handleGenerateRecoveryCodeTest() {
                       <UserPlus size={19} />
 
                       Créer mon compte
-
                     </>
 
                   ) : (
@@ -1281,7 +1300,6 @@ async function handleGenerateRecoveryCodeTest() {
                       <LogIn size={19} />
 
                       Se connecter
-
                     </>
 
                   )}
@@ -1291,7 +1309,6 @@ async function handleGenerateRecoveryCodeTest() {
               </form>
 
             )}
-
 
             {/* =================================
                 TEST TEMPORAIRE RÉCUPÉRATION
@@ -1354,16 +1371,13 @@ async function handleGenerateRecoveryCodeTest() {
 
           </div>
 
-
           {/* ==================================
               FOOTER
           ================================== */}
 
           <p className="text-center text-xs text-gray-400 mt-6">
-
             Apprends partout, même hors ligne
             avec Kalan Academy.
-
           </p>
 
         </div>

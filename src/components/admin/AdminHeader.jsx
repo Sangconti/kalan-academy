@@ -1,13 +1,29 @@
 import useAdmin from "../../hooks/useAdmin";
 import { supabase } from "../../lib/supabase";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminHeader() {
   const { admin } = useAdmin();
+  const navigate = useNavigate();
 
   async function logout() {
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
 
-    window.location.href = "/admin/login";
+    if (error) {
+      console.error(
+        "❌ [ADMIN LOGOUT] Erreur déconnexion =",
+        error
+      );
+      return;
+    }
+
+    console.log(
+      "✅ [ADMIN LOGOUT] Déconnexion réussie"
+    );
+
+    navigate("/login", {
+      replace: true
+    });
   }
 
   return (

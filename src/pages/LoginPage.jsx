@@ -1310,32 +1310,6 @@ export default function LoginPage() {
 
             )}
 
-            {/* =================================
-                TEST TEMPORAIRE RÉCUPÉRATION
-            ================================= */}
-
-            {!recoveryRequired && !isSignUp && (
-
-              <div className="mt-6 pt-5 border-t border-orange-100">
-
-                <p className="text-xs text-orange-600 text-center mb-3">
-                  🧪 Test temporaire — récupération appareil
-                </p>
-
-                <button
-                  type="button"
-                  onClick={handleGenerateRecoveryCodeTest}
-                  disabled={loading}
-                  className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-5 rounded-xl transition disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  <KeyRound size={18} />
-
-                  Générer mon code de récupération
-                </button>
-
-              </div>
-
-            )}
 
             {/* =================================
                 BAS DE CARTE

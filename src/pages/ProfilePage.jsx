@@ -6,7 +6,11 @@ import {
   useState
 } from "react";
 
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+  useLocation,
+  useParams
+} from "react-router-dom";
 
 import { supabase } from "../lib/supabase";
 
@@ -85,10 +89,33 @@ function writeLocalCache(key, value) {
 // COMPOSANT
 // =====================================================
 
-export default function ProfilePage() {
+export default function ProfilePage({
+  consultationMode = false
+}) {
 
   const navigate =
     useNavigate();
+
+  const location =
+    useLocation();
+
+  const {
+    studentId
+  } = useParams();
+
+
+  // ===================================================
+  // MODE CONSULTATION
+  // ===================================================
+
+  const isConsultation =
+    consultationMode ||
+    location.state?.consultationMode === true ||
+    (
+      Boolean(studentId) &&
+      location.pathname.includes("/admin/student/") &&
+      location.pathname.includes("/consultation")
+    );
 
 
   // ===================================================
@@ -125,6 +152,210 @@ export default function ProfilePage() {
 
       try {
 
+        // =================================================
+        // 👁️ MODE CONSULTATION
+        // =================================================
+
+        if (
+          isConsultation &&
+          studentId
+        ) {
+
+          console.log(
+            "👁️ [ADMIN] Chargement profil élève en consultation :",
+            studentId
+          );
+
+
+          // -----------------------------------------------
+          // CACHE ÉLÈVE CIBLÉ
+          // -----------------------------------------------
+
+          const cachedProfile =
+            readLocalCache(
+              getProfileCacheKey(studentId),
+              null
+            );
+
+          const cachedBadges =
+            readLocalCache(
+              getBadgesCacheKey(studentId),
+              []
+            );
+
+
+          /*
+            Affichage immédiat du cache
+            s'il existe.
+          */
+
+          if (cachedProfile) {
+
+            setProfile(
+              cachedProfile
+            );
+
+            setLoading(false);
+
+          }
+
+          if (
+            Array.isArray(cachedBadges)
+          ) {
+
+            setBadges(
+              cachedBadges
+            );
+
+          }
+
+
+          if (
+            !cachedProfile &&
+            !background
+          ) {
+
+            setLoading(true);
+
+          }
+
+
+          // -----------------------------------------------
+          // LECTURE SUPABASE
+          // -----------------------------------------------
+
+          const [
+            profileResult,
+            badgesResult
+          ] = await Promise.all([
+
+            supabase
+              .from("profiles")
+              .select(`
+                id,
+                full_name,
+                avatar_url,
+                role,
+                class_id,
+                orange_money_id,
+                is_premium
+              `)
+              .eq(
+                "id",
+                studentId
+              )
+              .single(),
+
+
+            supabase
+              .from("user_badges")
+              .select(`
+                id,
+                badge_id,
+                earned_at,
+                badges(
+                  id,
+                  name,
+                  description,
+                  image_url,
+                  xp_reward
+                )
+              `)
+              .eq(
+                "user_id",
+                studentId
+              )
+
+          ]);
+
+
+          // -----------------------------------------------
+          // PROFILE ÉLÈVE
+          // -----------------------------------------------
+
+          const {
+            data: profileData,
+            error: profileError
+          } = profileResult;
+
+
+          if (profileError) {
+
+            console.error(
+              "❌ PROFILE CONSULTATION ERROR :",
+              profileError
+            );
+
+          }
+          else if (profileData) {
+
+            setProfile(
+              profileData
+            );
+
+            writeLocalCache(
+              getProfileCacheKey(studentId),
+              profileData
+            );
+
+          }
+
+
+          // -----------------------------------------------
+          // BADGES ÉLÈVE
+          // -----------------------------------------------
+
+          const {
+            data: badgeData,
+            error: badgeError
+          } = badgesResult;
+
+
+          if (badgeError) {
+
+            console.error(
+              "❌ BADGES CONSULTATION ERROR :",
+              badgeError
+            );
+
+            /*
+              Si le réseau échoue mais que
+              le cache existe, on conserve
+              les badges locaux.
+            */
+
+            if (!cachedBadges) {
+
+              setBadges([]);
+
+            }
+
+          }
+          else {
+
+            const safeBadges =
+              badgeData || [];
+
+            setBadges(
+              safeBadges
+            );
+
+            writeLocalCache(
+              getBadgesCacheKey(studentId),
+              safeBadges
+            );
+
+          }
+
+
+          return;
+        }
+
+
+        // =================================================
+        // MODE NORMAL
+        // =================================================
+
         // -----------------------------------------------
         // SESSION
         // -----------------------------------------------
@@ -143,9 +374,11 @@ export default function ProfilePage() {
           );
 
           if (!background) {
+
             setProfile(null);
             setBadges([]);
             setLoading(false);
+
           }
 
           return;
@@ -176,9 +409,6 @@ export default function ProfilePage() {
         /*
           Si le cache existe, on l'affiche
           immédiatement.
-
-          C'est le point principal de
-          l'amélioration de vitesse.
         */
 
         if (cachedProfile) {
@@ -206,14 +436,6 @@ export default function ProfilePage() {
         // MODE PREMIER CHARGEMENT
         // -----------------------------------------------
 
-        /*
-          Si aucune donnée locale n'existe,
-          on affiche le chargement.
-
-          Si le cache existe déjà,
-          on NE remet PAS loading à true.
-        */
-
         if (
           !cachedProfile &&
           !background
@@ -227,21 +449,6 @@ export default function ProfilePage() {
         // -----------------------------------------------
         // SUPABASE
         // -----------------------------------------------
-
-        /*
-          Profil + badges sont maintenant
-          récupérés EN PARALLÈLE.
-
-          Avant :
-            profil
-              ↓
-            badges
-
-          Maintenant :
-            profil ─────┐
-                        ├──→ Promise.all
-            badges ─────┘
-        */
 
         const [
           profileResult,
@@ -395,7 +602,10 @@ export default function ProfilePage() {
       }
 
     },
-    []
+    [
+      isConsultation,
+      studentId
+    ]
   );
 
 
@@ -445,6 +655,19 @@ export default function ProfilePage() {
 
   async function handleLogout() {
 
+    /*
+      En mode consultation,
+      l'administrateur ne doit jamais
+      être déconnecté de sa session.
+    */
+
+    if (isConsultation) {
+
+      return;
+
+    }
+
+
     try {
 
       await supabase.auth.signOut();
@@ -460,6 +683,51 @@ export default function ProfilePage() {
 
     }
 
+  }
+
+
+  // ===================================================
+  // NAVIGATION
+  // ===================================================
+
+  function goHome() {
+
+    if (
+      isConsultation &&
+      studentId
+    ) {
+
+      navigate(
+        `/admin/student/${studentId}/consultation`
+      );
+
+      return;
+    }
+
+    navigate("/");
+  }
+
+
+  function goDownloads() {
+
+    if (
+      isConsultation &&
+      studentId
+    ) {
+
+      navigate(
+        `/admin/student/${studentId}/consultation/downloads`,
+        {
+          state: {
+            consultationMode: true
+          }
+        }
+      );
+
+      return;
+    }
+
+    navigate("/downloads");
   }
 
 
@@ -513,7 +781,11 @@ export default function ProfilePage() {
             font-medium
           "
         >
-          Chargement du profil...
+
+          {isConsultation
+            ? "Chargement du profil de l'élève..."
+            : "Chargement du profil..."}
+
         </p>
 
       </div>
@@ -552,9 +824,7 @@ export default function ProfilePage() {
       >
 
         <button
-          onClick={() =>
-            navigate("/")
-          }
+          onClick={goHome}
           className="
             flex
             items-center
@@ -590,6 +860,59 @@ export default function ProfilePage() {
 
 
       {/* =================================================
+          BANDEAU CONSULTATION
+      ================================================= */}
+
+      {isConsultation && (
+
+        <div
+          className="
+            bg-blue-600
+            text-white
+            px-5
+            py-3
+          "
+        >
+
+          <div
+            className="
+              max-w-3xl
+              mx-auto
+              flex
+              flex-col
+              sm:flex-row
+              sm:items-center
+              sm:justify-between
+              gap-1
+            "
+          >
+
+            <p
+              className="
+                text-sm
+                font-bold
+              "
+            >
+              👁️ MODE CONSULTATION
+            </p>
+
+            <p
+              className="
+                text-xs
+                opacity-90
+              "
+            >
+              Lecture seule — aucune donnée élève ne sera modifiée
+            </p>
+
+          </div>
+
+        </div>
+
+      )}
+
+
+      {/* =================================================
           CONTENU
       ================================================= */}
 
@@ -616,7 +939,11 @@ export default function ProfilePage() {
               text-gray-900
             "
           >
-            Mon profil
+
+            {isConsultation
+              ? "Profil de l'élève"
+              : "Mon profil"}
+
           </h1>
 
 
@@ -626,7 +953,11 @@ export default function ProfilePage() {
               mt-1
             "
           >
-            Consulte ton profil et tes récompenses.
+
+            {isConsultation
+              ? "Consultation du profil et des récompenses de l'élève."
+              : "Consulte ton profil et tes récompenses."}
+
           </p>
 
         </div>
@@ -741,7 +1072,9 @@ export default function ProfilePage() {
                   mt-1
                 "
               >
-                Élève Kalan Academy
+                {isConsultation
+                  ? "Profil élève — lecture seule"
+                  : "Élève Kalan Academy"}
               </p>
 
 
@@ -902,9 +1235,7 @@ export default function ProfilePage() {
         ================================================= */}
 
         <button
-          onClick={() =>
-            navigate("/downloads")
-          }
+          onClick={goDownloads}
           className="
             w-full
             bg-white
@@ -955,7 +1286,11 @@ export default function ProfilePage() {
                 text-gray-900
               "
             >
-              Mes téléchargements
+
+              {isConsultation
+                ? "Téléchargements de l'élève"
+                : "Mes téléchargements"}
+
             </h2>
 
 
@@ -966,7 +1301,11 @@ export default function ProfilePage() {
                 mt-1
               "
             >
-              Accéder à mes vidéos hors ligne
+
+              {isConsultation
+                ? "Consulter les vidéos disponibles hors ligne"
+                : "Accéder à mes vidéos hors ligne"}
+
             </p>
 
           </div>
@@ -1015,7 +1354,9 @@ export default function ProfilePage() {
                 className="text-yellow-500"
               />
 
-              Mes badges
+              {isConsultation
+                ? "Badges de l'élève"
+                : "Mes badges"}
 
             </h2>
 
@@ -1027,7 +1368,11 @@ export default function ProfilePage() {
                 mt-1
               "
             >
-              Tes récompenses Kalan Academy.
+
+              {isConsultation
+                ? "Récompenses obtenues par l'élève."
+                : "Tes récompenses Kalan Academy."}
+
             </p>
 
           </div>
@@ -1104,7 +1449,11 @@ export default function ProfilePage() {
                 text-gray-700
               "
             >
-              Aucun badge obtenu
+
+              {isConsultation
+                ? "Aucun badge obtenu"
+                : "Aucun badge obtenu"}
+
             </p>
 
 
@@ -1115,8 +1464,11 @@ export default function ProfilePage() {
                 mt-1
               "
             >
-              Continue tes leçons et tes quiz
-              pour gagner des récompenses.
+
+              {isConsultation
+                ? "Cet élève n'a encore obtenu aucun badge."
+                : "Continue tes leçons et tes quiz pour gagner des récompenses."}
+
             </p>
 
           </div>
@@ -1270,9 +1622,7 @@ export default function ProfilePage() {
         ================================================= */}
 
         <button
-          onClick={() =>
-            navigate("/")
-          }
+          onClick={goHome}
           className="
             w-full
             mt-6
@@ -1297,7 +1647,9 @@ export default function ProfilePage() {
             size={18}
           />
 
-          Retour à l'accueil
+          {isConsultation
+            ? "Retour à la consultation"
+            : "Retour à l'accueil"}
 
         </button>
 
@@ -1306,32 +1658,36 @@ export default function ProfilePage() {
             DÉCONNEXION
         ================================================= */}
 
-        <button
-          onClick={handleLogout}
-          className="
-            w-full
-            mt-3
-            flex
-            items-center
-            justify-center
-            gap-2
-            text-red-500
-            px-5
-            py-3
-            rounded-xl
-            font-semibold
-            hover:bg-red-50
-            transition
-          "
-        >
+        {!isConsultation && (
 
-          <LogOut
-            size={18}
-          />
+          <button
+            onClick={handleLogout}
+            className="
+              w-full
+              mt-3
+              flex
+              items-center
+              justify-center
+              gap-2
+              text-red-500
+              px-5
+              py-3
+              rounded-xl
+              font-semibold
+              hover:bg-red-50
+              transition
+            "
+          >
 
-          Se déconnecter
+            <LogOut
+              size={18}
+            />
 
-        </button>
+            Se déconnecter
+
+          </button>
+
+        )}
 
       </div>
 

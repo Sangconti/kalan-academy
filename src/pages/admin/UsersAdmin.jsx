@@ -27,14 +27,15 @@ export default function UsersAdmin(){
     const navigate = useNavigate();
 
     function viewStudent(studentId) {
-        console.log(
-            "👁️ [ADMIN] Consultation élève :",
-            studentId
-            );
-        navigate( `/admin/student/${studentId}`
-            );
+      console.log(
+        "👁️ [ADMIN] Ouverture du mode consultation :",
+        studentId
+      );
 
-        }
+      navigate(
+        `/admin/student/${studentId}/consultation`
+      );
+    }
 
     async function deleteUser(id) {
 

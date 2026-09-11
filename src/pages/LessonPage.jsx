@@ -7,7 +7,8 @@ import {
 
 import {
   useParams,
-  useNavigate
+  useNavigate,
+  useLocation
 } from "react-router-dom";
 
 import {
@@ -36,15 +37,37 @@ import {
 } from "lucide-react";
 
 
-export default function LessonPage() {
+export default function LessonPage({
+  consultationMode = false
+}) {
 
-  const { lessonId } = useParams();
+  const {
+    lessonId,
+    studentId
+  } = useParams();
 
   const navigate =
     useNavigate();
 
+  const location =
+    useLocation();
+
   const { isOnline } =
     useNetwork();
+
+
+  // =====================================================
+  // 👁️ MODE CONSULTATION
+  // =====================================================
+
+  const isConsultation =
+    consultationMode ||
+    location.state?.consultationMode === true ||
+    (
+      location.pathname.includes("/admin/student/") &&
+      location.pathname.includes("/consultation") &&
+      Boolean(studentId)
+    );
 
 
   // =====================================================
@@ -141,6 +164,7 @@ export default function LessonPage() {
     };
 
   }, []);
+
 
   const [lesson, setLesson] =
     useState(null);
@@ -239,6 +263,112 @@ export default function LessonPage() {
       setLoading(false);
 
     }
+
+  }
+
+
+  // =====================================================
+  // OUVRIR LA VIDÉO
+  // =====================================================
+
+  function openVideo() {
+
+    if (!lesson?.id) {
+      return;
+    }
+
+
+    // ---------------------------------------------------
+    // 👁️ CONSULTATION ADMIN
+    // ---------------------------------------------------
+
+    if (isConsultation && studentId) {
+
+      console.log(
+        "👁️ [CONSULTATION] Ouverture vidéo :",
+        lesson.id
+      );
+
+
+      navigate(
+        `/admin/student/${studentId}/consultation/video/${lesson.id}`,
+        {
+          state: {
+            consultationMode: true
+          }
+        }
+      );
+
+      return;
+
+    }
+
+
+    // ---------------------------------------------------
+    // 👨‍🎓 ÉLÈVE NORMAL
+    // ---------------------------------------------------
+
+    navigate(
+      `/video/${lesson.id}`,
+      {
+        state: {
+          consultationMode: false
+        }
+      }
+    );
+
+  }
+
+
+  // =====================================================
+  // OUVRIR LE QUIZ
+  // =====================================================
+
+  function openExercise() {
+
+    if (!lesson?.id) {
+      return;
+    }
+
+
+    // ---------------------------------------------------
+    // 👁️ CONSULTATION ADMIN
+    // ---------------------------------------------------
+
+    if (isConsultation && studentId) {
+
+      console.log(
+        "👁️ [CONSULTATION] Ouverture quiz :",
+        lesson.id
+      );
+
+
+      navigate(
+        `/admin/student/${studentId}/consultation/exercise/${lesson.id}`,
+        {
+          state: {
+            consultationMode: true
+          }
+        }
+      );
+
+      return;
+
+    }
+
+
+    // ---------------------------------------------------
+    // 👨‍🎓 ÉLÈVE NORMAL
+    // ---------------------------------------------------
+
+    navigate(
+      `/exercise/${lesson.id}`,
+      {
+        state: {
+          consultationMode: false
+        }
+      }
+    );
 
   }
 
@@ -548,7 +678,10 @@ export default function LessonPage() {
               size={14}
             />
 
-            Leçon
+            {isConsultation
+              ? "Leçon en consultation"
+              : "Leçon"
+            }
 
           </div>
 
@@ -671,11 +804,7 @@ export default function LessonPage() {
 
             <button
               type="button"
-              onClick={() =>
-                navigate(
-                  `/video/${lesson.id}`
-                )
-              }
+              onClick={openVideo}
               className="
                 mt-6
                 inline-flex
@@ -698,7 +827,10 @@ export default function LessonPage() {
                 size={21}
               />
 
-              Voir la vidéo
+              {isConsultation
+                ? "Voir la vidéo"
+                : "Voir la vidéo"
+              }
 
             </button>
 
@@ -1041,7 +1173,9 @@ export default function LessonPage() {
                 mb-1
               "
             >
-              Quiz de validation
+              {isConsultation
+                ? "Quiz en consultation"
+                : "Quiz de validation"}
             </p>
 
 
@@ -1068,19 +1202,16 @@ export default function LessonPage() {
               "
             >
 
-              Teste tes connaissances sur cette leçon
-              et gagne de l'XP.
+              {isConsultation
+                ? "Consulte les questions et le résultat sans modifier les données de l'élève."
+                : "Teste tes connaissances sur cette leçon et gagne de l'XP."}
 
             </p>
 
 
             <button
               type="button"
-              onClick={() =>
-                navigate(
-                  `/exercise/${lesson.id}`
-                )
-              }
+              onClick={openExercise}
               className="
                 mt-5
                 inline-flex
@@ -1103,7 +1234,9 @@ export default function LessonPage() {
                 size={20}
               />
 
-              Commencer le quiz
+              {isConsultation
+                ? "Voir le quiz"
+                : "Commencer le quiz"}
 
             </button>
 

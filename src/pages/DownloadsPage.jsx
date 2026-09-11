@@ -1,7 +1,11 @@
 // src/pages/DownloadsPage.jsx
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 
 import {
   getCachedVideos,
@@ -18,13 +22,37 @@ import {
   Home
 } from "lucide-react";
 
-export default function DownloadsPage() {
+export default function DownloadsPage({
+  consultationMode = false,
+}) {
 
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  const {
+    studentId,
+  } = useParams();
+
+
+  // ==========================================
+  // MODE CONSULTATION
+  // ==========================================
+
+  const isConsultation =
+    consultationMode ||
+    location.state?.consultationMode === true ||
+    (
+      Boolean(studentId) &&
+      location.pathname.includes("/admin/student/") &&
+      location.pathname.includes("/consultation")
+    );
+
 
   const [videos, setVideos] = useState([]);
   const [storage, setStorage] = useState(0);
   const [loading, setLoading] = useState(true);
+
 
   // ==========================================
   // CHARGEMENT
@@ -33,6 +61,7 @@ export default function DownloadsPage() {
   useEffect(() => {
     loadDownloads();
   }, []);
+
 
   async function loadDownloads() {
 
@@ -66,11 +95,27 @@ export default function DownloadsPage() {
     }
   }
 
+
   // ==========================================
   // SUPPRIMER UNE VIDÉO
   // ==========================================
 
   async function handleDelete(lessonId) {
+
+    /*
+     * IMPORTANT
+     *
+     * En mode consultation, l'administrateur ne doit
+     * pas modifier les téléchargements locaux depuis
+     * l'expérience de consultation de l'élève.
+     *
+     * La suppression est donc interdite.
+     */
+
+    if (isConsultation) {
+      return;
+    }
+
 
     if (
       !window.confirm(
@@ -96,6 +141,7 @@ export default function DownloadsPage() {
     }
   }
 
+
   // ==========================================
   // LIRE UNE VIDÉO
   // ==========================================
@@ -106,10 +152,53 @@ export default function DownloadsPage() {
       return;
     }
 
+
+    if (isConsultation && studentId) {
+
+      navigate(
+        `/admin/student/${studentId}/consultation/video/${video.lesson_id}`,
+        {
+          state: {
+            consultationMode: true,
+          },
+        }
+      );
+
+      return;
+    }
+
+
     navigate(
       `/video/${video.lesson_id}`
     );
+
   }
+
+
+  // ==========================================
+  // RETOUR ACCUEIL
+  // ==========================================
+
+  function goHome() {
+
+    if (isConsultation && studentId) {
+
+      navigate(
+        `/admin/student/${studentId}/consultation`,
+        {
+          state: {
+            consultationMode: true,
+          },
+        }
+      );
+
+      return;
+    }
+
+
+    navigate("/");
+  }
+
 
   // ==========================================
   // LOADING
@@ -160,6 +249,7 @@ export default function DownloadsPage() {
     );
   }
 
+
   // ==========================================
   // INTERFACE
   // ==========================================
@@ -185,7 +275,7 @@ export default function DownloadsPage() {
       ">
 
         <button
-          onClick={() => navigate("/")}
+          onClick={goHome}
           className="
             flex
             items-center
@@ -277,7 +367,10 @@ export default function DownloadsPage() {
               mt-1
             ">
 
-              Tes vidéos disponibles hors ligne
+              {isConsultation
+                ? "Vidéos disponibles hors ligne sur cet appareil"
+                : "Tes vidéos disponibles hors ligne"
+              }
 
             </p>
 
@@ -384,6 +477,26 @@ export default function DownloadsPage() {
 
           </div>
 
+
+          {isConsultation && (
+
+            <p className="
+              text-xs
+              text-gray-500
+              mt-3
+              pt-3
+              border-t
+              border-gray-100
+            ">
+
+              Ces téléchargements sont stockés
+              localement sur l'appareil utilisé
+              pour la consultation.
+
+            </p>
+
+          )}
+
         </div>
 
 
@@ -442,15 +555,16 @@ export default function DownloadsPage() {
               mx-auto
             ">
 
-              Les vidéos que tu télécharges
-              pour apprendre hors ligne
-              apparaîtront ici.
+              {isConsultation
+                ? "Aucune vidéo n'est actuellement disponible hors ligne sur cet appareil."
+                : "Les vidéos que tu télécharges pour apprendre hors ligne apparaîtront ici."
+              }
 
             </p>
 
 
             <button
-              onClick={() => navigate("/")}
+              onClick={goHome}
               className="
                 mt-6
                 inline-flex
@@ -616,32 +730,36 @@ export default function DownloadsPage() {
                   </button>
 
 
-                  <button
-                    onClick={() =>
-                      handleDelete(
-                        video.lesson_id
-                      )
-                    }
-                    className="
-                      w-10
-                      h-10
-                      rounded-xl
-                      bg-red-50
-                      text-red-500
-                      flex
-                      items-center
-                      justify-center
-                      hover:bg-red-100
-                      transition
-                    "
-                    title="Supprimer"
-                  >
+                  {!isConsultation && (
 
-                    <Trash2
-                      size={20}
-                    />
+                    <button
+                      onClick={() =>
+                        handleDelete(
+                          video.lesson_id
+                        )
+                      }
+                      className="
+                        w-10
+                        h-10
+                        rounded-xl
+                        bg-red-50
+                        text-red-500
+                        flex
+                        items-center
+                        justify-center
+                        hover:bg-red-100
+                        transition
+                      "
+                      title="Supprimer"
+                    >
 
-                  </button>
+                      <Trash2
+                        size={20}
+                      />
+
+                    </button>
+
+                  )}
 
                 </div>
 

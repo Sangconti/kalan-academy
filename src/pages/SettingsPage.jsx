@@ -22,6 +22,8 @@ import {
 
 import {
   useNavigate,
+  useLocation,
+  useParams,
 } from "react-router-dom";
 
 import {
@@ -129,9 +131,17 @@ const COLOR_OPTIONS = [
 // COMPOSANT
 // =====================================================
 
-export default function SettingsPage() {
+export default function SettingsPage({
+  consultationMode = false,
+}) {
 
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  const {
+    studentId,
+  } = useParams();
 
   const {
     isOnline,
@@ -143,6 +153,20 @@ export default function SettingsPage() {
     accentColor,
     setAccentColor,
   } = useTheme();
+
+
+  // ===================================================
+  // MODE CONSULTATION
+  // ===================================================
+
+  const isConsultation =
+    consultationMode ||
+    location.state?.consultationMode === true ||
+    (
+      Boolean(studentId) &&
+      location.pathname.includes("/admin/student/") &&
+      location.pathname.includes("/consultation")
+    );
 
 
   // ===================================================
@@ -200,6 +224,21 @@ export default function SettingsPage() {
 
   function openProfile() {
 
+    if (isConsultation && studentId) {
+
+      navigate(
+        `/admin/student/${studentId}/consultation/profile`,
+        {
+          state: {
+            consultationMode: true,
+          },
+        }
+      );
+
+      return;
+
+    }
+
     navigate("/profile");
 
   }
@@ -224,6 +263,18 @@ export default function SettingsPage() {
   // ===================================================
 
   async function logout() {
+
+    /*
+     * IMPORTANT
+     *
+     * En mode consultation, l'administrateur ne doit
+     * jamais être déconnecté de son propre compte.
+     */
+
+    if (isConsultation) {
+      return;
+    }
+
 
     if (loggingOut) {
       return;
@@ -355,13 +406,13 @@ export default function SettingsPage() {
 
         "Les cours, chapitres, leçons, quiz et " +
         "données pédagogiques stockés localement " +
-        "seront supprimés.\n\n" +
+        "sur cet appareil seront supprimés.\n\n" +
 
-        "Ta progression, tes tentatives de quiz " +
-        "et les données en attente de synchronisation " +
-        "seront conservées.\n\n" +
+        "La progression de l'élève consulté, ses " +
+        "tentatives de quiz et les données en attente " +
+        "de synchronisation ne seront pas supprimées.\n\n" +
 
-        "Cette action ne supprime pas ton compte."
+        "Cette action ne supprime aucun compte."
 
       );
 
@@ -382,13 +433,15 @@ export default function SettingsPage() {
        * IMPORTANT
        *
        * On supprime uniquement les tables
-       * contenant le contenu pédagogique.
+       * contenant le contenu pédagogique local.
        *
        * On conserve :
        *
        * - userProgress
        * - quizAttempts
        * - syncQueue
+       *
+       * Le cache concerne uniquement cet appareil.
        */
 
       await db.transaction(
@@ -433,7 +486,7 @@ export default function SettingsPage() {
 
       showMessage(
         "success",
-        "Le cache pédagogique a été vidé avec succès."
+        "Le cache pédagogique local a été vidé avec succès."
       );
 
 
@@ -470,6 +523,21 @@ export default function SettingsPage() {
   // ===================================================
 
   async function resetProgress() {
+
+    /*
+     * IMPORTANT
+     *
+     * Cette action modifie les données locales
+     * de progression de l'utilisateur.
+     *
+     * Elle est donc totalement interdite
+     * en mode consultation.
+     */
+
+    if (isConsultation) {
+      return;
+    }
+
 
     if (resettingProgress) {
       return;
@@ -786,7 +854,10 @@ export default function SettingsPage() {
             theme-text-secondary
           "
         >
-          Gère les paramètres de ton application.
+          {isConsultation
+            ? "Paramètres locaux de l'appareil de consultation."
+            : "Gère les paramètres de ton application."
+          }
         </p>
 
       </div>
@@ -1193,7 +1264,10 @@ export default function SettingsPage() {
                   theme-text
                 "
               >
-                Mon profil
+                {isConsultation
+                  ? "Profil de l'élève"
+                  : "Mon profil"
+                }
               </h3>
 
 
@@ -1205,7 +1279,10 @@ export default function SettingsPage() {
                   theme-text-secondary
                 "
               >
-                Consulter et gérer mon profil.
+                {isConsultation
+                  ? "Consulter le profil de l'élève."
+                  : "Consulter et gérer mon profil."
+                }
               </p>
 
             </div>
@@ -1223,97 +1300,103 @@ export default function SettingsPage() {
           </button>
 
 
-          <div
-            className="
-              border-t
-              border-gray-100
-              theme-border
-            "
-          />
+          {!isConsultation && (
+
+            <>
+              <div
+                className="
+                  border-t
+                  border-gray-100
+                  theme-border
+                "
+              />
 
 
-          <button
-            type="button"
-            onClick={logout}
-            disabled={loggingOut}
-            className="
-              w-full
-              flex
-              items-center
-              gap-4
-              p-5
-              text-left
-              hover:bg-red-50
-              transition
-              disabled:opacity-50
-            "
-          >
+              <button
+                type="button"
+                onClick={logout}
+                disabled={loggingOut}
+                className="
+                  w-full
+                  flex
+                  items-center
+                  gap-4
+                  p-5
+                  text-left
+                  hover:bg-red-50
+                  transition
+                  disabled:opacity-50
+                "
+              >
 
-            <div
-              className="
-                w-11
-                h-11
-                rounded-xl
-                bg-red-50
-                flex
-                items-center
-                justify-center
-                shrink-0
-              "
-            >
-
-              {loggingOut ? (
-
-                <Loader2
-                  size={20}
+                <div
                   className="
-                    text-red-600
-                    animate-spin
+                    w-11
+                    h-11
+                    rounded-xl
+                    bg-red-50
+                    flex
+                    items-center
+                    justify-center
+                    shrink-0
                   "
-                />
+                >
 
-              ) : (
+                  {loggingOut ? (
 
-                <LogOut
-                  size={20}
-                  className="text-red-600"
-                />
+                    <Loader2
+                      size={20}
+                      className="
+                        text-red-600
+                        animate-spin
+                      "
+                    />
 
-              )}
+                  ) : (
 
-            </div>
+                    <LogOut
+                      size={20}
+                      className="text-red-600"
+                    />
 
+                  )}
 
-            <div className="flex-1 min-w-0">
-
-              <h3
-                className="
-                  font-semibold
-                  text-red-600
-                "
-              >
-                {
-                  loggingOut
-                    ? "Déconnexion..."
-                    : "Déconnexion"
-                }
-              </h3>
+                </div>
 
 
-              <p
-                className="
-                  text-sm
-                  text-gray-500
-                  mt-1
-                  theme-text-secondary
-                "
-              >
-                Se déconnecter de Kalan Academy.
-              </p>
+                <div className="flex-1 min-w-0">
 
-            </div>
+                  <h3
+                    className="
+                      font-semibold
+                      text-red-600
+                    "
+                  >
+                    {
+                      loggingOut
+                        ? "Déconnexion..."
+                        : "Déconnexion"
+                    }
+                  </h3>
 
-          </button>
+
+                  <p
+                    className="
+                      text-sm
+                      text-gray-500
+                      mt-1
+                      theme-text-secondary
+                    "
+                  >
+                    Se déconnecter de Kalan Academy.
+                  </p>
+
+                </div>
+
+              </button>
+            </>
+
+          )}
 
         </div>
 
@@ -1711,9 +1794,10 @@ export default function SettingsPage() {
                   theme-text-secondary
                 "
               >
-                Supprimer les données pédagogiques
-                stockées localement sans supprimer
-                ta progression.
+                {isConsultation
+                  ? "Supprimer le cache pédagogique local de cet appareil."
+                  : "Supprimer les données pédagogiques stockées localement sans supprimer ta progression."
+                }
               </p>
 
             </div>
@@ -1743,140 +1827,144 @@ export default function SettingsPage() {
           APPRENTISSAGE
       ================================================= */}
 
-      <section className="mb-5">
+      {!isConsultation && (
 
-        <h2
-          className="
-            text-xs
-            font-bold
-            text-gray-500
-            uppercase
-            tracking-wider
-            mb-2
-            px-1
-            theme-text-secondary
-          "
-        >
-          📚 Apprentissage
-        </h2>
+        <section className="mb-5">
 
-
-        <div
-          className="
-            bg-white
-            rounded-2xl
-            border
-            border-gray-100
-            shadow-sm
-            overflow-hidden
-            theme-surface
-            theme-border
-          "
-        >
-
-          <button
-            type="button"
-            onClick={resetProgress}
-            disabled={resettingProgress}
+          <h2
             className="
-              w-full
-              flex
-              items-center
-              gap-4
-              p-5
-              text-left
-              hover:bg-orange-50
-              transition
-              disabled:opacity-60
-              disabled:cursor-not-allowed
+              text-xs
+              font-bold
+              text-gray-500
+              uppercase
+              tracking-wider
+              mb-2
+              px-1
+              theme-text-secondary
+            "
+          >
+            📚 Apprentissage
+          </h2>
+
+
+          <div
+            className="
+              bg-white
+              rounded-2xl
+              border
+              border-gray-100
+              shadow-sm
+              overflow-hidden
+              theme-surface
+              theme-border
             "
           >
 
-            <div
+            <button
+              type="button"
+              onClick={resetProgress}
+              disabled={resettingProgress}
               className="
-                w-11
-                h-11
-                rounded-xl
-                bg-orange-50
+                w-full
                 flex
                 items-center
-                justify-center
-                shrink-0
+                gap-4
+                p-5
+                text-left
+                hover:bg-orange-50
+                transition
+                disabled:opacity-60
+                disabled:cursor-not-allowed
               "
             >
 
-              {resettingProgress ? (
+              <div
+                className="
+                  w-11
+                  h-11
+                  rounded-xl
+                  bg-orange-50
+                  flex
+                  items-center
+                  justify-center
+                  shrink-0
+                "
+              >
 
-                <Loader2
+                {resettingProgress ? (
+
+                  <Loader2
+                    size={20}
+                    className="
+                      text-orange-600
+                      animate-spin
+                    "
+                  />
+
+                ) : (
+
+                  <RotateCcw
+                    size={20}
+                    className="text-orange-600"
+                  />
+
+                )}
+
+              </div>
+
+
+              <div className="flex-1 min-w-0">
+
+                <h3
+                  className="
+                    font-semibold
+                    text-gray-900
+                    theme-text
+                  "
+                >
+                  {
+                    resettingProgress
+                      ? "Réinitialisation..."
+                      : "Réinitialiser ma progression"
+                  }
+                </h3>
+
+
+                <p
+                  className="
+                    text-sm
+                    text-gray-500
+                    mt-1
+                    theme-text-secondary
+                  "
+                >
+                  Supprimer ma progression locale,
+                  mes tentatives de quiz et mon cache XP.
+                </p>
+
+              </div>
+
+
+              {!resettingProgress && (
+
+                <ChevronRight
                   size={20}
                   className="
-                    text-orange-600
-                    animate-spin
+                    text-gray-400
+                    theme-text-secondary
+                    shrink-0
                   "
-                />
-
-              ) : (
-
-                <RotateCcw
-                  size={20}
-                  className="text-orange-600"
                 />
 
               )}
 
-            </div>
+            </button>
 
+          </div>
 
-            <div className="flex-1 min-w-0">
+        </section>
 
-              <h3
-                className="
-                  font-semibold
-                  text-gray-900
-                  theme-text
-                "
-              >
-                {
-                  resettingProgress
-                    ? "Réinitialisation..."
-                    : "Réinitialiser ma progression"
-                }
-              </h3>
-
-
-              <p
-                className="
-                  text-sm
-                  text-gray-500
-                  mt-1
-                  theme-text-secondary
-                "
-              >
-                Supprimer ma progression locale,
-                mes tentatives de quiz et mon cache XP.
-              </p>
-
-            </div>
-
-
-            {!resettingProgress && (
-
-              <ChevronRight
-                size={20}
-                className="
-                  text-gray-400
-                  theme-text-secondary
-                  shrink-0
-                "
-              />
-
-            )}
-
-          </button>
-
-        </div>
-
-      </section>
+      )}
 
 
       {/* =================================================

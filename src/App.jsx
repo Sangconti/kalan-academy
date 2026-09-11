@@ -17,6 +17,7 @@ import SubjectPage from "./pages/SubjectPage";
 import ChapterPage from "./pages/ChapterPage";
 import LessonPage from "./pages/LessonPage";
 import ExercisePage from "./pages/ExercisePage";
+import VideoPage from "./pages/VideoPage";
 
 import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -59,6 +60,9 @@ import AdminVideos from "./pages/admin/AdminVideos";
 import AdminStats from "./pages/admin/AdminStats";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminStudentPage from "./pages/admin/AdminStudentPage";
+
+import ConsultationStudentLayout from "./components/ConsultationStudentLayout";
+import { ConsultationStudentProvider } from "./context/ConsultationStudentContext";
 
 // =====================================================
 // APP
@@ -219,6 +223,76 @@ function App() {
           </ProtectedAdminRoute>
         }
       />
+
+      {/* =================================================
+          ADMIN — CONSULTATION ÉLÈVE
+      ================================================= */}
+
+      <Route
+        path="/admin/student/:studentId/consultation"
+        element={
+          <ProtectedAdminRoute>
+            <ConsultationStudentProvider>
+              <ConsultationStudentLayout />
+            </ConsultationStudentProvider>
+          </ProtectedAdminRoute>
+        }
+      >
+        <Route
+          index
+          element={<HomePage />}
+        />
+
+        <Route
+          path="class/:classId"
+          element={<ClassPage />}
+        />
+
+        <Route
+          path="subject/:subjectId"
+          element={<SubjectPage />}
+        />
+
+        <Route
+          path="chapter/:chapterId"
+          element={<ChapterPage />}
+        />
+
+        <Route
+          path="lesson/:lessonId"
+          element={<LessonPage consultationMode />}
+        />
+
+        <Route
+          path="exercise/:lessonId"
+          element={<ExercisePage consultationMode />}
+        />
+
+        <Route
+          path="video/:lessonId"
+          element={<VideoPage consultationMode />}
+        />
+
+        <Route
+          path="dashboard"
+          element={<DashboardPage consultationMode />}
+        />
+
+        <Route
+          path="downloads"
+          element={<DownloadsPage consultationMode />}
+        />
+
+        <Route
+          path="profile"
+          element={<ProfilePage consultationMode />}
+        />
+
+        <Route
+          path="settings"
+          element={<SettingsPage consultationMode />}
+        />
+      </Route>
 
 
       {/* =================================================

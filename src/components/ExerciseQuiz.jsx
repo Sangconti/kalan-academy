@@ -29,7 +29,8 @@ import {
 
 export default function ExerciseQuiz({
   quizId,
-  lessonId
+  lessonId,
+  consultationMode = false
 }) {
 
   // ====================================
@@ -156,6 +157,120 @@ export default function ExerciseQuiz({
 
 
   // ====================================
+  // CORRECTION LOCALE
+  // ====================================
+  //
+  // Utilisée UNIQUEMENT en mode
+  // consultation.
+  //
+  // IMPORTANT :
+  // aucune sauvegarde Dexie,
+  // aucune écriture Supabase,
+  // aucun XP,
+  // aucune progression,
+  // aucun badge,
+  // aucune syncQueue.
+  //
+  // ====================================
+
+  function calculateConsultationResult() {
+
+    let correct = 0;
+
+
+    questions.forEach(
+      (question, index) => {
+
+        const userAnswer =
+          answers?.[index];
+
+        const correctIndex =
+          Number(
+            question.correct_index
+          );
+
+
+        const isCorrect =
+          Number(userAnswer) ===
+          correctIndex;
+
+
+        console.log(
+          `👁️ [CONSULTATION] QUESTION ${index + 1}`,
+          {
+            userAnswer,
+            userAnswerText:
+              question.choices?.[
+                Number(userAnswer)
+              ],
+
+            correctIndex,
+
+            correctAnswerText:
+              question.choices?.[
+                correctIndex
+              ],
+
+            isCorrect
+          }
+        );
+
+
+        if (isCorrect) {
+          correct++;
+        }
+
+      }
+    );
+
+
+    const total =
+      questions.length;
+
+
+    const score =
+      total > 0
+
+        ? Math.round(
+            (correct / total) * 100
+          )
+
+        : 0;
+
+
+    const passed =
+      score >= 80;
+
+
+    let xp = 20;
+
+
+    if (score >= 80) {
+
+      xp = 100;
+
+    }
+    else if (score >= 50) {
+
+      xp = 50;
+
+    }
+
+
+    return {
+
+      score,
+      correct,
+      total,
+      passed,
+      xp
+
+    };
+
+  }
+
+
+  // ====================================
   // VALIDATION
   // ====================================
 
@@ -175,6 +290,58 @@ export default function ExerciseQuiz({
 
 
     try {
+
+      // ==================================
+      // MODE CONSULTATION
+      // ==================================
+      //
+      // L'administrateur peut répondre
+      // au quiz et voir le résultat,
+      // mais RIEN n'est enregistré.
+      // ==================================
+
+      if (consultationMode) {
+
+        console.log(
+          "👁️ [CONSULTATION] Correction locale du quiz"
+        );
+
+
+        const quizResult =
+          calculateConsultationResult();
+
+
+        setResult({
+
+          score:
+            quizResult.score,
+
+          xp:
+            quizResult.xp,
+
+          correct:
+            quizResult.correct,
+
+          synced:
+            false,
+
+          pendingXP:
+            false,
+
+          consultation:
+            true
+
+        });
+
+
+        return;
+
+      }
+
+
+      // ==================================
+      // MODE ÉLÈVE NORMAL
+      // ==================================
 
       const {
         data: {
@@ -292,6 +459,9 @@ export default function ExerciseQuiz({
 
         pendingXP:
           xpResult?.pending ||
+          false,
+
+        consultation:
           false
 
       });
@@ -463,7 +633,11 @@ export default function ExerciseQuiz({
               mb-1
             "
           >
-            Quiz terminé
+
+            {result.consultation
+              ? "Quiz consulté"
+              : "Quiz terminé"}
+
           </p>
 
 
@@ -475,7 +649,11 @@ export default function ExerciseQuiz({
               dark:text-white
             "
           >
-            Ton résultat
+
+            {result.consultation
+              ? "Résultat de la consultation"
+              : "Ton résultat"}
+
           </h2>
 
         </div>
@@ -600,7 +778,9 @@ export default function ExerciseQuiz({
                 mt-1
               "
             >
+
               Tu as obtenu
+
             </p>
 
 
@@ -688,7 +868,11 @@ export default function ExerciseQuiz({
                     dark:text-gray-400
                   "
                 >
-                  XP gagnés
+
+                  {result.consultation
+                    ? "XP théoriques"
+                    : "XP gagnés"}
+
                 </p>
 
 
@@ -711,7 +895,7 @@ export default function ExerciseQuiz({
             </div>
 
 
-            {/* SYNCHRONISATION */}
+            {/* SYNCHRONISATION / CONSULTATION */}
 
             <div
               className="
@@ -722,7 +906,13 @@ export default function ExerciseQuiz({
               "
             >
 
-              {result.synced ? (
+              {result.consultation ? (
+
+                <p>
+                  👁️ Mode consultation — aucune donnée élève modifiée
+                </p>
+
+              ) : result.synced ? (
 
                 <p>
                   ☁️ Résultat synchronisé
@@ -863,7 +1053,11 @@ export default function ExerciseQuiz({
                 mb-1
               "
             >
-              Quiz de validation
+
+              {consultationMode
+                ? "Quiz en consultation"
+                : "Quiz de validation"}
+
             </p>
 
 
@@ -876,7 +1070,9 @@ export default function ExerciseQuiz({
               "
             >
 
-              Vérifie tes connaissances
+              {consultationMode
+                ? "Consulte les connaissances de l'élève"
+                : "Vérifie tes connaissances"}
 
             </h2>
 
@@ -1253,7 +1449,9 @@ export default function ExerciseQuiz({
               size={19}
             />
 
-            Valider le quiz
+            {consultationMode
+              ? "Voir le résultat"
+              : "Valider le quiz"}
 
           </>
 

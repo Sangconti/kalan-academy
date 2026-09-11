@@ -7,7 +7,8 @@ import {
 
 import {
   useParams,
-  useNavigate
+  useNavigate,
+  useLocation
 } from "react-router-dom";
 
 import {
@@ -37,11 +38,34 @@ import {
   CircleHelp
 } from "lucide-react";
 
-export default function VideoPage() {
 
-  const { lessonId } = useParams();
+export default function VideoPage({
+  consultationMode = false
+}) {
+
+  const {
+    lessonId,
+    studentId
+  } = useParams();
 
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+
+  // ==========================================
+  // MODE CONSULTATION ADMIN
+  // ==========================================
+
+  const isConsultation =
+    consultationMode ||
+    location.state?.consultationMode === true ||
+    (
+      Boolean(studentId) &&
+      location.pathname.includes("/admin/student/") &&
+      location.pathname.includes("/consultation")
+    );
+
 
   const [lesson, setLesson] = useState(null);
 
@@ -68,7 +92,10 @@ export default function VideoPage() {
 
     loadData();
 
-  }, [lessonId]);
+  }, [
+    lessonId,
+    isConsultation
+  ]);
 
 
   async function loadData() {
@@ -82,14 +109,35 @@ export default function VideoPage() {
       // UTILISATEUR
       // ========================================
 
-      const {
-        data: {
-          user
-        }
-      } = await supabase.auth.getUser();
+      // En mode consultation, l'administrateur
+      // reste connecté avec son propre compte.
+      //
+      // IMPORTANT :
+      // on ne récupère pas son compte comme compte
+      // de l'élève consulté et aucune donnée élève
+      // ne sera enregistrée.
+
+      if (!isConsultation) {
+
+        const {
+          data: {
+            user
+          }
+        } = await supabase.auth.getUser();
 
 
-      setUser(user);
+        setUser(user);
+
+      } else {
+
+        console.log(
+          "👁️ [CONSULTATION] VideoPage — aucune donnée élève ne sera modifiée."
+        );
+
+
+        setUser(null);
+
+      }
 
 
       // ========================================
@@ -255,6 +303,89 @@ export default function VideoPage() {
 
 
   // ==========================================
+  // CALCUL RÉSULTAT CONSULTATION
+  // ==========================================
+
+  function calculateConsultationResult() {
+
+    let goodAnswers = 0;
+
+
+    questions.forEach(
+      question => {
+
+        const selectedAnswer =
+          answers[question.id];
+
+
+        const correctIndex =
+          Number(
+            question.correct_index
+          );
+
+
+        if (
+          Number(selectedAnswer) ===
+          correctIndex
+        ) {
+
+          goodAnswers++;
+
+        }
+
+      }
+    );
+
+
+    const total =
+      questions.length;
+
+
+    const score =
+      total > 0
+        ? Math.round(
+            (
+              goodAnswers /
+              total
+            ) * 100
+          )
+        : 0;
+
+
+    // ========================================
+    // XP THÉORIQUE
+    // ========================================
+
+    let xpGain = 20;
+
+
+    if (score >= 80) {
+
+      xpGain = 100;
+
+    } else if (score >= 50) {
+
+      xpGain = 50;
+
+    }
+
+
+    return {
+
+      score,
+
+      goodAnswers,
+
+      total,
+
+      xp: xpGain
+
+    };
+
+  }
+
+
+  // ==========================================
   // VALIDATION QUIZ
   // ==========================================
 
@@ -263,7 +394,6 @@ export default function VideoPage() {
     if (
       validating ||
       result ||
-      !user ||
       !quiz ||
       questions.length === 0
     ) {
@@ -287,6 +417,70 @@ export default function VideoPage() {
 
 
     try {
+
+      // ======================================
+      // MODE CONSULTATION
+      // ======================================
+
+      // IMPORTANT :
+      //
+      // Aucun appel Supabase d'écriture.
+      // Aucun XP.
+      // Aucun badge.
+      // Aucune progression.
+      // Aucune tentative de quiz.
+      // Aucun compte élève modifié.
+
+      if (isConsultation) {
+
+        const consultationResult =
+          calculateConsultationResult();
+
+
+        console.log(
+          "👁️ [CONSULTATION] Résultat local :",
+          consultationResult
+        );
+
+
+        setResult({
+
+          score:
+            consultationResult.score,
+
+          goodAnswers:
+            consultationResult.goodAnswers,
+
+          total:
+            consultationResult.total,
+
+          xp:
+            consultationResult.xp,
+
+          level:
+            null,
+
+          consultation:
+            true
+
+        });
+
+
+        return;
+
+      }
+
+
+      // ======================================
+      // MODE ÉLÈVE NORMAL
+      // ======================================
+
+      if (!user) {
+
+        return;
+
+      }
+
 
       let goodAnswers = 0;
 
@@ -460,7 +654,10 @@ export default function VideoPage() {
 
         level:
           levelData?.level ||
-          null
+          null,
+
+        consultation:
+          false
 
       });
 
@@ -687,9 +884,22 @@ export default function VideoPage() {
       ">
 
         <button
-          onClick={() =>
-            navigate("/")
-          }
+          onClick={() => {
+
+            if (isConsultation) {
+
+              navigate(
+                `/admin/student/${studentId}/consultation`
+              );
+
+              return;
+
+            }
+
+
+            navigate("/");
+
+          }}
           className="
             flex
             items-center
@@ -777,7 +987,10 @@ export default function VideoPage() {
             mb-1
           ">
 
-            🎬 Vidéo de cours
+            {isConsultation
+              ? "👁️ Vidéo en consultation"
+              : "🎬 Vidéo de cours"
+            }
 
           </p>
 
@@ -941,8 +1154,10 @@ export default function VideoPage() {
                 text-gray-900
               ">
 
-                Apprends la leçon puis
-                vérifie tes connaissances.
+                {isConsultation
+                  ? "Consultation en lecture seule."
+                  : "Apprends la leçon puis vérifie tes connaissances."
+                }
 
               </p>
 
@@ -1000,6 +1215,11 @@ export default function VideoPage() {
                     text-purple-600
                   ">
 
+                    {isConsultation
+                      ? "👁️ Quiz en consultation"
+                      : ""
+                    }
+
                   </p>
 
                   <h2 className="
@@ -1008,7 +1228,10 @@ export default function VideoPage() {
                     text-gray-900
                   ">
 
-                    Vérifie tes connaissances
+                    {isConsultation
+                      ? "Voir le quiz"
+                      : "Vérifie tes connaissances"
+                    }
 
                   </h2>
 
@@ -1023,8 +1246,10 @@ export default function VideoPage() {
                 mt-2
               ">
 
-                Réponds à toutes les questions
-                pour valider le quiz.
+                {isConsultation
+                  ? "Réponds aux questions pour voir le résultat. Aucune donnée de l'élève ne sera modifiée."
+                  : "Réponds à toutes les questions pour valider le quiz."
+                }
 
               </p>
 
@@ -1139,7 +1364,10 @@ export default function VideoPage() {
                   text-blue-600
                 ">
 
-                  Quiz terminé
+                  {result.consultation
+                    ? "Quiz consulté"
+                    : "Quiz terminé"
+                  }
 
                 </p>
 
@@ -1211,7 +1439,10 @@ export default function VideoPage() {
                       text-gray-500
                     ">
 
-                      XP gagnés
+                      {result.consultation
+                        ? "XP théoriques"
+                        : "XP gagnés"
+                      }
 
                     </p>
 
@@ -1269,12 +1500,46 @@ export default function VideoPage() {
                 </div>
 
 
+                {result.consultation && (
+
+                  <div className="
+                    mt-5
+                    px-4
+                    py-3
+                    rounded-xl
+                    bg-purple-50
+                    border
+                    border-purple-100
+                    text-purple-700
+                    text-sm
+                    font-medium
+                  ">
+
+                    👁️ Mode consultation — aucune
+                    donnée de l'élève n'a été modifiée.
+
+                  </div>
+
+                )}
+
+
                 <button
-                  onClick={() =>
+                  onClick={() => {
+
+                    if (isConsultation) {
+
+                      navigate(-1);
+
+                      return;
+
+                    }
+
+
                     navigate(
                       `/lesson/${lessonId}`
-                    )
-                  }
+                    );
+
+                  }}
                   className="
                     w-full
                     mt-6
@@ -1568,7 +1833,10 @@ export default function VideoPage() {
                         size={19}
                       />
 
-                      Valider le quiz
+                      {isConsultation
+                        ? "Voir le résultat"
+                        : "Valider le quiz"
+                      }
 
                     </>
 

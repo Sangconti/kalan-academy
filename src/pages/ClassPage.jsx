@@ -7,7 +7,8 @@ import {
 
 import {
   useParams,
-  useNavigate
+  useNavigate,
+  useLocation
 } from "react-router-dom";
 
 import {
@@ -23,9 +24,10 @@ import {
 
 export default function ClassPage() {
 
-  const { classId } = useParams();
+  const { classId, studentId } = useParams();
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [subjects, setSubjects] =
     useState([]);
@@ -35,6 +37,35 @@ export default function ClassPage() {
 
   const [error, setError] =
     useState("");
+
+
+  // =====================================================
+  // MODE CONSULTATION
+  // =====================================================
+
+  const isConsultation =
+    location.pathname.includes("/admin/student/") &&
+    location.pathname.includes("/consultation") &&
+    Boolean(studentId);
+
+
+  // =====================================================
+  // RETOUR À L'ACCUEIL
+  // =====================================================
+
+  function goHome() {
+
+    if (isConsultation) {
+
+      navigate(
+        `/admin/student/${studentId}/consultation`
+      );
+
+      return;
+    }
+
+    navigate("/");
+  }
 
 
   // =====================================================
@@ -213,8 +244,29 @@ export default function ClassPage() {
     );
 
     console.log(
+      "CONSULTATION :",
+      isConsultation
+    );
+
+    console.log(
       "=================================="
     );
+
+
+    if (isConsultation) {
+
+      navigate(
+        `/admin/student/${studentId}/consultation/subject/${subject.id}`,
+        {
+          state: {
+            class_id: classId,
+            subject_id: subject.id
+          }
+        }
+      );
+
+      return;
+    }
 
 
     navigate(
@@ -289,9 +341,7 @@ export default function ClassPage() {
       ">
 
         <button
-          onClick={() =>
-            navigate("/")
-          }
+          onClick={goHome}
           className="
             inline-flex
             items-center
@@ -411,9 +461,7 @@ export default function ClassPage() {
       ================================================= */}
 
       <button
-        onClick={() =>
-          navigate("/")
-        }
+        onClick={goHome}
         className="
           inline-flex
           items-center

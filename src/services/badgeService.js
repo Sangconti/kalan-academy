@@ -3,76 +3,97 @@ import { supabase } from "../lib/supabase";
 
 
 export async function unlockBadge(
-userId,
-badgeName
-){
+  userId,
+  badgeName
+) {
+
+  const {
+    data: badge
+  } =
+    await supabase
+
+      .from("badges")
+
+      .select("id")
+
+      .eq(
+        "name",
+        badgeName
+      )
+
+      .single();
 
 
-const {
-data:badge
+
+  if (!badge)
+    return;
+
+
+
+  const {
+    data: exist
+  } =
+    await supabase
+
+      .from("user_badges")
+
+      .select("id")
+
+      .eq(
+        "user_id",
+        userId
+      )
+
+      .eq(
+        "badge_id",
+        badge.id
+      );
+
+
+
+  if (exist?.length)
+    return;
+
+
 }
-=
-await supabase
-
-.from("badges")
-
-.select("id")
-
-.eq(
-"name",
-badgeName
-)
-
-.single();
 
 
 
-if(!badge)
-return;
+// ---------------------------------------------------------
+// AJOUTER UN BADGE À UN UTILISATEUR
+// ---------------------------------------------------------
 
-
-
-const {
-data:exist
-}
-=
-await supabase
-
-.from("user_badges")
-
-.select("id")
-
-.eq(
-"user_id",
-userId
-)
-
-.eq(
-"badge_id",
-badge.id
-);
-
-
-
-if(exist?.length)
-return;
-
-
-
-
-export async function addUserBadge(userId, badgeId){
+export async function addUserBadge(
+  userId,
+  badgeId
+) {
 
   // Vérifier si le badge existe déjà
 
-  const { data: existing, error: checkError } = await supabase
+  const {
+    data: existing,
+    error: checkError
+  } = await supabase
+
     .from("user_badges")
+
     .select("id")
-    .eq("user_id", userId)
-    .eq("badge_id", badgeId)
+
+    .eq(
+      "user_id",
+      userId
+    )
+
+    .eq(
+      "badge_id",
+      badgeId
+    )
+
     .maybeSingle();
 
 
-  if(checkError){
+
+  if (checkError) {
 
     console.error(
       "Erreur vérification badge :",
@@ -87,7 +108,7 @@ export async function addUserBadge(userId, badgeId){
 
   // Déjà obtenu
 
-  if(existing){
+  if (existing) {
 
     console.log(
       "Badge déjà obtenu"
@@ -105,19 +126,22 @@ export async function addUserBadge(userId, badgeId){
     data,
     error
   } = await supabase
+
     .from("user_badges")
+
     .insert({
 
-      user_id:userId,
-      badge_id:badgeId
+      user_id: userId,
+      badge_id: badgeId
 
     })
+
     .select()
     .single();
 
 
 
-  if(error){
+  if (error) {
 
     console.error(
       "Erreur ajout badge :",
@@ -129,9 +153,7 @@ export async function addUserBadge(userId, badgeId){
   }
 
 
+
   return data;
-
-}
-
 
 }

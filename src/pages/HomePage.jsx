@@ -1,7 +1,11 @@
 // src/pages/HomePage.jsx
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams
+} from "react-router-dom";
 
 import { getClasses } from "../services/educationService";
 
@@ -14,9 +18,40 @@ import {
 export default function HomePage() {
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const { studentId } = useParams();
 
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
+
+
+  // =====================================================
+  // MODE CONSULTATION
+  // =====================================================
+
+  const isConsultation =
+    location.pathname.includes("/admin/student/") &&
+    location.pathname.includes("/consultation") &&
+    Boolean(studentId);
+
+
+  // =====================================================
+  // NAVIGATION VERS UNE CLASSE
+  // =====================================================
+
+  function openClass(classId) {
+
+    if (isConsultation) {
+
+      navigate(
+        `/admin/student/${studentId}/consultation/class/${classId}`
+      );
+
+      return;
+    }
+
+    navigate(`/class/${classId}`);
+  }
 
 
   // =====================================================
@@ -370,9 +405,7 @@ export default function HomePage() {
 
             <button
               key={classe.id}
-              onClick={() =>
-                navigate(`/class/${classe.id}`)
-              }
+              onClick={() => openClass(classe.id)}
               className="
                 group
                 relative

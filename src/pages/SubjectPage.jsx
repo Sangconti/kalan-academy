@@ -25,7 +25,10 @@ import { db } from "../offline/db";
 
 export default function SubjectPage() {
 
-  const { subjectId } = useParams();
+  const {
+    subjectId,
+    studentId
+  } = useParams();
 
   const location = useLocation();
 
@@ -43,6 +46,16 @@ export default function SubjectPage() {
 
   const [error, setError] =
     useState("");
+
+
+  // =====================================================
+  // MODE CONSULTATION
+  // =====================================================
+
+  const isConsultation =
+    location.pathname.includes("/admin/student/") &&
+    location.pathname.includes("/consultation") &&
+    Boolean(studentId);
 
 
   // =====================================================
@@ -360,6 +373,50 @@ export default function SubjectPage() {
       chapter
     );
 
+
+    if (!chapter?.id) {
+
+      console.error(
+        "❌ Chapitre invalide :",
+        chapter
+      );
+
+      return;
+
+    }
+
+
+    console.log(
+      "👁️ CONSULTATION :",
+      isConsultation
+    );
+
+
+    // ===================================================
+    // MODE CONSULTATION
+    // ===================================================
+
+    if (isConsultation) {
+
+      navigate(
+        `/admin/student/${studentId}/consultation/chapter/${chapter.id}`,
+        {
+          state: {
+            subject_id: subjectId,
+            class_id: subject?.class_id,
+            chapter_id: chapter.id
+          }
+        }
+      );
+
+      return;
+
+    }
+
+
+    // ===================================================
+    // MODE ÉLÈVE NORMAL
+    // ===================================================
 
     navigate(
       `/chapter/${chapter.id}`,

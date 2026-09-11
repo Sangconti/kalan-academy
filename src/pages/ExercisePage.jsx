@@ -7,7 +7,8 @@ import {
 
 import {
   useParams,
-  useNavigate
+  useNavigate,
+  useLocation
 } from "react-router-dom";
 
 import {
@@ -29,18 +30,38 @@ import {
 } from "lucide-react";
 
 
-export default function ExercisePage() {
+export default function ExercisePage({
+  consultationMode = false
+}) {
 
   const {
-    lessonId
+    lessonId,
+    studentId
   } = useParams();
 
   const navigate =
     useNavigate();
 
+  const location =
+    useLocation();
+
   const {
     isOnline
   } = useNetwork();
+
+
+  // =====================================================
+  // 👁️ MODE CONSULTATION
+  // =====================================================
+
+  const isConsultation =
+    consultationMode ||
+    location.state?.consultationMode === true ||
+    (
+      Boolean(studentId) &&
+      location.pathname.includes("/admin/student/") &&
+      location.pathname.includes("/consultation")
+    );
 
 
   // =====================================================
@@ -810,7 +831,11 @@ export default function ExercisePage() {
                       text-accent
                     "
                   >
-                    Quiz de validation
+
+                    {isConsultation
+                      ? "Quiz en consultation"
+                      : "Quiz de validation"}
+
                   </p>
 
 
@@ -963,6 +988,10 @@ export default function ExercisePage() {
 
               lessonId={
                 lessonId
+              }
+
+              consultationMode={
+                isConsultation
               }
 
             />

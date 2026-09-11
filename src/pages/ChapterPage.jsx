@@ -7,7 +7,8 @@ import {
 
 import {
   useNavigate,
-  useParams
+  useParams,
+  useLocation
 } from "react-router-dom";
 
 import {
@@ -36,11 +37,26 @@ import {
 
 export default function ChapterPage() {
 
-  const { chapterId } = useParams();
+  const {
+    chapterId,
+    studentId
+  } = useParams();
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+
   const { isOnline } = useNetwork();
+
+
+  // =====================================================
+  // MODE CONSULTATION ADMIN
+  // =====================================================
+
+  const isConsultation =
+    location.pathname.includes("/admin/student/") &&
+    location.pathname.includes("/consultation") &&
+    Boolean(studentId);
 
 
   const [chapter, setChapter] =
@@ -222,6 +238,42 @@ export default function ChapterPage() {
 
   function goBack() {
 
+    // ---------------------------------------------------
+    // MODE CONSULTATION
+    // ---------------------------------------------------
+
+    if (isConsultation) {
+
+      if (chapter?.subject_id) {
+
+        navigate(
+          `/admin/student/${studentId}/consultation/subject/${chapter.subject_id}`,
+          {
+            state: {
+              subject_id: chapter.subject_id,
+              class_id: chapter.class_id,
+              chapter_id: chapterId,
+              consultationMode: true
+            }
+          }
+        );
+
+        return;
+
+      }
+
+
+      navigate(-1);
+
+      return;
+
+    }
+
+
+    // ---------------------------------------------------
+    // MODE ÉLÈVE NORMAL
+    // ---------------------------------------------------
+
     if (chapter?.class_id) {
 
       navigate(
@@ -255,6 +307,39 @@ export default function ChapterPage() {
 
     }
 
+
+    // ---------------------------------------------------
+    // MODE CONSULTATION
+    // ---------------------------------------------------
+
+    if (isConsultation) {
+
+      console.log(
+        "👁️ [CONSULTATION] Ouverture leçon :",
+        lesson.id
+      );
+
+
+      navigate(
+        `/admin/student/${studentId}/consultation/lesson/${lesson.id}`,
+        {
+          state: {
+            chapter_id: chapterId,
+            subject_id: chapter?.subject_id,
+            class_id: chapter?.class_id,
+            consultationMode: true
+          }
+        }
+      );
+
+      return;
+
+    }
+
+
+    // ---------------------------------------------------
+    // MODE ÉLÈVE NORMAL
+    // ---------------------------------------------------
 
     navigate(
       `/lesson/${lesson.id}`

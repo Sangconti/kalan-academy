@@ -59,6 +59,16 @@ export default function ChapterPage() {
     Boolean(studentId);
 
 
+  // =====================================================
+  // MODE APERÇU APPLICATION ÉLÈVE
+  // =====================================================
+
+  const isStudentPreview =
+    location.pathname.startsWith(
+      "/admin/student-preview"
+    );
+
+
   const [chapter, setChapter] =
     useState(null);
 
@@ -271,6 +281,39 @@ export default function ChapterPage() {
 
 
     // ---------------------------------------------------
+    // MODE APERÇU APPLICATION ÉLÈVE
+    // ---------------------------------------------------
+
+    if (isStudentPreview) {
+
+      if (chapter?.subject_id) {
+
+        navigate(
+          `/admin/student-preview/subject/${chapter.subject_id}`,
+          {
+            state: {
+              subject_id: chapter.subject_id,
+              class_id: chapter.class_id,
+              chapter_id: chapterId
+            }
+          }
+        );
+
+        return;
+
+      }
+
+
+      navigate(
+        "/admin/student-preview"
+      );
+
+      return;
+
+    }
+
+
+    // ---------------------------------------------------
     // MODE ÉLÈVE NORMAL
     // ---------------------------------------------------
 
@@ -328,6 +371,34 @@ export default function ChapterPage() {
             subject_id: chapter?.subject_id,
             class_id: chapter?.class_id,
             consultationMode: true
+          }
+        }
+      );
+
+      return;
+
+    }
+
+
+    // ---------------------------------------------------
+    // MODE APERÇU APPLICATION ÉLÈVE
+    // ---------------------------------------------------
+
+    if (isStudentPreview) {
+
+      console.log(
+        "👁️ [APERÇU] Ouverture leçon :",
+        lesson.id
+      );
+
+
+      navigate(
+        `/admin/student-preview/lesson/${lesson.id}`,
+        {
+          state: {
+            chapter_id: chapterId,
+            subject_id: chapter?.subject_id,
+            class_id: chapter?.class_id
           }
         }
       );

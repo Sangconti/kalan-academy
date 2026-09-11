@@ -6,6 +6,10 @@ import {
 } from "react";
 
 import {
+  useLocation
+} from "react-router-dom";
+
+import {
   addXP
 } from "../services/xpService";
 
@@ -32,6 +36,20 @@ export default function ExerciseQuiz({
   lessonId,
   consultationMode = false
 }) {
+
+  const location =
+    useLocation();
+
+
+  // ====================================
+  // 👁️ MODE APERÇU DE L'APPLICATION
+  // ====================================
+
+  const isStudentPreview =
+    location.pathname.startsWith(
+      "/admin/student-preview"
+    );
+
 
   // ====================================
   // STATE
@@ -160,20 +178,21 @@ export default function ExerciseQuiz({
   // CORRECTION LOCALE
   // ====================================
   //
-  // Utilisée UNIQUEMENT en mode
-  // consultation.
+  // Utilisée en mode :
+  // - consultation
+  // - aperçu
   //
   // IMPORTANT :
   // aucune sauvegarde Dexie,
   // aucune écriture Supabase,
-  // aucun XP,
+  // aucun XP réel,
   // aucune progression,
   // aucun badge,
   // aucune syncQueue.
   //
   // ====================================
 
-  function calculateConsultationResult() {
+  function calculateReadonlyResult() {
 
     let correct = 0;
 
@@ -196,7 +215,9 @@ export default function ExerciseQuiz({
 
 
         console.log(
-          `👁️ [CONSULTATION] QUESTION ${index + 1}`,
+          isStudentPreview
+            ? `👁️ [APERÇU] QUESTION ${index + 1}`
+            : `👁️ [CONSULTATION] QUESTION ${index + 1}`,
           {
             userAnswer,
             userAnswerText:
@@ -292,7 +313,7 @@ export default function ExerciseQuiz({
     try {
 
       // ==================================
-      // MODE CONSULTATION
+      // 👁️ MODE CONSULTATION
       // ==================================
       //
       // L'administrateur peut répondre
@@ -300,7 +321,7 @@ export default function ExerciseQuiz({
       // mais RIEN n'est enregistré.
       // ==================================
 
-      if (consultationMode) {
+      if (consultationMode && !isStudentPreview) {
 
         console.log(
           "👁️ [CONSULTATION] Correction locale du quiz"
@@ -308,7 +329,7 @@ export default function ExerciseQuiz({
 
 
         const quizResult =
-          calculateConsultationResult();
+          calculateReadonlyResult();
 
 
         setResult({
@@ -329,6 +350,65 @@ export default function ExerciseQuiz({
             false,
 
           consultation:
+            true,
+
+          preview:
+            false
+
+        });
+
+
+        return;
+
+      }
+
+
+      // ==================================
+      // 👁️ MODE APERÇU
+      // ==================================
+      //
+      // L'administrateur peut répondre
+      // au quiz pour visualiser son rendu,
+      // mais RIEN n'est enregistré.
+      //
+      // Aucune tentative,
+      // aucun XP,
+      // aucune progression,
+      // aucun badge.
+      // ==================================
+
+      if (isStudentPreview) {
+
+        console.log(
+          "👁️ [APERÇU] Correction locale du quiz"
+        );
+
+
+        const quizResult =
+          calculateReadonlyResult();
+
+
+        setResult({
+
+          score:
+            quizResult.score,
+
+          xp:
+            quizResult.xp,
+
+          correct:
+            quizResult.correct,
+
+          synced:
+            false,
+
+          pendingXP:
+            false,
+
+          consultation:
+            false,
+
+          preview:
             true
 
         });
@@ -462,6 +542,9 @@ export default function ExerciseQuiz({
           false,
 
         consultation:
+          false,
+
+        preview:
           false
 
       });
@@ -634,9 +717,11 @@ export default function ExerciseQuiz({
             "
           >
 
-            {result.consultation
-              ? "Quiz consulté"
-              : "Quiz terminé"}
+            {result.preview
+              ? "Quiz aperçu"
+              : result.consultation
+                ? "Quiz consulté"
+                : "Quiz terminé"}
 
           </p>
 
@@ -650,9 +735,11 @@ export default function ExerciseQuiz({
             "
           >
 
-            {result.consultation
-              ? "Résultat de la consultation"
-              : "Ton résultat"}
+            {result.preview
+              ? "Résultat de l'aperçu"
+              : result.consultation
+                ? "Résultat de la consultation"
+                : "Ton résultat"}
 
           </h2>
 
@@ -869,7 +956,8 @@ export default function ExerciseQuiz({
                   "
                 >
 
-                  {result.consultation
+                  {result.preview ||
+                  result.consultation
                     ? "XP théoriques"
                     : "XP gagnés"}
 
@@ -895,7 +983,7 @@ export default function ExerciseQuiz({
             </div>
 
 
-            {/* SYNCHRONISATION / CONSULTATION */}
+            {/* SYNCHRONISATION / CONSULTATION / APERÇU */}
 
             <div
               className="
@@ -906,7 +994,13 @@ export default function ExerciseQuiz({
               "
             >
 
-              {result.consultation ? (
+              {result.preview ? (
+
+                <p>
+                  👁️ Mode aperçu — aucune donnée d'élève n'a été modifiée
+                </p>
+
+              ) : result.consultation ? (
 
                 <p>
                   👁️ Mode consultation — aucune donnée élève modifiée
@@ -1054,9 +1148,11 @@ export default function ExerciseQuiz({
               "
             >
 
-              {consultationMode
-                ? "Quiz en consultation"
-                : "Quiz de validation"}
+              {isStudentPreview
+                ? "Quiz aperçu"
+                : consultationMode
+                  ? "Quiz en consultation"
+                  : "Quiz de validation"}
 
             </p>
 
@@ -1070,9 +1166,11 @@ export default function ExerciseQuiz({
               "
             >
 
-              {consultationMode
-                ? "Consulte les connaissances de l'élève"
-                : "Vérifie tes connaissances"}
+              {isStudentPreview
+                ? "Aperçu du quiz"
+                : consultationMode
+                  ? "Consulte les connaissances de l'élève"
+                  : "Vérifie tes connaissances"}
 
             </h2>
 
@@ -1085,7 +1183,9 @@ export default function ExerciseQuiz({
               "
             >
 
-              Choisis une réponse pour chaque question.
+              {isStudentPreview
+                ? "Réponds aux questions pour visualiser le résultat. Aucune donnée élève ne sera modifiée."
+                : "Choisis une réponse pour chaque question."}
 
             </p>
 
@@ -1449,9 +1549,11 @@ export default function ExerciseQuiz({
               size={19}
             />
 
-            {consultationMode
+            {isStudentPreview
               ? "Voir le résultat"
-              : "Valider le quiz"}
+              : consultationMode
+                ? "Voir le résultat"
+                : "Valider le quiz"}
 
           </>
 

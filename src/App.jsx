@@ -31,6 +31,7 @@ import CoursesPage from "./pages/CoursesPage";
 
 import Layout from "./components/Layout";
 import ProtectedStudentRoute from "./components/ProtectedStudentRoute";
+import StudentPreviewLayout from "./components/StudentPreviewLayout";
 
 // =====================================================
 // ACCÈS
@@ -238,6 +239,7 @@ function App() {
           </ProtectedAdminRoute>
         }
       >
+
         <Route
           index
           element={<HomePage />}
@@ -292,6 +294,153 @@ function App() {
           path="settings"
           element={<SettingsPage consultationMode />}
         />
+
+      </Route>
+
+
+      {/* =================================================
+          ADMIN — APERÇU DE L'APPLICATION ÉLÈVE
+          =================================================
+
+          Cet espace est différent du mode consultation.
+
+          - Aucun studentId
+          - Aucun élève particulier
+          - Vue générale de l'application élève
+          - Accessible uniquement depuis l'administration
+          - Ne passe PAS par ProtectedStudentRoute
+      ================================================= */}
+
+      <Route
+        path="/admin/student-preview"
+        element={
+          <ProtectedAdminRoute>
+            <StudentPreviewLayout />
+          </ProtectedAdminRoute>
+        }
+      >
+
+        {/* ===============================================
+            ACCUEIL APERÇU
+        =============================================== */}
+
+        <Route
+          index
+          element={
+            <HomePage />
+          }
+        />
+
+        {/* ===============================================
+            CLASSE APERÇU
+        =============================================== */}
+
+        <Route
+          path="class/:classId"
+          element={
+            <ClassPage />
+          }
+        />
+
+        {/* ===============================================
+            MATIÈRE APERÇU
+        =============================================== */}
+
+        <Route
+          path="subject/:subjectId"
+          element={
+            <SubjectPage />
+          }
+        />
+
+        {/* ===============================================
+            CHAPITRE APERÇU
+        =============================================== */}
+
+        <Route
+          path="chapter/:chapterId"
+          element={
+            <ChapterPage />
+          }
+        />
+
+        {/* ===============================================
+            LEÇON APERÇU
+        =============================================== */}
+
+        <Route
+          path="lesson/:lessonId"
+          element={
+            <LessonPage />
+          }
+        />
+
+        {/* ===============================================
+            EXERCICE / QUIZ APERÇU
+        =============================================== */}
+
+        <Route
+          path="exercise/:lessonId"
+          element={
+            <ExercisePage />
+          }
+        />
+
+        {/* ===============================================
+            VIDÉO APERÇU
+        =============================================== */}
+
+        <Route
+          path="video/:lessonId"
+          element={
+            <VideoPage />
+          }
+        />
+
+        {/* ===============================================
+            DASHBOARD APERÇU
+        =============================================== */}
+
+        <Route
+          path="dashboard"
+          element={
+            <DashboardPage />
+          }
+        />
+
+        {/* ===============================================
+            TÉLÉCHARGEMENTS APERÇU
+        =============================================== */}
+
+        <Route
+          path="downloads"
+          element={
+            <DownloadsPage />
+          }
+        />
+
+        {/* ===============================================
+            PROFIL APERÇU
+        =============================================== */}
+
+        <Route
+          path="profile"
+          element={
+            <ProfilePage />
+          }
+        />
+
+        {/* ===============================================
+            PARAMÈTRES APERÇU
+        =============================================== */}
+
+        <Route
+          path="settings"
+          element={
+            <SettingsPage />
+          }
+        />
+
       </Route>
 
 
@@ -573,6 +722,7 @@ function App() {
         />
 
       </Route>
+
 
       {/* =================================================
           COURS

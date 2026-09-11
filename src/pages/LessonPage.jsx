@@ -71,6 +71,16 @@ export default function LessonPage({
 
 
   // =====================================================
+  // 👁️ MODE APERÇU APPLICATION ÉLÈVE
+  // =====================================================
+
+  const isStudentPreview =
+    location.pathname.startsWith(
+      "/admin/student-preview"
+    );
+
+
+  // =====================================================
   // 🔒 PROTECTION DU CONTENU PÉDAGOGIQUE
   // =====================================================
 
@@ -305,6 +315,32 @@ export default function LessonPage({
 
 
     // ---------------------------------------------------
+    // 👁️ APERÇU APPLICATION ÉLÈVE
+    // ---------------------------------------------------
+
+    if (isStudentPreview) {
+
+      console.log(
+        "👁️ [APERÇU] Ouverture vidéo :",
+        lesson.id
+      );
+
+
+      navigate(
+        `/admin/student-preview/video/${lesson.id}`,
+        {
+          state: {
+            previewMode: true
+          }
+        }
+      );
+
+      return;
+
+    }
+
+
+    // ---------------------------------------------------
     // 👨‍🎓 ÉLÈVE NORMAL
     // ---------------------------------------------------
 
@@ -348,6 +384,32 @@ export default function LessonPage({
         {
           state: {
             consultationMode: true
+          }
+        }
+      );
+
+      return;
+
+    }
+
+
+    // ---------------------------------------------------
+    // 👁️ APERÇU APPLICATION ÉLÈVE
+    // ---------------------------------------------------
+
+    if (isStudentPreview) {
+
+      console.log(
+        "👁️ [APERÇU] Ouverture quiz :",
+        lesson.id
+      );
+
+
+      navigate(
+        `/admin/student-preview/exercise/${lesson.id}`,
+        {
+          state: {
+            previewMode: true
           }
         }
       );
@@ -554,9 +616,36 @@ export default function LessonPage({
 
       <button
         type="button"
-        onClick={() =>
-          navigate(-1)
-        }
+        onClick={() => {
+
+          if (isConsultation) {
+            navigate(-1);
+            return;
+          }
+
+          if (isStudentPreview) {
+
+            if (lesson?.chapter_id) {
+
+              navigate(
+                `/admin/student-preview/chapter/${lesson.chapter_id}`
+              );
+
+              return;
+
+            }
+
+            navigate(
+              "/admin/student-preview"
+            );
+
+            return;
+
+          }
+
+          navigate(-1);
+
+        }}
         className="
           inline-flex
           items-center
@@ -680,7 +769,9 @@ export default function LessonPage({
 
             {isConsultation
               ? "Leçon en consultation"
-              : "Leçon"
+              : isStudentPreview
+                ? "Aperçu de la leçon"
+                : "Leçon"
             }
 
           </div>
@@ -827,10 +918,7 @@ export default function LessonPage({
                 size={21}
               />
 
-              {isConsultation
-                ? "Voir la vidéo"
-                : "Voir la vidéo"
-              }
+              Voir la vidéo
 
             </button>
 
@@ -1173,9 +1261,13 @@ export default function LessonPage({
                 mb-1
               "
             >
+
               {isConsultation
                 ? "Quiz en consultation"
-                : "Quiz de validation"}
+                : isStudentPreview
+                  ? "Aperçu du quiz"
+                  : "Quiz de validation"}
+
             </p>
 
 
@@ -1204,7 +1296,9 @@ export default function LessonPage({
 
               {isConsultation
                 ? "Consulte les questions et le résultat sans modifier les données de l'élève."
-                : "Teste tes connaissances sur cette leçon et gagne de l'XP."}
+                : isStudentPreview
+                  ? "Aperçu des questions du quiz sans modifier les données d'un élève."
+                  : "Teste tes connaissances sur cette leçon et gagne de l'XP."}
 
             </p>
 
@@ -1236,7 +1330,9 @@ export default function LessonPage({
 
               {isConsultation
                 ? "Voir le quiz"
-                : "Commencer le quiz"}
+                : isStudentPreview
+                  ? "Voir le quiz"
+                  : "Commencer le quiz"}
 
             </button>
 

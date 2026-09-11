@@ -65,6 +65,16 @@ export default function ExercisePage({
 
 
   // =====================================================
+  // 👁️ MODE APERÇU DE L'APPLICATION ÉLÈVE
+  // =====================================================
+
+  const isStudentPreview =
+    location.pathname.startsWith(
+      "/admin/student-preview"
+    );
+
+
+  // =====================================================
   // STATE
   // =====================================================
 
@@ -161,6 +171,16 @@ export default function ExercisePage({
   // =====================================================
 
   function handleBack() {
+
+    if (isStudentPreview) {
+
+      navigate(
+        "/admin/student-preview"
+      );
+
+      return;
+
+    }
 
     navigate(-1);
 
@@ -834,7 +854,9 @@ export default function ExercisePage({
 
                     {isConsultation
                       ? "Quiz en consultation"
-                      : "Quiz de validation"}
+                      : isStudentPreview
+                        ? "Quiz aperçu"
+                        : "Quiz de validation"}
 
                   </p>
 
@@ -991,7 +1013,8 @@ export default function ExercisePage({
               }
 
               consultationMode={
-                isConsultation
+                isConsultation ||
+                isStudentPreview
               }
 
             />

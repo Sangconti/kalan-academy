@@ -67,6 +67,16 @@ export default function VideoPage({
     );
 
 
+  // ==========================================
+  // MODE APERÇU APPLICATION ÉLÈVE
+  // ==========================================
+
+  const isStudentPreview =
+    location.pathname.startsWith(
+      "/admin/student-preview"
+    );
+
+
   const [lesson, setLesson] = useState(null);
 
   const [quiz, setQuiz] = useState(null);
@@ -94,7 +104,8 @@ export default function VideoPage({
 
   }, [
     lessonId,
-    isConsultation
+    isConsultation,
+    isStudentPreview
   ]);
 
 
@@ -109,15 +120,18 @@ export default function VideoPage({
       // UTILISATEUR
       // ========================================
 
-      // En mode consultation, l'administrateur
-      // reste connecté avec son propre compte.
+      // En mode consultation ou aperçu,
+      // aucune donnée élève ne doit être modifiée.
       //
-      // IMPORTANT :
-      // on ne récupère pas son compte comme compte
-      // de l'élève consulté et aucune donnée élève
-      // ne sera enregistrée.
+      // L'administrateur reste connecté avec son
+      // propre compte mais celui-ci ne doit jamais
+      // être utilisé pour enregistrer une tentative,
+      // une progression ou de l'XP.
 
-      if (!isConsultation) {
+      if (
+        !isConsultation &&
+        !isStudentPreview
+      ) {
 
         const {
           data: {
@@ -130,9 +144,19 @@ export default function VideoPage({
 
       } else {
 
-        console.log(
-          "👁️ [CONSULTATION] VideoPage — aucune donnée élève ne sera modifiée."
-        );
+        if (isStudentPreview) {
+
+          console.log(
+            "👁️ [APERÇU] VideoPage — aucune donnée élève ne sera modifiée."
+          );
+
+        } else {
+
+          console.log(
+            "👁️ [CONSULTATION] VideoPage — aucune donnée élève ne sera modifiée."
+          );
+
+        }
 
 
         setUser(null);
@@ -303,10 +327,10 @@ export default function VideoPage({
 
 
   // ==========================================
-  // CALCUL RÉSULTAT CONSULTATION
+  // CALCUL RÉSULTAT LECTURE SEULE
   // ==========================================
 
-  function calculateConsultationResult() {
+  function calculateReadonlyResult() {
 
     let goodAnswers = 0;
 
@@ -422,8 +446,6 @@ export default function VideoPage({
       // MODE CONSULTATION
       // ======================================
 
-      // IMPORTANT :
-      //
       // Aucun appel Supabase d'écriture.
       // Aucun XP.
       // Aucun badge.
@@ -434,7 +456,7 @@ export default function VideoPage({
       if (isConsultation) {
 
         const consultationResult =
-          calculateConsultationResult();
+          calculateReadonlyResult();
 
 
         console.log(
@@ -461,6 +483,66 @@ export default function VideoPage({
             null,
 
           consultation:
+            true,
+
+          preview:
+            false
+
+        });
+
+
+        return;
+
+      }
+
+
+      // ======================================
+      // MODE APERÇU APPLICATION ÉLÈVE
+      // ======================================
+
+      // IMPORTANT :
+      //
+      // L'aperçu est entièrement en lecture seule.
+      //
+      // Aucun insert dans quiz_attempts.
+      // Aucun upsert dans user_progress.
+      // Aucun ajout XP.
+      // Aucun badge.
+      // Aucun compte élève modifié.
+
+      if (isStudentPreview) {
+
+        const previewResult =
+          calculateReadonlyResult();
+
+
+        console.log(
+          "👁️ [APERÇU] Résultat local :",
+          previewResult
+        );
+
+
+        setResult({
+
+          score:
+            previewResult.score,
+
+          goodAnswers:
+            previewResult.goodAnswers,
+
+          total:
+            previewResult.total,
+
+          xp:
+            previewResult.xp,
+
+          level:
+            null,
+
+          consultation:
+            false,
+
+          preview:
             true
 
         });
@@ -657,6 +739,9 @@ export default function VideoPage({
           null,
 
         consultation:
+          false,
+
+        preview:
           false
 
       });
@@ -897,6 +982,17 @@ export default function VideoPage({
             }
 
 
+            if (isStudentPreview) {
+
+              navigate(
+                "/admin/student-preview"
+              );
+
+              return;
+
+            }
+
+
             navigate("/");
 
           }}
@@ -989,7 +1085,9 @@ export default function VideoPage({
 
             {isConsultation
               ? "👁️ Vidéo en consultation"
-              : "🎬 Vidéo de cours"
+              : isStudentPreview
+                ? "👁️ Aperçu de la vidéo"
+                : "🎬 Vidéo de cours"
             }
 
           </p>
@@ -1156,7 +1254,9 @@ export default function VideoPage({
 
                 {isConsultation
                   ? "Consultation en lecture seule."
-                  : "Apprends la leçon puis vérifie tes connaissances."
+                  : isStudentPreview
+                    ? "Aperçu en lecture seule. Aucune donnée élève ne sera modifiée."
+                    : "Apprends la leçon puis vérifie tes connaissances."
                 }
 
               </p>
@@ -1217,7 +1317,9 @@ export default function VideoPage({
 
                     {isConsultation
                       ? "👁️ Quiz en consultation"
-                      : ""
+                      : isStudentPreview
+                        ? "👁️ Quiz en aperçu"
+                        : ""
                     }
 
                   </p>
@@ -1228,7 +1330,7 @@ export default function VideoPage({
                     text-gray-900
                   ">
 
-                    {isConsultation
+                    {isConsultation || isStudentPreview
                       ? "Voir le quiz"
                       : "Vérifie tes connaissances"
                     }
@@ -1248,7 +1350,9 @@ export default function VideoPage({
 
                 {isConsultation
                   ? "Réponds aux questions pour voir le résultat. Aucune donnée de l'élève ne sera modifiée."
-                  : "Réponds à toutes les questions pour valider le quiz."
+                  : isStudentPreview
+                    ? "Réponds aux questions pour voir le résultat. L'aperçu ne modifie aucune donnée d'élève."
+                    : "Réponds à toutes les questions pour valider le quiz."
                 }
 
               </p>
@@ -1364,9 +1468,11 @@ export default function VideoPage({
                   text-blue-600
                 ">
 
-                  {result.consultation
-                    ? "Quiz consulté"
-                    : "Quiz terminé"
+                  {result.preview
+                    ? "Quiz aperçu"
+                    : result.consultation
+                      ? "Quiz consulté"
+                      : "Quiz terminé"
                   }
 
                 </p>
@@ -1439,7 +1545,8 @@ export default function VideoPage({
                       text-gray-500
                     ">
 
-                      {result.consultation
+                      {result.preview ||
+                      result.consultation
                         ? "XP théoriques"
                         : "XP gagnés"
                       }
@@ -1500,7 +1607,8 @@ export default function VideoPage({
                 </div>
 
 
-                {result.consultation && (
+                {(result.consultation ||
+                  result.preview) && (
 
                   <div className="
                     mt-5
@@ -1515,8 +1623,10 @@ export default function VideoPage({
                     font-medium
                   ">
 
-                    👁️ Mode consultation — aucune
-                    donnée de l'élève n'a été modifiée.
+                    {result.preview
+                      ? "👁️ Mode aperçu — aucune donnée d'élève n'a été modifiée."
+                      : "👁️ Mode consultation — aucune donnée de l'élève n'a été modifiée."
+                    }
 
                   </div>
 
@@ -1526,7 +1636,10 @@ export default function VideoPage({
                 <button
                   onClick={() => {
 
-                    if (isConsultation) {
+                    if (
+                      isConsultation ||
+                      isStudentPreview
+                    ) {
 
                       navigate(-1);
 
@@ -1833,7 +1946,8 @@ export default function VideoPage({
                         size={19}
                       />
 
-                      {isConsultation
+                      {isConsultation ||
+                      isStudentPreview
                         ? "Voir le résultat"
                         : "Valider le quiz"
                       }

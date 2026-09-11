@@ -50,6 +50,16 @@ export default function ClassPage() {
 
 
   // =====================================================
+  // MODE APERÇU APPLICATION ÉLÈVE
+  // =====================================================
+
+  const isStudentPreview =
+    location.pathname.startsWith(
+      "/admin/student-preview"
+    );
+
+
+  // =====================================================
   // RETOUR À L'ACCUEIL
   // =====================================================
 
@@ -63,6 +73,17 @@ export default function ClassPage() {
 
       return;
     }
+
+
+    if (isStudentPreview) {
+
+      navigate(
+        "/admin/student-preview"
+      );
+
+      return;
+    }
+
 
     navigate("/");
   }
@@ -249,9 +270,18 @@ export default function ClassPage() {
     );
 
     console.log(
+      "STUDENT PREVIEW :",
+      isStudentPreview
+    );
+
+    console.log(
       "=================================="
     );
 
+
+    // ===================================================
+    // MODE CONSULTATION
+    // ===================================================
 
     if (isConsultation) {
 
@@ -268,6 +298,30 @@ export default function ClassPage() {
       return;
     }
 
+
+    // ===================================================
+    // MODE APERÇU
+    // ===================================================
+
+    if (isStudentPreview) {
+
+      navigate(
+        `/admin/student-preview/subject/${subject.id}`,
+        {
+          state: {
+            class_id: classId,
+            subject_id: subject.id
+          }
+        }
+      );
+
+      return;
+    }
+
+
+    // ===================================================
+    // MODE NORMAL
+    // ===================================================
 
     navigate(
       `/subject/${subject.id}`,

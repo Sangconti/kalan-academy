@@ -36,10 +36,24 @@ export default function HomePage() {
 
 
   // =====================================================
+  // MODE APERÇU APPLICATION ÉLÈVE
+  // =====================================================
+
+  const isStudentPreview =
+    location.pathname.startsWith(
+      "/admin/student-preview"
+    );
+
+
+  // =====================================================
   // NAVIGATION VERS UNE CLASSE
   // =====================================================
 
   function openClass(classId) {
+
+    // ================================================
+    // MODE CONSULTATION D'UN ÉLÈVE
+    // ================================================
 
     if (isConsultation) {
 
@@ -49,6 +63,25 @@ export default function HomePage() {
 
       return;
     }
+
+
+    // ================================================
+    // MODE APERÇU APPLICATION ÉLÈVE
+    // ================================================
+
+    if (isStudentPreview) {
+
+      navigate(
+        `/admin/student-preview/class/${classId}`
+      );
+
+      return;
+    }
+
+
+    // ================================================
+    // MODE ÉLÈVE NORMAL
+    // ================================================
 
     navigate(`/class/${classId}`);
   }

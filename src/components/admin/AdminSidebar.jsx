@@ -86,14 +86,16 @@ export default function AdminSidebar({
 
 
   // =====================================================
-  // VOIR APPLICATION ÉLÈVE
+  // APERÇU APPLICATION ÉLÈVE
   // =====================================================
 
   function handleStudentApp() {
 
     handleClose();
 
-    navigate("/");
+    navigate(
+      "/admin/student-preview"
+    );
 
   }
 
@@ -415,7 +417,7 @@ export default function AdminSidebar({
               onClick={handleStudentApp}
               title={
                 collapsed
-                  ? "Voir l'application élève"
+                  ? "Aperçu de l'application élève"
                   : undefined
               }
               className={`
@@ -469,7 +471,7 @@ export default function AdminSidebar({
                   }
                 `}
               >
-                Voir l'application élève
+                Aperçu de l'application élève
               </span>
 
             </button>

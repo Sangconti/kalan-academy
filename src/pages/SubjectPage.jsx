@@ -59,6 +59,16 @@ export default function SubjectPage() {
 
 
   // =====================================================
+  // MODE APERÇU APPLICATION ÉLÈVE
+  // =====================================================
+
+  const isStudentPreview =
+    location.pathname.startsWith(
+      "/admin/student-preview"
+    );
+
+
+  // =====================================================
   // CHARGEMENT
   // =====================================================
 
@@ -391,6 +401,11 @@ export default function SubjectPage() {
       isConsultation
     );
 
+    console.log(
+      "👁️ APERÇU APPLICATION ÉLÈVE :",
+      isStudentPreview
+    );
+
 
     // ===================================================
     // MODE CONSULTATION
@@ -400,6 +415,28 @@ export default function SubjectPage() {
 
       navigate(
         `/admin/student/${studentId}/consultation/chapter/${chapter.id}`,
+        {
+          state: {
+            subject_id: subjectId,
+            class_id: subject?.class_id,
+            chapter_id: chapter.id
+          }
+        }
+      );
+
+      return;
+
+    }
+
+
+    // ===================================================
+    // MODE APERÇU APPLICATION ÉLÈVE
+    // ===================================================
+
+    if (isStudentPreview) {
+
+      navigate(
+        `/admin/student-preview/chapter/${chapter.id}`,
         {
           state: {
             subject_id: subjectId,

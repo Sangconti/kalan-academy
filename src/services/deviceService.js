@@ -28,11 +28,55 @@ export async function getDeviceId() {
 
 
 // ==========================================
+// RÉCUPÉRER LES INFORMATIONS DE L'APPAREIL
+// ==========================================
+
+export async function getDeviceInfo() {
+  try {
+    const info = await Device.getInfo();
+
+    console.log(
+      "📱 [DEVICE] Informations appareil =",
+      info
+    );
+
+    return {
+      manufacturer:
+        info.manufacturer || null,
+
+      model:
+        info.model || null,
+
+      platform:
+        info.platform || null,
+
+      osVersion:
+        info.osVersion || null
+    };
+
+  } catch (error) {
+    console.error(
+      "❌ [DEVICE] Impossible de récupérer les informations de l'appareil :",
+      error
+    );
+
+    return {
+      manufacturer: null,
+      model: null,
+      platform: null,
+      osVersion: null
+    };
+  }
+}
+
+
+// ==========================================
 // ENREGISTRER / VÉRIFIER L'APPAREIL
 // ==========================================
 
 export async function registerUserDevice() {
   try {
+
     // ----------------------------------------
     // Vérifier la session
     // ----------------------------------------
@@ -72,7 +116,8 @@ export async function registerUserDevice() {
     // Récupérer l'identifiant du téléphone
     // ----------------------------------------
 
-    const deviceId = await getDeviceId();
+    const deviceId =
+      await getDeviceId();
 
     if (!deviceId) {
       return {
@@ -81,6 +126,23 @@ export async function registerUserDevice() {
       };
     }
 
+
+    // ----------------------------------------
+    // Récupérer les informations du téléphone
+    // ----------------------------------------
+
+    const deviceInfo =
+      await getDeviceInfo();
+
+    console.log(
+      "📱 [DEVICE] Device ID =",
+      deviceId
+    );
+
+    console.log(
+      "📱 [DEVICE] Informations =",
+      deviceInfo
+    );
 
     console.log(
       "📱 [DEVICE] Vérification de l'appareil..."
@@ -132,10 +194,27 @@ export async function registerUserDevice() {
     } = await supabase.rpc(
       "register_user_device",
       {
-        p_device_id: deviceId
+        p_device_id:
+          deviceId,
+
+        p_manufacturer:
+          deviceInfo.manufacturer,
+
+        p_model:
+          deviceInfo.model,
+
+        p_platform:
+          deviceInfo.platform,
+
+        p_os_version:
+          deviceInfo.osVersion
       }
     );
 
+
+    // ----------------------------------------
+    // Erreur Supabase
+    // ----------------------------------------
 
     if (error) {
       console.error(
@@ -151,15 +230,46 @@ export async function registerUserDevice() {
     }
 
 
+    // ----------------------------------------
+    // Résultat RPC
+    // ----------------------------------------
+
     console.log(
-      "📱 [DEVICE] Résultat =",
+      "📱 [DEVICE] Résultat RPC =",
       data
     );
 
 
-    return data;
+    // ----------------------------------------
+    // Normaliser le résultat
+    //
+    // La RPC retourne :
+    //
+    // {
+    //   status: "authorized",
+    //   message: "..."
+    // }
+    //
+    // On ajoute success côté service afin que
+    // LoginPage puisse utiliser un contrat stable.
+    // ----------------------------------------
+
+    return {
+      success:
+        data?.status === "authorized" ||
+        data?.status === "registered",
+
+      status:
+        data?.status,
+
+      message:
+        data?.message,
+
+      data
+    };
 
   } catch (error) {
+
     console.error(
       "💥 [DEVICE] Exception =",
       error
@@ -248,9 +358,21 @@ export async function recoverUserDevice(
     }
 
 
+    // ----------------------------------------
+    // Récupérer les informations du nouvel appareil
+    // ----------------------------------------
+
+    const deviceInfo =
+      await getDeviceInfo();
+
     console.log(
       "📱 [DEVICE RECOVERY] Nouveau deviceId =",
       deviceId
+    );
+
+    console.log(
+      "📱 [DEVICE RECOVERY] Informations =",
+      deviceInfo
     );
 
 
@@ -303,7 +425,19 @@ export async function recoverUserDevice(
           recoveryCode.trim().toUpperCase(),
 
         p_device_id:
-          deviceId
+          deviceId,
+
+        p_manufacturer:
+          deviceInfo.manufacturer,
+
+        p_model:
+          deviceInfo.model,
+
+        p_platform:
+          deviceInfo.platform,
+
+        p_os_version:
+          deviceInfo.osVersion
       }
     );
 
@@ -326,15 +460,35 @@ export async function recoverUserDevice(
     }
 
 
+    // ----------------------------------------
+    // Résultat RPC
+    // ----------------------------------------
+
     console.log(
-      "📱 [DEVICE RECOVERY] Résultat =",
+      "📱 [DEVICE RECOVERY] Résultat RPC =",
       data
     );
 
 
-    return data;
+    // ----------------------------------------
+    // Normaliser le résultat
+    // ----------------------------------------
+
+    return {
+      success:
+        data?.status === "device_recovered",
+
+      status:
+        data?.status,
+
+      message:
+        data?.message,
+
+      data
+    };
 
   } catch (error) {
+
     console.error(
       "💥 [DEVICE RECOVERY] Exception =",
       error
@@ -401,6 +555,7 @@ export async function generateDeviceRecoveryCode() {
     }
 
     if (!sessionData?.session?.user) {
+
       console.warn(
         "🚫 [DEVICE RECOVERY] Aucun utilisateur connecté"
       );
@@ -492,7 +647,6 @@ export async function generateDeviceRecoveryCode() {
       data
     );
 
-
     return data;
 
   } catch (error) {
@@ -509,6 +663,7 @@ export async function generateDeviceRecoveryCode() {
     };
   }
 }
+
 
 // ==========================================
 // GÉNÉRER LE CODE D'UN UTILISATEUR — ADMIN
@@ -533,6 +688,7 @@ export async function generateUserDeviceRecoveryCode(
     console.log(
       "🔐 [ADMIN DEVICE RECOVERY] Début génération..."
     );
+
 
     // ----------------------------------------
     // Vérifier l'ID utilisateur cible
@@ -679,7 +835,7 @@ export async function generateUserDeviceRecoveryCode(
     // ----------------------------------------
 
     console.log(
-      "📱 [ADMIN DEVICE RECOVERY] Résultat =",
+      "📱 [ADMIN DEVICE RECOVERY] Résultat génération =",
       data
     );
 
@@ -700,6 +856,7 @@ export async function generateUserDeviceRecoveryCode(
   }
 }
 
+
 // ==========================================
 // RÉINITIALISER L'APPAREIL D'UN UTILISATEUR
 // — ADMIN
@@ -713,6 +870,7 @@ export async function generateUserDeviceRecoveryCode(
 //
 // Après réinitialisation, l'élève pourra
 // associer un nouveau téléphone.
+//
 // ==========================================
 
 export async function resetUserDevice(userId) {
@@ -721,6 +879,7 @@ export async function resetUserDevice(userId) {
     console.log(
       "🔄 [ADMIN DEVICE] Début réinitialisation..."
     );
+
 
     // ----------------------------------------
     // Vérifier l'ID utilisateur

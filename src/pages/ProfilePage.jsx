@@ -1000,11 +1000,7 @@ export default function ProfilePage({
       isConsultation &&
       studentId
     ) {
-
-      navigate(
-        `/admin/student/${studentId}/consultation`
-      );
-
+      navigate("/admin/users");
       return;
     }
 

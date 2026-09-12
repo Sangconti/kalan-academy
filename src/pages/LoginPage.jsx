@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { getCurrentAdmin } from "../services/adminAuthService";
 import {
-  getDeviceId,
   registerUserDevice,
   recoverUserDevice,
   generateDeviceRecoveryCode
@@ -178,69 +177,45 @@ export default function LoginPage() {
       }
 
       // ========================================
-      // RÉCUPÉRER L'IDENTIFIANT DU NOUVEAU
-      // TÉLÉPHONE
+      // RÉCUPÉRATION VIA DEVICE SERVICE
+      // ========================================
+      //
+      // IMPORTANT :
+      //
+      // recoverUserDevice() récupère lui-même :
+      //
+      // - device_id
+      // - manufacturer
+      // - model
+      // - platform
+      // - osVersion
+      //
+      // puis appelle la RPC sécurisée
+      // recover_user_device().
+      //
       // ========================================
 
       console.log(
         "📱 [RECOVERY] Récupération du nouvel appareil..."
       );
 
-      const deviceId =
-        await getDeviceId();
-
-      console.log(
-        "📱 [RECOVERY] Nouvel deviceId =",
-        deviceId
-      );
-
-      if (!deviceId) {
-        throw new Error(
-          "Impossible d'identifier ce téléphone."
-        );
-      }
-
-      // ========================================
-      // RPC DE RÉCUPÉRATION
-      // ========================================
-
-      console.log(
-        "🔐 [RECOVERY] Appel recover_user_device..."
-      );
-
-      const {
-        data,
-        error: recoveryError
-      } = await supabase.rpc(
-        "recover_user_device",
-        {
-          p_recovery_code:
-            normalizedCode,
-          p_device_id:
-            deviceId
-        }
-      );
-
-      console.log(
-        "📱 [RECOVERY] Résultat RAW =",
-        data
-      );
-
-      if (recoveryError) {
-        console.error(
-          "❌ [RECOVERY] Erreur RPC =",
-          recoveryError
+      const recoveryResult =
+        await recoverUserDevice(
+          normalizedCode
         );
 
-        throw recoveryError;
-      }
+      console.log(
+        "📱 [RECOVERY] Résultat récupération =",
+        recoveryResult
+      );
 
       // ========================================
       // CODE INVALIDE
       // ========================================
 
       if (
-        data?.status === "invalid_code"
+        recoveryResult?.status ===
+        "invalid_code"
       ) {
         setError(
           "❌ Code de récupération incorrect ou déjà utilisé."
@@ -254,7 +229,8 @@ export default function LoginPage() {
       // ========================================
 
       if (
-        data?.status === "not_authenticated"
+        recoveryResult?.status ===
+        "not_authenticated"
       ) {
         setRecoveryRequired(false);
 
@@ -269,15 +245,20 @@ export default function LoginPage() {
       // AUTRE ERREUR
       // ========================================
 
-      if (!data?.success) {
+      if (
+        !recoveryResult?.success
+      ) {
         console.error(
           "❌ [RECOVERY] Échec récupération =",
-          data
+          recoveryResult
         );
 
         throw new Error(
-          data?.message ||
-          "Impossible de récupérer cet appareil."
+          recoveryResult?.error?.message ||
+          recoveryResult?.message ||
+          `Impossible de récupérer cet appareil. Statut reçu : ${
+            recoveryResult?.status || "inconnu"
+          }`
         );
       }
 
@@ -286,7 +267,8 @@ export default function LoginPage() {
       // ========================================
 
       if (
-        data?.status === "device_recovered"
+        recoveryResult?.status ===
+        "device_recovered"
       ) {
         console.log(
           "✅ [RECOVERY] Appareil récupéré avec succès"

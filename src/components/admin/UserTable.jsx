@@ -8,7 +8,8 @@ export default function UserTable({
   onAccessStatusChange,
   onDelete,
   onDeviceReset,
-  onViewStudent
+  onViewStudent,
+  onManageStudent
 }) {
 
   // ==========================================
@@ -173,7 +174,7 @@ export default function UserTable({
         <table
           className="
             w-full
-            min-w-[1200px]
+            min-w-[1450px]
           "
         >
 
@@ -543,6 +544,34 @@ export default function UserTable({
                     >
                       👁️ Voir la page
                     </button>
+
+                    {/* GÉRER L'ÉLÈVE */}
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onManageStudent(user.id)
+                      }
+                      className="
+                        min-w-[125px]
+                        px-3
+                        py-2
+                        rounded-lg
+                        bg-amber-100
+                        dark:bg-amber-950/40
+                        text-amber-700
+                        dark:text-amber-300
+                        hover:bg-amber-200
+                        dark:hover:bg-amber-900/50
+                        transition
+                        font-medium
+                        text-sm
+                        whitespace-nowrap
+                      "
+                    >
+                      ⚙️ Gérer l'élève
+                    </button>
+
 
 
                     {/* RÉINITIALISER APPAREIL */}

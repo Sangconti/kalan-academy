@@ -37,6 +37,17 @@ export default function UsersAdmin(){
       );
     }
 
+    function manageStudent(studentId) {
+      console.log(
+        "⚙️ [ADMIN] Ouverture de la gestion de l'élève :",
+        studentId
+      );
+
+      navigate(
+        `/admin/student/${studentId}`
+      );
+    }
+
     async function deleteUser(id) {
 
       try {
@@ -308,6 +319,7 @@ setRole={setRole}
   onDelete={deleteUser}
   onDeviceReset={resetUserDevice}
   onViewStudent={viewStudent}
+  onManageStudent={manageStudent}
 />
 
 

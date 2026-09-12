@@ -31,7 +31,7 @@ export default function ConsultationStudentLayout() {
 
 
   function handleQuit() {
-    navigate(`/admin/student/${studentId}`);
+    navigate("/admin/users");
   }
 
 

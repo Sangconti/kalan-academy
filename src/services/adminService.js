@@ -19,7 +19,6 @@ export async function getAdminStats() {
 
   ] = await Promise.all([
 
-
     supabase
       .from("profiles")
       .select("*", {
@@ -27,7 +26,6 @@ export async function getAdminStats() {
         head: true
       })
       .eq("role", "student"),
-
 
     supabase
       .from("profiles")
@@ -37,14 +35,12 @@ export async function getAdminStats() {
       })
       .eq("is_premium", true),
 
-
     supabase
       .from("classes")
       .select("*", {
         count: "exact",
         head: true
       }),
-
 
     supabase
       .from("subjects")
@@ -53,7 +49,6 @@ export async function getAdminStats() {
         head: true
       }),
 
-
     supabase
       .from("lessons")
       .select("*", {
@@ -61,14 +56,12 @@ export async function getAdminStats() {
         head: true
       }),
 
-
     supabase
       .from("quizzes")
       .select("*", {
         count: "exact",
         head: true
       }),
-
 
     supabase
       .from("profiles")
@@ -256,6 +249,7 @@ export async function updateUserRole(
 
 }
 
+
 // ==========================
 // ACTIVER / DÉSACTIVER UN UTILISATEUR
 // ==========================
@@ -280,11 +274,16 @@ export async function updateUserAccess(
       userId
     );
 
+
   if (error) {
+
     throw error;
+
   }
 
+
   return true;
+
 }
 
 
@@ -296,29 +295,37 @@ export async function updateUserAccessStatus(
   userId,
   accessStatus
 ) {
+
   const {
     error
   } = await supabase
+
     .from("profiles")
+
     .update({
       access_status: accessStatus
     })
+
     .eq(
       "id",
       userId
     );
 
   if (error) {
+
     console.error(
       "Erreur modification access_status :",
       error
     );
 
     throw error;
+
   }
 
   return true;
+
 }
+
 
 export async function deleteAdminUser(userId) {
 
@@ -351,7 +358,9 @@ export async function deleteAdminUser(userId) {
       error?.message
     );
 
+
     // Lire la vraie réponse JSON de l'Edge Function
+
     if (error.context) {
 
       try {
@@ -374,11 +383,14 @@ export async function deleteAdminUser(userId) {
 
         // Si readError est notre propre erreur,
         // on la remonte directement.
+
         if (
           readError instanceof Error &&
           readError.message
         ) {
+
           throw readError;
+
         }
 
         console.error(
@@ -391,7 +403,9 @@ export async function deleteAdminUser(userId) {
     }
 
     throw error;
+
   }
+
 
   if (!data?.success) {
 
@@ -402,7 +416,9 @@ export async function deleteAdminUser(userId) {
 
   }
 
+
   return true;
+
 }
 
 
@@ -543,24 +559,34 @@ export async function deleteClass(
 
 }
 
+
 // ==========================
 // VUE ADMIN D'UN ÉLÈVE
 // ==========================
 
-export async function getAdminStudentView(studentId) {
+export async function getAdminStudentView(
+  studentId
+) {
 
   if (!studentId) {
+
     throw new Error(
       "Identifiant élève manquant."
     );
+
   }
 
+
   const [
+
     profileResult,
     progressResult,
     attemptsResult,
-    badgesResult
+    badgesResult,
+    deviceResult
+
   ] = await Promise.all([
+
 
     // -----------------------------------------
     // PROFIL
@@ -582,6 +608,7 @@ export async function getAdminStudentView(studentId) {
       `)
       .eq("id", studentId)
       .single(),
+
 
     // -----------------------------------------
     // PROGRESSION
@@ -606,6 +633,7 @@ export async function getAdminStudentView(studentId) {
       `)
       .eq("user_id", studentId),
 
+
     // -----------------------------------------
     // QUIZ
     // -----------------------------------------
@@ -616,6 +644,7 @@ export async function getAdminStudentView(studentId) {
         score
       `)
       .eq("user_id", studentId),
+
 
     // -----------------------------------------
     // BADGES
@@ -635,9 +664,32 @@ export async function getAdminStudentView(studentId) {
           xp_reward
         )
       `)
+      .eq("user_id", studentId),
+
+
+    // -----------------------------------------
+    // APPAREIL
+    // -----------------------------------------
+
+    supabase
+      .from("user_devices")
+      .select(`
+        device_id,
+        device_name,
+        platform,
+        manufacturer,
+        model,
+        os_version,
+        is_active,
+        last_seen_at,
+        created_at,
+        updated_at
+      `)
       .eq("user_id", studentId)
+      .maybeSingle()
 
   ]);
+
 
   // -----------------------------------------
   // VÉRIFICATION PROFIL
@@ -654,6 +706,7 @@ export async function getAdminStudentView(studentId) {
 
   }
 
+
   if (!profileResult.data) {
 
     throw new Error(
@@ -661,6 +714,25 @@ export async function getAdminStudentView(studentId) {
     );
 
   }
+
+
+  // -----------------------------------------
+  // APPAREIL
+  // -----------------------------------------
+
+  if (deviceResult.error) {
+
+    console.error(
+      "❌ [ADMIN STUDENT] Erreur appareil :",
+      deviceResult.error
+    );
+
+  }
+
+
+  const deviceData =
+    deviceResult.data || null;
+
 
   // -----------------------------------------
   // PROGRESSION
@@ -675,8 +747,10 @@ export async function getAdminStudentView(studentId) {
 
   }
 
+
   const progressData =
     progressResult.data || [];
+
 
   // -----------------------------------------
   // LEÇONS TERMINÉES
@@ -685,14 +759,17 @@ export async function getAdminStudentView(studentId) {
   const completedLessons =
     progressData.reduce(
       (total, item) =>
+
         total +
         (
           item?.completed === true
             ? 1
             : 0
         ),
+
       0
     );
+
 
   // -----------------------------------------
   // PROGRESSION PAR MATIÈRE
@@ -700,31 +777,43 @@ export async function getAdminStudentView(studentId) {
 
   const subjectsProgress = {};
 
+
   for (const item of progressData) {
 
     const subject =
       item?.lessons?.chapters?.subjects;
 
+
     if (!subject?.name) {
+
       continue;
+
     }
+
 
     const subjectName =
       subject.name;
 
+
     if (!subjectsProgress[subjectName]) {
 
       subjectsProgress[subjectName] = {
+
         total: 0,
+
         completed: 0,
+
         percent: 0
+
       };
 
     }
 
+
     subjectsProgress[
       subjectName
     ].total += 1;
+
 
     if (item.completed === true) {
 
@@ -735,6 +824,7 @@ export async function getAdminStudentView(studentId) {
     }
 
   }
+
 
   // -----------------------------------------
   // POURCENTAGES
@@ -758,6 +848,7 @@ export async function getAdminStudentView(studentId) {
 
   });
 
+
   // -----------------------------------------
   // QUIZ
   // -----------------------------------------
@@ -771,22 +862,28 @@ export async function getAdminStudentView(studentId) {
 
   }
 
+
   const attemptsData =
     attemptsResult.data || [];
 
+
   let averageScore = 0;
+
 
   if (attemptsData.length > 0) {
 
     const totalScore =
       attemptsData.reduce(
         (total, attempt) =>
+
           total +
           Number(
             attempt?.score || 0
           ),
+
         0
       );
+
 
     averageScore =
       Math.round(
@@ -795,6 +892,7 @@ export async function getAdminStudentView(studentId) {
       );
 
   }
+
 
   // -----------------------------------------
   // BADGES
@@ -809,8 +907,10 @@ export async function getAdminStudentView(studentId) {
 
   }
 
+
   const badges =
     badgesResult.data || [];
+
 
   // -----------------------------------------
   // RÉSULTAT FINAL
@@ -820,6 +920,9 @@ export async function getAdminStudentView(studentId) {
 
     profile:
       profileResult.data,
+
+    device:
+      deviceData,
 
     subjects:
       subjectsProgress,

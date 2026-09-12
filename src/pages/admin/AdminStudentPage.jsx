@@ -1,4 +1,4 @@
-//src/pages/admin/AdminStudentPage.jsx`
+// src/pages/admin/AdminStudentPage.jsx
 
 import {
   useEffect,
@@ -63,6 +63,7 @@ export default function AdminStudentPage() {
 
   const [error, setError] =
     useState("");
+
 
   // ===================================================
   // GESTION APPAREIL
@@ -274,7 +275,6 @@ export default function AdminStudentPage() {
 
       setDeviceMessageType("success");
 
-      // Actualiser les données de l'élève
       await loadStudent(true);
 
     } catch (error) {
@@ -298,6 +298,7 @@ export default function AdminStudentPage() {
     }
 
   }
+
 
   // ===================================================
   // INITIALISATION
@@ -494,7 +495,7 @@ export default function AdminStudentPage() {
     data.profile;
 
   const stats =
-    data.stats;
+    data.stats || {};
 
   const subjects =
     data.subjects || {};
@@ -601,7 +602,7 @@ export default function AdminStudentPage() {
 
 
         {/* =================================================
-            BARRE MODE CONSULTATION
+            BARRE GESTION DE L'ÉLÈVE
         ================================================= */}
 
         <div className="
@@ -611,9 +612,9 @@ export default function AdminStudentPage() {
           sm:items-center
           sm:justify-between
           gap-3
-          bg-purple-50
+          bg-amber-50
           border
-          border-purple-200
+          border-amber-200
           rounded-2xl
           px-4
           py-3
@@ -629,13 +630,13 @@ export default function AdminStudentPage() {
               w-10
               h-10
               rounded-xl
-              bg-purple-100
-              text-purple-700
+              bg-amber-100
+              text-amber-700
               flex
               items-center
               justify-center
             ">
-              👁️
+              ⚙️
             </div>
 
             <div>
@@ -645,16 +646,16 @@ export default function AdminStudentPage() {
                 font-bold
                 uppercase
                 tracking-wide
-                text-purple-600
+                text-amber-700
               ">
-                Mode consultation
+                Gestion de l'élève
               </p>
 
               <p className="
                 font-semibold
-                text-purple-900
+                text-amber-950
               ">
-                Vous consultez la page de {studentName}
+                Informations et progression de {studentName}
               </p>
 
             </div>
@@ -676,10 +677,10 @@ export default function AdminStudentPage() {
               rounded-xl
               bg-white
               border
-              border-purple-200
-              text-purple-700
+              border-amber-200
+              text-amber-800
               font-semibold
-              hover:bg-purple-100
+              hover:bg-amber-100
               transition
             "
           >
@@ -710,7 +711,7 @@ export default function AdminStudentPage() {
               font-bold
               text-accent
             ">
-              Kalan Academy
+              Kalan Academy · Administration
             </p>
 
             <h1 className="
@@ -720,14 +721,14 @@ export default function AdminStudentPage() {
               text-gray-950
               mt-1
             ">
-              Bonjour {studentName} 👋
+              Gestion de {studentName}
             </h1>
 
             <p className="
               text-gray-600
               mt-1
             ">
-              Voici la progression et les résultats de cet élève.
+              Consultez son profil, sa progression, ses résultats et son appareil associé.
             </p>
 
           </div>
@@ -775,214 +776,10 @@ export default function AdminStudentPage() {
 
 
         {/* =================================================
-            GESTION DE L'APPAREIL
-        ================================================= */}
-
-        <section
-          className="
-            bg-white
-            rounded-3xl
-            border
-            border-orange-200
-            shadow-sm
-            p-6
-          "
-        >
-
-          <div className="
-            flex
-            flex-col
-            lg:flex-row
-            lg:items-center
-            lg:justify-between
-            gap-5
-          ">
-
-            {/* INFORMATIONS */}
-
-            <div className="
-              flex
-              items-start
-              gap-4
-            ">
-
-              <div className="
-                w-12
-                h-12
-                rounded-2xl
-                bg-orange-50
-                text-orange-600
-                flex
-                items-center
-                justify-center
-                shrink-0
-              ">
-                📱
-              </div>
-
-              <div>
-
-                <h2 className="
-                  text-xl
-                  font-bold
-                  text-gray-950
-                ">
-                  Gestion de l'appareil
-                </h2>
-
-                <p className="
-                  text-sm
-                  text-gray-600
-                  mt-1
-                  max-w-2xl
-                ">
-                  Gérez la récupération du compte de cet élève
-                  lorsqu'il change de téléphone.
-                </p>
-
-              </div>
-
-            </div>
-
-
-            {/* ACTIONS */}
-
-            <div className="
-              flex
-              flex-col
-              sm:flex-row
-              gap-3
-            ">
-
-              <button
-                type="button"
-                onClick={
-                  handleGenerateRecoveryCode
-                }
-                disabled={deviceActionLoading}
-                className="
-                  inline-flex
-                  items-center
-                  justify-center
-                  gap-2
-
-                  px-4
-                  py-3
-
-                  rounded-xl
-
-                  bg-orange-500
-                  text-white
-
-                  font-semibold
-
-                  hover:bg-orange-600
-
-                  transition
-
-                  disabled:opacity-50
-                  disabled:cursor-not-allowed
-
-                  whitespace-nowrap
-                "
-              >
-
-                <span>
-                  🔐
-                </span>
-
-                {deviceActionLoading
-                  ? "Traitement..."
-                  : "Générer un code"
-                }
-
-              </button>
-
-
-              <button
-                type="button"
-                onClick={
-                  handleResetDevice
-                }
-                disabled={deviceActionLoading}
-                className="
-                  inline-flex
-                  items-center
-                  justify-center
-                  gap-2
-
-                  px-4
-                  py-3
-
-                  rounded-xl
-
-                  bg-gray-100
-                  text-gray-800
-
-                  border
-                  border-gray-200
-
-                  font-semibold
-
-                  hover:bg-gray-200
-
-                  transition
-
-                  disabled:opacity-50
-                  disabled:cursor-not-allowed
-
-                  whitespace-nowrap
-                "
-              >
-
-                🔄 Réinitialiser
-
-              </button>
-
-            </div>
-
-          </div>
-
-
-          {/* MESSAGE */}
-
-          {deviceMessage && (
-
-            <div
-              className={`
-                mt-5
-                rounded-xl
-                border
-                p-4
-
-                ${
-                  deviceMessageType === "success"
-                    ? "bg-green-50 border-green-200 text-green-800"
-                    : "bg-red-50 border-red-200 text-red-800"
-                }
-              `}
-            >
-
-              <p className="
-                text-sm
-                font-semibold
-                break-words
-              ">
-                {deviceMessage}
-              </p>
-
-            </div>
-
-          )}
-
-        </section>
-
-
-        {/* =================================================
             PROFIL RAPIDE
         ================================================= */}
 
-        <div className="
+        <section className="
           bg-white
           rounded-3xl
           border
@@ -994,8 +791,8 @@ export default function AdminStudentPage() {
           <div className="
             flex
             flex-col
-            sm:flex-row
-            sm:items-center
+            lg:flex-row
+            lg:items-center
             gap-5
           ">
 
@@ -1034,7 +831,7 @@ export default function AdminStudentPage() {
 
             </div>
 
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
 
               <h2 className="
                 text-xl
@@ -1051,6 +848,19 @@ export default function AdminStudentPage() {
               ">
                 Élève Kalan Academy
               </p>
+
+              {profile.email && (
+
+                <p className="
+                  text-sm
+                  text-gray-600
+                  mt-1
+                  break-all
+                ">
+                  {profile.email}
+                </p>
+
+              )}
 
             </div>
 
@@ -1090,14 +900,14 @@ export default function AdminStudentPage() {
 
           </div>
 
-        </div>
+        </section>
 
 
         {/* =================================================
             XP
         ================================================= */}
 
-        <div className="
+        <section className="
           relative
           overflow-hidden
           rounded-3xl
@@ -1108,6 +918,29 @@ export default function AdminStudentPage() {
           md:p-8
           shadow-xl
         ">
+
+        <div className="
+          absolute
+          -right-16
+          -top-16
+          w-48
+          h-48
+          rounded-full
+          bg-accent
+          opacity-10
+        "/>
+
+
+        <div className="
+          absolute
+          right-10
+          -bottom-24
+          w-56
+          h-56
+          rounded-full
+          bg-accent
+          opacity-5
+        "/>
 
           <div className="
             relative
@@ -1141,7 +974,7 @@ export default function AdminStudentPage() {
                   text-sm
                   font-medium
                 ">
-                  Niveau de l'élève
+                  Progression
                 </p>
 
                 <h2 className="
@@ -1182,6 +1015,7 @@ export default function AdminStudentPage() {
                   text-gray-950
                 ">
                   {xp}
+
                   <span className="
                     text-lg
                     font-semibold
@@ -1190,6 +1024,7 @@ export default function AdminStudentPage() {
                   ">
                     XP
                   </span>
+
                 </p>
 
               </div>
@@ -1285,96 +1120,143 @@ export default function AdminStudentPage() {
 
           </div>
 
-        </div>
+        </section>
 
 
         {/* =================================================
             STATISTIQUES
         ================================================= */}
 
-        <div className="
-          grid
-          grid-cols-2
-          lg:grid-cols-4
-          gap-4
-        ">
+        <section>
 
-          {[
-            {
-              icon: BookOpen,
-              label: "Leçons terminées",
-              value: stats.lessons
-            },
-            {
-              icon: Star,
-              label: "Score moyen",
-              value: `${stats.score}%`
-            },
-            {
-              icon: Award,
-              label: "Badges",
-              value: stats.badges
-            },
-            {
-              icon: Target,
-              label: "Quiz réalisés",
-              value: stats.attempts
-            }
-          ].map(
-            ({
-              icon: Icon,
-              label,
-              value
-            }) => (
+          <div className="
+            flex
+            items-center
+            gap-3
+            mb-4
+          ">
 
-              <div
-                key={label}
-                className="
-                  bg-white
-                  rounded-2xl
-                  border
-                  border-gray-200
-                  shadow-sm
-                  p-5
-                "
-              >
+            <div className="
+              w-10
+              h-10
+              rounded-xl
+              bg-accent-soft
+              text-accent
+              flex
+              items-center
+              justify-center
+            ">
+              <Target size={20} />
+            </div>
 
-                <div className="
-                  w-10
-                  h-10
-                  rounded-xl
-                  bg-accent-soft
-                  text-accent
-                  flex
-                  items-center
-                  justify-center
-                  mb-4
-                ">
-                  <Icon size={21} />
+            <div>
+
+              <h2 className="
+                text-xl
+                font-bold
+                text-gray-950
+              ">
+                Statistiques
+              </h2>
+
+              <p className="
+                text-sm
+                text-gray-600
+                mt-1
+              ">
+                Résumé de l'activité pédagogique de l'élève.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div className="
+            grid
+            grid-cols-2
+            lg:grid-cols-4
+            gap-4
+          ">
+
+            {[
+              {
+                icon: BookOpen,
+                label: "Leçons terminées",
+                value: stats.lessons || 0
+              },
+              {
+                icon: Star,
+                label: "Score moyen",
+                value: `${stats.score || 0}%`
+              },
+              {
+                icon: Award,
+                label: "Badges obtenus",
+                value: stats.badges || 0
+              },
+              {
+                icon: Target,
+                label: "Quiz réalisés",
+                value: stats.attempts || 0
+              }
+            ].map(
+              ({
+                icon: Icon,
+                label,
+                value
+              }) => (
+
+                <div
+                  key={label}
+                  className="
+                    bg-white
+                    rounded-2xl
+                    border
+                    border-gray-200
+                    shadow-sm
+                    p-5
+                  "
+                >
+
+                  <div className="
+                    w-10
+                    h-10
+                    rounded-xl
+                    bg-accent-soft
+                    text-accent
+                    flex
+                    items-center
+                    justify-center
+                    mb-4
+                  ">
+                    <Icon size={21} />
+                  </div>
+
+                  <p className="
+                    text-sm
+                    text-gray-600
+                  ">
+                    {label}
+                  </p>
+
+                  <p className="
+                    text-2xl
+                    font-extrabold
+                    text-gray-950
+                    mt-1
+                  ">
+                    {value}
+                  </p>
+
                 </div>
 
-                <p className="
-                  text-sm
-                  text-gray-600
-                ">
-                  {label}
-                </p>
+              )
+            )}
 
-                <p className="
-                  text-2xl
-                  font-extrabold
-                  text-gray-950
-                  mt-1
-                ">
-                  {value}
-                </p>
+          </div>
 
-              </div>
-
-            )
-          )}
-
-        </div>
+        </section>
 
 
         {/* =================================================
@@ -1508,7 +1390,7 @@ export default function AdminStudentPage() {
                         font-bold
                         text-accent
                       ">
-                        {subject.percent}%
+                        {subject.percent || 0}%
                       </span>
 
                     </div>
@@ -1528,7 +1410,13 @@ export default function AdminStudentPage() {
                           rounded-full
                         "
                         style={{
-                          width: `${subject.percent}%`
+                          width: `${Math.min(
+                            Math.max(
+                              Number(subject.percent || 0),
+                              0
+                            ),
+                            100
+                          )}%`
                         }}
                       />
 
@@ -1539,12 +1427,12 @@ export default function AdminStudentPage() {
                       text-gray-600
                       mt-2
                     ">
-                      {subject.completed} leçon
-                      {subject.completed > 1 ? "s" : ""}
+                      {subject.completed || 0} leçon
+                      {(subject.completed || 0) > 1 ? "s" : ""}
                       {" "}terminée
-                      {subject.completed > 1 ? "s" : ""}
+                      {(subject.completed || 0) > 1 ? "s" : ""}
                       {" "}sur{" "}
-                      {subject.total}
+                      {subject.total || 0}
                     </p>
 
                   </div>
@@ -1599,7 +1487,7 @@ export default function AdminStudentPage() {
                 text-sm
                 text-gray-600
               ">
-                Les récompenses obtenues.
+                Les récompenses obtenues sur Kalan Academy.
               </p>
 
             </div>
@@ -1629,6 +1517,14 @@ export default function AdminStudentPage() {
               ">
                 Aucun badge pour le moment
               </h3>
+
+              <p className="
+                text-sm
+                text-gray-600
+                mt-1
+              ">
+                Les badges obtenus par l'élève apparaîtront ici.
+              </p>
 
             </div>
 
@@ -1749,6 +1645,186 @@ export default function AdminStudentPage() {
           )}
 
         </section>
+
+
+        {/* =================================================
+            GESTION DE L'APPAREIL
+        ================================================= */}
+
+        <section
+          className="
+            bg-white
+            rounded-3xl
+            border
+            border-orange-200
+            shadow-sm
+            p-6
+          "
+        >
+
+          <div className="
+            flex
+            flex-col
+            lg:flex-row
+            lg:items-center
+            lg:justify-between
+            gap-5
+          ">
+
+            <div className="
+              flex
+              items-start
+              gap-4
+            ">
+
+              <div className="
+                w-12
+                h-12
+                rounded-2xl
+                bg-orange-50
+                text-orange-600
+                flex
+                items-center
+                justify-center
+                shrink-0
+              ">
+                📱
+              </div>
+
+              <div>
+
+                <h2 className="
+                  text-xl
+                  font-bold
+                  text-gray-950
+                ">
+                  Gestion de l'appareil
+                </h2>
+
+                <p className="
+                  text-sm
+                  text-gray-600
+                  mt-1
+                  max-w-2xl
+                ">
+                  Gérez la récupération du compte de cet élève lorsqu'il change de téléphone.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div className="
+              flex
+              flex-col
+              sm:flex-row
+              gap-3
+            ">
+
+              <button
+                type="button"
+                onClick={
+                  handleGenerateRecoveryCode
+                }
+                disabled={deviceActionLoading}
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  px-4
+                  py-3
+                  rounded-xl
+                  bg-orange-500
+                  text-white
+                  font-semibold
+                  hover:bg-orange-600
+                  transition
+                  disabled:opacity-50
+                  disabled:cursor-not-allowed
+                  whitespace-nowrap
+                "
+              >
+
+                <span>
+                  🔐
+                </span>
+
+                {deviceActionLoading
+                  ? "Traitement..."
+                  : "Générer un code"
+                }
+
+              </button>
+
+
+              <button
+                type="button"
+                onClick={
+                  handleResetDevice
+                }
+                disabled={deviceActionLoading}
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  px-4
+                  py-3
+                  rounded-xl
+                  bg-gray-100
+                  text-gray-800
+                  border
+                  border-gray-200
+                  font-semibold
+                  hover:bg-gray-200
+                  transition
+                  disabled:opacity-50
+                  disabled:cursor-not-allowed
+                  whitespace-nowrap
+                "
+              >
+
+                🔄 Réinitialiser
+
+              </button>
+
+            </div>
+
+          </div>
+
+
+          {deviceMessage && (
+
+            <div
+              className={`
+                mt-5
+                rounded-xl
+                border
+                p-4
+                ${
+                  deviceMessageType === "success"
+                    ? "bg-green-50 border-green-200 text-green-800"
+                    : "bg-red-50 border-red-200 text-red-800"
+                }
+              `}
+            >
+
+              <p className="
+                text-sm
+                font-semibold
+                break-words
+              ">
+                {deviceMessage}
+              </p>
+
+            </div>
+
+          )}
+
+        </section>
+
 
       </div>
 

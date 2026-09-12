@@ -449,6 +449,8 @@ export default function LessonPage({
           flex
           items-center
           justify-center
+          theme-bg
+          theme-text
         "
       >
 
@@ -474,8 +476,7 @@ export default function LessonPage({
 
           <p
             className="
-              text-gray-500
-              dark:text-gray-400
+              theme-text-secondary
               font-medium
             "
           >
@@ -501,6 +502,8 @@ export default function LessonPage({
 
       <div
         className="
+          theme-bg
+          theme-text
           p-4
           md:p-6
         "
@@ -521,6 +524,7 @@ export default function LessonPage({
           <p
             className="
               text-red-500
+              dark:text-red-400
               mb-4
             "
           >
@@ -564,6 +568,8 @@ export default function LessonPage({
 
       <div
         className="
+          theme-bg
+          theme-text
           p-6
           text-center
         "
@@ -571,8 +577,7 @@ export default function LessonPage({
 
         <p
           className="
-            text-gray-500
-            dark:text-gray-400
+            theme-text-secondary
           "
         >
           Leçon introuvable.
@@ -594,8 +599,8 @@ export default function LessonPage({
     <div
       className="
         min-h-screen
-        bg-white
-        dark:bg-gray-950
+        theme-bg
+        theme-text
         p-4
         md:p-6
         pb-10
@@ -658,8 +663,7 @@ export default function LessonPage({
           border
           theme-border
           shadow-sm
-          text-gray-700
-          dark:text-gray-200
+          theme-text
           font-medium
           hover:text-accent
           transition
@@ -785,8 +789,7 @@ export default function LessonPage({
               md:text-3xl
               font-bold
               leading-tight
-              text-gray-950
-              dark:text-white
+              theme-text
             "
           >
 
@@ -801,8 +804,7 @@ export default function LessonPage({
 
             <p
               className="
-                text-gray-700
-                dark:text-gray-300
+                theme-text-secondary
                 mt-3
                 leading-relaxed
               "
@@ -839,8 +841,7 @@ export default function LessonPage({
                   rounded-xl
                   bg-white/70
                   dark:bg-gray-950/30
-                  text-gray-800
-                  dark:text-gray-200
+                  theme-text
                   text-sm
                   font-medium
                   border
@@ -870,8 +871,7 @@ export default function LessonPage({
                   rounded-xl
                   bg-white/70
                   dark:bg-gray-950/30
-                  text-gray-800
-                  dark:text-gray-200
+                  theme-text
                   text-sm
                   font-medium
                   border
@@ -975,8 +975,7 @@ export default function LessonPage({
                 text-xl
                 md:text-2xl
                 font-bold
-                text-gray-900
-                dark:text-white
+                theme-text
               "
             >
               Cours
@@ -986,8 +985,7 @@ export default function LessonPage({
             <p
               className="
                 text-sm
-                text-gray-500
-                dark:text-gray-400
+                theme-text-secondary
               "
             >
               Apprends étape par étape.
@@ -1025,8 +1023,7 @@ export default function LessonPage({
 
             <p
               className="
-                text-gray-500
-                dark:text-gray-400
+                theme-text-secondary
               "
             >
               Aucun contenu disponible.
@@ -1110,8 +1107,7 @@ export default function LessonPage({
                             className="
                               font-bold
                               text-lg
-                              text-gray-900
-                              dark:text-white
+                              theme-text
                             "
                           >
 
@@ -1122,8 +1118,7 @@ export default function LessonPage({
 
                           <p
                             className="
-                              text-gray-700
-                              dark:text-gray-300
+                              theme-text-secondary
                               mt-3
                               leading-7
                               whitespace-pre-line
@@ -1275,8 +1270,7 @@ export default function LessonPage({
               className="
                 text-xl
                 font-bold
-                text-gray-950
-                dark:text-white
+                theme-text
               "
             >
 
@@ -1287,8 +1281,7 @@ export default function LessonPage({
 
             <p
               className="
-                text-gray-700
-                dark:text-gray-300
+                theme-text-secondary
                 text-sm
                 mt-1
               "

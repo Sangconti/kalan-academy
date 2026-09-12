@@ -149,7 +149,9 @@ export default function UserTable({
 
     <div
       className="
-        bg-white
+        theme-surface
+        theme-border
+        border
         rounded-xl
         shadow
         overflow-hidden
@@ -182,6 +184,7 @@ export default function UserTable({
           <thead
             className="
               bg-gray-100
+              dark:bg-gray-800
             "
           >
 
@@ -193,7 +196,7 @@ export default function UserTable({
                   text-left
                   whitespace-nowrap
                   font-semibold
-                  text-gray-700
+                  theme-text
                 "
               >
                 Nom
@@ -205,7 +208,7 @@ export default function UserTable({
                   p-4
                   whitespace-nowrap
                   font-semibold
-                  text-gray-700
+                  theme-text
                 "
               >
                 Rôle
@@ -217,7 +220,7 @@ export default function UserTable({
                   p-4
                   whitespace-nowrap
                   font-semibold
-                  text-gray-700
+                  theme-text
                 "
               >
                 Accès
@@ -229,7 +232,7 @@ export default function UserTable({
                   p-4
                   whitespace-nowrap
                   font-semibold
-                  text-gray-700
+                  theme-text
                 "
               >
                 Premium
@@ -241,7 +244,7 @@ export default function UserTable({
                   p-4
                   whitespace-nowrap
                   font-semibold
-                  text-gray-700
+                  theme-text
                 "
               >
                 XP
@@ -253,7 +256,7 @@ export default function UserTable({
                   p-4
                   whitespace-nowrap
                   font-semibold
-                  text-gray-700
+                  theme-text
                 "
               >
                 Niveau
@@ -265,7 +268,7 @@ export default function UserTable({
                   p-4
                   whitespace-nowrap
                   font-semibold
-                  text-gray-700
+                  theme-text
                 "
               >
                 Actions
@@ -288,7 +291,9 @@ export default function UserTable({
                 key={user.id}
                 className="
                   border-t
+                  theme-border
                   hover:bg-gray-50
+                  dark:hover:bg-gray-800
                   transition
                 "
               >
@@ -301,7 +306,7 @@ export default function UserTable({
                   className="
                     p-4
                     font-medium
-                    text-gray-900
+                    theme-text
                     whitespace-nowrap
                   "
                 >
@@ -328,15 +333,15 @@ export default function UserTable({
                     className="
                       min-w-[135px]
                       border
-                      border-gray-200
+                      theme-border
                       rounded-lg
                       p-2
-                      bg-white
-                      text-gray-700
+                      theme-surface
+                      theme-text
                       outline-none
-                      focus:border-blue-500
+                      focus:border-accent
                       focus:ring-2
-                      focus:ring-blue-100
+                      focus:ring-accent-soft
                     "
                   >
 
@@ -387,8 +392,11 @@ export default function UserTable({
                         py-2
                         rounded-lg
                         bg-green-100
+                        dark:bg-green-950/40
                         text-green-700
+                        dark:text-green-300
                         hover:bg-green-200
+                        dark:hover:bg-green-900/50
                         transition
                         font-medium
                         text-sm
@@ -414,8 +422,11 @@ export default function UserTable({
                         py-2
                         rounded-lg
                         bg-yellow-100
+                        dark:bg-yellow-950/40
                         text-yellow-700
+                        dark:text-yellow-300
                         hover:bg-yellow-200
+                        dark:hover:bg-yellow-900/50
                         transition
                         font-medium
                         text-sm
@@ -459,6 +470,7 @@ export default function UserTable({
                     p-4
                     text-center
                     whitespace-nowrap
+                    theme-text
                   "
                 >
 
@@ -476,6 +488,7 @@ export default function UserTable({
                     p-4
                     text-center
                     whitespace-nowrap
+                    theme-text
                   "
                 >
 
@@ -504,23 +517,33 @@ export default function UserTable({
                     "
                   >
 
-                  {/* VOIR LA PAGE DE L'ÉLÈVE */} <button type="button" onClick={() => onViewStudent(user.id) }
-                      className="
-                      min-w-[120px]
-                      px-3
-                      py-2
-                      rounded-lg
-                      bg-purple-100
-                      text-purple-700
-                      hover:bg-purple-200
-                      transition
-                      font-medium
-                      text-sm
-                      whitespace-nowrap "
+                    {/* VOIR LA PAGE DE L'ÉLÈVE */}
 
-                       >
-                       👁️ Voir la page
-                       </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onViewStudent(user.id)
+                      }
+                      className="
+                        min-w-[120px]
+                        px-3
+                        py-2
+                        rounded-lg
+                        bg-purple-100
+                        dark:bg-purple-950/40
+                        text-purple-700
+                        dark:text-purple-300
+                        hover:bg-purple-200
+                        dark:hover:bg-purple-900/50
+                        transition
+                        font-medium
+                        text-sm
+                        whitespace-nowrap
+                      "
+                    >
+                      👁️ Voir la page
+                    </button>
+
 
                     {/* RÉINITIALISER APPAREIL */}
 
@@ -535,8 +558,11 @@ export default function UserTable({
                         py-2
                         rounded-lg
                         bg-blue-100
+                        dark:bg-blue-950/40
                         text-blue-700
+                        dark:text-blue-300
                         hover:bg-blue-200
+                        dark:hover:bg-blue-900/50
                         transition
                         font-medium
                         text-sm
@@ -560,8 +586,11 @@ export default function UserTable({
                         py-2
                         rounded-lg
                         bg-red-100
+                        dark:bg-red-950/40
                         text-red-700
+                        dark:text-red-300
                         hover:bg-red-200
+                        dark:hover:bg-red-900/50
                         transition
                         font-medium
                         text-sm
@@ -596,10 +625,11 @@ export default function UserTable({
           px-4
           py-2.5
           bg-gray-50
+          dark:bg-gray-800
           border-t
-          border-gray-100
+          theme-border
           text-xs
-          text-gray-400
+          theme-text-secondary
           text-center
         "
       >

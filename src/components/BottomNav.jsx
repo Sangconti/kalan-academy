@@ -99,9 +99,9 @@ export default function BottomNav() {
         left-0
         right-0
         z-30
-        bg-white
+        theme-surface
         border-t
-        border-gray-200
+        theme-border
         shadow-lg
       "
     >
@@ -143,8 +143,8 @@ export default function BottomNav() {
 
                 ${
                   active
-                    ? "text-blue-600 font-semibold"
-                    : "text-gray-400 hover:text-gray-600"
+                    ? "text-accent font-semibold"
+                    : "theme-text-secondary hover:text-accent"
                 }
               `}
             >

@@ -719,7 +719,7 @@ export default function ExercisePage({
             size={18}
           />
 
-          Retour
+          Retour aux cours
 
         </button>
 

@@ -1,5 +1,3 @@
-// src/components/QuizTimer.jsx
-
 import {
   useEffect,
   useRef,
@@ -116,13 +114,13 @@ export default function QuizTimer({
 
 
   let colorClass =
-    "text-green-600";
+    "text-green-600 dark:text-green-400";
 
 
   if (percent <= 50) {
 
     colorClass =
-      "text-yellow-600";
+      "text-yellow-600 dark:text-yellow-400";
 
   }
 
@@ -130,7 +128,7 @@ export default function QuizTimer({
   if (percent <= 25) {
 
     colorClass =
-      "text-red-600";
+      "text-red-600 dark:text-red-400";
 
   }
 

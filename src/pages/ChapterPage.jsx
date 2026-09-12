@@ -485,12 +485,20 @@ export default function ChapterPage() {
         <button
           onClick={goBack}
           className="
-            flex
+            inline-flex
             items-center
             gap-2
-            theme-text-secondary
-            hover:text-accent
             mb-5
+            px-4
+            py-2.5
+            rounded-xl
+            theme-surface
+            border
+            theme-border
+            shadow-sm
+            theme-text
+            font-medium
+            hover:text-accent
             transition
           "
         >
@@ -578,36 +586,27 @@ export default function ChapterPage() {
       <button
         onClick={goBack}
         className="
-          flex
+          inline-flex
           items-center
           gap-2
-          theme-text-secondary
-          hover:text-accent
           mb-5
-          transition
-          font-medium
-        "
-      >
-
-        <div className="
-          w-9
-          h-9
-          rounded-full
+          px-4
+          py-2.5
+          rounded-xl
           theme-surface
           border
           theme-border
           shadow-sm
-          flex
-          items-center
-          justify-center
-        ">
+          theme-text
+          font-medium
+          hover:text-accent
+          transition
+        "
+      >
 
-          <ArrowLeft
-            size={18}
-          />
-
-        </div>
-
+        <ArrowLeft
+          size={18}
+        />
 
         Retour aux chapitres
 

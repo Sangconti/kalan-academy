@@ -5,70 +5,86 @@ export default function StatCard({
   description
 }) {
 
-return (
+  return (
 
-<div className="
-bg-white
-rounded-2xl
-shadow-sm
-border
-p-5
-hover:shadow-md
-transition
-">
+    <div
+      className="
+        theme-surface
+        theme-border
+        border
 
+        rounded-2xl
 
-<div className="
-flex
-justify-between
-items-start
-">
+        shadow-sm
 
+        p-5
 
-<div>
+        hover:shadow-md
 
-<p className="
-text-sm
-text-gray-500
-">
-{title}
-</p>
+        transition
+      "
+    >
 
+      <div
+        className="
+          flex
+          justify-between
+          items-start
+        "
+      >
 
-<h2 className="
-text-3xl
-font-bold
-mt-2
-">
-{value ?? "..."}
-</h2>
+        <div>
 
-
-<p className="
-text-xs
-text-gray-400
-mt-2
-">
-{description}
-</p>
+          <p
+            className="
+              text-sm
+              theme-text-secondary
+            "
+          >
+            {title}
+          </p>
 
 
-</div>
+          <h2
+            className="
+              text-3xl
+              font-bold
+              mt-2
+              theme-text
+            "
+          >
+            {value ?? "..."}
+          </h2>
 
 
-<div className="
-text-indigo-600
-text-3xl
-">
-{icon}
-</div>
+          <p
+            className="
+              text-xs
+              theme-text-secondary
+              mt-2
+            "
+          >
+            {description}
+          </p>
+
+        </div>
 
 
-</div>
+        <div
+          className="
+            text-accent
+            text-3xl
+          "
+        >
+          {icon}
+        </div>
 
 
-</div>
+      </div>
 
-)
+
+    </div>
+
+  );
 
 }

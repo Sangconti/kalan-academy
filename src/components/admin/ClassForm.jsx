@@ -80,10 +80,14 @@ export default function ClassForm({
             min-w-0
 
             bg-red-50
+            dark:bg-red-950/40
+
             border
             border-red-200
+            dark:border-red-900
 
             text-red-700
+            dark:text-red-300
 
             rounded-lg
 
@@ -111,7 +115,7 @@ export default function ClassForm({
             block
             text-sm
             font-medium
-            text-gray-700
+            theme-text
             mb-1
           "
         >
@@ -131,7 +135,10 @@ export default function ClassForm({
             min-w-0
 
             border
-            border-gray-300
+            theme-border
+
+            theme-surface
+            theme-text
 
             p-3
 
@@ -140,11 +147,13 @@ export default function ClassForm({
             outline-none
 
             focus:ring-2
-            focus:ring-blue-500
-            focus:border-blue-500
+            focus:ring-accent
+            focus:border-accent
 
             disabled:bg-gray-100
+            disabled:dark:bg-gray-800
             disabled:cursor-not-allowed
+            disabled:opacity-60
 
             transition
           "
@@ -164,7 +173,7 @@ export default function ClassForm({
             block
             text-sm
             font-medium
-            text-gray-700
+            theme-text
             mb-1
           "
         >
@@ -186,7 +195,10 @@ export default function ClassForm({
             min-w-0
 
             border
-            border-gray-300
+            theme-border
+
+            theme-surface
+            theme-text
 
             p-3
 
@@ -197,11 +209,13 @@ export default function ClassForm({
             outline-none
 
             focus:ring-2
-            focus:ring-blue-500
-            focus:border-blue-500
+            focus:ring-accent
+            focus:border-accent
 
             disabled:bg-gray-100
+            disabled:dark:bg-gray-800
             disabled:cursor-not-allowed
+            disabled:opacity-60
 
             transition
           "
@@ -221,7 +235,7 @@ export default function ClassForm({
             block
             text-sm
             font-medium
-            text-gray-700
+            theme-text
             mb-1
           "
         >
@@ -241,7 +255,10 @@ export default function ClassForm({
             sm:w-32
 
             border
-            border-gray-300
+            theme-border
+
+            theme-surface
+            theme-text
 
             p-3
 
@@ -250,11 +267,13 @@ export default function ClassForm({
             outline-none
 
             focus:ring-2
-            focus:ring-blue-500
-            focus:border-blue-500
+            focus:ring-accent
+            focus:border-accent
 
             disabled:bg-gray-100
+            disabled:dark:bg-gray-800
             disabled:cursor-not-allowed
+            disabled:opacity-60
 
             transition
           "
@@ -296,8 +315,8 @@ export default function ClassForm({
 
             gap-2
 
-            bg-blue-600
-            hover:bg-blue-700
+            bg-accent
+            hover:opacity-90
 
             text-white
 
@@ -341,16 +360,18 @@ export default function ClassForm({
               gap-2
 
               border
-              border-gray-300
+              theme-border
+
+              theme-surface
+              theme-text
 
               px-5
               py-3
 
               rounded-lg
 
-              text-gray-700
-
               hover:bg-gray-50
+              dark:hover:bg-gray-800
 
               disabled:opacity-50
               disabled:cursor-not-allowed

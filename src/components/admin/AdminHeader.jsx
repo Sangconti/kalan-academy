@@ -32,7 +32,8 @@ export default function AdminHeader() {
         min-h-16
         w-full
 
-        bg-white
+        theme-surface
+        theme-border
         border-b
 
         flex
@@ -62,7 +63,7 @@ export default function AdminHeader() {
         <h2
           className="
             font-semibold
-            text-gray-900
+            theme-text
             truncate
           "
         >
@@ -102,7 +103,7 @@ export default function AdminHeader() {
           <p
             className="
               font-medium
-              text-gray-900
+              theme-text
 
               truncate
               max-w-[120px]
@@ -115,7 +116,7 @@ export default function AdminHeader() {
           <p
             className="
               text-xs
-              text-gray-500
+              theme-text-secondary
               truncate
             "
           >

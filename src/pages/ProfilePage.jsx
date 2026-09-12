@@ -705,6 +705,7 @@ export default function ProfilePage({
     }
 
     navigate("/");
+
   }
 
 
@@ -728,6 +729,7 @@ export default function ProfilePage({
     }
 
     navigate("/downloads");
+
   }
 
 
@@ -750,7 +752,8 @@ export default function ProfilePage({
           items-center
           justify-center
           px-6
-          bg-gray-50
+          theme-bg
+          theme-text
         "
       >
 
@@ -759,7 +762,7 @@ export default function ProfilePage({
             w-14
             h-14
             rounded-2xl
-            bg-blue-100
+            bg-accent-soft
             flex
             items-center
             justify-center
@@ -769,7 +772,7 @@ export default function ProfilePage({
 
           <User
             size={28}
-            className="text-blue-600"
+            className="text-accent"
           />
 
         </div>
@@ -777,7 +780,7 @@ export default function ProfilePage({
 
         <p
           className="
-            text-gray-600
+            theme-text-secondary
             font-medium
           "
         >
@@ -804,10 +807,12 @@ export default function ProfilePage({
     <div
       className="
         min-h-screen
-        bg-gray-50
+        theme-bg
+        theme-text
         pb-8
       "
     >
+
 
       {/* =================================================
           HEADER
@@ -815,9 +820,9 @@ export default function ProfilePage({
 
       <div
         className="
-          bg-white
+          theme-surface
           border-b
-          border-gray-100
+          theme-border
           px-5
           py-4
         "
@@ -831,8 +836,8 @@ export default function ProfilePage({
             gap-2
             text-xl
             font-bold
-            text-gray-900
-            hover:text-blue-600
+            theme-text
+            hover:text-accent
             transition
           "
         >
@@ -842,7 +847,7 @@ export default function ProfilePage({
               w-9
               h-9
               rounded-xl
-              bg-blue-600
+              bg-accent
               text-white
               flex
               items-center
@@ -896,6 +901,7 @@ export default function ProfilePage({
               👁️ MODE CONSULTATION
             </p>
 
+
             <p
               className="
                 text-xs
@@ -925,6 +931,7 @@ export default function ProfilePage({
         "
       >
 
+
         {/* =================================================
             TITRE
         ================================================= */}
@@ -936,7 +943,7 @@ export default function ProfilePage({
               text-2xl
               md:text-3xl
               font-bold
-              text-gray-900
+              theme-text
             "
           >
 
@@ -949,7 +956,7 @@ export default function ProfilePage({
 
           <p
             className="
-              text-gray-500
+              theme-text-secondary
               mt-1
             "
           >
@@ -971,11 +978,11 @@ export default function ProfilePage({
 
           <div
             className="
-              bg-white
+              theme-surface
               rounded-2xl
               shadow-sm
               border
-              border-gray-100
+              theme-border
               overflow-hidden
               mb-6
             "
@@ -986,238 +993,290 @@ export default function ProfilePage({
             <div
               className="
                 h-24
-                bg-blue-600
+                bg-accent
               "
             />
 
 
-            <div
-              className="
-                px-5
-                pb-6
-              "
-            >
+            {/* ZONE PRINCIPALE DU PROFIL */}
 
-              {/* AVATAR */}
+            <div className="relative">
+
+              {/* CERCLES DÉCORATIFS */}
 
               <div
                 className="
-                  -mt-10
-                  mb-4
+                  pointer-events-none
+                  absolute
+                  inset-0
+                  overflow-hidden
                 "
+                aria-hidden="true"
               >
 
                 <div
                   className="
-                    w-20
-                    h-20
-                    rounded-2xl
-                    bg-white
-                    border-4
-                    border-white
-                    shadow-sm
-                    overflow-hidden
-                    flex
-                    items-center
-                    justify-center
+                    absolute
+                    -right-16
+                    -top-16
+                    w-48
+                    h-48
+                    rounded-full
+                    bg-accent
+                    opacity-10
                   "
-                >
+                />
 
-                  {profile.avatar_url ? (
-
-                    <img
-                      src={
-                        profile.avatar_url
-                      }
-                      alt="Avatar"
-                      className="
-                        w-full
-                        h-full
-                        object-cover
-                      "
-                    />
-
-                  ) : (
-
-                    <User
-                      size={34}
-                      className="text-blue-600"
-                    />
-
-                  )}
-
-                </div>
+                <div
+                  className="
+                    absolute
+                    right-10
+                    -bottom-24
+                    w-56
+                    h-56
+                    rounded-full
+                    bg-accent
+                    opacity-5
+                  "
+                />
 
               </div>
 
-
-              {/* NOM */}
-
-              <h2
-                className="
-                  text-xl
-                  font-bold
-                  text-gray-900
-                "
-              >
-                {profile.full_name ||
-                  "Étudiant Kalan"}
-              </h2>
-
-
-              <p
-                className="
-                  text-sm
-                  text-gray-500
-                  mt-1
-                "
-              >
-                {isConsultation
-                  ? "Profil élève — lecture seule"
-                  : "Élève Kalan Academy"}
-              </p>
-
-
-              {/* INFORMATIONS */}
-
               <div
                 className="
-                  grid
-                  grid-cols-2
-                  gap-3
-                  mt-5
+                  relative
+                  z-10
+                  px-5
+                  pb-6
                 "
               >
 
-                {/* STATUT */}
+                {/* AVATAR */}
 
                 <div
                   className="
-                    rounded-2xl
-                    bg-gray-50
-                    p-4
+                    -mt-10
+                    mb-4
                   "
                 >
 
                   <div
                     className="
-                      w-9
-                      h-9
-                      rounded-xl
-                      bg-yellow-50
+                      w-20
+                      h-20
+                      rounded-2xl
+                      theme-surface
+                      border-4
+                      border-white
+                      dark:border-gray-700
+                      shadow-sm
+                      overflow-hidden
                       flex
                       items-center
                       justify-center
-                      mb-3
                     "
                   >
 
-                    {profile.is_premium ? (
+                    {profile.avatar_url ? (
 
-                      <Crown
-                        size={19}
-                        className="text-yellow-500"
+                      <img
+                        src={
+                          profile.avatar_url
+                        }
+                        alt="Avatar"
+                        className="
+                          w-full
+                          h-full
+                          object-cover
+                        "
                       />
 
                     ) : (
 
                       <User
-                        size={19}
-                        className="text-gray-500"
+                        size={34}
+                        className="text-accent"
                       />
 
                     )}
 
                   </div>
 
-
-                  <p
-                    className="
-                      text-xs
-                      text-gray-500
-                    "
-                  >
-                    Statut
-                  </p>
-
-
-                  <p
-                    className="
-                      font-bold
-                      text-gray-900
-                      mt-1
-                    "
-                  >
-                    {profile.is_premium
-                      ? "Premium"
-                      : "Gratuit"}
-                  </p>
-
                 </div>
 
 
-                {/* COMPTE */}
+                {/* NOM */}
+
+                <h2
+                  className="
+                    text-xl
+                    font-bold
+                    theme-text
+                  "
+                >
+                  {profile.full_name ||
+                    "Étudiant Kalan"}
+                </h2>
+
+
+                <p
+                  className="
+                    text-sm
+                    theme-text-secondary
+                    mt-1
+                  "
+                >
+                  {isConsultation
+                    ? "Profil élève — lecture seule"
+                    : "Élève Kalan Academy"}
+                </p>
+
+
+                {/* INFORMATIONS */}
 
                 <div
                   className="
-                    rounded-2xl
-                    bg-gray-50
-                    p-4
+                    grid
+                    grid-cols-2
+                    gap-3
+                    mt-5
                   "
                 >
 
+                  {/* STATUT */}
+
                   <div
                     className="
-                      w-9
-                      h-9
-                      rounded-xl
-                      bg-blue-50
-                      flex
-                      items-center
-                      justify-center
-                      mb-3
+                      rounded-2xl
+                      bg-gray-50
+                      dark:bg-gray-800
+                      p-4
                     "
                   >
 
-                    <Star
-                      size={19}
-                      className="text-blue-600"
-                    />
+                    <div
+                      className="
+                        w-9
+                        h-9
+                        rounded-xl
+                        bg-yellow-50
+                        dark:bg-yellow-950/40
+                        flex
+                        items-center
+                        justify-center
+                        mb-3
+                      "
+                    >
+
+                      {profile.is_premium ? (
+
+                        <Crown
+                          size={19}
+                          className="text-yellow-500"
+                        />
+
+                      ) : (
+
+                        <User
+                          size={19}
+                          className="theme-text-secondary"
+                        />
+
+                      )}
+
+                    </div>
+
+
+                    <p
+                      className="
+                        text-xs
+                        theme-text-secondary
+                      "
+                    >
+                      Statut
+                    </p>
+
+
+                    <p
+                      className="
+                        font-bold
+                        theme-text
+                        mt-1
+                      "
+                    >
+                      {profile.is_premium
+                        ? "Premium"
+                        : "Gratuit"}
+                    </p>
 
                   </div>
 
 
-                  <p
-                    className="
-                      text-xs
-                      text-gray-500
-                    "
-                  >
-                    Compte
-                  </p>
+                  {/* COMPTE */}
 
-
-                  <p
+                  <div
                     className="
-                      font-bold
-                      text-gray-900
-                      mt-1
+                      rounded-2xl
+                      bg-gray-50
+                      dark:bg-gray-800
+                      p-4
                     "
                   >
 
-                    {profile.role ===
-                      "super_admin"
+                    <div
+                      className="
+                        w-9
+                        h-9
+                        rounded-xl
+                        bg-accent-soft
+                        flex
+                        items-center
+                        justify-center
+                        mb-3
+                      "
+                    >
 
-                      ? "Administrateur"
+                      <Star
+                        size={19}
+                        className="text-accent"
+                      />
 
-                      : profile.role ===
-                        "admin"
+                    </div>
 
-                      ? "Administrateur"
 
-                      : "Étudiant"}
+                    <p
+                      className="
+                        text-xs
+                        theme-text-secondary
+                      "
+                    >
+                      Compte
+                    </p>
 
-                  </p>
+
+                    <p
+                      className="
+                        font-bold
+                        theme-text
+                        mt-1
+                      "
+                    >
+
+                      {profile.role ===
+                        "super_admin"
+
+                        ? "Administrateur"
+
+                        : profile.role ===
+                          "admin"
+
+                        ? "Administrateur"
+
+                        : "Étudiant"}
+
+                    </p>
+
+                  </div>
 
                 </div>
 
@@ -1238,10 +1297,10 @@ export default function ProfilePage({
           onClick={goDownloads}
           className="
             w-full
-            bg-white
+            theme-surface
             rounded-2xl
             border
-            border-gray-100
+            theme-border
             shadow-sm
             p-4
             mb-6
@@ -1259,7 +1318,7 @@ export default function ProfilePage({
               w-12
               h-12
               rounded-2xl
-              bg-blue-100
+              bg-accent-soft
               flex
               items-center
               justify-center
@@ -1268,7 +1327,7 @@ export default function ProfilePage({
 
             <Download
               size={23}
-              className="text-blue-600"
+              className="text-accent"
             />
 
           </div>
@@ -1283,7 +1342,7 @@ export default function ProfilePage({
             <h2
               className="
                 font-bold
-                text-gray-900
+                theme-text
               "
             >
 
@@ -1297,7 +1356,7 @@ export default function ProfilePage({
             <p
               className="
                 text-sm
-                text-gray-500
+                theme-text-secondary
                 mt-1
               "
             >
@@ -1313,7 +1372,7 @@ export default function ProfilePage({
 
           <span
             className="
-              text-gray-400
+              theme-text-secondary
               text-xl
             "
           >
@@ -1342,7 +1401,7 @@ export default function ProfilePage({
               className="
                 text-xl
                 font-bold
-                text-gray-900
+                theme-text
                 flex
                 items-center
                 gap-2
@@ -1364,7 +1423,7 @@ export default function ProfilePage({
             <p
               className="
                 text-sm
-                text-gray-500
+                theme-text-secondary
                 mt-1
               "
             >
@@ -1386,8 +1445,8 @@ export default function ProfilePage({
                 h-9
                 px-3
                 rounded-full
-                bg-blue-50
-                text-blue-600
+                bg-accent-soft
+                text-accent
                 flex
                 items-center
                 justify-center
@@ -1411,10 +1470,10 @@ export default function ProfilePage({
 
           <div
             className="
-              bg-white
+              theme-surface
               rounded-2xl
               border
-              border-gray-100
+              theme-border
               shadow-sm
               p-8
               text-center
@@ -1429,6 +1488,7 @@ export default function ProfilePage({
                 mb-4
                 rounded-2xl
                 bg-gray-50
+                dark:bg-gray-800
                 flex
                 items-center
                 justify-center
@@ -1437,7 +1497,7 @@ export default function ProfilePage({
 
               <Award
                 size={30}
-                className="text-gray-400"
+                className="theme-text-secondary"
               />
 
             </div>
@@ -1446,7 +1506,7 @@ export default function ProfilePage({
             <p
               className="
                 font-bold
-                text-gray-700
+                theme-text
               "
             >
 
@@ -1460,7 +1520,7 @@ export default function ProfilePage({
             <p
               className="
                 text-sm
-                text-gray-500
+                theme-text-secondary
                 mt-1
               "
             >
@@ -1491,10 +1551,10 @@ export default function ProfilePage({
                 <div
                   key={item.id}
                   className="
-                    bg-white
+                    theme-surface
                     rounded-2xl
                     border
-                    border-gray-100
+                    theme-border
                     shadow-sm
                     p-4
                     flex
@@ -1514,6 +1574,7 @@ export default function ProfilePage({
                       h-14
                       rounded-2xl
                       bg-yellow-50
+                      dark:bg-yellow-950/40
                       flex
                       items-center
                       justify-center
@@ -1562,7 +1623,7 @@ export default function ProfilePage({
                     <h3
                       className="
                         font-bold
-                        text-gray-900
+                        theme-text
                       "
                     >
                       {item.badges?.name ||
@@ -1573,7 +1634,7 @@ export default function ProfilePage({
                     <p
                       className="
                         text-sm
-                        text-gray-500
+                        theme-text-secondary
                         mt-1
                       "
                     >
@@ -1590,8 +1651,8 @@ export default function ProfilePage({
                         px-2.5
                         py-1
                         rounded-full
-                        bg-blue-50
-                        text-blue-600
+                        bg-accent-soft
+                        text-accent
                         text-xs
                         font-bold
                       "
@@ -1630,15 +1691,16 @@ export default function ProfilePage({
             items-center
             justify-center
             gap-2
-            bg-white
+            theme-surface
             border
-            border-gray-200
-            text-gray-700
+            theme-border
+            theme-text
             px-5
             py-3
             rounded-xl
             font-semibold
             hover:bg-gray-100
+            dark:hover:bg-gray-800
             transition
           "
         >
@@ -1675,6 +1737,7 @@ export default function ProfilePage({
               rounded-xl
               font-semibold
               hover:bg-red-50
+              dark:hover:bg-red-950/40
               transition
             "
           >

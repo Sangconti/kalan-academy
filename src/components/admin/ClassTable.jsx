@@ -72,7 +72,13 @@ export default function ClassTable({
 
     return (
 
-      <div className="p-10 text-center">
+      <div
+        className="
+          p-10
+          text-center
+          theme-text
+        "
+      >
 
         <div
           className="
@@ -80,14 +86,14 @@ export default function ClassTable({
             w-8
             h-8
             border-4
-            border-gray-200
-            border-t-blue-600
+            theme-border
+            border-t-accent
             rounded-full
             animate-spin
           "
         />
 
-        <p className="text-gray-500 mt-3">
+        <p className="theme-text-secondary mt-3">
           Chargement des classes...
         </p>
 
@@ -105,7 +111,13 @@ export default function ClassTable({
 
     return (
 
-      <div className="p-10 text-center">
+      <div
+        className="
+          p-10
+          text-center
+          theme-text
+        "
+      >
 
         <div
           className="
@@ -113,11 +125,11 @@ export default function ClassTable({
             w-14
             h-14
             rounded-full
-            bg-gray-100
+            bg-accent-soft
             flex
             items-center
             justify-center
-            text-gray-500
+            text-accent
           "
         >
 
@@ -126,12 +138,20 @@ export default function ClassTable({
         </div>
 
 
-        <h3 className="font-semibold mt-4">
+        <h3 className="
+          font-semibold
+          mt-4
+          theme-text
+        ">
           Aucune classe
         </h3>
 
 
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="
+          text-sm
+          theme-text-secondary
+          mt-1
+        ">
           Ajoutez votre première classe.
         </p>
 
@@ -143,13 +163,19 @@ export default function ClassTable({
 
   return (
 
-    <div>
+    <div className="theme-text">
 
       {/* =================================================
           RECHERCHE
       ================================================= */}
 
-      <div className="p-5 border-b">
+      <div
+        className="
+          p-5
+          border-b
+          theme-border
+        "
+      >
 
         <div className="relative max-w-md">
 
@@ -160,7 +186,7 @@ export default function ClassTable({
               left-3
               top-1/2
               -translate-y-1/2
-              text-gray-400
+              theme-text-secondary
             "
           />
 
@@ -176,13 +202,18 @@ export default function ClassTable({
             className="
               w-full
               border
+              theme-border
+              theme-surface
+              theme-text
               rounded-lg
               pl-10
               pr-3
               py-2.5
               outline-none
               focus:ring-2
-              focus:ring-blue-500
+              focus:ring-accent
+              focus:border-accent
+              transition
             "
           />
 
@@ -202,25 +233,63 @@ export default function ClassTable({
           <thead
             className="
               bg-gray-50
+              dark:bg-gray-800
               border-b
+              theme-border
             "
           >
 
             <tr>
 
-              <th className="text-left px-5 py-3 text-sm font-semibold text-gray-600">
+              <th
+                className="
+                  text-left
+                  px-5
+                  py-3
+                  text-sm
+                  font-semibold
+                  theme-text-secondary
+                "
+              >
                 #
               </th>
 
-              <th className="text-left px-5 py-3 text-sm font-semibold text-gray-600">
+              <th
+                className="
+                  text-left
+                  px-5
+                  py-3
+                  text-sm
+                  font-semibold
+                  theme-text-secondary
+                "
+              >
                 Classe
               </th>
 
-              <th className="text-left px-5 py-3 text-sm font-semibold text-gray-600">
+              <th
+                className="
+                  text-left
+                  px-5
+                  py-3
+                  text-sm
+                  font-semibold
+                  theme-text-secondary
+                "
+              >
                 Code
               </th>
 
-              <th className="text-right px-5 py-3 text-sm font-semibold text-gray-600">
+              <th
+                className="
+                  text-right
+                  px-5
+                  py-3
+                  text-sm
+                  font-semibold
+                  theme-text-secondary
+                "
+              >
                 Actions
               </th>
 
@@ -229,17 +298,32 @@ export default function ClassTable({
           </thead>
 
 
-          <tbody className="divide-y">
+          <tbody
+            className="
+              divide-y
+              theme-border
+            "
+          >
 
             {filteredClasses.map(
               (item, index) => (
 
                 <tr
                   key={item.id}
-                  className="hover:bg-gray-50"
+                  className="
+                    hover:bg-gray-50
+                    dark:hover:bg-gray-800
+                    transition
+                  "
                 >
 
-                  <td className="px-5 py-4 text-gray-500">
+                  <td
+                    className="
+                      px-5
+                      py-4
+                      theme-text-secondary
+                    "
+                  >
 
                     {item.order_number ||
                       index + 1}
@@ -256,8 +340,8 @@ export default function ClassTable({
                           w-10
                           h-10
                           rounded-lg
-                          bg-blue-100
-                          text-blue-700
+                          bg-accent-soft
+                          text-accent
                           flex
                           items-center
                           justify-center
@@ -271,11 +355,17 @@ export default function ClassTable({
 
                       <div>
 
-                        <p className="font-semibold text-gray-900">
+                        <p className="
+                          font-semibold
+                          theme-text
+                        ">
                           {item.name}
                         </p>
 
-                        <p className="text-xs text-gray-500">
+                        <p className="
+                          text-xs
+                          theme-text-secondary
+                        ">
                           Classe scolaire
                         </p>
 
@@ -297,7 +387,8 @@ export default function ClassTable({
                           py-1
                           rounded-md
                           bg-gray-100
-                          text-gray-700
+                          dark:bg-gray-800
+                          theme-text
                           text-xs
                           font-semibold
                         "
@@ -307,7 +398,9 @@ export default function ClassTable({
 
                     ) : (
 
-                      <span className="text-gray-400">
+                      <span className="
+                        theme-text-secondary
+                      ">
                         —
                       </span>
 
@@ -331,8 +424,12 @@ export default function ClassTable({
                           p-2
                           rounded-lg
                           bg-red-50
+                          dark:bg-red-950/40
                           text-red-600
+                          dark:text-red-400
                           hover:bg-red-100
+                          dark:hover:bg-red-900/50
+                          transition
                         "
                         title="Supprimer"
                       >
@@ -361,14 +458,25 @@ export default function ClassTable({
           MOBILE
       ================================================= */}
 
-      <div className="md:hidden divide-y">
+      <div
+        className="
+          md:hidden
+          divide-y
+          theme-border
+        "
+      >
 
         {filteredClasses.map(
           (item, index) => (
 
             <div
               key={item.id}
-              className="p-4"
+              className="
+                p-4
+                hover:bg-gray-50
+                dark:hover:bg-gray-800
+                transition
+              "
             >
 
               <div className="flex items-start justify-between">
@@ -380,8 +488,8 @@ export default function ClassTable({
                       w-11
                       h-11
                       rounded-lg
-                      bg-blue-100
-                      text-blue-700
+                      bg-accent-soft
+                      text-accent
                       flex
                       items-center
                       justify-center
@@ -395,16 +503,25 @@ export default function ClassTable({
 
                   <div>
 
-                    <h3 className="font-semibold">
+                    <h3 className="
+                      font-semibold
+                      theme-text
+                    ">
                       {item.name}
                     </h3>
 
-                    <p className="text-sm text-gray-500">
+                    <p className="
+                      text-sm
+                      theme-text-secondary
+                    ">
                       Code :{" "}
                       {item.code || "—"}
                     </p>
 
-                    <p className="text-xs text-gray-400">
+                    <p className="
+                      text-xs
+                      theme-text-secondary
+                    ">
                       Ordre :{" "}
                       {item.order_number ||
                         index + 1}
@@ -426,7 +543,12 @@ export default function ClassTable({
                     p-2
                     rounded-lg
                     bg-red-50
+                    dark:bg-red-950/40
                     text-red-600
+                    dark:text-red-400
+                    hover:bg-red-100
+                    dark:hover:bg-red-900/50
+                    transition
                   "
                 >
 
@@ -451,9 +573,14 @@ export default function ClassTable({
       {filteredClasses.length === 0 &&
         search.trim() !== "" && (
 
-          <div className="p-8 text-center">
+          <div className="
+            p-8
+            text-center
+          ">
 
-            <p className="text-gray-500">
+            <p className="
+              theme-text-secondary
+            ">
 
               Aucune classe ne correspond à «{" "}
               {search}

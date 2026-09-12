@@ -547,11 +547,18 @@ export default function SubjectPage() {
         <button
           onClick={goBack}
           className="
-            mb-5
-            flex
+            inline-flex
             items-center
             gap-2
-            theme-text-secondary
+            mb-5
+            px-4
+            py-2.5
+            rounded-xl
+            theme-surface
+            border
+            theme-border
+            shadow-sm
+            theme-text
             font-medium
             hover:text-accent
             transition
@@ -683,41 +690,29 @@ export default function SubjectPage() {
       <button
         onClick={goBack}
         className="
-          flex
+          inline-flex
           items-center
           gap-2
           mb-5
-          theme-text-secondary
-          font-semibold
+          px-4
+          py-2.5
+          rounded-xl
+          theme-surface
+          border
+          theme-border
+          shadow-sm
+          theme-text
+          font-medium
           hover:text-accent
           transition
-          active:scale-95
         "
       >
 
-        <div className="
-          w-9
-          h-9
-          rounded-full
-          theme-surface
-          shadow-sm
-          border
-          theme-border
-          flex
-          items-center
-          justify-center
-        ">
+        <ArrowLeft
+          size={18}
+        />
 
-          <ArrowLeft
-            size={18}
-          />
-
-        </div>
-
-
-        <span>
-          Retour aux matières
-        </span>
+        Retour aux matières
 
       </button>
 

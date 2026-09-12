@@ -122,13 +122,10 @@ export default function StudentPreviewLayout() {
           sticky
           top-0
           z-40
-
           bg-blue-600
           text-white
-
           px-4
           py-2.5
-
           shadow-md
         "
       >
@@ -137,11 +134,9 @@ export default function StudentPreviewLayout() {
           className="
             max-w-2xl
             mx-auto
-
             flex
             items-center
             justify-between
-
             gap-3
           "
         >
@@ -197,22 +192,16 @@ export default function StudentPreviewLayout() {
             onClick={leavePreview}
             className="
               shrink-0
-
               flex
               items-center
               gap-1.5
-
               px-3
               py-1.5
-
               rounded-lg
-
               bg-white/15
               hover:bg-white/25
-
               text-xs
               font-semibold
-
               transition
             "
           >
@@ -258,16 +247,10 @@ export default function StudentPreviewLayout() {
           bottom-0
           left-0
           right-0
-
           z-30
-
-          bg-white
-          dark:bg-slate-900
-
+          theme-surface
           border-t
-          border-gray-200
-          dark:border-slate-700
-
+          theme-border
           shadow-lg
         "
       >
@@ -276,7 +259,6 @@ export default function StudentPreviewLayout() {
           className="
             max-w-2xl
             mx-auto
-
             grid
             grid-cols-5
           "
@@ -292,20 +274,16 @@ export default function StudentPreviewLayout() {
               flex-col
               items-center
               justify-center
-
               gap-1
-
               py-2
-
               text-xs
               font-medium
-
               transition
 
               ${
                 isHome
-                  ? "text-blue-600"
-                  : "text-gray-500 hover:text-blue-600"
+                  ? "text-accent font-semibold"
+                  : "theme-text-secondary hover:text-accent"
               }
             `}
           >
@@ -329,20 +307,16 @@ export default function StudentPreviewLayout() {
               flex-col
               items-center
               justify-center
-
               gap-1
-
               py-2
-
               text-xs
               font-medium
-
               transition
 
               ${
                 isDashboard
-                  ? "text-blue-600"
-                  : "text-gray-500 hover:text-blue-600"
+                  ? "text-accent font-semibold"
+                  : "theme-text-secondary hover:text-accent"
               }
             `}
           >
@@ -366,20 +340,16 @@ export default function StudentPreviewLayout() {
               flex-col
               items-center
               justify-center
-
               gap-1
-
               py-2
-
               text-xs
               font-medium
-
               transition
 
               ${
                 isDownloads
-                  ? "text-blue-600"
-                  : "text-gray-500 hover:text-blue-600"
+                  ? "text-accent font-semibold"
+                  : "theme-text-secondary hover:text-accent"
               }
             `}
           >
@@ -403,20 +373,16 @@ export default function StudentPreviewLayout() {
               flex-col
               items-center
               justify-center
-
               gap-1
-
               py-2
-
               text-xs
               font-medium
-
               transition
 
               ${
                 isProfile
-                  ? "text-blue-600"
-                  : "text-gray-500 hover:text-blue-600"
+                  ? "text-accent font-semibold"
+                  : "theme-text-secondary hover:text-accent"
               }
             `}
           >
@@ -440,20 +406,16 @@ export default function StudentPreviewLayout() {
               flex-col
               items-center
               justify-center
-
               gap-1
-
               py-2
-
               text-xs
               font-medium
-
               transition
 
               ${
                 isSettings
-                  ? "text-blue-600"
-                  : "text-gray-500 hover:text-blue-600"
+                  ? "text-accent font-semibold"
+                  : "theme-text-secondary hover:text-accent"
               }
             `}
           >

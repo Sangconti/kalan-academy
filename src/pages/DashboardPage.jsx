@@ -832,6 +832,8 @@ export default function DashboardPage({
           items-center
           justify-center
           px-6
+          theme-bg
+          theme-text
         "
       >
 
@@ -858,8 +860,7 @@ export default function DashboardPage({
 
         <p
           className="
-            text-gray-700
-            dark:text-gray-300
+            theme-text-secondary
             font-semibold
           "
         >
@@ -885,6 +886,8 @@ export default function DashboardPage({
 
       <div
         className="
+          theme-bg
+          theme-text
           max-w-2xl
           mx-auto
           px-5
@@ -911,6 +914,7 @@ export default function DashboardPage({
               mx-auto
               rounded-2xl
               bg-red-50
+              dark:bg-red-950/40
               flex
               items-center
               justify-center
@@ -925,8 +929,7 @@ export default function DashboardPage({
             className="
               text-xl
               font-bold
-              text-gray-900
-              dark:text-white
+              theme-text
             "
           >
             Impossible de charger le dashboard
@@ -936,8 +939,7 @@ export default function DashboardPage({
           <p
             className="
               text-sm
-              text-gray-600
-              dark:text-gray-400
+              theme-text-secondary
               mt-2
             "
           >
@@ -992,6 +994,8 @@ export default function DashboardPage({
 
       <div
         className="
+          theme-bg
+          theme-text
           max-w-2xl
           mx-auto
           px-5
@@ -1015,8 +1019,7 @@ export default function DashboardPage({
             className="
               text-xl
               font-bold
-              text-gray-900
-              dark:text-white
+              theme-text
             "
           >
             Profil introuvable
@@ -1025,8 +1028,7 @@ export default function DashboardPage({
 
           <p
             className="
-              text-gray-600
-              dark:text-gray-400
+              theme-text-secondary
               mt-2
             "
           >
@@ -1141,8 +1143,8 @@ export default function DashboardPage({
     <div
       className="
         min-h-screen
-        bg-white
-        dark:bg-gray-950
+        theme-bg
+        theme-text
         px-5
         py-6
         md:px-8
@@ -1190,8 +1192,7 @@ export default function DashboardPage({
                 text-2xl
                 md:text-3xl
                 font-extrabold
-                text-gray-950
-                dark:text-white
+                theme-text
                 mt-1
               "
             >
@@ -1201,8 +1202,7 @@ export default function DashboardPage({
 
             <p
               className="
-                text-gray-600
-                dark:text-gray-400
+                theme-text-secondary
                 mt-1
               "
             >
@@ -1226,12 +1226,10 @@ export default function DashboardPage({
               items-center
               justify-center
               gap-2
-              bg-white
-              dark:bg-gray-900
+              theme-surface
               border
               theme-border
-              text-gray-800
-              dark:text-gray-200
+              theme-text
               px-4
               py-2.5
               rounded-xl
@@ -1358,8 +1356,7 @@ export default function DashboardPage({
                     text-2xl
                     md:text-3xl
                     font-extrabold
-                    text-gray-950
-                    dark:text-white
+                    theme-text
                   "
                 >
                   Niveau {level}
@@ -1398,8 +1395,7 @@ export default function DashboardPage({
                     font-extrabold
                     mt-1
                     tracking-tight
-                    text-gray-950
-                    dark:text-white
+                    theme-text
                   "
                 >
 
@@ -1444,8 +1440,7 @@ export default function DashboardPage({
                     md:text-2xl
                     font-extrabold
                     mt-1
-                    text-gray-950
-                    dark:text-white
+                    theme-text
                   "
                 >
                   {rank}
@@ -1467,8 +1462,7 @@ export default function DashboardPage({
                   sm:justify-between
                   gap-1
                   text-sm
-                  text-gray-700
-                  dark:text-gray-300
+                  theme-text-secondary
                   mb-2
                 "
               >
@@ -1521,8 +1515,7 @@ export default function DashboardPage({
                   gap-1
                   mt-2
                   text-xs
-                  text-gray-600
-                  dark:text-gray-400
+                  theme-text-secondary
                 "
               >
 
@@ -1615,8 +1608,7 @@ export default function DashboardPage({
                 <p
                   className="
                     text-sm
-                    text-gray-600
-                    dark:text-gray-400
+                    theme-text-secondary
                   "
                 >
                   {label}
@@ -1627,8 +1619,7 @@ export default function DashboardPage({
                   className="
                     text-2xl
                     font-extrabold
-                    text-gray-950
-                    dark:text-white
+                    theme-text
                     mt-1
                   "
                 >
@@ -1678,8 +1669,7 @@ export default function DashboardPage({
                 className="
                   text-xl
                   font-bold
-                  text-gray-950
-                  dark:text-white
+                  theme-text
                 "
               >
                 Progression par matière
@@ -1689,8 +1679,7 @@ export default function DashboardPage({
               <p
                 className="
                   text-sm
-                  text-gray-600
-                  dark:text-gray-400
+                  theme-text-secondary
                   mt-1
                 "
               >
@@ -1730,8 +1719,7 @@ export default function DashboardPage({
               <h3
                 className="
                   font-bold
-                  text-gray-800
-                  dark:text-white
+                  theme-text
                 "
               >
                 Pas encore de progression
@@ -1741,8 +1729,7 @@ export default function DashboardPage({
               <p
                 className="
                   text-sm
-                  text-gray-600
-                  dark:text-gray-400
+                  theme-text-secondary
                   mt-1
                 "
               >
@@ -1796,8 +1783,7 @@ export default function DashboardPage({
                       <h3
                         className="
                           font-bold
-                          text-gray-950
-                          dark:text-white
+                          theme-text
                           truncate
                         "
                       >
@@ -1848,8 +1834,7 @@ export default function DashboardPage({
                     <p
                       className="
                         text-xs
-                        text-gray-600
-                        dark:text-gray-400
+                        theme-text-secondary
                         mt-2
                       "
                     >
@@ -1914,8 +1899,7 @@ export default function DashboardPage({
                 className="
                   text-xl
                   font-bold
-                  text-gray-950
-                  dark:text-white
+                  theme-text
                 "
               >
                 Mes badges
@@ -1925,8 +1909,7 @@ export default function DashboardPage({
               <p
                 className="
                   text-sm
-                  text-gray-600
-                  dark:text-gray-400
+                  theme-text-secondary
                 "
               >
                 Les récompenses que tu as obtenues.
@@ -1964,8 +1947,7 @@ export default function DashboardPage({
               <h3
                 className="
                   font-bold
-                  text-gray-800
-                  dark:text-white
+                  theme-text
                 "
               >
                 Aucun badge pour le moment
@@ -1975,8 +1957,7 @@ export default function DashboardPage({
               <p
                 className="
                   text-sm
-                  text-gray-600
-                  dark:text-gray-400
+                  theme-text-secondary
                   mt-1
                 "
               >
@@ -2075,8 +2056,7 @@ export default function DashboardPage({
                           <h3
                             className="
                               font-bold
-                              text-gray-950
-                              dark:text-white
+                              theme-text
                             "
                           >
                             {
@@ -2089,8 +2069,7 @@ export default function DashboardPage({
                           <p
                             className="
                               text-sm
-                              text-gray-600
-                              dark:text-gray-400
+                              theme-text-secondary
                               mt-1
                             "
                           >

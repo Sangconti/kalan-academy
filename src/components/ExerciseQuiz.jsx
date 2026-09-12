@@ -315,11 +315,6 @@ export default function ExerciseQuiz({
       // ==================================
       // 👁️ MODE CONSULTATION
       // ==================================
-      //
-      // L'administrateur peut répondre
-      // au quiz et voir le résultat,
-      // mais RIEN n'est enregistré.
-      // ==================================
 
       if (consultationMode && !isStudentPreview) {
 
@@ -365,16 +360,6 @@ export default function ExerciseQuiz({
 
       // ==================================
       // 👁️ MODE APERÇU
-      // ==================================
-      //
-      // L'administrateur peut répondre
-      // au quiz pour visualiser son rendu,
-      // mais RIEN n'est enregistré.
-      //
-      // Aucune tentative,
-      // aucun XP,
-      // aucune progression,
-      // aucun badge.
       // ==================================
 
       if (isStudentPreview) {
@@ -634,8 +619,7 @@ export default function ExerciseQuiz({
 
         <p
           className="
-            text-gray-500
-            dark:text-gray-400
+            theme-text-secondary
           "
         >
 
@@ -674,8 +658,7 @@ export default function ExerciseQuiz({
 
         <p
           className="
-            text-gray-500
-            dark:text-gray-400
+            theme-text-secondary
           "
         >
 
@@ -730,8 +713,7 @@ export default function ExerciseQuiz({
             className="
               text-2xl
               font-bold
-              text-gray-900
-              dark:text-white
+              theme-text
             "
           >
 
@@ -846,8 +828,7 @@ export default function ExerciseQuiz({
               className="
                 text-xl
                 font-bold
-                text-gray-950
-                dark:text-white
+                theme-text
               "
             >
 
@@ -860,8 +841,7 @@ export default function ExerciseQuiz({
 
             <p
               className="
-                text-gray-600
-                dark:text-gray-300
+                theme-text-secondary
                 mt-1
               "
             >
@@ -912,8 +892,7 @@ export default function ExerciseQuiz({
                 <p
                   className="
                     text-xs
-                    text-gray-500
-                    dark:text-gray-400
+                    theme-text-secondary
                   "
                 >
                   Bonnes réponses
@@ -923,8 +902,7 @@ export default function ExerciseQuiz({
                 <p
                   className="
                     font-extrabold
-                    text-gray-900
-                    dark:text-white
+                    theme-text
                     text-lg
                     mt-1
                   "
@@ -951,8 +929,7 @@ export default function ExerciseQuiz({
                 <p
                   className="
                     text-xs
-                    text-gray-500
-                    dark:text-gray-400
+                    theme-text-secondary
                   "
                 >
 
@@ -967,8 +944,7 @@ export default function ExerciseQuiz({
                 <p
                   className="
                     font-extrabold
-                    text-gray-900
-                    dark:text-white
+                    theme-text
                     text-lg
                     mt-1
                   "
@@ -1161,8 +1137,7 @@ export default function ExerciseQuiz({
               className="
                 text-2xl
                 font-bold
-                text-gray-900
-                dark:text-white
+                theme-text
               "
             >
 
@@ -1177,8 +1152,7 @@ export default function ExerciseQuiz({
 
             <p
               className="
-                text-gray-500
-                dark:text-gray-400
+                theme-text-secondary
                 mt-1
               "
             >
@@ -1224,8 +1198,7 @@ export default function ExerciseQuiz({
           <span
             className="
               font-medium
-              text-gray-700
-              dark:text-gray-300
+              theme-text
             "
           >
             Progression
@@ -1234,8 +1207,7 @@ export default function ExerciseQuiz({
 
           <span
             className="
-              text-gray-500
-              dark:text-gray-400
+              theme-text-secondary
             "
           >
 
@@ -1334,8 +1306,7 @@ export default function ExerciseQuiz({
                 <p
                   className="
                     font-semibold
-                    text-gray-900
-                    dark:text-white
+                    theme-text
                     leading-6
                   "
                 >
@@ -1400,8 +1371,7 @@ export default function ExerciseQuiz({
                               : `
                                 theme-surface
                                 theme-border
-                                text-gray-700
-                                dark:text-gray-300
+                                theme-text
                                 hover:bg-gray-50
                                 dark:hover:bg-gray-800
                               `
@@ -1439,8 +1409,7 @@ export default function ExerciseQuiz({
                                 : `
                                   bg-gray-100
                                   dark:bg-gray-800
-                                  text-gray-500
-                                  dark:text-gray-400
+                                  theme-text-secondary
                                 `
                             }
                           `}

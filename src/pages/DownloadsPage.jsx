@@ -1,6 +1,7 @@
 // src/pages/DownloadsPage.jsx
 
 import { useEffect, useState } from "react";
+
 import {
   useNavigate,
   useLocation,
@@ -21,6 +22,7 @@ import {
   Video,
   Home
 } from "lucide-react";
+
 
 export default function DownloadsPage({
   consultationMode = false,
@@ -93,6 +95,7 @@ export default function DownloadsPage({
       setLoading(false);
 
     }
+
   }
 
 
@@ -125,10 +128,10 @@ export default function DownloadsPage({
       return;
     }
 
+
     try {
 
       await deleteCachedVideo(lessonId);
-
       await loadDownloads();
 
     } catch (error) {
@@ -139,6 +142,7 @@ export default function DownloadsPage({
       );
 
     }
+
   }
 
 
@@ -197,6 +201,7 @@ export default function DownloadsPage({
 
 
     navigate("/");
+
   }
 
 
@@ -215,13 +220,15 @@ export default function DownloadsPage({
         items-center
         justify-center
         px-6
+        theme-bg
+        theme-text
       ">
 
         <div className="
           w-14
           h-14
           rounded-2xl
-          bg-blue-100
+          bg-accent-soft
           flex
           items-center
           justify-center
@@ -230,13 +237,14 @@ export default function DownloadsPage({
 
           <Download
             size={28}
-            className="text-blue-600"
+            className="text-accent"
           />
 
         </div>
 
+
         <p className="
-          text-gray-600
+          theme-text-secondary
           font-medium
         ">
 
@@ -247,6 +255,7 @@ export default function DownloadsPage({
       </div>
 
     );
+
   }
 
 
@@ -258,18 +267,20 @@ export default function DownloadsPage({
 
     <div className="
       min-h-screen
-      bg-gray-50
+      theme-bg
+      theme-text
       pb-8
     ">
+
 
       {/* ======================================
           HEADER
       ====================================== */}
 
       <div className="
-        bg-white
+        theme-surface
         border-b
-        border-gray-100
+        theme-border
         px-5
         py-4
       ">
@@ -282,8 +293,8 @@ export default function DownloadsPage({
             gap-2
             text-xl
             font-bold
-            text-gray-900
-            hover:text-blue-600
+            theme-text
+            hover:text-accent
             transition
           "
         >
@@ -292,7 +303,7 @@ export default function DownloadsPage({
             w-9
             h-9
             rounded-xl
-            bg-blue-600
+            bg-accent
             text-white
             flex
             items-center
@@ -335,7 +346,7 @@ export default function DownloadsPage({
             w-12
             h-12
             rounded-2xl
-            bg-blue-100
+            bg-accent-soft
             flex
             items-center
             justify-center
@@ -343,7 +354,7 @@ export default function DownloadsPage({
 
             <HardDrive
               size={25}
-              className="text-blue-600"
+              className="text-accent"
             />
 
           </div>
@@ -354,16 +365,17 @@ export default function DownloadsPage({
             <h1 className="
               text-2xl
               font-bold
-              text-gray-900
+              theme-text
             ">
 
               Téléchargements
 
             </h1>
 
+
             <p className="
               text-sm
-              text-gray-500
+              theme-text-secondary
               mt-1
             ">
 
@@ -384,64 +396,141 @@ export default function DownloadsPage({
         ====================================== */}
 
         <div className="
-          bg-white
+          relative
+          overflow-hidden
+          theme-surface
           rounded-2xl
           shadow-sm
           border
-          border-gray-100
+          theme-border
           p-5
           mb-6
         ">
 
+          {/* CERCLES DÉCORATIFS */}
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+              overflow-hidden
+            "
+            aria-hidden="true"
+          >
+
+            <div className="
+              absolute
+              -right-16
+              -top-16
+              w-48
+              h-48
+              rounded-full
+              bg-accent
+              opacity-10
+              "
+            />
+
+            <div className="
+              absolute
+              right-10
+              -bottom-24
+              w-56
+              h-56
+              rounded-full
+              bg-accent
+              opacity-5
+              "
+            />
+
+          </div>
+
+
           <div className="
-            flex
-            items-center
-            justify-between
-            mb-3
+            relative
+            z-10
           ">
 
             <div className="
               flex
               items-center
-              gap-3
+              justify-between
+              mb-3
             ">
 
               <div className="
-                w-10
-                h-10
-                rounded-xl
-                bg-green-100
                 flex
                 items-center
-                justify-center
+                gap-3
               ">
 
-                <HardDrive
-                  size={20}
-                  className="text-green-600"
-                />
+                <div className="
+                  w-10
+                  h-10
+                  rounded-xl
+                  bg-green-100
+                  dark:bg-green-950/40
+                  flex
+                  items-center
+                  justify-center
+                ">
+
+                  <HardDrive
+                    size={20}
+                    className="text-green-600 dark:text-green-400"
+                  />
+
+                </div>
+
+
+                <div>
+
+                  <p className="
+                    text-sm
+                    theme-text-secondary
+                  ">
+
+                    Stockage utilisé
+
+                  </p>
+
+
+                  <p className="
+                    text-xl
+                    font-bold
+                    theme-text
+                  ">
+
+                    {storage} MB
+
+                  </p>
+
+                </div>
 
               </div>
 
 
-              <div>
+              <div className="
+                text-right
+              ">
 
                 <p className="
-                  text-sm
-                  text-gray-500
+                  text-2xl
+                  font-bold
+                  text-accent
                 ">
 
-                  Stockage utilisé
+                  {videos.length}
 
                 </p>
 
+
                 <p className="
-                  text-xl
-                  font-bold
-                  text-gray-900
+                  text-xs
+                  theme-text-secondary
                 ">
 
-                  {storage} MB
+                  vidéo{videos.length > 1 ? "s" : ""}
 
                 </p>
 
@@ -450,52 +539,26 @@ export default function DownloadsPage({
             </div>
 
 
-            <div className="
-              text-right
-            ">
-
-              <p className="
-                text-2xl
-                font-bold
-                text-blue-600
-              ">
-
-                {videos.length}
-
-              </p>
+            {isConsultation && (
 
               <p className="
                 text-xs
-                text-gray-500
+                theme-text-secondary
+                mt-3
+                pt-3
+                border-t
+                theme-border
               ">
 
-                vidéo{videos.length > 1 ? "s" : ""}
+                Ces téléchargements sont stockés
+                localement sur l'appareil utilisé
+                pour la consultation.
 
               </p>
 
-            </div>
+            )}
 
           </div>
-
-
-          {isConsultation && (
-
-            <p className="
-              text-xs
-              text-gray-500
-              mt-3
-              pt-3
-              border-t
-              border-gray-100
-            ">
-
-              Ces téléchargements sont stockés
-              localement sur l'appareil utilisé
-              pour la consultation.
-
-            </p>
-
-          )}
 
         </div>
 
@@ -507,11 +570,11 @@ export default function DownloadsPage({
         {videos.length === 0 ? (
 
           <div className="
-            bg-white
+            theme-surface
             rounded-2xl
             shadow-sm
             border
-            border-gray-100
+            theme-border
             p-10
             text-center
           ">
@@ -521,6 +584,7 @@ export default function DownloadsPage({
               h-16
               rounded-2xl
               bg-gray-100
+              dark:bg-gray-800
               flex
               items-center
               justify-center
@@ -530,7 +594,7 @@ export default function DownloadsPage({
 
               <Video
                 size={30}
-                className="text-gray-400"
+                className="theme-text-secondary"
               />
 
             </div>
@@ -539,7 +603,7 @@ export default function DownloadsPage({
             <h2 className="
               text-lg
               font-bold
-              text-gray-800
+              theme-text
               mb-2
             ">
 
@@ -550,7 +614,7 @@ export default function DownloadsPage({
 
             <p className="
               text-sm
-              text-gray-500
+              theme-text-secondary
               max-w-sm
               mx-auto
             ">
@@ -570,13 +634,13 @@ export default function DownloadsPage({
                 inline-flex
                 items-center
                 gap-2
-                bg-blue-600
+                bg-accent
                 text-white
                 px-5
                 py-3
                 rounded-xl
                 font-semibold
-                hover:bg-blue-700
+                hover:opacity-90
                 transition
               "
             >
@@ -591,7 +655,6 @@ export default function DownloadsPage({
 
         ) : (
 
-
           /* ====================================
              LISTE DES VIDÉOS
           ==================================== */
@@ -605,11 +668,11 @@ export default function DownloadsPage({
               <div
                 key={video.lesson_id}
                 className="
-                  bg-white
+                  theme-surface
                   rounded-2xl
                   shadow-sm
                   border
-                  border-gray-100
+                  theme-border
                   p-4
                   flex
                   items-center
@@ -626,7 +689,7 @@ export default function DownloadsPage({
                   h-14
                   flex-shrink-0
                   rounded-2xl
-                  bg-blue-100
+                  bg-accent-soft
                   flex
                   items-center
                   justify-center
@@ -634,7 +697,7 @@ export default function DownloadsPage({
 
                   <PlayCircle
                     size={28}
-                    className="text-blue-600"
+                    className="text-accent"
                   />
 
                 </div>
@@ -649,7 +712,7 @@ export default function DownloadsPage({
 
                   <h2 className="
                     font-bold
-                    text-gray-900
+                    theme-text
                     truncate
                   ">
 
@@ -668,12 +731,12 @@ export default function DownloadsPage({
 
                     <Download
                       size={14}
-                      className="text-gray-400"
+                      className="theme-text-secondary"
                     />
 
                     <span className="
                       text-sm
-                      text-gray-500
+                      theme-text-secondary
                     ">
 
                       Disponible hors ligne
@@ -685,7 +748,7 @@ export default function DownloadsPage({
 
                   <p className="
                     text-xs
-                    text-gray-400
+                    theme-text-secondary
                     mt-1
                   ">
 
@@ -713,11 +776,14 @@ export default function DownloadsPage({
                       h-10
                       rounded-xl
                       bg-green-100
+                      dark:bg-green-950/40
                       text-green-600
+                      dark:text-green-400
                       flex
                       items-center
                       justify-center
                       hover:bg-green-200
+                      dark:hover:bg-green-900/50
                       transition
                     "
                     title="Lire"
@@ -743,11 +809,14 @@ export default function DownloadsPage({
                         h-10
                         rounded-xl
                         bg-red-50
+                        dark:bg-red-950/40
                         text-red-500
+                        dark:text-red-400
                         flex
                         items-center
                         justify-center
                         hover:bg-red-100
+                        dark:hover:bg-red-900/50
                         transition
                       "
                       title="Supprimer"
@@ -776,4 +845,5 @@ export default function DownloadsPage({
     </div>
 
   );
+
 }

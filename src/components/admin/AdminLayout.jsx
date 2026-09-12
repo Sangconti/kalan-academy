@@ -91,7 +91,8 @@ export default function AdminLayout({ children }) {
       className="
         min-h-screen
         w-full
-        bg-gray-100
+        theme-bg
+        theme-text
         overflow-x-hidden
       "
     >

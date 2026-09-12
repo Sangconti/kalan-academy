@@ -18,7 +18,7 @@ const ThemeContext = createContext(null);
 // VALEURS PAR DÉFAUT
 // =====================================================
 
-const DEFAULT_THEME = "system";
+const DEFAULT_THEME = "light";
 const DEFAULT_ACCENT = "blue";
 
 const VALID_THEMES = [

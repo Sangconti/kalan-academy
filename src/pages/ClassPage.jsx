@@ -408,7 +408,8 @@ export default function ClassPage() {
             border
             theme-border
             shadow-sm
-            theme-text-secondary
+            theme-text
+            font-medium
             hover:text-accent
             transition
           "
@@ -520,7 +521,7 @@ export default function ClassPage() {
           inline-flex
           items-center
           gap-2
-          mb-6
+          mb-5
           px-4
           py-2.5
           rounded-xl
@@ -528,7 +529,8 @@ export default function ClassPage() {
           border
           theme-border
           shadow-sm
-          theme-text-secondary
+          theme-text
+          font-medium
           hover:text-accent
           transition
         "

@@ -511,7 +511,7 @@ export default function DashboardAdmin() {
               text-2xl
               sm:text-3xl
               font-bold
-              text-gray-900
+              theme-text
               break-words
             "
           >
@@ -521,7 +521,7 @@ export default function DashboardAdmin() {
 
           <p
             className="
-              text-gray-500
+              theme-text-secondary
               mt-1
               text-sm
               sm:text-base
@@ -589,10 +589,14 @@ export default function DashboardAdmin() {
             mb-6
 
             bg-red-50
+            dark:bg-red-950/40
+
             border
             border-red-200
+            dark:border-red-900
 
             text-red-700
+            dark:text-red-300
 
             rounded-xl
 
@@ -632,9 +636,11 @@ export default function DashboardAdmin() {
           mb-8
 
           bg-orange-50
+          dark:bg-orange-950/40
 
           border
           border-orange-200
+          dark:border-orange-900
 
           rounded-2xl
 
@@ -655,7 +661,7 @@ export default function DashboardAdmin() {
             className="
               text-lg
               font-bold
-              text-gray-900
+              theme-text
             "
           >
             🔐 Récupération d'un appareil
@@ -665,7 +671,7 @@ export default function DashboardAdmin() {
           <p
             className="
               text-sm
-              text-gray-600
+              theme-text-secondary
               mt-1
               leading-relaxed
             "
@@ -702,7 +708,7 @@ export default function DashboardAdmin() {
                 block
                 text-sm
                 font-semibold
-                text-gray-700
+                theme-text
                 mb-2
               "
             >
@@ -729,19 +735,22 @@ export default function DashboardAdmin() {
                 rounded-xl
 
                 border
-                border-gray-200
+                theme-border
 
-                bg-white
+                theme-surface
 
-                text-gray-900
+                theme-text
 
                 outline-none
 
                 focus:border-orange-500
                 focus:ring-4
                 focus:ring-orange-100
+                dark:focus:ring-orange-950/40
 
                 disabled:bg-gray-100
+                dark:disabled:bg-gray-800
+
                 disabled:cursor-not-allowed
 
                 transition
@@ -838,10 +847,11 @@ export default function DashboardAdmin() {
             className="
               mt-5
 
-              bg-white
+              theme-surface
 
               border
               border-orange-200
+              dark:border-orange-900
 
               rounded-xl
 
@@ -857,7 +867,7 @@ export default function DashboardAdmin() {
                 className="
                   text-sm
                   font-semibold
-                  text-gray-700
+                  theme-text
                 "
               >
                 Code généré pour :
@@ -868,7 +878,7 @@ export default function DashboardAdmin() {
                 className="
                   text-base
                   font-bold
-                  text-gray-900
+                  theme-text
                   mt-1
                 "
               >
@@ -904,9 +914,10 @@ export default function DashboardAdmin() {
                   rounded-xl
 
                   bg-gray-50
+                  dark:bg-gray-800
 
                   border
-                  border-gray-200
+                  theme-border
 
                   text-center
 
@@ -917,7 +928,7 @@ export default function DashboardAdmin() {
 
                   text-lg
 
-                  text-gray-900
+                  theme-text
 
                   select-all
 
@@ -963,6 +974,7 @@ export default function DashboardAdmin() {
               className="
                 text-xs
                 text-orange-700
+                dark:text-orange-300
                 mt-3
                 leading-relaxed
               "
@@ -1096,7 +1108,9 @@ export default function DashboardAdmin() {
           mt-8
           sm:mt-10
 
-          bg-white
+          theme-surface
+          theme-border
+          border
 
           rounded-2xl
 
@@ -1136,7 +1150,7 @@ export default function DashboardAdmin() {
 
               font-bold
 
-              text-gray-900
+              theme-text
             "
           >
             État de la plateforme
@@ -1159,7 +1173,10 @@ export default function DashboardAdmin() {
               text-sm
 
               bg-green-100
+              dark:bg-green-950/40
+
               text-green-700
+              dark:text-green-300
 
               whitespace-nowrap
             "
@@ -1192,6 +1209,7 @@ export default function DashboardAdmin() {
           <div
             className="
               border
+              theme-border
               rounded-xl
               p-4
               min-w-0
@@ -1201,7 +1219,7 @@ export default function DashboardAdmin() {
             <p
               className="
                 text-sm
-                text-gray-500
+                theme-text-secondary
               "
             >
               Contenu pédagogique
@@ -1214,6 +1232,8 @@ export default function DashboardAdmin() {
                 sm:text-lg
 
                 font-semibold
+
+                theme-text
 
                 mt-1
 
@@ -1236,6 +1256,7 @@ export default function DashboardAdmin() {
           <div
             className="
               border
+              theme-border
               rounded-xl
               p-4
               min-w-0
@@ -1245,7 +1266,7 @@ export default function DashboardAdmin() {
             <p
               className="
                 text-sm
-                text-gray-500
+                theme-text-secondary
               "
             >
               Évaluations
@@ -1258,6 +1279,8 @@ export default function DashboardAdmin() {
                 sm:text-lg
 
                 font-semibold
+
+                theme-text
 
                 mt-1
 
@@ -1280,6 +1303,7 @@ export default function DashboardAdmin() {
           <div
             className="
               border
+              theme-border
               rounded-xl
               p-4
               min-w-0
@@ -1289,7 +1313,7 @@ export default function DashboardAdmin() {
             <p
               className="
                 text-sm
-                text-gray-500
+                theme-text-secondary
               "
             >
               Utilisateurs premium
@@ -1302,6 +1326,8 @@ export default function DashboardAdmin() {
                 sm:text-lg
 
                 font-semibold
+
+                theme-text
 
                 mt-1
 
@@ -1324,6 +1350,7 @@ export default function DashboardAdmin() {
           <div
             className="
               border
+              theme-border
               rounded-xl
               p-4
               min-w-0
@@ -1333,7 +1360,7 @@ export default function DashboardAdmin() {
             <p
               className="
                 text-sm
-                text-gray-500
+                theme-text-secondary
               "
             >
               XP distribuée
@@ -1346,6 +1373,8 @@ export default function DashboardAdmin() {
                 sm:text-lg
 
                 font-semibold
+
+                theme-text
 
                 mt-1
 
@@ -1375,7 +1404,9 @@ export default function DashboardAdmin() {
         className="
           mt-6
 
-          bg-white
+          theme-surface
+          theme-border
+          border
 
           rounded-2xl
 
@@ -1398,7 +1429,7 @@ export default function DashboardAdmin() {
 
             mb-4
 
-            text-gray-900
+            theme-text
           "
         >
           Activité récente
@@ -1407,7 +1438,7 @@ export default function DashboardAdmin() {
 
         <p
           className="
-            text-gray-500
+            theme-text-secondary
 
             text-sm
             sm:text-base
@@ -1420,6 +1451,7 @@ export default function DashboardAdmin() {
         </p>
 
       </div>
+
 
     </div>
 

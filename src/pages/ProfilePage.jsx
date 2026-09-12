@@ -15,6 +15,10 @@ import {
 import { supabase } from "../lib/supabase";
 
 import {
+  generateDeviceRecoveryCode
+} from "../services/deviceService";
+
+import {
   User,
   Crown,
   Trophy,
@@ -22,7 +26,10 @@ import {
   Download,
   LogOut,
   Home,
-  Award
+  Award,
+  KeyRound,
+  Copy,
+  Check
 } from "lucide-react";
 
 
@@ -139,6 +146,34 @@ export default function ProfilePage({
   */
   const [loading, setLoading] =
     useState(true);
+
+
+  // ===================================================
+  // CODE DE RÉCUPÉRATION
+  // ===================================================
+
+  /*
+    Le code n'est volontairement PAS enregistré
+    dans localStorage, Dexie ou le cache.
+
+    Il reste uniquement en mémoire pendant
+    l'affichage de cette page.
+  */
+
+  const [recoveryCode, setRecoveryCode] =
+    useState("");
+
+  const [recoveryLoading, setRecoveryLoading] =
+    useState(false);
+
+  const [recoveryMessage, setRecoveryMessage] =
+    useState("");
+
+  const [recoveryMessageType, setRecoveryMessageType] =
+    useState("");
+
+  const [recoveryCopied, setRecoveryCopied] =
+    useState(false);
 
 
   // ===================================================
@@ -647,6 +682,275 @@ export default function ProfilePage({
     };
 
   }, [loadProfile]);
+
+
+  // ===================================================
+  // GÉNÉRER LE CODE DE RÉCUPÉRATION
+  // ===================================================
+
+  async function handleGenerateRecoveryCode() {
+
+    /*
+      Cette fonctionnalité est uniquement
+      disponible pour l'élève connecté.
+
+      Elle ne doit jamais être disponible
+      pendant la consultation admin.
+    */
+
+    if (isConsultation) {
+
+      return;
+
+    }
+
+
+    /*
+      Générer un nouveau code remplace
+      l'ancien code côté serveur.
+
+      On demande donc confirmation si
+      un code est déjà affiché.
+    */
+
+    if (recoveryCode) {
+
+      const confirmed =
+        window.confirm(
+          "Générer un nouveau code de récupération ?\n\n" +
+          "L'ancien code deviendra immédiatement invalide."
+        );
+
+      if (!confirmed) {
+
+        return;
+
+      }
+
+    }
+
+
+    setRecoveryLoading(true);
+
+    setRecoveryMessage("");
+
+    setRecoveryMessageType("");
+
+    setRecoveryCopied(false);
+
+
+    try {
+
+      const result =
+        await generateDeviceRecoveryCode();
+
+
+      /*
+        Selon la structure retournée par
+        deviceService, le résultat peut être
+        directement l'objet RPC ou être
+        contenu dans result.data.
+
+        On accepte les deux sans modifier
+        deviceService.js.
+      */
+
+      const payload =
+        result?.data ?? result;
+
+
+      const code =
+        payload?.code;
+
+
+      if (
+        payload?.success &&
+        code
+      ) {
+
+        /*
+          Le code reste uniquement en mémoire.
+
+          Il n'est PAS enregistré dans :
+          - localStorage
+          - Dexie
+          - cache ProfilePage
+        */
+
+        setRecoveryCode(
+          String(code)
+            .trim()
+            .toUpperCase()
+        );
+
+        setRecoveryMessage(
+          "Nouveau code généré avec succès."
+        );
+
+        setRecoveryMessageType(
+          "success"
+        );
+
+      }
+      else {
+
+        console.error(
+          "❌ Génération du code de récupération échouée :",
+          result
+        );
+
+        setRecoveryMessage(
+          "Impossible de générer le code de récupération. Vérifie ta connexion Internet puis réessaie."
+        );
+
+        setRecoveryMessageType(
+          "error"
+        );
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "❌ Erreur génération code de récupération :",
+        error
+      );
+
+      setRecoveryMessage(
+        "Impossible de générer le code. Une connexion Internet est nécessaire."
+      );
+
+      setRecoveryMessageType(
+        "error"
+      );
+
+    } finally {
+
+      setRecoveryLoading(false);
+
+    }
+
+  }
+
+
+  // ===================================================
+  // COPIER LE CODE DE RÉCUPÉRATION
+  // ===================================================
+
+  async function handleCopyRecoveryCode() {
+
+    if (!recoveryCode) {
+
+      return;
+
+    }
+
+
+    try {
+
+      /*
+        Méthode principale.
+
+        La protection contre la sélection/copie
+        du contenu pédagogique n'empêche pas
+        cette écriture directe dans le presse-papiers.
+      */
+
+      if (
+        navigator.clipboard &&
+        typeof navigator.clipboard.writeText ===
+          "function"
+      ) {
+
+        await navigator.clipboard.writeText(
+          recoveryCode
+        );
+
+      }
+      else {
+
+        /*
+          Fallback pour les environnements
+          où Clipboard API n'est pas disponible.
+        */
+
+        const textarea =
+          document.createElement("textarea");
+
+        textarea.value =
+          recoveryCode;
+
+        textarea.setAttribute(
+          "readonly",
+          ""
+        );
+
+        textarea.style.position =
+          "fixed";
+
+        textarea.style.opacity =
+          "0";
+
+        textarea.style.pointerEvents =
+          "none";
+
+        document.body.appendChild(
+          textarea
+        );
+
+        textarea.select();
+
+        document.execCommand(
+          "copy"
+        );
+
+        document.body.removeChild(
+          textarea
+        );
+
+      }
+
+
+      setRecoveryCopied(true);
+
+      setRecoveryMessage(
+        "Code copié dans le presse-papiers."
+      );
+
+      setRecoveryMessageType(
+        "success"
+      );
+
+
+      /*
+        On remet le bouton dans son état
+        normal après quelques secondes.
+      */
+
+      window.setTimeout(() => {
+
+        setRecoveryCopied(false);
+
+      }, 2500);
+
+    } catch (error) {
+
+      console.error(
+        "❌ Impossible de copier le code :",
+        error
+      );
+
+      setRecoveryMessage(
+        "Impossible de copier automatiquement le code. Tu peux le recopier manuellement."
+      );
+
+      setRecoveryMessageType(
+        "error"
+      );
+
+    }
+
+  }
 
 
   // ===================================================
@@ -1281,6 +1585,395 @@ export default function ProfilePage({
                 </div>
 
               </div>
+
+            </div>
+
+          </div>
+
+        )}
+
+
+        {/* =================================================
+            CODE DE RÉCUPÉRATION
+        ================================================= */}
+
+        {!isConsultation && (
+
+          <div
+            className="
+              relative
+              overflow-hidden
+              theme-surface
+              rounded-2xl
+              border
+              theme-border
+              shadow-sm
+              p-5
+              mb-6
+            "
+          >
+
+            {/* CERCLES DÉCORATIFS */}
+
+            <div
+              className="
+                pointer-events-none
+                absolute
+                -right-16
+                -top-16
+                w-40
+                h-40
+                rounded-full
+                bg-accent
+                opacity-5
+              "
+              aria-hidden="true"
+            />
+
+            <div
+              className="
+                pointer-events-none
+                absolute
+                -left-20
+                -bottom-20
+                w-48
+                h-48
+                rounded-full
+                bg-accent
+                opacity-5
+              "
+              aria-hidden="true"
+            />
+
+
+            <div
+              className="
+                relative
+                z-10
+              "
+            >
+
+              {/* EN-TÊTE */}
+
+              <div
+                className="
+                  flex
+                  items-start
+                  gap-4
+                "
+              >
+
+                <div
+                  className="
+                    w-12
+                    h-12
+                    rounded-2xl
+                    bg-accent-soft
+                    text-accent
+                    flex
+                    items-center
+                    justify-center
+                    shrink-0
+                  "
+                >
+
+                  <KeyRound
+                    size={23}
+                  />
+
+                </div>
+
+
+                <div
+                  className="
+                    flex-1
+                    min-w-0
+                  "
+                >
+
+                  <h2
+                    className="
+                      font-bold
+                      theme-text
+                      text-lg
+                    "
+                  >
+                    Code de récupération
+                  </h2>
+
+
+                  <p
+                    className="
+                      text-sm
+                      theme-text-secondary
+                      mt-1
+                      leading-relaxed
+                    "
+                  >
+                    Utilise ce code si tu dois récupérer
+                    ton compte sur un autre téléphone.
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              {/* AVERTISSEMENT */}
+
+              <div
+                className="
+                  mt-4
+                  rounded-xl
+                  bg-yellow-50
+                  dark:bg-yellow-950/30
+                  border
+                  border-yellow-200
+                  dark:border-yellow-900
+                  px-4
+                  py-3
+                "
+              >
+
+                <p
+                  className="
+                    text-xs
+                    text-yellow-800
+                    dark:text-yellow-200
+                    leading-relaxed
+                  "
+                >
+                  <strong>Important :</strong>{" "}
+                  le code est affiché une seule fois.
+                  Garde-le dans un endroit sûr.
+                  Générer un nouveau code rendra
+                  immédiatement l'ancien invalide.
+                </p>
+
+              </div>
+
+
+              {/* CODE GÉNÉRÉ */}
+
+              {recoveryCode && (
+
+                <div
+                  className="
+                    mt-5
+                  "
+                >
+
+                  <p
+                    className="
+                      text-xs
+                      font-semibold
+                      theme-text-secondary
+                      mb-2
+                    "
+                  >
+                    Ton code de récupération
+                  </p>
+
+
+                  <div
+                    className="
+                      flex
+                      flex-col
+                      sm:flex-row
+                      gap-2
+                    "
+                  >
+
+                    <div
+                      className="
+                        flex-1
+                        min-w-0
+                        rounded-xl
+                        border
+                        theme-border
+                        bg-gray-50
+                        dark:bg-gray-800
+                        px-4
+                        py-3
+                        flex
+                        items-center
+                        justify-center
+                      "
+                    >
+
+                      <span
+                        className="
+                          font-mono
+                          text-lg
+                          sm:text-xl
+                          font-extrabold
+                          tracking-wider
+                          theme-text
+                          select-text
+                        "
+                      >
+                        {recoveryCode}
+                      </span>
+
+                    </div>
+
+
+                    <button
+                      type="button"
+                      onClick={
+                        handleCopyRecoveryCode
+                      }
+                      className="
+                        inline-flex
+                        items-center
+                        justify-center
+                        gap-2
+                        rounded-xl
+                        bg-accent
+                        text-white
+                        px-4
+                        py-3
+                        font-semibold
+                        hover:opacity-90
+                        transition
+                        shrink-0
+                      "
+                    >
+
+                      {recoveryCopied ? (
+
+                        <Check
+                          size={18}
+                        />
+
+                      ) : (
+
+                        <Copy
+                          size={18}
+                        />
+
+                      )}
+
+                      {recoveryCopied
+                        ? "Copié"
+                        : "Copier le code"}
+
+                    </button>
+
+                  </div>
+
+                </div>
+
+              )}
+
+
+              {/* MESSAGE */}
+
+              {recoveryMessage && (
+
+                <div
+                  className={`
+                    mt-4
+                    rounded-xl
+                    px-4
+                    py-3
+                    text-sm
+                    font-medium
+                    ${
+                      recoveryMessageType ===
+                      "success"
+                        ? "bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300"
+                        : "bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-300"
+                    }
+                  `}
+                >
+                  {recoveryMessage}
+                </div>
+
+              )}
+
+
+              {/* BOUTON GÉNÉRATION */}
+
+              <button
+                type="button"
+                onClick={
+                  handleGenerateRecoveryCode
+                }
+                disabled={
+                  recoveryLoading
+                }
+                className="
+                  w-full
+                  mt-5
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-xl
+                  border
+                  theme-border
+                  theme-text
+                  px-4
+                  py-3
+                  font-semibold
+                  hover:bg-gray-100
+                  dark:hover:bg-gray-800
+                  transition
+                  disabled:opacity-50
+                  disabled:cursor-not-allowed
+                "
+              >
+
+                {recoveryLoading ? (
+
+                  <>
+                    <span
+                      className="
+                        w-4
+                        h-4
+                        rounded-full
+                        border-2
+                        border-current
+                        border-t-transparent
+                        animate-spin
+                      "
+                    />
+
+                    Génération en cours...
+
+                  </>
+
+                ) : (
+
+                  <>
+                    <KeyRound
+                      size={18}
+                    />
+
+                    {recoveryCode
+                      ? "Générer un nouveau code"
+                      : "Générer mon code"}
+
+                  </>
+
+                )}
+
+              </button>
+
+
+              <p
+                className="
+                  text-xs
+                  theme-text-secondary
+                  mt-3
+                  text-center
+                  leading-relaxed
+                "
+              >
+                Une connexion Internet est nécessaire
+                pour générer un nouveau code.
+              </p>
 
             </div>
 

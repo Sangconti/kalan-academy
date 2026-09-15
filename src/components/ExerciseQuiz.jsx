@@ -72,6 +72,140 @@ export default function ExerciseQuiz({
 
 
   // ====================================
+  // 🔀 MÉLANGE ALÉATOIRE
+  // ====================================
+  //
+  // Retourne un nouveau tableau sans
+  // modifier le tableau original.
+  //
+  // Fisher-Yates permet un mélange
+  // réellement aléatoire des éléments.
+  //
+  // ====================================
+
+  function shuffleArray(array) {
+
+    const shuffled = [
+      ...(array || [])
+    ];
+
+
+    for (
+      let i = shuffled.length - 1;
+      i > 0;
+      i--
+    ) {
+
+      const randomIndex =
+        Math.floor(
+          Math.random() * (i + 1)
+        );
+
+
+      [
+        shuffled[i],
+        shuffled[randomIndex]
+      ] = [
+        shuffled[randomIndex],
+        shuffled[i]
+      ];
+
+    }
+
+
+    return shuffled;
+
+  }
+
+
+  // ====================================
+  // 🔀 PRÉPARER LE QUIZ
+  // ====================================
+  //
+  // 1. Les questions sont mélangées.
+  // 2. Les choix de chaque question
+  //    sont mélangés.
+  // 3. correct_index est recalculé.
+  //
+  // IMPORTANT :
+  // Cette fonction est appelée uniquement
+  // lors du chargement du quiz.
+  //
+  // Le mélange ne se reproduit donc pas
+  // à chaque render.
+  //
+  // ====================================
+
+  function prepareShuffledQuestions(
+    data
+  ) {
+
+    const formatted =
+      (data || []).map(
+        question => {
+
+          const originalChoices =
+            Array.isArray(
+              question.choices
+            )
+              ? question.choices
+              : Array.isArray(
+                  question.options
+                )
+                ? question.options
+                : [];
+
+
+          const originalCorrectIndex =
+            Number(
+              question.correct_index
+            );
+
+
+          const correctChoice =
+            originalChoices[
+              originalCorrectIndex
+            ];
+
+
+          const shuffledChoices =
+            shuffleArray(
+              originalChoices
+            );
+
+
+          const newCorrectIndex =
+            shuffledChoices.findIndex(
+              choice =>
+                choice ===
+                correctChoice
+            );
+
+
+          return {
+
+            ...question,
+
+            choices:
+              shuffledChoices,
+
+            correct_index:
+              newCorrectIndex
+
+          };
+
+        }
+      );
+
+
+    return shuffleArray(
+      formatted
+    );
+
+  }
+
+
+  // ====================================
   // CHARGEMENT QUESTIONS
   // ====================================
 
@@ -88,6 +222,13 @@ export default function ExerciseQuiz({
 
     setLoading(true);
 
+    // Réinitialiser les réponses
+    // lorsqu'un nouveau quiz est chargé.
+    setAnswers({});
+
+    setResult(null);
+
+
     try {
 
       const data =
@@ -96,29 +237,30 @@ export default function ExerciseQuiz({
         );
 
 
-      const formatted =
-        (data || []).map(
-          question => ({
+      // ==================================
+      // 🔀 MÉLANGE DU QUIZ
+      // ==================================
 
-            ...question,
-
-            choices:
-              question.choices ||
-              question.options ||
-              []
-
-          })
+      const shuffledQuestions =
+        prepareShuffledQuestions(
+          data
         );
 
 
       console.log(
         "QUESTIONS CHARGEES",
-        formatted
+        data
+      );
+
+
+      console.log(
+        "🔀 QUESTIONS MÉLANGÉES",
+        shuffledQuestions
       );
 
 
       setQuestions(
-        formatted
+        shuffledQuestions
       );
 
     }
@@ -316,7 +458,10 @@ export default function ExerciseQuiz({
       // 👁️ MODE CONSULTATION
       // ==================================
 
-      if (consultationMode && !isStudentPreview) {
+      if (
+        consultationMode &&
+        !isStudentPreview
+      ) {
 
         console.log(
           "👁️ [CONSULTATION] Correction locale du quiz"

@@ -1,7 +1,9 @@
 // src/pages/DashboardPage.jsx
 
 import {
+  useCallback,
   useEffect,
+  useRef,
   useState
 } from "react";
 
@@ -32,8 +34,11 @@ const XP_PER_LEVEL = 500;
 const DASHBOARD_CACHE_PREFIX =
   "kalan_dashboard_";
 
+// 5 minutes.
+// Le cache reste utilisé pour éviter de refaire
+// plusieurs requêtes Supabase à chaque ouverture.
 const DASHBOARD_CACHE_DURATION =
-  30 * 1000;
+  5 * 60 * 1000;
 
 
 // =====================================================
@@ -49,26 +54,21 @@ function getCachedDashboard(
   userId,
   allowExpired = false
 ) {
-
   try {
-
-    const raw =
-      sessionStorage.getItem(
-        getDashboardCacheKey(userId)
-      );
+    const raw = sessionStorage.getItem(
+      getDashboardCacheKey(userId)
+    );
 
     if (!raw) {
       return null;
     }
 
-    const cached =
-      JSON.parse(raw);
+    const cached = JSON.parse(raw);
 
     if (
       !cached?.timestamp ||
       !cached?.data
     ) {
-
       sessionStorage.removeItem(
         getDashboardCacheKey(userId)
       );
@@ -84,18 +84,17 @@ function getCachedDashboard(
       !allowExpired &&
       age > DASHBOARD_CACHE_DURATION
     ) {
-
-      sessionStorage.removeItem(
-        getDashboardCacheKey(userId)
-      );
-
+      // IMPORTANT :
+      // On ne supprime plus le cache expiré.
+      //
+      // Il pourra être affiché immédiatement
+      // pendant que Supabase est actualisé.
       return null;
     }
 
     return cached.data;
 
   } catch (error) {
-
     console.warn(
       "⚠️ Cache Dashboard inaccessible :",
       error
@@ -110,9 +109,7 @@ function setCachedDashboard(
   userId,
   data
 ) {
-
   try {
-
     sessionStorage.setItem(
       getDashboardCacheKey(userId),
       JSON.stringify({
@@ -122,7 +119,6 @@ function setCachedDashboard(
     );
 
   } catch (error) {
-
     console.warn(
       "⚠️ Impossible de sauvegarder le cache Dashboard :",
       error
@@ -138,13 +134,17 @@ function setCachedDashboard(
 export default function DashboardPage({
   consultationMode = false
 }) {
+  const { studentId } = useParams();
 
-  const {
-    studentId
-  } = useParams();
+  const location = useLocation();
 
-  const location =
-    useLocation();
+  // Permet d'éviter de mettre à jour l'état
+  // d'un composant qui n'est plus actif.
+  const mountedRef = useRef(true);
+
+  // Empêche plusieurs chargements simultanés
+  // inutiles.
+  const loadingRequestRef = useRef(false);
 
 
   // ===================================================
@@ -211,609 +211,745 @@ export default function DashboardPage({
 
 
   // ===================================================
-  // INITIALISATION
+  // MONTAGE / DÉMONTAGE
   // ===================================================
 
   useEffect(() => {
+    mountedRef.current = true;
 
-    loadDashboard();
-
-  }, [
-    studentId,
-    isConsultation
-  ]);
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
 
   // ===================================================
   // APPLICATION DONNÉES
   // ===================================================
 
-  function applyDashboardData(data) {
-
-    if (!data) {
-      return;
-    }
-
-    setProfile(
-      data.profile || null
-    );
-
-    setSubjects(
-      data.subjects || {}
-    );
-
-    setStats(
-      data.stats || {
-        lessons: 0,
-        score: 0,
-        badges: 0,
-        attempts: 0
+  const applyDashboardData = useCallback(
+    (data) => {
+      if (
+        !data ||
+        !mountedRef.current
+      ) {
+        return;
       }
-    );
 
-    setBadges(
-      data.badges || []
-    );
-  }
+      setProfile(
+        data.profile || null
+      );
+
+      setSubjects(
+        data.subjects || {}
+      );
+
+      setStats(
+        data.stats || {
+          lessons: 0,
+          score: 0,
+          badges: 0,
+          attempts: 0
+        }
+      );
+
+      setBadges(
+        data.badges || []
+      );
+    },
+    []
+  );
 
 
   // ===================================================
   // IDENTIFIANT UTILISATEUR
   // ===================================================
 
-  async function getTargetUserId() {
+  const getTargetUserId = useCallback(
+    async () => {
 
-    // -------------------------------------------------
-    // 👁️ CONSULTATION
-    // -------------------------------------------------
+      // -------------------------------------------------
+      // 👁️ CONSULTATION ADMIN
+      // -------------------------------------------------
 
-    if (isConsultation) {
+      if (isConsultation) {
+        if (!studentId) {
+          throw new Error(
+            "Identifiant de l'élève introuvable."
+          );
+        }
 
-      if (!studentId) {
-
-        throw new Error(
-          "Identifiant de l'élève introuvable."
-        );
+        return studentId;
       }
 
-      return studentId;
-    }
 
+      // -------------------------------------------------
+      // 👤 MODE NORMAL
+      // -------------------------------------------------
 
-    // -------------------------------------------------
-    // 👤 MODE NORMAL
-    // -------------------------------------------------
+      const {
+        data,
+        error: sessionError
+      } =
+        await supabase.auth.getSession();
 
-    const {
-      data: {
-        session
-      },
-      error: sessionError
-    } =
-      await supabase.auth.getSession();
+      if (sessionError) {
+        throw sessionError;
+      }
 
-    if (sessionError) {
-      throw sessionError;
-    }
+      const user =
+        data?.session?.user;
 
-    const user =
-      session?.user;
+      if (!user) {
+        return null;
+      }
 
-    if (!user) {
-      return null;
-    }
-
-    return user.id;
-  }
+      return user.id;
+    },
+    [
+      isConsultation,
+      studentId
+    ]
+  );
 
 
   // ===================================================
-  // CHARGEMENT
+  // CHARGEMENT SUPABASE
   // ===================================================
 
-  async function loadDashboard(
-    isRefresh = false
-  ) {
+  const fetchDashboardFromSupabase =
+    useCallback(
+      async (userId) => {
 
-    try {
+        const [
+          profileResult,
+          progressResult,
+          attemptsResult,
+          badgesResult
+        ] = await Promise.all([
 
-      if (isRefresh) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
-      }
+          // ------------------------------------------------
+          // PROFIL
+          // ------------------------------------------------
 
-      setError("");
-
-
-      // -------------------------------------------------
-      // UTILISATEUR CIBLE
-      // -------------------------------------------------
-
-      const userId =
-        await getTargetUserId();
-
-
-      // -------------------------------------------------
-      // UTILISATEUR ABSENT
-      // -------------------------------------------------
-
-      if (!userId) {
-
-        setProfile(null);
-        setSubjects({});
-        setBadges([]);
-
-        setStats({
-          lessons: 0,
-          score: 0,
-          badges: 0,
-          attempts: 0
-        });
-
-        setError(
-          "Tu dois être connecté pour voir ton tableau de bord."
-        );
-
-        return;
-      }
+          supabase
+            .from("profiles")
+            .select(`
+              id,
+              full_name,
+              xp,
+              level
+            `)
+            .eq("id", userId)
+            .single(),
 
 
-      // -------------------------------------------------
-      // CACHE
-      // -------------------------------------------------
+          // ------------------------------------------------
+          // PROGRESSION
+          // ------------------------------------------------
 
-      if (!isRefresh) {
-
-        const cached =
-          getCachedDashboard(
-            userId
-          );
-
-        if (cached) {
-
-          console.log(
-            isConsultation
-              ? "👁️ Dashboard élève chargé depuis le cache"
-              : "⚡ Dashboard chargé depuis le cache"
-          );
-
-          applyDashboardData(
-            cached
-          );
-
-          setLoading(false);
-
-          return;
-        }
-
-
-        // -------------------------------------------------
-        // OFFLINE
-        // -------------------------------------------------
-
-        if (
-          typeof navigator !==
-            "undefined" &&
-          navigator.onLine === false
-        ) {
-
-          const offlineCache =
-            getCachedDashboard(
-              userId,
-              true
-            );
-
-          if (offlineCache) {
-
-            console.log(
-              isConsultation
-                ? "👁️📴 Dashboard élève offline chargé depuis le cache"
-                : "📴 Dashboard offline chargé depuis le cache"
-            );
-
-            applyDashboardData(
-              offlineCache
-            );
-
-            setLoading(false);
-
-            return;
-          }
-        }
-      }
-
-
-      // -------------------------------------------------
-      // SUPABASE
-      // -------------------------------------------------
-
-      const [
-        profileResult,
-        progressResult,
-        attemptsResult,
-        badgesResult
-      ] = await Promise.all([
-
-        supabase
-          .from("profiles")
-          .select(`
-            id,
-            full_name,
-            xp,
-            level
-          `)
-          .eq("id", userId)
-          .single(),
-
-        supabase
-          .from("user_progress")
-          .select(`
-            completed,
-            lessons(
-              chapters(
-                subjects(
-                  name
+          supabase
+            .from("user_progress")
+            .select(`
+              completed,
+              lessons(
+                chapters(
+                  subjects(
+                    name
+                  )
                 )
               )
-            )
-          `)
-          .eq("user_id", userId),
+            `)
+            .eq("user_id", userId),
 
-        supabase
-          .from("quiz_attempts")
-          .select(`
-            score
-          `)
-          .eq("user_id", userId),
 
-        supabase
-          .from("user_badges")
-          .select(`
-            id,
-            badges(
+          // ------------------------------------------------
+          // TENTATIVES DE QUIZ
+          // ------------------------------------------------
+
+          supabase
+            .from("quiz_attempts")
+            .select(`
+              score
+            `)
+            .eq("user_id", userId),
+
+
+          // ------------------------------------------------
+          // BADGES
+          // ------------------------------------------------
+
+          supabase
+            .from("user_badges")
+            .select(`
               id,
-              name,
-              description,
-              xp_reward,
-              image_url
-            )
-          `)
-          .eq("user_id", userId)
+              badges(
+                id,
+                name,
+                description,
+                xp_reward,
+                image_url
+              )
+            `)
+            .eq("user_id", userId)
 
-      ]);
-
-
-      // -------------------------------------------------
-      // PROFILE
-      // -------------------------------------------------
-
-      if (profileResult.error) {
-        throw profileResult.error;
-      }
-
-      const profileData =
-        profileResult.data;
+        ]);
 
 
-      // -------------------------------------------------
-      // PROGRESSION
-      // -------------------------------------------------
+        // =================================================
+        // PROFILE
+        // =================================================
 
-      const progressData =
-        progressResult.data || [];
-
-      if (progressResult.error) {
-
-        console.error(
-          "Erreur progression :",
-          progressResult.error
-        );
-      }
-
-
-      // -------------------------------------------------
-      // LEÇONS TERMINÉES
-      // -------------------------------------------------
-
-      const completedLessons =
-        progressData.reduce(
-          (
-            total,
-            item
-          ) =>
-            total +
-            (
-              item?.completed === true
-                ? 1
-                : 0
-            ),
-          0
-        );
-
-
-      // -------------------------------------------------
-      // PROGRESSION MATIÈRES
-      // -------------------------------------------------
-
-      const subjectsProgress = {};
-
-
-      for (
-        const item of progressData
-      ) {
-
-        const subject =
-          item?.lessons
-            ?.chapters
-            ?.subjects;
-
-        if (!subject?.name) {
-          continue;
+        if (profileResult.error) {
+          throw profileResult.error;
         }
 
-        const subjectName =
-          subject.name;
+        const profileData =
+          profileResult.data;
 
 
-        if (
-          !subjectsProgress[
-            subjectName
-          ]
-        ) {
+        // =================================================
+        // PROGRESSION
+        // =================================================
 
-          subjectsProgress[
-            subjectName
-          ] = {
-            total: 0,
-            completed: 0,
-            percent: 0
-          };
+        const progressData =
+          progressResult.data || [];
+
+        if (progressResult.error) {
+          console.error(
+            "Erreur progression :",
+            progressResult.error
+          );
         }
 
 
-        subjectsProgress[
-          subjectName
-        ].total += 1;
+        // =================================================
+        // LEÇONS TERMINÉES
+        // =================================================
 
-
-        if (
-          item.completed === true
-        ) {
-
-          subjectsProgress[
-            subjectName
-          ].completed += 1;
-        }
-      }
-
-
-      // -------------------------------------------------
-      // POURCENTAGES
-      // -------------------------------------------------
-
-      Object.values(
-        subjectsProgress
-      ).forEach(
-        data => {
-
-          if (data.total > 0) {
-
-            data.percent =
-              Math.round(
-                (
-                  data.completed /
-                  data.total
-                ) * 100
-              );
-          }
-        }
-      );
-
-
-      // -------------------------------------------------
-      // QUIZ
-      // -------------------------------------------------
-
-      const attemptsData =
-        attemptsResult.data || [];
-
-      if (attemptsResult.error) {
-
-        console.error(
-          "Erreur quiz attempts :",
-          attemptsResult.error
-        );
-      }
-
-
-      let averageScore = 0;
-
-
-      if (
-        attemptsData.length > 0
-      ) {
-
-        const totalScore =
-          attemptsData.reduce(
+        const completedLessons =
+          progressData.reduce(
             (
               total,
-              attempt
+              item
             ) =>
               total +
-              Number(
-                attempt?.score || 0
+              (
+                item?.completed === true
+                  ? 1
+                  : 0
               ),
             0
           );
 
-        averageScore =
-          Math.round(
-            totalScore /
-            attemptsData.length
-          );
-      }
+
+        // =================================================
+        // PROGRESSION PAR MATIÈRE
+        // =================================================
+
+        const subjectsProgress = {};
+
+        for (
+          const item of progressData
+        ) {
+          const subject =
+            item?.lessons
+              ?.chapters
+              ?.subjects;
+
+          if (!subject?.name) {
+            continue;
+          }
+
+          const subjectName =
+            subject.name;
+
+          if (
+            !subjectsProgress[
+              subjectName
+            ]
+          ) {
+            subjectsProgress[
+              subjectName
+            ] = {
+              total: 0,
+              completed: 0,
+              percent: 0
+            };
+          }
+
+          subjectsProgress[
+            subjectName
+          ].total += 1;
+
+          if (
+            item.completed === true
+          ) {
+            subjectsProgress[
+              subjectName
+            ].completed += 1;
+          }
+        }
 
 
-      // -------------------------------------------------
-      // BADGES
-      // -------------------------------------------------
+        // =================================================
+        // POURCENTAGES
+        // =================================================
 
-      const badgeData =
-        badgesResult.data || [];
-
-      if (badgesResult.error) {
-
-        console.error(
-          "Erreur badges :",
-          badgesResult.error
+        Object.values(
+          subjectsProgress
+        ).forEach(
+          (data) => {
+            if (data.total > 0) {
+              data.percent =
+                Math.round(
+                  (
+                    data.completed /
+                    data.total
+                  ) * 100
+                );
+            }
+          }
         );
-      }
 
 
-      // -------------------------------------------------
-      // DONNÉES FINALES
-      // -------------------------------------------------
+        // =================================================
+        // QUIZ
+        // =================================================
 
-      const dashboardData = {
+        const attemptsData =
+          attemptsResult.data || [];
 
-        profile:
-          profileData,
+        if (attemptsResult.error) {
+          console.error(
+            "Erreur quiz attempts :",
+            attemptsResult.error
+          );
+        }
 
-        subjects:
-          subjectsProgress,
+        let averageScore = 0;
 
-        badges:
-          badgeData,
+        if (
+          attemptsData.length > 0
+        ) {
+          const totalScore =
+            attemptsData.reduce(
+              (
+                total,
+                attempt
+              ) =>
+                total +
+                Number(
+                  attempt?.score || 0
+                ),
+              0
+            );
 
-        stats: {
+          averageScore =
+            Math.round(
+              totalScore /
+              attemptsData.length
+            );
+        }
 
-          lessons:
-            completedLessons,
 
-          score:
-            averageScore,
+        // =================================================
+        // BADGES
+        // =================================================
+
+        const badgeData =
+          badgesResult.data || [];
+
+        if (badgesResult.error) {
+          console.error(
+            "Erreur badges :",
+            badgesResult.error
+          );
+        }
+
+
+        // =================================================
+        // DONNÉES FINALES
+        // =================================================
+
+        return {
+          profile:
+            profileData,
+
+          subjects:
+            subjectsProgress,
 
           badges:
-            badgeData.length,
+            badgeData,
 
-          attempts:
-            attemptsData.length
+          stats: {
+            lessons:
+              completedLessons,
+
+            score:
+              averageScore,
+
+            badges:
+              badgeData.length,
+
+            attempts:
+              attemptsData.length
+          }
+        };
+      },
+      []
+    );
+
+
+  // ===================================================
+  // CHARGEMENT PRINCIPAL
+  // ===================================================
+
+  const loadDashboard =
+    useCallback(
+      async (
+        isRefresh = false
+      ) => {
+
+        // Évite plusieurs appels réseau
+        // simultanés accidentels.
+        if (
+          loadingRequestRef.current &&
+          !isRefresh
+        ) {
+          return;
         }
-      };
 
-
-      // -------------------------------------------------
-      // APPLICATION
-      // -------------------------------------------------
-
-      applyDashboardData(
-        dashboardData
-      );
-
-
-      // -------------------------------------------------
-      // CACHE
-      // -------------------------------------------------
-
-      setCachedDashboard(
-        userId,
-        dashboardData
-      );
-
-
-      console.log(
-        isConsultation
-          ? "👁️ Dashboard élève chargé depuis Supabase — lecture seule"
-          : "✅ Dashboard chargé depuis Supabase"
-      );
-
-
-    } catch (err) {
-
-      console.error(
-        "❌ Erreur Dashboard :",
-        err
-      );
-
-
-      // -------------------------------------------------
-      // FALLBACK CACHE
-      // -------------------------------------------------
-
-      try {
+        loadingRequestRef.current = true;
 
         let userId = null;
 
+        try {
 
-        if (isConsultation) {
+          // ------------------------------------------------
+          // ÉTAT DE CHARGEMENT
+          // ------------------------------------------------
+
+          if (isRefresh) {
+            setRefreshing(true);
+          } else {
+            setLoading(true);
+          }
+
+          setError("");
+
+
+          // ------------------------------------------------
+          // UTILISATEUR CIBLE
+          // ------------------------------------------------
 
           userId =
-            studentId || null;
+            await getTargetUserId();
 
-        } else {
 
-          const {
-            data: {
-              session
+          // ------------------------------------------------
+          // UTILISATEUR ABSENT
+          // ------------------------------------------------
+
+          if (!userId) {
+
+            if (mountedRef.current) {
+              setProfile(null);
+              setSubjects({});
+              setBadges([]);
+
+              setStats({
+                lessons: 0,
+                score: 0,
+                badges: 0,
+                attempts: 0
+              });
+
+              setError(
+                "Tu dois être connecté pour voir ton tableau de bord."
+              );
             }
-          } =
-            await supabase.auth.getSession();
 
-          userId =
-            session?.user?.id || null;
-        }
+            return;
+          }
 
 
-        if (userId) {
+          // =================================================
+          // CACHE IMMÉDIAT
+          // =================================================
 
-          const cached =
+          const cachedDashboard =
             getCachedDashboard(
               userId,
               true
             );
 
-          if (cached) {
+
+          // =================================================
+          // CACHE DISPONIBLE
+          // =================================================
+
+          if (
+            cachedDashboard &&
+            !isRefresh
+          ) {
+
+            // Affichage immédiat.
+            applyDashboardData(
+              cachedDashboard
+            );
+
+            if (mountedRef.current) {
+              setLoading(false);
+            }
 
             console.log(
               isConsultation
-                ? "👁️📴 Fallback Dashboard élève depuis le cache"
-                : "📴 Fallback Dashboard depuis le cache"
+                ? "👁️⚡ Dashboard élève affiché depuis le cache"
+                : "⚡ Dashboard affiché depuis le cache"
             );
 
-            applyDashboardData(
-              cached
+
+            // ------------------------------------------------
+            // SI LE CACHE EST ENCORE FRAIS
+            // ------------------------------------------------
+
+            const raw =
+              (() => {
+                try {
+                  return sessionStorage.getItem(
+                    getDashboardCacheKey(
+                      userId
+                    )
+                  );
+                } catch {
+                  return null;
+                }
+              })();
+
+            let cacheIsFresh = false;
+
+            if (raw) {
+              try {
+                const parsed =
+                  JSON.parse(raw);
+
+                const age =
+                  Date.now() -
+                  Number(
+                    parsed?.timestamp || 0
+                  );
+
+                cacheIsFresh =
+                  age <=
+                  DASHBOARD_CACHE_DURATION;
+              } catch {
+                cacheIsFresh = false;
+              }
+            }
+
+
+            // ------------------------------------------------
+            // CACHE FRAIS :
+            // pas besoin d'attendre Supabase.
+            // ------------------------------------------------
+
+            if (cacheIsFresh) {
+
+              loadingRequestRef.current =
+                false;
+
+              return;
+            }
+
+
+            // ------------------------------------------------
+            // CACHE EXPIRÉ :
+            // on l'a déjà affiché.
+            //
+            // On continue maintenant en arrière-plan
+            // pour actualiser les données.
+            // ------------------------------------------------
+
+            console.log(
+              isConsultation
+                ? "👁️🔄 Actualisation Dashboard élève en arrière-plan"
+                : "🔄 Actualisation Dashboard en arrière-plan"
+            );
+          }
+
+
+          // =================================================
+          // OFFLINE
+          // =================================================
+
+          if (
+            typeof navigator !==
+              "undefined" &&
+            navigator.onLine === false
+          ) {
+
+            const offlineCache =
+              cachedDashboard ||
+              getCachedDashboard(
+                userId,
+                true
+              );
+
+            if (offlineCache) {
+
+              applyDashboardData(
+                offlineCache
+              );
+
+              if (mountedRef.current) {
+                setLoading(false);
+                setRefreshing(false);
+              }
+
+              console.log(
+                isConsultation
+                  ? "👁️📴 Dashboard élève offline"
+                  : "📴 Dashboard offline"
+              );
+
+              return;
+            }
+
+            throw new Error(
+              "Connexion Internet indisponible."
+            );
+          }
+
+
+          // =================================================
+          // SUPABASE
+          // =================================================
+
+          const dashboardData =
+            await fetchDashboardFromSupabase(
+              userId
             );
 
+
+          // Si le composant a changé de page
+          // entre-temps, on ne touche plus à son état.
+          if (!mountedRef.current) {
             return;
           }
+
+
+          // =================================================
+          // APPLICATION
+          // =================================================
+
+          applyDashboardData(
+            dashboardData
+          );
+
+
+          // =================================================
+          // CACHE
+          // =================================================
+
+          setCachedDashboard(
+            userId,
+            dashboardData
+          );
+
+
+          console.log(
+            isConsultation
+              ? "👁️✅ Dashboard élève actualisé depuis Supabase — lecture seule"
+              : "✅ Dashboard actualisé depuis Supabase"
+          );
+
+        } catch (err) {
+
+          console.error(
+            "❌ Erreur Dashboard :",
+            err
+          );
+
+
+          // =================================================
+          // FALLBACK CACHE
+          // =================================================
+
+          if (userId) {
+
+            const cached =
+              getCachedDashboard(
+                userId,
+                true
+              );
+
+            if (cached) {
+
+              applyDashboardData(
+                cached
+              );
+
+              if (mountedRef.current) {
+                setLoading(false);
+                setError("");
+              }
+
+              console.log(
+                isConsultation
+                  ? "👁️📴 Fallback Dashboard élève depuis le cache"
+                  : "📴 Fallback Dashboard depuis le cache"
+              );
+
+              return;
+            }
+          }
+
+
+          // =================================================
+          // ERREUR
+          // =================================================
+
+          if (mountedRef.current) {
+            setError(
+              err?.message ||
+              (
+                isConsultation
+                  ? "Impossible de charger le tableau de bord de l'élève."
+                  : "Impossible de charger ton tableau de bord."
+              )
+            );
+          }
+
+        } finally {
+
+          loadingRequestRef.current =
+            false;
+
+          if (mountedRef.current) {
+            setLoading(false);
+            setRefreshing(false);
+          }
         }
-
-      } catch (cacheError) {
-
-        console.warn(
-          "⚠️ Fallback cache impossible :",
-          cacheError
-        );
-      }
-
-
-      setError(
-        err?.message ||
-        (
-          isConsultation
-            ? "Impossible de charger le tableau de bord de l'élève."
-            : "Impossible de charger ton tableau de bord."
-        )
-      );
+      },
+      [
+        getTargetUserId,
+        fetchDashboardFromSupabase,
+        applyDashboardData,
+        isConsultation
+      ]
+    );
 
 
-    } finally {
+  // ===================================================
+  // INITIALISATION
+  // ===================================================
 
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }
+  useEffect(() => {
+    loadDashboard(false);
+  }, [
+    loadDashboard
+  ]);
 
 
   // ===================================================
@@ -821,9 +957,7 @@ export default function DashboardPage({
   // ===================================================
 
   if (loading) {
-
     return (
-
       <div
         className="
           min-h-[60vh]
@@ -832,11 +966,8 @@ export default function DashboardPage({
           items-center
           justify-center
           px-6
-          theme-bg
-          theme-text
         "
       >
-
         <div
           className="
             w-14
@@ -849,18 +980,16 @@ export default function DashboardPage({
             mb-4
           "
         >
-
           <TrendingUp
             size={28}
             className="text-accent"
           />
-
         </div>
-
 
         <p
           className="
-            theme-text-secondary
+            text-gray-700
+            dark:text-gray-300
             font-semibold
           "
         >
@@ -869,9 +998,7 @@ export default function DashboardPage({
             : "Chargement de ton tableau de bord..."
           }
         </p>
-
       </div>
-
     );
   }
 
@@ -881,20 +1008,15 @@ export default function DashboardPage({
   // ===================================================
 
   if (error) {
-
     return (
-
       <div
         className="
-          theme-bg
-          theme-text
           max-w-2xl
           mx-auto
           px-5
           py-10
         "
       >
-
         <div
           className="
             theme-surface
@@ -906,7 +1028,6 @@ export default function DashboardPage({
             text-center
           "
         >
-
           <div
             className="
               w-14
@@ -914,7 +1035,6 @@ export default function DashboardPage({
               mx-auto
               rounded-2xl
               bg-red-50
-              dark:bg-red-950/40
               flex
               items-center
               justify-center
@@ -924,28 +1044,27 @@ export default function DashboardPage({
             ⚠️
           </div>
 
-
           <h2
             className="
               text-xl
               font-bold
-              theme-text
+              text-gray-900
+              dark:text-white
             "
           >
             Impossible de charger le dashboard
           </h2>
 
-
           <p
             className="
               text-sm
-              theme-text-secondary
+              text-gray-600
+              dark:text-gray-400
               mt-2
             "
           >
             {error}
           </p>
-
 
           <button
             type="button"
@@ -968,17 +1087,13 @@ export default function DashboardPage({
               transition
             "
           >
-
             <RefreshCw
               size={18}
             />
 
             Réessayer
-
           </button>
-
         </div>
-
       </div>
     );
   }
@@ -989,13 +1104,9 @@ export default function DashboardPage({
   // ===================================================
 
   if (!profile) {
-
     return (
-
       <div
         className="
-          theme-bg
-          theme-text
           max-w-2xl
           mx-auto
           px-5
@@ -1003,7 +1114,6 @@ export default function DashboardPage({
           text-center
         "
       >
-
         <div
           className="
             theme-surface
@@ -1014,21 +1124,21 @@ export default function DashboardPage({
             p-8
           "
         >
-
           <h2
             className="
               text-xl
               font-bold
-              theme-text
+              text-gray-900
+              dark:text-white
             "
           >
             Profil introuvable
           </h2>
 
-
           <p
             className="
-              theme-text-secondary
+              text-gray-600
+              dark:text-gray-400
               mt-2
             "
           >
@@ -1037,9 +1147,7 @@ export default function DashboardPage({
               : "Ton profil Kalan Academy n'a pas encore été trouvé."
             }
           </p>
-
         </div>
-
       </div>
     );
   }
@@ -1051,42 +1159,32 @@ export default function DashboardPage({
 
   const xp =
     Math.max(
-      Number(
-        profile.xp || 0
-      ),
+      Number(profile.xp || 0),
       0
     );
-
 
   const level =
     Math.floor(
       xp / XP_PER_LEVEL
     ) + 1;
 
-
   const currentLevelXP =
-    (
-      level - 1
-    ) *
+    (level - 1) *
     XP_PER_LEVEL;
-
 
   const nextLevelXP =
     level *
     XP_PER_LEVEL;
 
-
   const xpInCurrentLevel =
     xp -
     currentLevelXP;
-
 
   const xpRemaining =
     Math.max(
       nextLevelXP - xp,
       0
     );
-
 
   const progressXP =
     Math.min(
@@ -1108,21 +1206,17 @@ export default function DashboardPage({
   let rank =
     "Débutant";
 
-
   if (xp >= 500) {
     rank = "Apprenti";
   }
-
 
   if (xp >= 1500) {
     rank = "Élève confirmé";
   }
 
-
   if (xp >= 3000) {
     rank = "Expert";
   }
-
 
   if (xp >= 5000) {
     rank = "Maître Kalan";
@@ -1139,19 +1233,17 @@ export default function DashboardPage({
   // ===================================================
 
   return (
-
     <div
       className="
         min-h-screen
-        theme-bg
-        theme-text
+        bg-white
+        dark:bg-gray-950
         px-5
         py-6
         md:px-8
         md:py-8
       "
     >
-
       <div
         className="
           max-w-6xl
@@ -1160,8 +1252,9 @@ export default function DashboardPage({
         "
       >
 
-
-        {/* HEADER */}
+        {/* =================================================
+            HEADER
+        ================================================= */}
 
         <div
           className="
@@ -1173,9 +1266,7 @@ export default function DashboardPage({
             gap-4
           "
         >
-
           <div>
-
             <p
               className="
                 text-sm
@@ -1186,23 +1277,23 @@ export default function DashboardPage({
               Kalan Academy
             </p>
 
-
             <h1
               className="
                 text-2xl
                 md:text-3xl
                 font-extrabold
-                theme-text
+                text-gray-950
+                dark:text-white
                 mt-1
               "
             >
               Bonjour {studentName} 👋
             </h1>
 
-
             <p
               className="
-                theme-text-secondary
+                text-gray-600
+                dark:text-gray-400
                 mt-1
               "
             >
@@ -1211,7 +1302,6 @@ export default function DashboardPage({
                 : "Voici ta progression et tes résultats."
               }
             </p>
-
           </div>
 
 
@@ -1226,10 +1316,12 @@ export default function DashboardPage({
               items-center
               justify-center
               gap-2
-              theme-surface
+              bg-white
+              dark:bg-gray-900
               border
               theme-border
-              theme-text
+              text-gray-800
+              dark:text-gray-200
               px-4
               py-2.5
               rounded-xl
@@ -1241,7 +1333,6 @@ export default function DashboardPage({
               disabled:opacity-50
             "
           >
-
             <RefreshCw
               size={17}
               className={
@@ -1252,13 +1343,13 @@ export default function DashboardPage({
             />
 
             Actualiser
-
           </button>
-
         </div>
 
 
-        {/* XP */}
+        {/* =================================================
+            XP
+        ================================================= */}
 
         <div
           className="
@@ -1273,7 +1364,6 @@ export default function DashboardPage({
             shadow-xl
           "
         >
-
           <div
             className="
               absolute
@@ -1286,7 +1376,6 @@ export default function DashboardPage({
               opacity-10
             "
           />
-
 
           <div
             className="
@@ -1301,14 +1390,12 @@ export default function DashboardPage({
             "
           />
 
-
           <div
             className="
               relative
               z-10
             "
           >
-
             <div
               className="
                 flex
@@ -1317,7 +1404,6 @@ export default function DashboardPage({
                 mb-6
               "
             >
-
               <div
                 className="
                   w-12
@@ -1334,9 +1420,7 @@ export default function DashboardPage({
                 <Star size={25} />
               </div>
 
-
               <div>
-
                 <p
                   className="
                     text-accent
@@ -1350,20 +1434,18 @@ export default function DashboardPage({
                   }
                 </p>
 
-
                 <h2
                   className="
                     text-2xl
                     md:text-3xl
                     font-extrabold
-                    theme-text
+                    text-gray-950
+                    dark:text-white
                   "
                 >
                   Niveau {level}
                 </h2>
-
               </div>
-
             </div>
 
 
@@ -1374,9 +1456,7 @@ export default function DashboardPage({
                 gap-6
               "
             >
-
               <div>
-
                 <p
                   className="
                     text-accent
@@ -1387,7 +1467,6 @@ export default function DashboardPage({
                   XP total
                 </p>
 
-
                 <p
                   className="
                     text-4xl
@@ -1395,10 +1474,10 @@ export default function DashboardPage({
                     font-extrabold
                     mt-1
                     tracking-tight
-                    theme-text
+                    text-gray-950
+                    dark:text-white
                   "
                 >
-
                   {xp}
 
                   <span
@@ -1411,9 +1490,7 @@ export default function DashboardPage({
                   >
                     XP
                   </span>
-
                 </p>
-
               </div>
 
 
@@ -1422,7 +1499,6 @@ export default function DashboardPage({
                   sm:text-right
                 "
               >
-
                 <p
                   className="
                     text-accent
@@ -1433,26 +1509,23 @@ export default function DashboardPage({
                   Rang
                 </p>
 
-
                 <p
                   className="
                     text-xl
                     md:text-2xl
                     font-extrabold
                     mt-1
-                    theme-text
+                    text-gray-950
+                    dark:text-white
                   "
                 >
                   {rank}
                 </p>
-
               </div>
-
             </div>
 
 
             <div className="mt-7">
-
               <div
                 className="
                   flex
@@ -1462,20 +1535,18 @@ export default function DashboardPage({
                   sm:justify-between
                   gap-1
                   text-sm
-                  theme-text-secondary
+                  text-gray-700
+                  dark:text-gray-300
                   mb-2
                 "
               >
-
                 <span className="font-medium">
                   Progression vers le niveau {level + 1}
                 </span>
 
-
                 <span className="font-bold">
                   {xpInCurrentLevel} / {XP_PER_LEVEL} XP
                 </span>
-
               </div>
 
 
@@ -1488,7 +1559,6 @@ export default function DashboardPage({
                   overflow-hidden
                 "
               >
-
                 <div
                   className="
                     h-full
@@ -1501,7 +1571,6 @@ export default function DashboardPage({
                     width: `${progressXP}%`
                   }}
                 />
-
               </div>
 
 
@@ -1515,29 +1584,26 @@ export default function DashboardPage({
                   gap-1
                   mt-2
                   text-xs
-                  theme-text-secondary
+                  text-gray-600
+                  dark:text-gray-400
                 "
               >
-
                 <span>
                   {xpInCurrentLevel} XP gagnés dans ce niveau
                 </span>
 
-
                 <span>
                   Encore {xpRemaining} XP
                 </span>
-
               </div>
-
             </div>
-
           </div>
-
         </div>
 
 
-        {/* STATISTIQUES */}
+        {/* =================================================
+            STATISTIQUES
+        ================================================= */}
 
         <div
           className="
@@ -1547,7 +1613,6 @@ export default function DashboardPage({
             gap-4
           "
         >
-
           {[
             {
               icon: BookOpen,
@@ -1575,7 +1640,6 @@ export default function DashboardPage({
               label,
               value
             }) => (
-
               <div
                 key={label}
                 className="
@@ -1587,7 +1651,6 @@ export default function DashboardPage({
                   p-5
                 "
               >
-
                 <div
                   className="
                     w-10
@@ -1604,40 +1667,38 @@ export default function DashboardPage({
                   <Icon size={21} />
                 </div>
 
-
                 <p
                   className="
                     text-sm
-                    theme-text-secondary
+                    text-gray-600
+                    dark:text-gray-400
                   "
                 >
                   {label}
                 </p>
 
-
                 <p
                   className="
                     text-2xl
                     font-extrabold
-                    theme-text
+                    text-gray-950
+                    dark:text-white
                     mt-1
                   "
                 >
                   {value}
                 </p>
-
               </div>
-
             )
           )}
-
         </div>
 
 
-        {/* PROGRESSION */}
+        {/* =================================================
+            PROGRESSION
+        ================================================= */}
 
         <section>
-
           <div
             className="
               flex
@@ -1646,7 +1707,6 @@ export default function DashboardPage({
               mb-4
             "
           >
-
             <div
               className="
                 w-10
@@ -1662,37 +1722,33 @@ export default function DashboardPage({
               <TrendingUp size={20} />
             </div>
 
-
             <div>
-
               <h2
                 className="
                   text-xl
                   font-bold
-                  theme-text
+                  text-gray-950
+                  dark:text-white
                 "
               >
                 Progression par matière
               </h2>
 
-
               <p
                 className="
                   text-sm
-                  theme-text-secondary
+                  text-gray-600
+                  dark:text-gray-400
                   mt-1
                 "
               >
                 Suis ton avancement dans chaque matière.
               </p>
-
             </div>
-
           </div>
 
 
           {Object.keys(subjects).length === 0 ? (
-
             <div
               className="
                 theme-surface
@@ -1704,7 +1760,6 @@ export default function DashboardPage({
                 text-center
               "
             >
-
               <BookOpen
                 size={36}
                 className="
@@ -1715,31 +1770,28 @@ export default function DashboardPage({
                 "
               />
 
-
               <h3
                 className="
                   font-bold
-                  theme-text
+                  text-gray-800
+                  dark:text-white
                 "
               >
                 Pas encore de progression
               </h3>
 
-
               <p
                 className="
                   text-sm
-                  theme-text-secondary
+                  text-gray-600
+                  dark:text-gray-400
                   mt-1
                 "
               >
                 Commence une leçon pour voir ta progression ici.
               </p>
-
             </div>
-
           ) : (
-
             <div
               className="
                 grid
@@ -1748,7 +1800,6 @@ export default function DashboardPage({
                 gap-4
               "
             >
-
               {Object.entries(
                 subjects
               ).map(
@@ -1758,7 +1809,6 @@ export default function DashboardPage({
                     data
                   ]
                 ) => (
-
                   <div
                     key={name}
                     className="
@@ -1770,7 +1820,6 @@ export default function DashboardPage({
                       p-5
                     "
                   >
-
                     <div
                       className="
                         flex
@@ -1779,17 +1828,16 @@ export default function DashboardPage({
                         gap-3
                       "
                     >
-
                       <h3
                         className="
                           font-bold
-                          theme-text
+                          text-gray-950
+                          dark:text-white
                           truncate
                         "
                       >
                         {name}
                       </h3>
-
 
                       <span
                         className="
@@ -1800,7 +1848,6 @@ export default function DashboardPage({
                       >
                         {data.percent}%
                       </span>
-
                     </div>
 
 
@@ -1814,7 +1861,6 @@ export default function DashboardPage({
                         mt-4
                       "
                     >
-
                       <div
                         className="
                           h-full
@@ -1827,18 +1873,17 @@ export default function DashboardPage({
                           width: `${data.percent}%`
                         }}
                       />
-
                     </div>
 
 
                     <p
                       className="
                         text-xs
-                        theme-text-secondary
+                        text-gray-600
+                        dark:text-gray-400
                         mt-2
                       "
                     >
-
                       {data.completed} leçon
                       {data.completed > 1
                         ? "s"
@@ -1849,25 +1894,20 @@ export default function DashboardPage({
                         : ""}
                       {" "}sur{" "}
                       {data.total}
-
                     </p>
-
                   </div>
-
                 )
               )}
-
             </div>
-
           )}
-
         </section>
 
 
-        {/* BADGES */}
+        {/* =================================================
+            BADGES
+        ================================================= */}
 
         <section>
-
           <div
             className="
               flex
@@ -1876,7 +1916,6 @@ export default function DashboardPage({
               mb-4
             "
           >
-
             <div
               className="
                 w-10
@@ -1892,36 +1931,32 @@ export default function DashboardPage({
               <Trophy size={21} />
             </div>
 
-
             <div>
-
               <h2
                 className="
                   text-xl
                   font-bold
-                  theme-text
+                  text-gray-950
+                  dark:text-white
                 "
               >
                 Mes badges
               </h2>
 
-
               <p
                 className="
                   text-sm
-                  theme-text-secondary
+                  text-gray-600
+                  dark:text-gray-400
                 "
               >
                 Les récompenses que tu as obtenues.
               </p>
-
             </div>
-
           </div>
 
 
           {badges.length === 0 ? (
-
             <div
               className="
                 theme-surface
@@ -1933,7 +1968,6 @@ export default function DashboardPage({
                 text-center
               "
             >
-
               <div
                 className="
                   text-4xl
@@ -1943,31 +1977,28 @@ export default function DashboardPage({
                 🏆
               </div>
 
-
               <h3
                 className="
                   font-bold
-                  theme-text
+                  text-gray-800
+                  dark:text-white
                 "
               >
                 Aucun badge pour le moment
               </h3>
 
-
               <p
                 className="
                   text-sm
-                  theme-text-secondary
+                  text-gray-600
+                  dark:text-gray-400
                   mt-1
                 "
               >
                 Réussis tes quiz et progresse dans tes leçons pour gagner des badges.
               </p>
-
             </div>
-
           ) : (
-
             <div
               className="
                 grid
@@ -1976,15 +2007,13 @@ export default function DashboardPage({
                 gap-4
               "
             >
-
               {badges.map(
-                item => {
+                (item) => {
 
                   const badge =
                     item.badges;
 
                   return (
-
                     <div
                       key={item.id}
                       className="
@@ -1996,7 +2025,6 @@ export default function DashboardPage({
                         p-5
                       "
                     >
-
                       <div
                         className="
                           flex
@@ -2004,7 +2032,6 @@ export default function DashboardPage({
                           gap-4
                         "
                       >
-
                         <div
                           className="
                             w-14
@@ -2018,9 +2045,7 @@ export default function DashboardPage({
                             overflow-hidden
                           "
                         >
-
                           {badge?.image_url ? (
-
                             <img
                               src={
                                 badge.image_url
@@ -2035,15 +2060,11 @@ export default function DashboardPage({
                                 object-cover
                               "
                             />
-
                           ) : (
-
                             <span className="text-3xl">
                               🏆
                             </span>
-
                           )}
-
                         </div>
 
 
@@ -2052,11 +2073,11 @@ export default function DashboardPage({
                             min-w-0
                           "
                         >
-
                           <h3
                             className="
                               font-bold
-                              theme-text
+                              text-gray-950
+                              dark:text-white
                             "
                           >
                             {
@@ -2069,7 +2090,8 @@ export default function DashboardPage({
                           <p
                             className="
                               text-sm
-                              theme-text-secondary
+                              text-gray-600
+                              dark:text-gray-400
                               mt-1
                             "
                           >
@@ -2081,7 +2103,6 @@ export default function DashboardPage({
 
 
                           {badge?.xp_reward ? (
-
                             <p
                               className="
                                 text-sm
@@ -2092,28 +2113,18 @@ export default function DashboardPage({
                             >
                               +{badge.xp_reward} XP
                             </p>
-
                           ) : null}
-
                         </div>
-
                       </div>
-
                     </div>
-
                   );
                 }
               )}
-
             </div>
-
           )}
-
         </section>
 
       </div>
-
     </div>
-
   );
 }

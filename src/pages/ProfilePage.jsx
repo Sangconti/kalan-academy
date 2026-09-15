@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useRef,
   useState
 } from "react";
 
@@ -41,18 +42,13 @@ function getProfileCacheKey(userId) {
   return `kalan_profile_${userId}`;
 }
 
-
 function getBadgesCacheKey(userId) {
   return `kalan_badges_${userId}`;
 }
 
-
 function readLocalCache(key, fallback = null) {
-
   try {
-
-    const value =
-      localStorage.getItem(key);
+    const value = localStorage.getItem(key);
 
     if (!value) {
       return fallback;
@@ -61,7 +57,6 @@ function readLocalCache(key, fallback = null) {
     return JSON.parse(value);
 
   } catch (error) {
-
     console.warn(
       "⚠️ Impossible de lire le cache ProfilePage :",
       error
@@ -71,23 +66,18 @@ function readLocalCache(key, fallback = null) {
   }
 }
 
-
 function writeLocalCache(key, value) {
-
   try {
-
     localStorage.setItem(
       key,
       JSON.stringify(value)
     );
 
   } catch (error) {
-
     console.warn(
       "⚠️ Impossible d'enregistrer le cache ProfilePage :",
       error
     );
-
   }
 }
 
@@ -136,11 +126,6 @@ export default function ProfilePage({
     useState([]);
 
   /*
-    Important :
-
-    La page ne doit plus rester bloquée
-    pendant les requêtes réseau.
-
     loading sert uniquement lorsqu'aucune
     donnée locale n'est encore disponible.
   */
@@ -149,15 +134,38 @@ export default function ProfilePage({
 
 
   // ===================================================
+  // PROTECTION DES REQUÊTES
+  // ===================================================
+
+  /*
+    Évite les doubles chargements.
+
+    C'est particulièrement utile avec React
+    Strict Mode en développement, qui peut
+    exécuter deux fois certains effets.
+  */
+  const loadingRequestRef =
+    useRef(false);
+
+  /*
+    Empêche les setState après démontage
+    de la page.
+  */
+  const mountedRef =
+    useRef(false);
+
+
+  // ===================================================
   // CODE DE RÉCUPÉRATION
   // ===================================================
 
   /*
-    Le code n'est volontairement PAS enregistré
-    dans localStorage, Dexie ou le cache.
+    Le code reste uniquement en mémoire.
 
-    Il reste uniquement en mémoire pendant
-    l'affichage de cette page.
+    Il n'est jamais enregistré dans :
+    - localStorage
+    - Dexie
+    - cache ProfilePage
   */
 
   const [recoveryCode, setRecoveryCode] =
@@ -184,6 +192,16 @@ export default function ProfilePage({
     async ({
       background = false
     } = {}) => {
+
+      /*
+        Protection contre les doubles chargements.
+      */
+      if (loadingRequestRef.current) {
+        return;
+      }
+
+      loadingRequestRef.current = true;
+
 
       try {
 
@@ -220,11 +238,13 @@ export default function ProfilePage({
 
 
           /*
-            Affichage immédiat du cache
-            s'il existe.
+            Affichage immédiat du cache.
           */
 
-          if (cachedProfile) {
+          if (
+            mountedRef.current &&
+            cachedProfile
+          ) {
 
             setProfile(
               cachedProfile
@@ -235,6 +255,7 @@ export default function ProfilePage({
           }
 
           if (
+            mountedRef.current &&
             Array.isArray(cachedBadges)
           ) {
 
@@ -247,11 +268,35 @@ export default function ProfilePage({
 
           if (
             !cachedProfile &&
-            !background
+            !background &&
+            mountedRef.current
           ) {
 
             setLoading(true);
 
+          }
+
+
+          // -----------------------------------------------
+          // HORS LIGNE
+          // -----------------------------------------------
+
+          /*
+            Si l'appareil est clairement hors ligne,
+            le cache est la seule source disponible.
+
+            On évite donc une attente réseau inutile.
+          */
+          if (
+            typeof navigator !== "undefined" &&
+            navigator.onLine === false
+          ) {
+
+            if (mountedRef.current) {
+              setLoading(false);
+            }
+
+            return;
           }
 
 
@@ -322,7 +367,10 @@ export default function ProfilePage({
             );
 
           }
-          else if (profileData) {
+          else if (
+            profileData &&
+            mountedRef.current
+          ) {
 
             setProfile(
               profileData
@@ -354,12 +402,13 @@ export default function ProfilePage({
             );
 
             /*
-              Si le réseau échoue mais que
-              le cache existe, on conserve
-              les badges locaux.
+              Le cache est conservé en cas d'erreur.
             */
 
-            if (!cachedBadges) {
+            if (
+              !cachedBadges &&
+              mountedRef.current
+            ) {
 
               setBadges([]);
 
@@ -371,9 +420,13 @@ export default function ProfilePage({
             const safeBadges =
               badgeData || [];
 
-            setBadges(
-              safeBadges
-            );
+            if (mountedRef.current) {
+
+              setBadges(
+                safeBadges
+              );
+
+            }
 
             writeLocalCache(
               getBadgesCacheKey(studentId),
@@ -408,7 +461,10 @@ export default function ProfilePage({
             "Utilisateur non connecté"
           );
 
-          if (!background) {
+          if (
+            !background &&
+            mountedRef.current
+          ) {
 
             setProfile(null);
             setBadges([]);
@@ -442,11 +498,13 @@ export default function ProfilePage({
 
 
         /*
-          Si le cache existe, on l'affiche
-          immédiatement.
+          Le cache est affiché immédiatement.
         */
 
-        if (cachedProfile) {
+        if (
+          cachedProfile &&
+          mountedRef.current
+        ) {
 
           setProfile(
             cachedProfile
@@ -457,7 +515,8 @@ export default function ProfilePage({
         }
 
         if (
-          Array.isArray(cachedBadges)
+          Array.isArray(cachedBadges) &&
+          mountedRef.current
         ) {
 
           setBadges(
@@ -473,11 +532,36 @@ export default function ProfilePage({
 
         if (
           !cachedProfile &&
-          !background
+          !background &&
+          mountedRef.current
         ) {
 
           setLoading(true);
 
+        }
+
+
+        // -----------------------------------------------
+        // HORS LIGNE
+        // -----------------------------------------------
+
+        /*
+          Si le téléphone est clairement hors ligne,
+          inutile d'attendre les requêtes Supabase.
+
+          Les données locales déjà affichées restent
+          disponibles.
+        */
+        if (
+          typeof navigator !== "undefined" &&
+          navigator.onLine === false
+        ) {
+
+          if (mountedRef.current) {
+            setLoading(false);
+          }
+
+          return;
         }
 
 
@@ -556,7 +640,10 @@ export default function ProfilePage({
           );
 
         }
-        else if (profileData) {
+        else if (
+          profileData &&
+          mountedRef.current
+        ) {
 
           setProfile(
             profileData
@@ -588,12 +675,14 @@ export default function ProfilePage({
           );
 
           /*
-            Si le réseau échoue mais que
-            le cache existe, on conserve
-            les badges locaux.
+            Le cache est conservé si Supabase
+            ne répond pas.
           */
 
-          if (!cachedBadges) {
+          if (
+            !cachedBadges &&
+            mountedRef.current
+          ) {
 
             setBadges([]);
 
@@ -605,9 +694,13 @@ export default function ProfilePage({
           const safeBadges =
             badgeData || [];
 
-          setBadges(
-            safeBadges
-          );
+          if (mountedRef.current) {
+
+            setBadges(
+              safeBadges
+            );
+
+          }
 
           writeLocalCache(
             getBadgesCacheKey(userId),
@@ -626,13 +719,18 @@ export default function ProfilePage({
 
       } finally {
 
-        /*
-          Même en cas d'erreur réseau,
-          la page ne doit pas rester
-          bloquée indéfiniment.
-        */
+        if (mountedRef.current) {
 
-        setLoading(false);
+          /*
+            Même en cas d'erreur réseau,
+            la page ne reste jamais bloquée.
+          */
+
+          setLoading(false);
+
+        }
+
+        loadingRequestRef.current = false;
 
       }
 
@@ -650,34 +748,21 @@ export default function ProfilePage({
 
   useEffect(() => {
 
-    let mounted = true;
+    mountedRef.current = true;
+
+    /*
+      Une nouvelle route doit pouvoir déclencher
+      un nouveau chargement.
+    */
+    loadingRequestRef.current = false;
 
 
-    async function initialize() {
-
-      /*
-        Première tentative.
-
-        La fonction affiche d'abord
-        le cache local si disponible,
-        puis actualise depuis Supabase.
-      */
-
-      if (mounted) {
-
-        await loadProfile();
-
-      }
-
-    }
-
-
-    initialize();
+    loadProfile();
 
 
     return () => {
 
-      mounted = false;
+      mountedRef.current = false;
 
     };
 
@@ -691,26 +776,17 @@ export default function ProfilePage({
   async function handleGenerateRecoveryCode() {
 
     /*
-      Cette fonctionnalité est uniquement
-      disponible pour l'élève connecté.
-
-      Elle ne doit jamais être disponible
-      pendant la consultation admin.
+      Disponible uniquement pour l'élève connecté.
     */
 
     if (isConsultation) {
-
       return;
-
     }
 
 
     /*
-      Générer un nouveau code remplace
-      l'ancien code côté serveur.
-
-      On demande donc confirmation si
-      un code est déjà affiché.
+      Générer un nouveau code invalide
+      immédiatement l'ancien.
     */
 
     if (recoveryCode) {
@@ -722,20 +798,15 @@ export default function ProfilePage({
         );
 
       if (!confirmed) {
-
         return;
-
       }
 
     }
 
 
     setRecoveryLoading(true);
-
     setRecoveryMessage("");
-
     setRecoveryMessageType("");
-
     setRecoveryCopied(false);
 
 
@@ -746,13 +817,9 @@ export default function ProfilePage({
 
 
       /*
-        Selon la structure retournée par
-        deviceService, le résultat peut être
-        directement l'objet RPC ou être
-        contenu dans result.data.
-
-        On accepte les deux sans modifier
-        deviceService.js.
+        Selon deviceService, le résultat peut être
+        directement l'objet RPC ou être contenu
+        dans result.data.
       */
 
       const payload =
@@ -770,11 +837,6 @@ export default function ProfilePage({
 
         /*
           Le code reste uniquement en mémoire.
-
-          Il n'est PAS enregistré dans :
-          - localStorage
-          - Dexie
-          - cache ProfilePage
         */
 
         setRecoveryCode(
@@ -840,21 +902,11 @@ export default function ProfilePage({
   async function handleCopyRecoveryCode() {
 
     if (!recoveryCode) {
-
       return;
-
     }
 
 
     try {
-
-      /*
-        Méthode principale.
-
-        La protection contre la sélection/copie
-        du contenu pédagogique n'empêche pas
-        cette écriture directe dans le presse-papiers.
-      */
 
       if (
         navigator.clipboard &&
@@ -868,11 +920,6 @@ export default function ProfilePage({
 
       }
       else {
-
-        /*
-          Fallback pour les environnements
-          où Clipboard API n'est pas disponible.
-        */
 
         const textarea =
           document.createElement("textarea");
@@ -922,11 +969,6 @@ export default function ProfilePage({
       );
 
 
-      /*
-        On remet le bouton dans son état
-        normal après quelques secondes.
-      */
-
       window.setTimeout(() => {
 
         setRecoveryCopied(false);
@@ -960,15 +1002,12 @@ export default function ProfilePage({
   async function handleLogout() {
 
     /*
-      En mode consultation,
-      l'administrateur ne doit jamais
-      être déconnecté de sa session.
+      En consultation, l'administrateur
+      ne doit jamais être déconnecté.
     */
 
     if (isConsultation) {
-
       return;
-
     }
 
 
@@ -1000,7 +1039,9 @@ export default function ProfilePage({
       isConsultation &&
       studentId
     ) {
+
       navigate("/admin/users");
+
       return;
     }
 
@@ -1288,8 +1329,6 @@ export default function ProfilePage({
             "
           >
 
-            {/* BANDEAU */}
-
             <div
               className="
                 h-24
@@ -1298,11 +1337,7 @@ export default function ProfilePage({
             />
 
 
-            {/* ZONE PRINCIPALE DU PROFIL */}
-
             <div className="relative">
-
-              {/* CERCLES DÉCORATIFS */}
 
               <div
                 className="
@@ -1380,9 +1415,7 @@ export default function ProfilePage({
                     {profile.avatar_url ? (
 
                       <img
-                        src={
-                          profile.avatar_url
-                        }
+                        src={profile.avatar_url}
                         alt="Avatar"
                         className="
                           w-full
@@ -1609,8 +1642,6 @@ export default function ProfilePage({
             "
           >
 
-            {/* CERCLES DÉCORATIFS */}
-
             <div
               className="
                 pointer-events-none
@@ -1753,11 +1784,7 @@ export default function ProfilePage({
 
               {recoveryCode && (
 
-                <div
-                  className="
-                    mt-5
-                  "
-                >
+                <div className="mt-5">
 
                   <p
                     className="
@@ -2022,11 +2049,7 @@ export default function ProfilePage({
           </div>
 
 
-          <div
-            className="
-              flex-1
-            "
-          >
+          <div className="flex-1">
 
             <h2
               className="
@@ -2198,11 +2221,7 @@ export default function ProfilePage({
                 theme-text
               "
             >
-
-              {isConsultation
-                ? "Aucun badge obtenu"
-                : "Aucun badge obtenu"}
-
+              Aucun badge obtenu
             </p>
 
 
@@ -2223,10 +2242,6 @@ export default function ProfilePage({
           </div>
 
         ) : (
-
-          /* =================================================
-             BADGES
-          ================================================= */
 
           <div
             className="

@@ -1,5 +1,3 @@
-// src/pages/SettingsPage.jsx
-
 import {
   Settings,
   User,
@@ -22,13 +20,12 @@ import {
 
 import {
   useNavigate,
-  useLocation,
-  useParams,
 } from "react-router-dom";
 
 import {
-  useState,
   useEffect,
+  useRef,
+  useState,
 } from "react";
 
 import {
@@ -73,14 +70,12 @@ const THEME_OPTIONS = [
     description: "Utiliser le thème clair.",
     icon: Sun,
   },
-
   {
     id: "dark",
     label: "Sombre",
     description: "Utiliser le thème sombre.",
     icon: Moon,
   },
-
   {
     id: "system",
     label: "Système",
@@ -100,25 +95,21 @@ const COLOR_OPTIONS = [
     label: "Bleu",
     className: "bg-blue-500",
   },
-
   {
     id: "green",
     label: "Vert",
     className: "bg-green-500",
   },
-
   {
     id: "purple",
     label: "Violet",
     className: "bg-purple-500",
   },
-
   {
     id: "orange",
     label: "Orange",
     className: "bg-orange-500",
   },
-
   {
     id: "pink",
     label: "Rose",
@@ -131,21 +122,15 @@ const COLOR_OPTIONS = [
 // COMPOSANT
 // =====================================================
 
-export default function SettingsPage({
-  consultationMode = false,
-}) {
+export default function SettingsPage() {
 
   const navigate = useNavigate();
 
-  const location = useLocation();
-
-  const {
-    studentId,
-  } = useParams();
 
   const {
     isOnline,
   } = useNetwork();
+
 
   const {
     theme,
@@ -155,38 +140,23 @@ export default function SettingsPage({
   } = useTheme();
 
 
-  // ===================================================
-  // MODE CONSULTATION
-  // ===================================================
-
-  const isConsultation =
-    consultationMode ||
-    location.state?.consultationMode === true ||
-    (
-      Boolean(studentId) &&
-      location.pathname.includes("/admin/student/") &&
-      location.pathname.includes("/consultation")
-    );
-
-
-  // ===================================================
-  // ÉTATS
-  // ===================================================
-
   const [
     loggingOut,
     setLoggingOut,
   ] = useState(false);
+
 
   const [
     clearingCache,
     setClearingCache,
   ] = useState(false);
 
+
   const [
     resettingProgress,
     setResettingProgress,
   ] = useState(false);
+
 
   const [
     message,
@@ -195,27 +165,29 @@ export default function SettingsPage({
 
 
   // ===================================================
-  // NETTOYAGE MESSAGE
+  // TIMER MESSAGE
   // ===================================================
+
+  const messageTimeoutRef = useRef(null);
+
 
   useEffect(() => {
 
-    if (!message) {
-      return;
-    }
-
-    const timer =
-      window.setTimeout(() => {
-
-        setMessage(null);
-
-      }, 4000);
-
     return () => {
-      window.clearTimeout(timer);
+
+      if (messageTimeoutRef.current) {
+
+        window.clearTimeout(
+          messageTimeoutRef.current
+        );
+
+        messageTimeoutRef.current = null;
+
+      }
+
     };
 
-  }, [message]);
+  }, []);
 
 
   // ===================================================
@@ -223,24 +195,7 @@ export default function SettingsPage({
   // ===================================================
 
   function openProfile() {
-
-    if (isConsultation && studentId) {
-
-      navigate(
-        `/admin/student/${studentId}/consultation/profile`,
-        {
-          state: {
-            consultationMode: true,
-          },
-        }
-      );
-
-      return;
-
-    }
-
     navigate("/profile");
-
   }
 
 
@@ -248,12 +203,36 @@ export default function SettingsPage({
   // MESSAGE
   // ===================================================
 
-  function showMessage(type, text) {
+  function showMessage(
+    type,
+    text
+  ) {
+
+    if (messageTimeoutRef.current) {
+
+      window.clearTimeout(
+        messageTimeoutRef.current
+      );
+
+      messageTimeoutRef.current = null;
+
+    }
+
 
     setMessage({
       type,
       text,
     });
+
+
+    messageTimeoutRef.current =
+      window.setTimeout(() => {
+
+        setMessage(null);
+
+        messageTimeoutRef.current = null;
+
+      }, 4000);
 
   }
 
@@ -264,27 +243,14 @@ export default function SettingsPage({
 
   async function logout() {
 
-    /*
-     * IMPORTANT
-     *
-     * En mode consultation, l'administrateur ne doit
-     * jamais être déconnecté de son propre compte.
-     */
-
-    if (isConsultation) {
-      return;
-    }
-
-
     if (loggingOut) {
       return;
     }
 
+
     try {
 
       setLoggingOut(true);
-
-      setMessage(null);
 
 
       const {
@@ -301,34 +267,18 @@ export default function SettingsPage({
           error
         );
 
-        /*
-         * En mode hors connexion, la session locale
-         * peut quand même être supprimée.
-         */
 
         if (!isOnline) {
-
-          navigate("/login", {
-            replace: true,
-          });
-
-          return;
-
+          navigate("/login");
         }
 
-        showMessage(
-          "error",
-          "Impossible de se déconnecter."
-        );
 
         return;
+
       }
 
 
-      navigate("/login", {
-        replace: true,
-      });
-
+      navigate("/login");
 
     } catch (error) {
 
@@ -339,49 +289,12 @@ export default function SettingsPage({
 
 
       if (!isOnline) {
-
-        navigate("/login", {
-          replace: true,
-        });
-
-        return;
-
+        navigate("/login");
       }
-
-
-      showMessage(
-        "error",
-        "Impossible de se déconnecter."
-      );
-
 
     } finally {
 
       setLoggingOut(false);
-
-    }
-
-  }
-
-
-  // ===================================================
-  // CONFIRMATION COMPATIBLE WEB + APK
-  // ===================================================
-
-  function confirmAction(message) {
-
-    try {
-
-      return window.confirm(message);
-
-    } catch (error) {
-
-      console.warn(
-        "⚠️ Confirmation native indisponible :",
-        error
-      );
-
-      return true;
 
     }
 
@@ -400,19 +313,19 @@ export default function SettingsPage({
 
 
     const confirmed =
-      confirmAction(
+      window.confirm(
 
         "Vider le cache ?\n\n" +
 
         "Les cours, chapitres, leçons, quiz et " +
         "données pédagogiques stockés localement " +
-        "sur cet appareil seront supprimés.\n\n" +
+        "seront supprimés.\n\n" +
 
-        "La progression de l'élève consulté, ses " +
-        "tentatives de quiz et les données en attente " +
-        "de synchronisation ne seront pas supprimées.\n\n" +
+        "Ta progression, tes tentatives de quiz " +
+        "et les données en attente de synchronisation " +
+        "seront conservées.\n\n" +
 
-        "Cette action ne supprime aucun compte."
+        "Cette action ne supprime pas ton compte."
 
       );
 
@@ -430,22 +343,25 @@ export default function SettingsPage({
 
 
       /*
-       * IMPORTANT
+       * IMPORTANT :
        *
-       * On supprime uniquement les tables
-       * contenant le contenu pédagogique local.
+       * On supprime uniquement le cache
+       * pédagogique.
        *
-       * On conserve :
+       * Les données utilisateur sont conservées :
        *
        * - userProgress
        * - quizAttempts
        * - syncQueue
        *
-       * Le cache concerne uniquement cet appareil.
+       * Le cache XP est également conservé.
        */
 
+
       await db.transaction(
+
         "rw",
+
         [
           db.classes,
           db.subjects,
@@ -458,35 +374,41 @@ export default function SettingsPage({
           db.badges,
           db.downloads,
         ],
+
         async () => {
 
-          await db.classes.clear();
+          await Promise.all([
 
-          await db.subjects.clear();
+            db.classes.clear(),
 
-          await db.chapters.clear();
+            db.subjects.clear(),
 
-          await db.lessons.clear();
+            db.chapters.clear(),
 
-          await db.lessonBlocks.clear();
+            db.lessons.clear(),
 
-          await db.exercises.clear();
+            db.lessonBlocks.clear(),
 
-          await db.quizzes.clear();
+            db.exercises.clear(),
 
-          await db.quizQuestions.clear();
+            db.quizzes.clear(),
 
-          await db.badges.clear();
+            db.quizQuestions.clear(),
 
-          await db.downloads.clear();
+            db.badges.clear(),
+
+            db.downloads.clear(),
+
+          ]);
 
         }
+
       );
 
 
       showMessage(
         "success",
-        "Le cache pédagogique local a été vidé avec succès."
+        "Le cache pédagogique a été vidé avec succès."
       );
 
 
@@ -524,42 +446,35 @@ export default function SettingsPage({
 
   async function resetProgress() {
 
-    /*
-     * IMPORTANT
-     *
-     * Cette action modifie les données locales
-     * de progression de l'utilisateur.
-     *
-     * Elle est donc totalement interdite
-     * en mode consultation.
-     */
-
-    if (isConsultation) {
-      return;
-    }
-
-
     if (resettingProgress) {
       return;
     }
 
 
     const confirmed =
-      confirmAction(
+      window.confirm(
 
         "Réinitialiser ta progression ?\n\n" +
 
-        "Cette action supprimera localement :\n" +
+        "Cette action supprimera :\n" +
 
         "• ta progression des leçons\n" +
+
         "• tes tentatives de quiz\n" +
-        "• ton cache XP local\n\n" +
 
-        "Les données déjà synchronisées avec " +
-        "le serveur ne seront PAS supprimées " +
-        "automatiquement.\n\n" +
+        "• ton XP\n\n" +
 
-        "Cette action est irréversible."
+        "Ton niveau sera remis au niveau 1.\n\n" +
+
+        "Tes badges seront également supprimés.\n\n" +
+
+        (
+          isOnline
+            ? "Les données enregistrées sur le serveur seront également réinitialisées."
+            : "Tu es actuellement hors connexion. Seules les données locales seront réinitialisées."
+        ) +
+
+        "\n\nCette action est irréversible."
 
       );
 
@@ -576,10 +491,6 @@ export default function SettingsPage({
       setMessage(null);
 
 
-      // =================================================
-      // RÉCUPÉRER L'UTILISATEUR
-      // =================================================
-
       const {
         data,
         error: sessionError,
@@ -588,8 +499,8 @@ export default function SettingsPage({
 
       if (sessionError) {
 
-        console.warn(
-          "⚠️ Impossible de récupérer la session :",
+        console.error(
+          "❌ Impossible de récupérer la session :",
           sessionError
         );
 
@@ -612,29 +523,184 @@ export default function SettingsPage({
       }
 
 
-      // =================================================
-      // PROGRESSION
-      // =================================================
+      /*
+       * -----------------------------------------
+       * RÉINITIALISATION SERVEUR
+       * -----------------------------------------
+       *
+       * En ligne, le RPC effectue une réinitialisation
+       * atomique de la progression, des tentatives de
+       * quiz et de l'XP/niveau du profil.
+       */
 
-      await db.userProgress
-        .where("user_id")
-        .equals(userId)
-        .delete();
+      if (isOnline) {
+
+        const {
+          data: resetData,
+          error: resetError,
+        } = await supabase.rpc(
+          "reset_my_progress"
+        );
 
 
-      // =================================================
-      // TENTATIVES QUIZ
-      // =================================================
+        if (resetError) {
 
-      await db.quizAttempts
-        .where("user_id")
-        .equals(userId)
-        .delete();
+          console.error(
+            "❌ Erreur réinitialisation serveur :",
+            resetError
+          );
 
 
-      // =================================================
-      // CACHE XP
-      // =================================================
+          showMessage(
+            "error",
+            resetError.message ||
+              "Impossible de réinitialiser ta progression sur le serveur."
+          );
+
+
+          return;
+
+        }
+
+
+        if (
+          !resetData ||
+          resetData.success !== true
+        ) {
+
+          showMessage(
+            "error",
+            resetData?.message ||
+              "La réinitialisation du serveur a été refusée."
+          );
+
+
+          return;
+
+        }
+
+
+        /*
+         * Vérification immédiate du profil serveur.
+         */
+
+        const {
+          data: profileData,
+          error: profileError,
+        } = await supabase
+          .from("profiles")
+          .select("xp, level")
+          .eq("id", userId)
+          .maybeSingle();
+
+
+        if (profileError) {
+
+          console.error(
+            "❌ Vérification XP serveur impossible :",
+            profileError
+          );
+
+
+          showMessage(
+            "error",
+            "La réinitialisation a été effectuée, mais sa vérification a échoué."
+          );
+
+
+          return;
+
+        }
+
+
+        if (
+          !profileData ||
+          Number(profileData.xp) !== 0 ||
+          Number(profileData.level) !== 1
+        ) {
+
+          showMessage(
+            "error",
+            "La progression du serveur n'a pas été correctement remise à zéro."
+          );
+
+
+          return;
+
+        }
+
+      }
+
+
+      /*
+       * -----------------------------------------
+       * SUPPRESSION PROGRESSION LOCALE
+       * -----------------------------------------
+       *
+       * Les trois opérations sont regroupées dans
+       * une transaction Dexie afin de limiter les
+       * opérations indépendantes sur IndexedDB.
+       */
+
+      await db.transaction(
+
+        "rw",
+
+        [
+          db.userProgress,
+          db.quizAttempts,
+          db.syncQueue,
+        ],
+
+        async () => {
+
+          await Promise.all([
+
+            db.userProgress
+              .where("user_id")
+              .equals(userId)
+              .delete(),
+
+            db.quizAttempts
+              .where("user_id")
+              .equals(userId)
+              .delete(),
+
+            db.syncQueue
+              .filter(
+                item =>
+                  item.table_name ===
+                    "user_progress"
+                  ||
+                  item.table_name ===
+                    "quiz_attempts"
+                  ||
+                  (
+                    item.table_name ===
+                      "profiles"
+                    &&
+                    item.action ===
+                      "xp"
+                  )
+              )
+              .delete(),
+
+          ]);
+
+        }
+
+      );
+
+
+      /*
+       * -----------------------------------------
+       * SUPPRESSION DES CACHES XP + BADGES + DASHBOARD
+       * -----------------------------------------
+       *
+       * Le Dashboard utilise sessionStorage.
+       * Il doit être invalidé avant le reload afin
+       * qu'il ne réaffiche pas les anciennes valeurs.
+       */
 
       try {
 
@@ -652,51 +718,64 @@ export default function SettingsPage({
       }
 
 
-      // =================================================
-      // FILE D'ATTENTE DE SYNCHRONISATION
-      // =================================================
+      try {
 
-      await db.syncQueue
-        .filter(
-          item => {
+        localStorage.removeItem(
+          `kalan_badges_${userId}`
+        );
 
-            const isProgress =
-              item.table_name ===
-              "user_progress";
+      } catch (error) {
 
-            const isQuiz =
-              item.table_name ===
-              "quiz_attempts";
+        console.warn(
+          "⚠️ Impossible de supprimer le cache des badges :",
+          error
+        );
 
-            const isXP =
-              item.table_name ===
-                "profiles" &&
-              item.action ===
-                "xp";
-
-            return (
-              isProgress ||
-              isQuiz ||
-              isXP
-            );
-
-          }
-        )
-        .delete();
+      }
 
 
-      // =================================================
-      // SUCCÈS
-      // =================================================
+      try {
 
-      showMessage(
-        "success",
-        "Ta progression locale a été réinitialisée."
-      );
+        sessionStorage.removeItem(
+          `kalan_dashboard_${userId}`
+        );
+
+      } catch (error) {
+
+        console.warn(
+          "⚠️ Impossible de supprimer le cache Dashboard :",
+          error
+        );
+
+      }
+
+
+      if (isOnline) {
+
+        showMessage(
+          "success",
+          "Ta progression a été entièrement réinitialisée."
+        );
+
+
+        window.setTimeout(() => {
+
+          window.location.reload();
+
+        }, 500);
+
+      } else {
+
+        showMessage(
+          "success",
+          "Ta progression locale a été réinitialisée. Les données du serveur restent inchangées hors connexion."
+        );
+
+      }
 
 
       console.log(
-        "🔄 Progression locale Kalan Academy réinitialisée."
+        "🔄 Progression Kalan Academy réinitialisée."
       );
 
 
@@ -710,7 +789,8 @@ export default function SettingsPage({
 
       showMessage(
         "error",
-        "Impossible de réinitialiser la progression."
+        error?.message ||
+          "Impossible de réinitialiser la progression."
       );
 
 
@@ -733,7 +813,6 @@ export default function SettingsPage({
       className="
         max-w-3xl
         mx-auto
-        w-full
         px-4
         py-6
         pb-10
@@ -756,7 +835,6 @@ export default function SettingsPage({
             flex
             items-center
             gap-3
-
             ${
               message.type === "success"
                 ? "bg-green-50 border-green-200 text-green-700"
@@ -780,6 +858,7 @@ export default function SettingsPage({
             />
 
           )}
+
 
           <p className="text-sm font-medium">
             {message.text}
@@ -854,10 +933,7 @@ export default function SettingsPage({
             theme-text-secondary
           "
         >
-          {isConsultation
-            ? "Paramètres locaux de l'appareil de consultation."
-            : "Gère les paramètres de ton application."
-          }
+          Gère les paramètres de ton application.
         </p>
 
       </div>
@@ -898,6 +974,8 @@ export default function SettingsPage({
           "
         >
 
+          {/* THÈME */}
+
           <div className="p-5">
 
             <div className="mb-4">
@@ -911,6 +989,7 @@ export default function SettingsPage({
               >
                 Thème
               </h3>
+
 
               <p
                 className="
@@ -937,8 +1016,7 @@ export default function SettingsPage({
 
               {THEME_OPTIONS.map((option) => {
 
-                const Icon =
-                  option.icon;
+                const Icon = option.icon;
 
                 const selected =
                   theme === option.id;
@@ -949,9 +1027,7 @@ export default function SettingsPage({
                   <button
                     key={option.id}
                     type="button"
-                    onClick={() =>
-                      setTheme(option.id)
-                    }
+                    onClick={() => setTheme(option.id)}
                     className={`
                       relative
                       flex
@@ -963,7 +1039,6 @@ export default function SettingsPage({
                       rounded-xl
                       border
                       transition-all
-
                       ${
                         selected
                           ? "theme-option-selected"
@@ -1051,6 +1126,8 @@ export default function SettingsPage({
           />
 
 
+          {/* COULEUR */}
+
           <div className="p-5">
 
             <div className="mb-4">
@@ -1064,6 +1141,7 @@ export default function SettingsPage({
               >
                 Couleur principale
               </h3>
+
 
               <p
                 className="
@@ -1102,9 +1180,7 @@ export default function SettingsPage({
                       setAccentColor(color.id)
                     }
                     title={color.label}
-                    aria-label={
-                      `Couleur ${color.label}`
-                    }
+                    aria-label={`Couleur ${color.label}`}
                     className={`
                       relative
                       w-12
@@ -1112,7 +1188,6 @@ export default function SettingsPage({
                       rounded-full
                       ${color.className}
                       transition-all
-
                       ${
                         selected
                           ? "ring-4 ring-offset-2 ring-gray-300 scale-110"
@@ -1163,9 +1238,8 @@ export default function SettingsPage({
               >
                 {
                   COLOR_OPTIONS.find(
-                    color =>
-                      color.id ===
-                      accentColor
+                    (color) =>
+                      color.id === accentColor
                   )?.label
                 }
               </span>
@@ -1214,6 +1288,8 @@ export default function SettingsPage({
           "
         >
 
+          {/* PROFIL */}
+
           <button
             type="button"
             onClick={openProfile}
@@ -1255,7 +1331,7 @@ export default function SettingsPage({
             </div>
 
 
-            <div className="flex-1 min-w-0">
+            <div className="flex-1">
 
               <h3
                 className="
@@ -1264,9 +1340,109 @@ export default function SettingsPage({
                   theme-text
                 "
               >
-                {isConsultation
-                  ? "Profil de l'élève"
-                  : "Mon profil"
+                Mon profil
+              </h3>
+
+
+              <p
+                className="
+                  text-sm
+                  text-gray-500
+                  mt-1
+                  theme-text-secondary
+                "
+              >
+                Consulter et gérer mon profil.
+              </p>
+
+            </div>
+
+
+            <ChevronRight
+              size={20}
+              className="
+                text-gray-400
+                theme-text-secondary
+              "
+            />
+
+          </button>
+
+
+          <div
+            className="
+              border-t
+              border-gray-100
+              theme-border
+            "
+          />
+
+
+          {/* DÉCONNEXION */}
+
+          <button
+            type="button"
+            onClick={logout}
+            disabled={loggingOut}
+            className="
+              w-full
+              flex
+              items-center
+              gap-4
+              p-5
+              text-left
+              hover:bg-red-50
+              transition
+              disabled:opacity-50
+            "
+          >
+
+            <div
+              className="
+                w-11
+                h-11
+                rounded-xl
+                bg-red-50
+                flex
+                items-center
+                justify-center
+                shrink-0
+              "
+            >
+
+              {loggingOut ? (
+
+                <Loader2
+                  size={20}
+                  className="
+                    text-red-600
+                    animate-spin
+                  "
+                />
+
+              ) : (
+
+                <LogOut
+                  size={20}
+                  className="text-red-600"
+                />
+
+              )}
+
+            </div>
+
+
+            <div className="flex-1">
+
+              <h3
+                className="
+                  font-semibold
+                  text-red-600
+                "
+              >
+                {loggingOut
+                  ? "Déconnexion..."
+                  : "Déconnexion"
                 }
               </h3>
 
@@ -1279,124 +1455,12 @@ export default function SettingsPage({
                   theme-text-secondary
                 "
               >
-                {isConsultation
-                  ? "Consulter le profil de l'élève."
-                  : "Consulter et gérer mon profil."
-                }
+                Se déconnecter de Kalan Academy.
               </p>
 
             </div>
 
-
-            <ChevronRight
-              size={20}
-              className="
-                text-gray-400
-                theme-text-secondary
-                shrink-0
-              "
-            />
-
           </button>
-
-
-          {!isConsultation && (
-
-            <>
-              <div
-                className="
-                  border-t
-                  border-gray-100
-                  theme-border
-                "
-              />
-
-
-              <button
-                type="button"
-                onClick={logout}
-                disabled={loggingOut}
-                className="
-                  w-full
-                  flex
-                  items-center
-                  gap-4
-                  p-5
-                  text-left
-                  hover:bg-red-50
-                  transition
-                  disabled:opacity-50
-                "
-              >
-
-                <div
-                  className="
-                    w-11
-                    h-11
-                    rounded-xl
-                    bg-red-50
-                    flex
-                    items-center
-                    justify-center
-                    shrink-0
-                  "
-                >
-
-                  {loggingOut ? (
-
-                    <Loader2
-                      size={20}
-                      className="
-                        text-red-600
-                        animate-spin
-                      "
-                    />
-
-                  ) : (
-
-                    <LogOut
-                      size={20}
-                      className="text-red-600"
-                    />
-
-                  )}
-
-                </div>
-
-
-                <div className="flex-1 min-w-0">
-
-                  <h3
-                    className="
-                      font-semibold
-                      text-red-600
-                    "
-                  >
-                    {
-                      loggingOut
-                        ? "Déconnexion..."
-                        : "Déconnexion"
-                    }
-                  </h3>
-
-
-                  <p
-                    className="
-                      text-sm
-                      text-gray-500
-                      mt-1
-                      theme-text-secondary
-                    "
-                  >
-                    Se déconnecter de Kalan Academy.
-                  </p>
-
-                </div>
-
-              </button>
-            </>
-
-          )}
 
         </div>
 
@@ -1438,6 +1502,8 @@ export default function SettingsPage({
           "
         >
 
+          {/* NOTIFICATIONS */}
+
           <div className="flex items-center gap-4 p-5">
 
             <div
@@ -1461,7 +1527,7 @@ export default function SettingsPage({
             </div>
 
 
-            <div className="flex-1 min-w-0">
+            <div className="flex-1">
 
               <h3
                 className="
@@ -1498,7 +1564,6 @@ export default function SettingsPage({
                 px-2.5
                 py-1
                 rounded-full
-                shrink-0
               "
             >
               Bientôt
@@ -1515,6 +1580,8 @@ export default function SettingsPage({
             "
           />
 
+
+          {/* LANGUE */}
 
           <div className="flex items-center gap-4 p-5">
 
@@ -1647,7 +1714,7 @@ export default function SettingsPage({
             </div>
 
 
-            <div className="flex-1 min-w-0">
+            <div className="flex-1">
 
               <h3
                 className="
@@ -1687,7 +1754,6 @@ export default function SettingsPage({
                 px-2.5
                 py-1
                 rounded-full
-                shrink-0
                 ${
                   isOnline
                     ? "bg-green-100 text-green-700"
@@ -1713,7 +1779,7 @@ export default function SettingsPage({
           />
 
 
-          {/* VIDER CACHE */}
+          {/* VIDER LE CACHE */}
 
           <button
             type="button"
@@ -1769,7 +1835,7 @@ export default function SettingsPage({
             </div>
 
 
-            <div className="flex-1 min-w-0">
+            <div className="flex-1">
 
               <h3
                 className="
@@ -1778,10 +1844,9 @@ export default function SettingsPage({
                   theme-text
                 "
               >
-                {
-                  clearingCache
-                    ? "Vidage du cache..."
-                    : "Vider le cache"
+                {clearingCache
+                  ? "Vidage du cache..."
+                  : "Vider le cache"
                 }
               </h3>
 
@@ -1794,10 +1859,9 @@ export default function SettingsPage({
                   theme-text-secondary
                 "
               >
-                {isConsultation
-                  ? "Supprimer le cache pédagogique local de cet appareil."
-                  : "Supprimer les données pédagogiques stockées localement sans supprimer ta progression."
-                }
+                Supprimer les données pédagogiques
+                stockées localement sans supprimer
+                ta progression.
               </p>
 
             </div>
@@ -1810,7 +1874,6 @@ export default function SettingsPage({
                 className="
                   text-gray-400
                   theme-text-secondary
-                  shrink-0
                 "
               />
 
@@ -1827,144 +1890,140 @@ export default function SettingsPage({
           APPRENTISSAGE
       ================================================= */}
 
-      {!isConsultation && (
+      <section className="mb-5">
 
-        <section className="mb-5">
+        <h2
+          className="
+            text-xs
+            font-bold
+            text-gray-500
+            uppercase
+            tracking-wider
+            mb-2
+            px-1
+            theme-text-secondary
+          "
+        >
+          📚 Apprentissage
+        </h2>
 
-          <h2
+
+        <div
+          className="
+            bg-white
+            rounded-2xl
+            border
+            border-gray-100
+            shadow-sm
+            overflow-hidden
+            theme-surface
+            theme-border
+          "
+        >
+
+          {/* RÉINITIALISER PROGRESSION */}
+
+          <button
+            type="button"
+            onClick={resetProgress}
+            disabled={resettingProgress}
             className="
-              text-xs
-              font-bold
-              text-gray-500
-              uppercase
-              tracking-wider
-              mb-2
-              px-1
-              theme-text-secondary
+              w-full
+              flex
+              items-center
+              gap-4
+              p-5
+              text-left
+              hover:bg-orange-50
+              transition
+              disabled:opacity-60
+              disabled:cursor-not-allowed
             "
           >
-            📚 Apprentissage
-          </h2>
 
-
-          <div
-            className="
-              bg-white
-              rounded-2xl
-              border
-              border-gray-100
-              shadow-sm
-              overflow-hidden
-              theme-surface
-              theme-border
-            "
-          >
-
-            <button
-              type="button"
-              onClick={resetProgress}
-              disabled={resettingProgress}
+            <div
               className="
-                w-full
+                w-11
+                h-11
+                rounded-xl
+                bg-orange-50
                 flex
                 items-center
-                gap-4
-                p-5
-                text-left
-                hover:bg-orange-50
-                transition
-                disabled:opacity-60
-                disabled:cursor-not-allowed
+                justify-center
+                shrink-0
               "
             >
 
-              <div
-                className="
-                  w-11
-                  h-11
-                  rounded-xl
-                  bg-orange-50
-                  flex
-                  items-center
-                  justify-center
-                  shrink-0
-                "
-              >
+              {resettingProgress ? (
 
-                {resettingProgress ? (
-
-                  <Loader2
-                    size={20}
-                    className="
-                      text-orange-600
-                      animate-spin
-                    "
-                  />
-
-                ) : (
-
-                  <RotateCcw
-                    size={20}
-                    className="text-orange-600"
-                  />
-
-                )}
-
-              </div>
-
-
-              <div className="flex-1 min-w-0">
-
-                <h3
-                  className="
-                    font-semibold
-                    text-gray-900
-                    theme-text
-                  "
-                >
-                  {
-                    resettingProgress
-                      ? "Réinitialisation..."
-                      : "Réinitialiser ma progression"
-                  }
-                </h3>
-
-
-                <p
-                  className="
-                    text-sm
-                    text-gray-500
-                    mt-1
-                    theme-text-secondary
-                  "
-                >
-                  Supprimer ma progression locale,
-                  mes tentatives de quiz et mon cache XP.
-                </p>
-
-              </div>
-
-
-              {!resettingProgress && (
-
-                <ChevronRight
+                <Loader2
                   size={20}
                   className="
-                    text-gray-400
-                    theme-text-secondary
-                    shrink-0
+                    text-orange-600
+                    animate-spin
                   "
+                />
+
+              ) : (
+
+                <RotateCcw
+                  size={20}
+                  className="text-orange-600"
                 />
 
               )}
 
-            </button>
+            </div>
 
-          </div>
 
-        </section>
+            <div className="flex-1">
 
-      )}
+              <h3
+                className="
+                  font-semibold
+                  text-gray-900
+                  theme-text
+                "
+              >
+                {resettingProgress
+                  ? "Réinitialisation..."
+                  : "Réinitialiser ma progression"
+                }
+              </h3>
+
+
+              <p
+                className="
+                  text-sm
+                  text-gray-500
+                  mt-1
+                  theme-text-secondary
+                "
+              >
+                Supprimer ma progression locale,
+                mes tentatives de quiz et mon cache XP.
+              </p>
+
+            </div>
+
+
+            {!resettingProgress && (
+
+              <ChevronRight
+                size={20}
+                className="
+                  text-gray-400
+                  theme-text-secondary
+                "
+              />
+
+            )}
+
+          </button>
+
+        </div>
+
+      </section>
 
 
       {/* =================================================
@@ -2001,6 +2060,8 @@ export default function SettingsPage({
             theme-border
           "
         >
+
+          {/* VERSION */}
 
           <div
             className="
@@ -2039,7 +2100,7 @@ export default function SettingsPage({
             </div>
 
 
-            <div className="flex-1 min-w-0">
+            <div className="flex-1">
 
               <h3
                 className="
@@ -2072,7 +2133,6 @@ export default function SettingsPage({
                 font-semibold
                 text-gray-600
                 theme-text-secondary
-                shrink-0
               "
             >
               {APP_VERSION}
@@ -2080,6 +2140,8 @@ export default function SettingsPage({
 
           </div>
 
+
+          {/* KALAN ACADEMY */}
 
           <div className="flex items-center gap-4 p-5">
 

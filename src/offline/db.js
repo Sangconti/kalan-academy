@@ -17,13 +17,13 @@ export const db = new Dexie("KalanAcademyDB");
 /*
   Version 7
 
-  Cette version conserve la structure actuelle.
+  Cette version conserve la structure actuelle mais permet
+  de repartir proprement avec le nouveau système de cache.
 
   IMPORTANT :
-  - Les données pédagogiques sont stockées localement.
-  - Les données utilisateur sont conservées séparément.
-  - La progression et les tentatives de quiz peuvent
-    être synchronisées ultérieurement.
+  - Les données pédagogiques sont remplacées lors d'une
+    synchronisation complète réussie.
+  - Les données utilisateur sont conservées.
 */
 
 db.version(7).stores({
@@ -84,28 +84,7 @@ db.version(7).stores({
 // ======================================================
 
 function now() {
-
   return new Date().toISOString();
-
-}
-
-
-function normalizeCode(value) {
-
-  return String(value || "")
-    .trim()
-    .toLowerCase();
-
-}
-
-
-function sortByOrder(a, b) {
-
-  return (
-    (Number(a?.order_number) || 0) -
-    (Number(b?.order_number) || 0)
-  );
-
 }
 
 
@@ -113,29 +92,70 @@ function sortByOrder(a, b) {
 // STORAGE
 // ======================================================
 
+/*
+ * IMPORTANT :
+ *
+ * Cette fonction mesure la taille approximative de
+ * l'ensemble des données Dexie.
+ *
+ * Elle est conservée pour compatibilité avec le reste
+ * de l'application.
+ *
+ * L'ancienne version parcourait les tables une par une :
+ *
+ *   table 1 → attente
+ *   table 2 → attente
+ *   table 3 → attente
+ *   ...
+ *
+ * Nous effectuons maintenant les lectures en parallèle.
+ *
+ * NOTE :
+ * Ce calcul reste une estimation basée sur JSON.stringify().
+ * Il ne représente pas exactement la taille physique
+ * réelle du stockage IndexedDB.
+ */
+
 export async function getStorageUsedMB() {
 
   let bytes = 0;
 
 
-  for (const table of db.tables) {
+  const results =
+    await Promise.all(
 
-    try {
+      db.tables.map(
+        async table => {
 
-      const data =
-        await table.toArray();
+          try {
 
-      bytes +=
-        JSON.stringify(data).length;
+            const data =
+              await table.toArray();
 
-    } catch (error) {
 
-      console.warn(
-        `⚠️ Impossible de mesurer ${table.name}`,
-        error
-      );
+            return JSON.stringify(data).length;
 
-    }
+          } catch (error) {
+
+            console.warn(
+              `⚠️ Impossible de mesurer ${table.name}`,
+              error
+            );
+
+
+            return 0;
+
+          }
+
+        }
+      )
+
+    );
+
+
+  for (const tableBytes of results) {
+
+    bytes += tableBytes;
 
   }
 
@@ -143,7 +163,6 @@ export async function getStorageUsedMB() {
   return Number(
     (bytes / 1024 / 1024).toFixed(2)
   );
-
 }
 
 
@@ -159,13 +178,10 @@ export async function cacheClasses(list) {
       cached_at: now()
     }));
 
-
   if (rows.length > 0) {
 
     await db.classes.bulkPut(rows);
-
   }
-
 }
 
 
@@ -174,51 +190,12 @@ export async function getCachedClasses() {
   return await db.classes
     .orderBy("order_number")
     .toArray();
-
 }
 
 
 // ======================================================
 // SUBJECTS
 // ======================================================
-
-/*
- * Cache les matières reçues depuis Supabase.
- *
- * IMPORTANT :
- *
- * bulkPut() seul ne supprime PAS les anciens IDs.
- *
- * Exemple :
- *
- * Ancien cache :
- *
- *   Mathématiques ID A
- *   Mathématiques ID B
- *
- * Supabase :
- *
- *   Mathématiques ID B
- *
- * Avec bulkPut() seul :
- *
- *   Mathématiques ID A
- *   Mathématiques ID B
- *
- * Le doublon reste.
- *
- * Cette fonction réconcilie donc les matières de chaque
- * classe.
- *
- * Une ancienne matière est supprimée uniquement si :
- *
- *   1. elle appartient à la classe concernée ;
- *   2. elle n'est plus présente dans les données reçues ;
- *   3. elle ne possède aucun chapitre.
- *
- * Si elle possède des chapitres, on la conserve afin
- * d'éviter de créer des chapitres orphelins.
- */
 
 export async function cacheSubjects(list) {
 
@@ -228,190 +205,17 @@ export async function cacheSubjects(list) {
       cached_at: now()
     }));
 
+  if (rows.length > 0) {
 
-  // --------------------------------------
-  // Rien à mettre en cache
-  // --------------------------------------
-
-  if (rows.length === 0) {
-
-    return;
-
+    await db.subjects.bulkPut(rows);
   }
-
-
-  // --------------------------------------
-  // Regrouper par classe
-  // --------------------------------------
-
-  const classIds =
-    [
-      ...new Set(
-        rows
-          .map(item =>
-            String(item?.class_id || "")
-          )
-          .filter(Boolean)
-      )
-    ];
-
-
-  // --------------------------------------
-  // Transaction Dexie
-  // --------------------------------------
-
-  await db.transaction(
-    "rw",
-    db.subjects,
-    db.chapters,
-    async () => {
-
-      // ====================================
-      // 1. Écrire les nouvelles matières
-      // ====================================
-
-      await db.subjects.bulkPut(rows);
-
-
-      // ====================================
-      // 2. Nettoyer les anciennes matières
-      // ====================================
-
-      for (const classId of classIds) {
-
-        const currentSubjects =
-          rows.filter(
-            subject =>
-              String(subject.class_id) ===
-              String(classId)
-          );
-
-
-        const currentIds =
-          new Set(
-            currentSubjects.map(
-              subject =>
-                String(subject.id)
-            )
-          );
-
-
-        const cachedSubjects =
-          await db.subjects
-            .where("class_id")
-            .equals(classId)
-            .toArray();
-
-
-        for (const cachedSubject of cachedSubjects) {
-
-          if (!cachedSubject?.id) {
-
-            continue;
-
-          }
-
-
-          const cachedId =
-            String(cachedSubject.id);
-
-
-          // --------------------------------
-          // Matière encore présente
-          // --------------------------------
-
-          if (currentIds.has(cachedId)) {
-
-            continue;
-
-          }
-
-
-          // --------------------------------
-          // Ancienne matière :
-          // vérifier ses chapitres
-          // --------------------------------
-
-          let chapterCount = 0;
-
-
-          try {
-
-            chapterCount =
-              await db.chapters
-                .where("subject_id")
-                .equals(cachedSubject.id)
-                .count();
-
-          } catch (error) {
-
-            console.warn(
-              "⚠️ Impossible de compter les chapitres avant suppression :",
-              cachedSubject,
-              error
-            );
-
-            // Sécurité :
-            // ne pas supprimer si le comptage échoue.
-            continue;
-
-          }
-
-
-          // --------------------------------
-          // Aucun chapitre :
-          // suppression sûre
-          // --------------------------------
-
-          if (chapterCount === 0) {
-
-            console.log(
-              "🧹 Suppression ancienne matière sans chapitre :",
-              {
-                id: cachedSubject.id,
-                class_id: cachedSubject.class_id,
-                name: cachedSubject.name,
-                code: cachedSubject.code
-              }
-            );
-
-
-            await db.subjects.delete(
-              cachedSubject.id
-            );
-
-          } else {
-
-            console.warn(
-              "⚠️ Ancienne matière conservée car elle possède des chapitres :",
-              {
-                id: cachedSubject.id,
-                name: cachedSubject.name,
-                code: cachedSubject.code,
-                chapters: chapterCount
-              }
-            );
-
-          }
-
-        }
-
-      }
-
-    }
-  );
-
 }
 
 
 export async function getCachedSubjects(classId) {
 
-  if (!classId) {
-
+  if (!classId)
     return [];
-
-  }
-
 
   const data =
     await db.subjects
@@ -419,306 +223,13 @@ export async function getCachedSubjects(classId) {
       .equals(classId)
       .toArray();
 
-
-  data.sort(sortByOrder);
-
+  data.sort(
+    (a, b) =>
+      (Number(a.order_number) || 0) -
+      (Number(b.order_number) || 0)
+  );
 
   return data;
-
-}
-
-
-// ======================================================
-// NETTOYAGE DES DOUBLONS MATIÈRES
-// ======================================================
-
-/*
- * Nettoie les doublons d'une classe.
- *
- * Pour chaque groupe :
- *
- *   class_id + code
- *
- * on conserve la matière qui possède le plus de chapitres.
- *
- * Exemple :
- *
- *   Mathématiques A → 0 chapitre
- *   Mathématiques B → 24 chapitres
- *
- * Résultat :
- *
- *   Mathématiques B → conservée
- *   Mathématiques A → supprimée
- *
- * Si deux matières possèdent des chapitres, aucune n'est
- * supprimée automatiquement.
- */
-
-export async function cleanupDuplicateSubjects(
-  classId = null
-) {
-
-  try {
-
-    let subjects;
-
-
-    // --------------------------------------
-    // Récupérer les matières
-    // --------------------------------------
-
-    if (classId) {
-
-      subjects =
-        await db.subjects
-          .where("class_id")
-          .equals(classId)
-          .toArray();
-
-    } else {
-
-      subjects =
-        await db.subjects.toArray();
-
-    }
-
-
-    const groups =
-      new Map();
-
-
-    // --------------------------------------
-    // Regroupement logique
-    // --------------------------------------
-
-    for (const subject of subjects) {
-
-      if (!subject?.id) {
-
-        continue;
-
-      }
-
-
-      const logicalCode =
-        normalizeCode(
-          subject.code ||
-          subject.subject_code ||
-          subject.name
-        );
-
-
-      const key =
-        `${String(subject.class_id || "")}::${logicalCode}`;
-
-
-      if (!groups.has(key)) {
-
-        groups.set(key, []);
-
-      }
-
-
-      groups
-        .get(key)
-        .push(subject);
-
-    }
-
-
-    const deleted = [];
-
-
-    // --------------------------------------
-    // Traiter chaque groupe
-    // --------------------------------------
-
-    for (const [key, group] of groups.entries()) {
-
-      if (group.length <= 1) {
-
-        continue;
-
-      }
-
-
-      const candidates = [];
-
-
-      for (const subject of group) {
-
-        let chapterCount = 0;
-
-
-        try {
-
-          chapterCount =
-            await db.chapters
-              .where("subject_id")
-              .equals(subject.id)
-              .count();
-
-        } catch (error) {
-
-          console.warn(
-            "⚠️ Comptage chapitres impossible :",
-            subject,
-            error
-          );
-
-        }
-
-
-        candidates.push({
-          subject,
-          chapterCount
-        });
-
-      }
-
-
-      // ------------------------------------
-      // Trier :
-      // 1. plus de chapitres
-      // 2. order_number
-      // 3. ID
-      // ------------------------------------
-
-      candidates.sort(
-        (a, b) => {
-
-          if (
-            b.chapterCount !==
-            a.chapterCount
-          ) {
-
-            return (
-              b.chapterCount -
-              a.chapterCount
-            );
-
-          }
-
-
-          const orderDifference =
-            sortByOrder(
-              a.subject,
-              b.subject
-            );
-
-
-          if (orderDifference !== 0) {
-
-            return orderDifference;
-
-          }
-
-
-          return String(
-            a.subject.id
-          ).localeCompare(
-            String(b.subject.id)
-          );
-
-        }
-      );
-
-
-      const winner =
-        candidates[0];
-
-
-      console.warn(
-        "🔎 DOUBLON MATIÈRE :",
-        key,
-        candidates.map(
-          item => ({
-            id: item.subject.id,
-            name: item.subject.name,
-            code: item.subject.code,
-            chapters:
-              item.chapterCount
-          })
-        )
-      );
-
-
-      // ------------------------------------
-      // Supprimer uniquement les doublons
-      // sans chapitre
-      // ------------------------------------
-
-      for (const candidate of candidates) {
-
-        if (
-          candidate.subject.id ===
-          winner.subject.id
-        ) {
-
-          continue;
-
-        }
-
-
-        if (
-          candidate.chapterCount ===
-          0
-        ) {
-
-          await db.subjects.delete(
-            candidate.subject.id
-          );
-
-
-          deleted.push(
-            candidate.subject
-          );
-
-
-          console.log(
-            "🧹 DOUBLON MATIÈRE SUPPRIMÉ :",
-            {
-              id: candidate.subject.id,
-              name: candidate.subject.name,
-              code: candidate.subject.code,
-              kept: winner.subject.id
-            }
-          );
-
-        } else {
-
-          console.warn(
-            "⚠️ Doublon conservé car il possède des chapitres :",
-            {
-              id: candidate.subject.id,
-              name: candidate.subject.name,
-              chapters:
-                candidate.chapterCount
-            }
-          );
-
-        }
-
-      }
-
-    }
-
-
-    return deleted;
-
-  } catch (error) {
-
-    console.error(
-      "❌ cleanupDuplicateSubjects :",
-      error
-    );
-
-
-    return [];
-
-  }
-
 }
 
 
@@ -734,24 +245,17 @@ export async function cacheChapters(list) {
       cached_at: now()
     }));
 
-
   if (rows.length > 0) {
 
     await db.chapters.bulkPut(rows);
-
   }
-
 }
 
 
 export async function getCachedChapters(subjectId) {
 
-  if (!subjectId) {
-
+  if (!subjectId)
     return [];
-
-  }
-
 
   const data =
     await db.chapters
@@ -759,46 +263,34 @@ export async function getCachedChapters(subjectId) {
       .equals(subjectId)
       .toArray();
 
-
-  data.sort(sortByOrder);
-
+  data.sort(
+    (a, b) =>
+      (Number(a.order_number) || 0) -
+      (Number(b.order_number) || 0)
+  );
 
   return data;
-
 }
 
 
 export async function cacheChapter(chapter) {
 
-  if (!chapter?.id) {
-
+  if (!chapter?.id)
     return;
 
-  }
-
-
   await db.chapters.put({
-
     ...chapter,
-
     cached_at: now()
-
   });
-
 }
 
 
 export async function getCachedChapter(id) {
 
-  if (!id) {
-
+  if (!id)
     return null;
 
-  }
-
-
   return await db.chapters.get(id);
-
 }
 
 
@@ -814,44 +306,29 @@ export async function cacheLessons(list) {
       cached_at: now()
     }));
 
-
   if (rows.length > 0) {
 
     await db.lessons.bulkPut(rows);
-
   }
-
 }
 
 
 export async function cacheLesson(lesson) {
 
-  if (!lesson?.id) {
-
+  if (!lesson?.id)
     return;
 
-  }
-
-
   await db.lessons.put({
-
     ...lesson,
-
     cached_at: now()
-
   });
-
 }
 
 
 export async function getCachedLessons(chapterId) {
 
-  if (!chapterId) {
-
+  if (!chapterId)
     return [];
-
-  }
-
 
   const data =
     await db.lessons
@@ -859,26 +336,22 @@ export async function getCachedLessons(chapterId) {
       .equals(chapterId)
       .toArray();
 
-
-  data.sort(sortByOrder);
-
+  data.sort(
+    (a, b) =>
+      (Number(a.order_number) || 0) -
+      (Number(b.order_number) || 0)
+  );
 
   return data;
-
 }
 
 
 export async function getCachedLesson(id) {
 
-  if (!id) {
-
+  if (!id)
     return null;
 
-  }
-
-
   return await db.lessons.get(id);
-
 }
 
 
@@ -891,12 +364,8 @@ export async function updateLessonVideoPath(
   path
 ) {
 
-  if (!id) {
-
+  if (!id)
     return;
-
-  }
-
 
   await db.lessons.update(
     id,
@@ -905,18 +374,13 @@ export async function updateLessonVideoPath(
         path || null
     }
   );
-
 }
 
 
 export async function removeLessonLocal(id) {
 
-  if (!id) {
-
+  if (!id)
     return;
-
-  }
-
 
   await db.lessons.update(
     id,
@@ -925,12 +389,10 @@ export async function removeLessonLocal(id) {
     }
   );
 
-
   await db.downloads
     .where("lesson_id")
     .equals(id)
     .delete();
-
 }
 
 
@@ -946,13 +408,10 @@ export async function cacheLessonBlocks(list) {
       cached_at: now()
     }));
 
-
   if (rows.length > 0) {
 
     await db.lessonBlocks.bulkPut(rows);
-
   }
-
 }
 
 
@@ -960,12 +419,8 @@ export async function getCachedLessonBlocks(
   lessonId
 ) {
 
-  if (!lessonId) {
-
+  if (!lessonId)
     return [];
-
-  }
-
 
   const data =
     await db.lessonBlocks
@@ -973,12 +428,13 @@ export async function getCachedLessonBlocks(
       .equals(lessonId)
       .toArray();
 
-
-  data.sort(sortByOrder);
-
+  data.sort(
+    (a, b) =>
+      (Number(a.order_number) || 0) -
+      (Number(b.order_number) || 0)
+  );
 
   return data;
-
 }
 
 
@@ -994,13 +450,10 @@ export async function cacheExercises(list) {
       cached_at: now()
     }));
 
-
   if (rows.length > 0) {
 
     await db.exercises.bulkPut(rows);
-
   }
-
 }
 
 
@@ -1008,12 +461,8 @@ export async function getCachedExercises(
   lessonId
 ) {
 
-  if (!lessonId) {
-
+  if (!lessonId)
     return [];
-
-  }
-
 
   const data =
     await db.exercises
@@ -1021,12 +470,13 @@ export async function getCachedExercises(
       .equals(lessonId)
       .toArray();
 
-
-  data.sort(sortByOrder);
-
+  data.sort(
+    (a, b) =>
+      (Number(a.order_number) || 0) -
+      (Number(b.order_number) || 0)
+  );
 
   return data;
-
 }
 
 
@@ -1042,13 +492,10 @@ export async function cacheQuizzes(list) {
       cached_at: now()
     }));
 
-
   if (rows.length > 0) {
 
     await db.quizzes.bulkPut(rows);
-
   }
-
 }
 
 
@@ -1056,18 +503,16 @@ export async function getCachedQuizzes(
   lessonId
 ) {
 
-  if (!lessonId) {
-
+  if (!lessonId)
     return [];
 
-  }
+  const data =
+    await db.quizzes
+      .where("lesson_id")
+      .equals(lessonId)
+      .toArray();
 
-
-  return await db.quizzes
-    .where("lesson_id")
-    .equals(lessonId)
-    .toArray();
-
+  return data;
 }
 
 
@@ -1083,13 +528,10 @@ export async function cacheQuizQuestions(list) {
       cached_at: now()
     }));
 
-
   if (rows.length > 0) {
 
     await db.quizQuestions.bulkPut(rows);
-
   }
-
 }
 
 
@@ -1097,18 +539,13 @@ export async function getCachedQuizQuestions(
   quizId
 ) {
 
-  if (!quizId) {
-
+  if (!quizId)
     return [];
-
-  }
-
 
   return await db.quizQuestions
     .where("quiz_id")
     .equals(quizId)
     .sortBy("order_number");
-
 }
 
 
@@ -1124,42 +561,58 @@ export async function cacheBadges(list) {
       cached_at: now()
     }));
 
-
   if (rows.length > 0) {
 
     await db.badges.bulkPut(rows);
-
   }
-
 }
 
 
 export async function getCachedBadges() {
 
   return await db.badges.toArray();
-
 }
 
 
 // ======================================================
 // USER PROGRESS
 // ======================================================
+//
+// RÈGLES MÉTIER :
+//
+// 1. Le meilleur score est conservé.
+//
+// 2. Une fois completed=true,
+//    completed reste true.
+//
+// 3. Un score inférieur ne peut donc
+//    jamais faire régresser une leçon.
+//
+// Exemple :
+//
+//   85 → 50 → 70 → 95
+//
+// devient :
+//
+//   score     = 95
+//   completed = true
+//
+// ======================================================
 
 export async function saveProgress(progress) {
 
-  if (!progress?.user_id) {
-
+  if (!progress?.user_id)
     return null;
 
-  }
-
-
-  if (!progress?.lesson_id) {
-
+  if (!progress?.lesson_id)
     return null;
 
-  }
 
+  /*
+   * ====================================
+   * RECHERCHE DE LA PROGRESSION EXISTANTE
+   * ====================================
+   */
 
   const existing =
     await db.userProgress
@@ -1173,58 +626,180 @@ export async function saveProgress(progress) {
       .first();
 
 
+  /*
+   * ====================================
+   * MEILLEUR SCORE
+   * ====================================
+   */
+
+  const existingScore =
+    Math.max(
+      0,
+      Number(existing?.score) || 0
+    );
+
+  const incomingScore =
+    Math.max(
+      0,
+      Number(progress.score) || 0
+    );
+
+  const bestScore =
+    Math.max(
+      existingScore,
+      incomingScore
+    );
+
+
+  /*
+   * ====================================
+   * ÉTAT TERMINÉ
+   * ====================================
+   */
+
+  const completed =
+    existing?.completed === true ||
+    progress.completed === true ||
+    bestScore >= 80;
+
+
+  /*
+   * ====================================
+   * DATE DE TERMINAISON
+   * ====================================
+   */
+
+  let completedAt = null;
+
+  if (completed) {
+
+    completedAt =
+      existing?.completed_at ||
+      progress.completed_at ||
+      now();
+  }
+
+
+  /*
+   * ====================================
+   * ENREGISTREMENT FINAL
+   * ====================================
+   */
+
   const record = {
 
     ...(existing || {}),
 
     ...progress,
 
-    synced: false,
+    score:
+      bestScore,
 
-    updated_at: now()
+    completed,
 
+    completed_at:
+      completedAt,
+
+    synced:
+      false,
+
+    updated_at:
+      now()
   };
 
+
+  /*
+   * On conserve toujours l'identifiant
+   * local existant.
+   */
 
   if (existing?.id) {
 
     record.id =
       existing.id;
-
   }
 
 
-  return await db.userProgress.put(
-    record
+  const savedId =
+    await db.userProgress.put(
+      record
+    );
+
+
+  console.log(
+    "💾 Progression locale enregistrée :",
+    {
+      userId:
+        progress.user_id,
+
+      lessonId:
+        progress.lesson_id,
+
+      score:
+        bestScore,
+
+      completed
+    }
   );
 
+
+  return savedId;
 }
 
+
+// ======================================================
+// PROGRESSIONS NON SYNCHRONISÉES
+// ======================================================
 
 export async function getUnsyncedProgress() {
 
-  return await db.userProgress
-    .filter(
-      item =>
-        item.synced === false ||
-        item.synced === 0 ||
-        item.synced === undefined
-    )
-    .toArray();
+  const [
+    unsyncedFalse,
+    unsyncedZero,
+    unsyncedUndefined
+  ] = await Promise.all([
+
+    db.userProgress
+      .where("synced")
+      .equals(false)
+      .toArray(),
+
+    db.userProgress
+      .where("synced")
+      .equals(0)
+      .toArray(),
+
+    db.userProgress
+      .filter(
+        item =>
+          item.synced === undefined
+      )
+      .toArray()
+
+  ]);
+
+
+  return [
+    ...unsyncedFalse,
+    ...unsyncedZero,
+    ...unsyncedUndefined
+  ];
 
 }
 
+
+// ======================================================
+// MARQUER UNE PROGRESSION SYNCHRONISÉE
+// ======================================================
 
 export async function markProgressSynced(id) {
 
   if (
     id === undefined ||
     id === null
-  ) {
+  )
 
     return;
-
-  }
 
 
   await db.userProgress.update(
@@ -1233,20 +808,20 @@ export async function markProgressSynced(id) {
       synced: true
     }
   );
-
 }
 
+
+// ======================================================
+// RÉCUPÉRER UNE PROGRESSION
+// ======================================================
 
 export async function getCachedProgress(
   userId,
   lessonId
 ) {
 
-  if (!userId || !lessonId) {
-
+  if (!userId || !lessonId)
     return null;
-
-  }
 
 
   return await db.userProgress
@@ -1258,7 +833,6 @@ export async function getCachedProgress(
         String(lessonId)
     )
     .first();
-
 }
 
 
@@ -1270,48 +844,67 @@ export async function saveQuizAttempt(
   attempt
 ) {
 
-  if (!attempt?.user_id) {
-
+  if (!attempt?.user_id)
     return null;
 
-  }
-
-
-  if (!attempt?.quiz_id) {
-
+  if (!attempt?.quiz_id)
     return null;
-
-  }
 
 
   return await db.quizAttempts.add({
 
     ...attempt,
 
-    synced: false,
+    synced:
+      false,
 
     completed_at:
       attempt.completed_at ||
       now()
-
   });
-
 }
 
 
 export async function getUnsyncedQuizAttempts() {
 
-  return await db.quizAttempts
-    .filter(
-      item =>
-        item.synced === false ||
-        item.synced === 0 ||
-        item.synced === undefined
-    )
-    .toArray();
+  const [
+    unsyncedFalse,
+    unsyncedZero,
+    unsyncedUndefined
+  ] = await Promise.all([
+
+    db.quizAttempts
+      .where("synced")
+      .equals(false)
+      .toArray(),
+
+    db.quizAttempts
+      .where("synced")
+      .equals(0)
+      .toArray(),
+
+    db.quizAttempts
+      .filter(
+        item =>
+          item.synced === undefined
+      )
+      .toArray()
+
+  ]);
+
+
+  return [
+    ...unsyncedFalse,
+    ...unsyncedZero,
+    ...unsyncedUndefined
+  ];
 
 }
 
+
+// ======================================================
+// MARQUER UNE TENTATIVE SYNCHRONISÉE
+// ======================================================
 
 export async function markQuizAttemptSynced(
   id
@@ -1320,11 +913,9 @@ export async function markQuizAttemptSynced(
   if (
     id === undefined ||
     id === null
-  ) {
+  )
 
     return;
-
-  }
 
 
   await db.quizAttempts.update(
@@ -1333,21 +924,33 @@ export async function markQuizAttemptSynced(
       synced: true
     }
   );
-
 }
 
 
 // ======================================================
 // SYNC QUEUE
 // ======================================================
+//
+// Une seule opération active par :
+//
+//   table_name
+//   action
+//   local_record_id
+//
+// IMPORTANT :
+// Si une opération existe déjà,
+// on met maintenant son payload à jour.
+//
+// Cela évite qu'une ancienne valeur,
+// par exemple score=50, reste dans la queue
+// alors qu'une nouvelle valeur score=95
+// vient d'être enregistrée.
+//
 
 export async function addToSyncQueue(item) {
 
-  if (!item) {
-
+  if (!item)
     return null;
-
-  }
 
 
   if (
@@ -1357,23 +960,64 @@ export async function addToSyncQueue(item) {
 
     const existing =
       await db.syncQueue
+
         .where("table_name")
         .equals(item.table_name)
+
         .filter(
           row =>
             row.action === item.action &&
             String(row.local_record_id) ===
             String(item.local_record_id)
         )
+
         .first();
 
 
     if (existing) {
 
+      /*
+       * On met à jour l'opération existante
+       * au lieu de simplement retourner son id.
+       *
+       * Cela permet de conserver la dernière
+       * progression locale disponible.
+       */
+
+      await db.syncQueue.update(
+        existing.id,
+        {
+
+          ...item,
+
+          id:
+            existing.id,
+
+          created_at:
+            existing.created_at ||
+            item.created_at ||
+            now()
+        }
+      );
+
+
+      console.log(
+        "🔄 Opération de synchronisation mise à jour :",
+        {
+          table:
+            item.table_name,
+
+          action:
+            item.action,
+
+          localRecordId:
+            item.local_record_id
+        }
+      );
+
+
       return existing.id;
-
     }
-
   }
 
 
@@ -1382,36 +1026,39 @@ export async function addToSyncQueue(item) {
     ...item,
 
     created_at:
-      item.created_at || now()
-
+      item.created_at ||
+      now()
   });
-
 }
 
+
+// ======================================================
+// RÉCUPÉRER LA QUEUE
+// ======================================================
 
 export async function getSyncQueue() {
 
   return await db.syncQueue
     .orderBy("created_at")
     .toArray();
-
 }
 
+
+// ======================================================
+// SUPPRIMER UNE OPÉRATION DE LA QUEUE
+// ======================================================
 
 export async function removeFromSyncQueue(id) {
 
   if (
     id === undefined ||
     id === null
-  ) {
+  )
 
     return;
 
-  }
-
 
   await db.syncQueue.delete(id);
-
 }
 
 
@@ -1504,7 +1151,6 @@ export async function debugOffline() {
     "SYNC QUEUE:",
     await db.syncQueue.toArray()
   );
-
 }
 
 
@@ -1512,96 +1158,13 @@ export async function debugOffline() {
 // GLOBAL DEBUG
 // ======================================================
 
-if (typeof window !== "undefined") {
+if (
+  typeof window !==
+  "undefined"
+) {
 
-  window.kalanDB = db;
-
-
-  /*
-   * Fonctions accessibles directement dans
-   * Chrome DevTools.
-   *
-   * Exemple :
-   *
-   * await window.kalanOffline.cacheSubjects(...)
-   *
-   * await window.kalanOffline.cleanupDuplicateSubjects()
-   */
-
-  window.kalanOffline = {
-
-    cacheClasses,
-
-    getCachedClasses,
-
-    cacheSubjects,
-
-    getCachedSubjects,
-
-    cleanupDuplicateSubjects,
-
-    cacheChapters,
-
-    getCachedChapters,
-
-    cacheChapter,
-
-    getCachedChapter,
-
-    cacheLessons,
-
-    cacheLesson,
-
-    getCachedLessons,
-
-    getCachedLesson,
-
-    cacheLessonBlocks,
-
-    getCachedLessonBlocks,
-
-    cacheExercises,
-
-    getCachedExercises,
-
-    cacheQuizzes,
-
-    getCachedQuizzes,
-
-    cacheQuizQuestions,
-
-    getCachedQuizQuestions,
-
-    cacheBadges,
-
-    getCachedBadges,
-
-    saveProgress,
-
-    getUnsyncedProgress,
-
-    markProgressSynced,
-
-    getCachedProgress,
-
-    saveQuizAttempt,
-
-    getUnsyncedQuizAttempts,
-
-    markQuizAttemptSynced,
-
-    addToSyncQueue,
-
-    getSyncQueue,
-
-    removeFromSyncQueue,
-
-    getStorageUsedMB,
-
-    debugOffline
-
-  };
-
+  window.kalanDB =
+    db;
 }
 
 
@@ -1609,7 +1172,10 @@ if (typeof window !== "undefined") {
 // RESET OFFLINE DATABASE
 // ======================================================
 
-if (typeof window !== "undefined") {
+if (
+  typeof window !==
+  "undefined"
+) {
 
   window.resetKalanOffline =
     async function () {
@@ -1639,9 +1205,6 @@ if (typeof window !== "undefined") {
           "❌ Impossible de supprimer le cache :",
           error
         );
-
       }
-
     };
-
 }

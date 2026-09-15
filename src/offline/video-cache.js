@@ -2,14 +2,41 @@
 
 import {
   db,
-  getStorageUsedMB,
   updateLessonVideoPath,
   removeLessonLocal
 } from "./db.js";
 
 
-// Taille maximale offline (MB)
+// Taille maximale des vidéos offline (MB)
 const MAX_STORAGE_MB = 500;
+
+
+
+// =====================================
+// CALCUL STOCKAGE VIDÉOS
+// =====================================
+
+async function getDownloadedVideoStorage() {
+
+  const videos =
+    await db.downloads.toArray();
+
+
+  let total = 0;
+
+
+  for (const video of videos) {
+
+    total += Number(video?.size_mb) || 0;
+
+  }
+
+
+  return Number(
+    total.toFixed(2)
+  );
+
+}
 
 
 
@@ -17,11 +44,13 @@ const MAX_STORAGE_MB = 500;
 // VERIFICATION ESPACE
 // =====================================
 
-async function checkStorage(){
+async function checkStorage() {
 
-  const used = await getStorageUsedMB();
+  const used =
+    await getDownloadedVideoStorage();
 
-  if(used >= MAX_STORAGE_MB){
+
+  if (used >= MAX_STORAGE_MB) {
 
     throw new Error(
       "Stockage offline plein. Supprimez des vidéos téléchargées."
@@ -40,17 +69,18 @@ async function checkStorage(){
 export async function cacheVideo(
   lessonId,
   videoUrl
-){
+) {
 
   try {
 
     await checkStorage();
 
 
-    const response = await fetch(videoUrl);
+    const response =
+      await fetch(videoUrl);
 
 
-    if(!response.ok){
+    if (!response.ok) {
 
       throw new Error(
         "Impossible de télécharger la vidéo"
@@ -59,15 +89,18 @@ export async function cacheVideo(
     }
 
 
-    const blob = await response.blob();
+    const blob =
+      await response.blob();
 
 
     const videoPath =
       `video_${lessonId}`;
 
 
+    // =================================
+    // STOCKAGE INDEXEDDB
+    // =================================
 
-    // Stockage IndexedDB
     await db.downloads.put({
 
       lesson_id: lessonId,
@@ -91,25 +124,22 @@ export async function cacheVideo(
     });
 
 
-
     await updateLessonVideoPath(
       lessonId,
       videoPath
     );
 
 
-
     return {
 
-      success:true,
+      success: true,
 
-      path:videoPath
+      path: videoPath
 
     };
 
 
-  } catch(error){
-
+  } catch (error) {
 
     console.error(
       "Erreur cache vidéo:",
@@ -119,12 +149,11 @@ export async function cacheVideo(
 
     return {
 
-      success:false,
+      success: false,
 
-      error:error.message
+      error: error.message
 
     };
-
 
   }
 
@@ -138,7 +167,7 @@ export async function cacheVideo(
 
 export async function getCachedVideo(
   lessonId
-){
+) {
 
   const download =
     await db.downloads
@@ -147,13 +176,14 @@ export async function getCachedVideo(
       .first();
 
 
-
-  if(!download || !download.blob){
+  if (
+    !download ||
+    !download.blob
+  ) {
 
     return null;
 
   }
-
 
 
   return URL.createObjectURL(
@@ -170,12 +200,11 @@ export async function getCachedVideo(
 
 export async function deleteCachedVideo(
   lessonId
-){
+) {
 
   await removeLessonLocal(
     lessonId
   );
-
 
 }
 
@@ -185,7 +214,7 @@ export async function deleteCachedVideo(
 // LISTE VIDEOS TELECHARGEES
 // =====================================
 
-export async function getCachedVideos(){
+export async function getCachedVideos() {
 
   return await db.downloads.toArray();
 
@@ -197,24 +226,8 @@ export async function getCachedVideos(){
 // TAILLE UTILISEE
 // =====================================
 
-export async function getVideoStorage(){
+export async function getVideoStorage() {
 
-  const videos =
-    await db.downloads.toArray();
-
-
-  let total = 0;
-
-
-  videos.forEach(v=>{
-
-    total += v.size_mb || 0;
-
-  });
-
-
-  return Number(
-    total.toFixed(2)
-  );
+  return await getDownloadedVideoStorage();
 
 }

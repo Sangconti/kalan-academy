@@ -1,6 +1,10 @@
 // src/pages/DownloadsPage.jsx
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import {
   useNavigate,
@@ -11,7 +15,7 @@ import {
 import {
   getCachedVideos,
   getVideoStorage,
-  deleteCachedVideo
+  deleteCachedVideo,
 } from "../offline/video-cache";
 
 import {
@@ -20,7 +24,7 @@ import {
   HardDrive,
   Download,
   Video,
-  Home
+  Home,
 } from "lucide-react";
 
 
@@ -57,44 +61,113 @@ export default function DownloadsPage({
 
 
   // ==========================================
-  // CHARGEMENT
+  // PROTECTION CONTRE LES DOUBLES CHARGEMENTS
   // ==========================================
 
+  const mountedRef = useRef(true);
+  const loadingRequestRef = useRef(null);
+
+
   useEffect(() => {
+
+    mountedRef.current = true;
+
     loadDownloads();
+
+    return () => {
+      mountedRef.current = false;
+    };
+
   }, []);
 
 
+  // ==========================================
+  // CHARGEMENT
+  // ==========================================
+
   async function loadDownloads() {
 
-    setLoading(true);
+    // Évite deux chargements simultanés.
+    if (loadingRequestRef.current) {
+      return loadingRequestRef.current;
+    }
+
+
+    const request = (async () => {
+
+      if (mountedRef.current) {
+        setLoading(true);
+      }
+
+
+      try {
+
+        /*
+         * Les deux lectures Dexie sont lancées
+         * en parallèle.
+         *
+         * Cela évite d'attendre la fin de la première
+         * lecture avant de commencer la seconde.
+         */
+        const [
+          downloaded,
+          used,
+        ] = await Promise.all([
+          getCachedVideos(),
+          getVideoStorage(),
+        ]);
+
+
+        if (!mountedRef.current) {
+          return;
+        }
+
+
+        setVideos(downloaded || []);
+        setStorage(used || 0);
+
+      } catch (err) {
+
+        console.error(
+          "Erreur chargement téléchargements :",
+          err
+        );
+
+
+        if (!mountedRef.current) {
+          return;
+        }
+
+
+        setVideos([]);
+        setStorage(0);
+
+      } finally {
+
+        if (mountedRef.current) {
+          setLoading(false);
+        }
+
+      }
+
+    })();
+
+
+    loadingRequestRef.current = request;
+
 
     try {
-
-      const downloaded =
-        await getCachedVideos();
-
-      const used =
-        await getVideoStorage();
-
-      setVideos(downloaded || []);
-      setStorage(used || 0);
-
-    } catch (err) {
-
-      console.error(
-        "Erreur chargement téléchargements :",
-        err
-      );
-
-      setVideos([]);
-      setStorage(0);
-
+      await request;
     } finally {
 
-      setLoading(false);
+      if (loadingRequestRef.current === request) {
+        loadingRequestRef.current = null;
+      }
 
     }
+
+
+    return request;
 
   }
 
@@ -132,6 +205,7 @@ export default function DownloadsPage({
     try {
 
       await deleteCachedVideo(lessonId);
+
       await loadDownloads();
 
     } catch (error) {
@@ -428,8 +502,7 @@ export default function DownloadsPage({
               rounded-full
               bg-accent
               opacity-10
-              "
-            />
+            " />
 
             <div className="
               absolute
@@ -440,8 +513,7 @@ export default function DownloadsPage({
               rounded-full
               bg-accent
               opacity-5
-              "
-            />
+            " />
 
           </div>
 

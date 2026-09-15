@@ -1214,108 +1214,6 @@ export default function ExerciseQuiz({
     >
 
       {/* ====================================
-          EN-TÊTE
-      ==================================== */}
-
-      <div
-        className="
-          theme-surface
-          rounded-3xl
-          border
-          theme-border
-          shadow-sm
-          p-5
-          md:p-6
-        "
-      >
-
-        <div
-          className="
-            flex
-            items-start
-            gap-4
-          "
-        >
-
-          <div
-            className="
-              w-12
-              h-12
-              shrink-0
-              rounded-2xl
-              bg-accent-soft
-              text-accent
-              flex
-              items-center
-              justify-center
-            "
-          >
-
-            <Trophy
-              size={24}
-            />
-
-          </div>
-
-
-          <div>
-
-            <p
-              className="
-                text-sm
-                font-semibold
-                text-accent
-                mb-1
-              "
-            >
-
-              {isStudentPreview
-                ? "Quiz aperçu"
-                : consultationMode
-                  ? "Quiz en consultation"
-                  : "Quiz de validation"}
-
-            </p>
-
-
-            <h2
-              className="
-                text-2xl
-                font-bold
-                theme-text
-              "
-            >
-
-              {isStudentPreview
-                ? "Aperçu du quiz"
-                : consultationMode
-                  ? "Consulte les connaissances de l'élève"
-                  : "Vérifie tes connaissances"}
-
-            </h2>
-
-
-            <p
-              className="
-                theme-text-secondary
-                mt-1
-              "
-            >
-
-              {isStudentPreview
-                ? "Réponds aux questions pour visualiser le résultat. Aucune donnée élève ne sera modifiée."
-                : "Choisis une réponse pour chaque question."}
-
-            </p>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      {/* ====================================
           PROGRESSION
       ==================================== */}
 
@@ -1453,6 +1351,8 @@ export default function ExerciseQuiz({
                     font-semibold
                     theme-text
                     leading-6
+                    min-w-0
+                    break-words
                   "
                 >
 
@@ -1570,6 +1470,8 @@ export default function ExerciseQuiz({
                         <span
                           className="
                             flex-1
+                            min-w-0
+                            break-words
                           "
                         >
 
@@ -1584,6 +1486,7 @@ export default function ExerciseQuiz({
                             size={18}
                             className="
                               text-accent
+                              shrink-0
                             "
                           />
 

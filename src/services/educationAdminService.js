@@ -1,77 +1,59 @@
 import { supabase } from "../lib/supabase";
 
-
 // =====================================
 // CLASSES
 // =====================================
 
-export async function getAdminClasses(){
-
-  const {data,error}=await supabase
+export async function getAdminClasses() {
+  const { data, error } = await supabase
     .from("classes")
     .select("*")
     .order("order_number");
 
-  if(error) throw error;
+  if (error) throw error;
 
   return data || [];
-
 }
 
-
-
-export async function createClass(classData){
-
-  const {data,error}=await supabase
+export async function createClass(classData) {
+  const { data, error } = await supabase
     .from("classes")
     .insert(classData)
     .select()
     .single();
 
-  if(error) throw error;
+  if (error) throw error;
 
   return data;
-
 }
 
-
-
-export async function updateClass(id,updates){
-
-  const {data,error}=await supabase
+export async function updateClass(id, updates) {
+  const { data, error } = await supabase
     .from("classes")
     .update(updates)
-    .eq("id",id)
+    .eq("id", id)
     .select()
     .single();
 
-  if(error) throw error;
+  if (error) throw error;
 
   return data;
-
 }
 
-
-
-export async function deleteClass(id){
-
-  const {error}=await supabase
+export async function deleteClass(id) {
+  const { error } = await supabase
     .from("classes")
     .delete()
-    .eq("id",id);
+    .eq("id", id);
 
-  if(error) throw error;
+  if (error) throw error;
 
   return true;
-
 }
-
-
 
 // =====================================
 // SUBJECTS
 // =====================================
-
 
 export async function getAllSubjects() {
   const { data, error } = await supabase
@@ -90,260 +72,166 @@ export async function getAllSubjects() {
   return data || [];
 }
 
-
-
-
-export async function getSubjectsByClass(classId){
-
-  const {data,error}=await supabase
+export async function getSubjectsByClass(classId) {
+  const { data, error } = await supabase
     .from("subjects")
     .select("*")
-    .eq("class_id",classId)
+    .eq("class_id", classId)
     .order("order_number");
 
-
-  if(error) throw error;
+  if (error) throw error;
 
   return data || [];
-
 }
 
-
-
-
-export async function createSubject(subject){
-
-  const {data,error}=await supabase
+export async function createSubject(subject) {
+  const { data, error } = await supabase
     .from("subjects")
     .insert(subject)
     .select()
     .single();
 
-
-  if(error) throw error;
+  if (error) throw error;
 
   return data;
-
 }
 
-
-
-
-export async function updateSubject(id,updates){
-
- const {data,error}=await supabase
+export async function updateSubject(id, updates) {
+  const { data, error } = await supabase
     .from("subjects")
     .update(updates)
-    .eq("id",id)
+    .eq("id", id)
     .select()
     .single();
 
+  if (error) throw error;
 
- if(error) throw error;
-
- return data;
-
+  return data;
 }
 
-
-
-
-export async function deleteSubject(id){
-
- const {error}=await supabase
+export async function deleteSubject(id) {
+  const { error } = await supabase
     .from("subjects")
     .delete()
-    .eq("id",id);
+    .eq("id", id);
 
+  if (error) throw error;
 
- if(error) throw error;
-
- return true;
-
+  return true;
 }
 
+// =====================================
+// CHAPTERS
+// =====================================
 
-
- // recherche chapitre existant
-
-export async function getChapters(subjectId){
-
- const {data,error}=await supabase
+// Recherche chapitres existants
+export async function getChapters(subjectId) {
+  const { data, error } = await supabase
     .from("chapters")
     .select("*")
-    .eq(
-      "subject_id",
-      subjectId
-    )
-    .order(
-      "order_number",
-      {
-        ascending:true
-      }
-    );
+    .eq("subject_id", subjectId)
+    .order("order_number", {
+      ascending: true
+    });
 
+  if (error) throw error;
 
- if(error) throw error;
-
- return data || [];
-
+  return data || [];
 }
 
-
-
-
-export async function createChapter(chapter){
-
- const {data,error}=await supabase
+export async function createChapter(chapter) {
+  const { data, error } = await supabase
     .from("chapters")
     .insert(chapter)
     .select()
     .single();
 
+  if (error) throw error;
 
- if(error) throw error;
-
- return data;
-
+  return data;
 }
 
-
-
-
-export async function updateChapter(id,updates){
-
- const {data,error}=await supabase
+export async function updateChapter(id, updates) {
+  const { data, error } = await supabase
     .from("chapters")
     .update(updates)
-    .eq("id",id)
+    .eq("id", id)
     .select()
     .single();
 
+  if (error) throw error;
 
- if(error) throw error;
-
- return data;
-
+  return data;
 }
-
-
-
 
 // =====================================
 // DELETE CHAPTER CASCADE V2
 // =====================================
 
-export async function deleteChapter(id){
-
-
+export async function deleteChapter(id) {
   // 1) Récupérer toutes les leçons du chapitre
-
-  const {data:lessons,error:lessonFetchError}=await supabase
-
+  const {
+    data: lessons,
+    error: lessonFetchError
+  } = await supabase
     .from("lessons")
-
     .select("id")
+    .eq("chapter_id", id);
 
-    .eq(
-      "chapter_id",
-      id
-    );
-
-
-
-  if(lessonFetchError)
+  if (lessonFetchError) {
     throw lessonFetchError;
-
-
-
-  // 2) Supprimer chaque leçon proprement
-
-  if(lessons?.length){
-
-
-    for(const lesson of lessons){
-
-
-      await deleteLesson(
-        lesson.id
-      );
-
-
-    }
-
-
   }
 
-
+  // 2) Supprimer chaque leçon proprement
+  if (lessons?.length) {
+    for (const lesson of lessons) {
+      await deleteLesson(lesson.id);
+    }
+  }
 
   // 3) Supprimer le chapitre
-
-  const {error:chapterError}=await supabase
-
+  const { error: chapterError } = await supabase
     .from("chapters")
-
     .delete()
+    .eq("id", id);
 
-    .eq(
-      "id",
-      id
-    );
-
-
-
-  if(chapterError)
+  if (chapterError) {
     throw chapterError;
-
-
+  }
 
   return true;
-
-
 }
-
 
 // =====================================
 // LESSONS
 // =====================================
 
-
-export async function getLessons(chapterId){
-
- const {data,error}=await supabase
+export async function getLessons(chapterId) {
+  const { data, error } = await supabase
     .from("lessons")
     .select("*")
-    .eq(
-      "chapter_id",
-      chapterId
-    )
-    .order(
-      "order_number",
-      {
-        ascending:true
-      }
-    );
+    .eq("chapter_id", chapterId)
+    .order("order_number", {
+      ascending: true
+    });
 
+  if (error) throw error;
 
- if(error) throw error;
-
- return data || [];
-
+  return data || [];
 }
 
+export async function createLesson(lesson) {
+  const lessonOrder =
+    lesson.lesson_order ??
+    lesson.order_number ??
+    1;
 
-
-
-
-export async function createLesson(lesson){
-
-
- const {data,error}=await supabase
+  const { data, error } = await supabase
     .from("lessons")
     .insert({
+      chapter_id: lesson.chapter_id,
 
-      chapter_id:lesson.chapter_id,
-
-      title:lesson.title,
+      title: lesson.title,
 
       description:
         lesson.description ?? null,
@@ -351,51 +239,39 @@ export async function createLesson(lesson){
       duration_minutes:
         lesson.duration_minutes ?? 10,
 
-
       difficulty:
         lesson.difficulty ?? "easy",
-
 
       video_url:
         lesson.video_url ?? null,
 
-
       thumbnail_url:
         lesson.thumbnail_url ?? null,
-
 
       is_premium:
         lesson.is_premium ?? false,
 
-
       order_number:
-        lesson.order_number ?? 1
-
+        lessonOrder
     })
     .select()
     .single();
 
+  if (error) throw error;
 
-
- if(error) throw error;
-
-
- return data;
-
-
+  return data;
 }
 
+export async function updateLesson(id, lesson) {
+  const lessonOrder =
+    lesson.lesson_order ??
+    lesson.order_number ??
+    1;
 
-
-
-export async function updateLesson(id,lesson){
-
-
- const {data,error}=await supabase
+  const { data, error } = await supabase
     .from("lessons")
     .update({
-
-      title:lesson.title,
+      title: lesson.title,
 
       description:
         lesson.description ?? null,
@@ -416,92 +292,53 @@ export async function updateLesson(id,lesson){
         lesson.is_premium ?? false,
 
       order_number:
-        lesson.order_number
-
+        lessonOrder
     })
-    .eq("id",id)
+    .eq("id", id)
     .select()
     .single();
 
+  if (error) throw error;
 
-
- if(error) throw error;
-
-
- return data;
-
-
+  return data;
 }
 
+export async function deleteLesson(id) {
+  // Supprimer blocks
+  await supabase
+    .from("lesson_blocks")
+    .delete()
+    .eq("lesson_id", id);
 
+  // Récupérer quizzes
+  const { data: quizzes } = await supabase
+    .from("quizzes")
+    .select("id")
+    .eq("lesson_id", id);
 
+  if (quizzes?.length) {
+    await supabase
+      .from("quiz_questions")
+      .delete()
+      .in(
+        "quiz_id",
+        quizzes.map((q) => q.id)
+      );
 
+    await supabase
+      .from("quizzes")
+      .delete()
+      .eq("lesson_id", id);
+  }
 
-export async function deleteLesson(id){
+  const { error } = await supabase
+    .from("lessons")
+    .delete()
+    .eq("id", id);
 
+  if (error) throw error;
 
- // supprimer blocks
-
- await supabase
- .from("lesson_blocks")
- .delete()
- .eq(
-   "lesson_id",
-   id
- );
-
-
-
- // récupérer quizzes
-
- const {data:quizzes}=await supabase
- .from("quizzes")
- .select("id")
- .eq(
-   "lesson_id",
-   id
- );
-
-
-
- if(quizzes?.length){
-
-
-   await supabase
-   .from("quiz_questions")
-   .delete()
-   .in(
-     "quiz_id",
-     quizzes.map(q=>q.id)
-   );
-
-
-   await supabase
-   .from("quizzes")
-   .delete()
-   .eq(
-     "lesson_id",
-     id
-   );
-
- }
-
-
-
- const {error}=await supabase
- .from("lessons")
- .delete()
- .eq(
-   "id",
-   id
- );
-
-
- if(error) throw error;
-
-
- return true;
-
+  return true;
 }
 
 // =====================================
@@ -521,7 +358,6 @@ export async function getLessonBlocks(lessonId) {
 
   return data || [];
 }
-
 
 // =====================================
 // CREER UN BLOC
@@ -555,7 +391,6 @@ export async function createLessonBlock(block) {
 
   return data;
 }
-
 
 // =====================================
 // MODIFIER UN BLOC
@@ -592,7 +427,6 @@ export async function updateLessonBlock(
   return data;
 }
 
-
 // =====================================
 // SUPPRIMER UN BLOC
 // =====================================
@@ -628,7 +462,6 @@ export async function getLessonQuiz(lessonId) {
   return data || null;
 }
 
-
 // =====================================
 // CREER UN QUIZ
 // =====================================
@@ -647,7 +480,6 @@ export async function createQuiz(quiz) {
 
   return data;
 }
-
 
 // =====================================
 // MODIFIER UN QUIZ
@@ -668,7 +500,6 @@ export async function updateQuiz(id, updates) {
 
   return data;
 }
-
 
 // =====================================
 // SUPPRIMER UN QUIZ
@@ -698,7 +529,6 @@ export async function deleteQuiz(id) {
   return true;
 }
 
-
 // =====================================
 // QUESTIONS
 // =====================================
@@ -722,7 +552,6 @@ export async function getQuizQuestions(
 
   return data || [];
 }
-
 
 // =====================================
 // CREER UNE QUESTION
@@ -766,7 +595,6 @@ export async function createQuizQuestion(
   return data;
 }
 
-
 // =====================================
 // MODIFIER UNE QUESTION
 // =====================================
@@ -809,7 +637,6 @@ export async function updateQuizQuestion(
   return data;
 }
 
-
 // =====================================
 // SUPPRIMER UNE QUESTION
 // =====================================
@@ -833,12 +660,16 @@ export async function deleteQuizQuestion(
 // Compatible avec :
 // - anciens JSON sans block.title
 // - nouveaux JSON avec block.title
+// - lesson_order (format canonique)
+// - order_number (compatibilité anciens JSON)
 // - migration des blocs existants
 // - anti-duplication
 // - quiz/questions
 // =====================================
 
-export async function importAdminLessonPack(jsonData) {
+export async function importAdminLessonPack(
+  jsonData
+) {
   let result = {
     created: {
       chapters: 0,
@@ -857,7 +688,8 @@ export async function importAdminLessonPack(jsonData) {
     },
 
     updated: {
-      blocks: 0
+      blocks: 0,
+      lessons: 0
     }
   };
 
@@ -869,19 +701,27 @@ export async function importAdminLessonPack(jsonData) {
   // =====================================
 
   if (!jsonData) {
-    throw new Error("Aucune donnée JSON reçue.");
+    throw new Error(
+      "Aucune donnée JSON reçue."
+    );
   }
 
   if (!jsonData.class) {
-    throw new Error("Le champ 'class' est obligatoire.");
+    throw new Error(
+      "Le champ 'class' est obligatoire."
+    );
   }
 
   if (!jsonData.subject) {
-    throw new Error("Le champ 'subject' est obligatoire.");
+    throw new Error(
+      "Le champ 'subject' est obligatoire."
+    );
   }
 
   if (!jsonData.chapter) {
-    throw new Error("Le champ 'chapter' est obligatoire.");
+    throw new Error(
+      "Le champ 'chapter' est obligatoire."
+    );
   }
 
   // =====================================
@@ -903,7 +743,8 @@ export async function importAdminLessonPack(jsonData) {
 
   if (!classData) {
     throw new Error(
-      "Classe introuvable : " + jsonData.class
+      "Classe introuvable : " +
+      jsonData.class
     );
   }
 
@@ -927,12 +768,12 @@ export async function importAdminLessonPack(jsonData) {
 
   if (!existingSubject) {
     throw new Error(
-      "Matière introuvable : " + jsonData.subject
+      "Matière introuvable : " +
+      jsonData.subject
     );
   }
 
   subject = existingSubject;
-
 
   // =====================================
   // CHAPITRE
@@ -989,8 +830,35 @@ export async function importAdminLessonPack(jsonData) {
   // LESSONS
   // =====================================
 
-  for (const lesson of jsonData.lessons ?? []) {
+  for (
+    let lessonIndex = 0;
+    lessonIndex < (jsonData.lessons ?? []).length;
+    lessonIndex++
+  ) {
+    const lesson =
+      jsonData.lessons[lessonIndex];
+
     let newLesson = null;
+
+    // =====================================
+    // ORDRE DE LA LEÇON
+    // =====================================
+    // Format canonique :
+    // lesson_order
+    //
+    // Compatibilité :
+    // order_number
+    //
+    // Dernier secours :
+    // position dans le tableau + 1
+    // =====================================
+
+    const lessonOrder =
+      Number(
+        lesson.lesson_order ??
+        lesson.order_number ??
+        lessonIndex + 1
+      ) || lessonIndex + 1;
 
     // =====================================
     // RECHERCHE LEÇON EXISTANTE
@@ -1015,9 +883,41 @@ export async function importAdminLessonPack(jsonData) {
     // =====================================
 
     if (oldLesson) {
-      result.skipped.lessons++;
-
       newLesson = oldLesson;
+
+      // -------------------------------------
+      // CORRECTION DE L'ORDRE
+      // -------------------------------------
+      // Si la leçon existe déjà mais possède
+      // un mauvais order_number, on le corrige.
+      // -------------------------------------
+
+      if (
+        Number(oldLesson.order_number) !==
+        lessonOrder
+      ) {
+        const {
+          data: updatedLesson,
+          error: updateLessonError
+        } = await supabase
+          .from("lessons")
+          .update({
+            order_number: lessonOrder
+          })
+          .eq("id", oldLesson.id)
+          .select()
+          .single();
+
+        if (updateLessonError) {
+          throw updateLessonError;
+        }
+
+        newLesson = updatedLesson;
+
+        result.updated.lessons++;
+      } else {
+        result.skipped.lessons++;
+      }
     }
 
     // =====================================
@@ -1055,7 +955,7 @@ export async function importAdminLessonPack(jsonData) {
             lesson.is_premium ?? false,
 
           order_number:
-            lesson.order_number ?? 1
+            lessonOrder
         })
         .select()
         .single();
@@ -1100,7 +1000,8 @@ export async function importAdminLessonPack(jsonData) {
       blockIndex < lessonBlocks.length;
       blockIndex++
     ) {
-      const block = lessonBlocks[blockIndex];
+      const block =
+        lessonBlocks[blockIndex];
 
       // -------------------------------------
       // ORDRE DU BLOC
@@ -1161,11 +1062,14 @@ export async function importAdminLessonPack(jsonData) {
         const blocksWithSameOrder =
           existingBlocks?.filter(
             (existing) =>
-              Number(existing.order_number) ===
-              Number(blockOrder)
+              Number(
+                existing.order_number
+              ) === Number(blockOrder)
           ) ?? [];
 
-        if (blocksWithSameOrder.length === 1) {
+        if (
+          blocksWithSameOrder.length === 1
+        ) {
           existingBlock =
             blocksWithSameOrder[0];
         }
@@ -1197,8 +1101,9 @@ export async function importAdminLessonPack(jsonData) {
             blockContent ||
           (existingBlock.block_type ?? "text") !==
             blockType ||
-          Number(existingBlock.order_number ?? 1) !==
-            Number(blockOrder);
+          Number(
+            existingBlock.order_number ?? 1
+          ) !== Number(blockOrder);
 
         if (needsUpdate) {
           const {
@@ -1429,7 +1334,9 @@ export async function importAdminLessonPack(jsonData) {
 // CONTEXTE CHAPITRE
 // =====================================
 
-export async function getChapterContext(chapterId) {
+export async function getChapterContext(
+  chapterId
+) {
   const { data, error } = await supabase
     .from("chapters")
     .select(`

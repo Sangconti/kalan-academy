@@ -10,6 +10,10 @@ import {
 import { getClasses } from "../services/educationService";
 
 import {
+  getCachedClasses
+} from "../offline/db";
+
+import {
   GraduationCap,
   ArrowRight,
   BookOpen
@@ -95,45 +99,114 @@ export default function HomePage() {
 
     let mounted = true;
 
+
     async function loadClasses() {
+
+      // =================================================
+      // 1. CACHE DEXIE — PRIORITÉ
+      // =================================================
 
       try {
 
-        const data = await getClasses();
+        const cachedClasses =
+          await getCachedClasses();
 
-        if (!mounted) return;
 
-        setClasses(
-          Array.isArray(data)
-            ? data
-            : []
-        );
+        if (
+          !mounted
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          Array.isArray(cachedClasses) &&
+          cachedClasses.length > 0
+        ) {
+
+          setClasses(
+            cachedClasses
+          );
+
+          // ---------------------------------------------
+          // L'accueil peut maintenant être affiché
+          // immédiatement.
+          // ---------------------------------------------
+
+          setLoading(false);
+
+        }
 
       } catch (error) {
 
-        console.error(
-          "Erreur classes :",
+        console.warn(
+          "⚠️ Impossible de charger les classes depuis Dexie :",
           error
         );
 
-        if (!mounted) return;
+      }
 
-        setClasses([]);
+
+      // =================================================
+      // 2. ACTUALISATION EN ARRIÈRE-PLAN
+      // =================================================
+
+      try {
+
+        const freshClasses =
+          await getClasses();
+
+
+        if (
+          !mounted
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          Array.isArray(freshClasses)
+        ) {
+
+          setClasses(
+            freshClasses
+          );
+
+        }
+
+      } catch (error) {
+
+        console.warn(
+          "⚠️ Actualisation des classes impossible :",
+          error
+        );
 
       } finally {
 
-        if (mounted) {
+        if (
+          mounted
+        ) {
+
           setLoading(false);
+
         }
 
       }
 
     }
 
+
     loadClasses();
 
+
     return () => {
+
       mounted = false;
+
     };
 
   }, []);
@@ -142,6 +215,12 @@ export default function HomePage() {
   // =====================================================
   // LOADING
   // =====================================================
+
+  /*
+   * Ce loading n'est affiché que lorsque le cache Dexie
+   * ne contient aucune classe et que nous attendons encore
+   * la première récupération.
+   */
 
   if (loading) {
 

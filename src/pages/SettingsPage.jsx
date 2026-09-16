@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 
 import {
+  useLocation,
   useNavigate,
 } from "react-router-dom";
 
@@ -126,6 +127,8 @@ export default function SettingsPage() {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+
 
   const {
     isOnline,
@@ -165,6 +168,16 @@ export default function SettingsPage() {
 
 
   // ===================================================
+  // MODE APERÇU ADMIN
+  // ===================================================
+
+  const isStudentPreview =
+    location.pathname.startsWith(
+      "/admin/student-preview"
+    );
+
+
+  // ===================================================
   // TIMER MESSAGE
   // ===================================================
 
@@ -195,7 +208,20 @@ export default function SettingsPage() {
   // ===================================================
 
   function openProfile() {
+
+    if (isStudentPreview) {
+
+      navigate(
+        "/admin/student-preview/profile"
+      );
+
+      return;
+
+    }
+
+
     navigate("/profile");
+
   }
 
 
@@ -340,22 +366,6 @@ export default function SettingsPage() {
       setClearingCache(true);
 
       setMessage(null);
-
-
-      /*
-       * IMPORTANT :
-       *
-       * On supprime uniquement le cache
-       * pédagogique.
-       *
-       * Les données utilisateur sont conservées :
-       *
-       * - userProgress
-       * - quizAttempts
-       * - syncQueue
-       *
-       * Le cache XP est également conservé.
-       */
 
 
       await db.transaction(
@@ -523,16 +533,6 @@ export default function SettingsPage() {
       }
 
 
-      /*
-       * -----------------------------------------
-       * RÉINITIALISATION SERVEUR
-       * -----------------------------------------
-       *
-       * En ligne, le RPC effectue une réinitialisation
-       * atomique de la progression, des tentatives de
-       * quiz et de l'XP/niveau du profil.
-       */
-
       if (isOnline) {
 
         const {
@@ -579,10 +579,6 @@ export default function SettingsPage() {
 
         }
 
-
-        /*
-         * Vérification immédiate du profil serveur.
-         */
 
         const {
           data: profileData,
@@ -631,16 +627,6 @@ export default function SettingsPage() {
 
       }
 
-
-      /*
-       * -----------------------------------------
-       * SUPPRESSION PROGRESSION LOCALE
-       * -----------------------------------------
-       *
-       * Les trois opérations sont regroupées dans
-       * une transaction Dexie afin de limiter les
-       * opérations indépendantes sur IndexedDB.
-       */
 
       await db.transaction(
 
@@ -691,16 +677,6 @@ export default function SettingsPage() {
 
       );
 
-
-      /*
-       * -----------------------------------------
-       * SUPPRESSION DES CACHES XP + BADGES + DASHBOARD
-       * -----------------------------------------
-       *
-       * Le Dashboard utilise sessionStorage.
-       * Il doit être invalidé avant le reload afin
-       * qu'il ne réaffiche pas les anciennes valeurs.
-       */
 
       try {
 
@@ -819,10 +795,6 @@ export default function SettingsPage() {
       "
     >
 
-      {/* =================================================
-          MESSAGE
-      ================================================= */}
-
       {message && (
 
         <div
@@ -868,10 +840,6 @@ export default function SettingsPage() {
 
       )}
 
-
-      {/* =================================================
-          EN-TÊTE
-      ================================================= */}
 
       <div className="mb-7">
 
@@ -939,10 +907,6 @@ export default function SettingsPage() {
       </div>
 
 
-      {/* =================================================
-          APPARENCE
-      ================================================= */}
-
       <section className="mb-5">
 
         <h2
@@ -973,8 +937,6 @@ export default function SettingsPage() {
             theme-border
           "
         >
-
-          {/* THÈME */}
 
           <div className="p-5">
 
@@ -1126,8 +1088,6 @@ export default function SettingsPage() {
           />
 
 
-          {/* COULEUR */}
-
           <div className="p-5">
 
             <div className="mb-4">
@@ -1253,10 +1213,6 @@ export default function SettingsPage() {
       </section>
 
 
-      {/* =================================================
-          COMPTE
-      ================================================= */}
-
       <section className="mb-5">
 
         <h2
@@ -1287,8 +1243,6 @@ export default function SettingsPage() {
             theme-border
           "
         >
-
-          {/* PROFIL */}
 
           <button
             type="button"
@@ -1378,8 +1332,6 @@ export default function SettingsPage() {
           />
 
 
-          {/* DÉCONNEXION */}
-
           <button
             type="button"
             onClick={logout}
@@ -1467,10 +1419,6 @@ export default function SettingsPage() {
       </section>
 
 
-      {/* =================================================
-          APPLICATION
-      ================================================= */}
-
       <section className="mb-5">
 
         <h2
@@ -1501,8 +1449,6 @@ export default function SettingsPage() {
             theme-border
           "
         >
-
-          {/* NOTIFICATIONS */}
 
           <div className="flex items-center gap-4 p-5">
 
@@ -1581,8 +1527,6 @@ export default function SettingsPage() {
           />
 
 
-          {/* LANGUE */}
-
           <div className="flex items-center gap-4 p-5">
 
             <div
@@ -1639,10 +1583,6 @@ export default function SettingsPage() {
       </section>
 
 
-      {/* =================================================
-          HORS CONNEXION
-      ================================================= */}
-
       <section className="mb-5">
 
         <h2
@@ -1673,8 +1613,6 @@ export default function SettingsPage() {
             theme-border
           "
         >
-
-          {/* ÉTAT */}
 
           <div className="flex items-center gap-4 p-5">
 
@@ -1778,8 +1716,6 @@ export default function SettingsPage() {
             "
           />
 
-
-          {/* VIDER LE CACHE */}
 
           <button
             type="button"
@@ -1886,10 +1822,6 @@ export default function SettingsPage() {
       </section>
 
 
-      {/* =================================================
-          APPRENTISSAGE
-      ================================================= */}
-
       <section className="mb-5">
 
         <h2
@@ -1920,8 +1852,6 @@ export default function SettingsPage() {
             theme-border
           "
         >
-
-          {/* RÉINITIALISER PROGRESSION */}
 
           <button
             type="button"
@@ -2026,10 +1956,6 @@ export default function SettingsPage() {
       </section>
 
 
-      {/* =================================================
-          À PROPOS
-      ================================================= */}
-
       <section className="mb-5">
 
         <h2
@@ -2060,8 +1986,6 @@ export default function SettingsPage() {
             theme-border
           "
         >
-
-          {/* VERSION */}
 
           <div
             className="
@@ -2141,8 +2065,6 @@ export default function SettingsPage() {
           </div>
 
 
-          {/* KALAN ACADEMY */}
-
           <div className="flex items-center gap-4 p-5">
 
             <div
@@ -2198,10 +2120,6 @@ export default function SettingsPage() {
 
       </section>
 
-
-      {/* =================================================
-          FOOTER
-      ================================================= */}
 
       <div
         className="

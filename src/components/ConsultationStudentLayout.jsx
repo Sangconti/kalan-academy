@@ -7,63 +7,47 @@ import {
   BarChart3,
   Download,
   User,
-  Settings
+  Settings,
 } from "lucide-react";
 
 import { useConsultationStudent } from "../context/ConsultationStudentContext";
 
 export default function ConsultationStudentLayout() {
-
   const navigate = useNavigate();
   const location = useLocation();
 
   const {
     studentId,
     studentName,
+    student,
     loading,
-    error
+    error,
   } = useConsultationStudent();
-
 
   function consultationPath(path = "") {
     return `/admin/student/${studentId}/consultation${path}`;
   }
 
-
   function handleQuit() {
     navigate("/admin/users");
   }
 
-
   function isActive(path) {
-
-    const target =
-      consultationPath(path);
+    const target = consultationPath(path);
 
     if (path === "") {
-
-      return (
-        location.pathname ===
-        consultationPath("")
-      );
-
+      return location.pathname === consultationPath("");
     }
 
-    return location.pathname.startsWith(
-      target
-    );
-
+    return location.pathname.startsWith(target);
   }
-
 
   // =====================================================
   // CHARGEMENT
   // =====================================================
 
   if (loading) {
-
     return (
-
       <div
         className="
           min-h-screen
@@ -74,9 +58,7 @@ export default function ConsultationStudentLayout() {
           justify-center
         "
       >
-
         <div className="text-center px-6">
-
           <div
             className="
               animate-spin
@@ -98,24 +80,17 @@ export default function ConsultationStudentLayout() {
           >
             Chargement de la consultation...
           </p>
-
         </div>
-
       </div>
-
     );
-
   }
-
 
   // =====================================================
   // ERREUR
   // =====================================================
 
   if (error) {
-
     return (
-
       <div
         className="
           min-h-screen
@@ -126,7 +101,6 @@ export default function ConsultationStudentLayout() {
           px-6
         "
       >
-
         <div
           className="
             max-w-md
@@ -140,7 +114,6 @@ export default function ConsultationStudentLayout() {
             text-center
           "
         >
-
           <div
             className="
               w-14
@@ -155,7 +128,6 @@ export default function ConsultationStudentLayout() {
               justify-center
             "
           >
-
             <Eye
               size={28}
               className="
@@ -163,9 +135,7 @@ export default function ConsultationStudentLayout() {
                 dark:text-red-400
               "
             />
-
           </div>
-
 
           <h1
             className="
@@ -178,7 +148,6 @@ export default function ConsultationStudentLayout() {
             Consultation impossible
           </h1>
 
-
           <p
             className="
               text-sm
@@ -188,7 +157,6 @@ export default function ConsultationStudentLayout() {
           >
             {error}
           </p>
-
 
           <button
             type="button"
@@ -207,18 +175,16 @@ export default function ConsultationStudentLayout() {
           >
             Retour à la fiche élève
           </button>
-
         </div>
-
       </div>
-
     );
-
   }
 
+  // =====================================================
+  // CONSULTATION
+  // =====================================================
 
   return (
-
     <div
       className="
         min-h-screen
@@ -227,7 +193,6 @@ export default function ConsultationStudentLayout() {
         pb-24
       "
     >
-
       {/* =====================================================
           BANDEAU CONSULTATION
       ===================================================== */}
@@ -242,7 +207,6 @@ export default function ConsultationStudentLayout() {
           shadow-md
         "
       >
-
         <div
           className="
             max-w-2xl
@@ -255,7 +219,6 @@ export default function ConsultationStudentLayout() {
             gap-3
           "
         >
-
           <div
             className="
               flex
@@ -264,7 +227,6 @@ export default function ConsultationStudentLayout() {
               min-w-0
             "
           >
-
             <div
               className="
                 w-9
@@ -281,7 +243,6 @@ export default function ConsultationStudentLayout() {
             </div>
 
             <div className="min-w-0">
-
               <p
                 className="
                   text-xs
@@ -303,11 +264,8 @@ export default function ConsultationStudentLayout() {
               >
                 {studentName}
               </p>
-
             </div>
-
           </div>
-
 
           <div
             className="
@@ -317,7 +275,6 @@ export default function ConsultationStudentLayout() {
               shrink-0
             "
           >
-
             <span
               className="
                 hidden
@@ -331,7 +288,6 @@ export default function ConsultationStudentLayout() {
             >
               Lecture seule
             </span>
-
 
             <button
               type="button"
@@ -350,22 +306,23 @@ export default function ConsultationStudentLayout() {
                 transition
               "
             >
-
               <ArrowLeft size={15} />
-
               Quitter
-
             </button>
-
           </div>
-
         </div>
-
       </div>
-
 
       {/* =====================================================
           CONTENU
+
+          IMPORTANT :
+          Les données déjà chargées par
+          ConsultationStudentProvider sont transmises
+          aux pages enfants via Outlet context.
+
+          Le Dashboard peut donc les réutiliser sans
+          refaire une requête Supabase au chargement.
       ===================================================== */}
 
       <main
@@ -376,11 +333,15 @@ export default function ConsultationStudentLayout() {
           p-4
         "
       >
-
-        <Outlet />
-
+        <Outlet
+          context={{
+            consultationMode: true,
+            studentId,
+            studentName,
+            student,
+          }}
+        />
       </main>
-
 
       {/* =====================================================
           NAVIGATION ÉLÈVE — CONSULTATION
@@ -399,7 +360,6 @@ export default function ConsultationStudentLayout() {
           shadow-lg
         "
       >
-
         <div
           className="
             max-w-2xl
@@ -409,7 +369,6 @@ export default function ConsultationStudentLayout() {
             h-16
           "
         >
-
           {/* ACCUEIL */}
 
           <button
@@ -435,15 +394,10 @@ export default function ConsultationStudentLayout() {
               }
             `}
           >
-
             <Home size={19} />
 
-            <span>
-              Accueil
-            </span>
-
+            <span>Accueil</span>
           </button>
-
 
           {/* PROGRESSION */}
 
@@ -472,15 +426,10 @@ export default function ConsultationStudentLayout() {
               }
             `}
           >
-
             <BarChart3 size={19} />
 
-            <span>
-              Progression
-            </span>
-
+            <span>Progression</span>
           </button>
-
 
           {/* TÉLÉCHARGEMENTS */}
 
@@ -509,15 +458,10 @@ export default function ConsultationStudentLayout() {
               }
             `}
           >
-
             <Download size={19} />
 
-            <span>
-              Téléchargés
-            </span>
-
+            <span>Téléchargés</span>
           </button>
-
 
           {/* PROFIL */}
 
@@ -546,15 +490,10 @@ export default function ConsultationStudentLayout() {
               }
             `}
           >
-
             <User size={19} />
 
-            <span>
-              Profil
-            </span>
-
+            <span>Profil</span>
           </button>
-
 
           {/* PARAMÈTRES */}
 
@@ -583,21 +522,12 @@ export default function ConsultationStudentLayout() {
               }
             `}
           >
-
             <Settings size={19} />
 
-            <span>
-              Paramètres
-            </span>
-
+            <span>Paramètres</span>
           </button>
-
         </div>
-
       </nav>
-
     </div>
-
   );
-
 }

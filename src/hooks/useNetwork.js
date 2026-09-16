@@ -1,11 +1,20 @@
 import {
   useState,
   useEffect,
-  useCallback
+  useCallback,
+  useRef,
 } from "react";
 
+import {
+  supabase,
+} from "../lib/supabase";
 
-const CHECK_INTERVAL = 15000;
+
+// =====================================================
+// CONFIGURATION
+// =====================================================
+
+const CHECK_INTERVAL = 5000;
 const CHECK_TIMEOUT = 5000;
 
 
@@ -16,46 +25,51 @@ const CHECK_TIMEOUT = 5000;
 export function useNetwork() {
 
   const [isOnline, setIsOnline] =
-    useState(
-      typeof navigator !== "undefined"
-        ? navigator.onLine
-        : true
-    );
+    useState(false);
+
+
+  const checkingRef =
+    useRef(false);
 
 
   // ===================================================
-  // VÉRIFICATION INTERNET RÉEL
+  // VÉRIFICATION RÉELLE DE LA CONNEXION SUPABASE
   // ===================================================
 
   const checkInternetConnection =
     useCallback(
       async () => {
 
+        /*
+         * Évite plusieurs vérifications simultanées.
+         */
+        if (checkingRef.current) {
+          return isOnline;
+        }
+
+
+        checkingRef.current = true;
+
+
+        /*
+         * Si Android/WebView indique explicitement
+         * qu'il n'y a pas de réseau, on considère
+         * immédiatement l'application hors ligne.
+         *
+         * IMPORTANT :
+         * navigator.onLine === true ne suffit PAS
+         * pour déclarer l'application en ligne.
+         */
         if (
           typeof navigator !== "undefined" &&
-          !navigator.onLine
+          navigator.onLine === false
         ) {
 
           setIsOnline(false);
 
+          checkingRef.current = false;
+
           return false;
-        }
-
-
-        const supabaseUrl =
-          import.meta.env.VITE_SUPABASE_URL;
-
-
-        if (!supabaseUrl) {
-
-          const status =
-            typeof navigator !== "undefined"
-              ? navigator.onLine
-              : true;
-
-          setIsOnline(status);
-
-          return status;
         }
 
 
@@ -65,36 +79,71 @@ export function useNetwork() {
 
         const timeout =
           setTimeout(
-            () => controller.abort(),
+            () => {
+              controller.abort();
+            },
             CHECK_TIMEOUT
           );
 
 
         try {
 
-          const response =
-            await fetch(
-              `${supabaseUrl}/rest/v1/`,
-              {
-                method: "HEAD",
-                cache: "no-store",
-                signal: controller.signal
-              }
-            );
+          /*
+           * ------------------------------------------------
+           * TEST RÉEL SUPABASE
+           * ------------------------------------------------
+           *
+           * On utilise le client Supabase déjà configuré
+           * par Kalan Academy.
+           *
+           * Une petite requête vers "settings" permet de
+           * vérifier que le serveur Supabase répond.
+           *
+           * Même si RLS empêche la lecture, une réponse
+           * Supabase signifie que le réseau fonctionne.
+           */
+
+          const result =
+            await Promise.race([
+
+              supabase
+                .from("settings")
+                .select("id")
+                .limit(1),
+
+              new Promise((_, reject) => {
+
+                setTimeout(
+                  () => {
+
+                    const error =
+                      new Error(
+                        "Timeout de vérification réseau"
+                      );
+
+                    error.name =
+                      "NetworkTimeoutError";
+
+                    reject(error);
+
+                  },
+                  CHECK_TIMEOUT
+                );
+
+              }),
+
+            ]);
 
 
           /*
-           * Une réponse HTTP signifie que le réseau
-           * est accessible.
+           * Supabase nous a répondu.
            *
-           * 200, 401, 403, 404, etc. :
-           * Internet fonctionne.
+           * Même si result.error existe, cela signifie
+           * généralement que la requête a atteint le
+           * serveur. Une erreur d'autorisation ou de RLS
+           * n'est donc pas une perte d'Internet.
            */
-
-          if (
-            response ||
-            response === null
-          ) {
+          if (result) {
 
             setIsOnline(true);
 
@@ -102,14 +151,20 @@ export function useNetwork() {
           }
 
 
-          setIsOnline(true);
+          /*
+           * Sécurité supplémentaire.
+           */
+          setIsOnline(false);
 
-          return true;
+          return false;
 
         } catch (error) {
 
+          /*
+           * Timeout ou véritable erreur réseau.
+           */
           console.warn(
-            "🌐 Vérification réseau échouée :",
+            "🌐 Vérification Supabase échouée :",
             error?.message || error
           );
 
@@ -121,14 +176,16 @@ export function useNetwork() {
         } finally {
 
           clearTimeout(timeout);
+
+          checkingRef.current = false;
         }
       },
-      []
+      [isOnline]
     );
 
 
   // ===================================================
-  // EVENTS
+  // INITIALISATION + SURVEILLANCE
   // ===================================================
 
   useEffect(() => {
@@ -136,15 +193,21 @@ export function useNetwork() {
     let mounted = true;
 
 
+    // =================================================
+    // VÉRIFICATION INITIALE
+    // =================================================
+
     const initialCheck =
       async () => {
 
         const result =
           await checkInternetConnection();
 
+
         if (!mounted) {
           return;
         }
+
 
         setIsOnline(result);
       };
@@ -153,16 +216,36 @@ export function useNetwork() {
     initialCheck();
 
 
-    function handleOnline() {
+    // =================================================
+    // ÉVÉNEMENT : CONNEXION
+    // =================================================
 
-      checkInternetConnection();
-    }
+    const handleOnline =
+      () => {
+
+        console.log(
+          "🌐 Réseau détecté : vérification Supabase..."
+        );
 
 
-    function handleOffline() {
+        checkInternetConnection();
+      };
 
-      setIsOnline(false);
-    }
+
+    // =================================================
+    // ÉVÉNEMENT : DÉCONNEXION
+    // =================================================
+
+    const handleOffline =
+      () => {
+
+        console.log(
+          "📴 Réseau perdu."
+        );
+
+
+        setIsOnline(false);
+      };
 
 
     window.addEventListener(
@@ -177,14 +260,24 @@ export function useNetwork() {
     );
 
 
+    // =================================================
+    // VÉRIFICATION PÉRIODIQUE
+    // =================================================
+
     const interval =
       setInterval(
         () => {
+
           checkInternetConnection();
+
         },
         CHECK_INTERVAL
       );
 
+
+    // =================================================
+    // NETTOYAGE
+    // =================================================
 
     return () => {
 
@@ -204,15 +297,21 @@ export function useNetwork() {
 
 
       clearInterval(interval);
+
     };
 
   }, [
-    checkInternetConnection
+    checkInternetConnection,
   ]);
 
 
+  // ===================================================
+  // API DU HOOK
+  // ===================================================
+
   return {
     isOnline,
-    checkInternetConnection
+    checkInternetConnection,
   };
+
 }

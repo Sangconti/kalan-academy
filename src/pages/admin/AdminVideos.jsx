@@ -1,4 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import {
   Video,
@@ -18,6 +24,36 @@ import {
 
 import { supabase } from "../../lib/supabase";
 
+
+// ===========================================================
+// CONSTANTES
+// ===========================================================
+
+const SUCCESS_MESSAGE_DURATION = 3500;
+
+
+// ===========================================================
+// HELPERS
+// ===========================================================
+
+function hasVideo(lesson) {
+  return (
+    typeof lesson?.video_url === "string" &&
+    lesson.video_url.trim() !== ""
+  );
+}
+
+
+function normalizeText(value) {
+  return typeof value === "string"
+    ? value.trim().toLowerCase()
+    : "";
+}
+
+
+// ===========================================================
+// COMPOSANT
+// ===========================================================
 
 export default function AdminVideos() {
   // =========================================================
@@ -39,86 +75,98 @@ export default function AdminVideos() {
 
   const [saving, setSaving] = useState(false);
 
+  const successTimeoutRef = useRef(null);
+
+
+  // =========================================================
+  // NETTOYAGE DU MESSAGE DE SUCCÈS
+  // =========================================================
+
+  const showSuccess = useCallback((message) => {
+    setSuccess(message);
+
+    if (successTimeoutRef.current) {
+      clearTimeout(successTimeoutRef.current);
+    }
+
+    successTimeoutRef.current = setTimeout(() => {
+      setSuccess("");
+      successTimeoutRef.current = null;
+    }, SUCCESS_MESSAGE_DURATION);
+  }, []);
+
 
   // =========================================================
   // CHARGEMENT DES LEÇONS
   // =========================================================
 
-  const loadLessons = async (isRefresh = false) => {
-    try {
-      if (isRefresh) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
-      }
+  const loadLessons = useCallback(
+    async (isRefresh = false) => {
+      try {
+        if (isRefresh) {
+          setRefreshing(true);
+        } else {
+          setLoading(true);
+        }
 
-      setError("");
-      setSuccess("");
+        setError("");
 
-      const { data, error: fetchError } = await supabase
-        .from("lessons")
-        .select(`
-          id,
-          chapter_id,
-          title,
-          description,
-          duration_minutes,
-          difficulty,
-          video_url,
-          thumbnail_url,
-          is_premium,
-          order_number,
-          created_at,
-          chapters (
+        if (!isRefresh) {
+          setSuccess("");
+        }
+
+        const { data, error: fetchError } = await supabase
+          .from("lessons")
+          .select(`
             id,
+            chapter_id,
             title,
-            subject_id,
-            subjects (
+            description,
+            duration_minutes,
+            video_url,
+            thumbnail_url,
+            is_premium,
+            chapters (
               id,
-              name,
-              code
+              title,
+              subjects (
+                id,
+                name
+              )
             )
-          )
-        `)
-        .order("created_at", {
-          ascending: false,
-        });
+          `)
+          .order("created_at", {
+            ascending: false,
+          });
 
+        if (fetchError) {
+          throw fetchError;
+        }
 
-      if (fetchError) {
-        throw fetchError;
-      }
+        setLessons(Array.isArray(data) ? data : []);
 
-
-      setLessons(data || []);
-
-
-      if (isRefresh) {
-        setSuccess(
-          "Liste des vidéos actualisée."
+        if (isRefresh) {
+          showSuccess(
+            "Liste des vidéos actualisée."
+          );
+        }
+      } catch (err) {
+        console.error(
+          "Erreur chargement vidéos :",
+          err
         );
 
-        setTimeout(() => {
-          setSuccess("");
-        }, 3000);
+        setError(
+          err?.message ||
+            "Impossible de charger les vidéos."
+        );
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
       }
-
-    } catch (err) {
-      console.error(
-        "Erreur chargement vidéos :",
-        err
-      );
-
-      setError(
-        err?.message ||
-          "Impossible de charger les vidéos."
-      );
-
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
+    },
+    [showSuccess]
+  );
 
 
   // =========================================================
@@ -127,19 +175,43 @@ export default function AdminVideos() {
 
   useEffect(() => {
     loadLessons();
-  }, []);
+
+    return () => {
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+        successTimeoutRef.current = null;
+      }
+    };
+  }, [loadLessons]);
 
 
   // =========================================================
-  // DÉTECTION VIDÉO
+  // DONNÉES PRÉPARÉES POUR LA RECHERCHE
   // =========================================================
 
-  const hasVideo = (lesson) => {
-    return (
-      typeof lesson.video_url === "string" &&
-      lesson.video_url.trim() !== ""
-    );
-  };
+  const indexedLessons = useMemo(() => {
+    return lessons.map((lesson) => {
+      const subjectName =
+        lesson.chapters?.subjects?.name || "";
+
+      const chapterTitle =
+        lesson.chapters?.title || "";
+
+      return {
+        lesson,
+        searchTitle: normalizeText(
+          lesson.title
+        ),
+        searchChapter: normalizeText(
+          chapterTitle
+        ),
+        searchSubject: normalizeText(
+          subjectName
+        ),
+        videoExists: hasVideo(lesson),
+      };
+    });
+  }, [lessons]);
 
 
   // =========================================================
@@ -148,75 +220,101 @@ export default function AdminVideos() {
 
   const filteredLessons = useMemo(() => {
     const normalizedSearch =
-      search.trim().toLowerCase();
+      normalizeText(search);
 
+    if (
+      !normalizedSearch &&
+      filter === "all"
+    ) {
+      return lessons;
+    }
 
-    return lessons.filter((lesson) => {
-      const subjectName =
-        lesson.chapters?.subjects?.name || "";
+    return indexedLessons
+      .filter(
+        ({
+          searchTitle,
+          searchChapter,
+          searchSubject,
+          videoExists,
+          lesson,
+        }) => {
+          const matchesSearch =
+            !normalizedSearch ||
+            searchTitle.includes(normalizedSearch) ||
+            searchChapter.includes(normalizedSearch) ||
+            searchSubject.includes(normalizedSearch);
 
-      const chapterTitle =
-        lesson.chapters?.title || "";
+          if (!matchesSearch) {
+            return false;
+          }
 
+          if (filter === "with-video") {
+            return videoExists;
+          }
 
-      const matchesSearch =
-        !normalizedSearch ||
-        lesson.title
-          ?.toLowerCase()
-          .includes(normalizedSearch) ||
-        chapterTitle
-          .toLowerCase()
-          .includes(normalizedSearch) ||
-        subjectName
-          .toLowerCase()
-          .includes(normalizedSearch);
+          if (filter === "without-video") {
+            return !videoExists;
+          }
 
+          if (filter === "premium") {
+            return lesson.is_premium === true;
+          }
 
-      const videoExists =
-        hasVideo(lesson);
-
-
-      const matchesFilter =
-        filter === "all" ||
-        (filter === "with-video" && videoExists) ||
-        (filter === "without-video" && !videoExists) ||
-        (filter === "premium" &&
-          lesson.is_premium === true);
-
-
-      return (
-        matchesSearch &&
-        matchesFilter
-      );
-    });
-
-  }, [lessons, search, filter]);
+          return true;
+        }
+      )
+      .map(({ lesson }) => lesson);
+  }, [
+    lessons,
+    indexedLessons,
+    search,
+    filter,
+  ]);
 
 
   // =========================================================
   // STATISTIQUES
   // =========================================================
 
-  const totalLessons = lessons.length;
+  const statistics = useMemo(() => {
+    let totalVideos = 0;
+    let premiumVideos = 0;
 
-  const totalVideos = lessons.filter(
-    hasVideo
-  ).length;
+    for (const lesson of lessons) {
+      if (hasVideo(lesson)) {
+        totalVideos += 1;
+      }
 
-  const missingVideos =
-    totalLessons - totalVideos;
+      if (lesson.is_premium === true) {
+        premiumVideos += 1;
+      }
+    }
 
-  const premiumVideos = lessons.filter(
-    (lesson) =>
-      lesson.is_premium === true
-  ).length;
+    const totalLessons = lessons.length;
+
+    return {
+      totalLessons,
+      totalVideos,
+      missingVideos:
+        totalLessons - totalVideos,
+      premiumVideos,
+    };
+  }, [lessons]);
+
+
+  const {
+    totalLessons,
+    totalVideos,
+    missingVideos,
+    premiumVideos,
+  } = statistics;
 
 
   // =========================================================
   // OUVRIR L'ÉDITEUR
   // =========================================================
 
-  const openEditor = (lesson) => {
+  const openEditor = useCallback((lesson) => {
     setEditingLesson({
       id: lesson.id,
       title: lesson.title || "",
@@ -231,83 +329,86 @@ export default function AdminVideos() {
 
     setError("");
     setSuccess("");
-  };
+  }, []);
 
 
   // =========================================================
   // FERMER L'ÉDITEUR
   // =========================================================
 
-  const closeEditor = () => {
-    if (saving) return;
+  const closeEditor = useCallback(() => {
+    if (saving) {
+      return;
+    }
 
     setEditingLesson(null);
-  };
+  }, [saving]);
 
 
   // =========================================================
   // MODIFICATION CHAMP
   // =========================================================
 
-  const handleEditorChange = (
-    field,
-    value
-  ) => {
-    setEditingLesson((current) => ({
-      ...current,
-      [field]: value,
-    }));
-  };
+  const handleEditorChange = useCallback(
+    (field, value) => {
+      setEditingLesson((current) => {
+        if (!current) {
+          return current;
+        }
+
+        return {
+          ...current,
+          [field]: value,
+        };
+      });
+    },
+    []
+  );
 
 
   // =========================================================
   // ENREGISTRER
   // =========================================================
 
-  const saveLessonVideo = async () => {
-    if (!editingLesson) {
-      return;
-    }
-
-
-    try {
-      setSaving(true);
-      setError("");
-      setSuccess("");
-
-
-      const duration =
-        editingLesson.duration_minutes ===
-          "" ||
-        editingLesson.duration_minutes ===
-          null
-          ? null
-          : Number(
-              editingLesson.duration_minutes
-            );
-
-
-      if (
-        duration !== null &&
-        (!Number.isFinite(duration) ||
-          duration < 0)
-      ) {
-        throw new Error(
-          "La durée doit être un nombre positif."
-        );
+  const saveLessonVideo = useCallback(
+    async () => {
+      if (!editingLesson) {
+        return;
       }
 
+      try {
+        setSaving(true);
+        setError("");
+        setSuccess("");
 
-      const videoUrl =
-        editingLesson.video_url.trim();
+        const duration =
+          editingLesson.duration_minutes === "" ||
+          editingLesson.duration_minutes === null
+            ? null
+            : Number(
+                editingLesson.duration_minutes
+              );
 
+        if (
+          duration !== null &&
+          (!Number.isFinite(duration) ||
+            duration < 0)
+        ) {
+          throw new Error(
+            "La durée doit être un nombre positif."
+          );
+        }
 
-      const thumbnailUrl =
-        editingLesson.thumbnail_url.trim();
+        const videoUrl =
+          editingLesson.video_url.trim();
 
+        const thumbnailUrl =
+          editingLesson.thumbnail_url.trim();
 
-      const { data, error: updateError } =
-        await supabase
+        const {
+          data,
+          error: updateError,
+        } = await supabase
           .from("lessons")
           .update({
             video_url:
@@ -331,81 +432,70 @@ export default function AdminVideos() {
             title,
             description,
             duration_minutes,
-            difficulty,
             video_url,
             thumbnail_url,
             is_premium,
-            order_number,
-            created_at,
             chapters (
               id,
               title,
-              subject_id,
               subjects (
                 id,
-                name,
-                code
+                name
               )
             )
           `)
           .single();
 
+        if (updateError) {
+          throw updateError;
+        }
 
-      if (updateError) {
-        throw updateError;
+        setLessons((current) =>
+          current.map((lesson) =>
+            lesson.id === data.id
+              ? data
+              : lesson
+          )
+        );
+
+        setEditingLesson(null);
+
+        showSuccess(
+          "Les informations de la vidéo ont été enregistrées."
+        );
+      } catch (err) {
+        console.error(
+          "Erreur sauvegarde vidéo :",
+          err
+        );
+
+        setError(
+          err?.message ||
+            "Impossible d'enregistrer la vidéo."
+        );
+      } finally {
+        setSaving(false);
       }
-
-
-      setLessons((current) =>
-        current.map((lesson) =>
-          lesson.id === data.id
-            ? data
-            : lesson
-        )
-      );
-
-
-      setEditingLesson(null);
-
-      setSuccess(
-        "Les informations de la vidéo ont été enregistrées."
-      );
-
-
-      setTimeout(() => {
-        setSuccess("");
-      }, 3500);
-
-    } catch (err) {
-      console.error(
-        "Erreur sauvegarde vidéo :",
-        err
-      );
-
-      setError(
-        err?.message ||
-          "Impossible d'enregistrer la vidéo."
-      );
-
-    } finally {
-      setSaving(false);
-    }
-  };
+    },
+    [editingLesson, showSuccess]
+  );
 
 
   // =========================================================
   // TEST VIDÉO
   // =========================================================
 
-  const openVideo = (url) => {
-    if (!url) return;
+  const openVideo = useCallback((url) => {
+    if (!url) {
+      return;
+    }
 
     window.open(
       url,
       "_blank",
       "noopener,noreferrer"
     );
-  };
+  }, []);
 
 
   // =========================================================
@@ -415,11 +505,8 @@ export default function AdminVideos() {
   if (loading) {
     return (
       <div className="p-6">
-
         <div className="min-h-[400px] flex items-center justify-center">
-
           <div className="text-center">
-
             <Loader2
               size={40}
               className="animate-spin text-blue-600 mx-auto mb-4"
@@ -428,11 +515,8 @@ export default function AdminVideos() {
             <p className="text-slate-600">
               Chargement des vidéos...
             </p>
-
           </div>
-
         </div>
-
       </div>
     );
   }
@@ -452,20 +536,16 @@ export default function AdminVideos() {
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
 
         <div>
-
           <div className="flex items-center gap-3">
 
             <div className="p-3 bg-blue-100 rounded-xl">
-
               <Video
                 size={25}
                 className="text-blue-600"
               />
-
             </div>
 
             <div>
-
               <h1 className="text-2xl font-bold text-slate-900">
                 Gestion des vidéos
               </h1>
@@ -473,11 +553,9 @@ export default function AdminVideos() {
               <p className="text-sm text-slate-500">
                 Gérez les vidéos associées aux leçons.
               </p>
-
             </div>
 
           </div>
-
         </div>
 
 
@@ -500,7 +578,6 @@ export default function AdminVideos() {
             disabled:cursor-not-allowed
           "
         >
-
           <RefreshCw
             size={18}
             className={
@@ -511,7 +588,6 @@ export default function AdminVideos() {
           />
 
           Actualiser
-
         </button>
 
       </div>
@@ -530,7 +606,6 @@ export default function AdminVideos() {
           />
 
           <div>
-
             <p className="font-semibold">
               Une erreur est survenue
             </p>
@@ -538,7 +613,6 @@ export default function AdminVideos() {
             <p className="text-sm mt-1">
               {error}
             </p>
-
           </div>
 
         </div>
@@ -672,7 +746,6 @@ export default function AdminVideos() {
               focus:ring-blue-500
             "
           >
-
             <option value="all">
               Toutes les leçons
             </option>
@@ -688,7 +761,6 @@ export default function AdminVideos() {
             <option value="premium">
               Premium
             </option>
-
           </select>
 
         </div>
@@ -793,204 +865,79 @@ export default function AdminVideos() {
 
               <tbody>
 
-                {filteredLessons.map(
-                  (lesson) => {
+                {filteredLessons.map((lesson) => {
 
-                    const subjectName =
-                      lesson.chapters?.subjects?.name ||
-                      "—";
+                  const subjectName =
+                    lesson.chapters?.subjects?.name ||
+                    "—";
 
-                    const chapterTitle =
-                      lesson.chapters?.title ||
-                      "—";
+                  const chapterTitle =
+                    lesson.chapters?.title ||
+                    "—";
 
-                    const videoExists =
-                      hasVideo(lesson);
+                  const videoExists =
+                    hasVideo(lesson);
 
+                  return (
+                    <tr
+                      key={lesson.id}
+                      className="
+                        border-t
+                        border-slate-100
+                        hover:bg-slate-50
+                      "
+                    >
 
-                    return (
+                      {/* Leçon */}
 
-                      <tr
-                        key={lesson.id}
-                        className="
-                          border-t
-                          border-slate-100
-                          hover:bg-slate-50
-                        "
-                      >
+                      <td className="p-4">
 
-                        {/* Leçon */}
+                        <div className="max-w-xs">
 
-                        <td className="p-4">
+                          <p className="font-medium text-slate-900">
+                            {lesson.title}
+                          </p>
 
-                          <div className="max-w-xs">
-
-                            <p className="font-medium text-slate-900">
-                              {lesson.title}
+                          {lesson.description && (
+                            <p className="text-xs text-slate-400 mt-1 line-clamp-2">
+                              {lesson.description}
                             </p>
-
-                            {lesson.description && (
-                              <p className="text-xs text-slate-400 mt-1 line-clamp-2">
-                                {lesson.description}
-                              </p>
-                            )}
-
-                          </div>
-
-                        </td>
-
-
-                        {/* Matière */}
-
-                        <td className="p-4">
-
-                          <span className="text-slate-700">
-                            {subjectName}
-                          </span>
-
-                        </td>
-
-
-                        {/* Chapitre */}
-
-                        <td className="p-4">
-
-                          <span className="text-slate-600">
-                            {chapterTitle}
-                          </span>
-
-                        </td>
-
-
-                        {/* Vidéo */}
-
-                        <td className="p-4">
-
-                          {videoExists ? (
-
-                            <button
-                              type="button"
-                              onClick={() =>
-                                openVideo(
-                                  lesson.video_url
-                                )
-                              }
-                              className="
-                                inline-flex
-                                items-center
-                                gap-2
-                                px-3
-                                py-1.5
-                                rounded-lg
-                                bg-green-100
-                                text-green-700
-                                hover:bg-green-200
-                                text-xs
-                                font-semibold
-                              "
-                            >
-
-                              <Video size={15} />
-
-                              Disponible
-
-                              <ExternalLink
-                                size={13}
-                              />
-
-                            </button>
-
-                          ) : (
-
-                            <span className="
-                              inline-flex
-                              items-center
-                              gap-2
-                              px-3
-                              py-1.5
-                              rounded-lg
-                              bg-red-100
-                              text-red-700
-                              text-xs
-                              font-semibold
-                            ">
-
-                              <XCircle size={15} />
-
-                              Absente
-
-                            </span>
-
                           )}
 
-                        </td>
+                        </div>
+
+                      </td>
 
 
-                        {/* Durée */}
+                      {/* Matière */}
 
-                        <td className="p-4">
-
-                          <div className="flex items-center gap-2 text-slate-600">
-
-                            <Clock size={15} />
-
-                            {lesson.duration_minutes
-                              ? `${lesson.duration_minutes} min`
-                              : "—"}
-
-                          </div>
-
-                        </td>
+                      <td className="p-4">
+                        <span className="text-slate-700">
+                          {subjectName}
+                        </span>
+                      </td>
 
 
-                        {/* Type */}
+                      {/* Chapitre */}
 
-                        <td className="p-4">
-
-                          {lesson.is_premium ? (
-
-                            <span className="
-                              inline-flex
-                              items-center
-                              gap-1.5
-                              px-2.5
-                              py-1
-                              rounded-full
-                              bg-yellow-100
-                              text-yellow-700
-                              text-xs
-                              font-semibold
-                            ">
-
-                              <Crown size={13} />
-
-                              Premium
-
-                            </span>
-
-                          ) : (
-
-                            <span className="
-                              text-xs
-                              text-slate-500
-                            ">
-                              Gratuit
-                            </span>
-
-                          )}
-
-                        </td>
+                      <td className="p-4">
+                        <span className="text-slate-600">
+                          {chapterTitle}
+                        </span>
+                      </td>
 
 
-                        {/* Action */}
+                      {/* Vidéo */}
 
-                        <td className="p-4 text-right">
+                      <td className="p-4">
+
+                        {videoExists ? (
 
                           <button
                             type="button"
                             onClick={() =>
-                              openEditor(
-                                lesson
+                              openVideo(
+                                lesson.video_url
                               )
                             }
                             className="
@@ -998,11 +945,11 @@ export default function AdminVideos() {
                               items-center
                               gap-2
                               px-3
-                              py-2
+                              py-1.5
                               rounded-lg
-                              bg-slate-900
-                              text-white
-                              hover:bg-slate-700
+                              bg-green-100
+                              text-green-700
+                              hover:bg-green-200
                               text-xs
                               font-semibold
                             "
@@ -1010,24 +957,137 @@ export default function AdminVideos() {
 
                             <Video size={15} />
 
-                            Gérer
+                            Disponible
+
+                            <ExternalLink
+                              size={13}
+                            />
 
                           </button>
 
-                        </td>
+                        ) : (
 
-                      </tr>
+                          <span className="
+                            inline-flex
+                            items-center
+                            gap-2
+                            px-3
+                            py-1.5
+                            rounded-lg
+                            bg-red-100
+                            text-red-700
+                            text-xs
+                            font-semibold
+                          ">
 
-                    );
-                  }
-                )}
+                            <XCircle size={15} />
+
+                            Absente
+
+                          </span>
+
+                        )}
+
+                      </td>
+
+
+                      {/* Durée */}
+
+                      <td className="p-4">
+
+                        <div className="flex items-center gap-2 text-slate-600">
+
+                          <Clock size={15} />
+
+                          {lesson.duration_minutes
+                            ? `${lesson.duration_minutes} min`
+                            : "—"}
+
+                        </div>
+
+                      </td>
+
+
+                      {/* Type */}
+
+                      <td className="p-4">
+
+                        {lesson.is_premium ? (
+
+                          <span className="
+                            inline-flex
+                            items-center
+                            gap-1.5
+                            px-2.5
+                            py-1
+                            rounded-full
+                            bg-yellow-100
+                            text-yellow-700
+                            text-xs
+                            font-semibold
+                          ">
+
+                            <Crown size={13} />
+
+                            Premium
+
+                          </span>
+
+                        ) : (
+
+                          <span className="
+                            text-xs
+                            text-slate-500
+                          ">
+                            Gratuit
+                          </span>
+
+                        )}
+
+                      </td>
+
+
+                      {/* Action */}
+
+                      <td className="p-4 text-right">
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            openEditor(lesson)
+                          }
+                          className="
+                            inline-flex
+                            items-center
+                            gap-2
+                            px-3
+                            py-2
+                            rounded-lg
+                            bg-slate-900
+                            text-white
+                            hover:bg-slate-700
+                            text-xs
+                            font-semibold
+                          "
+                        >
+
+                          <Video size={15} />
+
+                          Gérer
+
+                        </button>
+
+                      </td>
+
+                    </tr>
+                  );
+                })}
 
               </tbody>
 
             </table>
 
           </div>
-
         )}
 
       </div>

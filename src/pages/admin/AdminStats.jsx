@@ -1,4 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import {
   BarChart3,
@@ -40,154 +46,265 @@ export default function AdminStats() {
   const [quizAttempts, setQuizAttempts] = useState([]);
   const [downloads, setDownloads] = useState([]);
 
+  const successTimeoutRef = useRef(null);
+
 
   // =========================================================
   // CHARGEMENT DES STATISTIQUES
   // =========================================================
 
-  const loadStatistics = async (isRefresh = false) => {
-    try {
-      if (isRefresh) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
-      }
+  const loadStatistics = useCallback(
+    async (isRefresh = false) => {
+      try {
+        if (isRefresh) {
+          setRefreshing(true);
+        } else {
+          setLoading(true);
+        }
 
-      setError("");
-      setSuccess("");
+        setError("");
+        setSuccess("");
 
-      const [
-        profilesResult,
-        classesResult,
-        subjectsResult,
-        chaptersResult,
-        lessonsResult,
-        quizzesResult,
-        attemptsResult,
-        downloadsResult,
-      ] = await Promise.all([
-        supabase
-          .from("profiles")
-          .select(
-            "id, full_name, avatar_url, role, class_id, is_premium, xp, level, created_at"
-          ),
+        const [
+          profilesResult,
+          classesResult,
+          subjectsResult,
+          chaptersResult,
+          lessonsResult,
+          quizzesResult,
+          attemptsResult,
+          downloadsResult,
+        ] = await Promise.all([
+          // ---------------------------------------------------
+          // PROFILS
+          // ---------------------------------------------------
+          supabase
+            .from("profiles")
+            .select(
+              "id, full_name, role, class_id, xp, level"
+            ),
 
-        supabase
-          .from("classes")
-          .select(
-            "id, name, description, order_number"
-          )
-          .order("order_number", {
-            ascending: true,
-          }),
+          // ---------------------------------------------------
+          // CLASSES
+          // ---------------------------------------------------
+          supabase
+            .from("classes")
+            .select(
+              "id, name, description, order_number"
+            )
+            .order("order_number", {
+              ascending: true,
+            }),
 
-        supabase
-          .from("subjects")
-          .select(
-            "id, class_id, name, code, order_number"
-          )
-          .order("order_number", {
-            ascending: true,
-          }),
+          // ---------------------------------------------------
+          // MATIÈRES
+          // ---------------------------------------------------
+          supabase
+            .from("subjects")
+            .select(
+              "id, class_id, name, code, order_number"
+            )
+            .order("order_number", {
+              ascending: true,
+            }),
 
-        supabase
-          .from("chapters")
-          .select(
-            "id, subject_id, title, order_number"
-          ),
+          // ---------------------------------------------------
+          // CHAPITRES
+          // ---------------------------------------------------
+          supabase
+            .from("chapters")
+            .select(
+              "id, subject_id, title, order_number"
+            ),
 
-        supabase
-          .from("lessons")
-          .select(
-            "id, chapter_id, title, video_url, is_premium, order_number"
-          ),
+          // ---------------------------------------------------
+          // LEÇONS
+          // ---------------------------------------------------
+          supabase
+            .from("lessons")
+            .select(
+              "id, chapter_id, title, video_url, is_premium, order_number"
+            ),
 
-        supabase
-          .from("quizzes")
-          .select(
-            "id, lesson_id, title, passing_score, created_at"
-          ),
+          // ---------------------------------------------------
+          // QUIZ
+          // ---------------------------------------------------
+          supabase
+            .from("quizzes")
+            .select(
+              "id, lesson_id, title, passing_score, created_at"
+            ),
 
-        supabase
-          .from("quiz_attempts")
-          .select(
-            "id, user_id, quiz_id, score, answers, attempt_number, created_at"
-          )
-          .order("created_at", {
-            ascending: false,
-          }),
+          // ---------------------------------------------------
+          // TENTATIVES DE QUIZ
+          // ---------------------------------------------------
+          // "answers" n'est pas nécessaire pour AdminStats.
+          supabase
+            .from("quiz_attempts")
+            .select(
+              "id, user_id, quiz_id, score, attempt_number, created_at"
+            )
+            .order("created_at", {
+              ascending: false,
+            }),
 
-        supabase
-          .from("downloads")
-          .select(
-            "id, user_id, lesson_id, file_size_mb, downloaded_at"
-          ),
-      ]);
-
-
-      // =======================================================
-      // VÉRIFICATION DES ERREURS
-      // =======================================================
-
-      const results = [
-        profilesResult,
-        classesResult,
-        subjectsResult,
-        chaptersResult,
-        lessonsResult,
-        quizzesResult,
-        attemptsResult,
-        downloadsResult,
-      ];
-
-      const failedResult = results.find(
-        (result) => result.error
-      );
-
-      if (failedResult) {
-        throw failedResult.error;
-      }
-
-
-      // =======================================================
-      // STOCKAGE
-      // =======================================================
-
-      setProfiles(profilesResult.data || []);
-      setClasses(classesResult.data || []);
-      setSubjects(subjectsResult.data || []);
-      setChapters(chaptersResult.data || []);
-      setLessons(lessonsResult.data || []);
-      setQuizzes(quizzesResult.data || []);
-      setQuizAttempts(attemptsResult.data || []);
-      setDownloads(downloadsResult.data || []);
+          // ---------------------------------------------------
+          // TÉLÉCHARGEMENTS
+          // ---------------------------------------------------
+          supabase
+            .from("downloads")
+            .select(
+              "id, user_id, lesson_id, file_size_mb, downloaded_at"
+            ),
+        ]);
 
 
-      if (isRefresh) {
-        setSuccess(
-          "Statistiques actualisées avec succès."
+        // =====================================================
+        // VÉRIFICATION DES ERREURS
+        // =====================================================
+
+        const results = [
+          {
+            name: "profiles",
+            result: profilesResult,
+          },
+          {
+            name: "classes",
+            result: classesResult,
+          },
+          {
+            name: "subjects",
+            result: subjectsResult,
+          },
+          {
+            name: "chapters",
+            result: chaptersResult,
+          },
+          {
+            name: "lessons",
+            result: lessonsResult,
+          },
+          {
+            name: "quizzes",
+            result: quizzesResult,
+          },
+          {
+            name: "quiz_attempts",
+            result: attemptsResult,
+          },
+          {
+            name: "downloads",
+            result: downloadsResult,
+          },
+        ];
+
+        const failedResult = results.find(
+          ({ result }) => result?.error
         );
 
-        setTimeout(() => {
-          setSuccess("");
-        }, 3000);
+        if (failedResult) {
+          console.error(
+            `Erreur Supabase dans "${failedResult.name}" :`,
+            failedResult.result.error
+          );
+
+          throw failedResult.result.error;
+        }
+
+
+        // =====================================================
+        // STOCKAGE
+        // =====================================================
+
+        setProfiles(
+          Array.isArray(profilesResult.data)
+            ? profilesResult.data
+            : []
+        );
+
+        setClasses(
+          Array.isArray(classesResult.data)
+            ? classesResult.data
+            : []
+        );
+
+        setSubjects(
+          Array.isArray(subjectsResult.data)
+            ? subjectsResult.data
+            : []
+        );
+
+        setChapters(
+          Array.isArray(chaptersResult.data)
+            ? chaptersResult.data
+            : []
+        );
+
+        setLessons(
+          Array.isArray(lessonsResult.data)
+            ? lessonsResult.data
+            : []
+        );
+
+        setQuizzes(
+          Array.isArray(quizzesResult.data)
+            ? quizzesResult.data
+            : []
+        );
+
+        setQuizAttempts(
+          Array.isArray(attemptsResult.data)
+            ? attemptsResult.data
+            : []
+        );
+
+        setDownloads(
+          Array.isArray(downloadsResult.data)
+            ? downloadsResult.data
+            : []
+        );
+
+
+        // =====================================================
+        // MESSAGE DE SUCCÈS
+        // =====================================================
+
+        if (isRefresh) {
+          setSuccess(
+            "Statistiques actualisées avec succès."
+          );
+
+          if (successTimeoutRef.current) {
+            clearTimeout(
+              successTimeoutRef.current
+            );
+          }
+
+          successTimeoutRef.current =
+            setTimeout(() => {
+              setSuccess("");
+              successTimeoutRef.current = null;
+            }, 3000);
+        }
+
+      } catch (err) {
+        console.error(
+          "Erreur chargement statistiques :",
+          err
+        );
+
+        setError(
+          err?.message ||
+            "Impossible de charger les statistiques."
+        );
+
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
       }
-
-    } catch (err) {
-      console.error(
-        "Erreur chargement statistiques :",
-        err
-      );
-
-      setError(
-        err?.message ||
-          "Impossible de charger les statistiques."
-      );
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
+    },
+    []
+  );
 
 
   // =========================================================
@@ -196,7 +313,17 @@ export default function AdminStats() {
 
   useEffect(() => {
     loadStatistics();
-  }, []);
+
+    return () => {
+      if (successTimeoutRef.current) {
+        clearTimeout(
+          successTimeoutRef.current
+        );
+
+        successTimeoutRef.current = null;
+      }
+    };
+  }, [loadStatistics]);
 
 
   // =========================================================
@@ -239,26 +366,33 @@ export default function AdminStats() {
   // VIDÉOS
   // =========================================================
 
-  const lessonsWithVideo = lessons.filter(
-    (lesson) =>
-      typeof lesson.video_url === "string" &&
-      lesson.video_url.trim() !== ""
-  ).length;
+  const lessonsWithVideo = useMemo(() => {
+    return lessons.filter(
+      (lesson) =>
+        typeof lesson.video_url === "string" &&
+        lesson.video_url.trim() !== ""
+    ).length;
+  }, [lessons]);
 
 
   // =========================================================
   // XP
   // =========================================================
 
-  const totalXP = students.reduce(
-    (total, student) =>
-      total + (Number(student.xp) || 0),
-    0
-  );
+  const totalXP = useMemo(() => {
+    return students.reduce(
+      (total, student) =>
+        total + (Number(student.xp) || 0),
+      0
+    );
+  }, [students]);
+
 
   const averageXP =
     totalStudents > 0
-      ? Math.round(totalXP / totalStudents)
+      ? Math.round(
+          totalXP / totalStudents
+        )
       : 0;
 
 
@@ -271,7 +405,8 @@ export default function AdminStats() {
       ? (
           students.reduce(
             (total, student) =>
-              total + (Number(student.level) || 0),
+              total +
+              (Number(student.level) || 0),
             0
           ) / totalStudents
         ).toFixed(1)
@@ -287,7 +422,8 @@ export default function AdminStats() {
       ? Math.round(
           quizAttempts.reduce(
             (total, attempt) =>
-              total + (Number(attempt.score) || 0),
+              total +
+              (Number(attempt.score) || 0),
             0
           ) / totalAttempts
         )
@@ -295,31 +431,61 @@ export default function AdminStats() {
 
 
   // =========================================================
+  // MAP DES SEUILS DE RÉUSSITE
+  // =========================================================
+
+  const quizPassingScores = useMemo(() => {
+    const map = new Map();
+
+    quizzes.forEach((quiz) => {
+      const passingScore =
+        Number(quiz.passing_score);
+
+      map.set(
+        quiz.id,
+        Number.isFinite(passingScore)
+          ? passingScore
+          : 50
+      );
+    });
+
+    return map;
+  }, [quizzes]);
+
+
+  // =========================================================
   // TAUX DE RÉUSSITE
   // =========================================================
 
-  const passedAttempts = quizAttempts.filter(
-    (attempt) => {
-      const quiz = quizzes.find(
-        (item) => item.id === attempt.quiz_id
-      );
-
-      const passingScore =
-        Number(quiz?.passing_score) || 50;
-
-      return (
-        Number(attempt.score) >= passingScore
-      );
+  const successRate = useMemo(() => {
+    if (totalAttempts === 0) {
+      return 0;
     }
-  ).length;
 
+    let passed = 0;
 
-  const successRate =
-    totalAttempts > 0
-      ? Math.round(
-          (passedAttempts / totalAttempts) * 100
-        )
-      : 0;
+    quizAttempts.forEach((attempt) => {
+      const passingScore =
+        quizPassingScores.get(
+          attempt.quiz_id
+        ) ?? 50;
+
+      const score =
+        Number(attempt.score) || 0;
+
+      if (score >= passingScore) {
+        passed += 1;
+      }
+    });
+
+    return Math.round(
+      (passed / totalAttempts) * 100
+    );
+  }, [
+    quizAttempts,
+    quizPassingScores,
+    totalAttempts,
+  ]);
 
 
   // =========================================================
@@ -327,11 +493,15 @@ export default function AdminStats() {
   // =========================================================
 
   const activeStudentIds = useMemo(() => {
-    return new Set(
-      quizAttempts
-        .map((attempt) => attempt.user_id)
-        .filter(Boolean)
-    );
+    const ids = new Set();
+
+    quizAttempts.forEach((attempt) => {
+      if (attempt.user_id) {
+        ids.add(attempt.user_id);
+      }
+    });
+
+    return ids;
   }, [quizAttempts]);
 
 
@@ -342,7 +512,8 @@ export default function AdminStats() {
   const activityRate =
     totalStudents > 0
       ? Math.round(
-          (activeStudents / totalStudents) * 100
+          (activeStudents / totalStudents) *
+            100
         )
       : 0;
 
@@ -363,58 +534,239 @@ export default function AdminStats() {
 
 
   // =========================================================
+  // MAP DES ÉLÈVES PAR CLASSE
+  // =========================================================
+
+  const studentsByClass = useMemo(() => {
+    const map = new Map();
+
+    students.forEach((student) => {
+      if (!student.class_id) {
+        return;
+      }
+
+      if (!map.has(student.class_id)) {
+        map.set(
+          student.class_id,
+          []
+        );
+      }
+
+      map
+        .get(student.class_id)
+        .push(student);
+    });
+
+    return map;
+  }, [students]);
+
+
+  // =========================================================
+  // MAP DES TENTATIVES PAR ÉLÈVE
+  // =========================================================
+
+  const attemptsByUser = useMemo(() => {
+    const map = new Map();
+
+    quizAttempts.forEach((attempt) => {
+      if (!attempt.user_id) {
+        return;
+      }
+
+      if (!map.has(attempt.user_id)) {
+        map.set(
+          attempt.user_id,
+          []
+        );
+      }
+
+      map
+        .get(attempt.user_id)
+        .push(attempt);
+    });
+
+    return map;
+  }, [quizAttempts]);
+
+
+  // =========================================================
   // STATISTIQUES PAR CLASSE
   // =========================================================
 
   const classStatistics = useMemo(() => {
     return classes.map((classe) => {
-      const classStudents = students.filter(
-        (student) =>
-          student.class_id === classe.id
-      );
+      const classStudents =
+        studentsByClass.get(
+          classe.id
+        ) || [];
 
-      const classStudentIds = new Set(
-        classStudents.map(
-          (student) => student.id
-        )
-      );
+      let attemptsCount = 0;
+      let totalScore = 0;
 
-      const classAttempts =
-        quizAttempts.filter((attempt) =>
-          classStudentIds.has(attempt.user_id)
-        );
+      classStudents.forEach(
+        (student) => {
+          const studentAttempts =
+            attemptsByUser.get(
+              student.id
+            ) || [];
+
+          attemptsCount +=
+            studentAttempts.length;
+
+          studentAttempts.forEach(
+            (attempt) => {
+              totalScore +=
+                Number(
+                  attempt.score
+                ) || 0;
+            }
+          );
+        }
+      );
 
       const averageScore =
-        classAttempts.length > 0
+        attemptsCount > 0
           ? Math.round(
-              classAttempts.reduce(
-                (total, attempt) =>
-                  total +
-                  (Number(attempt.score) || 0),
-                0
-              ) / classAttempts.length
+              totalScore /
+                attemptsCount
             )
           : 0;
 
-      const classXP = classStudents.reduce(
-        (total, student) =>
-          total + (Number(student.xp) || 0),
-        0
-      );
+      const classXP =
+        classStudents.reduce(
+          (total, student) =>
+            total +
+            (Number(student.xp) || 0),
+          0
+        );
 
       return {
         ...classe,
-        students: classStudents.length,
-        attempts: classAttempts.length,
+        students:
+          classStudents.length,
+        attempts:
+          attemptsCount,
         averageScore,
         totalXP: classXP,
       };
     });
   }, [
     classes,
-    students,
-    quizAttempts,
+    studentsByClass,
+    attemptsByUser,
   ]);
+
+
+  // =========================================================
+  // MAP CHAPITRES PAR MATIÈRE
+  // =========================================================
+
+  const chaptersBySubject = useMemo(() => {
+    const map = new Map();
+
+    chapters.forEach((chapter) => {
+      if (!chapter.subject_id) {
+        return;
+      }
+
+      if (!map.has(chapter.subject_id)) {
+        map.set(
+          chapter.subject_id,
+          []
+        );
+      }
+
+      map
+        .get(chapter.subject_id)
+        .push(chapter);
+    });
+
+    return map;
+  }, [chapters]);
+
+
+  // =========================================================
+  // MAP LEÇONS PAR CHAPITRE
+  // =========================================================
+
+  const lessonsByChapter = useMemo(() => {
+    const map = new Map();
+
+    lessons.forEach((lesson) => {
+      if (!lesson.chapter_id) {
+        return;
+      }
+
+      if (!map.has(lesson.chapter_id)) {
+        map.set(
+          lesson.chapter_id,
+          []
+        );
+      }
+
+      map
+        .get(lesson.chapter_id)
+        .push(lesson);
+    });
+
+    return map;
+  }, [lessons]);
+
+
+  // =========================================================
+  // MAP QUIZ PAR LEÇON
+  // =========================================================
+
+  const quizzesByLesson = useMemo(() => {
+    const map = new Map();
+
+    quizzes.forEach((quiz) => {
+      if (!quiz.lesson_id) {
+        return;
+      }
+
+      if (!map.has(quiz.lesson_id)) {
+        map.set(
+          quiz.lesson_id,
+          []
+        );
+      }
+
+      map
+        .get(quiz.lesson_id)
+        .push(quiz);
+    });
+
+    return map;
+  }, [quizzes]);
+
+
+  // =========================================================
+  // MAP TENTATIVES PAR QUIZ
+  // =========================================================
+
+  const attemptsByQuiz = useMemo(() => {
+    const map = new Map();
+
+    quizAttempts.forEach((attempt) => {
+      if (!attempt.quiz_id) {
+        return;
+      }
+
+      if (!map.has(attempt.quiz_id)) {
+        map.set(
+          attempt.quiz_id,
+          []
+        );
+      }
+
+      map
+        .get(attempt.quiz_id)
+        .push(attempt);
+    });
+
+    return map;
+  }, [quizAttempts]);
 
 
   // =========================================================
@@ -424,72 +776,87 @@ export default function AdminStats() {
   const subjectStatistics = useMemo(() => {
     return subjects.map((subject) => {
       const subjectChapters =
-        chapters.filter(
-          (chapter) =>
-            chapter.subject_id === subject.id
-        );
+        chaptersBySubject.get(
+          subject.id
+        ) || [];
 
-      const chapterIds = new Set(
-        subjectChapters.map(
-          (chapter) => chapter.id
-        )
+      let lessonsCount = 0;
+      let quizzesCount = 0;
+      let attemptsCount = 0;
+      let totalScore = 0;
+
+      subjectChapters.forEach(
+        (chapter) => {
+          const chapterLessons =
+            lessonsByChapter.get(
+              chapter.id
+            ) || [];
+
+          lessonsCount +=
+            chapterLessons.length;
+
+          chapterLessons.forEach(
+            (lesson) => {
+              const lessonQuizzes =
+                quizzesByLesson.get(
+                  lesson.id
+                ) || [];
+
+              quizzesCount +=
+                lessonQuizzes.length;
+
+              lessonQuizzes.forEach(
+                (quiz) => {
+                  const quizAttemptsForSubject =
+                    attemptsByQuiz.get(
+                      quiz.id
+                    ) || [];
+
+                  attemptsCount +=
+                    quizAttemptsForSubject.length;
+
+                  quizAttemptsForSubject.forEach(
+                    (attempt) => {
+                      totalScore +=
+                        Number(
+                          attempt.score
+                        ) || 0;
+                    }
+                  );
+                }
+              );
+            }
+          );
+        }
       );
-
-      const subjectLessons =
-        lessons.filter((lesson) =>
-          chapterIds.has(lesson.chapter_id)
-        );
-
-      const lessonIds = new Set(
-        subjectLessons.map(
-          (lesson) => lesson.id
-        )
-      );
-
-      const subjectQuizzes =
-        quizzes.filter((quiz) =>
-          lessonIds.has(quiz.lesson_id)
-        );
-
-      const quizIds = new Set(
-        subjectQuizzes.map(
-          (quiz) => quiz.id
-        )
-      );
-
-      const subjectAttempts =
-        quizAttempts.filter((attempt) =>
-          quizIds.has(attempt.quiz_id)
-        );
 
       const averageScore =
-        subjectAttempts.length > 0
+        attemptsCount > 0
           ? Math.round(
-              subjectAttempts.reduce(
-                (total, attempt) =>
-                  total +
-                  (Number(attempt.score) || 0),
-                0
-              ) /
-                subjectAttempts.length
+              totalScore /
+                attemptsCount
             )
           : 0;
 
       return {
         ...subject,
-        chapters: subjectChapters.length,
-        lessons: subjectLessons.length,
-        quizzes: subjectQuizzes.length,
-        attempts: subjectAttempts.length,
+        chapters:
+          subjectChapters.length,
+        lessons:
+          lessonsCount,
+        quizzes:
+          quizzesCount,
+        attempts:
+          attemptsCount,
         averageScore,
       };
     });
   }, [
     subjects,
-    chapters,
-    lessons,
-    quizzes,
-    quizAttempts,
+    chaptersBySubject,
+    lessonsByChapter,
+    quizzesByLesson,
+    attemptsByQuiz,
   ]);
 
 
@@ -506,7 +873,7 @@ export default function AdminStats() {
 
 
   // =========================================================
-  // RENDU
+  // RENDU CHARGEMENT
   // =========================================================
 
   if (loading) {
@@ -534,6 +901,10 @@ export default function AdminStats() {
     );
   }
 
+
+  // =========================================================
+  // RENDU PRINCIPAL
+  // =========================================================
 
   return (
     <div className="p-6">
@@ -664,8 +1035,6 @@ export default function AdminStats() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
 
-        {/* Élèves */}
-
         <StatCard
           icon={Users}
           label="Élèves"
@@ -675,8 +1044,6 @@ export default function AdminStats() {
           bgClass="bg-blue-100"
         />
 
-
-        {/* XP */}
 
         <StatCard
           icon={Trophy}
@@ -688,8 +1055,6 @@ export default function AdminStats() {
         />
 
 
-        {/* Quiz */}
-
         <StatCard
           icon={ClipboardCheck}
           label="Tentatives de quiz"
@@ -699,8 +1064,6 @@ export default function AdminStats() {
           bgClass="bg-green-100"
         />
 
-
-        {/* Score */}
 
         <StatCard
           icon={TrendingUp}
@@ -759,8 +1122,6 @@ export default function AdminStats() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
 
-        {/* Activité */}
-
         <div className="bg-white border border-slate-200 rounded-xl p-5">
 
           <h2 className="font-semibold text-slate-900 mb-4">
@@ -795,8 +1156,6 @@ export default function AdminStats() {
         </div>
 
 
-        {/* Niveau */}
-
         <div className="bg-white border border-slate-200 rounded-xl p-5">
 
           <h2 className="font-semibold text-slate-900 mb-4">
@@ -830,8 +1189,6 @@ export default function AdminStats() {
 
         </div>
 
-
-        {/* Téléchargements */}
 
         <div className="bg-white border border-slate-200 rounded-xl p-5">
 

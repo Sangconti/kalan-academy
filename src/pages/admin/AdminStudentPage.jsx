@@ -14,7 +14,12 @@ import {
   ArrowLeft,
   Award,
   BookOpen,
+  CheckCircle2,
+  CreditCard,
+  Mail,
   RefreshCw,
+  ShieldCheck,
+  Smartphone,
   Star,
   Target,
   Trophy,
@@ -23,7 +28,8 @@ import {
 } from "lucide-react";
 
 import {
-  getAdminStudentView
+  getAdminStudentView,
+  resetUserProgress
 } from "../../services/adminService";
 
 import {
@@ -37,6 +43,76 @@ import {
 // =====================================================
 
 const XP_PER_LEVEL = 500;
+
+
+// =====================================================
+// OUTILS
+// =====================================================
+
+function formatDate(value) {
+
+  if (!value) {
+    return "—";
+  }
+
+  try {
+
+    return new Intl.DateTimeFormat(
+      "fr-FR",
+      {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }
+    ).format(new Date(value));
+
+  } catch {
+
+    return "—";
+
+  }
+
+}
+
+
+function formatAccessStatus(status) {
+
+  if (!status) {
+    return "—";
+  }
+
+  const labels = {
+    active: "Actif",
+    pending: "En attente",
+    suspended: "Suspendu",
+    blocked: "Bloqué",
+    inactive: "Inactif"
+  };
+
+  return labels[status] || status;
+
+}
+
+
+function getAccessStatusClass(status) {
+
+  switch (status) {
+
+    case "active":
+      return "bg-green-50 text-green-700 border-green-200";
+
+    case "suspended":
+    case "blocked":
+      return "bg-red-50 text-red-700 border-red-200";
+
+    case "pending":
+      return "bg-amber-50 text-amber-700 border-amber-200";
+
+    default:
+      return "bg-gray-50 text-gray-700 border-gray-200";
+
+  }
+
+}
 
 
 // =====================================================
@@ -76,6 +152,20 @@ export default function AdminStudentPage() {
     useState("");
 
   const [deviceMessageType, setDeviceMessageType] =
+    useState("");
+
+
+  // ===================================================
+  // RÉINITIALISATION PROGRESSION
+  // ===================================================
+
+  const [progressResetLoading, setProgressResetLoading] =
+    useState(false);
+
+  const [progressResetMessage, setProgressResetMessage] =
+    useState("");
+
+  const [progressResetMessageType, setProgressResetMessageType] =
     useState("");
 
 
@@ -141,6 +231,20 @@ export default function AdminStudentPage() {
   // ===================================================
 
   async function handleGenerateRecoveryCode() {
+
+    const studentName =
+      data?.profile?.full_name ||
+      "cet élève";
+
+    const confirmed =
+      window.confirm(
+        `Générer un nouveau code de récupération pour ${studentName} ?\n\n` +
+        "Tout ancien code de récupération deviendra immédiatement invalide."
+      );
+
+    if (!confirmed) {
+      return;
+    }
 
     try {
 
@@ -294,6 +398,96 @@ export default function AdminStudentPage() {
     } finally {
 
       setDeviceActionLoading(false);
+
+    }
+
+  }
+
+
+  // ===================================================
+  // RÉINITIALISER LA PROGRESSION
+  // ===================================================
+
+  async function handleResetProgress() {
+
+    const studentName =
+      data?.profile?.full_name ||
+      "cet élève";
+
+    const confirmed =
+      window.confirm(
+        `⚠️ Réinitialiser complètement la progression de ${studentName} ?\n\n` +
+        "Cette action supprimera :\n" +
+        "• les leçons terminées\n" +
+        "• les résultats de quiz\n" +
+        "• les badges obtenus\n" +
+        "• l'XP\n" +
+        "• le niveau\n\n" +
+        "Cette action est irréversible."
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+
+      setProgressResetLoading(true);
+      setProgressResetMessage("");
+      setProgressResetMessageType("");
+
+      console.log(
+        "🔄 [ADMIN STUDENT PROGRESS] Réinitialisation pour =",
+        studentId
+      );
+
+      const result =
+        await resetUserProgress(
+          studentId
+        );
+
+      console.log(
+        "📊 [ADMIN STUDENT PROGRESS] Résultat =",
+        result
+      );
+
+      if (!result?.success) {
+
+        setProgressResetMessage(
+          result?.message ||
+          "Impossible de réinitialiser la progression."
+        );
+
+        setProgressResetMessageType("error");
+
+        return;
+      }
+
+      setProgressResetMessage(
+        "La progression de l'élève a été entièrement réinitialisée."
+      );
+
+      setProgressResetMessageType("success");
+
+      await loadStudent(true);
+
+    } catch (error) {
+
+      console.error(
+        "❌ [ADMIN STUDENT PROGRESS] Erreur =",
+        error
+      );
+
+      setProgressResetMessage(
+        error?.message ||
+        "Impossible de réinitialiser la progression."
+      );
+
+      setProgressResetMessageType("error");
+
+    } finally {
+
+      setProgressResetLoading(false);
 
     }
 
@@ -503,6 +697,32 @@ export default function AdminStudentPage() {
   const badges =
     data.badges || [];
 
+  const device =
+    data.device || null;
+
+
+  // ===================================================
+  // INFORMATIONS PROFIL
+  // ===================================================
+
+  const studentName =
+    profile.full_name ||
+    "Élève";
+
+  const studentEmail =
+    profile.email ||
+    "Non renseigné";
+
+  const className =
+    profile.classes?.name ||
+    profile.class?.name ||
+    profile.class_name ||
+    "Classe non renseignée";
+
+  const orangeMoneyId =
+    profile.orange_money_id ||
+    "Non renseigné";
+
 
   // ===================================================
   // XP
@@ -574,9 +794,37 @@ export default function AdminStudentPage() {
   }
 
 
-  const studentName =
-    profile.full_name ||
-    "Élève";
+  // ===================================================
+  // APPAREIL
+  // ===================================================
+
+  const hasDevice =
+    Boolean(device);
+
+  const deviceName =
+    device?.device_name ||
+    "Téléphone non identifié";
+
+  const deviceManufacturer =
+    device?.manufacturer ||
+    "—";
+
+  const deviceModel =
+    device?.model ||
+    "—";
+
+  const devicePlatform =
+    device?.platform ||
+    "—";
+
+  const deviceOS =
+    device?.os_version ||
+    "—";
+
+  const deviceLastSeen =
+    device?.last_seen_at
+      ? formatDate(device.last_seen_at)
+      : "—";
 
 
   // ===================================================
@@ -849,18 +1097,36 @@ export default function AdminStudentPage() {
                 Élève Kalan Academy
               </p>
 
-              {profile.email && (
+              <div className="
+                flex
+                flex-col
+                gap-1
+                mt-2
+              ">
+
+                <p className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  text-sm
+                  text-gray-600
+                  break-all
+                ">
+                  <Mail
+                    size={15}
+                    className="shrink-0"
+                  />
+                  {studentEmail}
+                </p>
 
                 <p className="
                   text-sm
                   text-gray-600
-                  mt-1
-                  break-all
                 ">
-                  {profile.email}
+                  Classe : <strong>{className}</strong>
                 </p>
 
-              )}
+              </div>
 
             </div>
 
@@ -884,17 +1150,270 @@ export default function AdminStudentPage() {
                   : "Compte gratuit"}
               </span>
 
-              <span className="
+              <span className={`
                 px-3
                 py-2
                 rounded-xl
-                bg-green-50
-                text-green-700
+                border
                 text-sm
                 font-semibold
-              ">
-                {profile.access_status}
+                ${getAccessStatusClass(
+                  profile.access_status
+                )}
+              `}>
+                {formatAccessStatus(
+                  profile.access_status
+                )}
               </span>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        {/* =================================================
+            INFORMATIONS ADMINISTRATIVES
+        ================================================= */}
+
+        <section className="
+          bg-white
+          rounded-3xl
+          border
+          border-gray-200
+          shadow-sm
+          p-6
+        ">
+
+          <div className="
+            flex
+            items-center
+            gap-3
+            mb-5
+          ">
+
+            <div className="
+              w-10
+              h-10
+              rounded-xl
+              bg-accent-soft
+              text-accent
+              flex
+              items-center
+              justify-center
+            ">
+              <ShieldCheck size={20} />
+            </div>
+
+            <div>
+
+              <h2 className="
+                text-xl
+                font-bold
+                text-gray-950
+              ">
+                Informations administratives
+              </h2>
+
+              <p className="
+                text-sm
+                text-gray-600
+                mt-1
+              ">
+                Informations utiles à la gestion du compte.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="
+            grid
+            sm:grid-cols-2
+            lg:grid-cols-3
+            gap-4
+          ">
+
+            <div className="
+              rounded-2xl
+              bg-gray-50
+              border
+              border-gray-200
+              p-4
+            ">
+
+              <p className="
+                text-xs
+                uppercase
+                tracking-wide
+                font-bold
+                text-gray-500
+              ">
+                Classe
+              </p>
+
+              <p className="
+                font-bold
+                text-gray-900
+                mt-1
+              ">
+                {className}
+              </p>
+
+            </div>
+
+            <div className="
+              rounded-2xl
+              bg-gray-50
+              border
+              border-gray-200
+              p-4
+            ">
+
+              <p className="
+                text-xs
+                uppercase
+                tracking-wide
+                font-bold
+                text-gray-500
+              ">
+                Rôle
+              </p>
+
+              <p className="
+                font-bold
+                text-gray-900
+                mt-1
+              ">
+                {profile.role || "student"}
+              </p>
+
+            </div>
+
+            <div className="
+              rounded-2xl
+              bg-gray-50
+              border
+              border-gray-200
+              p-4
+            ">
+
+              <p className="
+                text-xs
+                uppercase
+                tracking-wide
+                font-bold
+                text-gray-500
+              ">
+                Orange Money
+              </p>
+
+              <p className="
+                inline-flex
+                items-center
+                gap-2
+                font-bold
+                text-gray-900
+                mt-1
+                break-all
+              ">
+                <CreditCard
+                  size={16}
+                  className="text-orange-500 shrink-0"
+                />
+                {orangeMoneyId}
+              </p>
+
+            </div>
+
+            <div className="
+              rounded-2xl
+              bg-gray-50
+              border
+              border-gray-200
+              p-4
+            ">
+
+              <p className="
+                text-xs
+                uppercase
+                tracking-wide
+                font-bold
+                text-gray-500
+              ">
+                Compte créé
+              </p>
+
+              <p className="
+                font-bold
+                text-gray-900
+                mt-1
+              ">
+                {formatDate(
+                  profile.created_at
+                )}
+              </p>
+
+            </div>
+
+            <div className="
+              rounded-2xl
+              bg-gray-50
+              border
+              border-gray-200
+              p-4
+            ">
+
+              <p className="
+                text-xs
+                uppercase
+                tracking-wide
+                font-bold
+                text-gray-500
+              ">
+                Dernière mise à jour
+              </p>
+
+              <p className="
+                font-bold
+                text-gray-900
+                mt-1
+              ">
+                {formatDate(
+                  profile.updated_at
+                )}
+              </p>
+
+            </div>
+
+            <div className="
+              rounded-2xl
+              bg-gray-50
+              border
+              border-gray-200
+              p-4
+            ">
+
+              <p className="
+                text-xs
+                uppercase
+                tracking-wide
+                font-bold
+                text-gray-500
+              ">
+                Identifiant élève
+              </p>
+
+              <p className="
+                text-xs
+                font-mono
+                text-gray-700
+                mt-1
+                break-all
+              ">
+                {profile.id}
+              </p>
 
             </div>
 
@@ -919,28 +1438,27 @@ export default function AdminStudentPage() {
           shadow-xl
         ">
 
-        <div className="
-          absolute
-          -right-16
-          -top-16
-          w-48
-          h-48
-          rounded-full
-          bg-accent
-          opacity-10
-        "/>
+          <div className="
+            absolute
+            -right-16
+            -top-16
+            w-48
+            h-48
+            rounded-full
+            bg-accent
+            opacity-10
+          "/>
 
-
-        <div className="
-          absolute
-          right-10
-          -bottom-24
-          w-56
-          h-56
-          rounded-full
-          bg-accent
-          opacity-5
-        "/>
+          <div className="
+            absolute
+            right-10
+            -bottom-24
+            w-56
+            h-56
+            rounded-full
+            bg-accent
+            opacity-5
+          "/>
 
           <div className="
             relative
@@ -1171,7 +1689,6 @@ export default function AdminStudentPage() {
 
           </div>
 
-
           <div className="
             grid
             grid-cols-2
@@ -1183,22 +1700,22 @@ export default function AdminStudentPage() {
               {
                 icon: BookOpen,
                 label: "Leçons terminées",
-                value: stats.lessons || 0
+                value: Number(stats.lessons || 0)
               },
               {
                 icon: Star,
                 label: "Score moyen",
-                value: `${stats.score || 0}%`
+                value: `${Number(stats.score || 0)}%`
               },
               {
                 icon: Award,
                 label: "Badges obtenus",
-                value: stats.badges || 0
+                value: Number(stats.badges || 0)
               },
               {
                 icon: Target,
                 label: "Quiz réalisés",
-                value: stats.attempts || 0
+                value: Number(stats.attempts || 0)
               }
             ].map(
               ({
@@ -1300,13 +1817,12 @@ export default function AdminStudentPage() {
                 text-gray-600
                 mt-1
               ">
-                Avancement de l'élève dans chaque matière.
+                Avancement réel de l'élève dans chaque matière.
               </p>
 
             </div>
 
           </div>
-
 
           {Object.keys(subjects).length === 0 ? (
 
@@ -1356,88 +1872,111 @@ export default function AdminStudentPage() {
             ">
 
               {Object.entries(subjects).map(
-                ([name, subject]) => (
+                ([name, subject]) => {
 
-                  <div
-                    key={name}
-                    className="
-                      bg-white
-                      rounded-2xl
-                      border
-                      border-gray-200
-                      shadow-sm
-                      p-5
-                    "
-                  >
+                  const percent =
+                    Math.min(
+                      Math.max(
+                        Number(subject?.percent || 0),
+                        0
+                      ),
+                      100
+                    );
 
-                    <div className="
-                      flex
-                      items-center
-                      justify-between
-                      gap-3
-                    ">
+                  const completed =
+                    Number(
+                      subject?.completed || 0
+                    );
 
-                      <h3 className="
-                        font-bold
-                        text-gray-950
-                        truncate
+                  const total =
+                    Number(
+                      subject?.total || 0
+                    );
+
+                  return (
+
+                    <div
+                      key={
+                        subject?.id ||
+                        name
+                      }
+                      className="
+                        bg-white
+                        rounded-2xl
+                        border
+                        border-gray-200
+                        shadow-sm
+                        p-5
+                      "
+                    >
+
+                      <div className="
+                        flex
+                        items-center
+                        justify-between
+                        gap-3
                       ">
-                        {name}
-                      </h3>
 
-                      <span className="
-                        text-sm
-                        font-bold
-                        text-accent
+                        <h3 className="
+                          font-bold
+                          text-gray-950
+                          truncate
+                        ">
+                          {subject?.name || name}
+                        </h3>
+
+                        <span className="
+                          text-sm
+                          font-bold
+                          text-accent
+                        ">
+                          {percent}%
+                        </span>
+
+                      </div>
+
+                      <div className="
+                        h-3
+                        bg-gray-100
+                        rounded-full
+                        overflow-hidden
+                        mt-4
                       ">
-                        {subject.percent || 0}%
-                      </span>
+
+                        <div
+                          className="
+                            h-full
+                            bg-accent
+                            rounded-full
+                            transition-all
+                          "
+                          style={{
+                            width: `${percent}%`
+                          }}
+                        />
+
+                      </div>
+
+                      <p className="
+                        text-xs
+                        text-gray-600
+                        mt-2
+                      ">
+
+                        {completed} leçon
+                        {completed > 1 ? "s" : ""}
+                        {" "}terminée
+                        {completed > 1 ? "s" : ""}
+                        {" "}sur{" "}
+                        {total}
+
+                      </p>
 
                     </div>
 
-                    <div className="
-                      h-3
-                      bg-gray-100
-                      rounded-full
-                      overflow-hidden
-                      mt-4
-                    ">
+                  );
 
-                      <div
-                        className="
-                          h-full
-                          bg-accent
-                          rounded-full
-                        "
-                        style={{
-                          width: `${Math.min(
-                            Math.max(
-                              Number(subject.percent || 0),
-                              0
-                            ),
-                            100
-                          )}%`
-                        }}
-                      />
-
-                    </div>
-
-                    <p className="
-                      text-xs
-                      text-gray-600
-                      mt-2
-                    ">
-                      {subject.completed || 0} leçon
-                      {(subject.completed || 0) > 1 ? "s" : ""}
-                      {" "}terminée
-                      {(subject.completed || 0) > 1 ? "s" : ""}
-                      {" "}sur{" "}
-                      {subject.total || 0}
-                    </p>
-
-                  </div>
-
-                )
+                }
               )}
 
             </div>
@@ -1493,7 +2032,6 @@ export default function AdminStudentPage() {
             </div>
 
           </div>
-
 
           {badges.length === 0 ? (
 
@@ -1665,6 +2203,376 @@ export default function AdminStudentPage() {
           <div className="
             flex
             flex-col
+            gap-5
+          ">
+
+            <div className="
+              flex
+              flex-col
+              lg:flex-row
+              lg:items-center
+              lg:justify-between
+              gap-5
+            ">
+
+              <div className="
+                flex
+                items-start
+                gap-4
+              ">
+
+                <div className="
+                  w-12
+                  h-12
+                  rounded-2xl
+                  bg-orange-50
+                  text-orange-600
+                  flex
+                  items-center
+                  justify-center
+                  shrink-0
+                ">
+                  <Smartphone size={24} />
+                </div>
+
+                <div>
+
+                  <h2 className="
+                    text-xl
+                    font-bold
+                    text-gray-950
+                  ">
+                    Gestion de l'appareil
+                  </h2>
+
+                  <p className="
+                    text-sm
+                    text-gray-600
+                    mt-1
+                    max-w-2xl
+                  ">
+                    Gérez l'appareil actuellement associé au compte de cet élève.
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="
+                flex
+                flex-col
+                sm:flex-row
+                gap-3
+              ">
+
+                <button
+                  type="button"
+                  onClick={
+                    handleGenerateRecoveryCode
+                  }
+                  disabled={deviceActionLoading}
+                  className="
+                    inline-flex
+                    items-center
+                    justify-center
+                    gap-2
+                    px-4
+                    py-3
+                    rounded-xl
+                    bg-orange-500
+                    text-white
+                    font-semibold
+                    hover:bg-orange-600
+                    transition
+                    disabled:opacity-50
+                    disabled:cursor-not-allowed
+                    whitespace-nowrap
+                  "
+                >
+
+                  <span>
+                    🔐
+                  </span>
+
+                  {deviceActionLoading
+                    ? "Traitement..."
+                    : "Générer un code"
+                  }
+
+                </button>
+
+                <button
+                  type="button"
+                  onClick={
+                    handleResetDevice
+                  }
+                  disabled={deviceActionLoading}
+                  className="
+                    inline-flex
+                    items-center
+                    justify-center
+                    gap-2
+                    px-4
+                    py-3
+                    rounded-xl
+                    bg-gray-100
+                    text-gray-800
+                    border
+                    border-gray-200
+                    font-semibold
+                    hover:bg-gray-200
+                    transition
+                    disabled:opacity-50
+                    disabled:cursor-not-allowed
+                    whitespace-nowrap
+                  "
+                >
+
+                  🔄 Réinitialiser
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+            {/* INFORMATIONS APPAREIL */}
+
+            <div className="
+              rounded-2xl
+              bg-orange-50
+              border
+              border-orange-100
+              p-5
+            ">
+
+              {!hasDevice ? (
+
+                <div className="
+                  flex
+                  items-center
+                  gap-3
+                  text-orange-800
+                ">
+
+                  <Smartphone size={20} />
+
+                  <div>
+
+                    <p className="
+                      font-bold
+                    ">
+                      Aucun appareil associé
+                    </p>
+
+                    <p className="
+                      text-sm
+                      mt-1
+                    ">
+                      Ce compte n'a actuellement aucun téléphone enregistré.
+                    </p>
+
+                  </div>
+
+                </div>
+
+              ) : (
+
+                <div className="
+                  grid
+                  sm:grid-cols-2
+                  lg:grid-cols-3
+                  gap-4
+                ">
+
+                  <div>
+
+                    <p className="
+                      text-xs
+                      uppercase
+                      tracking-wide
+                      font-bold
+                      text-orange-700
+                    ">
+                      Appareil
+                    </p>
+
+                    <p className="
+                      font-bold
+                      text-gray-900
+                      mt-1
+                    ">
+                      {deviceName}
+                    </p>
+
+                  </div>
+
+                  <div>
+
+                    <p className="
+                      text-xs
+                      uppercase
+                      tracking-wide
+                      font-bold
+                      text-orange-700
+                    ">
+                      Fabricant
+                    </p>
+
+                    <p className="
+                      font-bold
+                      text-gray-900
+                      mt-1
+                    ">
+                      {deviceManufacturer}
+                    </p>
+
+                  </div>
+
+                  <div>
+
+                    <p className="
+                      text-xs
+                      uppercase
+                      tracking-wide
+                      font-bold
+                      text-orange-700
+                    ">
+                      Modèle
+                    </p>
+
+                    <p className="
+                      font-bold
+                      text-gray-900
+                      mt-1
+                    ">
+                      {deviceModel}
+                    </p>
+
+                  </div>
+
+                  <div>
+
+                    <p className="
+                      text-xs
+                      uppercase
+                      tracking-wide
+                      font-bold
+                      text-orange-700
+                    ">
+                      Plateforme
+                    </p>
+
+                    <p className="
+                      font-bold
+                      text-gray-900
+                      mt-1
+                    ">
+                      {devicePlatform}
+                    </p>
+
+                  </div>
+
+                  <div>
+
+                    <p className="
+                      text-xs
+                      uppercase
+                      tracking-wide
+                      font-bold
+                      text-orange-700
+                    ">
+                      Version système
+                    </p>
+
+                    <p className="
+                      font-bold
+                      text-gray-900
+                      mt-1
+                    ">
+                      {deviceOS}
+                    </p>
+
+                  </div>
+
+                  <div>
+
+                    <p className="
+                      text-xs
+                      uppercase
+                      tracking-wide
+                      font-bold
+                      text-orange-700
+                    ">
+                      Dernière activité
+                    </p>
+
+                    <p className="
+                      font-bold
+                      text-gray-900
+                      mt-1
+                    ">
+                      {deviceLastSeen}
+                    </p>
+
+                  </div>
+
+                </div>
+
+              )}
+
+            </div>
+
+
+            {deviceMessage && (
+
+              <div
+                className={`
+                  rounded-xl
+                  border
+                  p-4
+                  ${
+                    deviceMessageType === "success"
+                      ? "bg-green-50 border-green-200 text-green-800"
+                      : "bg-red-50 border-red-200 text-red-800"
+                  }
+                `}
+              >
+
+                <p className="
+                  text-sm
+                  font-semibold
+                  break-words
+                ">
+                  {deviceMessage}
+                </p>
+
+              </div>
+
+            )}
+
+          </div>
+
+        </section>
+
+
+        {/* =================================================
+            ACTION ADMINISTRATIVE
+        ================================================= */}
+
+        <section className="
+          bg-white
+          rounded-3xl
+          border
+          border-red-200
+          shadow-sm
+          p-6
+        ">
+
+          <div className="
+            flex
+            flex-col
             lg:flex-row
             lg:items-center
             lg:justify-between
@@ -1681,14 +2589,14 @@ export default function AdminStudentPage() {
                 w-12
                 h-12
                 rounded-2xl
-                bg-orange-50
-                text-orange-600
+                bg-red-50
+                text-red-600
                 flex
                 items-center
                 justify-center
                 shrink-0
               ">
-                📱
+                <RefreshCw size={23} />
               </div>
 
               <div>
@@ -1698,7 +2606,7 @@ export default function AdminStudentPage() {
                   font-bold
                   text-gray-950
                 ">
-                  Gestion de l'appareil
+                  Réinitialisation de la progression
                 </h2>
 
                 <p className="
@@ -1707,95 +2615,60 @@ export default function AdminStudentPage() {
                   mt-1
                   max-w-2xl
                 ">
-                  Gérez la récupération du compte de cet élève lorsqu'il change de téléphone.
+                  Remettre la progression pédagogique de cet élève à zéro.
+                  Cette action supprime son XP, son niveau, ses leçons terminées,
+                  ses tentatives de quiz et ses badges.
                 </p>
 
               </div>
 
             </div>
 
+            <button
+              type="button"
+              onClick={
+                handleResetProgress
+              }
+              disabled={progressResetLoading}
+              className="
+                inline-flex
+                items-center
+                justify-center
+                gap-2
+                px-5
+                py-3
+                rounded-xl
+                bg-red-600
+                text-white
+                font-semibold
+                hover:bg-red-700
+                transition
+                disabled:opacity-50
+                disabled:cursor-not-allowed
+                whitespace-nowrap
+              "
+            >
 
-            <div className="
-              flex
-              flex-col
-              sm:flex-row
-              gap-3
-            ">
-
-              <button
-                type="button"
-                onClick={
-                  handleGenerateRecoveryCode
+              <RefreshCw
+                size={18}
+                className={
+                  progressResetLoading
+                    ? "animate-spin"
+                    : ""
                 }
-                disabled={deviceActionLoading}
-                className="
-                  inline-flex
-                  items-center
-                  justify-center
-                  gap-2
-                  px-4
-                  py-3
-                  rounded-xl
-                  bg-orange-500
-                  text-white
-                  font-semibold
-                  hover:bg-orange-600
-                  transition
-                  disabled:opacity-50
-                  disabled:cursor-not-allowed
-                  whitespace-nowrap
-                "
-              >
+              />
 
-                <span>
-                  🔐
-                </span>
+              {progressResetLoading
+                ? "Réinitialisation..."
+                : "Réinitialiser la progression"
+              }
 
-                {deviceActionLoading
-                  ? "Traitement..."
-                  : "Générer un code"
-                }
-
-              </button>
-
-
-              <button
-                type="button"
-                onClick={
-                  handleResetDevice
-                }
-                disabled={deviceActionLoading}
-                className="
-                  inline-flex
-                  items-center
-                  justify-center
-                  gap-2
-                  px-4
-                  py-3
-                  rounded-xl
-                  bg-gray-100
-                  text-gray-800
-                  border
-                  border-gray-200
-                  font-semibold
-                  hover:bg-gray-200
-                  transition
-                  disabled:opacity-50
-                  disabled:cursor-not-allowed
-                  whitespace-nowrap
-                "
-              >
-
-                🔄 Réinitialiser
-
-              </button>
-
-            </div>
+            </button>
 
           </div>
 
 
-          {deviceMessage && (
+          {progressResetMessage && (
 
             <div
               className={`
@@ -1804,7 +2677,7 @@ export default function AdminStudentPage() {
                 border
                 p-4
                 ${
-                  deviceMessageType === "success"
+                  progressResetMessageType === "success"
                     ? "bg-green-50 border-green-200 text-green-800"
                     : "bg-red-50 border-red-200 text-red-800"
                 }
@@ -1814,9 +2687,8 @@ export default function AdminStudentPage() {
               <p className="
                 text-sm
                 font-semibold
-                break-words
               ">
-                {deviceMessage}
+                {progressResetMessage}
               </p>
 
             </div>

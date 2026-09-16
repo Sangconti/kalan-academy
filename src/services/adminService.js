@@ -6,9 +6,7 @@ import { supabase } from "../lib/supabase";
 // ==========================
 
 export async function getAdminStats() {
-
   const [
-
     students,
     premium,
     classes,
@@ -16,9 +14,7 @@ export async function getAdminStats() {
     lessons,
     quizzes,
     xp
-
   ] = await Promise.all([
-
     supabase
       .from("profiles")
       .select("*", {
@@ -66,47 +62,38 @@ export async function getAdminStats() {
     supabase
       .from("profiles")
       .select("xp")
-
   ]);
 
 
   const responses = [
-
     {
       name: "students",
       response: students
     },
-
     {
       name: "premium",
       response: premium
     },
-
     {
       name: "classes",
       response: classes
     },
-
     {
       name: "subjects",
       response: subjects
     },
-
     {
       name: "lessons",
       response: lessons
     },
-
     {
       name: "quizzes",
       response: quizzes
     },
-
     {
       name: "xp",
       response: xp
     }
-
   ];
 
 
@@ -116,32 +103,27 @@ export async function getAdminStats() {
 
 
   if (failedRequest) {
-
     console.error(
       `Erreur statistiques ${failedRequest.name}:`,
       failedRequest.response.error
     );
 
     throw failedRequest.response.error;
-
   }
 
 
   const totalXP =
     xp.data?.reduce(
       (sum, user) => {
-
         return sum + (
           Number(user.xp) || 0
         );
-
       },
       0
     ) || 0;
 
 
   return {
-
     students:
       students.count || 0,
 
@@ -161,9 +143,7 @@ export async function getAdminStats() {
       quizzes.count || 0,
 
     totalXP
-
   };
-
 }
 
 
@@ -172,14 +152,11 @@ export async function getAdminStats() {
 // ==========================
 
 export async function getAdminUsers() {
-
   const {
     data,
     error
   } = await supabase
-
     .from("profiles")
-
     .select(`
       id,
       full_name,
@@ -190,9 +167,9 @@ export async function getAdminUsers() {
       is_premium,
       xp,
       level,
+      orange_money_id,
       created_at
     `)
-
     .order(
       "created_at",
       {
@@ -202,14 +179,11 @@ export async function getAdminUsers() {
 
 
   if (error) {
-
     throw error;
-
   }
 
 
   return data || [];
-
 }
 
 
@@ -221,17 +195,13 @@ export async function updateUserRole(
   userId,
   role
 ) {
-
   const {
     error
   } = await supabase
-
     .from("profiles")
-
     .update({
       role
     })
-
     .eq(
       "id",
       userId
@@ -239,36 +209,29 @@ export async function updateUserRole(
 
 
   if (error) {
-
     throw error;
-
   }
 
 
   return true;
-
 }
 
 
 // ==========================
-// ACTIVER / DÉSACTIVER UN UTILISATEUR
+// ACTIVER / DÉSACTIVER
 // ==========================
 
 export async function updateUserAccess(
   userId,
   accessStatus
 ) {
-
   const {
     error
   } = await supabase
-
     .from("profiles")
-
     .update({
       access_status: accessStatus
     })
-
     .eq(
       "id",
       userId
@@ -276,14 +239,11 @@ export async function updateUserAccess(
 
 
   if (error) {
-
     throw error;
-
   }
 
 
   return true;
-
 }
 
 
@@ -295,40 +255,261 @@ export async function updateUserAccessStatus(
   userId,
   accessStatus
 ) {
-
   const {
     error
   } = await supabase
-
     .from("profiles")
-
     .update({
       access_status: accessStatus
     })
-
     .eq(
       "id",
       userId
     );
 
-  if (error) {
 
+  if (error) {
     console.error(
       "Erreur modification access_status :",
       error
     );
 
     throw error;
-
   }
 
-  return true;
 
+  return true;
 }
 
 
-export async function deleteAdminUser(userId) {
+// ==========================
+// MODIFIER PREMIUM
+// ==========================
 
+export async function updateUserPremium(
+  userId,
+  isPremium
+) {
+  if (!userId) {
+    throw new Error(
+      "Identifiant utilisateur manquant."
+    );
+  }
+
+
+  const {
+    error
+  } = await supabase
+    .from("profiles")
+    .update({
+      is_premium: Boolean(isPremium)
+    })
+    .eq(
+      "id",
+      userId
+    );
+
+
+  if (error) {
+    console.error(
+      "Erreur modification Premium :",
+      error
+    );
+
+    throw error;
+  }
+
+
+  return true;
+}
+
+
+// ==========================
+// MODIFIER LA CLASSE
+// ==========================
+
+export async function updateUserClass(
+  userId,
+  classId
+) {
+  if (!userId) {
+    throw new Error(
+      "Identifiant utilisateur manquant."
+    );
+  }
+
+
+  const {
+    error
+  } = await supabase
+    .from("profiles")
+    .update({
+      class_id: classId || null
+    })
+    .eq(
+      "id",
+      userId
+    );
+
+
+  if (error) {
+    console.error(
+      "Erreur modification classe :",
+      error
+    );
+
+    throw error;
+  }
+
+
+  return true;
+}
+
+
+// ==========================
+// MODIFIER ORANGE MONEY
+// ==========================
+
+export async function updateUserOrangeMoney(
+  userId,
+  orangeMoneyId
+) {
+  if (!userId) {
+    throw new Error(
+      "Identifiant utilisateur manquant."
+    );
+  }
+
+
+  const {
+    error
+  } = await supabase
+    .from("profiles")
+    .update({
+      orange_money_id:
+        orangeMoneyId?.trim() || null
+    })
+    .eq(
+      "id",
+      userId
+    );
+
+
+  if (error) {
+    console.error(
+      "Erreur modification Orange Money :",
+      error
+    );
+
+    throw error;
+  }
+
+
+  return true;
+}
+
+
+// ==========================
+// RÉINITIALISER LA PROGRESSION
+// ==========================
+
+export async function resetUserProgress(
+  userId
+) {
+  if (!userId) {
+    throw new Error(
+      "Identifiant élève manquant."
+    );
+  }
+
+
+  const {
+    data,
+    error
+  } = await supabase.rpc(
+    "reset_user_progress",
+    {
+      p_user_id: userId
+    }
+  );
+
+
+  if (error) {
+    console.error(
+      "Erreur RPC reset_user_progress :",
+      error
+    );
+
+    throw error;
+  }
+
+
+  if (!data?.success) {
+    throw new Error(
+      data?.message ||
+      "La réinitialisation de la progression a échoué."
+    );
+  }
+
+
+  return data;
+}
+
+
+// ==========================
+// EMAIL ADMIN DE L'ÉLÈVE
+// ==========================
+
+export async function getAdminStudentEmail(
+  userId
+) {
+  if (!userId) {
+    throw new Error(
+      "Identifiant élève manquant."
+    );
+  }
+
+
+  const {
+    data,
+    error
+  } = await supabase.rpc(
+    "get_admin_student_email",
+    {
+      p_user_id: userId
+    }
+  );
+
+
+  if (error) {
+    console.error(
+      "Erreur RPC get_admin_student_email :",
+      error
+    );
+
+    throw error;
+  }
+
+
+  if (!data?.success) {
+    throw new Error(
+      data?.message ||
+      "Impossible de récupérer l'adresse email."
+    );
+  }
+
+
+  return data.email || null;
+}
+
+
+// ==========================
+// SUPPRIMER UN UTILISATEUR
+// ==========================
+
+export async function deleteAdminUser(
+  userId
+) {
   const {
     data,
     error
@@ -341,8 +522,8 @@ export async function deleteAdminUser(userId) {
     }
   );
 
-  if (error) {
 
+  if (error) {
     console.error(
       "❌ Erreur Edge Function :",
       error
@@ -359,12 +540,8 @@ export async function deleteAdminUser(userId) {
     );
 
 
-    // Lire la vraie réponse JSON de l'Edge Function
-
     if (error.context) {
-
       try {
-
         const details =
           await error.context.json();
 
@@ -381,44 +558,34 @@ export async function deleteAdminUser(userId) {
 
       } catch (readError) {
 
-        // Si readError est notre propre erreur,
-        // on la remonte directement.
-
         if (
           readError instanceof Error &&
           readError.message
         ) {
-
           throw readError;
-
         }
 
         console.error(
           "Impossible de lire la réponse Edge Function :",
           readError
         );
-
       }
-
     }
 
-    throw error;
 
+    throw error;
   }
 
 
   if (!data?.success) {
-
     throw new Error(
       data?.error ||
       "La suppression n'a pas été confirmée."
     );
-
   }
 
 
   return true;
-
 }
 
 
@@ -427,16 +594,12 @@ export async function deleteAdminUser(userId) {
 // ==========================
 
 export async function getAdminClasses() {
-
   const {
     data,
     error
   } = await supabase
-
     .from("classes")
-
     .select("*")
-
     .order(
       "order_number",
       {
@@ -446,14 +609,11 @@ export async function getAdminClasses() {
 
 
   if (error) {
-
     throw error;
-
   }
 
 
   return data || [];
-
 }
 
 
@@ -464,30 +624,22 @@ export async function getAdminClasses() {
 export async function createClass(
   classData
 ) {
-
   const {
     data,
     error
   } = await supabase
-
     .from("classes")
-
     .insert(classData)
-
     .select()
-
     .single();
 
 
   if (error) {
-
     throw error;
-
   }
 
 
   return data;
-
 }
 
 
@@ -499,15 +651,11 @@ export async function updateClass(
   id,
   classData
 ) {
-
   const {
     error
   } = await supabase
-
     .from("classes")
-
     .update(classData)
-
     .eq(
       "id",
       id
@@ -515,14 +663,11 @@ export async function updateClass(
 
 
   if (error) {
-
     throw error;
-
   }
 
 
   return true;
-
 }
 
 
@@ -533,15 +678,11 @@ export async function updateClass(
 export async function deleteClass(
   id
 ) {
-
   const {
     error
   } = await supabase
-
     .from("classes")
-
     .delete()
-
     .eq(
       "id",
       id
@@ -549,14 +690,11 @@ export async function deleteClass(
 
 
   if (error) {
-
     throw error;
-
   }
 
 
   return true;
-
 }
 
 
@@ -567,26 +705,22 @@ export async function deleteClass(
 export async function getAdminStudentView(
   studentId
 ) {
-
   if (!studentId) {
-
     throw new Error(
       "Identifiant élève manquant."
     );
-
   }
 
 
   const [
-
     profileResult,
     progressResult,
     attemptsResult,
     badgesResult,
-    deviceResult
-
+    deviceResult,
+    lessonsResult,
+    emailResult
   ] = await Promise.all([
-
 
     // -----------------------------------------
     // PROFIL
@@ -602,36 +736,36 @@ export async function getAdminStudentView(
         access_status,
         class_id,
         is_premium,
+        orange_money_id,
         xp,
         level,
-        created_at
+        created_at,
+        classes(
+          id,
+          name
+        )
       `)
-      .eq("id", studentId)
+      .eq(
+        "id",
+        studentId
+      )
       .single(),
 
 
     // -----------------------------------------
-    // PROGRESSION
+    // PROGRESSION ÉLÈVE
     // -----------------------------------------
 
     supabase
       .from("user_progress")
       .select(`
-        completed,
-        lessons(
-          id,
-          title,
-          chapters(
-            id,
-            title,
-            subjects(
-              id,
-              name
-            )
-          )
-        )
+        lesson_id,
+        completed
       `)
-      .eq("user_id", studentId),
+      .eq(
+        "user_id",
+        studentId
+      ),
 
 
     // -----------------------------------------
@@ -643,7 +777,10 @@ export async function getAdminStudentView(
       .select(`
         score
       `)
-      .eq("user_id", studentId),
+      .eq(
+        "user_id",
+        studentId
+      ),
 
 
     // -----------------------------------------
@@ -664,7 +801,10 @@ export async function getAdminStudentView(
           xp_reward
         )
       `)
-      .eq("user_id", studentId),
+      .eq(
+        "user_id",
+        studentId
+      ),
 
 
     // -----------------------------------------
@@ -674,6 +814,7 @@ export async function getAdminStudentView(
     supabase
       .from("user_devices")
       .select(`
+        id,
         device_id,
         device_name,
         platform,
@@ -685,34 +826,81 @@ export async function getAdminStudentView(
         created_at,
         updated_at
       `)
-      .eq("user_id", studentId)
-      .maybeSingle()
+      .eq(
+        "user_id",
+        studentId
+      )
+      .maybeSingle(),
+
+
+    // -----------------------------------------
+    // TOUTES LES LEÇONS
+    // -----------------------------------------
+
+    supabase
+      .from("lessons")
+      .select(`
+        id,
+        subject_id,
+        subjects(
+          id,
+          name
+        )
+      `),
+
+
+    // -----------------------------------------
+    // EMAIL
+    // -----------------------------------------
+
+    supabase.rpc(
+      "get_admin_student_email",
+      {
+        p_user_id: studentId
+      }
+    )
 
   ]);
 
 
   // -----------------------------------------
-  // VÉRIFICATION PROFIL
+  // PROFIL
   // -----------------------------------------
 
   if (profileResult.error) {
-
     console.error(
       "❌ [ADMIN STUDENT] Erreur profil :",
       profileResult.error
     );
 
     throw profileResult.error;
-
   }
 
 
   if (!profileResult.data) {
-
     throw new Error(
       "Élève introuvable."
     );
+  }
 
+
+  // -----------------------------------------
+  // EMAIL
+  // -----------------------------------------
+
+  let email = null;
+
+
+  if (emailResult.error) {
+    console.error(
+      "❌ [ADMIN STUDENT] Erreur email :",
+      emailResult.error
+    );
+  } else if (
+    emailResult.data?.success
+  ) {
+    email =
+      emailResult.data.email || null;
   }
 
 
@@ -721,12 +909,10 @@ export async function getAdminStudentView(
   // -----------------------------------------
 
   if (deviceResult.error) {
-
     console.error(
       "❌ [ADMIN STUDENT] Erreur appareil :",
       deviceResult.error
     );
-
   }
 
 
@@ -739,17 +925,31 @@ export async function getAdminStudentView(
   // -----------------------------------------
 
   if (progressResult.error) {
-
     console.error(
       "❌ [ADMIN STUDENT] Erreur progression :",
       progressResult.error
     );
-
   }
 
 
   const progressData =
     progressResult.data || [];
+
+
+  // -----------------------------------------
+  // TOUTES LES LEÇONS
+  // -----------------------------------------
+
+  if (lessonsResult.error) {
+    console.error(
+      "❌ [ADMIN STUDENT] Erreur leçons :",
+      lessonsResult.error
+    );
+  }
+
+
+  const lessonsData =
+    lessonsResult.data || [];
 
 
   // -----------------------------------------
@@ -772,53 +972,74 @@ export async function getAdminStudentView(
 
 
   // -----------------------------------------
+  // LEÇONS TERMINÉES PAR ID
+  // -----------------------------------------
+
+  const completedLessonIds =
+    new Set(
+      progressData
+        .filter(
+          item =>
+            item?.completed === true &&
+            item?.lesson_id
+        )
+        .map(
+          item => item.lesson_id
+        )
+    );
+
+
+  // -----------------------------------------
   // PROGRESSION PAR MATIÈRE
   // -----------------------------------------
 
   const subjectsProgress = {};
 
 
-  for (const item of progressData) {
+  for (const lesson of lessonsData) {
 
     const subject =
-      item?.lessons?.chapters?.subjects;
+      lesson?.subjects;
 
 
-    if (!subject?.name) {
-
+    if (!subject?.id) {
       continue;
-
     }
 
 
+    const subjectId =
+      subject.id;
+
+
     const subjectName =
-      subject.name;
+      subject.name ||
+      "Matière inconnue";
 
 
-    if (!subjectsProgress[subjectName]) {
+    if (!subjectsProgress[subjectId]) {
 
-      subjectsProgress[subjectName] = {
-
+      subjectsProgress[subjectId] = {
+        id: subjectId,
+        name: subjectName,
         total: 0,
-
         completed: 0,
-
         percent: 0
-
       };
 
     }
 
 
-    subjectsProgress[
-      subjectName
-    ].total += 1;
+    subjectsProgress[subjectId].total += 1;
 
 
-    if (item.completed === true) {
+    if (
+      completedLessonIds.has(
+        lesson.id
+      )
+    ) {
 
       subjectsProgress[
-        subjectName
+        subjectId
       ].completed += 1;
 
     }
@@ -827,7 +1048,7 @@ export async function getAdminStudentView(
 
 
   // -----------------------------------------
-  // POURCENTAGES
+  // CALCUL DES POURCENTAGES
   // -----------------------------------------
 
   Object.values(
@@ -844,6 +1065,10 @@ export async function getAdminStudentView(
           ) * 100
         );
 
+    } else {
+
+      subject.percent = 0;
+
     }
 
   });
@@ -854,12 +1079,10 @@ export async function getAdminStudentView(
   // -----------------------------------------
 
   if (attemptsResult.error) {
-
     console.error(
       "❌ [ADMIN STUDENT] Erreur quiz :",
       attemptsResult.error
     );
-
   }
 
 
@@ -899,12 +1122,10 @@ export async function getAdminStudentView(
   // -----------------------------------------
 
   if (badgesResult.error) {
-
     console.error(
       "❌ [ADMIN STUDENT] Erreur badges :",
       badgesResult.error
     );
-
   }
 
 
@@ -918,8 +1139,10 @@ export async function getAdminStudentView(
 
   return {
 
-    profile:
-      profileResult.data,
+    profile: {
+      ...profileResult.data,
+      email
+    },
 
     device:
       deviceData,
@@ -946,5 +1169,4 @@ export async function getAdminStudentView(
     badges
 
   };
-
 }

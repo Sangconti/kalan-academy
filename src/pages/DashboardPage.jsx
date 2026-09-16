@@ -1,18 +1,15 @@
-// src/pages/DashboardPage.jsx
-
 import {
   useCallback,
   useEffect,
   useRef,
-  useState
+  useState,
 } from "react";
 
 import {
   useParams,
-  useLocation
+  useLocation,
+  useOutletContext,
 } from "react-router-dom";
-
-import { supabase } from "../lib/supabase";
 
 import {
   Award,
@@ -21,25 +18,18 @@ import {
   Trophy,
   Target,
   RefreshCw,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
 
-
-// =====================================================
-// CONSTANTES
-// =====================================================
+import { supabase } from "../lib/supabase";
 
 const XP_PER_LEVEL = 500;
 
 const DASHBOARD_CACHE_PREFIX =
   "kalan_dashboard_";
 
-// 5 minutes.
-// Le cache reste utilisé pour éviter de refaire
-// plusieurs requêtes Supabase à chaque ouverture.
 const DASHBOARD_CACHE_DURATION =
   5 * 60 * 1000;
-
 
 // =====================================================
 // CACHE
@@ -49,54 +39,43 @@ function getDashboardCacheKey(userId) {
   return `${DASHBOARD_CACHE_PREFIX}${userId}`;
 }
 
-
 function getCachedDashboard(
   userId,
   allowExpired = false
 ) {
   try {
-    const raw = sessionStorage.getItem(
-      getDashboardCacheKey(userId)
-    );
+    const key =
+      getDashboardCacheKey(userId);
+
+    const raw =
+      sessionStorage.getItem(key);
 
     if (!raw) {
       return null;
     }
 
-    const cached = JSON.parse(raw);
+    const parsed =
+      JSON.parse(raw);
 
-    if (
-      !cached?.timestamp ||
-      !cached?.data
-    ) {
-      sessionStorage.removeItem(
-        getDashboardCacheKey(userId)
-      );
-
+    if (!parsed?.data) {
       return null;
     }
 
     const age =
       Date.now() -
-      Number(cached.timestamp);
+      Number(parsed.timestamp || 0);
 
     if (
       !allowExpired &&
       age > DASHBOARD_CACHE_DURATION
     ) {
-      // IMPORTANT :
-      // On ne supprime plus le cache expiré.
-      //
-      // Il pourra être affiché immédiatement
-      // pendant que Supabase est actualisé.
       return null;
     }
 
-    return cached.data;
-
+    return parsed.data;
   } catch (error) {
     console.warn(
-      "⚠️ Cache Dashboard inaccessible :",
+      "⚠️ Lecture cache Dashboard impossible :",
       error
     );
 
@@ -104,52 +83,59 @@ function getCachedDashboard(
   }
 }
 
-
 function setCachedDashboard(
   userId,
   data
 ) {
   try {
+    const key =
+      getDashboardCacheKey(userId);
+
     sessionStorage.setItem(
-      getDashboardCacheKey(userId),
+      key,
       JSON.stringify({
         timestamp: Date.now(),
-        data
+        data,
       })
     );
-
   } catch (error) {
     console.warn(
-      "⚠️ Impossible de sauvegarder le cache Dashboard :",
+      "⚠️ Écriture cache Dashboard impossible :",
       error
     );
   }
 }
 
-
 // =====================================================
-// PAGE
+// COMPOSANT
 // =====================================================
 
 export default function DashboardPage({
-  consultationMode = false
+  consultationMode = false,
 }) {
-  const { studentId } = useParams();
+  const { studentId } =
+    useParams();
 
-  const location = useLocation();
+  const location =
+    useLocation();
 
-  // Permet d'éviter de mettre à jour l'état
-  // d'un composant qui n'est plus actif.
-  const mountedRef = useRef(true);
+  /*
+   * IMPORTANT
+   *
+   * En consultation, ConsultationStudentLayout
+   * transmet les données déjà chargées par
+   * ConsultationStudentProvider.
+   *
+   * En mode normal / preview, aucun contexte
+   * n'est nécessaire.
+   */
+  const outletContext =
+    useOutletContext() || {};
 
-  // Empêche plusieurs chargements simultanés
-  // inutiles.
-  const loadingRequestRef = useRef(false);
-
-
-  // ===================================================
-  // 👁️ MODE CONSULTATION
-  // ===================================================
+  const consultationStudent =
+    outletContext?.consultationMode
+      ? outletContext?.student
+      : null;
 
   const isConsultation =
     consultationMode ||
@@ -164,55 +150,41 @@ export default function DashboardPage({
       )
     );
 
+  const [profile, setProfile] =
+    useState(null);
 
-  // ===================================================
-  // STATE
-  // ===================================================
+  const [subjects, setSubjects] =
+    useState({});
 
-  const [
-    profile,
-    setProfile
-  ] = useState(null);
+  const [stats, setStats] =
+    useState({
+      lessons: 0,
+      score: 0,
+      badges: 0,
+      attempts: 0,
+    });
 
-  const [
-    subjects,
-    setSubjects
-  ] = useState({});
+  const [badges, setBadges] =
+    useState([]);
 
-  const [
-    stats,
-    setStats
-  ] = useState({
-    lessons: 0,
-    score: 0,
-    badges: 0,
-    attempts: 0
-  });
+  const [loading, setLoading] =
+    useState(true);
 
-  const [
-    badges,
-    setBadges
-  ] = useState([]);
+  const [error, setError] =
+    useState(null);
 
-  const [
-    loading,
-    setLoading
-  ] = useState(true);
+  const [refreshing, setRefreshing] =
+    useState(false);
 
-  const [
-    error,
-    setError
-  ] = useState("");
+  const mountedRef =
+    useRef(true);
 
-  const [
-    refreshing,
-    setRefreshing
-  ] = useState(false);
+  const loadingRequestRef =
+    useRef(false);
 
-
-  // ===================================================
-  // MONTAGE / DÉMONTAGE
-  // ===================================================
+  // =====================================================
+  // NETTOYAGE
+  // =====================================================
 
   useEffect(() => {
     mountedRef.current = true;
@@ -222,17 +194,13 @@ export default function DashboardPage({
     };
   }, []);
 
+  // =====================================================
+  // APPLICATION DES DONNÉES
+  // =====================================================
 
-  // ===================================================
-  // APPLICATION DONNÉES
-  // ===================================================
-
-  const applyDashboardData = useCallback(
-    (data) => {
-      if (
-        !data ||
-        !mountedRef.current
-      ) {
+  const applyDashboardData =
+    useCallback((data) => {
+      if (!data) {
         return;
       }
 
@@ -244,52 +212,48 @@ export default function DashboardPage({
         data.subjects || {}
       );
 
-      setStats(
-        data.stats || {
-          lessons: 0,
-          score: 0,
-          badges: 0,
-          attempts: 0
-        }
-      );
-
       setBadges(
-        data.badges || []
+        Array.isArray(data.badges)
+          ? data.badges
+          : []
       );
-    },
-    []
-  );
 
+      setStats({
+        lessons:
+          Number(
+            data.stats?.lessons
+          ) || 0,
 
-  // ===================================================
-  // IDENTIFIANT UTILISATEUR
-  // ===================================================
+        score:
+          Number(
+            data.stats?.score
+          ) || 0,
 
-  const getTargetUserId = useCallback(
-    async () => {
+        badges:
+          Number(
+            data.stats?.badges
+          ) || 0,
 
-      // -------------------------------------------------
-      // 👁️ CONSULTATION ADMIN
-      // -------------------------------------------------
+        attempts:
+          Number(
+            data.stats?.attempts
+          ) || 0,
+      });
+    }, []);
 
+  // =====================================================
+  // UTILISATEUR CIBLE
+  // =====================================================
+
+  const getTargetUserId =
+    useCallback(async () => {
       if (isConsultation) {
-        if (!studentId) {
-          throw new Error(
-            "Identifiant de l'élève introuvable."
-          );
-        }
-
         return studentId;
       }
 
-
-      // -------------------------------------------------
-      // 👤 MODE NORMAL
-      // -------------------------------------------------
-
       const {
         data,
-        error: sessionError
+        error: sessionError,
       } =
         await supabase.auth.getSession();
 
@@ -297,142 +261,177 @@ export default function DashboardPage({
         throw sessionError;
       }
 
-      const user =
-        data?.session?.user;
-
-      if (!user) {
-        return null;
-      }
-
-      return user.id;
-    },
-    [
+      return (
+        data?.session?.user?.id ||
+        null
+      );
+    }, [
       isConsultation,
-      studentId
-    ]
-  );
+      studentId,
+    ]);
 
-
-  // ===================================================
+  // =====================================================
   // CHARGEMENT SUPABASE
-  // ===================================================
+  // =====================================================
 
   const fetchDashboardFromSupabase =
     useCallback(
       async (userId) => {
+        if (!userId) {
+          throw new Error(
+            "Utilisateur introuvable."
+          );
+        }
 
         const [
           profileResult,
           progressResult,
           attemptsResult,
-          badgesResult
-        ] = await Promise.all([
+          badgesResult,
+        ] =
+          await Promise.all([
+            // -------------------------------------------------
+            // PROFILE
+            // -------------------------------------------------
 
-          // ------------------------------------------------
-          // PROFIL
-          // ------------------------------------------------
+            supabase
+              .from("profiles")
+              .select(
+                `
+                  id,
+                  full_name,
+                  xp,
+                  level
+                `
+              )
+              .eq("id", userId)
+              .maybeSingle(),
 
-          supabase
-            .from("profiles")
-            .select(`
-              id,
-              full_name,
-              xp,
-              level
-            `)
-            .eq("id", userId)
-            .single(),
+            // -------------------------------------------------
+            // PROGRESSION
+            // -------------------------------------------------
 
-
-          // ------------------------------------------------
-          // PROGRESSION
-          // ------------------------------------------------
-
-          supabase
-            .from("user_progress")
-            .select(`
-              completed,
-              lessons(
-                chapters(
-                  subjects(
-                    name
+            supabase
+              .from("user_progress")
+              .select(
+                `
+                  completed,
+                  lessons(
+                    id,
+                    title,
+                    chapters(
+                      id,
+                      title,
+                      subjects(
+                        id,
+                        name
+                      )
+                    )
                   )
-                )
+                `
               )
-            `)
-            .eq("user_id", userId),
+              .eq(
+                "user_id",
+                userId
+              ),
 
+            // -------------------------------------------------
+            // QUIZ
+            // -------------------------------------------------
 
-          // ------------------------------------------------
-          // TENTATIVES DE QUIZ
-          // ------------------------------------------------
-
-          supabase
-            .from("quiz_attempts")
-            .select(`
-              score
-            `)
-            .eq("user_id", userId),
-
-
-          // ------------------------------------------------
-          // BADGES
-          // ------------------------------------------------
-
-          supabase
-            .from("user_badges")
-            .select(`
-              id,
-              badges(
-                id,
-                name,
-                description,
-                xp_reward,
-                image_url
+            supabase
+              .from("quiz_attempts")
+              .select(
+                "score"
               )
-            `)
-            .eq("user_id", userId)
+              .eq(
+                "user_id",
+                userId
+              ),
 
-        ]);
+            // -------------------------------------------------
+            // BADGES
+            // -------------------------------------------------
 
+            supabase
+              .from("user_badges")
+              .select(
+                `
+                  id,
+                  badges(
+                    id,
+                    name,
+                    description,
+                    icon
+                  )
+                `
+              )
+              .eq(
+                "user_id",
+                userId
+              ),
+          ]);
 
-        // =================================================
-        // PROFILE
-        // =================================================
+        // =====================================================
+        // ERREURS
+        // =====================================================
 
         if (profileResult.error) {
           throw profileResult.error;
         }
 
-        const profileData =
-          profileResult.data;
-
-
-        // =================================================
-        // PROGRESSION
-        // =================================================
-
-        const progressData =
-          progressResult.data || [];
-
         if (progressResult.error) {
-          console.error(
-            "Erreur progression :",
+          console.warn(
+            "⚠️ Erreur progression Dashboard :",
             progressResult.error
           );
         }
 
+        if (attemptsResult.error) {
+          console.warn(
+            "⚠️ Erreur quiz Dashboard :",
+            attemptsResult.error
+          );
+        }
 
-        // =================================================
+        if (badgesResult.error) {
+          console.warn(
+            "⚠️ Erreur badges Dashboard :",
+            badgesResult.error
+          );
+        }
+
+        const profileData =
+          profileResult.data || null;
+
+        const progressData =
+          progressResult.error
+            ? []
+            : (
+                progressResult.data || []
+              );
+
+        const attemptsData =
+          attemptsResult.error
+            ? []
+            : (
+                attemptsResult.data || []
+              );
+
+        const badgesRaw =
+          badgesResult.error
+            ? []
+            : (
+                badgesResult.data || []
+              );
+
+        // =====================================================
         // LEÇONS TERMINÉES
-        // =================================================
+        // =====================================================
 
         const completedLessons =
           progressData.reduce(
-            (
-              total,
-              item
-            ) =>
+            (total, item) =>
               total +
               (
                 item?.completed === true
@@ -442,135 +441,112 @@ export default function DashboardPage({
             0
           );
 
-
-        // =================================================
+        // =====================================================
         // PROGRESSION PAR MATIÈRE
-        // =================================================
+        // =====================================================
 
-        const subjectsProgress = {};
+        const subjectsProgress =
+          {};
 
-        for (
-          const item of progressData
-        ) {
-          const subject =
-            item?.lessons
-              ?.chapters
-              ?.subjects;
+        progressData.forEach(
+          (item) => {
+            const subjectName =
+              item?.lessons?.chapters
+                ?.subjects?.name;
 
-          if (!subject?.name) {
-            continue;
-          }
+            if (!subjectName) {
+              return;
+            }
 
-          const subjectName =
-            subject.name;
+            if (
+              !subjectsProgress[
+                subjectName
+              ]
+            ) {
+              subjectsProgress[
+                subjectName
+              ] = {
+                total: 0,
+                completed: 0,
+                percentage: 0,
+              };
+            }
 
-          if (
-            !subjectsProgress[
-              subjectName
-            ]
-          ) {
             subjectsProgress[
               subjectName
-            ] = {
-              total: 0,
-              completed: 0,
-              percent: 0
-            };
-          }
+            ].total += 1;
 
-          subjectsProgress[
-            subjectName
-          ].total += 1;
-
-          if (
-            item.completed === true
-          ) {
-            subjectsProgress[
-              subjectName
-            ].completed += 1;
-          }
-        }
-
-
-        // =================================================
-        // POURCENTAGES
-        // =================================================
-
-        Object.values(
-          subjectsProgress
-        ).forEach(
-          (data) => {
-            if (data.total > 0) {
-              data.percent =
-                Math.round(
-                  (
-                    data.completed /
-                    data.total
-                  ) * 100
-                );
+            if (
+              item?.completed === true
+            ) {
+              subjectsProgress[
+                subjectName
+              ].completed += 1;
             }
           }
         );
 
+        Object.keys(
+          subjectsProgress
+        ).forEach(
+          (subjectName) => {
+            const item =
+              subjectsProgress[
+                subjectName
+              ];
 
-        // =================================================
-        // QUIZ
-        // =================================================
+            item.percentage =
+              item.total > 0
+                ? Math.round(
+                    (
+                      item.completed /
+                      item.total
+                    ) *
+                    100
+                  )
+                : 0;
+          }
+        );
 
-        const attemptsData =
-          attemptsResult.data || [];
+        // =====================================================
+        // SCORE MOYEN
+        // =====================================================
 
-        if (attemptsResult.error) {
-          console.error(
-            "Erreur quiz attempts :",
-            attemptsResult.error
-          );
-        }
-
-        let averageScore = 0;
-
-        if (
-          attemptsData.length > 0
-        ) {
-          const totalScore =
-            attemptsData.reduce(
+        const totalScore =
+          attemptsData.reduce(
+            (total, attempt) =>
+              total +
               (
-                total,
-                attempt
-              ) =>
-                total +
                 Number(
-                  attempt?.score || 0
-                ),
-              0
-            );
+                  attempt?.score
+                ) || 0
+              ),
+            0
+          );
 
-          averageScore =
-            Math.round(
-              totalScore /
-              attemptsData.length
-            );
-        }
+        const averageScore =
+          attemptsData.length > 0
+            ? Math.round(
+                totalScore /
+                attemptsData.length
+              )
+            : 0;
 
-
-        // =================================================
+        // =====================================================
         // BADGES
-        // =================================================
+        // =====================================================
 
         const badgeData =
-          badgesResult.data || [];
+          badgesRaw
+            .map(
+              (item) =>
+                item?.badges
+            )
+            .filter(Boolean);
 
-        if (badgesResult.error) {
-          console.error(
-            "Erreur badges :",
-            badgesResult.error
-          );
-        }
-
-
-        // =================================================
-        // DONNÉES FINALES
-        // =================================================
+        // =====================================================
+        // RÉSULTAT FINAL
+        // =====================================================
 
         return {
           profile:
@@ -593,26 +569,20 @@ export default function DashboardPage({
               badgeData.length,
 
             attempts:
-              attemptsData.length
-          }
+              attemptsData.length,
+          },
         };
       },
       []
     );
 
-
-  // ===================================================
-  // CHARGEMENT PRINCIPAL
-  // ===================================================
+  // =====================================================
+  // CHARGEMENT DASHBOARD
+  // =====================================================
 
   const loadDashboard =
     useCallback(
-      async (
-        isRefresh = false
-      ) => {
-
-        // Évite plusieurs appels réseau
-        // simultanés accidentels.
+      async (isRefresh = false) => {
         if (
           loadingRequestRef.current &&
           !isRefresh
@@ -620,114 +590,143 @@ export default function DashboardPage({
           return;
         }
 
-        loadingRequestRef.current = true;
+        loadingRequestRef.current =
+          true;
 
-        let userId = null;
+        if (isRefresh) {
+          setRefreshing(true);
+        } else {
+          setLoading(true);
+        }
+
+        setError(null);
 
         try {
+          /*
+           * =================================================
+           * CORRECTION PRINCIPALE
+           * =================================================
+           *
+           * Lors du premier chargement en consultation,
+           * le Provider a déjà effectué :
+           *
+           * getAdminStudentView(studentId)
+           *
+           * Il possède donc déjà profile / subjects /
+           * stats / badges.
+           *
+           * On réutilise directement ces données.
+           *
+           * Le Dashboard ne refait donc PAS une seconde
+           * requête Supabase à l'ouverture.
+           *
+           * Si l'utilisateur clique volontairement sur
+           * "Actualiser", isRefresh === true et le
+           * Dashboard effectue alors sa requête habituelle.
+           * =================================================
+           */
 
-          // ------------------------------------------------
-          // ÉTAT DE CHARGEMENT
-          // ------------------------------------------------
-
-          if (isRefresh) {
-            setRefreshing(true);
-          } else {
-            setLoading(true);
-          }
-
-          setError("");
-
-
-          // ------------------------------------------------
-          // UTILISATEUR CIBLE
-          // ------------------------------------------------
-
-          userId =
-            await getTargetUserId();
-
-
-          // ------------------------------------------------
-          // UTILISATEUR ABSENT
-          // ------------------------------------------------
-
-          if (!userId) {
-
-            if (mountedRef.current) {
-              setProfile(null);
-              setSubjects({});
-              setBadges([]);
-
-              setStats({
-                lessons: 0,
-                score: 0,
-                badges: 0,
-                attempts: 0
-              });
-
-              setError(
-                "Tu dois être connecté pour voir ton tableau de bord."
+          if (
+            isConsultation &&
+            !isRefresh
+          ) {
+            if (
+              !consultationStudent
+            ) {
+              throw new Error(
+                "Informations de l'élève introuvables."
               );
             }
+
+            const consultationData = {
+              profile:
+                consultationStudent
+                  .profile || null,
+
+              subjects:
+                consultationStudent
+                  .subjects || {},
+
+              badges:
+                Array.isArray(
+                  consultationStudent
+                    .badges
+                )
+                  ? consultationStudent
+                      .badges
+                  : [],
+
+              stats:
+                consultationStudent
+                  .stats || {
+                    lessons: 0,
+                    score: 0,
+                    badges: 0,
+                    attempts: 0,
+                  },
+            };
+
+            applyDashboardData(
+              consultationData
+            );
+
+            console.log(
+              "👁️⚡ Dashboard élève chargé depuis le contexte de consultation"
+            );
 
             return;
           }
 
+          // =====================================================
+          // UTILISATEUR CIBLE
+          // =====================================================
 
-          // =================================================
-          // CACHE IMMÉDIAT
-          // =================================================
+          const userId =
+            await getTargetUserId();
 
-          const cachedDashboard =
+          if (!userId) {
+            throw new Error(
+              "Impossible d'identifier l'utilisateur."
+            );
+          }
+
+          // =====================================================
+          // CACHE
+          // =====================================================
+
+          const cachedData =
             getCachedDashboard(
               userId,
               true
             );
 
-
-          // =================================================
-          // CACHE DISPONIBLE
-          // =================================================
-
           if (
-            cachedDashboard &&
+            cachedData &&
             !isRefresh
           ) {
-
-            // Affichage immédiat.
             applyDashboardData(
-              cachedDashboard
+              cachedData
             );
 
-            if (mountedRef.current) {
+            if (
+              mountedRef.current
+            ) {
               setLoading(false);
             }
 
-            console.log(
-              isConsultation
-                ? "👁️⚡ Dashboard élève affiché depuis le cache"
-                : "⚡ Dashboard affiché depuis le cache"
-            );
-
-
-            // ------------------------------------------------
-            // SI LE CACHE EST ENCORE FRAIS
-            // ------------------------------------------------
-
+            /*
+             * Si le cache est encore frais,
+             * aucune requête réseau n'est nécessaire.
+             */
             const raw =
-              (() => {
-                try {
-                  return sessionStorage.getItem(
-                    getDashboardCacheKey(
-                      userId
-                    )
-                  );
-                } catch {
-                  return null;
-                }
-              })();
+              sessionStorage.getItem(
+                getDashboardCacheKey(
+                  userId
+                )
+              );
 
-            let cacheIsFresh = false;
+            let cacheIsFresh =
+              false;
 
             if (raw) {
               try {
@@ -737,429 +736,169 @@ export default function DashboardPage({
                 const age =
                   Date.now() -
                   Number(
-                    parsed?.timestamp || 0
+                    parsed.timestamp || 0
                   );
 
                 cacheIsFresh =
                   age <=
                   DASHBOARD_CACHE_DURATION;
               } catch {
-                cacheIsFresh = false;
+                cacheIsFresh =
+                  false;
               }
             }
 
-
-            // ------------------------------------------------
-            // CACHE FRAIS :
-            // pas besoin d'attendre Supabase.
-            // ------------------------------------------------
-
             if (cacheIsFresh) {
-
-              loadingRequestRef.current =
-                false;
+              console.log(
+                "⚡ Dashboard chargé depuis le cache"
+              );
 
               return;
             }
-
-
-            // ------------------------------------------------
-            // CACHE EXPIRÉ :
-            // on l'a déjà affiché.
-            //
-            // On continue maintenant en arrière-plan
-            // pour actualiser les données.
-            // ------------------------------------------------
-
-            console.log(
-              isConsultation
-                ? "👁️🔄 Actualisation Dashboard élève en arrière-plan"
-                : "🔄 Actualisation Dashboard en arrière-plan"
-            );
           }
 
-
-          // =================================================
-          // OFFLINE
-          // =================================================
+          // =====================================================
+          // HORS LIGNE
+          // =====================================================
 
           if (
             typeof navigator !==
               "undefined" &&
             navigator.onLine === false
           ) {
-
-            const offlineCache =
-              cachedDashboard ||
-              getCachedDashboard(
-                userId,
-                true
-              );
-
-            if (offlineCache) {
-
+            if (cachedData) {
               applyDashboardData(
-                offlineCache
+                cachedData
               );
-
-              if (mountedRef.current) {
-                setLoading(false);
-                setRefreshing(false);
-              }
 
               console.log(
-                isConsultation
-                  ? "👁️📴 Dashboard élève offline"
-                  : "📴 Dashboard offline"
+                "📴 Dashboard chargé depuis le cache hors ligne"
               );
 
               return;
             }
 
             throw new Error(
-              "Connexion Internet indisponible."
+              "Connexion Internet indisponible et aucune donnée en cache."
             );
           }
 
-
-          // =================================================
+          // =====================================================
           // SUPABASE
-          // =================================================
+          // =====================================================
 
-          const dashboardData =
+          const freshData =
             await fetchDashboardFromSupabase(
               userId
             );
 
-
-          // Si le composant a changé de page
-          // entre-temps, on ne touche plus à son état.
-          if (!mountedRef.current) {
+          if (
+            !mountedRef.current
+          ) {
             return;
           }
 
-
-          // =================================================
-          // APPLICATION
-          // =================================================
-
           applyDashboardData(
-            dashboardData
+            freshData
           );
-
-
-          // =================================================
-          // CACHE
-          // =================================================
 
           setCachedDashboard(
             userId,
-            dashboardData
+            freshData
           );
-
 
           console.log(
-            isConsultation
-              ? "👁️✅ Dashboard élève actualisé depuis Supabase — lecture seule"
-              : "✅ Dashboard actualisé depuis Supabase"
+            "🌐 Dashboard élève actualisé depuis Supabase"
           );
-
-        } catch (err) {
-
+        } catch (loadError) {
           console.error(
-            "❌ Erreur Dashboard :",
-            err
+            "❌ Erreur chargement Dashboard :",
+            loadError
           );
 
+          /*
+           * En cas d'erreur, on essaie encore
+           * le cache.
+           */
+          try {
+            const fallbackUserId =
+              isConsultation
+                ? studentId
+                : await getTargetUserId();
 
-          // =================================================
-          // FALLBACK CACHE
-          // =================================================
+            if (fallbackUserId) {
+              const fallback =
+                getCachedDashboard(
+                  fallbackUserId,
+                  true
+                );
 
-          if (userId) {
+              if (fallback) {
+                applyDashboardData(
+                  fallback
+                );
 
-            const cached =
-              getCachedDashboard(
-                userId,
-                true
-              );
+                console.log(
+                  "⚠️ Dashboard récupéré depuis le cache"
+                );
 
-            if (cached) {
-
-              applyDashboardData(
-                cached
-              );
-
-              if (mountedRef.current) {
-                setLoading(false);
-                setError("");
+                return;
               }
-
-              console.log(
-                isConsultation
-                  ? "👁️📴 Fallback Dashboard élève depuis le cache"
-                  : "📴 Fallback Dashboard depuis le cache"
-              );
-
-              return;
             }
-          }
-
-
-          // =================================================
-          // ERREUR
-          // =================================================
-
-          if (mountedRef.current) {
-            setError(
-              err?.message ||
-              (
-                isConsultation
-                  ? "Impossible de charger le tableau de bord de l'élève."
-                  : "Impossible de charger ton tableau de bord."
-              )
+          } catch (fallbackError) {
+            console.warn(
+              "⚠️ Fallback Dashboard impossible :",
+              fallbackError
             );
           }
 
+          if (
+            mountedRef.current
+          ) {
+            setError(
+              loadError?.message ||
+                "Impossible de charger le tableau de bord."
+            );
+          }
         } finally {
-
           loadingRequestRef.current =
             false;
 
-          if (mountedRef.current) {
+          if (
+            mountedRef.current
+          ) {
             setLoading(false);
             setRefreshing(false);
           }
         }
       },
       [
+        isConsultation,
+        consultationStudent,
+        studentId,
+        applyDashboardData,
         getTargetUserId,
         fetchDashboardFromSupabase,
-        applyDashboardData,
-        isConsultation
       ]
     );
 
-
-  // ===================================================
-  // INITIALISATION
-  // ===================================================
+  // =====================================================
+  // CHARGEMENT INITIAL
+  // =====================================================
 
   useEffect(() => {
     loadDashboard(false);
-  }, [
-    loadDashboard
-  ]);
+  }, [loadDashboard]);
 
-
-  // ===================================================
-  // LOADING
-  // ===================================================
-
-  if (loading) {
-    return (
-      <div
-        className="
-          min-h-[60vh]
-          flex
-          flex-col
-          items-center
-          justify-center
-          px-6
-        "
-      >
-        <div
-          className="
-            w-14
-            h-14
-            rounded-2xl
-            bg-accent-soft
-            flex
-            items-center
-            justify-center
-            mb-4
-          "
-        >
-          <TrendingUp
-            size={28}
-            className="text-accent"
-          />
-        </div>
-
-        <p
-          className="
-            text-gray-700
-            dark:text-gray-300
-            font-semibold
-          "
-        >
-          {isConsultation
-            ? "Chargement du tableau de bord de l'élève..."
-            : "Chargement de ton tableau de bord..."
-          }
-        </p>
-      </div>
-    );
-  }
-
-
-  // ===================================================
-  // ERREUR
-  // ===================================================
-
-  if (error) {
-    return (
-      <div
-        className="
-          max-w-2xl
-          mx-auto
-          px-5
-          py-10
-        "
-      >
-        <div
-          className="
-            theme-surface
-            rounded-3xl
-            border
-            theme-border
-            shadow-sm
-            p-8
-            text-center
-          "
-        >
-          <div
-            className="
-              w-14
-              h-14
-              mx-auto
-              rounded-2xl
-              bg-red-50
-              flex
-              items-center
-              justify-center
-              mb-4
-            "
-          >
-            ⚠️
-          </div>
-
-          <h2
-            className="
-              text-xl
-              font-bold
-              text-gray-900
-              dark:text-white
-            "
-          >
-            Impossible de charger le dashboard
-          </h2>
-
-          <p
-            className="
-              text-sm
-              text-gray-600
-              dark:text-gray-400
-              mt-2
-            "
-          >
-            {error}
-          </p>
-
-          <button
-            type="button"
-            onClick={() =>
-              loadDashboard(true)
-            }
-            className="
-              mt-6
-              inline-flex
-              items-center
-              justify-center
-              gap-2
-              bg-accent
-              text-white
-              px-5
-              py-3
-              rounded-xl
-              font-semibold
-              hover:opacity-90
-              transition
-            "
-          >
-            <RefreshCw
-              size={18}
-            />
-
-            Réessayer
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-
-  // ===================================================
-  // PROFIL ABSENT
-  // ===================================================
-
-  if (!profile) {
-    return (
-      <div
-        className="
-          max-w-2xl
-          mx-auto
-          px-5
-          py-10
-          text-center
-        "
-      >
-        <div
-          className="
-            theme-surface
-            rounded-3xl
-            border
-            theme-border
-            shadow-sm
-            p-8
-          "
-        >
-          <h2
-            className="
-              text-xl
-              font-bold
-              text-gray-900
-              dark:text-white
-            "
-          >
-            Profil introuvable
-          </h2>
-
-          <p
-            className="
-              text-gray-600
-              dark:text-gray-400
-              mt-2
-            "
-          >
-            {isConsultation
-              ? "Le profil de cet élève n'a pas été trouvé."
-              : "Ton profil Kalan Academy n'a pas encore été trouvé."
-            }
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-
-  // ===================================================
-  // XP
-  // ===================================================
+  // =====================================================
+  // XP / NIVEAU
+  // =====================================================
 
   const xp =
     Math.max(
-      Number(profile.xp || 0),
+      Number(
+        profile?.xp || 0
+      ),
       0
     );
 
@@ -1168,142 +907,157 @@ export default function DashboardPage({
       xp / XP_PER_LEVEL
     ) + 1;
 
-  const currentLevelXP =
-    (level - 1) *
-    XP_PER_LEVEL;
-
-  const nextLevelXP =
-    level *
-    XP_PER_LEVEL;
-
   const xpInCurrentLevel =
-    xp -
-    currentLevelXP;
+    xp % XP_PER_LEVEL;
 
   const xpRemaining =
-    Math.max(
-      nextLevelXP - xp,
-      0
-    );
+    XP_PER_LEVEL -
+    xpInCurrentLevel;
 
-  const progressXP =
+  const levelProgress =
     Math.min(
-      Math.max(
-        (
-          xpInCurrentLevel /
-          XP_PER_LEVEL
-        ) * 100,
-        0
-      ),
+      (
+        xpInCurrentLevel /
+        XP_PER_LEVEL
+      ) *
+        100,
       100
     );
 
-
-  // ===================================================
+  // =====================================================
   // RANG
-  // ===================================================
+  // =====================================================
 
   let rank =
     "Débutant";
 
-  if (xp >= 500) {
-    rank = "Apprenti";
-  }
-
-  if (xp >= 1500) {
-    rank = "Élève confirmé";
-  }
-
-  if (xp >= 3000) {
-    rank = "Expert";
-  }
-
   if (xp >= 5000) {
-    rank = "Maître Kalan";
+    rank =
+      "Maître Kalan";
+  } else if (xp >= 3000) {
+    rank =
+      "Expert";
+  } else if (xp >= 1500) {
+    rank =
+      "Élève confirmé";
+  } else if (xp >= 500) {
+    rank =
+      "Apprenti";
   }
 
+  // =====================================================
+  // LOADING
+  // =====================================================
 
-  const studentName =
-    profile.full_name ||
-    "Élève";
-
-
-  // ===================================================
-  // AFFICHAGE
-  // ===================================================
-
-  return (
-    <div
-      className="
-        min-h-screen
-        bg-white
-        dark:bg-gray-950
-        px-5
-        py-6
-        md:px-8
-        md:py-8
-      "
-    >
+  if (loading) {
+    return (
       <div
         className="
-          max-w-6xl
-          mx-auto
-          space-y-6
+          min-h-[60vh]
+          flex
+          items-center
+          justify-center
+          theme-text
         "
       >
+        <div className="text-center">
+          <div
+            className="
+              animate-spin
+              rounded-full
+              h-10
+              w-10
+              border-b-2
+              border-accent
+              mx-auto
+              mb-4
+            "
+          />
 
-        {/* =================================================
-            HEADER
-        ================================================= */}
+          <p
+            className="
+              theme-text-secondary
+              text-sm
+            "
+          >
+            Chargement de la progression...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
+  // =====================================================
+  // ERREUR
+  // =====================================================
+
+  if (error) {
+    return (
+      <div
+        className="
+          min-h-[60vh]
+          flex
+          items-center
+          justify-center
+          px-4
+        "
+      >
         <div
           className="
-            flex
-            flex-col
-            sm:flex-row
-            sm:items-center
-            sm:justify-between
-            gap-4
+            w-full
+            max-w-md
+            theme-surface
+            border
+            theme-border
+            rounded-2xl
+            p-6
+            text-center
+            shadow-sm
           "
         >
-          <div>
-            <p
+          <div
+            className="
+              w-14
+              h-14
+              rounded-2xl
+              bg-red-50
+              dark:bg-red-950/40
+              mx-auto
+              mb-4
+              flex
+              items-center
+              justify-center
+            "
+          >
+            <Target
+              size={28}
               className="
-                text-sm
-                font-bold
-                text-accent
+                text-red-500
+                dark:text-red-400
               "
-            >
-              Kalan Academy
-            </p>
-
-            <h1
-              className="
-                text-2xl
-                md:text-3xl
-                font-extrabold
-                text-gray-950
-                dark:text-white
-                mt-1
-              "
-            >
-              Bonjour {studentName} 👋
-            </h1>
-
-            <p
-              className="
-                text-gray-600
-                dark:text-gray-400
-                mt-1
-              "
-            >
-              {isConsultation
-                ? "Voici la progression et les résultats de l'élève."
-                : "Voici ta progression et tes résultats."
-              }
-            </p>
+            />
           </div>
 
+          <h2
+            className="
+              text-lg
+              font-bold
+              theme-text
+              mb-2
+            "
+          >
+            Impossible de charger la progression
+          </h2>
+
+          <p
+            className="
+              text-sm
+              theme-text-secondary
+              mb-5
+            "
+          >
+            {error}
+          </p>
 
           <button
             type="button"
@@ -1316,19 +1070,13 @@ export default function DashboardPage({
               items-center
               justify-center
               gap-2
-              bg-white
-              dark:bg-gray-900
-              border
-              theme-border
-              text-gray-800
-              dark:text-gray-200
-              px-4
-              py-2.5
               rounded-xl
+              bg-accent
+              text-white
+              px-5
+              py-3
               font-semibold
-              shadow-sm
-              hover:bg-gray-50
-              dark:hover:bg-gray-800
+              hover:opacity-90
               transition
               disabled:opacity-50
             "
@@ -1342,58 +1090,437 @@ export default function DashboardPage({
               }
             />
 
-            Actualiser
+            Réessayer
           </button>
         </div>
+      </div>
+    );
+  }
 
+  // =====================================================
+  // PROFIL ABSENT
+  // =====================================================
 
-        {/* =================================================
-            XP
-        ================================================= */}
-
+  if (!profile) {
+    return (
+      <div
+        className="
+          min-h-[60vh]
+          flex
+          items-center
+          justify-center
+          px-4
+        "
+      >
         <div
           className="
-            relative
-            overflow-hidden
-            rounded-3xl
-            bg-accent-soft
+            w-full
+            max-w-md
+            theme-surface
             border
-            border-accent
+            theme-border
+            rounded-2xl
             p-6
-            md:p-8
-            shadow-xl
+            text-center
+          "
+        >
+          <h2
+            className="
+              text-lg
+              font-bold
+              theme-text
+              mb-2
+            "
+          >
+            Profil introuvable
+          </h2>
+
+          <p
+            className="
+              text-sm
+              theme-text-secondary
+            "
+          >
+            Les informations de cet élève ne sont pas
+            disponibles.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // =====================================================
+  // AFFICHAGE
+  // =====================================================
+
+  return (
+    <div
+      className="
+        w-full
+        space-y-5
+        pb-6
+      "
+    >
+      {/* =====================================================
+          EN-TÊTE
+      ===================================================== */}
+
+      <div
+        className="
+          theme-surface
+          border
+          theme-border
+          rounded-2xl
+          p-5
+          shadow-sm
+        "
+      >
+        <div
+          className="
+            flex
+            items-center
+            justify-between
+            gap-4
+          "
+        >
+          <div className="min-w-0">
+            <p
+              className="
+                text-sm
+                theme-text-secondary
+                mb-1
+              "
+            >
+              Tableau de bord
+            </p>
+
+            <h1
+              className="
+                text-xl
+                font-bold
+                theme-text
+                truncate
+              "
+            >
+              {profile.full_name ||
+                "Élève"}
+            </h1>
+          </div>
+
+          <button
+            type="button"
+            onClick={() =>
+              loadDashboard(true)
+            }
+            disabled={refreshing}
+            title="Actualiser"
+            className="
+              shrink-0
+              w-10
+              h-10
+              rounded-xl
+              theme-bg
+              border
+              theme-border
+              flex
+              items-center
+              justify-center
+              theme-text
+              hover:text-accent
+              transition
+              disabled:opacity-50
+            "
+          >
+            <RefreshCw
+              size={18}
+              className={
+                refreshing
+                  ? "animate-spin"
+                  : ""
+              }
+            />
+          </button>
+        </div>
+      </div>
+
+      {/* =====================================================
+          XP / NIVEAU
+      ===================================================== */}
+
+      <div
+        className="
+          theme-surface
+          border
+          theme-border
+          rounded-2xl
+          p-5
+          shadow-sm
+        "
+      >
+        <div
+          className="
+            flex
+            items-center
+            justify-between
+            gap-4
+            mb-4
           "
         >
           <div
             className="
-              absolute
-              -right-16
-              -top-16
-              w-48
-              h-48
+              flex
+              items-center
+              gap-3
+            "
+          >
+            <div
+              className="
+                w-11
+                h-11
+                rounded-xl
+                bg-accent-soft
+                flex
+                items-center
+                justify-center
+              "
+            >
+              <Star
+                size={22}
+                className="text-accent"
+              />
+            </div>
+
+            <div>
+              <p
+                className="
+                  text-xs
+                  theme-text-secondary
+                "
+              >
+                Niveau
+              </p>
+
+              <p
+                className="
+                  text-xl
+                  font-bold
+                  theme-text
+                "
+              >
+                {level}
+              </p>
+            </div>
+          </div>
+
+          <div className="text-right">
+            <p
+              className="
+                text-xs
+                theme-text-secondary
+              "
+            >
+              XP total
+            </p>
+
+            <p
+              className="
+                text-xl
+                font-bold
+                text-accent
+              "
+            >
+              {xp} XP
+            </p>
+          </div>
+        </div>
+
+        <div
+          className="
+            flex
+            items-center
+            justify-between
+            gap-3
+            mb-2
+          "
+        >
+          <span
+            className="
+              text-sm
+              font-semibold
+              theme-text
+            "
+          >
+            Progression vers le niveau {level + 1}
+          </span>
+
+          <span
+            className="
+              text-sm
+              theme-text-secondary
+            "
+          >
+            {xpInCurrentLevel} / {XP_PER_LEVEL} XP
+          </span>
+        </div>
+
+        <div
+          className="
+            w-full
+            h-3
+            rounded-full
+            theme-bg
+            overflow-hidden
+          "
+        >
+          <div
+            className="
+              h-full
               rounded-full
               bg-accent
-              opacity-10
+              transition-all
             "
+            style={{
+              width: `${levelProgress}%`,
+            }}
           />
+        </div>
+
+        <div
+          className="
+            flex
+            items-center
+            justify-between
+            gap-3
+            mt-3
+          "
+        >
+          <span
+            className="
+              text-xs
+              theme-text-secondary
+            "
+          >
+            {xpInCurrentLevel} XP dans ce niveau
+          </span>
+
+          <span
+            className="
+              text-xs
+              theme-text-secondary
+            "
+          >
+            Encore {xpRemaining} XP
+          </span>
+        </div>
+      </div>
+
+      {/* =====================================================
+          RANG
+      ===================================================== */}
+
+      <div
+        className="
+          theme-surface
+          border
+          theme-border
+          rounded-2xl
+          p-5
+          shadow-sm
+        "
+      >
+        <div
+          className="
+            flex
+            items-center
+            gap-3
+          "
+        >
+          <div
+            className="
+              w-11
+              h-11
+              rounded-xl
+              bg-accent-soft
+              flex
+              items-center
+              justify-center
+            "
+          >
+            <Trophy
+              size={22}
+              className="text-accent"
+            />
+          </div>
+
+          <div>
+            <p
+              className="
+                text-xs
+                theme-text-secondary
+              "
+            >
+              Rang
+            </p>
+
+            <p
+              className="
+                text-lg
+                font-bold
+                theme-text
+              "
+            >
+              {rank}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* =====================================================
+          STATISTIQUES
+      ===================================================== */}
+
+      <div>
+        <div
+          className="
+            flex
+            items-center
+            gap-2
+            mb-3
+          "
+        >
+          <TrendingUp
+            size={20}
+            className="text-accent"
+          />
+
+          <h2
+            className="
+              text-lg
+              font-bold
+              theme-text
+            "
+          >
+            Statistiques
+          </h2>
+        </div>
+
+        <div
+          className="
+            grid
+            grid-cols-2
+            gap-3
+          "
+        >
+          {/* LEÇONS */}
 
           <div
             className="
-              absolute
-              right-10
-              -bottom-24
-              w-56
-              h-56
-              rounded-full
-              bg-accent
-              opacity-5
-            "
-          />
-
-          <div
-            className="
-              relative
-              z-10
+              theme-surface
+              border
+              theme-border
+              rounded-2xl
+              p-4
+              shadow-sm
             "
           >
             <div
@@ -1401,729 +1528,519 @@ export default function DashboardPage({
                 flex
                 items-center
                 gap-3
-                mb-6
               "
             >
               <div
                 className="
-                  w-12
-                  h-12
-                  rounded-2xl
-                  bg-accent
-                  text-white
+                  w-10
+                  h-10
+                  rounded-xl
+                  bg-accent-soft
                   flex
                   items-center
                   justify-center
-                  shrink-0
                 "
               >
-                <Star size={25} />
-              </div>
-
-              <div>
-                <p
-                  className="
-                    text-accent
-                    text-sm
-                    font-medium
-                  "
-                >
-                  {isConsultation
-                    ? "Niveau de l'élève"
-                    : "Ton niveau"
-                  }
-                </p>
-
-                <h2
-                  className="
-                    text-2xl
-                    md:text-3xl
-                    font-extrabold
-                    text-gray-950
-                    dark:text-white
-                  "
-                >
-                  Niveau {level}
-                </h2>
-              </div>
-            </div>
-
-
-            <div
-              className="
-                grid
-                sm:grid-cols-2
-                gap-6
-              "
-            >
-              <div>
-                <p
-                  className="
-                    text-accent
-                    text-sm
-                    font-medium
-                  "
-                >
-                  XP total
-                </p>
-
-                <p
-                  className="
-                    text-4xl
-                    md:text-5xl
-                    font-extrabold
-                    mt-1
-                    tracking-tight
-                    text-gray-950
-                    dark:text-white
-                  "
-                >
-                  {xp}
-
-                  <span
-                    className="
-                      text-lg
-                      font-semibold
-                      text-accent
-                      ml-2
-                    "
-                  >
-                    XP
-                  </span>
-                </p>
-              </div>
-
-
-              <div
-                className="
-                  sm:text-right
-                "
-              >
-                <p
-                  className="
-                    text-accent
-                    text-sm
-                    font-medium
-                  "
-                >
-                  Rang
-                </p>
-
-                <p
-                  className="
-                    text-xl
-                    md:text-2xl
-                    font-extrabold
-                    mt-1
-                    text-gray-950
-                    dark:text-white
-                  "
-                >
-                  {rank}
-                </p>
-              </div>
-            </div>
-
-
-            <div className="mt-7">
-              <div
-                className="
-                  flex
-                  flex-col
-                  sm:flex-row
-                  sm:items-center
-                  sm:justify-between
-                  gap-1
-                  text-sm
-                  text-gray-700
-                  dark:text-gray-300
-                  mb-2
-                "
-              >
-                <span className="font-medium">
-                  Progression vers le niveau {level + 1}
-                </span>
-
-                <span className="font-bold">
-                  {xpInCurrentLevel} / {XP_PER_LEVEL} XP
-                </span>
-              </div>
-
-
-              <div
-                className="
-                  h-3
-                  bg-white/70
-                  dark:bg-gray-900/50
-                  rounded-full
-                  overflow-hidden
-                "
-              >
-                <div
-                  className="
-                    h-full
-                    bg-accent
-                    rounded-full
-                    transition-all
-                    duration-500
-                  "
-                  style={{
-                    width: `${progressXP}%`
-                  }}
+                <BookOpen
+                  size={19}
+                  className="text-accent"
                 />
               </div>
 
-
-              <div
-                className="
-                  flex
-                  flex-col
-                  sm:flex-row
-                  sm:items-center
-                  sm:justify-between
-                  gap-1
-                  mt-2
-                  text-xs
-                  text-gray-600
-                  dark:text-gray-400
-                "
-              >
-                <span>
-                  {xpInCurrentLevel} XP gagnés dans ce niveau
-                </span>
-
-                <span>
-                  Encore {xpRemaining} XP
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        {/* =================================================
-            STATISTIQUES
-        ================================================= */}
-
-        <div
-          className="
-            grid
-            grid-cols-2
-            lg:grid-cols-4
-            gap-4
-          "
-        >
-          {[
-            {
-              icon: BookOpen,
-              label: "Leçons terminées",
-              value: stats.lessons
-            },
-            {
-              icon: Star,
-              label: "Score moyen",
-              value: `${stats.score}%`
-            },
-            {
-              icon: Award,
-              label: "Badges",
-              value: stats.badges
-            },
-            {
-              icon: Target,
-              label: "Quiz réalisés",
-              value: stats.attempts
-            }
-          ].map(
-            ({
-              icon: Icon,
-              label,
-              value
-            }) => (
-              <div
-                key={label}
-                className="
-                  theme-surface
-                  rounded-2xl
-                  border
-                  theme-border
-                  shadow-sm
-                  p-5
-                "
-              >
-                <div
-                  className="
-                    w-10
-                    h-10
-                    rounded-xl
-                    bg-accent-soft
-                    text-accent
-                    flex
-                    items-center
-                    justify-center
-                    mb-4
-                  "
-                >
-                  <Icon size={21} />
-                </div>
-
-                <p
-                  className="
-                    text-sm
-                    text-gray-600
-                    dark:text-gray-400
-                  "
-                >
-                  {label}
-                </p>
-
+              <div>
                 <p
                   className="
                     text-2xl
-                    font-extrabold
-                    text-gray-950
-                    dark:text-white
-                    mt-1
+                    font-bold
+                    theme-text
                   "
                 >
-                  {value}
+                  {stats.lessons}
+                </p>
+
+                <p
+                  className="
+                    text-xs
+                    theme-text-secondary
+                  "
+                >
+                  Leçons terminées
                 </p>
               </div>
-            )
-          )}
-        </div>
+            </div>
+          </div>
 
+          {/* SCORE */}
 
-        {/* =================================================
-            PROGRESSION
-        ================================================= */}
-
-        <section>
           <div
             className="
-              flex
-              items-center
-              gap-3
-              mb-4
+              theme-surface
+              border
+              theme-border
+              rounded-2xl
+              p-4
+              shadow-sm
             "
           >
             <div
               className="
-                w-10
-                h-10
-                rounded-xl
-                bg-accent-soft
-                text-accent
                 flex
                 items-center
-                justify-center
+                gap-3
               "
             >
-              <TrendingUp size={20} />
-            </div>
-
-            <div>
-              <h2
+              <div
                 className="
-                  text-xl
-                  font-bold
-                  text-gray-950
-                  dark:text-white
+                  w-10
+                  h-10
+                  rounded-xl
+                  bg-accent-soft
+                  flex
+                  items-center
+                  justify-center
                 "
               >
-                Progression par matière
-              </h2>
+                <Target
+                  size={19}
+                  className="text-accent"
+                />
+              </div>
 
-              <p
-                className="
-                  text-sm
-                  text-gray-600
-                  dark:text-gray-400
-                  mt-1
-                "
-              >
-                Suis ton avancement dans chaque matière.
-              </p>
+              <div>
+                <p
+                  className="
+                    text-2xl
+                    font-bold
+                    theme-text
+                  "
+                >
+                  {stats.score}%
+                </p>
+
+                <p
+                  className="
+                    text-xs
+                    theme-text-secondary
+                  "
+                >
+                  Score moyen
+                </p>
+              </div>
             </div>
           </div>
 
+          {/* BADGES */}
 
-          {Object.keys(subjects).length === 0 ? (
+          <div
+            className="
+              theme-surface
+              border
+              theme-border
+              rounded-2xl
+              p-4
+              shadow-sm
+            "
+          >
             <div
               className="
-                theme-surface
-                rounded-2xl
-                border
-                theme-border
-                shadow-sm
-                p-8
-                text-center
+                flex
+                items-center
+                gap-3
               "
             >
-              <BookOpen
-                size={36}
+              <div
                 className="
-                  mx-auto
-                  text-gray-300
-                  dark:text-gray-600
-                  mb-3
-                "
-              />
-
-              <h3
-                className="
-                  font-bold
-                  text-gray-800
-                  dark:text-white
+                  w-10
+                  h-10
+                  rounded-xl
+                  bg-accent-soft
+                  flex
+                  items-center
+                  justify-center
                 "
               >
-                Pas encore de progression
-              </h3>
+                <Award
+                  size={19}
+                  className="text-accent"
+                />
+              </div>
 
-              <p
-                className="
-                  text-sm
-                  text-gray-600
-                  dark:text-gray-400
-                  mt-1
-                "
-              >
-                Commence une leçon pour voir ta progression ici.
-              </p>
+              <div>
+                <p
+                  className="
+                    text-2xl
+                    font-bold
+                    theme-text
+                  "
+                >
+                  {stats.badges}
+                </p>
+
+                <p
+                  className="
+                    text-xs
+                    theme-text-secondary
+                  "
+                >
+                  Badges obtenus
+                </p>
+              </div>
             </div>
-          ) : (
+          </div>
+
+          {/* QUIZ */}
+
+          <div
+            className="
+              theme-surface
+              border
+              theme-border
+              rounded-2xl
+              p-4
+              shadow-sm
+            "
+          >
             <div
               className="
-                grid
-                md:grid-cols-2
-                lg:grid-cols-3
-                gap-4
+                flex
+                items-center
+                gap-3
               "
             >
-              {Object.entries(
-                subjects
-              ).map(
-                (
-                  [
-                    name,
-                    data
-                  ]
-                ) => (
+              <div
+                className="
+                  w-10
+                  h-10
+                  rounded-xl
+                  bg-accent-soft
+                  flex
+                  items-center
+                  justify-center
+                "
+              >
+                <Trophy
+                  size={19}
+                  className="text-accent"
+                />
+              </div>
+
+              <div>
+                <p
+                  className="
+                    text-2xl
+                    font-bold
+                    theme-text
+                  "
+                >
+                  {stats.attempts}
+                </p>
+
+                <p
+                  className="
+                    text-xs
+                    theme-text-secondary
+                  "
+                >
+                  Quiz réalisés
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* =====================================================
+          PROGRESSION PAR MATIÈRE
+      ===================================================== */}
+
+      <div>
+        <div
+          className="
+            flex
+            items-center
+            gap-2
+            mb-3
+          "
+        >
+          <BookOpen
+            size={20}
+            className="text-accent"
+          />
+
+          <h2
+            className="
+              text-lg
+              font-bold
+              theme-text
+            "
+          >
+            Progression par matière
+          </h2>
+        </div>
+
+        {Object.keys(subjects).length ===
+        0 ? (
+          <div
+            className="
+              theme-surface
+              border
+              theme-border
+              rounded-2xl
+              p-5
+              text-center
+            "
+          >
+            <p
+              className="
+                text-sm
+                theme-text-secondary
+              "
+            >
+              Aucune progression enregistrée.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {Object.entries(
+              subjects
+            ).map(
+              ([
+                subjectName,
+                subject,
+              ]) => (
+                <div
+                  key={subjectName}
+                  className="
+                    theme-surface
+                    border
+                    theme-border
+                    rounded-2xl
+                    p-4
+                    shadow-sm
+                  "
+                >
                   <div
-                    key={name}
                     className="
-                      theme-surface
-                      rounded-2xl
-                      border
-                      theme-border
-                      shadow-sm
-                      p-5
+                      flex
+                      items-center
+                      justify-between
+                      gap-3
+                      mb-2
+                    "
+                  >
+                    <p
+                      className="
+                        font-semibold
+                        theme-text
+                        truncate
+                      "
+                    >
+                      {subjectName}
+                    </p>
+
+                    <span
+                      className="
+                        text-sm
+                        font-semibold
+                        text-accent
+                        shrink-0
+                      "
+                    >
+                      {subject.percentage}%
+                    </span>
+                  </div>
+
+                  <div
+                    className="
+                      w-full
+                      h-2.5
+                      rounded-full
+                      theme-bg
+                      overflow-hidden
                     "
                   >
                     <div
                       className="
-                        flex
-                        items-center
-                        justify-between
-                        gap-3
-                      "
-                    >
-                      <h3
-                        className="
-                          font-bold
-                          text-gray-950
-                          dark:text-white
-                          truncate
-                        "
-                      >
-                        {name}
-                      </h3>
-
-                      <span
-                        className="
-                          text-sm
-                          font-bold
-                          text-accent
-                        "
-                      >
-                        {data.percent}%
-                      </span>
-                    </div>
-
-
-                    <div
-                      className="
-                        h-3
-                        bg-gray-100
-                        dark:bg-gray-800
+                        h-full
                         rounded-full
-                        overflow-hidden
-                        mt-4
+                        bg-accent
+                        transition-all
                       "
-                    >
-                      <div
-                        className="
-                          h-full
-                          bg-accent
-                          rounded-full
-                          transition-all
-                          duration-500
-                        "
-                        style={{
-                          width: `${data.percent}%`
-                        }}
-                      />
-                    </div>
-
-
-                    <p
-                      className="
-                        text-xs
-                        text-gray-600
-                        dark:text-gray-400
-                        mt-2
-                      "
-                    >
-                      {data.completed} leçon
-                      {data.completed > 1
-                        ? "s"
-                        : ""}
-                      {" "}terminée
-                      {data.completed > 1
-                        ? "s"
-                        : ""}
-                      {" "}sur{" "}
-                      {data.total}
-                    </p>
+                      style={{
+                        width: `${subject.percentage}%`,
+                      }}
+                    />
                   </div>
-                )
-              )}
-            </div>
-          )}
-        </section>
 
+                  <p
+                    className="
+                      text-xs
+                      theme-text-secondary
+                      mt-2
+                    "
+                  >
+                    {subject.completed} leçon
+                    {subject.completed !== 1
+                      ? "s"
+                      : ""}{" "}
+                    terminée
+                    {subject.completed !== 1
+                      ? "s"
+                      : ""}{" "}
+                    sur{" "}
+                    {subject.total}
+                  </p>
+                </div>
+              )
+            )}
+          </div>
+        )}
+      </div>
 
-        {/* =================================================
-            BADGES
-        ================================================= */}
+      {/* =====================================================
+          BADGES
+      ===================================================== */}
 
-        <section>
+      <div>
+        <div
+          className="
+            flex
+            items-center
+            gap-2
+            mb-3
+          "
+        >
+          <Award
+            size={20}
+            className="text-accent"
+          />
+
+          <h2
+            className="
+              text-lg
+              font-bold
+              theme-text
+            "
+          >
+            Badges obtenus
+          </h2>
+        </div>
+
+        {badges.length === 0 ? (
           <div
             className="
-              flex
-              items-center
-              gap-3
-              mb-4
+              theme-surface
+              border
+              theme-border
+              rounded-2xl
+              p-5
+              text-center
             "
           >
             <div
               className="
-                w-10
-                h-10
-                rounded-xl
+                w-12
+                h-12
+                rounded-2xl
                 bg-accent-soft
-                text-accent
+                mx-auto
+                mb-3
                 flex
                 items-center
                 justify-center
               "
             >
-              <Trophy size={21} />
+              <Award
+                size={24}
+                className="text-accent"
+              />
             </div>
 
-            <div>
-              <h2
-                className="
-                  text-xl
-                  font-bold
-                  text-gray-950
-                  dark:text-white
-                "
-              >
-                Mes badges
-              </h2>
-
-              <p
-                className="
-                  text-sm
-                  text-gray-600
-                  dark:text-gray-400
-                "
-              >
-                Les récompenses que tu as obtenues.
-              </p>
-            </div>
+            <p
+              className="
+                text-sm
+                theme-text-secondary
+              "
+            >
+              Aucun badge obtenu pour le moment.
+            </p>
           </div>
+        ) : (
+          <div
+            className="
+              grid
+              grid-cols-2
+              gap-3
+            "
+          >
+            {badges.map(
+              (badge, index) => (
+                <div
+                  key={
+                    badge?.id ||
+                    `badge-${index}`
+                  }
+                  className="
+                    theme-surface
+                    border
+                    theme-border
+                    rounded-2xl
+                    p-4
+                    shadow-sm
+                  "
+                >
+                  <div
+                    className="
+                      w-12
+                      h-12
+                      rounded-2xl
+                      bg-accent-soft
+                      flex
+                      items-center
+                      justify-center
+                      mb-3
+                    "
+                  >
+                    {badge?.icon ? (
+                      <span className="text-2xl">
+                        {badge.icon}
+                      </span>
+                    ) : (
+                      <Award
+                        size={24}
+                        className="text-accent"
+                      />
+                    )}
+                  </div>
 
+                  <p
+                    className="
+                      font-semibold
+                      theme-text
+                      text-sm
+                    "
+                  >
+                    {badge?.name ||
+                      "Badge"}
+                  </p>
 
-          {badges.length === 0 ? (
-            <div
-              className="
-                theme-surface
-                rounded-2xl
-                border
-                theme-border
-                shadow-sm
-                p-8
-                text-center
-              "
-            >
-              <div
-                className="
-                  text-4xl
-                  mb-3
-                "
-              >
-                🏆
-              </div>
-
-              <h3
-                className="
-                  font-bold
-                  text-gray-800
-                  dark:text-white
-                "
-              >
-                Aucun badge pour le moment
-              </h3>
-
-              <p
-                className="
-                  text-sm
-                  text-gray-600
-                  dark:text-gray-400
-                  mt-1
-                "
-              >
-                Réussis tes quiz et progresse dans tes leçons pour gagner des badges.
-              </p>
-            </div>
-          ) : (
-            <div
-              className="
-                grid
-                sm:grid-cols-2
-                lg:grid-cols-3
-                gap-4
-              "
-            >
-              {badges.map(
-                (item) => {
-
-                  const badge =
-                    item.badges;
-
-                  return (
-                    <div
-                      key={item.id}
+                  {badge?.description && (
+                    <p
                       className="
-                        theme-surface
-                        rounded-2xl
-                        border
-                        theme-border
-                        shadow-sm
-                        p-5
+                        text-xs
+                        theme-text-secondary
+                        mt-1
+                        line-clamp-3
                       "
                     >
-                      <div
-                        className="
-                          flex
-                          items-start
-                          gap-4
-                        "
-                      >
-                        <div
-                          className="
-                            w-14
-                            h-14
-                            shrink-0
-                            rounded-2xl
-                            bg-accent-soft
-                            flex
-                            items-center
-                            justify-center
-                            overflow-hidden
-                          "
-                        >
-                          {badge?.image_url ? (
-                            <img
-                              src={
-                                badge.image_url
-                              }
-                              alt={
-                                badge.name ||
-                                "Badge"
-                              }
-                              className="
-                                w-full
-                                h-full
-                                object-cover
-                              "
-                            />
-                          ) : (
-                            <span className="text-3xl">
-                              🏆
-                            </span>
-                          )}
-                        </div>
-
-
-                        <div
-                          className="
-                            min-w-0
-                          "
-                        >
-                          <h3
-                            className="
-                              font-bold
-                              text-gray-950
-                              dark:text-white
-                            "
-                          >
-                            {
-                              badge?.name ||
-                              "Badge"
-                            }
-                          </h3>
-
-
-                          <p
-                            className="
-                              text-sm
-                              text-gray-600
-                              dark:text-gray-400
-                              mt-1
-                            "
-                          >
-                            {
-                              badge?.description ||
-                              "Badge obtenu sur Kalan Academy."
-                            }
-                          </p>
-
-
-                          {badge?.xp_reward ? (
-                            <p
-                              className="
-                                text-sm
-                                font-semibold
-                                text-accent
-                                mt-2
-                              "
-                            >
-                              +{badge.xp_reward} XP
-                            </p>
-                          ) : null}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-              )}
-            </div>
-          )}
-        </section>
-
+                      {badge.description}
+                    </p>
+                  )}
+                </div>
+              )
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

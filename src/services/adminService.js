@@ -1,5 +1,66 @@
 import { supabase } from "../lib/supabase";
 
+// ==========================
+// JOURNAL ADMIN
+// ==========================
+
+export async function logAdminActivity({
+  action,
+  targetUserId = null,
+  details = {}
+}) {
+  if (!action) {
+    console.warn(
+      "⚠️ [ADMIN ACTIVITY] Action manquante."
+    );
+
+    return false;
+  }
+
+  try {
+    const {
+      data,
+      error
+    } = await supabase.rpc(
+      "log_admin_activity",
+      {
+        p_action: action,
+        p_target_user_id:
+          targetUserId || null,
+        p_details:
+          details || {}
+      }
+    );
+
+    if (error) {
+      console.error(
+        "❌ [ADMIN ACTIVITY] Erreur enregistrement :",
+        error
+      );
+
+      return false;
+    }
+
+    if (!data?.success) {
+      console.warn(
+        "⚠️ [ADMIN ACTIVITY] Enregistrement non confirmé :",
+        data
+      );
+
+      return false;
+    }
+
+    return true;
+
+  } catch (error) {
+    console.error(
+      "💥 [ADMIN ACTIVITY] Exception enregistrement :",
+      error
+    );
+
+    return false;
+  }
+}
 
 // ==========================
 // DASHBOARD STATISTIQUES

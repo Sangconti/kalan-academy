@@ -73,19 +73,6 @@ export function useNetwork() {
         }
 
 
-        const controller =
-          new AbortController();
-
-
-        const timeout =
-          setTimeout(
-            () => {
-              controller.abort();
-            },
-            CHECK_TIMEOUT
-          );
-
-
         try {
 
           /*
@@ -93,21 +80,20 @@ export function useNetwork() {
            * TEST RÉEL SUPABASE
            * ------------------------------------------------
            *
-           * On utilise le client Supabase déjà configuré
-           * par Kalan Academy.
+           * On utilise la table "profiles" qui existe
+           * réellement dans Kalan Academy.
            *
-           * Une petite requête vers "settings" permet de
-           * vérifier que le serveur Supabase répond.
+           * Le contenu retourné n'est pas important.
            *
-           * Même si RLS empêche la lecture, une réponse
-           * Supabase signifie que le réseau fonctionne.
+           * Même si RLS empêche la lecture, le fait que
+           * Supabase réponde signifie que le serveur est
+           * joignable.
            */
-
           const result =
             await Promise.race([
 
               supabase
-                .from("settings")
+                .from("profiles")
                 .select("id")
                 .limit(1),
 
@@ -139,9 +125,10 @@ export function useNetwork() {
            * Supabase nous a répondu.
            *
            * Même si result.error existe, cela signifie
-           * généralement que la requête a atteint le
-           * serveur. Une erreur d'autorisation ou de RLS
-           * n'est donc pas une perte d'Internet.
+           * que la requête a atteint le serveur.
+           *
+           * Une erreur RLS / autorisation n'est donc
+           * pas considérée comme une perte d'Internet.
            */
           if (result) {
 
@@ -174,8 +161,6 @@ export function useNetwork() {
           return false;
 
         } finally {
-
-          clearTimeout(timeout);
 
           checkingRef.current = false;
         }

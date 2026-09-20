@@ -1,5 +1,6 @@
 import { Device } from "@capacitor/device";
 import { supabase } from "../lib/supabase";
+import { logAdminActivity } from "./adminService";
 
 // ==========================================
 // RÉCUPÉRER L'IDENTIFIANT DE L'APPAREIL
@@ -828,6 +829,11 @@ export async function generateUserDeviceRecoveryCode(
         error
       };
     }
+
+    await logAdminActivity({
+      action: "device_recovery_code_generated",
+      targetUserId: userId
+    });
 
 
     // ----------------------------------------

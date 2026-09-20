@@ -75,31 +75,7 @@ export default function UsersAdmin() {
   // =====================================================
 
   async function resetUserDevice(id) {
-    console.log(
-      "🚨 TEST RESET APPAREIL APPELÉ",
-      id
-    );
-
     try {
-      console.log(
-        "📱 [ADMIN] Réinitialisation appareil pour :",
-        id
-      );
-
-      const {
-        data: sessionData
-      } = await supabase.auth.getSession();
-
-      console.log(
-        "🔐 [ADMIN] Session avant reset =",
-        sessionData?.session?.user?.id
-      );
-
-      console.log(
-        "👑 [ADMIN] ID attendu =",
-        "6d37e063-455a-4058-92ce-468e43e8a993"
-      );
-
       const {
         data,
         error
@@ -108,41 +84,6 @@ export default function UsersAdmin() {
         {
           p_user_id: id
         }
-      );
-
-      console.log(
-        "📱 [ADMIN] Résultat reset appareil RAW =",
-        data
-      );
-
-      console.log(
-        "🔎 [ADMIN] auth_uid RPC =",
-        data?.auth_uid
-      );
-
-      console.log(
-        "🔎 [ADMIN] auth_uid_text RPC =",
-        data?.auth_uid_text
-      );
-
-      console.log(
-        "🔎 [ADMIN] profile_role RPC =",
-        data?.profile_role
-      );
-
-      console.log(
-        "🔎 [ADMIN] target_user_id RPC =",
-        data?.target_user_id
-      );
-
-      console.log(
-        "🔎 [ADMIN] is_admin RPC =",
-        data?.is_admin
-      );
-
-      console.log(
-        "🔎 [ADMIN] status RPC =",
-        data?.status
       );
 
       if (error) {

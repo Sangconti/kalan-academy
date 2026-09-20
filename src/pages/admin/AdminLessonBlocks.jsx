@@ -233,316 +233,460 @@ export default function AdminLessonBlocks() {
       {/* HEADER */}
       {/* ================================= */}
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+      <div
+        className="
+          relative
+          overflow-hidden
+          rounded-3xl
+          bg-accent-soft
+          border
+          border-accent
+          shadow-lg
+          p-6
+          md:p-8
+        "
+      >
+        <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent opacity-10" />
+        <div className="absolute -left-16 -bottom-20 w-48 h-48 rounded-full bg-accent opacity-10" />
+        <div className="absolute right-16 -bottom-24 w-56 h-56 rounded-full bg-accent opacity-5" />
 
-        <button
-          onClick={() => navigate(-1)}
-          className="
-            flex
-            items-center
-            gap-2
-            text-gray-600
-            hover:text-blue-600
-            mb-5
-            transition
-          "
-        >
-          <ArrowLeft size={18} />
+        <div className="relative z-10">
 
-          Retour
-        </button>
-
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-
-          <div>
-
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-
-              <BookOpen
-                size={27}
-                className="text-blue-600"
-              />
-
-              Blocs pédagogiques
-
-            </h1>
-
-            <p className="text-sm text-gray-500 mt-2">
-              Gestion du contenu pédagogique
-              de la leçon.
-            </p>
-
-          </div>
-
-          <div
+          <button
+            onClick={() => navigate(-1)}
             className="
               inline-flex
               items-center
               gap-2
-              px-4
-              py-2
-              rounded-xl
-              bg-blue-50
-              text-blue-700
-              font-semibold
-              text-sm
+              theme-text
+              hover:text-accent
+              mb-5
+              transition
+              font-medium
             "
           >
-            <BookOpen size={17} />
+            <ArrowLeft size={18} />
+            Retour
+          </button>
 
-            {blocks.length} bloc
-            {blocks.length !== 1
-              ? "s"
-              : ""}
+          <div className="
+            flex
+            flex-col
+            md:flex-row
+            md:items-center
+            md:justify-between
+            gap-5
+          ">
+
+            <div>
+
+              <div
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  px-3
+                  py-1.5
+                  rounded-full
+                  bg-accent
+                  text-white
+                  text-xs
+                  font-semibold
+                  mb-3
+                "
+              >
+                <BookOpen size={14} />
+                Administration
+              </div>
+
+              <h1 className="
+                text-2xl
+                md:text-3xl
+                font-bold
+                leading-tight
+                theme-text
+                flex
+                items-center
+                gap-3
+              ">
+                <BookOpen
+                  size={28}
+                  className="text-accent shrink-0"
+                />
+
+                Blocs pédagogiques
+              </h1>
+
+              <p className="
+                theme-text-secondary
+                mt-3
+                leading-relaxed
+              ">
+                Gérez le contenu pédagogique
+                de la leçon, bloc par bloc.
+              </p>
+
+            </div>
+
+            <div
+              className="
+                inline-flex
+                items-center
+                gap-2
+                px-4
+                py-2.5
+                rounded-xl
+                bg-white/70
+                dark:bg-gray-950/30
+                theme-text
+                border
+                border-white/50
+                dark:border-white/10
+                font-semibold
+                text-sm
+                shrink-0
+              "
+            >
+              <BookOpen
+                size={17}
+                className="text-accent"
+              />
+
+              {blocks.length} bloc
+              {blocks.length !== 1
+                ? "s"
+                : ""}
+            </div>
+
           </div>
 
         </div>
-
       </div>
 
       {/* ================================= */}
       {/* FORMULAIRE */}
       {/* ================================= */}
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+      <div
+        className="
+          theme-surface
+          theme-border
+          border
+          rounded-3xl
+          shadow-sm
+          overflow-hidden
+        "
+      >
 
-        <div className="flex items-center gap-2 mb-5">
+        <div className="
+          p-5
+          md:p-6
+          border-b
+          border-accent
+          flex
+          items-center
+          gap-3
+        ">
 
-          {editing ? (
-            <Pencil
-              size={20}
-              className="text-yellow-600"
-            />
-          ) : (
-            <Plus
-              size={20}
-              className="text-blue-600"
-            />
-          )}
+          <div
+            className="
+              w-11
+              h-11
+              rounded-2xl
+              bg-accent-soft
+              border
+              border-accent
+              text-accent
+              flex
+              items-center
+              justify-center
+              shrink-0
+            "
+          >
+            {editing ? (
+              <Pencil size={20} />
+            ) : (
+              <Plus size={20} />
+            )}
+          </div>
 
-          <h2 className="font-bold text-lg text-gray-900">
+          <div>
 
-            {editing
-              ? "Modifier le bloc"
-              : "Nouveau bloc"}
+            <h2 className="
+              font-bold
+              text-lg
+              theme-text
+            ">
+              {editing
+                ? "Modifier le bloc"
+                : "Nouveau bloc"}
+            </h2>
 
-          </h2>
+            <p className="
+              text-sm
+              theme-text-secondary
+              mt-0.5
+            ">
+              {editing
+                ? "Modifiez le contenu de ce bloc pédagogique."
+                : "Ajoutez un nouveau bloc au contenu de la leçon."}
+            </p>
+
+          </div>
 
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4"
-        >
+        <div className="p-5 md:p-6">
 
-          {/* TYPE */}
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4"
+          >
 
-          <div>
+            {/* TYPE */}
 
-            <label className="block font-medium text-gray-700 mb-2">
-              Type de bloc
-            </label>
+            <div>
 
-            <select
-              className="
-                w-full
-                border
-                border-gray-200
-                p-3
-                rounded-xl
-                focus:outline-none
-                focus:ring-2
-                focus:ring-blue-500
-              "
-              value={form.block_type}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  block_type:
-                    e.target.value
-                })
-              }
-            >
+              <label className="
+                block
+                font-medium
+                theme-text
+                mb-2
+              ">
+                Type de bloc
+              </label>
 
-              <option value="text">
-                Texte
-              </option>
-
-            </select>
-
-          </div>
-
-          {/* TITRE */}
-
-          <div>
-
-            <label className="block font-medium text-gray-700 mb-2">
-              Titre du bloc
-            </label>
-
-            <input
-              className="
-                w-full
-                border
-                border-gray-200
-                p-3
-                rounded-xl
-                focus:outline-none
-                focus:ring-2
-                focus:ring-blue-500
-              "
-              placeholder="Titre du bloc"
-              value={form.title}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  title: e.target.value
-                })
-              }
-            />
-
-          </div>
-
-          {/* CONTENU */}
-
-          <div>
-
-            <label className="block font-medium text-gray-700 mb-2">
-              Contenu
-            </label>
-
-            <textarea
-              rows={8}
-              className="
-                w-full
-                border
-                border-gray-200
-                p-3
-                rounded-xl
-                focus:outline-none
-                focus:ring-2
-                focus:ring-blue-500
-                resize-y
-              "
-              placeholder="Contenu pédagogique du bloc..."
-              value={form.content}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  content:
-                    e.target.value
-                })
-              }
-            />
-
-          </div>
-
-          {/* ORDRE */}
-
-          <div>
-
-            <label className="block font-medium text-gray-700 mb-2">
-              Ordre du bloc
-            </label>
-
-            <input
-              type="number"
-              min="1"
-              className="
-                w-full
-                border
-                border-gray-200
-                p-3
-                rounded-xl
-                focus:outline-none
-                focus:ring-2
-                focus:ring-blue-500
-              "
-              value={
-                form.order_number
-              }
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  order_number:
-                    Number(
+              <select
+                className="
+                  w-full
+                  theme-surface
+                  theme-text
+                  theme-border
+                  border
+                  p-3
+                  rounded-xl
+                  outline-none
+                  focus:ring-2
+                  focus:ring-accent
+                  focus:border-accent
+                "
+                value={form.block_type}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    block_type:
                       e.target.value
-                    )
-                })
-              }
-            />
+                  })
+                }
+              >
 
-          </div>
+                <option value="text">
+                  Texte
+                </option>
 
-          {/* BOUTONS */}
+              </select>
 
-          <div className="flex gap-3">
+            </div>
 
-            <button
-              type="submit"
-              disabled={saving}
-              className="
-                bg-blue-600
-                hover:bg-blue-700
-                disabled:bg-blue-300
-                text-white
-                px-5
-                py-3
-                rounded-xl
-                font-semibold
-                flex
-                items-center
-                gap-2
-                transition
-              "
-            >
+            {/* TITRE */}
 
-              {editing ? (
-                <>
-                  <Pencil size={18} />
+            <div>
 
-                  {saving
-                    ? "Mise à jour..."
-                    : "Mettre à jour"}
-                </>
-              ) : (
-                <>
-                  <Plus size={18} />
+              <label className="
+                block
+                font-medium
+                theme-text
+                mb-2
+              ">
+                Titre du bloc
+              </label>
 
-                  {saving
-                    ? "Création..."
-                    : "Créer le bloc"}
-                </>
-              )}
+              <input
+                className="
+                  w-full
+                  theme-surface
+                  theme-text
+                  theme-border
+                  border
+                  p-3
+                  rounded-xl
+                  outline-none
+                  focus:ring-2
+                  focus:ring-accent
+                  focus:border-accent
+                "
+                placeholder="Titre du bloc"
+                value={form.title}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    title: e.target.value
+                  })
+                }
+              />
 
-            </button>
+            </div>
 
-            {editing && (
+            {/* CONTENU */}
+
+            <div>
+
+              <label className="
+                block
+                font-medium
+                theme-text
+                mb-2
+              ">
+                Contenu
+              </label>
+
+              <textarea
+                rows={8}
+                className="
+                  w-full
+                  theme-surface
+                  theme-text
+                  theme-border
+                  border
+                  p-3
+                  rounded-xl
+                  outline-none
+                  focus:ring-2
+                  focus:ring-accent
+                  focus:border-accent
+                  resize-y
+                "
+                placeholder="Contenu pédagogique du bloc..."
+                value={form.content}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    content:
+                      e.target.value
+                  })
+                }
+              />
+
+            </div>
+
+            {/* ORDRE */}
+
+            <div>
+
+              <label className="
+                block
+                font-medium
+                theme-text
+                mb-2
+              ">
+                Ordre du bloc
+              </label>
+
+              <input
+                type="number"
+                min="1"
+                className="
+                  w-full
+                  theme-surface
+                  theme-text
+                  theme-border
+                  border
+                  p-3
+                  rounded-xl
+                  outline-none
+                  focus:ring-2
+                  focus:ring-accent
+                  focus:border-accent
+                "
+                value={
+                  form.order_number
+                }
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    order_number:
+                      Number(
+                        e.target.value
+                      )
+                  })
+                }
+              />
+
+            </div>
+
+            {/* BOUTONS */}
+
+            <div className="flex flex-wrap gap-3">
 
               <button
-                type="button"
-                onClick={resetForm}
+                type="submit"
+                disabled={saving}
                 className="
+                  bg-accent
+                  hover:opacity-90
+                  hover:-translate-y-0.5
+                  disabled:opacity-50
+                  text-white
                   px-5
                   py-3
                   rounded-xl
-                  border
-                  border-gray-200
-                  text-gray-600
                   font-semibold
-                  hover:bg-gray-50
+                  flex
+                  items-center
+                  gap-2
                   transition
+                  shadow-md
                 "
               >
-                Annuler
+
+                {editing ? (
+                  <>
+                    <Pencil size={18} />
+
+                    {saving
+                      ? "Mise à jour..."
+                      : "Mettre à jour"}
+                  </>
+                ) : (
+                  <>
+                    <Plus size={18} />
+
+                    {saving
+                      ? "Création..."
+                      : "Créer le bloc"}
+                  </>
+                )}
+
               </button>
 
-            )}
+              {editing && (
 
-          </div>
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="
+                    px-5
+                    py-3
+                    rounded-xl
+                    theme-surface
+                    theme-border
+                    border
+                    theme-text
+                    font-semibold
+                    hover:bg-accent-soft
+                    transition
+                  "
+                >
+                  Annuler
+                </button>
 
-        </form>
+              )}
 
+            </div>
+
+          </form>
+
+        </div>
       </div>
 
       {/* ================================= */}
@@ -551,15 +695,28 @@ export default function AdminLessonBlocks() {
 
       <div>
 
-        <div className="flex items-center justify-between mb-4">
+        <div className="
+          flex
+          items-center
+          justify-between
+          mb-4
+        ">
 
           <div>
 
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="
+              text-xl
+              font-bold
+              theme-text
+            ">
               Blocs de la leçon
             </h2>
 
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="
+              text-sm
+              theme-text-secondary
+              mt-1
+            ">
               Les blocs sont affichés dans
               leur ordre pédagogique.
             </p>
@@ -570,9 +727,29 @@ export default function AdminLessonBlocks() {
 
         {loading ? (
 
-          <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
+          <div
+            className="
+              theme-surface
+              theme-border
+              border
+              rounded-3xl
+              p-8
+              text-center
+              shadow-sm
+            "
+          >
 
-            <p className="text-gray-500">
+            <BookOpen
+              size={34}
+              className="
+                mx-auto
+                text-accent
+                mb-3
+                animate-pulse
+              "
+            />
+
+            <p className="theme-text-secondary">
               Chargement des blocs...
             </p>
 
@@ -580,20 +757,50 @@ export default function AdminLessonBlocks() {
 
         ) : blocks.length === 0 ? (
 
-          <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
+          <div
+            className="
+              theme-surface
+              theme-border
+              border
+              rounded-3xl
+              p-8
+              text-center
+              shadow-sm
+            "
+          >
 
-            <BookOpen
-              size={42}
-              className="mx-auto text-gray-300 mb-3"
-            />
+            <div
+              className="
+                w-14
+                h-14
+                rounded-2xl
+                bg-accent-soft
+                border
+                border-accent
+                text-accent
+                flex
+                items-center
+                justify-center
+                mx-auto
+                mb-4
+              "
+            >
+              <BookOpen size={28} />
+            </div>
 
-            <p className="text-gray-500">
+            <p className="
+              font-semibold
+              theme-text
+            ">
               Aucun bloc pédagogique.
             </p>
 
-            <p className="text-sm text-gray-400 mt-1">
-              Créez le premier bloc
-              ci-dessus.
+            <p className="
+              text-sm
+              theme-text-secondary
+              mt-1
+            ">
+              Créez le premier bloc ci-dessus.
             </p>
 
           </div>
@@ -607,28 +814,43 @@ export default function AdminLessonBlocks() {
               <div
                 key={block.id}
                 className="
-                  bg-white
+                  theme-surface
                   shadow-sm
                   border
-                  border-gray-100
-                  rounded-2xl
+                  theme-border
+                  rounded-3xl
                   p-5
+                  hover:shadow-md
+                  transition
                 "
               >
 
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                <div className="
+                  flex
+                  flex-col
+                  md:flex-row
+                  md:items-start
+                  md:justify-between
+                  gap-4
+                ">
 
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
 
-                    <div className="flex items-start gap-3">
+                    <div className="
+                      flex
+                      items-start
+                      gap-3
+                    ">
 
                       <div
                         className="
                           w-10
                           h-10
                           rounded-xl
-                          bg-blue-50
-                          text-blue-600
+                          bg-accent-soft
+                          border
+                          border-accent
+                          text-accent
                           flex
                           items-center
                           justify-center
@@ -639,13 +861,20 @@ export default function AdminLessonBlocks() {
                         {block.order_number}
                       </div>
 
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
 
-                        <div className="flex items-center gap-2">
+                        <div className="
+                          flex
+                          items-center
+                          gap-2
+                          flex-wrap
+                        ">
 
                           <GripVertical
                             size={17}
-                            className="text-gray-300"
+                            className="
+                              theme-text-secondary
+                            "
                           />
 
                           <span
@@ -653,8 +882,10 @@ export default function AdminLessonBlocks() {
                               text-xs
                               font-semibold
                               uppercase
-                              text-blue-600
-                              bg-blue-50
+                              text-accent
+                              bg-accent-soft
+                              border
+                              border-accent
                               px-2
                               py-1
                               rounded-lg
@@ -666,12 +897,22 @@ export default function AdminLessonBlocks() {
 
                         </div>
 
-                        <h3 className="font-bold text-gray-900 mt-2">
+                        <h3 className="
+                          font-bold
+                          theme-text
+                          mt-2
+                        ">
                           {block.title ||
                             "Bloc sans titre"}
                         </h3>
 
-                        <div className="text-sm text-gray-600 mt-2 whitespace-pre-wrap">
+                        <div className="
+                          text-sm
+                          theme-text-secondary
+                          mt-2
+                          whitespace-pre-wrap
+                          leading-relaxed
+                        ">
                           {block.content}
                         </div>
 
@@ -681,7 +922,11 @@ export default function AdminLessonBlocks() {
 
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="
+                    flex
+                    gap-2
+                    shrink-0
+                  ">
 
                     <button
                       type="button"
@@ -691,7 +936,11 @@ export default function AdminLessonBlocks() {
                       className="
                         p-2.5
                         bg-yellow-100
+                        dark:bg-yellow-950/30
                         hover:bg-yellow-200
+                        dark:hover:bg-yellow-900/40
+                        text-yellow-700
+                        dark:text-yellow-300
                         rounded-xl
                         transition
                       "
@@ -710,7 +959,11 @@ export default function AdminLessonBlocks() {
                       className="
                         p-2.5
                         bg-red-100
+                        dark:bg-red-950/30
                         hover:bg-red-200
+                        dark:hover:bg-red-900/40
+                        text-red-700
+                        dark:text-red-300
                         rounded-xl
                         transition
                       "

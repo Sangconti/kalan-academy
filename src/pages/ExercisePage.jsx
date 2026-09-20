@@ -732,28 +732,28 @@ export default function ExercisePage({
           className="
             relative
             overflow-hidden
-            theme-surface
             rounded-3xl
+            bg-accent-soft
             border
-            theme-border
-            shadow-sm
+            border-accent
+            shadow-lg
             p-6
-            md:p-7
+            md:p-8
           "
         >
 
           {/* =================================================
-              CERCLE DÉCORATIF HAUT DROIT
+              CERCLES DÉCORATIFS
           ================================================= */}
 
           <div
             className="
               pointer-events-none
               absolute
-              -right-12
-              -top-12
-              w-36
-              h-36
+              -right-10
+              -top-10
+              w-40
+              h-40
               rounded-full
               bg-accent
               opacity-10
@@ -761,21 +761,32 @@ export default function ExercisePage({
           />
 
 
-          {/* =================================================
-              CERCLE DÉCORATIF BAS GAUCHE
-          ================================================= */}
+          <div
+            className="
+              pointer-events-none
+              absolute
+              -left-16
+              -bottom-20
+              w-48
+              h-48
+              rounded-full
+              bg-accent
+              opacity-10
+            "
+          />
+
 
           <div
             className="
               pointer-events-none
               absolute
-              -left-10
-              -bottom-16
-              w-32
-              h-32
+              right-16
+              -bottom-24
+              w-56
+              h-56
               rounded-full
               bg-accent
-              opacity-10
+              opacity-5
             "
           />
 
@@ -791,137 +802,64 @@ export default function ExercisePage({
             "
           >
 
+            {/* BADGE */}
+
             <div
               className="
-                flex
-                items-start
-                gap-4
+                inline-flex
+                items-center
+                gap-2
+                px-3
+                py-1.5
+                rounded-full
+                bg-accent
+                text-white
+                text-xs
+                font-semibold
+                mb-4
               "
             >
 
-              {/* =================================================
-                  ICÔNE
-              ================================================= */}
+              <ClipboardCheck
+                size={14}
+              />
 
-              <div
-                className="
-                  w-12
-                  h-12
-                  rounded-2xl
-                  bg-accent-soft
-                  text-accent
-                  flex
-                  items-center
-                  justify-center
-                  flex-shrink-0
-                "
-              >
-
-                <ClipboardCheck
-                  size={25}
-                />
-
-              </div>
-
-
-              {/* =================================================
-                  TITRE
-              ================================================= */}
-
-              <div
-                className="
-                  min-w-0
-                  flex-1
-                "
-              >
-
-                <div
-                  className="
-                    flex
-                    flex-wrap
-                    items-center
-                    gap-2
-                  "
-                >
-
-                  <p
-                    className="
-                      text-sm
-                      font-bold
-                      text-accent
-                    "
-                  >
-
-                    {isConsultation
-                      ? "Quiz en consultation"
-                      : isStudentPreview
-                        ? "Quiz aperçu"
-                        : "Quiz de validation"}
-
-                  </p>
-
-
-                  {!isOnline && (
-
-                    <span
-                      className="
-                        inline-flex
-                        items-center
-                        gap-1.5
-                        px-2.5
-                        py-1
-                        rounded-full
-                        bg-accent-soft
-                        text-accent
-                        text-xs
-                        font-semibold
-                      "
-                    >
-
-                      <WifiOff
-                        size={13}
-                      />
-
-                      Hors ligne
-
-                    </span>
-
-                  )}
-
-                </div>
-
-
-                <h1
-                  className="
-                    text-2xl
-                    md:text-3xl
-                    font-extrabold
-                    theme-text
-                    mt-1
-                    leading-tight
-                  "
-                >
-
-                  {quiz.title || "Quiz"}
-
-                </h1>
-
-              </div>
+              {isConsultation
+                ? "Quiz en consultation"
+                : isStudentPreview
+                  ? "Quiz aperçu"
+                  : "Quiz de validation"}
 
             </div>
 
 
-            {/* =================================================
-                DESCRIPTION
-            ================================================= */}
+            {/* TITRE */}
+
+            <h1
+              className="
+                text-2xl
+                md:text-3xl
+                font-bold
+                leading-tight
+                theme-text
+              "
+            >
+
+              {quiz.title || "Quiz"}
+
+            </h1>
+
+
+            {/* DESCRIPTION */}
 
             {quiz.description && (
 
               <p
                 className="
                   theme-text-secondary
+                  mt-3
                   leading-relaxed
-                  mt-5
+                  max-w-3xl
                 "
               >
 
@@ -930,6 +868,82 @@ export default function ExercisePage({
               </p>
 
             )}
+
+
+            {/* INFORMATIONS */}
+
+            <div
+              className="
+                flex
+                flex-wrap
+                items-center
+                gap-3
+                mt-5
+              "
+            >
+
+              <div
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  px-3
+                  py-2
+                  rounded-xl
+                  bg-white/70
+                  dark:bg-gray-950/30
+                  theme-text
+                  text-sm
+                  font-medium
+                  border
+                  border-white/50
+                  dark:border-white/10
+                "
+              >
+
+                <ClipboardCheck
+                  size={16}
+                  className="text-accent"
+                />
+
+                Validation des connaissances
+
+              </div>
+
+
+              {!isOnline && (
+
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-2
+                    rounded-xl
+                    bg-white/70
+                    dark:bg-gray-950/30
+                    theme-text
+                    text-sm
+                    font-medium
+                    border
+                    border-white/50
+                    dark:border-white/10
+                  "
+                >
+
+                  <WifiOff
+                    size={16}
+                    className="text-accent"
+                  />
+
+                  Hors ligne
+
+                </div>
+
+              )}
+
+            </div>
 
           </div>
 
@@ -944,18 +958,18 @@ export default function ExercisePage({
           className="
             relative
             overflow-hidden
-            theme-surface
             rounded-3xl
+            bg-accent-soft
             border
-            theme-border
-            shadow-sm
+            border-accent
+            shadow-lg
             p-5
             md:p-7
           "
         >
 
           {/* =================================================
-              CERCLE DÉCORATIF HAUT DROIT
+              CERCLES DÉCORATIFS
           ================================================= */}
 
           <div
@@ -972,10 +986,6 @@ export default function ExercisePage({
             "
           />
 
-
-          {/* =================================================
-              CERCLE DÉCORATIF BAS GAUCHE
-          ================================================= */}
 
           <div
             className="

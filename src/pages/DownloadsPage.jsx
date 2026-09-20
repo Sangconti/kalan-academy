@@ -348,54 +348,6 @@ export default function DownloadsPage({
 
 
       {/* ======================================
-          HEADER
-      ====================================== */}
-
-      <div className="
-        theme-surface
-        border-b
-        theme-border
-        px-5
-        py-4
-      ">
-
-        <button
-          onClick={goHome}
-          className="
-            flex
-            items-center
-            gap-2
-            text-xl
-            font-bold
-            theme-text
-            hover:text-accent
-            transition
-          "
-        >
-
-          <span className="
-            w-9
-            h-9
-            rounded-xl
-            bg-accent
-            text-white
-            flex
-            items-center
-            justify-center
-          ">
-
-            🎓
-
-          </span>
-
-          Kalan Academy
-
-        </button>
-
-      </div>
-
-
-      {/* ======================================
           CONTENU
       ====================================== */}
 
@@ -407,58 +359,207 @@ export default function DownloadsPage({
       ">
 
 
-        {/* TITRE */}
+        {/* ======================================
+            EN-TÊTE
+        ====================================== */}
 
-        <div className="
-          flex
-          items-center
-          gap-3
-          mb-6
-        ">
-
-          <div className="
-            w-12
-            h-12
-            rounded-2xl
+        <div
+          className="
+            relative
+            overflow-hidden
+            rounded-3xl
             bg-accent-soft
-            flex
-            items-center
-            justify-center
-          ">
+            border
+            border-accent
+            p-6
+            md:p-8
+            shadow-lg
+            mb-7
+          "
+        >
 
-            <HardDrive
-              size={25}
-              className="text-accent"
-            />
+          {/* CERCLES DÉCORATIFS */}
 
-          </div>
+          <div
+            className="
+              absolute
+              -right-10
+              -top-10
+              w-40
+              h-40
+              rounded-full
+              bg-accent
+              opacity-10
+            "
+          />
 
 
-          <div>
+          <div
+            className="
+              absolute
+              -left-16
+              -bottom-20
+              w-48
+              h-48
+              rounded-full
+              bg-accent
+              opacity-10
+            "
+          />
 
-            <h1 className="
-              text-2xl
-              font-bold
-              theme-text
-            ">
 
+          <div
+            className="
+              absolute
+              right-16
+              -bottom-24
+              w-56
+              h-56
+              rounded-full
+              bg-accent
+              opacity-5
+            "
+          />
+
+
+          <div
+            className="
+              relative
+              z-10
+            "
+          >
+
+            {/* BADGE */}
+
+            <div
+              className="
+                inline-flex
+                items-center
+                gap-2
+                px-3
+                py-1.5
+                rounded-full
+                bg-accent
+                text-white
+                text-xs
+                font-semibold
+                mb-4
+              "
+            >
+
+              <HardDrive size={14} />
+
+              {isConsultation
+                ? "Consultation"
+                : "Hors connexion"
+              }
+
+            </div>
+
+
+            {/* TITRE */}
+
+            <h1
+              className="
+                text-2xl
+                md:text-3xl
+                font-bold
+                leading-tight
+                theme-text
+              "
+            >
               Téléchargements
-
             </h1>
 
 
-            <p className="
-              text-sm
-              theme-text-secondary
-              mt-1
-            ">
+            {/* DESCRIPTION */}
 
+            <p
+              className="
+                theme-text-secondary
+                mt-3
+                leading-relaxed
+                max-w-2xl
+              "
+            >
               {isConsultation
-                ? "Vidéos disponibles hors ligne sur cet appareil"
-                : "Tes vidéos disponibles hors ligne"
+                ? "Vidéos disponibles hors ligne sur cet appareil."
+                : "Retrouve ici tes vidéos disponibles hors ligne."
               }
-
             </p>
+
+
+            {/* INFORMATIONS */}
+
+            <div
+              className="
+                flex
+                flex-wrap
+                items-center
+                gap-3
+                mt-5
+              "
+            >
+
+              <div
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  px-3
+                  py-2
+                  rounded-xl
+                  bg-white/70
+                  dark:bg-gray-950/30
+                  theme-text
+                  text-sm
+                  font-medium
+                  border
+                  border-white/50
+                  dark:border-white/10
+                "
+              >
+
+                <Download
+                  size={16}
+                  className="text-accent"
+                />
+
+                {videos.length} vidéo
+                {videos.length > 1 ? "s" : ""}
+
+              </div>
+
+
+              <div
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  px-3
+                  py-2
+                  rounded-xl
+                  bg-white/70
+                  dark:bg-gray-950/30
+                  theme-text
+                  text-sm
+                  font-medium
+                  border
+                  border-white/50
+                  dark:border-white/10
+                "
+              >
+
+                <HardDrive
+                  size={16}
+                  className="text-accent"
+                />
+
+                {storage} MB
+
+              </div>
+
+            </div>
 
           </div>
 
@@ -472,12 +573,13 @@ export default function DownloadsPage({
         <div className="
           relative
           overflow-hidden
-          theme-surface
-          rounded-2xl
+          bg-accent-soft
+          rounded-3xl
           shadow-sm
           border
-          theme-border
+          border-accent
           p-5
+          md:p-6
           mb-6
         ">
 
@@ -503,6 +605,19 @@ export default function DownloadsPage({
               bg-accent
               opacity-10
             " />
+
+
+            <div className="
+              absolute
+              -left-20
+              -bottom-24
+              w-48
+              h-48
+              rounded-full
+              bg-accent
+              opacity-10
+            " />
+
 
             <div className="
               absolute
@@ -539,9 +654,12 @@ export default function DownloadsPage({
                 <div className="
                   w-10
                   h-10
-                  rounded-xl
-                  bg-green-100
-                  dark:bg-green-950/40
+                  rounded-2xl
+                  bg-white/70
+                  dark:bg-gray-950/30
+                  border
+                  border-white/50
+                  dark:border-white/10
                   flex
                   items-center
                   justify-center
@@ -549,7 +667,7 @@ export default function DownloadsPage({
 
                   <HardDrive
                     size={20}
-                    className="text-green-600 dark:text-green-400"
+                    className="text-accent"
                   />
 
                 </div>
@@ -561,9 +679,7 @@ export default function DownloadsPage({
                     text-sm
                     theme-text-secondary
                   ">
-
                     Stockage utilisé
-
                   </p>
 
 
@@ -572,9 +688,7 @@ export default function DownloadsPage({
                     font-bold
                     theme-text
                   ">
-
                     {storage} MB
-
                   </p>
 
                 </div>
@@ -591,9 +705,7 @@ export default function DownloadsPage({
                   font-bold
                   text-accent
                 ">
-
                   {videos.length}
-
                 </p>
 
 
@@ -601,9 +713,7 @@ export default function DownloadsPage({
                   text-xs
                   theme-text-secondary
                 ">
-
                   vidéo{videos.length > 1 ? "s" : ""}
-
                 </p>
 
               </div>
@@ -619,7 +729,8 @@ export default function DownloadsPage({
                 mt-3
                 pt-3
                 border-t
-                theme-border
+                border-white/50
+                dark:border-white/10
               ">
 
                 Ces téléchargements sont stockés
@@ -643,7 +754,7 @@ export default function DownloadsPage({
 
           <div className="
             theme-surface
-            rounded-2xl
+            rounded-3xl
             shadow-sm
             border
             theme-border
@@ -655,8 +766,7 @@ export default function DownloadsPage({
               w-16
               h-16
               rounded-2xl
-              bg-gray-100
-              dark:bg-gray-800
+              bg-accent-soft
               flex
               items-center
               justify-center
@@ -666,7 +776,7 @@ export default function DownloadsPage({
 
               <Video
                 size={30}
-                className="theme-text-secondary"
+                className="text-accent"
               />
 
             </div>
@@ -678,9 +788,7 @@ export default function DownloadsPage({
               theme-text
               mb-2
             ">
-
               Aucun téléchargement
-
             </h2>
 
 
@@ -712,7 +820,9 @@ export default function DownloadsPage({
                 py-3
                 rounded-xl
                 font-semibold
+                shadow-md
                 hover:opacity-90
+                hover:-translate-y-0.5
                 transition
               "
             >
@@ -741,7 +851,7 @@ export default function DownloadsPage({
                 key={video.lesson_id}
                 className="
                   theme-surface
-                  rounded-2xl
+                  rounded-3xl
                   shadow-sm
                   border
                   theme-border
@@ -810,9 +920,7 @@ export default function DownloadsPage({
                       text-sm
                       theme-text-secondary
                     ">
-
                       Disponible hors ligne
-
                     </span>
 
                   </div>
@@ -823,9 +931,7 @@ export default function DownloadsPage({
                     theme-text-secondary
                     mt-1
                   ">
-
                     {video.size_mb} MB
-
                   </p>
 
                 </div>
@@ -847,15 +953,14 @@ export default function DownloadsPage({
                       w-10
                       h-10
                       rounded-xl
-                      bg-green-100
-                      dark:bg-green-950/40
-                      text-green-600
-                      dark:text-green-400
+                      bg-accent-soft
+                      text-accent
+                      border
+                      border-accent
                       flex
                       items-center
                       justify-center
-                      hover:bg-green-200
-                      dark:hover:bg-green-900/50
+                      hover:opacity-80
                       transition
                     "
                     title="Lire"
@@ -882,7 +987,7 @@ export default function DownloadsPage({
                         rounded-xl
                         bg-red-50
                         dark:bg-red-950/40
-                        text-red-500
+                        text-red-600
                         dark:text-red-400
                         flex
                         items-center

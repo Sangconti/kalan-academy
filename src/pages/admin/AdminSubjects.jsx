@@ -10,7 +10,7 @@ import {
   GraduationCap,
   Layers,
   Search,
-  X
+  X,
 } from "lucide-react";
 
 import {
@@ -19,7 +19,7 @@ import {
   createSubject,
   updateSubject,
   deleteSubject,
-  getChapters
+  getChapters,
 } from "../../services/educationAdminService";
 
 export default function AdminSubjects() {
@@ -39,7 +39,7 @@ export default function AdminSubjects() {
     name: "",
     code: "",
     class_id: "",
-    order_number: 1
+    order_number: 1,
   });
 
   const [editing, setEditing] = useState(null);
@@ -77,10 +77,7 @@ export default function AdminSubjects() {
 
       setChapterCounts(counts);
     } catch (error) {
-      console.error(
-        "Erreur chargement matières",
-        error
-      );
+      console.error("Erreur chargement matières", error);
     } finally {
       setLoading(false);
     }
@@ -98,10 +95,7 @@ export default function AdminSubjects() {
 
       setClasses(data || []);
     } catch (error) {
-      console.error(
-        "Erreur chargement classes",
-        error
-      );
+      console.error("Erreur chargement classes", error);
     } finally {
       setLoadingClasses(false);
     }
@@ -120,23 +114,16 @@ export default function AdminSubjects() {
   // RECHERCHE
   // =====================================
 
-  const normalizedSearch = searchTerm
-    .trim()
-    .toLowerCase();
+  const normalizedSearch = searchTerm.trim().toLowerCase();
 
   const filteredSubjects = subjects.filter((subject) => {
     if (!normalizedSearch) {
       return true;
     }
 
-    const name =
-      subject?.name?.toLowerCase() || "";
-
-    const code =
-      subject?.code?.toLowerCase() || "";
-
-    const className =
-      subject?.classes?.name?.toLowerCase() || "";
+    const name = subject?.name?.toLowerCase() || "";
+    const code = subject?.code?.toLowerCase() || "";
+    const className = subject?.classes?.name?.toLowerCase() || "";
 
     return (
       name.includes(normalizedSearch) ||
@@ -167,14 +154,11 @@ export default function AdminSubjects() {
         name: form.name.trim(),
         code: form.code.trim() || null,
         class_id: form.class_id,
-        order_number: Number(form.order_number) || 1
+        order_number: Number(form.order_number) || 1,
       };
 
       if (editing) {
-        await updateSubject(
-          editing.id,
-          payload
-        );
+        await updateSubject(editing.id, payload);
       } else {
         await createSubject(payload);
       }
@@ -183,14 +167,11 @@ export default function AdminSubjects() {
 
       await loadSubjects();
     } catch (error) {
-      console.error(
-        "Erreur sauvegarde matière",
-        error
-      );
+      console.error("Erreur sauvegarde matière", error);
 
       alert(
         error?.message ||
-        "Impossible de sauvegarder la matière."
+          "Impossible de sauvegarder la matière."
       );
     }
   }
@@ -204,7 +185,7 @@ export default function AdminSubjects() {
       name: "",
       code: "",
       class_id: "",
-      order_number: 1
+      order_number: 1,
     });
 
     setEditing(null);
@@ -221,7 +202,7 @@ export default function AdminSubjects() {
 
     const confirmed = confirm(
       `Supprimer la matière "${subject?.name || ""}" ?\n\n` +
-      "Cette action peut supprimer les éléments liés à cette matière."
+        "Cette action peut supprimer les éléments liés à cette matière."
     );
 
     if (!confirmed) return;
@@ -231,14 +212,11 @@ export default function AdminSubjects() {
 
       await loadSubjects();
     } catch (error) {
-      console.error(
-        "Erreur suppression matière",
-        error
-      );
+      console.error("Erreur suppression matière", error);
 
       alert(
         error?.message ||
-        "Impossible de supprimer la matière."
+          "Impossible de supprimer la matière."
       );
     }
   }
@@ -254,13 +232,12 @@ export default function AdminSubjects() {
       name: subject.name || "",
       code: subject.code || "",
       class_id: subject.class_id || "",
-      order_number:
-        subject.order_number || 1
+      order_number: subject.order_number || 1,
     });
 
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   }
 
@@ -270,10 +247,19 @@ export default function AdminSubjects() {
 
   if (loading || loadingClasses) {
     return (
-      <div className="p-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
-          <p className="text-gray-500 font-medium">
+      <div className="p-4 md:p-6">
+        <div className="theme-surface theme-border border rounded-3xl shadow-sm p-8 text-center">
+          <BookOpen
+            size={34}
+            className="mx-auto text-accent mb-3"
+          />
+
+          <p className="theme-text font-semibold">
             Chargement des matières...
+          </p>
+
+          <p className="theme-text-secondary text-sm mt-1">
+            Préparation des données pédagogiques.
           </p>
         </div>
       </div>
@@ -285,8 +271,7 @@ export default function AdminSubjects() {
   // =====================================
 
   return (
-    <div className="p-4 md:p-6 space-y-6">
-
+    <div className="p-4 md:p-6 space-y-7">
       {/* RETOUR */}
 
       <button
@@ -295,9 +280,9 @@ export default function AdminSubjects() {
           inline-flex
           items-center
           gap-2
-          text-gray-600
-          hover:text-blue-600
-          font-medium
+          theme-text-secondary
+          hover:text-accent
+          font-semibold
           transition
         "
       >
@@ -307,108 +292,167 @@ export default function AdminSubjects() {
 
       {/* HEADER */}
 
-      <div>
-        <div className="flex items-center gap-3">
+      <div
+        className="
+          relative
+          overflow-hidden
+          rounded-3xl
+          bg-accent-soft
+          border
+          border-accent
+          p-6
+          md:p-8
+          shadow-lg
+        "
+      >
+        <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent opacity-10" />
+        <div className="absolute -left-16 -bottom-20 w-48 h-48 rounded-full bg-accent opacity-10" />
+        <div className="absolute right-16 -bottom-24 w-56 h-56 rounded-full bg-accent opacity-5" />
 
-          <div className="
-            w-12
-            h-12
-            rounded-2xl
-            bg-blue-50
-            flex
-            items-center
-            justify-center
-          ">
-            <BookOpen
-              size={24}
-              className="text-blue-600"
-            />
+        <div className="relative z-10">
+          <div className="flex items-start gap-4">
+            <div
+              className="
+                w-14
+                h-14
+                shrink-0
+                rounded-2xl
+                bg-white/70
+                dark:bg-gray-950/30
+                border
+                border-white/50
+                dark:border-white/10
+                flex
+                items-center
+                justify-center
+              "
+            >
+              <BookOpen
+                size={26}
+                className="text-accent"
+              />
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  px-3
+                  py-1.5
+                  rounded-full
+                  bg-accent
+                  text-white
+                  text-xs
+                  font-semibold
+                  mb-3
+                "
+              >
+                <BookOpen size={14} />
+                Gestion pédagogique
+              </div>
+
+              <h1 className="text-2xl md:text-3xl font-bold leading-tight theme-text">
+                Gestion des matières
+              </h1>
+
+              <p className="theme-text-secondary mt-3 leading-relaxed">
+                Organisez les matières par classe et gérez leur ordre
+                d'affichage.
+              </p>
+            </div>
           </div>
 
-          <div>
-            <h1 className="
-              text-2xl
-              md:text-3xl
-              font-bold
-              text-gray-900
-            ">
-              Gestion des matières
-            </h1>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-gray-950/30 theme-text text-sm font-medium border border-white/50 dark:border-white/10">
+              <BookOpen size={16} className="text-accent" />
+              {subjects.length} matière
+              {subjects.length > 1 ? "s" : ""}
+            </div>
 
-            <p className="text-gray-500 mt-1">
-              Organisez les matières par classe.
-            </p>
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-gray-950/30 theme-text text-sm font-medium border border-white/50 dark:border-white/10">
+              <GraduationCap size={16} className="text-accent" />
+              {classes.length} classe
+              {classes.length > 1 ? "s" : ""}
+            </div>
+
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-gray-950/30 theme-text text-sm font-medium border border-white/50 dark:border-white/10">
+              <Layers size={16} className="text-accent" />
+              {filteredSubjects.length} affichée
+              {filteredSubjects.length > 1 ? "s" : ""}
+            </div>
           </div>
-
         </div>
       </div>
 
       {/* FORMULAIRE */}
 
-      <div className="
-        bg-white
-        rounded-2xl
-        border
-        border-gray-100
-        shadow-sm
-        p-5
-        md:p-6
-      ">
+      <div className="theme-surface theme-border border rounded-3xl shadow-sm p-5 md:p-6">
+        <div className="flex items-center justify-between gap-4 mb-5">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-accent-soft border border-accent flex items-center justify-center">
+              {editing ? (
+                <Pencil size={20} className="text-accent" />
+              ) : (
+                <Plus size={20} className="text-accent" />
+              )}
+            </div>
 
-        <div className="flex items-center gap-2 mb-5">
+            <div>
+              <h2 className="text-lg font-bold theme-text">
+                {editing
+                  ? "Modifier la matière"
+                  : "Nouvelle matière"}
+              </h2>
 
-          <Plus
-            size={20}
-            className="text-blue-600"
-          />
+              <p className="text-sm theme-text-secondary mt-0.5">
+                {editing
+                  ? "Modifiez les informations de la matière."
+                  : "Ajoutez une nouvelle matière à une classe."}
+              </p>
+            </div>
+          </div>
 
-          <h2 className="
-            text-lg
-            font-bold
-            text-gray-900
-          ">
-            {editing
-              ? "Modifier la matière"
-              : "Nouvelle matière"}
-          </h2>
-
+          {editing && (
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-accent-soft border border-accent text-accent text-xs font-semibold">
+              Modification
+            </span>
+          )}
         </div>
 
         <form
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
-
           {/* NOM */}
 
           <div>
-            <label className="
-              block
-              text-sm
-              font-semibold
-              text-gray-700
-              mb-1.5
-            ">
+            <label className="block text-sm font-semibold theme-text mb-1.5">
               Nom de la matière
             </label>
 
             <input
               className="
                 w-full
+                theme-surface
+                theme-text
+                theme-border
                 border
-                border-gray-200
                 rounded-xl
                 p-3
                 outline-none
                 focus:ring-2
-                focus:ring-blue-500
+                focus:ring-accent
+                focus:border-accent
+                placeholder:theme-text-secondary
               "
               placeholder="Ex : Mathématiques"
               value={form.name}
               onChange={(e) =>
                 setForm({
                   ...form,
-                  name: e.target.value
+                  name: e.target.value,
                 })
               }
             />
@@ -417,33 +461,29 @@ export default function AdminSubjects() {
           {/* CLASSE */}
 
           <div>
-            <label className="
-              block
-              text-sm
-              font-semibold
-              text-gray-700
-              mb-1.5
-            ">
+            <label className="block text-sm font-semibold theme-text mb-1.5">
               Classe
             </label>
 
             <select
               className="
                 w-full
+                theme-surface
+                theme-text
+                theme-border
                 border
-                border-gray-200
                 rounded-xl
                 p-3
-                bg-white
                 outline-none
                 focus:ring-2
-                focus:ring-blue-500
+                focus:ring-accent
+                focus:border-accent
               "
               value={form.class_id}
               onChange={(e) =>
                 setForm({
                   ...form,
-                  class_id: e.target.value
+                  class_id: e.target.value,
                 })
               }
             >
@@ -465,33 +505,30 @@ export default function AdminSubjects() {
           {/* CODE */}
 
           <div>
-            <label className="
-              block
-              text-sm
-              font-semibold
-              text-gray-700
-              mb-1.5
-            ">
+            <label className="block text-sm font-semibold theme-text mb-1.5">
               Code
             </label>
 
             <input
               className="
                 w-full
+                theme-surface
+                theme-text
+                theme-border
                 border
-                border-gray-200
                 rounded-xl
                 p-3
                 outline-none
                 focus:ring-2
-                focus:ring-blue-500
+                focus:ring-accent
+                focus:border-accent
               "
               placeholder="Ex : MATH"
               value={form.code}
               onChange={(e) =>
                 setForm({
                   ...form,
-                  code: e.target.value
+                  code: e.target.value,
                 })
               }
             />
@@ -500,13 +537,7 @@ export default function AdminSubjects() {
           {/* ORDRE */}
 
           <div>
-            <label className="
-              block
-              text-sm
-              font-semibold
-              text-gray-700
-              mb-1.5
-            ">
+            <label className="block text-sm font-semibold theme-text mb-1.5">
               Ordre d'affichage
             </label>
 
@@ -515,20 +546,22 @@ export default function AdminSubjects() {
               min="1"
               className="
                 w-full
+                theme-surface
+                theme-text
+                theme-border
                 border
-                border-gray-200
                 rounded-xl
                 p-3
                 outline-none
                 focus:ring-2
-                focus:ring-blue-500
+                focus:ring-accent
+                focus:border-accent
               "
               value={form.order_number}
               onChange={(e) =>
                 setForm({
                   ...form,
-                  order_number:
-                    Number(e.target.value)
+                  order_number: Number(e.target.value),
                 })
               }
             />
@@ -536,26 +569,22 @@ export default function AdminSubjects() {
 
           {/* ACTIONS */}
 
-          <div className="
-            md:col-span-2
-            flex
-            flex-wrap
-            gap-3
-          ">
-
+          <div className="md:col-span-2 flex flex-wrap gap-3">
             <button
               type="submit"
               className="
-                bg-blue-600
-                hover:bg-blue-700
+                bg-accent
                 text-white
                 rounded-xl
                 px-5
                 py-3
-                font-semibold
+                font-bold
                 flex
                 items-center
                 gap-2
+                shadow-md
+                hover:opacity-90
+                hover:-translate-y-0.5
                 transition
               "
             >
@@ -575,163 +604,145 @@ export default function AdminSubjects() {
                 type="button"
                 onClick={resetForm}
                 className="
-                  bg-gray-100
-                  hover:bg-gray-200
-                  text-gray-700
+                  theme-surface
+                  theme-text
+                  theme-border
+                  border
                   rounded-xl
                   px-5
                   py-3
                   font-semibold
+                  hover:bg-accent-soft
                   transition
                 "
               >
                 Annuler
               </button>
             )}
-
           </div>
-
         </form>
       </div>
 
       {/* LISTE */}
 
       <div>
+        <div
+          className="
+            theme-surface
+            theme-border
+            border
+            rounded-3xl
+            shadow-sm
+            p-5
+            md:p-6
+            mb-5
+          "
+        >
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-xl bg-accent-soft border border-accent flex items-center justify-center">
+                  <Layers
+                    size={18}
+                    className="text-accent"
+                  />
+                </div>
 
-        <div className="
-          flex
-          flex-col
-          md:flex-row
-          md:items-center
-          md:justify-between
-          gap-4
-          mb-4
-        ">
+                <h2 className="text-xl font-bold theme-text">
+                  Matières
+                </h2>
+              </div>
 
-          <div>
-            <h2 className="
-              text-xl
-              font-bold
-              text-gray-900
-            ">
-              Matières
-            </h2>
+              <p className="text-sm theme-text-secondary mt-2">
+                {normalizedSearch
+                  ? `${filteredSubjects.length} résultat(s) sur ${subjects.length} matière(s)`
+                  : `${subjects.length} matière(s)`}
+              </p>
+            </div>
 
-            <p className="text-sm text-gray-500">
-              {normalizedSearch
-                ? `${filteredSubjects.length} résultat(s) sur ${subjects.length} matière(s)`
-                : `${subjects.length} matière(s)`}
-            </p>
-          </div>
+            {/* RECHERCHE */}
 
-          {/* RECHERCHE */}
-
-          <div className="relative w-full md:w-80">
-
-            <Search
-              size={19}
-              className="
-                absolute
-                left-3
-                top-1/2
-                -translate-y-1/2
-                text-gray-400
-              "
-            />
-
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) =>
-                setSearchTerm(e.target.value)
-              }
-              placeholder="Rechercher une matière..."
-              className="
-                w-full
-                border
-                border-gray-200
-                rounded-xl
-                pl-10
-                pr-10
-                py-3
-                outline-none
-                focus:ring-2
-                focus:ring-blue-500
-                focus:border-blue-300
-                bg-white
-              "
-            />
-
-            {searchTerm && (
-              <button
-                type="button"
-                onClick={() => setSearchTerm("")}
+            <div className="relative w-full md:w-80">
+              <Search
+                size={19}
                 className="
                   absolute
-                  right-3
+                  left-3
                   top-1/2
                   -translate-y-1/2
-                  text-gray-400
-                  hover:text-gray-700
+                  text-accent
                 "
-                title="Effacer la recherche"
-              >
-                <X size={18} />
-              </button>
-            )}
+              />
 
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) =>
+                  setSearchTerm(e.target.value)
+                }
+                placeholder="Rechercher une matière..."
+                className="
+                  w-full
+                  theme-surface
+                  theme-text
+                  theme-border
+                  border
+                  rounded-xl
+                  pl-10
+                  pr-10
+                  py-3
+                  outline-none
+                  focus:ring-2
+                  focus:ring-accent
+                  focus:border-accent
+                "
+              />
+
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm("")}
+                  className="
+                    absolute
+                    right-3
+                    top-1/2
+                    -translate-y-1/2
+                    theme-text-secondary
+                    hover:text-accent
+                    transition
+                  "
+                  title="Effacer la recherche"
+                >
+                  <X size={18} />
+                </button>
+              )}
+            </div>
           </div>
-
         </div>
 
         {subjects.length === 0 ? (
-
-          <div className="
-            bg-white
-            rounded-2xl
-            border
-            border-gray-100
-            p-8
-            text-center
-          ">
+          <div className="theme-surface theme-border border rounded-3xl p-8 text-center shadow-sm">
             <BookOpen
               size={40}
-              className="
-                mx-auto
-                text-gray-300
-                mb-3
-              "
+              className="mx-auto text-accent mb-3"
             />
 
-            <p className="text-gray-500">
+            <p className="theme-text font-semibold">
               Aucune matière disponible.
             </p>
           </div>
-
         ) : filteredSubjects.length === 0 ? (
-
-          <div className="
-            bg-white
-            rounded-2xl
-            border
-            border-gray-100
-            p-8
-            text-center
-          ">
+          <div className="theme-surface theme-border border rounded-3xl p-8 text-center shadow-sm">
             <Search
               size={40}
-              className="
-                mx-auto
-                text-gray-300
-                mb-3
-              "
+              className="mx-auto text-accent mb-3"
             />
 
-            <p className="font-semibold text-gray-700">
+            <p className="font-semibold theme-text">
               Aucune matière trouvée.
             </p>
 
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm theme-text-secondary mt-1">
               Essayez avec un autre mot-clé.
             </p>
 
@@ -740,177 +751,96 @@ export default function AdminSubjects() {
               onClick={() => setSearchTerm("")}
               className="
                 mt-4
-                text-blue-600
-                hover:text-blue-700
+                text-accent
+                hover:opacity-80
                 font-semibold
               "
             >
               Effacer la recherche
             </button>
           </div>
-
         ) : (
-
-          <div className="
-            grid
-            grid-cols-1
-            lg:grid-cols-2
-            gap-4
-          ">
-
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {filteredSubjects.map((subject) => (
-
               <div
                 key={subject.id}
                 className="
-                  bg-white
+                  theme-surface
+                  theme-border
                   border
-                  border-gray-100
-                  rounded-2xl
+                  rounded-3xl
                   shadow-sm
                   p-5
-                  hover:shadow-md
+                  hover:shadow-lg
+                  hover:-translate-y-0.5
                   transition
                 "
               >
-
                 {/* TOP */}
 
-                <div className="
-                  flex
-                  items-start
-                  justify-between
-                  gap-4
-                ">
-
-                  <div className="
-                    flex
-                    items-start
-                    gap-3
-                  ">
-
-                    <div className="
-                      w-11
-                      h-11
-                      rounded-xl
-                      bg-blue-50
-                      flex
-                      items-center
-                      justify-center
-                      flex-shrink-0
-                    ">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-start gap-3 min-w-0">
+                    <div className="w-12 h-12 rounded-2xl bg-accent-soft border border-accent flex items-center justify-center flex-shrink-0">
                       <BookOpen
                         size={21}
-                        className="text-blue-600"
+                        className="text-accent"
                       />
                     </div>
 
-                    <div>
-
-                      <h3 className="
-                        text-lg
-                        font-bold
-                        text-gray-900
-                      ">
+                    <div className="min-w-0">
+                      <h3 className="text-lg font-bold theme-text truncate">
                         {subject.name}
                       </h3>
 
                       {subject.code && (
-                        <p className="
-                          text-sm
-                          text-gray-500
-                          mt-0.5
-                        ">
+                        <p className="text-sm theme-text-secondary mt-0.5">
                           Code : {subject.code}
                         </p>
                       )}
-
                     </div>
-
                   </div>
 
-                  <span className="
-                    text-xs
-                    font-bold
-                    px-2.5
-                    py-1
-                    rounded-full
-                    bg-blue-50
-                    text-blue-700
-                  ">
+                  <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-accent-soft text-accent border border-accent shrink-0">
                     #{subject.order_number}
                   </span>
-
                 </div>
 
                 {/* CLASSE */}
 
-                <div className="
-                  mt-4
-                  flex
-                  items-center
-                  gap-2
-                  rounded-xl
-                  bg-gray-50
-                  px-3
-                  py-2.5
-                ">
-
+                <div className="mt-4 flex items-center gap-2 rounded-2xl bg-accent-soft border border-accent px-3 py-3">
                   <GraduationCap
                     size={18}
-                    className="text-gray-600"
+                    className="text-accent shrink-0"
                   />
 
                   <div>
-                    <p className="
-                      text-xs
-                      text-gray-500
-                    ">
+                    <p className="text-xs theme-text-secondary">
                       Classe
                     </p>
 
-                    <p className="
-                      text-sm
-                      font-bold
-                      text-gray-800
-                    ">
+                    <p className="text-sm font-bold theme-text">
                       {subject.classes?.name ||
                         "Classe non renseignée"}
                     </p>
                   </div>
-
                 </div>
 
                 {/* CHAPITRES */}
 
-                <div className="
-                  mt-3
-                  flex
-                  items-center
-                  gap-2
-                  text-sm
-                  text-gray-600
-                ">
-
-                  <Layers size={17} />
+                <div className="mt-3 flex items-center gap-2 text-sm theme-text-secondary">
+                  <Layers
+                    size={17}
+                    className="text-accent"
+                  />
 
                   <span>
-                    {chapterCounts[subject.id] ?? 0}
-                    {" "}
-                    chapitre(s)
+                    {chapterCounts[subject.id] ?? 0} chapitre(s)
                   </span>
-
                 </div>
 
                 {/* ACTIONS */}
 
-                <div className="
-                  mt-5
-                  flex
-                  flex-wrap
-                  gap-2
-                ">
-
+                <div className="mt-5 flex flex-wrap gap-2">
                   <button
                     onClick={() =>
                       navigate(
@@ -922,8 +852,8 @@ export default function AdminSubjects() {
                       min-w-[150px]
                       px-4
                       py-2.5
-                      bg-green-600
-                      hover:bg-green-700
+                      bg-accent
+                      hover:opacity-90
                       text-white
                       rounded-xl
                       font-semibold
@@ -931,6 +861,7 @@ export default function AdminSubjects() {
                       items-center
                       justify-center
                       gap-2
+                      shadow-sm
                       transition
                     "
                   >
@@ -939,16 +870,20 @@ export default function AdminSubjects() {
                   </button>
 
                   <button
-                    onClick={() =>
-                      editSubject(subject)
-                    }
+                    onClick={() => editSubject(subject)}
                     className="
                       px-3
                       py-2.5
                       rounded-xl
                       bg-yellow-50
+                      dark:bg-yellow-950/30
                       text-yellow-700
+                      dark:text-yellow-300
+                      border
+                      border-yellow-200
+                      dark:border-yellow-900/50
                       hover:bg-yellow-100
+                      dark:hover:bg-yellow-950/50
                       transition
                     "
                     title="Modifier"
@@ -965,27 +900,26 @@ export default function AdminSubjects() {
                       py-2.5
                       rounded-xl
                       bg-red-50
+                      dark:bg-red-950/30
                       text-red-700
+                      dark:text-red-300
+                      border
+                      border-red-200
+                      dark:border-red-900/50
                       hover:bg-red-100
+                      dark:hover:bg-red-950/50
                       transition
                     "
                     title="Supprimer"
                   >
                     <Trash2 size={18} />
                   </button>
-
                 </div>
-
               </div>
-
             ))}
-
           </div>
-
         )}
-
       </div>
-
     </div>
   );
 }

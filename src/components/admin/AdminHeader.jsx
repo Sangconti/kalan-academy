@@ -46,9 +46,10 @@ export default function AdminHeader() {
         sm:px-6
 
         py-3
+
+        shadow-sm
       "
     >
-
       {/* ==========================================
           TITRE
       ========================================== */}
@@ -60,17 +61,42 @@ export default function AdminHeader() {
           md:pl-0
         "
       >
-        <h2
+        <div
           className="
-            font-semibold
-            theme-text
-            truncate
+            inline-flex
+            items-center
+            gap-2
+            px-3
+            py-1.5
+            rounded-full
+            bg-accent-soft
+            border
+            border-accent
           "
         >
-          Administration
-        </h2>
-      </div>
+          <span
+            className="
+              w-2
+              h-2
+              rounded-full
+              bg-accent
+              shrink-0
+            "
+          />
 
+          <h2
+            className="
+              text-sm
+              sm:text-base
+              font-semibold
+              theme-text
+              truncate
+            "
+          >
+            Administration
+          </h2>
+        </div>
+      </div>
 
       {/* ==========================================
           ADMIN + DÉCONNEXION
@@ -81,12 +107,11 @@ export default function AdminHeader() {
           flex
           items-center
           gap-2
-          sm:gap-5
+          sm:gap-4
 
           min-w-0
         "
       >
-
         {/* ========================================
             INFORMATIONS ADMIN
         ======================================== */}
@@ -95,14 +120,24 @@ export default function AdminHeader() {
           className="
             text-right
             min-w-0
+
             hidden
             xs:block
+
+            px-3
+            py-2
+
+            rounded-xl
+
+            bg-accent-soft
+            border
+            border-accent
           "
         >
-
           <p
             className="
-              font-medium
+              text-sm
+              font-semibold
               theme-text
 
               truncate
@@ -118,13 +153,12 @@ export default function AdminHeader() {
               text-xs
               theme-text-secondary
               truncate
+              mt-0.5
             "
           >
             {admin?.profile?.role || ""}
           </p>
-
         </div>
-
 
         {/* ========================================
             DÉCONNEXION
@@ -142,24 +176,26 @@ export default function AdminHeader() {
 
             py-2
 
-            rounded-lg
+            rounded-xl
 
             text-sm
             sm:text-base
+            font-semibold
 
             whitespace-nowrap
 
+            shadow-sm
+
             hover:bg-red-600
+            hover:-translate-y-0.5
             active:scale-95
 
-            transition
+            transition-all
           "
         >
           Déconnexion
         </button>
-
       </div>
-
     </header>
   );
 }

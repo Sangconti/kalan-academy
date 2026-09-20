@@ -3,6 +3,9 @@ import {
   Plus,
   RefreshCw,
   School,
+  Layers3,
+  BookOpen,
+  GraduationCap,
 } from "lucide-react";
 
 import ClassTable from "../../components/admin/ClassTable";
@@ -145,92 +148,234 @@ export default function ClassesAdmin() {
     <div className="space-y-6">
 
       {/* =================================================
-          EN-TÊTE
+          HERO
       ================================================= */}
 
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div
+        className="
+          relative
+          overflow-hidden
+          rounded-3xl
+          bg-accent-soft
+          border
+          border-accent
+          shadow-lg
+          p-6
+          md:p-8
+        "
+      >
 
-        <div className="flex items-center gap-3">
+        <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent opacity-10" />
 
-          <div className="p-3 bg-blue-100 text-blue-700 rounded-xl">
-            <School size={28} />
+        <div className="absolute -left-16 -bottom-20 w-48 h-48 rounded-full bg-accent opacity-10" />
+
+        <div className="absolute right-16 -bottom-24 w-56 h-56 rounded-full bg-accent opacity-5" />
+
+        <div className="relative z-10">
+
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+            <div className="flex items-start gap-4">
+
+              <div
+                className="
+                  w-16
+                  h-16
+                  shrink-0
+                  rounded-2xl
+                  bg-white/70
+                  dark:bg-gray-950/30
+                  border
+                  border-white/50
+                  dark:border-white/10
+                  flex
+                  items-center
+                  justify-center
+                  text-accent
+                "
+              >
+                <School size={30} />
+              </div>
+
+              <div className="min-w-0">
+
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-1.5
+                    rounded-full
+                    bg-accent
+                    text-white
+                    text-xs
+                    font-semibold
+                    mb-3
+                  "
+                >
+                  <GraduationCap size={14} />
+
+                  Administration
+                </div>
+
+                <h1
+                  className="
+                    text-2xl
+                    md:text-3xl
+                    font-bold
+                    leading-tight
+                    theme-text
+                  "
+                >
+                  Gestion des classes
+                </h1>
+
+                <p className="theme-text-secondary mt-3 leading-relaxed">
+                  Gérez les classes scolaires de Kalan Academy
+                  et leur organisation pédagogique.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-3 mt-5">
+
+                  <div
+                    className="
+                      inline-flex
+                      items-center
+                      gap-2
+                      px-3
+                      py-2
+                      rounded-xl
+                      bg-white/70
+                      dark:bg-gray-950/30
+                      theme-text
+                      text-sm
+                      font-medium
+                      border
+                      border-white/50
+                      dark:border-white/10
+                    "
+                  >
+                    <School
+                      size={16}
+                      className="text-accent"
+                    />
+
+                    {classes.length} classe
+                    {classes.length > 1 ? "s" : ""}
+                  </div>
+
+                  <div
+                    className="
+                      inline-flex
+                      items-center
+                      gap-2
+                      px-3
+                      py-2
+                      rounded-xl
+                      bg-white/70
+                      dark:bg-gray-950/30
+                      theme-text
+                      text-sm
+                      font-medium
+                      border
+                      border-white/50
+                      dark:border-white/10
+                    "
+                  >
+                    <Layers3
+                      size={16}
+                      className="text-accent"
+                    />
+
+                    Matières → Chapitres
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div className="flex flex-wrap items-center gap-2">
+
+              <button
+                type="button"
+                onClick={load}
+                disabled={loading}
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  px-4
+                  py-2.5
+                  rounded-xl
+                  bg-white/70
+                  dark:bg-gray-950/30
+                  theme-text
+                  border
+                  border-white/50
+                  dark:border-white/10
+                  font-semibold
+                  shadow-sm
+                  hover:bg-white
+                  dark:hover:bg-gray-900
+                  disabled:opacity-50
+                  disabled:cursor-not-allowed
+                  transition
+                "
+              >
+
+                <RefreshCw
+                  size={18}
+                  className={
+                    loading
+                      ? "animate-spin"
+                      : ""
+                  }
+                />
+
+                Actualiser
+
+              </button>
+
+
+              <button
+                type="button"
+                onClick={() =>
+                  setShowForm(
+                    (value) => !value
+                  )
+                }
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  px-4
+                  py-2.5
+                  rounded-xl
+                  bg-accent
+                  text-white
+                  font-bold
+                  shadow-md
+                  hover:opacity-90
+                  hover:-translate-y-0.5
+                  transition
+                "
+              >
+
+                <Plus size={18} />
+
+                Nouvelle classe
+
+              </button>
+
+            </div>
+
           </div>
-
-          <div>
-
-            <h1 className="text-3xl font-bold text-gray-900">
-              Gestion des classes
-            </h1>
-
-            <p className="text-gray-500 mt-1">
-              Gérez les classes scolaires de Kalan Academy.
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div className="flex items-center gap-2">
-
-          <button
-            type="button"
-            onClick={load}
-            disabled={loading}
-            className="
-              flex
-              items-center
-              gap-2
-              px-4
-              py-2
-              rounded-lg
-              border
-              bg-white
-              text-gray-700
-              hover:bg-gray-50
-              disabled:opacity-50
-            "
-          >
-
-            <RefreshCw
-              size={18}
-              className={
-                loading
-                  ? "animate-spin"
-                  : ""
-              }
-            />
-
-            Actualiser
-
-          </button>
-
-
-          <button
-            type="button"
-            onClick={() =>
-              setShowForm(
-                (value) => !value
-              )
-            }
-            className="
-              flex
-              items-center
-              gap-2
-              px-4
-              py-2
-              rounded-lg
-              bg-blue-600
-              text-white
-              hover:bg-blue-700
-            "
-          >
-
-            <Plus size={18} />
-
-            Nouvelle classe
-
-          </button>
 
         </div>
 
@@ -245,11 +390,13 @@ export default function ClassesAdmin() {
 
         <div
           className="
-            rounded-lg
+            rounded-2xl
             border
             border-red-200
             bg-red-50
+            dark:bg-red-950/20
             text-red-700
+            dark:text-red-300
             px-4
             py-3
           "
@@ -272,17 +419,48 @@ export default function ClassesAdmin() {
 
         <div
           className="
-            bg-white
-            rounded-xl
-            shadow-sm
+            theme-surface
+            theme-border
             border
+            rounded-3xl
+            shadow-sm
             p-5
+            md:p-6
           "
         >
 
-          <h2 className="text-xl font-bold mb-4">
-            Nouvelle classe
-          </h2>
+          <div className="flex items-center gap-3 mb-5">
+
+            <div
+              className="
+                w-10
+                h-10
+                rounded-xl
+                bg-accent-soft
+                border
+                border-accent
+                flex
+                items-center
+                justify-center
+                text-accent
+              "
+            >
+              <Plus size={20} />
+            </div>
+
+            <div>
+
+              <h2 className="text-xl font-bold theme-text">
+                Nouvelle classe
+              </h2>
+
+              <p className="text-sm theme-text-secondary mt-0.5">
+                Ajoutez un nouveau niveau scolaire.
+              </p>
+
+            </div>
+
+          </div>
 
           <ClassForm
             onSubmit={add}
@@ -303,41 +481,149 @@ export default function ClassesAdmin() {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
-        <div className="bg-white border rounded-xl p-4">
+        <div
+          className="
+            relative
+            overflow-hidden
+            bg-accent-soft
+            border
+            border-accent
+            rounded-3xl
+            p-5
+            shadow-sm
+          "
+        >
 
-          <p className="text-sm text-gray-500">
-            Total des classes
-          </p>
+          <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-accent opacity-10" />
 
-          <p className="text-2xl font-bold mt-1">
-            {classes.length}
-          </p>
+          <div className="relative z-10 flex items-center justify-between gap-4">
+
+            <div>
+
+              <p className="text-sm theme-text-secondary">
+                Total des classes
+              </p>
+
+              <p className="text-3xl font-bold theme-text mt-2">
+                {classes.length}
+              </p>
+
+            </div>
+
+            <div
+              className="
+                w-12
+                h-12
+                rounded-2xl
+                bg-white/70
+                dark:bg-gray-950/30
+                border
+                border-white/50
+                dark:border-white/10
+                flex
+                items-center
+                justify-center
+                text-accent
+              "
+            >
+              <School size={23} />
+            </div>
+
+          </div>
 
         </div>
 
 
-        <div className="bg-white border rounded-xl p-4">
+        <div
+          className="
+            theme-surface
+            theme-border
+            border
+            rounded-3xl
+            p-5
+            shadow-sm
+          "
+        >
 
-          <p className="text-sm text-gray-500">
-            Organisation
-          </p>
+          <div className="flex items-center gap-3">
 
-          <p className="text-sm text-gray-600 mt-2">
-            Classe → Matières → Chapitres
-          </p>
+            <div
+              className="
+                w-12
+                h-12
+                rounded-2xl
+                bg-accent-soft
+                border
+                border-accent
+                flex
+                items-center
+                justify-center
+                text-accent
+              "
+            >
+              <Layers3 size={22} />
+            </div>
+
+            <div>
+
+              <p className="text-sm theme-text-secondary">
+                Organisation
+              </p>
+
+              <p className="text-sm font-semibold theme-text mt-1">
+                Classe → Matières → Chapitres
+              </p>
+
+            </div>
+
+          </div>
 
         </div>
 
 
-        <div className="bg-white border rounded-xl p-4">
+        <div
+          className="
+            theme-surface
+            theme-border
+            border
+            rounded-3xl
+            p-5
+            shadow-sm
+          "
+        >
 
-          <p className="text-sm text-gray-500">
-            Contenu
-          </p>
+          <div className="flex items-center gap-3">
 
-          <p className="text-sm text-gray-600 mt-2">
-            Leçons → Quiz → Questions
-          </p>
+            <div
+              className="
+                w-12
+                h-12
+                rounded-2xl
+                bg-accent-soft
+                border
+                border-accent
+                flex
+                items-center
+                justify-center
+                text-accent
+              "
+            >
+              <BookOpen size={22} />
+            </div>
+
+            <div>
+
+              <p className="text-sm theme-text-secondary">
+                Contenu
+              </p>
+
+              <p className="text-sm font-semibold theme-text mt-1">
+                Leçons → Quiz → Questions
+              </p>
+
+            </div>
+
+          </div>
 
         </div>
 
@@ -350,23 +636,59 @@ export default function ClassesAdmin() {
 
       <div
         className="
-          bg-white
-          rounded-xl
-          shadow-sm
+          theme-surface
+          theme-border
           border
+          rounded-3xl
+          shadow-sm
           overflow-hidden
         "
       >
 
-        <div className="p-5 border-b">
+        <div
+          className="
+            p-5
+            md:p-6
+            border-b
+            theme-border
+            bg-accent-soft
+          "
+        >
 
-          <h2 className="text-xl font-bold">
-            Classes disponibles
-          </h2>
+          <div className="flex items-center gap-3">
 
-          <p className="text-sm text-gray-500 mt-1">
-            Organisation des niveaux scolaires.
-          </p>
+            <div
+              className="
+                w-10
+                h-10
+                rounded-xl
+                bg-white/70
+                dark:bg-gray-950/30
+                border
+                border-white/50
+                dark:border-white/10
+                flex
+                items-center
+                justify-center
+                text-accent
+              "
+            >
+              <School size={20} />
+            </div>
+
+            <div>
+
+              <h2 className="text-xl font-bold theme-text">
+                Classes disponibles
+              </h2>
+
+              <p className="text-sm theme-text-secondary mt-1">
+                Organisation des niveaux scolaires.
+              </p>
+
+            </div>
+
+          </div>
 
         </div>
 

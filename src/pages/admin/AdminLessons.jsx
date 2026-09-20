@@ -1,3 +1,5 @@
+// src/pages/admin/AdminLessons.jsx
+
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -11,7 +13,7 @@ import {
   Library,
   ClipboardCheck,
   Search,
-  X
+  X,
 } from "lucide-react";
 
 import {
@@ -20,7 +22,7 @@ import {
   updateLesson,
   deleteLesson,
   importAdminLessonPack,
-  getChapterContext
+  getChapterContext,
 } from "../../services/educationAdminService";
 
 export default function AdminLessons() {
@@ -52,11 +54,11 @@ export default function AdminLessons() {
     video_url: "",
     thumbnail_url: "",
     is_premium: false,
-    order_number: 1
+    order_number: 1,
   });
 
   // =====================================
-  // CHARGER LE CONTEXTE
+  // CHARGER LE CONTEXTE CHAPITRE
   // =====================================
 
   async function loadChapterContext() {
@@ -161,7 +163,7 @@ export default function AdminLessons() {
       const difficultyLabel = {
         easy: "facile",
         medium: "moyen",
-        hard: "difficile"
+        hard: "difficile",
       }[lesson?.difficulty] || "";
 
       const order = String(
@@ -242,10 +244,10 @@ Mis à jour :
 
       alert(
         "❌ Erreur import JSON :\n\n" +
-        (
-          error.message ||
-          "Une erreur inconnue est survenue."
-        )
+          (
+            error.message ||
+            "Une erreur inconnue est survenue."
+          )
       );
 
       e.target.value = "";
@@ -284,7 +286,7 @@ Mis à jour :
       } else {
         await createLesson({
           ...form,
-          chapter_id: chapterId
+          chapter_id: chapterId,
         });
       }
 
@@ -298,7 +300,7 @@ Mis à jour :
         video_url: "",
         thumbnail_url: "",
         is_premium: false,
-        order_number: 1
+        order_number: 1,
       });
 
       await loadLessons();
@@ -310,7 +312,7 @@ Mis à jour :
 
       alert(
         "❌ Impossible d'enregistrer la leçon.\n\n" +
-        (error.message || "")
+          (error.message || "")
       );
     }
   }
@@ -344,12 +346,12 @@ Mis à jour :
         lesson.is_premium || false,
 
       order_number:
-        lesson.order_number || 1
+        lesson.order_number || 1,
     });
 
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   }
 
@@ -420,7 +422,7 @@ Mis à jour :
 
       alert(
         "❌ Impossible de supprimer la leçon.\n\n" +
-        (error.message || "")
+          (error.message || "")
       );
     }
   }
@@ -460,7 +462,7 @@ Mis à jour :
 
       alert(
         "❌ La suppression multiple a rencontré une erreur.\n\n" +
-        (error.message || "")
+          (error.message || "")
       );
 
       await loadLessons();
@@ -491,7 +493,7 @@ Mis à jour :
     return date.toLocaleDateString("fr-FR", {
       day: "2-digit",
       month: "2-digit",
-      year: "numeric"
+      year: "numeric",
     });
   }
 
@@ -505,990 +507,1337 @@ Mis à jour :
       filteredLessons.length;
 
   return (
-    <div className="space-y-6">
+    <div className="theme-bg min-h-full px-4 md:px-6 py-6 md:py-8">
+      <div className="max-w-6xl mx-auto space-y-6">
 
-      {/* HEADER */}
+        {/* ================================= */}
+        {/* HEADER */}
+        {/* ================================= */}
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-
-        <button
-          onClick={() => navigate(-1)}
+        <div
           className="
-            flex
-            items-center
-            gap-2
-            text-gray-600
-            hover:text-blue-600
-            mb-5
-            transition
+            relative
+            overflow-hidden
+            rounded-3xl
+            bg-accent-soft
+            border
+            border-accent
+            shadow-lg
+            p-6
+            md:p-8
           "
         >
-          <ArrowLeft size={18} />
-          Retour
-        </button>
+          <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent opacity-10" />
+          <div className="absolute -left-16 -bottom-20 w-48 h-48 rounded-full bg-accent opacity-10" />
+          <div className="absolute right-16 -bottom-24 w-56 h-56 rounded-full bg-accent opacity-5" />
 
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+          <div className="relative z-10">
+            <button
+              onClick={() => navigate(-1)}
+              className="
+                inline-flex
+                items-center
+                gap-2
+                px-3
+                py-2
+                rounded-xl
+                theme-surface
+                theme-border
+                border
+                theme-text
+                hover:bg-accent-soft
+                hover:text-accent
+                transition
+                mb-5
+              "
+            >
+              <ArrowLeft size={18} />
+              Retour
+            </button>
 
-          <div>
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
 
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <div className="flex items-start gap-4">
 
-              <BookOpen
-                size={27}
-                className="text-blue-600"
-              />
+                <div
+                  className="
+                    w-16
+                    h-16
+                    shrink-0
+                    rounded-2xl
+                    bg-accent
+                    text-white
+                    flex
+                    items-center
+                    justify-center
+                    shadow-md
+                  "
+                >
+                  <BookOpen size={28} />
+                </div>
 
-              Gestion des leçons
+                <div className="min-w-0">
 
-            </h1>
+                  <div
+                    className="
+                      inline-flex
+                      items-center
+                      gap-2
+                      px-3
+                      py-1.5
+                      rounded-full
+                      bg-accent
+                      text-white
+                      text-xs
+                      font-semibold
+                      mb-3
+                    "
+                  >
+                    <BookOpen size={14} />
+                    Administration
+                  </div>
 
-            <div className="flex flex-wrap gap-2 mt-4">
+                  <h1 className="text-2xl md:text-3xl font-bold leading-tight theme-text">
+                    Gestion des leçons
+                  </h1>
 
-              <div
-                className="
-                  inline-flex
-                  items-center
-                  gap-2
-                  px-3
-                  py-2
-                  rounded-xl
-                  bg-blue-50
-                  text-blue-700
-                  text-sm
-                  font-semibold
-                "
-              >
-                <GraduationCap size={16} />
+                  <p className="theme-text-secondary mt-3 leading-relaxed">
+                    Gérez les leçons, leur contenu, leurs vidéos et leurs
+                    quiz pour ce chapitre.
+                  </p>
 
-                {contextLoading
-                  ? "Chargement..."
-                  : chapter?.subjects?.classes?.name ||
-                    "Classe inconnue"}
+                  <div className="flex flex-wrap gap-2 mt-5">
 
+                    <div
+                      className="
+                        inline-flex
+                        items-center
+                        gap-2
+                        px-3
+                        py-2
+                        rounded-xl
+                        theme-surface
+                        theme-border
+                        border
+                        theme-text
+                        text-sm
+                        font-medium
+                      "
+                    >
+                      <GraduationCap
+                        size={16}
+                        className="text-accent"
+                      />
+
+                      {contextLoading
+                        ? "Chargement..."
+                        : chapter?.subjects?.classes?.name ||
+                          "Classe inconnue"}
+                    </div>
+
+                    <div
+                      className="
+                        inline-flex
+                        items-center
+                        gap-2
+                        px-3
+                        py-2
+                        rounded-xl
+                        theme-surface
+                        theme-border
+                        border
+                        theme-text
+                        text-sm
+                        font-medium
+                      "
+                    >
+                      <Library
+                        size={16}
+                        className="text-accent"
+                      />
+
+                      {contextLoading
+                        ? "Chargement..."
+                        : chapter?.subjects?.name ||
+                          "Matière inconnue"}
+                    </div>
+
+                    <div
+                      className="
+                        inline-flex
+                        items-center
+                        gap-2
+                        px-3
+                        py-2
+                        rounded-xl
+                        theme-surface
+                        theme-border
+                        border
+                        theme-text
+                        text-sm
+                        font-medium
+                      "
+                    >
+                      <BookOpen
+                        size={16}
+                        className="text-accent"
+                      />
+
+                      {contextLoading
+                        ? "Chargement..."
+                        : chapter?.title ||
+                          "Chapitre inconnu"}
+                    </div>
+
+                  </div>
+                </div>
               </div>
 
-              <div
+              <label
                 className="
+                  cursor-pointer
                   inline-flex
                   items-center
+                  justify-center
                   gap-2
-                  px-3
-                  py-2
-                  rounded-xl
-                  bg-green-50
-                  text-green-700
-                  text-sm
-                  font-semibold
-                "
-              >
-                <Library size={16} />
-
-                {contextLoading
-                  ? "Chargement..."
-                  : chapter?.subjects?.name ||
-                    "Matière inconnue"}
-
-              </div>
-
-              <div
-                className="
-                  inline-flex
-                  items-center
-                  gap-2
-                  px-3
-                  py-2
-                  rounded-xl
-                  bg-purple-50
-                  text-purple-700
-                  text-sm
-                  font-semibold
-                "
-              >
-                <BookOpen size={16} />
-
-                {contextLoading
-                  ? "Chargement..."
-                  : chapter?.title ||
-                    "Chapitre inconnu"}
-
-              </div>
-
-            </div>
-
-          </div>
-
-          <label
-            className="
-              cursor-pointer
-              inline-flex
-              items-center
-              justify-center
-              gap-2
-              bg-green-600
-              hover:bg-green-700
-              text-white
-              px-5
-              py-3
-              rounded-xl
-              font-semibold
-              transition
-              shadow-sm
-            "
-          >
-            📦 Importer pack JSON Mali
-
-            <input
-              type="file"
-              accept=".json,application/json"
-              className="hidden"
-              onChange={handleImportJSON}
-            />
-
-          </label>
-
-        </div>
-
-      </div>
-
-      {/* FIL D'ARIANE */}
-
-      <div
-        className="
-          bg-gray-50
-          border
-          border-gray-100
-          rounded-xl
-          px-4
-          py-3
-        "
-      >
-
-        <div className="text-sm text-gray-500">
-
-          Administration
-
-          <span className="mx-2">
-            ›
-          </span>
-
-          Matières
-
-          <span className="mx-2">
-            ›
-          </span>
-
-          <span className="font-semibold text-gray-700">
-            {chapter?.subjects?.name ||
-              "Matière"}
-          </span>
-
-          <span className="mx-2">
-            ›
-          </span>
-
-          <span className="font-semibold text-gray-700">
-            {chapter?.title ||
-              "Chapitre"}
-          </span>
-
-          <span className="mx-2">
-            ›
-          </span>
-
-          <span className="font-semibold text-blue-600">
-            Leçons
-          </span>
-
-        </div>
-
-      </div>
-
-      {/* AUCUN CHAPITRE */}
-
-      {!chapterId && (
-
-        <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-5">
-
-          <p className="font-semibold text-yellow-800">
-            Aucun chapitre sélectionné
-          </p>
-
-          <p className="text-sm text-yellow-700 mt-1">
-            Utilisez la navigation des chapitres
-            pour accéder aux leçons.
-          </p>
-
-        </div>
-
-      )}
-
-      {/* FORMULAIRE */}
-
-      {chapterId && (
-
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-
-          <div className="flex items-center gap-2 mb-4">
-
-            <Plus
-              size={20}
-              className="text-blue-600"
-            />
-
-            <h2 className="font-bold text-lg text-gray-900">
-
-              {editing
-                ? "Modifier leçon"
-                : "Nouvelle leçon"}
-
-            </h2>
-
-          </div>
-
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-4"
-          >
-
-            <input
-              className="
-                w-full
-                border
-                border-gray-200
-                p-3
-                rounded-xl
-                focus:outline-none
-                focus:ring-2
-                focus:ring-blue-500
-              "
-              placeholder="Titre de la leçon"
-              value={form.title}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  title: e.target.value
-                })
-              }
-            />
-
-            <textarea
-              rows={3}
-              className="
-                w-full
-                border
-                border-gray-200
-                p-3
-                rounded-xl
-                focus:outline-none
-                focus:ring-2
-                focus:ring-blue-500
-              "
-              placeholder="Description"
-              value={form.description}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  description:
-                    e.target.value
-                })
-              }
-            />
-
-            <div>
-
-              <label className="block font-medium text-gray-700 mb-2">
-                Durée en minutes
-              </label>
-
-              <input
-                type="number"
-                min="1"
-                className="
-                  w-full
-                  border
-                  border-gray-200
-                  p-3
-                  rounded-xl
-                "
-                value={
-                  form.duration_minutes
-                }
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    duration_minutes:
-                      Number(
-                        e.target.value
-                      )
-                  })
-                }
-              />
-
-            </div>
-
-            <div>
-
-              <label className="block font-medium text-gray-700 mb-2">
-                Difficulté
-              </label>
-
-              <select
-                className="
-                  w-full
-                  border
-                  border-gray-200
-                  p-3
-                  rounded-xl
-                "
-                value={form.difficulty}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    difficulty:
-                      e.target.value
-                  })
-                }
-              >
-
-                <option value="easy">
-                  Facile
-                </option>
-
-                <option value="medium">
-                  Moyen
-                </option>
-
-                <option value="hard">
-                  Difficile
-                </option>
-
-              </select>
-
-            </div>
-
-            <input
-              className="
-                w-full
-                border
-                border-gray-200
-                p-3
-                rounded-xl
-              "
-              placeholder="URL vidéo"
-              value={form.video_url}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  video_url:
-                    e.target.value
-                })
-              }
-            />
-
-            <input
-              className="
-                w-full
-                border
-                border-gray-200
-                p-3
-                rounded-xl
-              "
-              placeholder="URL miniature"
-              value={
-                form.thumbnail_url
-              }
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  thumbnail_url:
-                    e.target.value
-                })
-              }
-            />
-
-            <div>
-
-              <label className="block font-medium text-gray-700 mb-2">
-                Ordre de la leçon
-              </label>
-
-              <input
-                type="number"
-                min="1"
-                className="
-                  w-full
-                  border
-                  border-gray-200
-                  p-3
-                  rounded-xl
-                "
-                value={
-                  form.order_number
-                }
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    order_number:
-                      Number(
-                        e.target.value
-                      )
-                  })
-                }
-              />
-
-            </div>
-
-            <label className="flex items-center gap-3">
-
-              <input
-                type="checkbox"
-                checked={
-                  form.is_premium
-                }
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    is_premium:
-                      e.target.checked
-                  })
-                }
-              />
-
-              <span className="font-medium text-gray-700">
-                Leçon Premium
-              </span>
-
-            </label>
-
-            <div className="flex gap-3">
-
-              <button
-                type="submit"
-                className="
-                  bg-blue-600
-                  hover:bg-blue-700
+                  bg-accent
+                  hover:opacity-90
+                  hover:-translate-y-0.5
                   text-white
                   px-5
                   py-3
                   rounded-xl
                   font-semibold
-                  flex
-                  items-center
-                  gap-2
+                  transition-all
+                  shadow-md
+                  shrink-0
                 "
               >
+                📦 Importer pack JSON Mali
 
+                <input
+                  type="file"
+                  accept=".json,application/json"
+                  className="hidden"
+                  onChange={handleImportJSON}
+                />
+              </label>
+
+            </div>
+          </div>
+        </div>
+
+        {/* ================================= */}
+        {/* FIL D'ARIANE */}
+        {/* ================================= */}
+
+        <div
+          className="
+            theme-surface
+            theme-border
+            border
+            rounded-2xl
+            px-4
+            py-3
+            shadow-sm
+          "
+        >
+          <div className="flex flex-wrap items-center text-sm gap-y-1">
+
+            <span className="theme-text-secondary">
+              Administration
+            </span>
+
+            <span className="mx-2 theme-text-secondary">
+              ›
+            </span>
+
+            <span className="theme-text-secondary">
+              Matières
+            </span>
+
+            <span className="mx-2 theme-text-secondary">
+              ›
+            </span>
+
+            <span className="font-semibold theme-text">
+              {chapter?.subjects?.name ||
+                "Matière"}
+            </span>
+
+            <span className="mx-2 theme-text-secondary">
+              ›
+            </span>
+
+            <span className="font-semibold theme-text">
+              {chapter?.title ||
+                "Chapitre"}
+            </span>
+
+            <span className="mx-2 theme-text-secondary">
+              ›
+            </span>
+
+            <span className="font-semibold text-accent">
+              Leçons
+            </span>
+
+          </div>
+        </div>
+
+        {/* ================================= */}
+        {/* AUCUN CHAPITRE */}
+        {/* ================================= */}
+
+        {!chapterId && (
+          <div
+            className="
+              bg-yellow-50
+              dark:bg-yellow-950/30
+              border
+              border-yellow-200
+              dark:border-yellow-900
+              rounded-2xl
+              p-5
+            "
+          >
+            <p className="font-semibold text-yellow-800 dark:text-yellow-200">
+              Aucun chapitre sélectionné
+            </p>
+
+            <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+              Utilisez la navigation des chapitres
+              pour accéder aux leçons.
+            </p>
+          </div>
+        )}
+
+        {/* ================================= */}
+        {/* FORMULAIRE */}
+        {/* ================================= */}
+
+        {chapterId && (
+          <div
+            className="
+              theme-surface
+              theme-border
+              border
+              rounded-3xl
+              shadow-sm
+              overflow-hidden
+            "
+          >
+            <div
+              className="
+                p-5
+                md:p-6
+                border-b
+                border-accent
+                flex
+                items-center
+                gap-3
+              "
+            >
+              <div
+                className="
+                  w-11
+                  h-11
+                  rounded-2xl
+                  bg-accent-soft
+                  border
+                  border-accent
+                  text-accent
+                  flex
+                  items-center
+                  justify-center
+                "
+              >
                 {editing ? (
-                  <>
-                    <Pencil size={18} />
-                    Mettre à jour
-                  </>
+                  <Pencil size={20} />
                 ) : (
-                  <>
-                    <Plus size={18} />
-                    Créer la leçon
-                  </>
+                  <Plus size={20} />
                 )}
+              </div>
 
-              </button>
+              <div>
+                <h2 className="font-bold text-lg theme-text">
+                  {editing
+                    ? "Modifier leçon"
+                    : "Nouvelle leçon"}
+                </h2>
 
-              {editing && (
+                <p className="text-sm theme-text-secondary mt-0.5">
+                  {editing
+                    ? "Modifiez les informations de la leçon."
+                    : "Créez une nouvelle leçon pour ce chapitre."}
+                </p>
+              </div>
+            </div>
+
+            <form
+              onSubmit={handleSubmit}
+              className="p-5 md:p-6 space-y-5"
+            >
+              <div>
+                <label className="block font-semibold theme-text mb-2">
+                  Titre de la leçon
+                </label>
+
+                <input
+                  className="
+                    w-full
+                    theme-surface
+                    theme-text
+                    theme-border
+                    border
+                    px-4
+                    py-3
+                    rounded-xl
+                    outline-none
+                    focus:ring-2
+                    focus:ring-accent
+                    focus:border-accent
+                    transition
+                  "
+                  placeholder="Titre de la leçon"
+                  value={form.title}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      title: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold theme-text mb-2">
+                  Description
+                </label>
+
+                <textarea
+                  rows={3}
+                  className="
+                    w-full
+                    theme-surface
+                    theme-text
+                    theme-border
+                    border
+                    px-4
+                    py-3
+                    rounded-xl
+                    outline-none
+                    focus:ring-2
+                    focus:ring-accent
+                    focus:border-accent
+                    resize-y
+                    transition
+                  "
+                  placeholder="Description"
+                  value={form.description}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      description:
+                        e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold theme-text mb-2">
+                  Durée en minutes
+                </label>
+
+                <input
+                  type="number"
+                  min="1"
+                  className="
+                    w-full
+                    theme-surface
+                    theme-text
+                    theme-border
+                    border
+                    px-4
+                    py-3
+                    rounded-xl
+                    outline-none
+                    focus:ring-2
+                    focus:ring-accent
+                    focus:border-accent
+                    transition
+                  "
+                  value={form.duration_minutes}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      duration_minutes:
+                        Number(
+                          e.target.value
+                        ),
+                    })
+                  }
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold theme-text mb-2">
+                  Difficulté
+                </label>
+
+                <select
+                  className="
+                    w-full
+                    theme-surface
+                    theme-text
+                    theme-border
+                    border
+                    px-4
+                    py-3
+                    rounded-xl
+                    outline-none
+                    focus:ring-2
+                    focus:ring-accent
+                    focus:border-accent
+                    transition
+                  "
+                  value={form.difficulty}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      difficulty:
+                        e.target.value,
+                    })
+                  }
+                >
+                  <option value="easy">
+                    Facile
+                  </option>
+
+                  <option value="medium">
+                    Moyen
+                  </option>
+
+                  <option value="hard">
+                    Difficile
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-semibold theme-text mb-2">
+                  URL vidéo
+                </label>
+
+                <input
+                  className="
+                    w-full
+                    theme-surface
+                    theme-text
+                    theme-border
+                    border
+                    px-4
+                    py-3
+                    rounded-xl
+                    outline-none
+                    focus:ring-2
+                    focus:ring-accent
+                    focus:border-accent
+                    transition
+                  "
+                  placeholder="URL vidéo"
+                  value={form.video_url}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      video_url:
+                        e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold theme-text mb-2">
+                  URL miniature
+                </label>
+
+                <input
+                  className="
+                    w-full
+                    theme-surface
+                    theme-text
+                    theme-border
+                    border
+                    px-4
+                    py-3
+                    rounded-xl
+                    outline-none
+                    focus:ring-2
+                    focus:ring-accent
+                    focus:border-accent
+                    transition
+                  "
+                  placeholder="URL miniature"
+                  value={form.thumbnail_url}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      thumbnail_url:
+                        e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold theme-text mb-2">
+                  Ordre de la leçon
+                </label>
+
+                <input
+                  type="number"
+                  min="1"
+                  className="
+                    w-full
+                    theme-surface
+                    theme-text
+                    theme-border
+                    border
+                    px-4
+                    py-3
+                    rounded-xl
+                    outline-none
+                    focus:ring-2
+                    focus:ring-accent
+                    focus:border-accent
+                    transition
+                  "
+                  value={form.order_number}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      order_number:
+                        Number(
+                          e.target.value
+                        ),
+                    })
+                  }
+                />
+              </div>
+
+              <label
+                className="
+                  flex
+                  items-center
+                  gap-3
+                  p-4
+                  rounded-2xl
+                  theme-surface
+                  theme-border
+                  border
+                  cursor-pointer
+                  hover:bg-accent-soft
+                  transition
+                "
+              >
+                <input
+                  type="checkbox"
+                  checked={form.is_premium}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      is_premium:
+                        e.target.checked,
+                    })
+                  }
+                  className="
+                    w-4
+                    h-4
+                    accent-[var(--accent-primary)]
+                  "
+                />
+
+                <span className="font-medium theme-text">
+                  Leçon Premium
+                </span>
+              </label>
+
+              <div className="flex flex-wrap gap-3">
 
                 <button
-                  type="button"
-                  onClick={() => {
-
-                    setEditing(null);
-
-                    setForm({
-                      title: "",
-                      description: "",
-                      duration_minutes: 10,
-                      difficulty: "easy",
-                      video_url: "",
-                      thumbnail_url: "",
-                      is_premium: false,
-                      order_number: 1
-                    });
-
-                  }}
+                  type="submit"
                   className="
+                    bg-accent
+                    hover:opacity-90
+                    hover:-translate-y-0.5
+                    text-white
                     px-5
                     py-3
                     rounded-xl
-                    border
-                    border-gray-200
-                    text-gray-600
                     font-semibold
+                    flex
+                    items-center
+                    gap-2
+                    shadow-md
+                    transition-all
                   "
                 >
-                  Annuler
+                  {editing ? (
+                    <>
+                      <Pencil size={18} />
+                      Mettre à jour
+                    </>
+                  ) : (
+                    <>
+                      <Plus size={18} />
+                      Créer la leçon
+                    </>
+                  )}
                 </button>
 
-              )}
+                {editing && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditing(null);
 
-            </div>
+                      setForm({
+                        title: "",
+                        description: "",
+                        duration_minutes: 10,
+                        difficulty: "easy",
+                        video_url: "",
+                        thumbnail_url: "",
+                        is_premium: false,
+                        order_number: 1,
+                      });
+                    }}
+                    className="
+                      px-5
+                      py-3
+                      rounded-xl
+                      theme-surface
+                      theme-border
+                      border
+                      theme-text
+                      font-semibold
+                      hover:bg-accent-soft
+                      hover:text-accent
+                      transition
+                    "
+                  >
+                    Annuler
+                  </button>
+                )}
 
-          </form>
-
-        </div>
-
-      )}
-
-      {/* LISTE */}
-
-      {chapterId && (
-
-        <div>
-
-          <div className="
-            flex
-            flex-col
-            md:flex-row
-            md:items-center
-            md:justify-between
-            gap-4
-            mb-4
-          ">
-
-            <div>
-
-              <h2 className="text-xl font-bold text-gray-900">
-                Leçons
-              </h2>
-
-              <p className="text-sm text-gray-500 mt-1">
-
-                {chapter?.subjects?.classes?.name ||
-                  "Classe inconnue"}
-
-                {" · "}
-
-                {chapter?.subjects?.name ||
-                  "Matière inconnue"}
-
-                {" · "}
-
-                {chapter?.title ||
-                  "Chapitre inconnu"}
-
-              </p>
-
-            </div>
-
-            {/* RECHERCHE */}
-
-            <div className="relative w-full md:w-80">
-
-              <Search
-                size={19}
-                className="
-                  absolute
-                  left-3
-                  top-1/2
-                  -translate-y-1/2
-                  text-gray-400
-                "
-              />
-
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) =>
-                  setSearchTerm(e.target.value)
-                }
-                placeholder="Rechercher une leçon..."
-                className="
-                  w-full
-                  border
-                  border-gray-200
-                  rounded-xl
-                  pl-10
-                  pr-10
-                  py-3
-                  outline-none
-                  focus:ring-2
-                  focus:ring-blue-500
-                  focus:border-blue-300
-                  bg-white
-                "
-              />
-
-              {searchTerm && (
-                <button
-                  type="button"
-                  onClick={() => setSearchTerm("")}
-                  className="
-                    absolute
-                    right-3
-                    top-1/2
-                    -translate-y-1/2
-                    text-gray-400
-                    hover:text-gray-700
-                  "
-                  title="Effacer la recherche"
-                >
-                  <X size={18} />
-                </button>
-              )}
-
-            </div>
-
+              </div>
+            </form>
           </div>
+        )}
 
-          {/* BARRE DE SELECTION */}
+        {/* ================================= */}
+        {/* LISTE */}
+        {/* ================================= */}
 
-          {filteredLessons.length > 0 && (
-
+        {chapterId && (
+          <div>
             <div
               className="
-                bg-white
-                rounded-2xl
-                shadow-sm
-                border
-                border-gray-100
-                p-4
-                mb-4
                 flex
                 flex-col
                 md:flex-row
                 md:items-center
                 md:justify-between
-                gap-3
+                gap-4
+                mb-4
               "
             >
+              <div>
+                <h2 className="text-xl font-bold theme-text">
+                  Leçons
+                </h2>
 
-              <label className="flex items-center gap-3 cursor-pointer">
+                <p className="text-sm theme-text-secondary mt-1">
+                  {chapter?.subjects?.classes?.name ||
+                    "Classe inconnue"}
 
-                <input
-                  type="checkbox"
-                  checked={allSelected}
-                  onChange={toggleSelectAll}
-                  className="w-4 h-4"
-                />
+                  {" · "}
 
-                <span className="font-medium text-gray-700">
-                  Tout sélectionner
-                </span>
+                  {chapter?.subjects?.name ||
+                    "Matière inconnue"}
 
-              </label>
+                  {" · "}
 
-              <div className="flex items-center gap-3">
-
-                {selectedLessons.length > 0 && (
-                  <>
-
-                    <span className="text-sm text-gray-500">
-                      {selectedLessons.length} sélectionnée
-                      {selectedLessons.length !== 1
-                        ? "s"
-                        : ""}
-                    </span>
-
-                    <button
-                      type="button"
-                      onClick={
-                        handleDeleteSelected
-                      }
-                      className="
-                        inline-flex
-                        items-center
-                        gap-2
-                        bg-red-600
-                        hover:bg-red-700
-                        text-white
-                        px-4
-                        py-2.5
-                        rounded-xl
-                        font-semibold
-                        transition
-                      "
-                    >
-
-                      <Trash2 size={17} />
-
-                      Supprimer la sélection
-
-                    </button>
-
-                  </>
-                )}
-
+                  {chapter?.title ||
+                    "Chapitre inconnu"}
+                </p>
               </div>
 
+              {/* RECHERCHE */}
+
+              <div className="relative w-full md:w-80">
+                <Search
+                  size={19}
+                  className="
+                    absolute
+                    left-3
+                    top-1/2
+                    -translate-y-1/2
+                    text-accent
+                  "
+                />
+
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) =>
+                    setSearchTerm(
+                      e.target.value
+                    )
+                  }
+                  placeholder="Rechercher une leçon..."
+                  className="
+                    w-full
+                    theme-surface
+                    theme-text
+                    theme-border
+                    border
+                    rounded-2xl
+                    pl-10
+                    pr-10
+                    py-3
+                    outline-none
+                    focus:ring-2
+                    focus:ring-accent
+                    focus:border-accent
+                    transition
+                  "
+                />
+
+                {searchTerm && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSearchTerm("")
+                    }
+                    className="
+                      absolute
+                      right-3
+                      top-1/2
+                      -translate-y-1/2
+                      theme-text-secondary
+                      hover:text-accent
+                      transition
+                    "
+                    title="Effacer la recherche"
+                  >
+                    <X size={18} />
+                  </button>
+                )}
+              </div>
             </div>
 
-          )}
+            {/* BARRE DE SELECTION */}
 
-          {loading ? (
-
-            <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
-
-              <p className="text-gray-500">
-                Chargement des leçons...
-              </p>
-
-            </div>
-
-          ) : lessons.length === 0 ? (
-
-            <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
-
-              <BookOpen
-                size={42}
-                className="mx-auto text-gray-300 mb-3"
-              />
-
-              <p className="text-gray-500">
-                Aucune leçon disponible.
-              </p>
-
-            </div>
-
-          ) : filteredLessons.length === 0 ? (
-
-            <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
-
-              <Search
-                size={42}
-                className="mx-auto text-gray-300 mb-3"
-              />
-
-              <p className="font-semibold text-gray-700">
-                Aucune leçon trouvée.
-              </p>
-
-              <p className="text-sm text-gray-500 mt-1">
-                Essayez avec un autre mot-clé.
-              </p>
-
-              <button
-                type="button"
-                onClick={() => setSearchTerm("")}
+            {filteredLessons.length > 0 && (
+              <div
                 className="
-                  mt-4
-                  text-blue-600
-                  hover:text-blue-700
-                  font-semibold
+                  theme-surface
+                  theme-border
+                  border
+                  rounded-3xl
+                  shadow-sm
+                  p-4
+                  mb-4
+                  flex
+                  flex-col
+                  md:flex-row
+                  md:items-center
+                  md:justify-between
+                  gap-3
                 "
               >
-                Effacer la recherche
-              </button>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={allSelected}
+                    onChange={toggleSelectAll}
+                    className="
+                      w-4
+                      h-4
+                      accent-[var(--accent-primary)]
+                    "
+                  />
 
-            </div>
+                  <span className="font-medium theme-text">
+                    Tout sélectionner
+                  </span>
+                </label>
 
-          ) : (
+                <div className="flex items-center gap-3">
+                  {selectedLessons.length > 0 && (
+                    <>
+                      <span className="text-sm theme-text-secondary">
+                        {selectedLessons.length} sélectionnée
+                        {selectedLessons.length !== 1
+                          ? "s"
+                          : ""}
+                      </span>
 
-            <div className="space-y-4">
+                      <button
+                        type="button"
+                        onClick={
+                          handleDeleteSelected
+                        }
+                        className="
+                          inline-flex
+                          items-center
+                          gap-2
+                          bg-red-50
+                          dark:bg-red-950/30
+                          border
+                          border-red-200
+                          dark:border-red-900
+                          text-red-700
+                          dark:text-red-300
+                          hover:bg-red-100
+                          dark:hover:bg-red-950/50
+                          px-4
+                          py-2.5
+                          rounded-xl
+                          font-semibold
+                          transition
+                        "
+                      >
+                        <Trash2 size={17} />
+                        Supprimer la sélection
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
 
-              {filteredLessons.map((lesson) => {
+            {/* CHARGEMENT */}
 
-                const importDate =
-                  formatImportDate(lesson);
+            {loading ? (
+              <div
+                className="
+                  theme-surface
+                  theme-border
+                  border
+                  rounded-3xl
+                  p-10
+                  text-center
+                  shadow-sm
+                "
+              >
+                <BookOpen
+                  size={34}
+                  className="mx-auto text-accent mb-3"
+                />
 
-                const isSelected =
-                  selectedLessons.includes(
-                    lesson.id
-                  );
+                <p className="theme-text-secondary">
+                  Chargement des leçons...
+                </p>
+              </div>
+            ) : lessons.length === 0 ? (
+              <div
+                className="
+                  theme-surface
+                  theme-border
+                  border
+                  rounded-3xl
+                  p-10
+                  text-center
+                  shadow-sm
+                "
+              >
+                <div
+                  className="
+                    w-14
+                    h-14
+                    mx-auto
+                    rounded-2xl
+                    bg-accent-soft
+                    border
+                    border-accent
+                    text-accent
+                    flex
+                    items-center
+                    justify-center
+                    mb-4
+                  "
+                >
+                  <BookOpen size={28} />
+                </div>
 
-                return (
+                <p className="theme-text font-semibold">
+                  Aucune leçon disponible.
+                </p>
+              </div>
+            ) : filteredLessons.length === 0 ? (
+              <div
+                className="
+                  theme-surface
+                  theme-border
+                  border
+                  rounded-3xl
+                  p-10
+                  text-center
+                  shadow-sm
+                "
+              >
+                <div
+                  className="
+                    w-14
+                    h-14
+                    mx-auto
+                    rounded-2xl
+                    bg-accent-soft
+                    border
+                    border-accent
+                    text-accent
+                    flex
+                    items-center
+                    justify-center
+                    mb-4
+                  "
+                >
+                  <Search size={28} />
+                </div>
 
-                  <div
-                    key={lesson.id}
-                    className={`
-                      bg-white
-                      shadow-sm
-                      border
-                      rounded-2xl
-                      p-5
-                      flex
-                      flex-col
-                      md:flex-row
-                      md:items-center
-                      md:justify-between
-                      gap-4
-                      ${
-                        isSelected
-                          ? "border-blue-300 bg-blue-50/30"
-                          : "border-gray-100"
-                      }
-                    `}
-                  >
+                <p className="font-semibold theme-text">
+                  Aucune leçon trouvée.
+                </p>
 
-                    <div className="flex-1">
+                <p className="text-sm theme-text-secondary mt-1">
+                  Essayez avec un autre mot-clé.
+                </p>
 
-                      <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setSearchTerm("")
+                  }
+                  className="
+                    mt-4
+                    text-accent
+                    hover:opacity-80
+                    font-semibold
+                  "
+                >
+                  Effacer la recherche
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredLessons.map((lesson) => {
+                  const importDate =
+                    formatImportDate(lesson);
 
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={() =>
-                            toggleLessonSelection(
+                  const isSelected =
+                    selectedLessons.includes(
+                      lesson.id
+                    );
+
+                  return (
+                    <div
+                      key={lesson.id}
+                      className={`
+                        theme-surface
+                        shadow-sm
+                        border
+                        rounded-3xl
+                        p-5
+                        md:p-6
+                        flex
+                        flex-col
+                        md:flex-row
+                        md:items-center
+                        md:justify-between
+                        gap-4
+                        transition
+                        ${
+                          isSelected
+                            ? "border-accent bg-accent-soft"
+                            : "theme-border hover:shadow-md"
+                        }
+                      `}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start gap-3">
+
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() =>
+                              toggleLessonSelection(
+                                lesson.id
+                              )
+                            }
+                            className="
+                              w-4
+                              h-4
+                              mt-3
+                              shrink-0
+                              accent-[var(--accent-primary)]
+                            "
+                          />
+
+                          <div
+                            className="
+                              w-10
+                              h-10
+                              rounded-xl
+                              bg-accent-soft
+                              border
+                              border-accent
+                              text-accent
+                              flex
+                              items-center
+                              justify-center
+                              font-bold
+                              shrink-0
+                            "
+                          >
+                            {lesson.order_number}
+                          </div>
+
+                          <div className="min-w-0">
+                            <h3 className="font-bold theme-text">
+                              {lesson.title}
+                            </h3>
+
+                            {lesson.description && (
+                              <p className="text-sm theme-text-secondary mt-1 leading-relaxed">
+                                {lesson.description}
+                              </p>
+                            )}
+
+                            <div className="flex flex-wrap items-center gap-2 mt-3">
+
+                              {lesson.duration_minutes && (
+                                <span
+                                  className="
+                                    inline-flex
+                                    items-center
+                                    px-2.5
+                                    py-1
+                                    rounded-lg
+                                    bg-accent-soft
+                                    border
+                                    border-accent
+                                    text-accent
+                                    text-xs
+                                    font-semibold
+                                  "
+                                >
+                                  ⏱️ {lesson.duration_minutes} min
+                                </span>
+                              )}
+
+                              {lesson.difficulty && (
+                                <span
+                                  className={`
+                                    inline-flex
+                                    items-center
+                                    px-2.5
+                                    py-1
+                                    rounded-lg
+                                    text-xs
+                                    font-semibold
+                                    ${
+                                      lesson.difficulty ===
+                                      "easy"
+                                        ? "bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-900"
+                                        : lesson.difficulty ===
+                                          "medium"
+                                        ? "bg-yellow-50 dark:bg-yellow-950/30 text-yellow-700 dark:text-yellow-300 border border-yellow-200 dark:border-yellow-900"
+                                        : "bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900"
+                                    }
+                                  `}
+                                >
+                                  {lesson.difficulty ===
+                                  "easy"
+                                    ? "Facile"
+                                    : lesson.difficulty ===
+                                      "medium"
+                                    ? "Moyen"
+                                    : "Difficile"}
+                                </span>
+                              )}
+
+                              {lesson.is_premium && (
+                                <span
+                                  className="
+                                    inline-flex
+                                    items-center
+                                    px-2.5
+                                    py-1
+                                    rounded-lg
+                                    bg-yellow-50
+                                    dark:bg-yellow-950/30
+                                    border
+                                    border-yellow-200
+                                    dark:border-yellow-900
+                                    text-yellow-700
+                                    dark:text-yellow-300
+                                    text-xs
+                                    font-semibold
+                                  "
+                                >
+                                  Premium
+                                </span>
+                              )}
+
+                              {importDate && (
+                                <span className="text-xs theme-text-secondary">
+                                  📅 Importée le {importDate}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 md:justify-end">
+
+                        {/* QUIZ */}
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            navigate(
+                              `/admin/lesson/${lesson.id}/quiz`
+                            )
+                          }
+                          className="
+                            inline-flex
+                            items-center
+                            gap-2
+                            px-3
+                            py-2.5
+                            bg-green-50
+                            dark:bg-green-950/30
+                            border
+                            border-green-200
+                            dark:border-green-900
+                            hover:bg-green-100
+                            dark:hover:bg-green-950/50
+                            text-green-700
+                            dark:text-green-300
+                            rounded-xl
+                            font-semibold
+                            transition
+                          "
+                          title="Gérer le quiz"
+                        >
+                          <ClipboardCheck size={17} />
+
+                          <span className="hidden sm:inline">
+                            Quiz
+                          </span>
+                        </button>
+
+                        {/* BLOCS */}
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            navigate(
+                              `/admin/lesson/${lesson.id}/blocks`
+                            )
+                          }
+                          className="
+                            inline-flex
+                            items-center
+                            gap-2
+                            px-3
+                            py-2.5
+                            bg-accent-soft
+                            border
+                            border-accent
+                            hover:opacity-80
+                            text-accent
+                            rounded-xl
+                            font-semibold
+                            transition
+                          "
+                          title="Gérer les blocs"
+                        >
+                          <BookOpen size={17} />
+
+                          <span className="hidden sm:inline">
+                            Blocs
+                          </span>
+                        </button>
+
+                        {/* MODIFIER */}
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            editLesson(lesson)
+                          }
+                          className="
+                            p-2.5
+                            bg-yellow-50
+                            dark:bg-yellow-950/30
+                            border
+                            border-yellow-200
+                            dark:border-yellow-900
+                            text-yellow-700
+                            dark:text-yellow-300
+                            hover:bg-yellow-100
+                            dark:hover:bg-yellow-950/50
+                            rounded-xl
+                            transition
+                          "
+                          title="Modifier"
+                        >
+                          <Pencil size={18} />
+                        </button>
+
+                        {/* SUPPRIMER */}
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleDelete(
                               lesson.id
                             )
                           }
-                          className="w-4 h-4 flex-shrink-0"
-                        />
-
-                        <div
                           className="
-                            w-10
-                            h-10
+                            p-2.5
+                            bg-red-50
+                            dark:bg-red-950/30
+                            border
+                            border-red-200
+                            dark:border-red-900
+                            text-red-700
+                            dark:text-red-300
+                            hover:bg-red-100
+                            dark:hover:bg-red-950/50
                             rounded-xl
-                            bg-blue-50
-                            text-blue-600
-                            flex
-                            items-center
-                            justify-center
-                            font-bold
+                            transition
                           "
+                          title="Supprimer"
                         >
-                          {lesson.order_number}
-                        </div>
-
-                        <div>
-
-                          <h3 className="font-bold text-gray-900">
-                            {lesson.title}
-                          </h3>
-
-                          {lesson.description && (
-                            <p className="text-sm text-gray-500 mt-1">
-                              {lesson.description}
-                            </p>
-                          )}
-
-                          {importDate && (
-                            <p className="text-xs text-gray-400 mt-2">
-                              📅 Importée le {importDate}
-                            </p>
-                          )}
-
-                        </div>
+                          <Trash2 size={18} />
+                        </button>
 
                       </div>
-
                     </div>
-
-                    <div className="flex flex-wrap gap-2">
-
-                      {/* QUIZ */}
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          navigate(
-                            `/admin/lesson/${lesson.id}/quiz`
-                          )
-                        }
-                        className="
-                          inline-flex
-                          items-center
-                          gap-2
-                          px-3
-                          py-2.5
-                          bg-green-100
-                          hover:bg-green-200
-                          text-green-700
-                          rounded-xl
-                          font-semibold
-                          transition
-                        "
-                        title="Gérer le quiz"
-                      >
-                        <ClipboardCheck size={17} />
-
-                        <span className="hidden sm:inline">
-                          Quiz
-                        </span>
-                      </button>
-
-                      {/* BLOCS */}
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          navigate(
-                            `/admin/lesson/${lesson.id}/blocks`
-                          )
-                        }
-                        className="
-                          inline-flex
-                          items-center
-                          gap-2
-                          px-3
-                          py-2.5
-                          bg-blue-100
-                          hover:bg-blue-200
-                          text-blue-700
-                          rounded-xl
-                          font-semibold
-                          transition
-                        "
-                        title="Gérer les blocs"
-                      >
-                        <BookOpen size={17} />
-
-                        <span className="hidden sm:inline">
-                          Blocs
-                        </span>
-                      </button>
-
-                      {/* MODIFIER */}
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          editLesson(lesson)
-                        }
-                        className="
-                          p-2.5
-                          bg-yellow-100
-                          hover:bg-yellow-200
-                          rounded-xl
-                          transition
-                        "
-                        title="Modifier"
-                      >
-                        <Pencil size={18} />
-                      </button>
-
-                      {/* SUPPRIMER */}
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleDelete(
-                            lesson.id
-                          )
-                        }
-                        className="
-                          p-2.5
-                          bg-red-100
-                          hover:bg-red-200
-                          rounded-xl
-                          transition
-                        "
-                        title="Supprimer"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-
-                    </div>
-
-                  </div>
-
-                );
-              })}
-
-            </div>
-
-          )}
-
-        </div>
-
-      )}
-
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

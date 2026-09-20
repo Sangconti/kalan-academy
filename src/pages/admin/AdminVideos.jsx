@@ -24,13 +24,11 @@ import {
 
 import { supabase } from "../../lib/supabase";
 
-
 // ===========================================================
 // CONSTANTES
 // ===========================================================
 
 const SUCCESS_MESSAGE_DURATION = 3500;
-
 
 // ===========================================================
 // HELPERS
@@ -43,13 +41,11 @@ function hasVideo(lesson) {
   );
 }
 
-
 function normalizeText(value) {
   return typeof value === "string"
     ? value.trim().toLowerCase()
     : "";
 }
-
 
 // ===========================================================
 // COMPOSANT
@@ -77,7 +73,6 @@ export default function AdminVideos() {
 
   const successTimeoutRef = useRef(null);
 
-
   // =========================================================
   // NETTOYAGE DU MESSAGE DE SUCCÈS
   // =========================================================
@@ -94,7 +89,6 @@ export default function AdminVideos() {
       successTimeoutRef.current = null;
     }, SUCCESS_MESSAGE_DURATION);
   }, []);
-
 
   // =========================================================
   // CHARGEMENT DES LEÇONS
@@ -168,7 +162,6 @@ export default function AdminVideos() {
     [showSuccess]
   );
 
-
   // =========================================================
   // CHARGEMENT INITIAL
   // =========================================================
@@ -183,7 +176,6 @@ export default function AdminVideos() {
       }
     };
   }, [loadLessons]);
-
 
   // =========================================================
   // DONNÉES PRÉPARÉES POUR LA RECHERCHE
@@ -212,7 +204,6 @@ export default function AdminVideos() {
       };
     });
   }, [lessons]);
-
 
   // =========================================================
   // FILTRAGE
@@ -271,7 +262,6 @@ export default function AdminVideos() {
     filter,
   ]);
 
-
   // =========================================================
   // STATISTIQUES
   // =========================================================
@@ -301,14 +291,12 @@ export default function AdminVideos() {
     };
   }, [lessons]);
 
-
   const {
     totalLessons,
     totalVideos,
     missingVideos,
     premiumVideos,
   } = statistics;
-
 
   // =========================================================
   // OUVRIR L'ÉDITEUR
@@ -331,7 +319,6 @@ export default function AdminVideos() {
     setSuccess("");
   }, []);
 
-
   // =========================================================
   // FERMER L'ÉDITEUR
   // =========================================================
@@ -343,7 +330,6 @@ export default function AdminVideos() {
 
     setEditingLesson(null);
   }, [saving]);
-
 
   // =========================================================
   // MODIFICATION CHAMP
@@ -364,7 +350,6 @@ export default function AdminVideos() {
     },
     []
   );
-
 
   // =========================================================
   // ENREGISTRER
@@ -480,7 +465,6 @@ export default function AdminVideos() {
     [editingLesson, showSuccess]
   );
 
-
   // =========================================================
   // TEST VIDÉO
   // =========================================================
@@ -497,7 +481,6 @@ export default function AdminVideos() {
     );
   }, []);
 
-
   // =========================================================
   // CHARGEMENT
   // =========================================================
@@ -507,88 +490,247 @@ export default function AdminVideos() {
       <div className="p-6">
         <div className="min-h-[400px] flex items-center justify-center">
           <div className="text-center">
+
             <Loader2
               size={40}
-              className="animate-spin text-blue-600 mx-auto mb-4"
+              className="animate-spin text-accent mx-auto mb-4"
             />
 
-            <p className="text-slate-600">
+            <p className="theme-text-secondary">
               Chargement des vidéos...
             </p>
+
           </div>
         </div>
       </div>
     );
   }
 
-
   // =========================================================
   // RENDU
   // =========================================================
 
   return (
-    <div className="p-6">
+    <div className="space-y-6">
 
       {/* =====================================================
-          HEADER
+          HERO
       ===================================================== */}
 
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+      <div
+        className="
+          relative
+          overflow-hidden
+          rounded-3xl
+          bg-accent-soft
+          border
+          border-accent
+          shadow-lg
+          p-6
+          md:p-8
+        "
+      >
 
-        <div>
-          <div className="flex items-center gap-3">
+        <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent opacity-10" />
 
-            <div className="p-3 bg-blue-100 rounded-xl">
-              <Video
-                size={25}
-                className="text-blue-600"
+        <div className="absolute -left-16 -bottom-20 w-48 h-48 rounded-full bg-accent opacity-10" />
+
+        <div className="absolute right-16 -bottom-24 w-56 h-56 rounded-full bg-accent opacity-5" />
+
+        <div className="relative z-10">
+
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+            <div className="flex items-start gap-4">
+
+              <div
+                className="
+                  w-16
+                  h-16
+                  shrink-0
+                  rounded-2xl
+                  bg-white/70
+                  dark:bg-gray-950/30
+                  border
+                  border-white/50
+                  dark:border-white/10
+                  flex
+                  items-center
+                  justify-center
+                  text-accent
+                "
+              >
+                <Video size={30} />
+              </div>
+
+              <div className="min-w-0">
+
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-1.5
+                    rounded-full
+                    bg-accent
+                    text-white
+                    text-xs
+                    font-semibold
+                    mb-3
+                  "
+                >
+                  <Video size={14} />
+
+                  Administration
+                </div>
+
+                <h1
+                  className="
+                    text-2xl
+                    md:text-3xl
+                    font-bold
+                    leading-tight
+                    theme-text
+                  "
+                >
+                  Gestion des vidéos
+                </h1>
+
+                <p className="theme-text-secondary mt-3 leading-relaxed">
+                  Gérez les vidéos associées aux leçons,
+                  leurs miniatures, durées et accès premium.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-3 mt-5">
+
+                  <div
+                    className="
+                      inline-flex
+                      items-center
+                      gap-2
+                      px-3
+                      py-2
+                      rounded-xl
+                      bg-white/70
+                      dark:bg-gray-950/30
+                      theme-text
+                      text-sm
+                      font-medium
+                      border
+                      border-white/50
+                      dark:border-white/10
+                    "
+                  >
+                    <Video
+                      size={16}
+                      className="text-accent"
+                    />
+
+                    {totalVideos} vidéo
+                    {totalVideos > 1 ? "s" : ""}
+                  </div>
+
+                  <div
+                    className="
+                      inline-flex
+                      items-center
+                      gap-2
+                      px-3
+                      py-2
+                      rounded-xl
+                      bg-white/70
+                      dark:bg-gray-950/30
+                      theme-text
+                      text-sm
+                      font-medium
+                      border
+                      border-white/50
+                      dark:border-white/10
+                    "
+                  >
+                    <XCircle
+                      size={16}
+                      className="text-accent"
+                    />
+
+                    {missingVideos} sans vidéo
+                  </div>
+
+                  <div
+                    className="
+                      inline-flex
+                      items-center
+                      gap-2
+                      px-3
+                      py-2
+                      rounded-xl
+                      bg-white/70
+                      dark:bg-gray-950/30
+                      theme-text
+                      text-sm
+                      font-medium
+                      border
+                      border-white/50
+                      dark:border-white/10
+                    "
+                  >
+                    <Crown
+                      size={16}
+                      className="text-accent"
+                    />
+
+                    {premiumVideos} premium
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <button
+              type="button"
+              onClick={() => loadLessons(true)}
+              disabled={refreshing}
+              className="
+                inline-flex
+                items-center
+                justify-center
+                gap-2
+                px-5
+                py-3
+                rounded-xl
+                bg-accent
+                text-white
+                font-bold
+                shadow-md
+                hover:opacity-90
+                hover:-translate-y-0.5
+                transition
+                disabled:opacity-50
+                disabled:cursor-not-allowed
+                shrink-0
+              "
+            >
+
+              <RefreshCw
+                size={18}
+                className={
+                  refreshing
+                    ? "animate-spin"
+                    : ""
+                }
               />
-            </div>
 
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">
-                Gestion des vidéos
-              </h1>
+              Actualiser
 
-              <p className="text-sm text-slate-500">
-                Gérez les vidéos associées aux leçons.
-              </p>
-            </div>
+            </button>
 
           </div>
+
         </div>
-
-
-        <button
-          type="button"
-          onClick={() => loadLessons(true)}
-          disabled={refreshing}
-          className="
-            inline-flex
-            items-center
-            justify-center
-            gap-2
-            px-4
-            py-2.5
-            rounded-lg
-            bg-blue-600
-            text-white
-            hover:bg-blue-700
-            disabled:opacity-50
-            disabled:cursor-not-allowed
-          "
-        >
-          <RefreshCw
-            size={18}
-            className={
-              refreshing
-                ? "animate-spin"
-                : ""
-            }
-          />
-
-          Actualiser
-        </button>
 
       </div>
 
@@ -598,7 +740,21 @@ export default function AdminVideos() {
       ===================================================== */}
 
       {error && (
-        <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 flex gap-3">
+        <div
+          className="
+            rounded-2xl
+            border
+            border-red-200
+            bg-red-50
+            dark:bg-red-950/20
+            text-red-700
+            dark:text-red-300
+            px-4
+            py-3
+            flex
+            gap-3
+          "
+        >
 
           <AlertCircle
             size={20}
@@ -606,6 +762,7 @@ export default function AdminVideos() {
           />
 
           <div>
+
             <p className="font-semibold">
               Une erreur est survenue
             </p>
@@ -613,6 +770,7 @@ export default function AdminVideos() {
             <p className="text-sm mt-1">
               {error}
             </p>
+
           </div>
 
         </div>
@@ -624,7 +782,21 @@ export default function AdminVideos() {
       ===================================================== */}
 
       {success && (
-        <div className="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 text-green-700 flex gap-3">
+        <div
+          className="
+            rounded-2xl
+            border
+            border-green-200
+            bg-green-50
+            dark:bg-green-950/20
+            text-green-700
+            dark:text-green-300
+            px-4
+            py-3
+            flex
+            gap-3
+          "
+        >
 
           <CheckCircle
             size={20}
@@ -643,38 +815,33 @@ export default function AdminVideos() {
           STATISTIQUES
       ===================================================== */}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
 
         <VideoStat
           icon={Video}
           label="Leçons"
           value={totalLessons}
-          bg="bg-blue-100"
-          iconColor="text-blue-600"
         />
 
         <VideoStat
           icon={CheckCircle}
           label="Avec vidéo"
           value={totalVideos}
-          bg="bg-green-100"
-          iconColor="text-green-600"
+          variant="success"
         />
 
         <VideoStat
           icon={XCircle}
           label="Sans vidéo"
           value={missingVideos}
-          bg="bg-red-100"
-          iconColor="text-red-600"
+          variant="danger"
         />
 
         <VideoStat
           icon={Crown}
           label="Premium"
           value={premiumVideos}
-          bg="bg-yellow-100"
-          iconColor="text-yellow-600"
+          variant="premium"
         />
 
       </div>
@@ -684,7 +851,50 @@ export default function AdminVideos() {
           FILTRES
       ===================================================== */}
 
-      <div className="bg-white border border-slate-200 rounded-xl p-4 mb-6">
+      <div
+        className="
+          theme-surface
+          theme-border
+          border
+          rounded-3xl
+          shadow-sm
+          p-5
+          md:p-6
+        "
+      >
+
+        <div className="flex items-center gap-3 mb-4">
+
+          <div
+            className="
+              w-10
+              h-10
+              rounded-xl
+              bg-accent-soft
+              border
+              border-accent
+              flex
+              items-center
+              justify-center
+              text-accent
+            "
+          >
+            <Search size={19} />
+          </div>
+
+          <div>
+
+            <h2 className="font-bold theme-text">
+              Rechercher et filtrer
+            </h2>
+
+            <p className="text-sm theme-text-secondary mt-0.5">
+              Trouvez rapidement une leçon ou un contenu vidéo.
+            </p>
+
+          </div>
+
+        </div>
 
         <div className="flex flex-col lg:flex-row gap-3">
 
@@ -699,7 +909,7 @@ export default function AdminVideos() {
                 left-3
                 top-1/2
                 -translate-y-1/2
-                text-slate-400
+                text-accent
               "
             />
 
@@ -712,15 +922,18 @@ export default function AdminVideos() {
               placeholder="Rechercher une leçon, un chapitre ou une matière..."
               className="
                 w-full
+                theme-surface
+                theme-text
+                theme-border
                 border
-                border-slate-300
-                rounded-lg
+                rounded-xl
                 pl-10
                 pr-4
                 py-2.5
                 outline-none
                 focus:ring-2
-                focus:ring-blue-500
+                focus:ring-accent
+                placeholder:opacity-60
               "
             />
 
@@ -735,17 +948,20 @@ export default function AdminVideos() {
               setFilter(event.target.value)
             }
             className="
+              theme-surface
+              theme-text
+              theme-border
               border
-              border-slate-300
-              rounded-lg
+              rounded-xl
               px-4
               py-2.5
-              bg-white
               outline-none
               focus:ring-2
-              focus:ring-blue-500
+              focus:ring-accent
+              lg:min-w-[190px]
             "
           >
+
             <option value="all">
               Toutes les leçons
             </option>
@@ -761,6 +977,7 @@ export default function AdminVideos() {
             <option value="premium">
               Premium
             </option>
+
           </select>
 
         </div>
@@ -772,27 +989,71 @@ export default function AdminVideos() {
           TABLE
       ===================================================== */}
 
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+      <div
+        className="
+          theme-surface
+          theme-border
+          border
+          rounded-3xl
+          shadow-sm
+          overflow-hidden
+        "
+      >
 
-        <div className="p-5 border-b border-slate-200">
+        <div
+          className="
+            p-5
+            md:p-6
+            border-b
+            theme-border
+            bg-accent-soft
+          "
+        >
 
           <div className="flex items-center justify-between gap-4">
 
             <div>
 
-              <h2 className="text-lg font-semibold text-slate-900">
-                Leçons
-              </h2>
+              <div className="flex items-center gap-3">
 
-              <p className="text-sm text-slate-500 mt-1">
-                {filteredLessons.length} leçon
-                {filteredLessons.length > 1
-                  ? "s"
-                  : ""} affichée
-                {filteredLessons.length > 1
-                  ? "s"
-                  : ""}
-              </p>
+                <div
+                  className="
+                    w-10
+                    h-10
+                    rounded-xl
+                    bg-white/70
+                    dark:bg-gray-950/30
+                    border
+                    border-white/50
+                    dark:border-white/10
+                    flex
+                    items-center
+                    justify-center
+                    text-accent
+                  "
+                >
+                  <Video size={19} />
+                </div>
+
+                <div>
+
+                  <h2 className="text-xl font-bold theme-text">
+                    Leçons
+                  </h2>
+
+                  <p className="text-sm theme-text-secondary mt-1">
+                    {filteredLessons.length} leçon
+                    {filteredLessons.length > 1
+                      ? "s"
+                      : ""} affichée
+                    {filteredLessons.length > 1
+                      ? "s"
+                      : ""}
+                  </p>
+
+                </div>
+
+              </div>
 
             </div>
 
@@ -805,16 +1066,30 @@ export default function AdminVideos() {
 
           <div className="p-10 text-center">
 
-            <Video
-              size={42}
-              className="mx-auto text-slate-300 mb-4"
-            />
+            <div
+              className="
+                w-16
+                h-16
+                rounded-2xl
+                bg-accent-soft
+                border
+                border-accent
+                flex
+                items-center
+                justify-center
+                text-accent
+                mx-auto
+                mb-4
+              "
+            >
+              <Video size={30} />
+            </div>
 
-            <h3 className="font-semibold text-slate-700">
+            <h3 className="font-semibold theme-text">
               Aucune leçon trouvée
             </h3>
 
-            <p className="text-sm text-slate-500 mt-1">
+            <p className="text-sm theme-text-secondary mt-1">
               Modifiez votre recherche ou votre filtre.
             </p>
 
@@ -826,35 +1101,35 @@ export default function AdminVideos() {
 
             <table className="w-full text-sm">
 
-              <thead className="bg-slate-50">
+              <thead className="bg-accent-soft">
 
                 <tr>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Leçon
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Matière
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Chapitre
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Vidéo
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Durée
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Type
                   </th>
 
-                  <th className="text-right p-4 font-semibold text-slate-600">
+                  <th className="text-right p-4 font-semibold theme-text-secondary">
                     Action
                   </th>
 
@@ -883,8 +1158,9 @@ export default function AdminVideos() {
                       key={lesson.id}
                       className="
                         border-t
-                        border-slate-100
-                        hover:bg-slate-50
+                        theme-border
+                        hover:bg-accent-soft
+                        transition
                       "
                     >
 
@@ -894,12 +1170,12 @@ export default function AdminVideos() {
 
                         <div className="max-w-xs">
 
-                          <p className="font-medium text-slate-900">
+                          <p className="font-medium theme-text">
                             {lesson.title}
                           </p>
 
                           {lesson.description && (
-                            <p className="text-xs text-slate-400 mt-1 line-clamp-2">
+                            <p className="text-xs theme-text-secondary mt-1 line-clamp-2">
                               {lesson.description}
                             </p>
                           )}
@@ -912,18 +1188,22 @@ export default function AdminVideos() {
                       {/* Matière */}
 
                       <td className="p-4">
-                        <span className="text-slate-700">
+
+                        <span className="theme-text">
                           {subjectName}
                         </span>
+
                       </td>
 
 
                       {/* Chapitre */}
 
                       <td className="p-4">
-                        <span className="text-slate-600">
+
+                        <span className="theme-text-secondary">
                           {chapterTitle}
                         </span>
+
                       </td>
 
 
@@ -946,12 +1226,16 @@ export default function AdminVideos() {
                               gap-2
                               px-3
                               py-1.5
-                              rounded-lg
+                              rounded-xl
                               bg-green-100
+                              dark:bg-green-950/30
                               text-green-700
+                              dark:text-green-300
                               hover:bg-green-200
+                              dark:hover:bg-green-950/50
                               text-xs
                               font-semibold
+                              transition
                             "
                           >
 
@@ -967,18 +1251,22 @@ export default function AdminVideos() {
 
                         ) : (
 
-                          <span className="
-                            inline-flex
-                            items-center
-                            gap-2
-                            px-3
-                            py-1.5
-                            rounded-lg
-                            bg-red-100
-                            text-red-700
-                            text-xs
-                            font-semibold
-                          ">
+                          <span
+                            className="
+                              inline-flex
+                              items-center
+                              gap-2
+                              px-3
+                              py-1.5
+                              rounded-xl
+                              bg-red-100
+                              dark:bg-red-950/30
+                              text-red-700
+                              dark:text-red-300
+                              text-xs
+                              font-semibold
+                            "
+                          >
 
                             <XCircle size={15} />
 
@@ -995,7 +1283,7 @@ export default function AdminVideos() {
 
                       <td className="p-4">
 
-                        <div className="flex items-center gap-2 text-slate-600">
+                        <div className="flex items-center gap-2 theme-text-secondary">
 
                           <Clock size={15} />
 
@@ -1014,18 +1302,22 @@ export default function AdminVideos() {
 
                         {lesson.is_premium ? (
 
-                          <span className="
-                            inline-flex
-                            items-center
-                            gap-1.5
-                            px-2.5
-                            py-1
-                            rounded-full
-                            bg-yellow-100
-                            text-yellow-700
-                            text-xs
-                            font-semibold
-                          ">
+                          <span
+                            className="
+                              inline-flex
+                              items-center
+                              gap-1.5
+                              px-2.5
+                              py-1
+                              rounded-full
+                              bg-yellow-100
+                              dark:bg-yellow-950/30
+                              text-yellow-700
+                              dark:text-yellow-300
+                              text-xs
+                              font-semibold
+                            "
+                          >
 
                             <Crown size={13} />
 
@@ -1035,10 +1327,7 @@ export default function AdminVideos() {
 
                         ) : (
 
-                          <span className="
-                            text-xs
-                            text-slate-500
-                          ">
+                          <span className="text-xs theme-text-secondary">
                             Gratuit
                           </span>
 
@@ -1062,12 +1351,14 @@ export default function AdminVideos() {
                             gap-2
                             px-3
                             py-2
-                            rounded-lg
-                            bg-slate-900
+                            rounded-xl
+                            bg-accent
                             text-white
-                            hover:bg-slate-700
+                            hover:opacity-90
                             text-xs
                             font-semibold
+                            shadow-sm
+                            transition
                           "
                         >
 
@@ -1099,46 +1390,65 @@ export default function AdminVideos() {
 
       {editingLesson && (
 
-        <div className="
-          fixed
-          inset-0
-          z-50
-          bg-black/50
-          flex
-          items-center
-          justify-center
-          p-4
-        ">
+        <div
+          className="
+            fixed
+            inset-0
+            z-50
+            bg-black/50
+            flex
+            items-center
+            justify-center
+            p-4
+          "
+        >
 
-          <div className="
-            bg-white
-            rounded-2xl
-            shadow-2xl
-            w-full
-            max-w-2xl
-            max-h-[90vh]
-            overflow-y-auto
-          ">
+          <div
+            className="
+              theme-surface
+              theme-text
+              rounded-3xl
+              shadow-2xl
+              w-full
+              max-w-2xl
+              max-h-[90vh]
+              overflow-y-auto
+              theme-border
+              border
+            "
+          >
 
             {/* Header modal */}
 
-            <div className="
-              flex
-              items-center
-              justify-between
-              gap-4
-              p-5
-              border-b
-              border-slate-200
-            ">
+            <div
+              className="
+                flex
+                items-center
+                justify-between
+                gap-4
+                p-5
+                md:p-6
+                border-b
+                theme-border
+                bg-accent-soft
+              "
+            >
 
               <div>
 
-                <h2 className="text-xl font-bold text-slate-900">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent text-white text-xs font-semibold mb-2">
+
+                  <Video size={14} />
+
+                  Édition
+
+                </div>
+
+                <h2 className="text-xl font-bold theme-text">
                   Gérer la vidéo
                 </h2>
 
-                <p className="text-sm text-slate-500 mt-1">
+                <p className="text-sm theme-text-secondary mt-1">
                   {editingLesson.title}
                 </p>
 
@@ -1150,11 +1460,14 @@ export default function AdminVideos() {
                 onClick={closeEditor}
                 disabled={saving}
                 className="
-                  p-2
-                  rounded-lg
-                  hover:bg-slate-100
-                  text-slate-500
+                  p-2.5
+                  rounded-xl
+                  theme-text-secondary
+                  hover:bg-white/70
+                  dark:hover:bg-gray-950/30
+                  hover:text-accent
                   disabled:opacity-50
+                  transition
                 "
               >
 
@@ -1167,19 +1480,21 @@ export default function AdminVideos() {
 
             {/* Corps */}
 
-            <div className="p-5 space-y-5">
+            <div className="p-5 md:p-6 space-y-5">
 
               {/* URL vidéo */}
 
               <div>
 
-                <label className="
-                  block
-                  text-sm
-                  font-semibold
-                  text-slate-700
-                  mb-2
-                ">
+                <label
+                  className="
+                    block
+                    text-sm
+                    font-semibold
+                    theme-text
+                    mb-2
+                  "
+                >
                   URL de la vidéo
                 </label>
 
@@ -1192,7 +1507,7 @@ export default function AdminVideos() {
                       left-3
                       top-1/2
                       -translate-y-1/2
-                      text-slate-400
+                      text-accent
                     "
                   />
 
@@ -1210,21 +1525,24 @@ export default function AdminVideos() {
                     placeholder="https://..."
                     className="
                       w-full
+                      theme-surface
+                      theme-text
+                      theme-border
                       border
-                      border-slate-300
-                      rounded-lg
+                      rounded-xl
                       pl-10
                       pr-4
                       py-2.5
                       outline-none
                       focus:ring-2
-                      focus:ring-blue-500
+                      focus:ring-accent
+                      placeholder:opacity-60
                     "
                   />
 
                 </div>
 
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs theme-text-secondary mt-1">
                   URL directe ou URL fournie par ton hébergeur vidéo.
                 </p>
 
@@ -1235,13 +1553,15 @@ export default function AdminVideos() {
 
               <div>
 
-                <label className="
-                  block
-                  text-sm
-                  font-semibold
-                  text-slate-700
-                  mb-2
-                ">
+                <label
+                  className="
+                    block
+                    text-sm
+                    font-semibold
+                    theme-text
+                    mb-2
+                  "
+                >
                   URL de la miniature
                 </label>
 
@@ -1254,7 +1574,7 @@ export default function AdminVideos() {
                       left-3
                       top-1/2
                       -translate-y-1/2
-                      text-slate-400
+                      text-accent
                     "
                   />
 
@@ -1272,15 +1592,18 @@ export default function AdminVideos() {
                     placeholder="https://..."
                     className="
                       w-full
+                      theme-surface
+                      theme-text
+                      theme-border
                       border
-                      border-slate-300
-                      rounded-lg
+                      rounded-xl
                       pl-10
                       pr-4
                       py-2.5
                       outline-none
                       focus:ring-2
-                      focus:ring-blue-500
+                      focus:ring-accent
+                      placeholder:opacity-60
                     "
                   />
 
@@ -1295,12 +1618,7 @@ export default function AdminVideos() {
 
                 <div>
 
-                  <p className="
-                    text-sm
-                    font-semibold
-                    text-slate-700
-                    mb-2
-                  ">
+                  <p className="text-sm font-semibold theme-text mb-2">
                     Aperçu
                   </p>
 
@@ -1313,9 +1631,9 @@ export default function AdminVideos() {
                       w-full
                       max-h-56
                       object-cover
-                      rounded-xl
+                      rounded-2xl
                       border
-                      border-slate-200
+                      theme-border
                     "
                     onError={(event) => {
                       event.currentTarget.style.display =
@@ -1332,13 +1650,15 @@ export default function AdminVideos() {
 
               <div>
 
-                <label className="
-                  block
-                  text-sm
-                  font-semibold
-                  text-slate-700
-                  mb-2
-                ">
+                <label
+                  className="
+                    block
+                    text-sm
+                    font-semibold
+                    theme-text
+                    mb-2
+                  "
+                >
                   Durée en minutes
                 </label>
 
@@ -1351,7 +1671,7 @@ export default function AdminVideos() {
                       left-3
                       top-1/2
                       -translate-y-1/2
-                      text-slate-400
+                      text-accent
                     "
                   />
 
@@ -1371,15 +1691,18 @@ export default function AdminVideos() {
                     placeholder="10"
                     className="
                       w-full
+                      theme-surface
+                      theme-text
+                      theme-border
                       border
-                      border-slate-300
-                      rounded-lg
+                      rounded-xl
                       pl-10
                       pr-4
                       py-2.5
                       outline-none
                       focus:ring-2
-                      focus:ring-blue-500
+                      focus:ring-accent
+                      placeholder:opacity-60
                     "
                   />
 
@@ -1390,37 +1713,52 @@ export default function AdminVideos() {
 
               {/* Premium */}
 
-              <label className="
-                flex
-                items-center
-                justify-between
-                gap-4
-                p-4
-                rounded-xl
-                border
-                border-slate-200
-                cursor-pointer
-                hover:bg-slate-50
-              ">
+              <label
+                className="
+                  flex
+                  items-center
+                  justify-between
+                  gap-4
+                  p-4
+                  rounded-2xl
+                  theme-surface
+                  theme-border
+                  border
+                  cursor-pointer
+                  hover:bg-accent-soft
+                  transition
+                "
+              >
 
                 <div className="flex items-center gap-3">
 
-                  <div className="p-2 bg-yellow-100 rounded-lg">
+                  <div
+                    className="
+                      w-10
+                      h-10
+                      rounded-xl
+                      bg-yellow-100
+                      dark:bg-yellow-950/30
+                      flex
+                      items-center
+                      justify-center
+                    "
+                  >
 
                     <Crown
                       size={19}
-                      className="text-yellow-600"
+                      className="text-yellow-600 dark:text-yellow-400"
                     />
 
                   </div>
 
                   <div>
 
-                    <p className="font-semibold text-slate-800">
+                    <p className="font-semibold theme-text">
                       Vidéo premium
                     </p>
 
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs theme-text-secondary">
                       Réserver cette leçon aux utilisateurs premium.
                     </p>
 
@@ -1454,17 +1792,20 @@ export default function AdminVideos() {
 
             {/* Footer */}
 
-            <div className="
-              flex
-              flex-col-reverse
-              sm:flex-row
-              sm:justify-between
-              gap-3
-              p-5
-              border-t
-              border-slate-200
-              bg-slate-50
-            ">
+            <div
+              className="
+                flex
+                flex-col-reverse
+                sm:flex-row
+                sm:justify-between
+                gap-3
+                p-5
+                md:p-6
+                border-t
+                theme-border
+                bg-accent-soft
+              "
+            >
 
               <div>
 
@@ -1484,13 +1825,15 @@ export default function AdminVideos() {
                       gap-2
                       px-4
                       py-2.5
-                      rounded-lg
+                      rounded-xl
+                      theme-surface
+                      theme-text
+                      theme-border
                       border
-                      border-slate-300
-                      bg-white
-                      text-slate-700
-                      hover:bg-slate-100
+                      hover:bg-white
+                      dark:hover:bg-gray-900
                       disabled:opacity-50
+                      transition
                     "
                   >
 
@@ -1514,13 +1857,15 @@ export default function AdminVideos() {
                   className="
                     px-4
                     py-2.5
-                    rounded-lg
+                    rounded-xl
+                    theme-surface
+                    theme-text
+                    theme-border
                     border
-                    border-slate-300
-                    bg-white
-                    text-slate-700
-                    hover:bg-slate-100
+                    hover:bg-white
+                    dark:hover:bg-gray-900
                     disabled:opacity-50
+                    transition
                   "
                 >
                   Annuler
@@ -1538,12 +1883,16 @@ export default function AdminVideos() {
                     gap-2
                     px-4
                     py-2.5
-                    rounded-lg
-                    bg-blue-600
+                    rounded-xl
+                    bg-accent
                     text-white
-                    hover:bg-blue-700
+                    font-bold
+                    shadow-md
+                    hover:opacity-90
+                    hover:-translate-y-0.5
                     disabled:opacity-50
                     disabled:cursor-not-allowed
+                    transition
                   "
                 >
 
@@ -1576,7 +1925,6 @@ export default function AdminVideos() {
   );
 }
 
-
 // ===========================================================
 // STAT CARD
 // ===========================================================
@@ -1585,27 +1933,61 @@ function VideoStat({
   icon: Icon,
   label,
   value,
-  bg,
-  iconColor,
+  variant = "default",
 }) {
-  return (
-    <div className="
-      bg-white
-      border
-      border-slate-200
-      rounded-xl
-      p-5
-    ">
+  const variantClasses = {
+    default: {
+      wrapper: "bg-accent-soft border-accent",
+      icon: "text-accent",
+    },
 
-      <div className="flex items-center justify-between gap-4">
+    success: {
+      wrapper:
+        "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900",
+      icon: "text-green-600 dark:text-green-400",
+    },
+
+    danger: {
+      wrapper:
+        "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900",
+      icon: "text-red-600 dark:text-red-400",
+    },
+
+    premium: {
+      wrapper:
+        "bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-900",
+      icon: "text-yellow-600 dark:text-yellow-400",
+    },
+  };
+
+  const current =
+    variantClasses[variant] ||
+    variantClasses.default;
+
+  return (
+    <div
+      className={`
+        relative
+        overflow-hidden
+        border
+        rounded-3xl
+        p-5
+        shadow-sm
+        ${current.wrapper}
+      `}
+    >
+
+      <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-accent opacity-5" />
+
+      <div className="relative z-10 flex items-center justify-between gap-4">
 
         <div>
 
-          <p className="text-sm text-slate-500">
+          <p className="text-sm theme-text-secondary">
             {label}
           </p>
 
-          <p className="text-3xl font-bold text-slate-900 mt-2">
+          <p className="text-3xl font-bold theme-text mt-2">
             {value}
           </p>
 
@@ -1613,16 +1995,24 @@ function VideoStat({
 
 
         <div
-          className={`
-            p-3
-            rounded-xl
-            ${bg}
-          `}
+          className="
+            w-12
+            h-12
+            rounded-2xl
+            bg-white/70
+            dark:bg-gray-950/30
+            border
+            border-white/50
+            dark:border-white/10
+            flex
+            items-center
+            justify-center
+          "
         >
 
           <Icon
             size={22}
-            className={iconColor}
+            className={current.icon}
           />
 
         </div>

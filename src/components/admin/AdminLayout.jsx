@@ -4,7 +4,6 @@ import AdminSidebar from "./AdminSidebar";
 import AdminHeader from "./AdminHeader";
 
 export default function AdminLayout({ children }) {
-
   // =====================================================
   // ÉTAT SIDEBAR
   // =====================================================
@@ -12,53 +11,36 @@ export default function AdminLayout({ children }) {
   // Mobile :
   // false = fermée
   // true  = ouverte
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Desktop :
   // false = sidebar normale
   // true  = sidebar réduite
-
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-
 
   // =====================================================
   // FERMER AVEC ESCAPE
   // =====================================================
 
   useEffect(() => {
-
     function handleEscape(event) {
-
       if (event.key === "Escape") {
         setSidebarOpen(false);
       }
-
     }
 
-    document.addEventListener(
-      "keydown",
-      handleEscape
-    );
+    document.addEventListener("keydown", handleEscape);
 
     return () => {
-
-      document.removeEventListener(
-        "keydown",
-        handleEscape
-      );
-
+      document.removeEventListener("keydown", handleEscape);
     };
-
   }, []);
-
 
   // =====================================================
   // BLOQUER LE SCROLL SUR MOBILE
   // =====================================================
 
   useEffect(() => {
-
     if (sidebarOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -68,25 +50,17 @@ export default function AdminLayout({ children }) {
     return () => {
       document.body.style.overflow = "";
     };
-
   }, [sidebarOpen]);
-
 
   // =====================================================
   // BASCULER LA SIDEBAR DESKTOP
   // =====================================================
 
   function toggleSidebar() {
-
-    setSidebarCollapsed(
-      (previous) => !previous
-    );
-
+    setSidebarCollapsed((previous) => !previous);
   }
 
-
   return (
-
     <div
       className="
         min-h-screen
@@ -96,7 +70,6 @@ export default function AdminLayout({ children }) {
         overflow-x-hidden
       "
     >
-
       {/* ==================================================
           SIDEBAR
       ================================================== */}
@@ -107,7 +80,6 @@ export default function AdminLayout({ children }) {
         onClose={() => setSidebarOpen(false)}
         onToggleCollapse={toggleSidebar}
       />
-
 
       {/* ==================================================
           CONTENU PRINCIPAL
@@ -128,24 +100,19 @@ export default function AdminLayout({ children }) {
           }
         `}
       >
-
         {/* ==================================================
             BOUTON MENU MOBILE
         ================================================== */}
 
         <button
           type="button"
-          onClick={() =>
-            setSidebarOpen(true)
-          }
+          onClick={() => setSidebarOpen(true)}
           aria-label="Ouvrir le menu"
           aria-expanded={sidebarOpen}
           className="
             fixed
-
             top-4
             left-4
-
             z-40
 
             flex
@@ -157,20 +124,20 @@ export default function AdminLayout({ children }) {
 
             rounded-xl
 
-            bg-slate-900
+            bg-accent
             text-white
 
-            shadow-lg
+            shadow-md
 
-            hover:bg-slate-700
+            hover:opacity-90
+            hover:-translate-y-0.5
             active:scale-95
 
-            transition
+            transition-all
 
             md:hidden
           "
         >
-
           <span
             className="
               text-2xl
@@ -179,16 +146,13 @@ export default function AdminLayout({ children }) {
           >
             ☰
           </span>
-
         </button>
-
 
         {/* ==================================================
             HEADER
         ================================================== */}
 
         <AdminHeader />
-
 
         {/* ==================================================
             CONTENU
@@ -213,10 +177,7 @@ export default function AdminLayout({ children }) {
             {children}
           </div>
         </main>
-
       </div>
-
     </div>
-
   );
 }

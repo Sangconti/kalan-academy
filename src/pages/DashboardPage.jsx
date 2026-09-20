@@ -604,25 +604,7 @@ export default function DashboardPage({
         try {
           /*
            * =================================================
-           * CORRECTION PRINCIPALE
-           * =================================================
-           *
-           * Lors du premier chargement en consultation,
-           * le Provider a déjà effectué :
-           *
-           * getAdminStudentView(studentId)
-           *
-           * Il possède donc déjà profile / subjects /
-           * stats / badges.
-           *
-           * On réutilise directement ces données.
-           *
-           * Le Dashboard ne refait donc PAS une seconde
-           * requête Supabase à l'ouverture.
-           *
-           * Si l'utilisateur clique volontairement sur
-           * "Actualiser", isRefresh === true et le
-           * Dashboard effectue alors sa requête habituelle.
+           * CONSULTATION
            * =================================================
            */
 
@@ -714,10 +696,6 @@ export default function DashboardPage({
               setLoading(false);
             }
 
-            /*
-             * Si le cache est encore frais,
-             * aucune requête réseau n'est nécessaire.
-             */
             const raw =
               sessionStorage.getItem(
                 getDashboardCacheKey(
@@ -817,8 +795,7 @@ export default function DashboardPage({
           );
 
           /*
-           * En cas d'erreur, on essaie encore
-           * le cache.
+           * Fallback cache
            */
           try {
             const fallbackUserId =
@@ -1009,10 +986,10 @@ export default function DashboardPage({
             theme-surface
             border
             theme-border
-            rounded-2xl
+            rounded-3xl
             p-6
             text-center
-            shadow-sm
+            shadow-lg
           "
         >
           <div
@@ -1020,8 +997,9 @@ export default function DashboardPage({
               w-14
               h-14
               rounded-2xl
-              bg-red-50
-              dark:bg-red-950/40
+              bg-accent-soft
+              border
+              border-accent
               mx-auto
               mb-4
               flex
@@ -1031,10 +1009,7 @@ export default function DashboardPage({
           >
             <Target
               size={28}
-              className="
-                text-red-500
-                dark:text-red-400
-              "
+              className="text-accent"
             />
           </div>
 
@@ -1076,9 +1051,12 @@ export default function DashboardPage({
               px-5
               py-3
               font-semibold
+              shadow-md
               hover:opacity-90
+              hover:-translate-y-0.5
               transition
               disabled:opacity-50
+              disabled:hover:translate-y-0
             "
           >
             <RefreshCw
@@ -1119,11 +1097,33 @@ export default function DashboardPage({
             theme-surface
             border
             theme-border
-            rounded-2xl
+            rounded-3xl
             p-6
             text-center
+            shadow-lg
           "
         >
+          <div
+            className="
+              w-14
+              h-14
+              rounded-2xl
+              bg-accent-soft
+              border
+              border-accent
+              mx-auto
+              mb-4
+              flex
+              items-center
+              justify-center
+            "
+          >
+            <BookOpen
+              size={26}
+              className="text-accent"
+            />
+          </div>
+
           <h2
             className="
               text-lg
@@ -1157,113 +1157,427 @@ export default function DashboardPage({
     <div
       className="
         w-full
-        space-y-5
+        space-y-6
         pb-6
       "
     >
       {/* =====================================================
-          EN-TÊTE
+          EN-TÊTE HERO
       ===================================================== */}
 
-      <div
+      <section
         className="
-          theme-surface
+          relative
+          overflow-hidden
+          rounded-3xl
+          bg-accent-soft
           border
-          theme-border
-          rounded-2xl
-          p-5
-          shadow-sm
+          border-accent
+          p-6
+          md:p-8
+          shadow-lg
         "
       >
+        {/* DÉCORATIONS */}
+
         <div
           className="
-            flex
-            items-center
-            justify-between
-            gap-4
+            absolute
+            -right-10
+            -top-10
+            w-40
+            h-40
+            rounded-full
+            bg-accent
+            opacity-10
+          "
+        />
+
+        <div
+          className="
+            absolute
+            -left-16
+            -bottom-20
+            w-48
+            h-48
+            rounded-full
+            bg-accent
+            opacity-10
+          "
+        />
+
+        <div
+          className="
+            absolute
+            right-16
+            -bottom-24
+            w-56
+            h-56
+            rounded-full
+            bg-accent
+            opacity-5
+          "
+        />
+
+        <div
+          className="
+            relative
+            z-10
           "
         >
-          <div className="min-w-0">
-            <p
-              className="
-                text-sm
-                theme-text-secondary
-                mb-1
-              "
-            >
-              Tableau de bord
-            </p>
+          {/* BADGE */}
 
-            <h1
-              className="
-                text-xl
-                font-bold
-                theme-text
-                truncate
-              "
-            >
-              {profile.full_name ||
-                "Élève"}
-            </h1>
-          </div>
-
-          <button
-            type="button"
-            onClick={() =>
-              loadDashboard(true)
-            }
-            disabled={refreshing}
-            title="Actualiser"
+          <div
             className="
-              shrink-0
-              w-10
-              h-10
-              rounded-xl
-              theme-bg
-              border
-              theme-border
-              flex
+              inline-flex
               items-center
-              justify-center
-              theme-text
-              hover:text-accent
-              transition
-              disabled:opacity-50
+              gap-2
+              px-3
+              py-1.5
+              rounded-full
+              bg-accent
+              text-white
+              text-xs
+              font-semibold
+              mb-4
             "
           >
-            <RefreshCw
-              size={18}
-              className={
-                refreshing
-                  ? "animate-spin"
-                  : ""
+            <TrendingUp size={14} />
+
+            Tableau de bord
+          </div>
+
+          {/* BIENVENUE */}
+
+          <p
+            className="
+              text-sm
+              md:text-base
+              font-semibold
+              text-accent
+              mb-1
+            "
+          >
+            Bienvenue sur ton espace d'apprentissage
+          </p>
+
+          {/* NOM */}
+
+          <h1
+            className="
+              text-2xl
+              md:text-3xl
+              font-bold
+              leading-tight
+              theme-text
+            "
+          >
+            {profile.full_name || "Élève"}
+          </h1>
+
+          {/* SLOGAN */}
+
+          <p
+            className="
+              text-lg
+              md:text-xl
+              font-bold
+              theme-text
+              mt-2
+            "
+          >
+            Continue ton apprentissage et progresse chaque jour.
+          </p>
+
+          {/* DESCRIPTION + ACTUALISATION */}
+
+          <div
+            className="
+              mt-4
+              flex
+              items-start
+              justify-between
+              gap-4
+            "
+          >
+            <p
+              className="
+                theme-text-secondary
+                max-w-2xl
+                leading-relaxed
+              "
+            >
+              Consulte ta progression, ton niveau, tes
+              statistiques et les badges que tu as obtenus.
+            </p>
+
+            <button
+              type="button"
+              onClick={() =>
+                loadDashboard(true)
               }
-            />
-          </button>
+              disabled={refreshing}
+              title="Actualiser"
+              className="
+                shrink-0
+                w-11
+                h-11
+                rounded-xl
+                bg-white/70
+                dark:bg-gray-950/30
+                border
+                border-accent
+                flex
+                items-center
+                justify-center
+                text-accent
+                hover:opacity-80
+                transition
+                disabled:opacity-50
+              "
+            >
+              <RefreshCw
+                size={18}
+                className={
+                  refreshing
+                    ? "animate-spin"
+                    : ""
+                }
+              />
+            </button>
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* =====================================================
           XP / NIVEAU
       ===================================================== */}
 
-      <div
+      <section
         className="
+          relative
+          overflow-hidden
           theme-surface
           border
           theme-border
-          rounded-2xl
+          rounded-3xl
           p-5
+          md:p-6
           shadow-sm
         "
       >
         <div
           className="
+            absolute
+            -right-10
+            -top-10
+            w-28
+            h-28
+            rounded-full
+            bg-accent
+            opacity-5
+          "
+        />
+
+        <div className="relative z-10">
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+              gap-4
+              mb-4
+            "
+          >
+            <div
+              className="
+                flex
+                items-center
+                gap-3
+              "
+            >
+              <div
+                className="
+                  w-11
+                  h-11
+                  rounded-2xl
+                  bg-accent-soft
+                  border
+                  border-accent
+                  flex
+                  items-center
+                  justify-center
+                "
+              >
+                <Star
+                  size={22}
+                  className="text-accent"
+                />
+              </div>
+
+              <div>
+                <p
+                  className="
+                    text-xs
+                    theme-text-secondary
+                  "
+                >
+                  Niveau
+                </p>
+
+                <p
+                  className="
+                    text-xl
+                    font-bold
+                    theme-text
+                  "
+                >
+                  {level}
+                </p>
+              </div>
+            </div>
+
+            <div className="text-right">
+              <p
+                className="
+                  text-xs
+                  theme-text-secondary
+                "
+              >
+                XP total
+              </p>
+
+              <p
+                className="
+                  text-xl
+                  font-bold
+                  text-accent
+                "
+              >
+                {xp} XP
+              </p>
+            </div>
+          </div>
+
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+              gap-3
+              mb-2
+            "
+          >
+            <span
+              className="
+                text-sm
+                font-semibold
+                theme-text
+              "
+            >
+              Progression vers le niveau {level + 1}
+            </span>
+
+            <span
+              className="
+                text-sm
+                theme-text-secondary
+              "
+            >
+              {xpInCurrentLevel} / {XP_PER_LEVEL} XP
+            </span>
+          </div>
+
+          <div
+            className="
+              w-full
+              h-3
+              rounded-full
+              theme-bg
+              overflow-hidden
+            "
+          >
+            <div
+              className="
+                h-full
+                rounded-full
+                bg-accent
+                transition-all
+              "
+              style={{
+                width: `${levelProgress}%`,
+              }}
+            />
+          </div>
+
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+              gap-3
+              mt-3
+            "
+          >
+            <span
+              className="
+                text-xs
+                theme-text-secondary
+              "
+            >
+              {xpInCurrentLevel} XP dans ce niveau
+            </span>
+
+            <span
+              className="
+                text-xs
+                theme-text-secondary
+              "
+            >
+              Encore {xpRemaining} XP
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          RANG
+      ===================================================== */}
+
+      <section
+        className="
+          relative
+          overflow-hidden
+          theme-surface
+          border
+          theme-border
+          rounded-3xl
+          p-5
+          md:p-6
+          shadow-sm
+        "
+      >
+        <div
+          className="
+            absolute
+            -right-10
+            -top-10
+            w-28
+            h-28
+            rounded-full
+            bg-accent
+            opacity-5
+          "
+        />
+
+        <div
+          className="
+            relative
+            z-10
             flex
             items-center
             justify-between
             gap-4
-            mb-4
           "
         >
           <div
@@ -1277,14 +1591,16 @@ export default function DashboardPage({
               className="
                 w-11
                 h-11
-                rounded-xl
+                rounded-2xl
                 bg-accent-soft
+                border
+                border-accent
                 flex
                 items-center
                 justify-center
               "
             >
-              <Star
+              <Trophy
                 size={22}
                 className="text-accent"
               />
@@ -1297,189 +1613,47 @@ export default function DashboardPage({
                   theme-text-secondary
                 "
               >
-                Niveau
+                Rang
               </p>
 
               <p
                 className="
-                  text-xl
+                  text-lg
                   font-bold
                   theme-text
                 "
               >
-                {level}
+                {rank}
               </p>
             </div>
           </div>
 
-          <div className="text-right">
-            <p
-              className="
-                text-xs
-                theme-text-secondary
-              "
-            >
-              XP total
-            </p>
-
-            <p
-              className="
-                text-xl
-                font-bold
-                text-accent
-              "
-            >
-              {xp} XP
-            </p>
-          </div>
-        </div>
-
-        <div
-          className="
-            flex
-            items-center
-            justify-between
-            gap-3
-            mb-2
-          "
-        >
-          <span
-            className="
-              text-sm
-              font-semibold
-              theme-text
-            "
-          >
-            Progression vers le niveau {level + 1}
-          </span>
-
-          <span
-            className="
-              text-sm
-              theme-text-secondary
-            "
-          >
-            {xpInCurrentLevel} / {XP_PER_LEVEL} XP
-          </span>
-        </div>
-
-        <div
-          className="
-            w-full
-            h-3
-            rounded-full
-            theme-bg
-            overflow-hidden
-          "
-        >
           <div
             className="
-              h-full
-              rounded-full
-              bg-accent
-              transition-all
-            "
-            style={{
-              width: `${levelProgress}%`,
-            }}
-          />
-        </div>
-
-        <div
-          className="
-            flex
-            items-center
-            justify-between
-            gap-3
-            mt-3
-          "
-        >
-          <span
-            className="
-              text-xs
-              theme-text-secondary
-            "
-          >
-            {xpInCurrentLevel} XP dans ce niveau
-          </span>
-
-          <span
-            className="
-              text-xs
-              theme-text-secondary
-            "
-          >
-            Encore {xpRemaining} XP
-          </span>
-        </div>
-      </div>
-
-      {/* =====================================================
-          RANG
-      ===================================================== */}
-
-      <div
-        className="
-          theme-surface
-          border
-          theme-border
-          rounded-2xl
-          p-5
-          shadow-sm
-        "
-      >
-        <div
-          className="
-            flex
-            items-center
-            gap-3
-          "
-        >
-          <div
-            className="
-              w-11
-              h-11
+              hidden
+              sm:flex
+              items-center
+              gap-2
+              px-3
+              py-2
               rounded-xl
               bg-accent-soft
-              flex
-              items-center
-              justify-center
+              text-accent
+              text-sm
+              font-semibold
             "
           >
-            <Trophy
-              size={22}
-              className="text-accent"
-            />
-          </div>
-
-          <div>
-            <p
-              className="
-                text-xs
-                theme-text-secondary
-              "
-            >
-              Rang
-            </p>
-
-            <p
-              className="
-                text-lg
-                font-bold
-                theme-text
-              "
-            >
-              {rank}
-            </p>
+            <Star size={15} />
+            XP
           </div>
         </div>
-      </div>
+      </section>
 
       {/* =====================================================
           STATISTIQUES
       ===================================================== */}
 
-      <div>
+      <section>
         <div
           className="
             flex
@@ -1747,13 +1921,13 @@ export default function DashboardPage({
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* =====================================================
           PROGRESSION PAR MATIÈRE
       ===================================================== */}
 
-      <div>
+      <section>
         <div
           className="
             flex
@@ -1790,6 +1964,25 @@ export default function DashboardPage({
               text-center
             "
           >
+            <div
+              className="
+                w-11
+                h-11
+                rounded-2xl
+                bg-accent-soft
+                mx-auto
+                mb-3
+                flex
+                items-center
+                justify-center
+              "
+            >
+              <BookOpen
+                size={21}
+                className="text-accent"
+              />
+            </div>
+
             <p
               className="
                 text-sm
@@ -1811,6 +2004,8 @@ export default function DashboardPage({
                 <div
                   key={subjectName}
                   className="
+                    relative
+                    overflow-hidden
                     theme-surface
                     border
                     theme-border
@@ -1821,87 +2016,102 @@ export default function DashboardPage({
                 >
                   <div
                     className="
-                      flex
-                      items-center
-                      justify-between
-                      gap-3
-                      mb-2
-                    "
-                  >
-                    <p
-                      className="
-                        font-semibold
-                        theme-text
-                        truncate
-                      "
-                    >
-                      {subjectName}
-                    </p>
-
-                    <span
-                      className="
-                        text-sm
-                        font-semibold
-                        text-accent
-                        shrink-0
-                      "
-                    >
-                      {subject.percentage}%
-                    </span>
-                  </div>
-
-                  <div
-                    className="
-                      w-full
-                      h-2.5
+                      absolute
+                      -right-8
+                      -top-8
+                      w-20
+                      h-20
                       rounded-full
-                      theme-bg
-                      overflow-hidden
+                      bg-accent
+                      opacity-5
                     "
-                  >
+                  />
+
+                  <div className="relative z-10">
                     <div
                       className="
-                        h-full
-                        rounded-full
-                        bg-accent
-                        transition-all
+                        flex
+                        items-center
+                        justify-between
+                        gap-3
+                        mb-2
                       "
-                      style={{
-                        width: `${subject.percentage}%`,
-                      }}
-                    />
-                  </div>
+                    >
+                      <p
+                        className="
+                          font-semibold
+                          theme-text
+                          truncate
+                        "
+                      >
+                        {subjectName}
+                      </p>
 
-                  <p
-                    className="
-                      text-xs
-                      theme-text-secondary
-                      mt-2
-                    "
-                  >
-                    {subject.completed} leçon
-                    {subject.completed !== 1
-                      ? "s"
-                      : ""}{" "}
-                    terminée
-                    {subject.completed !== 1
-                      ? "s"
-                      : ""}{" "}
-                    sur{" "}
-                    {subject.total}
-                  </p>
+                      <span
+                        className="
+                          text-sm
+                          font-semibold
+                          text-accent
+                          shrink-0
+                        "
+                      >
+                        {subject.percentage}%
+                      </span>
+                    </div>
+
+                    <div
+                      className="
+                        w-full
+                        h-2.5
+                        rounded-full
+                        theme-bg
+                        overflow-hidden
+                      "
+                    >
+                      <div
+                        className="
+                          h-full
+                          rounded-full
+                          bg-accent
+                          transition-all
+                        "
+                        style={{
+                          width: `${subject.percentage}%`,
+                        }}
+                      />
+                    </div>
+
+                    <p
+                      className="
+                        text-xs
+                        theme-text-secondary
+                        mt-2
+                      "
+                    >
+                      {subject.completed} leçon
+                      {subject.completed !== 1
+                        ? "s"
+                        : ""}{" "}
+                      terminée
+                      {subject.completed !== 1
+                        ? "s"
+                        : ""}{" "}
+                      sur{" "}
+                      {subject.total}
+                    </p>
+                  </div>
                 </div>
               )
             )}
           </div>
         )}
-      </div>
+      </section>
 
       {/* =====================================================
           BADGES
       ===================================================== */}
 
-      <div>
+      <section>
         <div
           className="
             flex
@@ -1943,6 +2153,8 @@ export default function DashboardPage({
                 h-12
                 rounded-2xl
                 bg-accent-soft
+                border
+                border-accent
                 mx-auto
                 mb-3
                 flex
@@ -1981,6 +2193,8 @@ export default function DashboardPage({
                     `badge-${index}`
                   }
                   className="
+                    relative
+                    overflow-hidden
                     theme-surface
                     border
                     theme-border
@@ -1991,57 +2205,74 @@ export default function DashboardPage({
                 >
                   <div
                     className="
-                      w-12
-                      h-12
-                      rounded-2xl
-                      bg-accent-soft
-                      flex
-                      items-center
-                      justify-center
-                      mb-3
+                      absolute
+                      -right-8
+                      -top-8
+                      w-20
+                      h-20
+                      rounded-full
+                      bg-accent
+                      opacity-5
                     "
-                  >
-                    {badge?.icon ? (
-                      <span className="text-2xl">
-                        {badge.icon}
-                      </span>
-                    ) : (
-                      <Award
-                        size={24}
-                        className="text-accent"
-                      />
-                    )}
-                  </div>
+                  />
 
-                  <p
-                    className="
-                      font-semibold
-                      theme-text
-                      text-sm
-                    "
-                  >
-                    {badge?.name ||
-                      "Badge"}
-                  </p>
-
-                  {badge?.description && (
-                    <p
+                  <div className="relative z-10">
+                    <div
                       className="
-                        text-xs
-                        theme-text-secondary
-                        mt-1
-                        line-clamp-3
+                        w-12
+                        h-12
+                        rounded-2xl
+                        bg-accent-soft
+                        border
+                        border-accent
+                        flex
+                        items-center
+                        justify-center
+                        mb-3
                       "
                     >
-                      {badge.description}
+                      {badge?.icon ? (
+                        <span className="text-2xl">
+                          {badge.icon}
+                        </span>
+                      ) : (
+                        <Award
+                          size={24}
+                          className="text-accent"
+                        />
+                      )}
+                    </div>
+
+                    <p
+                      className="
+                        font-semibold
+                        theme-text
+                        text-sm
+                      "
+                    >
+                      {badge?.name ||
+                        "Badge"}
                     </p>
-                  )}
+
+                    {badge?.description && (
+                      <p
+                        className="
+                          text-xs
+                          theme-text-secondary
+                          mt-1
+                          line-clamp-3
+                        "
+                      >
+                        {badge.description}
+                      </p>
+                    )}
+                  </div>
                 </div>
               )
             )}
           </div>
         )}
-      </div>
+      </section>
     </div>
   );
 }

@@ -74,14 +74,6 @@ export default function ExerciseQuiz({
   // ====================================
   // 🔀 MÉLANGE ALÉATOIRE
   // ====================================
-  //
-  // Retourne un nouveau tableau sans
-  // modifier le tableau original.
-  //
-  // Fisher-Yates permet un mélange
-  // réellement aléatoire des éléments.
-  //
-  // ====================================
 
   function shuffleArray(array) {
 
@@ -120,20 +112,6 @@ export default function ExerciseQuiz({
 
   // ====================================
   // 🔀 PRÉPARER LE QUIZ
-  // ====================================
-  //
-  // 1. Les questions sont mélangées.
-  // 2. Les choix de chaque question
-  //    sont mélangés.
-  // 3. correct_index est recalculé.
-  //
-  // IMPORTANT :
-  // Cette fonction est appelée uniquement
-  // lors du chargement du quiz.
-  //
-  // Le mélange ne se reproduit donc pas
-  // à chaque render.
-  //
   // ====================================
 
   function prepareShuffledQuestions(
@@ -222,8 +200,6 @@ export default function ExerciseQuiz({
 
     setLoading(true);
 
-    // Réinitialiser les réponses
-    // lorsqu'un nouveau quiz est chargé.
     setAnswers({});
 
     setResult(null);
@@ -236,10 +212,6 @@ export default function ExerciseQuiz({
           quizId
         );
 
-
-      // ==================================
-      // 🔀 MÉLANGE DU QUIZ
-      // ==================================
 
       const shuffledQuestions =
         prepareShuffledQuestions(
@@ -318,20 +290,6 @@ export default function ExerciseQuiz({
 
   // ====================================
   // CORRECTION LOCALE
-  // ====================================
-  //
-  // Utilisée en mode :
-  // - consultation
-  // - aperçu
-  //
-  // IMPORTANT :
-  // aucune sauvegarde Dexie,
-  // aucune écriture Supabase,
-  // aucun XP réel,
-  // aucune progression,
-  // aucun badge,
-  // aucune syncQueue.
-  //
   // ====================================
 
   function calculateReadonlyResult() {
@@ -828,7 +786,7 @@ export default function ExerciseQuiz({
 
       <div
         className="
-          space-y-5
+          space-y-6
         "
       >
 
@@ -857,7 +815,9 @@ export default function ExerciseQuiz({
           <h2
             className="
               text-2xl
+              md:text-3xl
               font-bold
+              leading-tight
               theme-text
             "
           >
@@ -957,6 +917,7 @@ export default function ExerciseQuiz({
                 flex
                 items-center
                 justify-center
+                shadow-md
               "
             >
 
@@ -972,6 +933,7 @@ export default function ExerciseQuiz({
             <h3
               className="
                 text-xl
+                md:text-2xl
                 font-bold
                 theme-text
               "
@@ -1027,10 +989,11 @@ export default function ExerciseQuiz({
               <div
                 className="
                   theme-surface
-                  rounded-2xl
+                  rounded-3xl
                   border
                   theme-border
                   p-4
+                  shadow-sm
                 "
               >
 
@@ -1064,10 +1027,11 @@ export default function ExerciseQuiz({
               <div
                 className="
                   theme-surface
-                  rounded-2xl
+                  rounded-3xl
                   border
                   theme-border
                   p-4
+                  shadow-sm
                 "
               >
 
@@ -1220,7 +1184,7 @@ export default function ExerciseQuiz({
       <div
         className="
           theme-surface
-          rounded-2xl
+          rounded-3xl
           shadow-sm
           border
           theme-border
@@ -1308,11 +1272,12 @@ export default function ExerciseQuiz({
               key={question.id}
               className="
                 theme-surface
-                rounded-2xl
+                rounded-3xl
                 shadow-sm
                 border
                 theme-border
                 p-5
+                md:p-6
               "
             >
 
@@ -1472,6 +1437,7 @@ export default function ExerciseQuiz({
                             flex-1
                             min-w-0
                             break-words
+                            theme-text
                           "
                         >
 
@@ -1535,8 +1501,9 @@ export default function ExerciseQuiz({
           px-6
           py-3.5
           rounded-xl
-          shadow-sm
+          shadow-md
           hover:opacity-90
+          hover:-translate-y-0.5
           transition
           disabled:opacity-50
           disabled:cursor-not-allowed

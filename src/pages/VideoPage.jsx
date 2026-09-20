@@ -35,7 +35,8 @@ import {
   Award,
   BookOpen,
   Loader2,
-  CircleHelp
+  CircleHelp,
+  GraduationCap
 } from "lucide-react";
 
 
@@ -120,14 +121,6 @@ export default function VideoPage({
       // UTILISATEUR
       // ========================================
 
-      // En mode consultation ou aperçu,
-      // aucune donnée élève ne doit être modifiée.
-      //
-      // L'administrateur reste connecté avec son
-      // propre compte mais celui-ci ne doit jamais
-      // être utilisé pour enregistrer une tentative,
-      // une progression ou de l'XP.
-
       if (
         !isConsultation &&
         !isStudentPreview
@@ -190,16 +183,12 @@ export default function VideoPage({
         data: quizData,
         error: quizError
       } = await supabase
-
         .from("quizzes")
-
         .select("*")
-
         .eq(
           "lesson_id",
           lessonId
         )
-
         .maybeSingle();
 
 
@@ -233,16 +222,12 @@ export default function VideoPage({
         data: questionsData,
         error: questionsError
       } = await supabase
-
         .from("quiz_questions")
-
         .select("*")
-
         .eq(
           "quiz_id",
           quizData.id
         )
-
         .order(
           "order_number",
           {
@@ -261,18 +246,15 @@ export default function VideoPage({
       setQuestions(
         (questionsData || []).map(
           question => ({
-
             ...question,
 
             choices:
               question.choices ||
               question.options ||
               []
-
           })
         )
       );
-
 
     }
 
@@ -315,11 +297,8 @@ export default function VideoPage({
 
     setAnswers(
       previous => ({
-
         ...previous,
-
         [questionId]: index
-
       })
     );
 
@@ -376,10 +355,6 @@ export default function VideoPage({
         : 0;
 
 
-    // ========================================
-    // XP THÉORIQUE
-    // ========================================
-
     let xpGain = 20;
 
 
@@ -395,15 +370,10 @@ export default function VideoPage({
 
 
     return {
-
       score,
-
       goodAnswers,
-
       total,
-
       xp: xpGain
-
     };
 
   }
@@ -446,13 +416,6 @@ export default function VideoPage({
       // MODE CONSULTATION
       // ======================================
 
-      // Aucun appel Supabase d'écriture.
-      // Aucun XP.
-      // Aucun badge.
-      // Aucune progression.
-      // Aucune tentative de quiz.
-      // Aucun compte élève modifié.
-
       if (isConsultation) {
 
         const consultationResult =
@@ -466,7 +429,6 @@ export default function VideoPage({
 
 
         setResult({
-
           score:
             consultationResult.score,
 
@@ -487,7 +449,6 @@ export default function VideoPage({
 
           preview:
             false
-
         });
 
 
@@ -499,16 +460,6 @@ export default function VideoPage({
       // ======================================
       // MODE APERÇU APPLICATION ÉLÈVE
       // ======================================
-
-      // IMPORTANT :
-      //
-      // L'aperçu est entièrement en lecture seule.
-      //
-      // Aucun insert dans quiz_attempts.
-      // Aucun upsert dans user_progress.
-      // Aucun ajout XP.
-      // Aucun badge.
-      // Aucun compte élève modifié.
 
       if (isStudentPreview) {
 
@@ -523,7 +474,6 @@ export default function VideoPage({
 
 
         setResult({
-
           score:
             previewResult.score,
 
@@ -544,7 +494,6 @@ export default function VideoPage({
 
           preview:
             true
-
         });
 
 
@@ -603,11 +552,8 @@ export default function VideoPage({
       const {
         error: attemptError
       } = await supabase
-
         .from("quiz_attempts")
-
         .insert({
-
           user_id:
             user.id,
 
@@ -615,7 +561,6 @@ export default function VideoPage({
             quiz.id,
 
           score
-
         });
 
 
@@ -636,11 +581,8 @@ export default function VideoPage({
       const {
         error: progressError
       } = await supabase
-
         .from("user_progress")
-
         .upsert({
-
           user_id:
             user.id,
 
@@ -660,7 +602,6 @@ export default function VideoPage({
             score >= 80
               ? new Date().toISOString()
               : null
-
         });
 
 
@@ -723,7 +664,6 @@ export default function VideoPage({
       // ======================================
 
       setResult({
-
         score,
 
         goodAnswers,
@@ -743,7 +683,6 @@ export default function VideoPage({
 
         preview:
           false
-
       });
 
     }
@@ -796,49 +735,20 @@ export default function VideoPage({
   if (loading) {
 
     return (
+      <div className="min-h-[60vh] theme-bg theme-text flex flex-col items-center justify-center px-6">
 
-      <div className="
-        min-h-[60vh]
-        flex
-        flex-col
-        items-center
-        justify-center
-        px-6
-      ">
-
-        <div className="
-          w-14
-          h-14
-          rounded-2xl
-          bg-blue-100
-          flex
-          items-center
-          justify-center
-          mb-4
-        ">
-
+        <div className="w-14 h-14 rounded-2xl bg-accent-soft border border-accent flex items-center justify-center mb-4">
           <Loader2
             size={28}
-            className="
-              text-blue-600
-              animate-spin
-            "
+            className="text-accent animate-spin"
           />
-
         </div>
 
-
-        <p className="
-          text-gray-600
-          font-medium
-        ">
-
+        <p className="theme-text font-medium">
           Chargement de la vidéo...
-
         </p>
 
       </div>
-
     );
 
   }
@@ -851,74 +761,33 @@ export default function VideoPage({
   if (!lesson) {
 
     return (
+      <div className="min-h-screen theme-bg theme-text max-w-3xl mx-auto px-5 py-10 text-center">
 
-      <div className="
-        max-w-3xl
-        mx-auto
-        px-5
-        py-10
-        text-center
-      ">
+        <div className="theme-surface rounded-3xl border theme-border shadow-sm p-8">
 
-        <div className="
-          bg-white
-          rounded-2xl
-          border
-          border-gray-100
-          shadow-sm
-          p-8
-        ">
+          <div className="w-16 h-16 rounded-2xl bg-accent-soft border border-accent mx-auto mb-4 flex items-center justify-center">
+            <BookOpen
+              size={40}
+              className="text-accent"
+            />
+          </div>
 
-          <BookOpen
-            size={40}
-            className="
-              mx-auto
-              mb-4
-              text-gray-300
-            "
-          />
-
-          <h1 className="
-            text-xl
-            font-bold
-            text-gray-900
-          ">
-
+          <h1 className="text-xl font-bold theme-text">
             Leçon introuvable
-
           </h1>
 
-
           <button
-            onClick={() =>
-              navigate(-1)
-            }
-            className="
-              mt-5
-              inline-flex
-              items-center
-              gap-2
-              bg-blue-600
-              text-white
-              px-5
-              py-3
-              rounded-xl
-              font-semibold
-              hover:bg-blue-700
-              transition
-            "
+            type="button"
+            onClick={() => navigate(-1)}
+            className="mt-5 inline-flex items-center gap-2 bg-accent text-white px-5 py-3 rounded-xl font-semibold shadow-md hover:opacity-90 hover:-translate-y-0.5 transition"
           >
-
             <ArrowLeft size={18} />
-
             Retour
-
           </button>
 
         </div>
 
       </div>
-
     );
 
   }
@@ -948,84 +817,57 @@ export default function VideoPage({
   // ==========================================
 
   return (
-
-    <div className="
-      min-h-screen
-      bg-gray-50
-      pb-10
-    ">
-
+    <div className="min-h-screen theme-bg theme-text pb-10">
 
       {/* =====================================
           HEADER
       ====================================== */}
 
-      <div className="
-        bg-white
-        border-b
-        border-gray-100
-        px-5
-        py-4
-      ">
+      <div className="theme-surface theme-border border-b shadow-sm px-5 py-4">
 
-        <button
-          onClick={() => {
+        <div className="max-w-4xl mx-auto">
 
-            if (isConsultation) {
+          <button
+            type="button"
+            onClick={() => {
 
-              navigate(
-                `/admin/student/${studentId}/consultation`
-              );
+              if (isConsultation) {
 
-              return;
+                navigate(
+                  `/admin/student/${studentId}/consultation`
+                );
 
-            }
+                return;
+
+              }
 
 
-            if (isStudentPreview) {
+              if (isStudentPreview) {
 
-              navigate(
-                "/admin/student-preview"
-              );
+                navigate(
+                  "/admin/student-preview"
+                );
 
-              return;
+                return;
 
-            }
+              }
 
 
-            navigate("/");
+              navigate("/");
 
-          }}
-          className="
-            flex
-            items-center
-            gap-3
-            text-xl
-            font-bold
-            text-gray-900
-            hover:text-blue-600
-            transition
-          "
-        >
+            }}
+            className="inline-flex items-center gap-3 text-xl font-bold theme-text hover:text-accent transition"
+          >
 
-          <span className="
-            w-9
-            h-9
-            rounded-xl
-            bg-blue-600
-            text-white
-            flex
-            items-center
-            justify-center
-          ">
+            <span className="w-10 h-10 rounded-xl bg-accent text-white flex items-center justify-center shadow-sm">
+              <GraduationCap size={23} />
+            </span>
 
-            🎓
+            Kalan Academy
 
-          </span>
+          </button>
 
-          Kalan Academy
-
-        </button>
+        </div>
 
       </div>
 
@@ -1034,39 +876,19 @@ export default function VideoPage({
           CONTENU
       ====================================== */}
 
-      <div className="
-        max-w-4xl
-        mx-auto
-        px-5
-        py-6
-      ">
-
+      <div className="max-w-4xl mx-auto px-5 py-6">
 
         {/* ===================================
             NAVIGATION
         ==================================== */}
 
         <button
-          onClick={() =>
-            navigate(-1)
-          }
-          className="
-            inline-flex
-            items-center
-            gap-2
-            text-sm
-            font-medium
-            text-gray-600
-            hover:text-blue-600
-            transition
-            mb-5
-          "
+          type="button"
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl theme-surface border theme-border shadow-sm text-sm font-medium theme-text hover:text-accent transition mb-5"
         >
-
           <ArrowLeft size={18} />
-
           Retour à la leçon
-
         </button>
 
 
@@ -1074,50 +896,76 @@ export default function VideoPage({
             TITRE
         ==================================== */}
 
-        <div className="mb-5">
+        <div className="relative overflow-hidden rounded-3xl bg-accent-soft border border-accent shadow-lg p-6 md:p-8 mb-7">
 
-          <p className="
-            text-sm
-            font-medium
-            text-blue-600
-            mb-1
-          ">
+          <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent opacity-10" />
 
-            {isConsultation
-              ? "👁️ Vidéo en consultation"
-              : isStudentPreview
-                ? "👁️ Aperçu de la vidéo"
-                : "🎬 Vidéo de cours"
-            }
+          <div className="absolute -left-16 -bottom-20 w-48 h-48 rounded-full bg-accent opacity-10" />
 
-          </p>
+          <div className="absolute right-16 -bottom-24 w-56 h-56 rounded-full bg-accent opacity-5" />
 
+          <div className="relative z-10">
 
-          <h1 className="
-            text-2xl
-            md:text-3xl
-            font-bold
-            text-gray-900
-          ">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent text-white text-xs font-semibold mb-4">
 
-            {lesson.title}
+              <PlayCircle size={14} />
 
-          </h1>
+              {isConsultation
+                ? "Vidéo en consultation"
+                : isStudentPreview
+                  ? "Aperçu de la vidéo"
+                  : "Vidéo de cours"
+              }
+
+            </div>
 
 
-          {lesson.description && (
+            <h1 className="text-2xl md:text-3xl font-bold leading-tight theme-text">
+              {lesson.title}
+            </h1>
 
-            <p className="
-              text-gray-500
-              mt-2
-              leading-relaxed
-            ">
 
-              {lesson.description}
+            {lesson.description && (
 
-            </p>
+              <p className="theme-text-secondary mt-3 leading-relaxed">
+                {lesson.description}
+              </p>
 
-          )}
+            )}
+
+
+            <div className="flex flex-wrap items-center gap-3 mt-5">
+
+              {lesson.duration_minutes && (
+
+                <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-gray-950/30 theme-text text-sm font-medium border border-white/50 dark:border-white/10">
+
+                  <BookOpen
+                    size={16}
+                    className="text-accent"
+                  />
+
+                  {lesson.duration_minutes} min
+
+                </div>
+
+              )}
+
+
+              <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-gray-950/30 theme-text text-sm font-medium border border-white/50 dark:border-white/10">
+
+                <PlayCircle
+                  size={16}
+                  className="text-accent"
+                />
+
+                Vidéo
+
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
 
@@ -1126,14 +974,7 @@ export default function VideoPage({
             VIDÉO
         ==================================== */}
 
-        <div className="
-          bg-black
-          rounded-3xl
-          overflow-hidden
-          shadow-xl
-          mb-6
-          aspect-video
-        ">
+        <div className="bg-black rounded-3xl overflow-hidden shadow-xl mb-6 aspect-video">
 
           {lesson.video_url ? (
 
@@ -1142,53 +983,25 @@ export default function VideoPage({
               playsInline
               preload="metadata"
               src={lesson.video_url}
-              className="
-                w-full
-                h-full
-                object-contain
-              "
+              className="w-full h-full object-contain"
             />
 
           ) : (
 
-            <div className="
-              w-full
-              h-full
-              flex
-              flex-col
-              items-center
-              justify-center
-              text-white
-              px-6
-              text-center
-            ">
+            <div className="w-full h-full flex flex-col items-center justify-center text-white px-6 text-center">
 
               <PlayCircle
                 size={50}
-                className="
-                  text-gray-500
-                  mb-4
-                "
+                className="text-gray-500 mb-4"
               />
 
-              <p className="
-                font-semibold
-              ">
-
+              <p className="font-semibold">
                 Vidéo indisponible
-
               </p>
 
-
-              <p className="
-                text-sm
-                text-gray-400
-                mt-1
-              ">
-
+              <p className="text-sm text-gray-400 mt-1">
                 Cette leçon ne contient pas encore
                 de vidéo.
-
               </p>
 
             </div>
@@ -1202,35 +1015,15 @@ export default function VideoPage({
             INFORMATIONS LEÇON
         ==================================== */}
 
-        <div className="
-          bg-white
-          rounded-2xl
-          border
-          border-gray-100
-          shadow-sm
-          p-5
-          mb-8
-        ">
+        <div className="theme-surface rounded-3xl border theme-border shadow-sm p-5 md:p-6 mb-8">
 
-          <div className="
-            flex
-            items-center
-            gap-3
-          ">
+          <div className="flex items-center gap-3">
 
-            <div className="
-              w-11
-              h-11
-              rounded-xl
-              bg-blue-50
-              flex
-              items-center
-              justify-center
-            ">
+            <div className="w-11 h-11 rounded-2xl bg-accent-soft border border-accent flex items-center justify-center shrink-0">
 
               <BookOpen
                 size={22}
-                className="text-blue-600"
+                className="text-accent"
               />
 
             </div>
@@ -1238,19 +1031,11 @@ export default function VideoPage({
 
             <div>
 
-              <p className="
-                text-sm
-                text-gray-500
-              ">
-
+              <p className="text-sm theme-text-secondary">
                 Leçon
-
               </p>
 
-              <p className="
-                font-semibold
-                text-gray-900
-              ">
+              <p className="font-semibold theme-text">
 
                 {isConsultation
                   ? "Consultation en lecture seule."
@@ -1278,84 +1063,66 @@ export default function VideoPage({
 
             {/* TITRE QUIZ */}
 
-            <div className="
-              mb-5
-            ">
+            <div className="relative overflow-hidden rounded-3xl bg-accent-soft border border-accent shadow-lg p-6 md:p-7 mb-6">
 
-              <div className="
-                flex
-                items-center
-                gap-3
-                mb-2
-              ">
+              <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent opacity-10" />
 
-                <div className="
-                  w-11
-                  h-11
-                  rounded-xl
-                  bg-purple-50
-                  flex
-                  items-center
-                  justify-center
-                ">
+              <div className="absolute -left-16 -bottom-20 w-48 h-48 rounded-full bg-accent opacity-10" />
 
-                  <CircleHelp
-                    size={23}
-                    className="text-purple-600"
-                  />
+              <div className="absolute right-16 -bottom-24 w-56 h-56 rounded-full bg-accent opacity-5" />
 
-                </div>
+              <div className="relative z-10">
+
+                <div className="flex items-center gap-3">
+
+                  <div className="w-12 h-12 rounded-2xl bg-accent text-white flex items-center justify-center shrink-0 shadow-sm">
+
+                    <CircleHelp size={24} />
+
+                  </div>
 
 
-                <div>
+                  <div>
 
-                  <p className="
-                    text-sm
-                    font-medium
-                    text-purple-600
-                  ">
+                    <p className="text-sm font-semibold text-accent">
 
-                    {isConsultation
-                      ? "👁️ Quiz en consultation"
-                      : isStudentPreview
-                        ? "👁️ Quiz en aperçu"
-                        : ""
-                    }
+                      {isConsultation
+                        ? "Quiz en consultation"
+                        : isStudentPreview
+                          ? "Quiz en aperçu"
+                          : "Quiz de validation"
+                      }
 
-                  </p>
+                    </p>
 
-                  <h2 className="
-                    text-xl
-                    font-bold
-                    text-gray-900
-                  ">
 
-                    {isConsultation || isStudentPreview
-                      ? "Voir le quiz"
-                      : "Vérifie tes connaissances"
-                    }
+                    <h2 className="text-xl md:text-2xl font-bold theme-text">
 
-                  </h2>
+                      {isConsultation ||
+                      isStudentPreview
+                        ? "Voir le quiz"
+                        : "Vérifie tes connaissances"
+                      }
+
+                    </h2>
+
+                  </div>
 
                 </div>
+
+
+                <p className="theme-text-secondary text-sm mt-4 leading-relaxed">
+
+                  {isConsultation
+                    ? "Réponds aux questions pour voir le résultat. Aucune donnée de l'élève ne sera modifiée."
+                    : isStudentPreview
+                      ? "Réponds aux questions pour voir le résultat. L'aperçu ne modifie aucune donnée d'élève."
+                      : "Réponds à toutes les questions pour valider le quiz."
+                  }
+
+                </p>
 
               </div>
-
-
-              <p className="
-                text-sm
-                text-gray-500
-                mt-2
-              ">
-
-                {isConsultation
-                  ? "Réponds aux questions pour voir le résultat. Aucune donnée de l'élève ne sera modifiée."
-                  : isStudentPreview
-                    ? "Réponds aux questions pour voir le résultat. L'aperçu ne modifie aucune donnée d'élève."
-                    : "Réponds à toutes les questions pour valider le quiz."
-                }
-
-              </p>
 
             </div>
 
@@ -1364,57 +1131,27 @@ export default function VideoPage({
 
             {!result && (
 
-              <div className="
-                mb-5
-              ">
+              <div className="theme-surface rounded-3xl border theme-border shadow-sm p-5 mb-5">
 
-                <div className="
-                  flex
-                  items-center
-                  justify-between
-                  text-sm
-                  mb-2
-                ">
+                <div className="flex items-center justify-between text-sm mb-2">
 
-                  <span className="
-                    font-medium
-                    text-gray-700
-                  ">
-
+                  <span className="font-medium theme-text">
                     Progression
-
                   </span>
 
-
-                  <span className="
-                    text-gray-500
-                  ">
-
-                    {answeredCount}/
-                    {questions.length}
-
+                  <span className="theme-text-secondary">
+                    {answeredCount}/{questions.length}
                   </span>
 
                 </div>
 
 
-                <div className="
-                  h-2
-                  bg-gray-100
-                  rounded-full
-                  overflow-hidden
-                ">
+                <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
 
                   <div
-                    className="
-                      h-full
-                      bg-blue-600
-                      rounded-full
-                      transition-all
-                    "
+                    className="h-full bg-accent rounded-full transition-all"
                     style={{
-                      width:
-                        `${progress}%`
+                      width: `${progress}%`
                     }}
                   />
 
@@ -1431,264 +1168,167 @@ export default function VideoPage({
 
             {result ? (
 
-              <div className="
-                bg-white
-                rounded-3xl
-                border
-                border-gray-100
-                shadow-sm
-                p-6
-                md:p-8
-                text-center
-              ">
+              <div className="relative overflow-hidden rounded-3xl bg-accent-soft border border-accent shadow-lg p-6 md:p-8 text-center">
 
-                <div className="
-                  w-16
-                  h-16
-                  mx-auto
-                  mb-4
-                  rounded-full
-                  bg-blue-50
-                  flex
-                  items-center
-                  justify-center
-                ">
+                <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent opacity-10" />
 
-                  <Trophy
-                    size={32}
-                    className="text-blue-600"
-                  />
+                <div className="absolute -left-16 -bottom-20 w-48 h-48 rounded-full bg-accent opacity-10" />
 
-                </div>
+                <div className="absolute right-16 -bottom-24 w-56 h-56 rounded-full bg-accent opacity-5" />
 
 
-                <p className="
-                  text-sm
-                  font-medium
-                  text-blue-600
-                ">
+                <div className="relative z-10">
 
-                  {result.preview
-                    ? "Quiz aperçu"
-                    : result.consultation
-                      ? "Quiz consulté"
-                      : "Quiz terminé"
-                  }
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-accent text-white flex items-center justify-center shadow-md">
 
-                </p>
-
-
-                <h2 className="
-                  text-2xl
-                  font-bold
-                  text-gray-900
-                  mt-1
-                ">
-
-                  {getResultMessage(
-                    result.score
-                  )}
-
-                </h2>
-
-
-                <div className="
-                  text-5xl
-                  font-bold
-                  text-blue-600
-                  mt-4
-                ">
-
-                  {result.score}%
-
-                </div>
-
-
-                <p className="
-                  text-gray-500
-                  mt-2
-                ">
-
-                  {result.goodAnswers}
-                  /
-                  {result.total}
-                  {" "}
-                  bonnes réponses
-
-                </p>
-
-
-                <div className="
-                  grid
-                  grid-cols-2
-                  gap-3
-                  mt-6
-                ">
-
-                  <div className="
-                    bg-gray-50
-                    rounded-xl
-                    p-4
-                  ">
-
-                    <Award
-                      size={20}
-                      className="
-                        mx-auto
-                        text-yellow-500
-                        mb-2
-                      "
-                    />
-
-                    <p className="
-                      text-xs
-                      text-gray-500
-                    ">
-
-                      {result.preview ||
-                      result.consultation
-                        ? "XP théoriques"
-                        : "XP gagnés"
-                      }
-
-                    </p>
-
-
-                    <p className="
-                      font-bold
-                      text-gray-900
-                      mt-1
-                    ">
-
-                      +{result.xp} XP
-
-                    </p>
+                    <Trophy size={32} />
 
                   </div>
 
 
-                  <div className="
-                    bg-gray-50
-                    rounded-xl
-                    p-4
-                  ">
-
-                    <Trophy
-                      size={20}
-                      className="
-                        mx-auto
-                        text-blue-600
-                        mb-2
-                      "
-                    />
-
-                    <p className="
-                      text-xs
-                      text-gray-500
-                    ">
-
-                      Niveau
-
-                    </p>
-
-
-                    <p className="
-                      font-bold
-                      text-gray-900
-                      mt-1
-                    ">
-
-                      {result.level || "-"}
-
-                    </p>
-
-                  </div>
-
-                </div>
-
-
-                {(result.consultation ||
-                  result.preview) && (
-
-                  <div className="
-                    mt-5
-                    px-4
-                    py-3
-                    rounded-xl
-                    bg-purple-50
-                    border
-                    border-purple-100
-                    text-purple-700
-                    text-sm
-                    font-medium
-                  ">
+                  <p className="text-sm font-semibold text-accent">
 
                     {result.preview
-                      ? "👁️ Mode aperçu — aucune donnée d'élève n'a été modifiée."
-                      : "👁️ Mode consultation — aucune donnée de l'élève n'a été modifiée."
+                      ? "Quiz aperçu"
+                      : result.consultation
+                        ? "Quiz consulté"
+                        : "Quiz terminé"
                     }
+
+                  </p>
+
+
+                  <h2 className="text-2xl font-bold theme-text mt-1">
+
+                    {getResultMessage(
+                      result.score
+                    )}
+
+                  </h2>
+
+
+                  <div className="text-5xl font-bold text-accent mt-4">
+
+                    {result.score}%
 
                   </div>
 
-                )}
+
+                  <p className="theme-text-secondary mt-2">
+
+                    {result.goodAnswers}
+                    /
+                    {result.total}
+                    {" "}
+                    bonnes réponses
+
+                  </p>
 
 
-                <button
-                  onClick={() => {
+                  <div className="grid grid-cols-2 gap-3 mt-6">
 
-                    if (
-                      isConsultation ||
-                      isStudentPreview
-                    ) {
+                    <div className="theme-surface border theme-border rounded-2xl p-4">
 
-                      navigate(-1);
+                      <Award
+                        size={20}
+                        className="mx-auto text-yellow-500 mb-2"
+                      />
 
-                      return;
+                      <p className="text-xs theme-text-secondary">
 
-                    }
+                        {result.preview ||
+                        result.consultation
+                          ? "XP théoriques"
+                          : "XP gagnés"
+                        }
+
+                      </p>
 
 
-                    navigate(
-                      `/lesson/${lessonId}`
-                    );
+                      <p className="font-bold theme-text mt-1">
+                        +{result.xp} XP
+                      </p>
 
-                  }}
-                  className="
-                    w-full
-                    mt-6
-                    flex
-                    items-center
-                    justify-center
-                    gap-2
-                    bg-blue-600
-                    text-white
-                    font-semibold
-                    px-5
-                    py-3
-                    rounded-xl
-                    hover:bg-blue-700
-                    transition
-                  "
-                >
+                    </div>
 
-                  <ArrowLeft
-                    size={18}
-                  />
 
-                  Retour à la leçon
+                    <div className="theme-surface border theme-border rounded-2xl p-4">
 
-                </button>
+                      <Trophy
+                        size={20}
+                        className="mx-auto text-accent mb-2"
+                      />
+
+                      <p className="text-xs theme-text-secondary">
+                        Niveau
+                      </p>
+
+
+                      <p className="font-bold theme-text mt-1">
+                        {result.level || "-"}
+                      </p>
+
+                    </div>
+
+                  </div>
+
+
+                  {(result.consultation ||
+                    result.preview) && (
+
+                    <div className="mt-5 px-4 py-3 rounded-xl bg-accent-soft border border-accent text-accent text-sm font-medium">
+
+                      {result.preview
+                        ? "👁️ Mode aperçu — aucune donnée d'élève n'a été modifiée."
+                        : "👁️ Mode consultation — aucune donnée de l'élève n'a été modifiée."
+                      }
+
+                    </div>
+
+                  )}
+
+
+                  <button
+                    type="button"
+                    onClick={() => {
+
+                      if (
+                        isConsultation ||
+                        isStudentPreview
+                      ) {
+
+                        navigate(-1);
+
+                        return;
+
+                      }
+
+
+                      navigate(
+                        `/lesson/${lessonId}`
+                      );
+
+                    }}
+                    className="w-full mt-6 flex items-center justify-center gap-2 bg-accent text-white font-semibold px-5 py-3 rounded-xl shadow-md hover:opacity-90 hover:-translate-y-0.5 transition"
+                  >
+
+                    <ArrowLeft size={18} />
+
+                    Retour à la leçon
+
+                  </button>
+
+                </div>
 
               </div>
 
             ) : (
 
               <>
+
                 {/* QUESTIONS */}
 
-                <div className="
-                  space-y-4
-                ">
+                <div className="space-y-4">
 
                   {questions.map(
                     (
@@ -1698,47 +1338,19 @@ export default function VideoPage({
 
                       <div
                         key={question.id}
-                        className="
-                          bg-white
-                          rounded-2xl
-                          border
-                          border-gray-100
-                          shadow-sm
-                          p-5
-                        "
+                        className="theme-surface rounded-3xl border theme-border shadow-sm p-5 md:p-6"
                       >
 
-                        <div className="
-                          flex
-                          items-start
-                          gap-3
-                          mb-4
-                        ">
+                        <div className="flex items-start gap-3 mb-4">
 
-                          <div className="
-                            shrink-0
-                            w-8
-                            h-8
-                            rounded-full
-                            bg-blue-50
-                            text-blue-600
-                            flex
-                            items-center
-                            justify-center
-                            text-sm
-                            font-bold
-                          ">
+                          <div className="shrink-0 w-8 h-8 rounded-full bg-accent-soft border border-accent text-accent flex items-center justify-center text-sm font-bold">
 
                             {index + 1}
 
                           </div>
 
 
-                          <p className="
-                            font-semibold
-                            text-gray-900
-                            leading-6
-                          ">
+                          <p className="font-semibold theme-text leading-6">
 
                             {question.question}
 
@@ -1747,9 +1359,7 @@ export default function VideoPage({
                         </div>
 
 
-                        <div className="
-                          space-y-2
-                        ">
+                        <div className="space-y-2">
 
                           {question.choices.map(
                             (
@@ -1767,9 +1377,7 @@ export default function VideoPage({
                               return (
 
                                 <button
-                                  key={
-                                    choiceIndex
-                                  }
+                                  key={choiceIndex}
                                   type="button"
                                   onClick={() =>
                                     chooseAnswer(
@@ -1777,9 +1385,7 @@ export default function VideoPage({
                                       choiceIndex
                                     )
                                   }
-                                  disabled={
-                                    validating
-                                  }
+                                  disabled={validating}
                                   className={`
                                     w-full
                                     flex
@@ -1791,29 +1397,14 @@ export default function VideoPage({
                                     rounded-xl
                                     border
                                     transition
-
                                     ${
                                       selected
-                                        ? `
-                                          bg-blue-50
-                                          border-blue-500
-                                          text-blue-700
-                                        `
-                                        : `
-                                          bg-white
-                                          border-gray-200
-                                          text-gray-700
-                                          hover:bg-gray-50
-                                          hover:border-gray-300
-                                        `
+                                        ? "bg-accent-soft border-accent text-accent"
+                                        : "theme-surface theme-border theme-text hover:bg-accent-soft"
                                     }
-
                                     ${
                                       validating
-                                        ? `
-                                          opacity-60
-                                          cursor-not-allowed
-                                        `
+                                        ? "opacity-60 cursor-not-allowed"
                                         : ""
                                     }
                                   `}
@@ -1830,17 +1421,10 @@ export default function VideoPage({
                                       justify-center
                                       text-xs
                                       font-semibold
-
                                       ${
                                         selected
-                                          ? `
-                                            bg-blue-600
-                                            text-white
-                                          `
-                                          : `
-                                            bg-gray-100
-                                            text-gray-500
-                                          `
+                                          ? "bg-accent text-white"
+                                          : "bg-accent-soft text-accent border border-accent"
                                       }
                                     `}
                                   >
@@ -1853,12 +1437,8 @@ export default function VideoPage({
                                   </span>
 
 
-                                  <span className="
-                                    flex-1
-                                  ">
-
+                                  <span className="flex-1">
                                     {choice}
-
                                   </span>
 
 
@@ -1866,9 +1446,7 @@ export default function VideoPage({
 
                                     <CheckCircle2
                                       size={18}
-                                      className="
-                                        text-blue-600
-                                      "
+                                      className="text-accent"
                                     />
 
                                   )}
@@ -1894,33 +1472,13 @@ export default function VideoPage({
 
                 <button
                   type="button"
-                  onClick={
-                    validateQuiz
-                  }
+                  onClick={validateQuiz}
                   disabled={
                     validating ||
                     answeredCount <
                       questions.length
                   }
-                  className="
-                    w-full
-                    mt-6
-                    flex
-                    items-center
-                    justify-center
-                    gap-2
-                    bg-blue-600
-                    text-white
-                    font-semibold
-                    px-6
-                    py-3.5
-                    rounded-xl
-                    shadow-sm
-                    hover:bg-blue-700
-                    transition
-                    disabled:opacity-50
-                    disabled:cursor-not-allowed
-                  "
+                  className="w-full mt-6 flex items-center justify-center gap-2 bg-accent text-white font-semibold px-6 py-3.5 rounded-xl shadow-md hover:opacity-90 hover:-translate-y-0.5 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
 
                   {validating ? (
@@ -1929,9 +1487,7 @@ export default function VideoPage({
 
                       <Loader2
                         size={19}
-                        className="
-                          animate-spin
-                        "
+                        className="animate-spin"
                       />
 
                       Validation...
@@ -1942,9 +1498,7 @@ export default function VideoPage({
 
                     <>
 
-                      <CheckCircle2
-                        size={19}
-                      />
+                      <CheckCircle2 size={19} />
 
                       {isConsultation ||
                       isStudentPreview
@@ -1969,7 +1523,6 @@ export default function VideoPage({
       </div>
 
     </div>
-
   );
 
 }

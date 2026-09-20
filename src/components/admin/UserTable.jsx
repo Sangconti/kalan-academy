@@ -11,37 +11,22 @@ export default function UserTable({
   onViewStudent,
   onManageStudent
 }) {
-
   // ==========================================
   // SUPPRESSION UTILISATEUR
   // ==========================================
 
   async function handleDelete(user) {
-
-    // =====================================
-    // VÉRIFIER L'UTILISATEUR CONNECTÉ
-    // =====================================
-
     const {
       data: { user: currentUser }
     } = await supabase.auth.getUser();
 
-    // =====================================
-    // PROTECTION AUTO-SUPPRESSION
-    // =====================================
-
     if (currentUser?.id === user.id) {
-
       alert(
         "Vous ne pouvez pas supprimer votre propre compte."
       );
 
       return;
     }
-
-    // =====================================
-    // CONFIRMATION
-    // =====================================
 
     const confirmed = window.confirm(
       `Voulez-vous vraiment supprimer définitivement ${
@@ -53,16 +38,9 @@ export default function UserTable({
       return;
     }
 
-    // =====================================
-    // SUPPRESSION
-    // =====================================
-
     try {
-
       await onDelete(user.id);
-
     } catch (error) {
-
       console.error(
         "Erreur suppression utilisateur :",
         error
@@ -72,38 +50,25 @@ export default function UserTable({
         error?.message ||
         "Impossible de supprimer cet utilisateur."
       );
-
     }
-
   }
-
 
   // ==========================================
   // RÉINITIALISATION APPAREIL
   // ==========================================
 
   async function handleDeviceReset(user) {
-
-    // =====================================
-    // PROTECTION AUTO-RÉINITIALISATION
-    // =====================================
-
     const {
       data: { user: currentUser }
     } = await supabase.auth.getUser();
 
     if (currentUser?.id === user.id) {
-
       alert(
         "Vous ne pouvez pas réinitialiser votre propre appareil depuis cette action."
       );
 
       return;
     }
-
-    // =====================================
-    // CONFIRMATION
-    // =====================================
 
     const confirmed = window.confirm(
       `Voulez-vous réinitialiser l'appareil de ${
@@ -117,20 +82,13 @@ export default function UserTable({
       return;
     }
 
-    // =====================================
-    // RÉINITIALISATION
-    // =====================================
-
     try {
-
       await onDeviceReset(user.id);
 
       alert(
         "📱 Appareil réinitialisé avec succès."
       );
-
     } catch (error) {
-
       console.error(
         "Erreur réinitialisation appareil :",
         error
@@ -140,25 +98,23 @@ export default function UserTable({
         error?.message ||
         "Impossible de réinitialiser l'appareil."
       );
-
     }
-
   }
 
-
   return (
-
     <div
       className="
         theme-surface
         theme-border
         border
-        rounded-xl
-        shadow
+
+        rounded-3xl
+
+        shadow-sm
+
         overflow-hidden
       "
     >
-
       {/* =====================================================
           CONTENEUR RESPONSIVE
       ===================================================== */}
@@ -170,27 +126,24 @@ export default function UserTable({
           overscroll-x-contain
         "
       >
-
         <table
           className="
             w-full
             min-w-[1450px]
           "
         >
-
           {/* =====================================================
               HEADER
           ===================================================== */}
 
           <thead
             className="
-              bg-gray-100
-              dark:bg-gray-800
+              bg-accent-soft
+              border-b
+              border-accent
             "
           >
-
             <tr>
-
               <th
                 className="
                   p-4
@@ -203,7 +156,6 @@ export default function UserTable({
                 Nom
               </th>
 
-
               <th
                 className="
                   p-4
@@ -214,7 +166,6 @@ export default function UserTable({
               >
                 Rôle
               </th>
-
 
               <th
                 className="
@@ -227,7 +178,6 @@ export default function UserTable({
                 Accès
               </th>
 
-
               <th
                 className="
                   p-4
@@ -238,7 +188,6 @@ export default function UserTable({
               >
                 Premium
               </th>
-
 
               <th
                 className="
@@ -251,7 +200,6 @@ export default function UserTable({
                 XP
               </th>
 
-
               <th
                 className="
                   p-4
@@ -263,7 +211,6 @@ export default function UserTable({
                 Niveau
               </th>
 
-
               <th
                 className="
                   p-4
@@ -274,31 +221,26 @@ export default function UserTable({
               >
                 Actions
               </th>
-
             </tr>
-
           </thead>
-
 
           {/* =====================================================
               CORPS
           ===================================================== */}
 
           <tbody>
-
             {users.map((user) => (
-
               <tr
                 key={user.id}
                 className="
                   border-t
                   theme-border
-                  hover:bg-gray-50
-                  dark:hover:bg-gray-800
-                  transition
+
+                  hover:bg-accent-soft
+
+                  transition-colors
                 "
               >
-
                 {/* =================================================
                     NOM
                 ================================================= */}
@@ -311,18 +253,14 @@ export default function UserTable({
                     whitespace-nowrap
                   "
                 >
-
                   {user.full_name || "Sans nom"}
-
                 </td>
-
 
                 {/* =================================================
                     RÔLE
                 ================================================= */}
 
                 <td className="p-4">
-
                   <select
                     value={user.role || "student"}
                     onChange={(e) =>
@@ -333,19 +271,26 @@ export default function UserTable({
                     }
                     className="
                       min-w-[135px]
+
                       border
                       theme-border
-                      rounded-lg
+
+                      rounded-xl
+
                       p-2
+
                       theme-surface
                       theme-text
+
                       outline-none
+
                       focus:border-accent
                       focus:ring-2
                       focus:ring-accent-soft
+
+                      transition
                     "
                   >
-
                     <option value="student">
                       student
                     </option>
@@ -365,20 +310,15 @@ export default function UserTable({
                     <option value="super_admin">
                       super_admin
                     </option>
-
                   </select>
-
                 </td>
-
 
                 {/* =================================================
                     ACCÈS
                 ================================================= */}
 
                 <td className="p-4">
-
                   {user.access_status === "active" ? (
-
                     <button
                       type="button"
                       onClick={() =>
@@ -389,26 +329,32 @@ export default function UserTable({
                       }
                       className="
                         min-w-[95px]
+
                         px-3
                         py-2
-                        rounded-lg
+
+                        rounded-xl
+
                         bg-green-100
                         dark:bg-green-950/40
+
                         text-green-700
                         dark:text-green-300
+
                         hover:bg-green-200
                         dark:hover:bg-green-900/50
+
                         transition
+
                         font-medium
                         text-sm
+
                         whitespace-nowrap
                       "
                     >
                       ✅ Actif
                     </button>
-
                   ) : (
-
                     <button
                       type="button"
                       onClick={() =>
@@ -419,28 +365,33 @@ export default function UserTable({
                       }
                       className="
                         min-w-[105px]
+
                         px-3
                         py-2
-                        rounded-lg
+
+                        rounded-xl
+
                         bg-yellow-100
                         dark:bg-yellow-950/40
+
                         text-yellow-700
                         dark:text-yellow-300
+
                         hover:bg-yellow-200
                         dark:hover:bg-yellow-900/50
+
                         transition
+
                         font-medium
                         text-sm
+
                         whitespace-nowrap
                       "
                     >
                       🔒 Activer
                     </button>
-
                   )}
-
                 </td>
-
 
                 {/* =================================================
                     PREMIUM
@@ -451,16 +402,11 @@ export default function UserTable({
                     p-4
                     text-center
                     whitespace-nowrap
+                    theme-text
                   "
                 >
-
-                  {user.is_premium
-                    ? "⭐"
-                    : "-"
-                  }
-
+                  {user.is_premium ? "⭐" : "-"}
                 </td>
-
 
                 {/* =================================================
                     XP
@@ -474,11 +420,8 @@ export default function UserTable({
                     theme-text
                   "
                 >
-
                   {user.xp || 0}
-
                 </td>
-
 
                 {/* =================================================
                     NIVEAU
@@ -492,11 +435,8 @@ export default function UserTable({
                     theme-text
                   "
                 >
-
                   {user.level || 1}
-
                 </td>
-
 
                 {/* =================================================
                     ACTIONS
@@ -508,7 +448,6 @@ export default function UserTable({
                     text-center
                   "
                 >
-
                   <div
                     className="
                       flex
@@ -517,7 +456,6 @@ export default function UserTable({
                       gap-2
                     "
                   >
-
                     {/* VOIR LA PAGE DE L'ÉLÈVE */}
 
                     <button
@@ -527,18 +465,26 @@ export default function UserTable({
                       }
                       className="
                         min-w-[120px]
+
                         px-3
                         py-2
-                        rounded-lg
+
+                        rounded-xl
+
                         bg-purple-100
                         dark:bg-purple-950/40
+
                         text-purple-700
                         dark:text-purple-300
+
                         hover:bg-purple-200
                         dark:hover:bg-purple-900/50
+
                         transition
+
                         font-medium
                         text-sm
+
                         whitespace-nowrap
                       "
                     >
@@ -554,25 +500,31 @@ export default function UserTable({
                       }
                       className="
                         min-w-[125px]
+
                         px-3
                         py-2
-                        rounded-lg
+
+                        rounded-xl
+
                         bg-amber-100
                         dark:bg-amber-950/40
+
                         text-amber-700
                         dark:text-amber-300
+
                         hover:bg-amber-200
                         dark:hover:bg-amber-900/50
+
                         transition
+
                         font-medium
                         text-sm
+
                         whitespace-nowrap
                       "
                     >
                       ⚙️ Gérer l'élève
                     </button>
-
-
 
                     {/* RÉINITIALISER APPAREIL */}
 
@@ -583,24 +535,31 @@ export default function UserTable({
                       }
                       className="
                         min-w-[125px]
+
                         px-3
                         py-2
-                        rounded-lg
+
+                        rounded-xl
+
                         bg-blue-100
                         dark:bg-blue-950/40
+
                         text-blue-700
                         dark:text-blue-300
+
                         hover:bg-blue-200
                         dark:hover:bg-blue-900/50
+
                         transition
+
                         font-medium
                         text-sm
+
                         whitespace-nowrap
                       "
                     >
                       📱 Réinitialiser
                     </button>
-
 
                     {/* SUPPRIMER */}
 
@@ -611,38 +570,38 @@ export default function UserTable({
                       }
                       className="
                         min-w-[120px]
+
                         px-3
                         py-2
-                        rounded-lg
+
+                        rounded-xl
+
                         bg-red-100
                         dark:bg-red-950/40
+
                         text-red-700
                         dark:text-red-300
+
                         hover:bg-red-200
                         dark:hover:bg-red-900/50
+
                         transition
+
                         font-medium
                         text-sm
+
                         whitespace-nowrap
                       "
                     >
                       🗑️ Supprimer
                     </button>
-
                   </div>
-
                 </td>
-
               </tr>
-
             ))}
-
           </tbody>
-
         </table>
-
       </div>
-
 
       {/* =====================================================
           INDICATION MOBILE
@@ -651,22 +610,24 @@ export default function UserTable({
       <div
         className="
           sm:hidden
+
           px-4
-          py-2.5
-          bg-gray-50
-          dark:bg-gray-800
+          py-3
+
+          bg-accent-soft
+
           border-t
-          theme-border
+          border-accent
+
           text-xs
           theme-text-secondary
+
           text-center
         "
       >
         👉 Fais glisser le tableau horizontalement pour voir
         toutes les informations.
       </div>
-
     </div>
-
   );
 }

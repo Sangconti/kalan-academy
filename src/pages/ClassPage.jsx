@@ -553,23 +553,22 @@ export default function ClassPage() {
         rounded-3xl
         bg-accent-soft
         border
-        border-accent-soft
-        px-6
-        py-7
-        md:px-8
-        md:py-8
+        border-accent
+        p-6
+        md:p-8
+        shadow-lg
         mb-8
       ">
 
 
-        {/* DÉCORATION */}
+        {/* CERCLES DÉCORATIFS */}
 
         <div className="
           absolute
           -right-10
           -top-10
-          w-32
-          h-32
+          w-40
+          h-40
           rounded-full
           bg-accent
           opacity-10
@@ -578,13 +577,25 @@ export default function ClassPage() {
 
         <div className="
           absolute
-          -left-8
-          -bottom-12
-          w-28
-          h-28
+          -left-16
+          -bottom-20
+          w-48
+          h-48
           rounded-full
           bg-accent
           opacity-10
+        " />
+
+
+        <div className="
+          absolute
+          right-16
+          -bottom-24
+          w-56
+          h-56
+          rounded-full
+          bg-accent
+          opacity-5
         " />
 
 
@@ -593,39 +604,52 @@ export default function ClassPage() {
           z-10
         ">
 
+
+          {/* BADGE */}
+
           <div className="
             inline-flex
             items-center
             gap-2
-            text-sm
+            px-3
+            py-1.5
+            rounded-full
+            bg-accent
+            text-white
+            text-xs
             font-semibold
-            text-accent
-            mb-2
+            mb-4
           ">
 
-            <BookOpen size={17} />
+            <BookOpen
+              size={14}
+            />
 
             Kalan Academy
 
           </div>
 
 
+          {/* TITRE */}
+
           <h1 className="
-            text-3xl
-            md:text-4xl
-            font-extrabold
-            tracking-tight
+            text-2xl
+            md:text-3xl
+            font-bold
+            leading-tight
             theme-text
           ">
             Matières
           </h1>
 
 
+          {/* DESCRIPTION */}
+
           <p className="
             theme-text-secondary
-            mt-2
-            max-w-2xl
+            mt-3
             leading-relaxed
+            max-w-2xl
           ">
             Choisis une matière pour commencer
             ton apprentissage.

@@ -620,13 +620,13 @@ export default function ChapterPage() {
       <div className="
         relative
         overflow-hidden
-        theme-surface
         rounded-3xl
-        shadow-sm
+        bg-accent-soft
         border
-        theme-border
+        border-accent
         p-6
-        md:p-7
+        md:p-8
+        shadow-lg
         mb-7
       ">
 
@@ -635,10 +635,10 @@ export default function ChapterPage() {
 
         <div className="
           absolute
-          -right-12
-          -top-12
-          w-36
-          h-36
+          -right-10
+          -top-10
+          w-40
+          h-40
           rounded-full
           bg-accent
           opacity-10
@@ -647,13 +647,25 @@ export default function ChapterPage() {
 
         <div className="
           absolute
-          -left-10
-          -bottom-14
-          w-28
-          h-28
+          -left-16
+          -bottom-20
+          w-48
+          h-48
           rounded-full
           bg-accent
           opacity-10
+        " />
+
+
+        <div className="
+          absolute
+          right-16
+          -bottom-24
+          w-56
+          h-56
+          rounded-full
+          bg-accent
+          opacity-5
         " />
 
 
@@ -662,153 +674,127 @@ export default function ChapterPage() {
           z-10
         ">
 
+
+          {/* BADGE */}
+
           <div className="
-            flex
-            items-start
-            gap-4
+            inline-flex
+            items-center
+            gap-2
+            px-3
+            py-1.5
+            rounded-full
+            bg-accent
+            text-white
+            text-xs
+            font-semibold
+            mb-4
           ">
 
+            <BookOpen
+              size={14}
+            />
 
-            {/* ICÔNE */}
-
-            <div className="
-              w-14
-              h-14
-              md:w-16
-              md:h-16
-              shrink-0
-              rounded-2xl
-              bg-accent-soft
-              flex
-              items-center
-              justify-center
-            ">
-
-              <BookOpen
-                size={30}
-                className="text-accent"
-              />
-
-            </div>
-
-
-            {/* TITRE */}
-
-            <div className="
-              min-w-0
-            ">
-
-              <p className="
-                text-sm
-                font-medium
-                text-accent
-                mb-1
-              ">
-
-                Chapitre
-
-              </p>
-
-
-              <h1 className="
-                text-2xl
-                md:text-3xl
-                font-bold
-                theme-text
-                leading-tight
-              ">
-
-                {chapter?.title}
-
-              </h1>
-
-
-              {chapter?.description && (
-
-                <p className="
-                  mt-2
-                  theme-text-secondary
-                  leading-relaxed
-                ">
-
-                  {chapter.description}
-
-                </p>
-
-              )}
-
-            </div>
+            Chapitre
 
           </div>
+
+
+          {/* TITRE */}
+
+          <h1 className="
+            text-2xl
+            md:text-3xl
+            font-bold
+            leading-tight
+            theme-text
+          ">
+
+            {chapter?.title}
+
+          </h1>
+
+
+          {/* DESCRIPTION */}
+
+          {chapter?.description && (
+
+            <p className="
+              theme-text-secondary
+              mt-3
+              leading-relaxed
+              max-w-3xl
+            ">
+
+              {chapter.description}
+
+            </p>
+
+          )}
 
 
           {/* INFORMATIONS */}
 
           <div className="
-            mt-6
-            pt-4
-            border-t
-            theme-border
             flex
+            flex-wrap
             items-center
-            justify-between
+            gap-3
+            mt-6
           ">
 
-            <div>
 
-              <p className="
-                text-xs
-                theme-text-secondary
-                font-medium
-                uppercase
-                tracking-wide
-              ">
+            <div className="
+              inline-flex
+              items-center
+              gap-2
+              px-3
+              py-2
+              rounded-xl
+              bg-white/70
+              dark:bg-gray-950/30
+              theme-text
+              text-sm
+              font-medium
+              border
+              border-white/50
+              dark:border-white/10
+            ">
 
-                Contenu
+              <BookOpen
+                size={16}
+                className="text-accent"
+              />
 
-              </p>
-
-
-              <p className="
-                theme-text
-                font-bold
-                mt-1
-              ">
-
-                Leçons disponibles
-
-              </p>
+              Contenu du chapitre
 
             </div>
 
 
             <div className="
-              text-right
+              inline-flex
+              items-center
+              gap-2
+              px-3
+              py-2
+              rounded-xl
+              bg-white/70
+              dark:bg-gray-950/30
+              theme-text
+              text-sm
+              font-medium
+              border
+              border-white/50
+              dark:border-white/10
             ">
 
-              <p className="
-                text-xs
-                theme-text-secondary
-                font-medium
-                uppercase
-                tracking-wide
-              ">
+              <PlayCircle
+                size={16}
+                className="text-accent"
+              />
 
-                Leçons
-
-              </p>
-
-
-              <p className="
-                text-lg
-                font-bold
-                text-accent
-                mt-1
-              ">
-
-                {lessons.length}
-
-              </p>
+              {lessons.length} leçon
+              {lessons.length > 1 ? "s" : ""}
 
             </div>
 

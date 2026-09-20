@@ -1,616 +1,262 @@
 // src/pages/CoursesPage.jsx
 
-import {
-  useEffect,
-  useState
-} from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import {
-  useNavigate
-} from "react-router-dom";
-
-import {
-  getClasses
-} from "../services/educationService";
+import { getClasses } from "../services/educationService";
 
 import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
-  GraduationCap
+  GraduationCap,
 } from "lucide-react";
 
 export default function CoursesPage() {
-
   const navigate = useNavigate();
 
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
-
 
   // ==========================================
   // CHARGEMENT DES CLASSES
   // ==========================================
 
   useEffect(() => {
-
     async function loadClasses() {
-
       try {
-
-        const data =
-          await getClasses();
-
+        const data = await getClasses();
         setClasses(data || []);
-
       } catch (error) {
-
         console.error(
           "Erreur chargement des cours :",
           error
         );
 
         setClasses([]);
-
       } finally {
-
         setLoading(false);
-
       }
-
     }
 
     loadClasses();
-
   }, []);
-
 
   // ==========================================
   // LOADING
   // ==========================================
 
   if (loading) {
-
     return (
-
-      <div className="
-        min-h-[60vh]
-        flex
-        flex-col
-        items-center
-        justify-center
-        px-6
-      ">
-
-        <div className="
-          w-14
-          h-14
-          rounded-2xl
-          bg-blue-50
-          flex
-          items-center
-          justify-center
-          mb-4
-        ">
-
+      <div className="min-h-[60vh] theme-bg flex flex-col items-center justify-center px-6">
+        <div className="w-14 h-14 rounded-2xl bg-accent-soft border border-accent flex items-center justify-center mb-4">
           <GraduationCap
             size={28}
-            className="text-blue-600"
+            className="text-accent"
           />
-
         </div>
 
-
-        <p className="
-          text-gray-600
-          font-medium
-        ">
-
+        <p className="theme-text font-medium">
           Chargement des cours...
-
         </p>
-
       </div>
-
     );
-
   }
-
 
   // ==========================================
   // INTERFACE
   // ==========================================
 
   return (
-
-    <div className="
-      min-h-screen
-      bg-gray-50
-      pb-8
-    ">
-
+    <div className="min-h-screen theme-bg theme-text pb-8">
 
       {/* ======================================
           HEADER
       ====================================== */}
 
-      <div className="
-        bg-white
-        border-b
-        border-gray-100
-        px-5
-        py-4
-      ">
-
-        <div className="
-          max-w-5xl
-          mx-auto
-          flex
-          items-center
-          justify-between
-          gap-4
-        ">
-
+      <div className="theme-surface theme-border border-b shadow-sm px-5 py-4">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
 
           {/* LOGO */}
 
           <button
             type="button"
             onClick={() => navigate("/")}
-            className="
-              flex
-              items-center
-              gap-3
-              group
-            "
+            className="flex items-center gap-3 group"
           >
-
-            <div className="
-              w-10
-              h-10
-              rounded-xl
-              bg-blue-600
-              text-white
-              flex
-              items-center
-              justify-center
-              shadow-sm
-              group-hover:bg-blue-700
-              transition
-            ">
-
-              <GraduationCap
-                size={23}
-              />
-
+            <div className="w-10 h-10 rounded-xl bg-accent text-white flex items-center justify-center shadow-sm group-hover:opacity-90 transition">
+              <GraduationCap size={23} />
             </div>
-
 
             <div className="text-left">
-
-              <p className="
-                text-base
-                font-bold
-                text-gray-900
-                leading-none
-              ">
-
+              <p className="text-base font-bold theme-text leading-none">
                 Kalan Academy
-
               </p>
 
-              <p className="
-                text-xs
-                text-gray-500
-                mt-1
-              ">
-
+              <p className="text-xs theme-text-secondary mt-1">
                 Apprendre. Progresser. Réussir.
-
               </p>
-
             </div>
-
           </button>
-
 
           {/* RETOUR */}
 
           <button
             type="button"
             onClick={() => navigate("/")}
-            className="
-              hidden
-              sm:flex
-              items-center
-              gap-2
-              text-sm
-              font-medium
-              text-gray-500
-              hover:text-blue-600
-              transition
-            "
+            className="hidden sm:flex items-center gap-2 text-sm font-medium theme-text-secondary hover:text-accent transition"
           >
-
-            <ArrowLeft
-              size={17}
-            />
-
+            <ArrowLeft size={17} />
             Accueil
-
           </button>
-
         </div>
-
       </div>
-
 
       {/* ======================================
           CONTENU
       ====================================== */}
 
-      <main className="
-        max-w-5xl
-        mx-auto
-        px-5
-        py-7
-      ">
-
+      <main className="max-w-5xl mx-auto px-5 py-7">
 
         {/* ====================================
             EN-TÊTE
         ==================================== */}
 
-        <div className="
-          flex
-          items-start
-          justify-between
-          gap-4
-          mb-7
-        ">
+        <div className="relative overflow-hidden rounded-3xl bg-accent-soft border border-accent shadow-lg p-6 md:p-8 mb-7">
 
-          <div>
+          {/* DÉCORATIONS */}
 
-            <p className="
-              text-sm
-              font-medium
-              text-blue-600
-              mb-1
-            ">
+          <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent opacity-10" />
 
-              Kalan Academy
+          <div className="absolute -left-16 -bottom-20 w-48 h-48 rounded-full bg-accent opacity-10" />
 
-            </p>
+          <div className="absolute right-16 -bottom-24 w-56 h-56 rounded-full bg-accent opacity-5" />
 
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
 
-            <h1 className="
-              text-2xl
-              md:text-3xl
-              font-bold
-              text-gray-900
-            ">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent text-white text-xs font-semibold mb-3">
+                <GraduationCap size={14} />
+                Kalan Academy
+              </div>
 
-              Mes cours
+              <h1 className="text-2xl md:text-3xl font-bold leading-tight theme-text">
+                Mes cours
+              </h1>
 
-            </h1>
+              <p className="theme-text-secondary mt-3 leading-relaxed max-w-xl">
+                Choisis ton niveau scolaire pour accéder
+                à tes matières et à tes leçons.
+              </p>
+            </div>
 
-
-            <p className="
-              text-gray-500
-              mt-2
-              max-w-xl
-            ">
-
-              Choisis ton niveau scolaire pour
-              accéder à tes matières et à tes leçons.
-
-            </p>
-
+            <div className="hidden sm:flex w-14 h-14 rounded-2xl bg-white/70 dark:bg-gray-950/30 border border-white/50 dark:border-white/10 items-center justify-center shrink-0">
+              <BookOpen
+                size={27}
+                className="text-accent"
+              />
+            </div>
           </div>
-
-
-          <div className="
-            hidden
-            sm:flex
-            w-12
-            h-12
-            rounded-2xl
-            bg-blue-50
-            items-center
-            justify-center
-            shrink-0
-          ">
-
-            <BookOpen
-              size={24}
-              className="text-blue-600"
-            />
-
-          </div>
-
         </div>
-
 
         {/* ====================================
             AUCUNE CLASSE
         ==================================== */}
 
         {classes.length === 0 ? (
+          <div className="theme-surface rounded-3xl border theme-border shadow-sm p-10 text-center">
 
-          <div className="
-            bg-white
-            rounded-3xl
-            border
-            border-gray-100
-            shadow-sm
-            p-10
-            text-center
-          ">
-
-            <div className="
-              w-16
-              h-16
-              rounded-2xl
-              bg-gray-50
-              mx-auto
-              mb-4
-              flex
-              items-center
-              justify-center
-            ">
-
+            <div className="w-16 h-16 rounded-2xl bg-accent-soft border border-accent mx-auto mb-4 flex items-center justify-center">
               <GraduationCap
                 size={32}
-                className="text-gray-400"
+                className="text-accent"
               />
-
             </div>
 
-
-            <h2 className="
-              text-lg
-              font-bold
-              text-gray-800
-            ">
-
+            <h2 className="text-lg font-bold theme-text">
               Aucun cours disponible
-
             </h2>
 
-
-            <p className="
-              text-sm
-              text-gray-500
-              mt-2
-              max-w-sm
-              mx-auto
-            ">
-
+            <p className="text-sm theme-text-secondary mt-2 max-w-sm mx-auto">
               Les classes disponibles apparaîtront
               ici dès qu'elles seront ajoutées.
-
             </p>
-
 
             <button
               type="button"
               onClick={() => navigate("/")}
-              className="
-                mt-6
-                inline-flex
-                items-center
-                gap-2
-                bg-blue-600
-                text-white
-                px-5
-                py-3
-                rounded-xl
-                font-semibold
-                hover:bg-blue-700
-                transition
-              "
+              className="mt-6 inline-flex items-center gap-2 bg-accent text-white px-5 py-3 rounded-xl font-semibold shadow-md hover:opacity-90 hover:-translate-y-0.5 transition"
             >
-
-              <ArrowLeft
-                size={18}
-              />
-
+              <ArrowLeft size={18} />
               Retour à l'accueil
-
             </button>
-
           </div>
-
         ) : (
-
 
           /* ==================================
              LISTE DES CLASSES
           ================================== */
 
-          <div className="
-            grid
-            grid-cols-1
-            sm:grid-cols-2
-            lg:grid-cols-3
-            gap-4
-          ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-            {classes.map(
-              (classe, index) => (
+            {classes.map((classe) => (
+              <button
+                key={classe.id}
+                type="button"
+                onClick={() => navigate(`/class/${classe.id}`)}
+                className="group relative overflow-hidden theme-surface rounded-3xl border theme-border p-5 md:p-6 text-left shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all"
+              >
 
-                <button
-                  key={classe.id}
-                  type="button"
-                  onClick={() =>
-                    navigate(
-                      `/class/${classe.id}`
-                    )
-                  }
-                  className="
-                    group
-                    relative
-                    overflow-hidden
-                    bg-white
-                    rounded-3xl
-                    border
-                    border-gray-100
-                    p-5
-                    md:p-6
-                    text-left
-                    shadow-sm
-                    hover:shadow-xl
-                    hover:-translate-y-1
-                    transition-all
-                  "
-                >
+                {/* BARRE SUPÉRIEURE */}
 
+                <div className="absolute left-0 right-0 top-0 h-1.5 bg-accent" />
 
-                  {/* BARRE SUPÉRIEURE */}
+                {/* ICÔNE + FLÈCHE */}
 
-                  <div
-                    className={`
-                      absolute
-                      left-0
-                      right-0
-                      top-0
-                      h-1.5
-                      ${
-                        index % 3 === 0
-                          ? "bg-blue-600"
-                          : index % 3 === 1
-                          ? "bg-purple-600"
-                          : "bg-green-600"
-                      }
-                    `}
+                <div className="flex items-start justify-between gap-4">
+
+                  <div className="w-14 h-14 rounded-2xl bg-accent-soft border border-accent flex items-center justify-center text-accent">
+                    <GraduationCap size={28} />
+                  </div>
+
+                  <ArrowRight
+                    size={21}
+                    className="theme-text-secondary group-hover:text-accent group-hover:translate-x-1 transition"
                   />
+                </div>
 
+                {/* NOM */}
 
-                  {/* ICÔNE + FLÈCHE */}
+                <h2 className="mt-5 text-xl font-bold theme-text">
+                  {classe.name}
+                </h2>
 
-                  <div className="
-                    flex
-                    items-start
-                    justify-between
-                    gap-4
-                  ">
+                {/* DESCRIPTION */}
 
-                    <div
-                      className={`
-                        w-14
-                        h-14
-                        rounded-2xl
-                        flex
-                        items-center
-                        justify-center
-                        ${
-                          index % 3 === 0
-                            ? "bg-blue-50 text-blue-600"
-                            : index % 3 === 1
-                            ? "bg-purple-50 text-purple-600"
-                            : "bg-green-50 text-green-600"
-                        }
-                      `}
-                    >
+                {classe.description && (
+                  <p className="text-sm theme-text-secondary mt-2 leading-relaxed line-clamp-2">
+                    {classe.description}
+                  </p>
+                )}
 
-                      <GraduationCap
-                        size={28}
-                      />
+                {/* ACTION */}
 
-                    </div>
+                <div className="mt-5 flex items-center justify-between">
 
+                  <span className="text-sm font-semibold text-accent">
+                    Voir les matières
+                  </span>
 
-                    <ArrowRight
-                      size={21}
-                      className="
-                        text-gray-300
-                        group-hover:text-blue-600
-                        group-hover:translate-x-1
-                        transition
-                      "
-                    />
+                  <span className="text-xs font-medium theme-text-secondary">
+                    Commencer →
+                  </span>
+                </div>
 
-                  </div>
-
-
-                  {/* NOM */}
-
-                  <h2 className="
-                    mt-5
-                    text-xl
-                    font-bold
-                    text-gray-900
-                  ">
-
-                    {classe.name}
-
-                  </h2>
-
-
-                  {/* DESCRIPTION */}
-
-                  {classe.description && (
-
-                    <p className="
-                      text-sm
-                      text-gray-500
-                      mt-2
-                      leading-relaxed
-                      line-clamp-2
-                    ">
-
-                      {classe.description}
-
-                    </p>
-
-                  )}
-
-
-                  {/* ACTION */}
-
-                  <div className="
-                    mt-5
-                    flex
-                    items-center
-                    justify-between
-                  ">
-
-                    <span className="
-                      text-sm
-                      font-semibold
-                      text-blue-600
-                    ">
-
-                      Voir les matières
-
-                    </span>
-
-
-                    <span className="
-                      text-xs
-                      font-medium
-                      text-gray-400
-                    ">
-
-                      Commencer →
-
-                    </span>
-
-                  </div>
-
-                </button>
-
-              )
-            )}
-
+              </button>
+            ))}
           </div>
-
         )}
-
       </main>
-
     </div>
-
   );
-
 }

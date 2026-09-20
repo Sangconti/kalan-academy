@@ -440,312 +440,561 @@ Mis à jour :
   return (
     <div className="space-y-6">
 
+      {/* ================================= */}
       {/* HEADER */}
+      {/* ================================= */}
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+      <div
+        className="
+          relative
+          overflow-hidden
+          rounded-3xl
+          bg-accent-soft
+          border
+          border-accent
+          shadow-lg
+          p-6
+          md:p-8
+        "
+      >
+        <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent opacity-10" />
+        <div className="absolute -left-16 -bottom-20 w-48 h-48 rounded-full bg-accent opacity-10" />
+        <div className="absolute right-16 -bottom-24 w-56 h-56 rounded-full bg-accent opacity-5" />
 
-        <button
-          onClick={() => navigate(-1)}
-          className="
+        <div className="relative z-10">
+
+          <button
+            onClick={() => navigate(-1)}
+            className="
+              inline-flex
+              items-center
+              gap-2
+              theme-text
+              hover:text-accent
+              mb-5
+              transition
+              font-medium
+            "
+          >
+            <ArrowLeft size={18} />
+            Retour
+          </button>
+
+          <div className="
             flex
-            items-center
-            gap-2
-            text-gray-600
-            hover:text-blue-600
-            mb-5
-            transition
-          "
-        >
-          <ArrowLeft size={18} />
-          Retour
-        </button>
+            flex-col
+            lg:flex-row
+            lg:items-center
+            lg:justify-between
+            gap-5
+          ">
 
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+            <div className="min-w-0">
 
-          <div>
-
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-
-              <BookOpen
-                size={27}
-                className="text-blue-600"
-              />
-
-              Gestion des chapitres
-
-            </h1>
-
-            <div className="flex flex-wrap gap-2 mt-4">
-
-              <div className="
-                inline-flex
-                items-center
-                gap-2
-                px-3
-                py-2
-                rounded-xl
-                bg-blue-50
-                text-blue-700
-                text-sm
-                font-semibold
-              ">
-                <GraduationCap size={16} />
-
-                {contextLoading
-                  ? "Chargement..."
-                  : subject?.classes?.name ||
-                    "Classe inconnue"}
+              <div
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  px-3
+                  py-1.5
+                  rounded-full
+                  bg-accent
+                  text-white
+                  text-xs
+                  font-semibold
+                  mb-3
+                "
+              >
+                <BookOpen size={14} />
+                Administration
               </div>
 
-              <div className="
-                inline-flex
+              <h1 className="
+                text-2xl
+                md:text-3xl
+                font-bold
+                leading-tight
+                theme-text
+                flex
                 items-center
-                gap-2
-                px-3
-                py-2
-                rounded-xl
-                bg-green-50
-                text-green-700
-                text-sm
-                font-semibold
+                gap-3
               ">
-                <Library size={16} />
+                <BookOpen
+                  size={28}
+                  className="text-accent shrink-0"
+                />
 
-                {contextLoading
-                  ? "Chargement..."
-                  : subject?.name ||
-                    "Matière inconnue"}
+                Gestion des chapitres
+              </h1>
+
+              <p className="
+                theme-text-secondary
+                mt-3
+                leading-relaxed
+              ">
+                Gérez les chapitres et leur contenu
+                pédagogique pour cette matière.
+              </p>
+
+              <div className="
+                flex
+                flex-wrap
+                gap-2
+                mt-5
+              ">
+
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-2
+                    rounded-xl
+                    bg-white/70
+                    dark:bg-gray-950/30
+                    theme-text
+                    text-sm
+                    font-medium
+                    border
+                    border-white/50
+                    dark:border-white/10
+                  "
+                >
+                  <GraduationCap
+                    size={16}
+                    className="text-accent"
+                  />
+
+                  {contextLoading
+                    ? "Chargement..."
+                    : subject?.classes?.name ||
+                      "Classe inconnue"}
+                </div>
+
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-2
+                    rounded-xl
+                    bg-white/70
+                    dark:bg-gray-950/30
+                    theme-text
+                    text-sm
+                    font-medium
+                    border
+                    border-white/50
+                    dark:border-white/10
+                  "
+                >
+                  <Library
+                    size={16}
+                    className="text-accent"
+                  />
+
+                  {contextLoading
+                    ? "Chargement..."
+                    : subject?.name ||
+                      "Matière inconnue"}
+                </div>
+
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-2
+                    rounded-xl
+                    bg-white/70
+                    dark:bg-gray-950/30
+                    theme-text
+                    text-sm
+                    font-medium
+                    border
+                    border-white/50
+                    dark:border-white/10
+                  "
+                >
+                  <BookOpen
+                    size={16}
+                    className="text-accent"
+                  />
+
+                  {chapters.length} chapitre
+                  {chapters.length !== 1
+                    ? "s"
+                    : ""}
+                </div>
+
               </div>
 
             </div>
 
-          </div>
-
-          <label
-            className="
-              cursor-pointer
-              inline-flex
-              items-center
-              justify-center
-              gap-2
-              bg-green-600
-              hover:bg-green-700
-              text-white
-              px-5
-              py-3
-              rounded-xl
-              font-semibold
-              transition
-              shadow-sm
-            "
-          >
-            📦 Importer pack JSON Mali
-
-            <input
-              type="file"
-              accept=".json,application/json"
-              className="hidden"
-              onChange={handleImportJSON}
-            />
-
-          </label>
-
-        </div>
-
-      </div>
-
-      {/* FIL D'ARIANE */}
-
-      <div className="bg-gray-50 border border-gray-100 rounded-xl px-4 py-3">
-
-        <div className="text-sm text-gray-500">
-
-          Administration
-
-          <span className="mx-2">›</span>
-
-          Matières
-
-          <span className="mx-2">›</span>
-
-          <span className="font-semibold text-gray-700">
-            {subject?.name || "Matière"}
-          </span>
-
-          <span className="mx-2">›</span>
-
-          <span className="font-semibold text-blue-600">
-            Chapitres
-          </span>
-
-        </div>
-
-      </div>
-
-      {/* FORMULAIRE */}
-
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-
-        <div className="flex items-center gap-2 mb-4">
-
-          <Plus
-            size={20}
-            className="text-blue-600"
-          />
-
-          <h2 className="font-bold text-lg text-gray-900">
-            {editing
-              ? "Modifier chapitre"
-              : "Nouveau chapitre"}
-          </h2>
-
-        </div>
-
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4"
-        >
-
-          <input
-            className="
-              w-full
-              border
-              border-gray-200
-              rounded-xl
-              p-3
-              focus:outline-none
-              focus:ring-2
-              focus:ring-blue-500
-            "
-            placeholder="Titre du chapitre"
-            value={form.title}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                title: e.target.value
-              })
-            }
-          />
-
-          <textarea
-            rows={3}
-            className="
-              w-full
-              border
-              border-gray-200
-              rounded-xl
-              p-3
-              focus:outline-none
-              focus:ring-2
-              focus:ring-blue-500
-            "
-            placeholder="Description du chapitre"
-            value={form.description}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                description: e.target.value
-              })
-            }
-          />
-
-          <div>
-
-            <label className="block font-medium text-gray-700 mb-2">
-              Ordre du chapitre
-            </label>
-
-            <input
-              type="number"
-              min="1"
+            <label
               className="
-                w-full
-                border
-                border-gray-200
-                rounded-xl
-                p-3
-                focus:outline-none
-                focus:ring-2
-                focus:ring-blue-500
-              "
-              value={form.order_number}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  order_number:
-                    Number(e.target.value)
-                })
-              }
-            />
-
-          </div>
-
-          <div className="flex gap-3">
-
-            <button
-              type="submit"
-              className="
-                bg-blue-600
-                hover:bg-blue-700
+                cursor-pointer
+                inline-flex
+                items-center
+                justify-center
+                gap-2
+                bg-accent
+                hover:opacity-90
+                hover:-translate-y-0.5
                 text-white
                 px-5
                 py-3
                 rounded-xl
                 font-semibold
-                flex
-                items-center
-                gap-2
                 transition
+                shadow-md
+                shrink-0
               "
             >
+              📦 Importer pack JSON Mali
 
-              {editing ? (
-                <>
-                  <Pencil size={18} />
-                  Mettre à jour
-                </>
-              ) : (
-                <>
-                  <Plus size={18} />
-                  Créer le chapitre
-                </>
-              )}
+              <input
+                type="file"
+                accept=".json,application/json"
+                className="hidden"
+                onChange={handleImportJSON}
+              />
 
-            </button>
-
-            {editing && (
-              <button
-                type="button"
-                onClick={() => {
-                  setEditing(null);
-
-                  setForm({
-                    title: "",
-                    description: "",
-                    order_number: 1
-                  });
-                }}
-                className="
-                  px-5
-                  py-3
-                  rounded-xl
-                  border
-                  border-gray-200
-                  text-gray-600
-                  font-semibold
-                "
-              >
-                Annuler
-              </button>
-            )}
+            </label>
 
           </div>
 
-        </form>
-
+        </div>
       </div>
 
+      {/* ================================= */}
+      {/* FIL D'ARIANE */}
+      {/* ================================= */}
+
+      <div
+        className="
+          theme-surface
+          theme-border
+          border
+          rounded-2xl
+          px-4
+          py-3
+          shadow-sm
+        "
+      >
+        <div className="text-sm theme-text-secondary">
+
+          Administration
+
+          <span className="mx-2">
+            ›
+          </span>
+
+          Matières
+
+          <span className="mx-2">
+            ›
+          </span>
+
+          <span className="font-semibold theme-text">
+            {subject?.name || "Matière"}
+          </span>
+
+          <span className="mx-2">
+            ›
+          </span>
+
+          <span className="font-semibold text-accent">
+            Chapitres
+          </span>
+
+        </div>
+      </div>
+
+      {/* ================================= */}
+      {/* AUCUN CHAPITRE */}
+      {/* ================================= */}
+
+      {!subjectId && (
+
+        <div
+          className="
+            bg-yellow-50
+            dark:bg-yellow-950/30
+            border
+            border-yellow-200
+            dark:border-yellow-900
+            rounded-2xl
+            p-5
+          "
+        >
+          <p className="
+            font-semibold
+            text-yellow-800
+            dark:text-yellow-300
+          ">
+            Aucun chapitre sélectionné
+          </p>
+
+          <p className="
+            text-sm
+            text-yellow-700
+            dark:text-yellow-400
+            mt-1
+          ">
+            Utilisez la navigation des matières
+            pour accéder aux chapitres.
+          </p>
+        </div>
+
+      )}
+
+      {/* ================================= */}
+      {/* FORMULAIRE */}
+      {/* ================================= */}
+
+      <div
+        className="
+          theme-surface
+          theme-border
+          border
+          rounded-3xl
+          shadow-sm
+          overflow-hidden
+        "
+      >
+
+        <div className="
+          p-5
+          md:p-6
+          border-b
+          border-accent
+          flex
+          items-center
+          gap-3
+        ">
+
+          <div
+            className="
+              w-11
+              h-11
+              rounded-2xl
+              bg-accent-soft
+              border
+              border-accent
+              text-accent
+              flex
+              items-center
+              justify-center
+              shrink-0
+            "
+          >
+            {editing ? (
+              <Pencil size={20} />
+            ) : (
+              <Plus size={20} />
+            )}
+          </div>
+
+          <div>
+
+            <h2 className="font-bold text-lg theme-text">
+              {editing
+                ? "Modifier chapitre"
+                : "Nouveau chapitre"}
+            </h2>
+
+            <p className="
+              text-sm
+              theme-text-secondary
+              mt-0.5
+            ">
+              {editing
+                ? "Modifiez les informations du chapitre."
+                : "Ajoutez un nouveau chapitre à cette matière."}
+            </p>
+
+          </div>
+
+        </div>
+
+        <div className="p-5 md:p-6">
+
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4"
+          >
+
+            <input
+              className="
+                w-full
+                theme-surface
+                theme-text
+                theme-border
+                border
+                rounded-xl
+                px-4
+                py-3
+                outline-none
+                focus:ring-2
+                focus:ring-accent
+                focus:border-accent
+              "
+              placeholder="Titre du chapitre"
+              value={form.title}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  title: e.target.value
+                })
+              }
+            />
+
+            <textarea
+              rows={3}
+              className="
+                w-full
+                theme-surface
+                theme-text
+                theme-border
+                border
+                rounded-xl
+                px-4
+                py-3
+                outline-none
+                focus:ring-2
+                focus:ring-accent
+                focus:border-accent
+                resize-y
+              "
+              placeholder="Description du chapitre"
+              value={form.description}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  description: e.target.value
+                })
+              }
+            />
+
+            <div>
+
+              <label className="
+                block
+                font-medium
+                theme-text
+                mb-2
+              ">
+                Ordre du chapitre
+              </label>
+
+              <input
+                type="number"
+                min="1"
+                className="
+                  w-full
+                  theme-surface
+                  theme-text
+                  theme-border
+                  border
+                  rounded-xl
+                  px-4
+                  py-3
+                  outline-none
+                  focus:ring-2
+                  focus:ring-accent
+                  focus:border-accent
+                "
+                value={form.order_number}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    order_number:
+                      Number(e.target.value)
+                  })
+                }
+              />
+
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+
+              <button
+                type="submit"
+                className="
+                  bg-accent
+                  hover:opacity-90
+                  hover:-translate-y-0.5
+                  text-white
+                  px-5
+                  py-3
+                  rounded-xl
+                  font-semibold
+                  flex
+                  items-center
+                  gap-2
+                  transition
+                  shadow-md
+                "
+              >
+
+                {editing ? (
+                  <>
+                    <Pencil size={18} />
+                    Mettre à jour
+                  </>
+                ) : (
+                  <>
+                    <Plus size={18} />
+                    Créer le chapitre
+                  </>
+                )}
+
+              </button>
+
+              {editing && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditing(null);
+
+                    setForm({
+                      title: "",
+                      description: "",
+                      order_number: 1
+                    });
+                  }}
+                  className="
+                    px-5
+                    py-3
+                    rounded-xl
+                    theme-surface
+                    theme-border
+                    border
+                    theme-text
+                    font-semibold
+                    hover:bg-accent-soft
+                    transition
+                  "
+                >
+                  Annuler
+                </button>
+              )}
+
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+      {/* ================================= */}
       {/* LISTE DES CHAPITRES */}
+      {/* ================================= */}
 
       <div>
 
@@ -761,11 +1010,19 @@ Mis à jour :
 
           <div>
 
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="
+              text-xl
+              font-bold
+              theme-text
+            ">
               Chapitres
             </h2>
 
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="
+              text-sm
+              theme-text-secondary
+              mt-1
+            ">
               {subject?.name || "Matière"}
               {" · "}
               {subject?.classes?.name ||
@@ -776,7 +1033,11 @@ Mis à jour :
 
           {/* RECHERCHE */}
 
-          <div className="relative w-full md:w-80">
+          <div className="
+            relative
+            w-full
+            md:w-80
+          ">
 
             <Search
               size={19}
@@ -785,7 +1046,7 @@ Mis à jour :
                 left-3
                 top-1/2
                 -translate-y-1/2
-                text-gray-400
+                text-accent
               "
             />
 
@@ -798,17 +1059,18 @@ Mis à jour :
               placeholder="Rechercher un chapitre..."
               className="
                 w-full
+                theme-surface
+                theme-text
+                theme-border
                 border
-                border-gray-200
-                rounded-xl
+                rounded-2xl
                 pl-10
                 pr-10
                 py-3
                 outline-none
                 focus:ring-2
-                focus:ring-blue-500
-                focus:border-blue-300
-                bg-white
+                focus:ring-accent
+                focus:border-accent
               "
             />
 
@@ -821,8 +1083,9 @@ Mis à jour :
                   right-3
                   top-1/2
                   -translate-y-1/2
-                  text-gray-400
-                  hover:text-gray-700
+                  theme-text-secondary
+                  hover:text-accent
+                  transition
                 "
                 title="Effacer la recherche"
               >
@@ -839,11 +1102,11 @@ Mis à jour :
         {filteredChapters.length > 0 && (
           <div
             className="
-              bg-white
-              rounded-2xl
+              theme-surface
+              theme-border
+              rounded-3xl
               shadow-sm
               border
-              border-gray-100
               p-4
               mb-4
               flex
@@ -855,27 +1118,46 @@ Mis à jour :
             "
           >
 
-            <label className="flex items-center gap-3 cursor-pointer">
+            <label className="
+              flex
+              items-center
+              gap-3
+              cursor-pointer
+            ">
 
               <input
                 type="checkbox"
                 checked={allSelected}
                 onChange={toggleSelectAll}
-                className="w-4 h-4"
+                className="
+                  w-4
+                  h-4
+                  accent-[var(--accent-primary)]
+                "
               />
 
-              <span className="font-medium text-gray-700">
+              <span className="
+                font-medium
+                theme-text
+              ">
                 Tout sélectionner
               </span>
 
             </label>
 
-            <div className="flex items-center gap-3">
+            <div className="
+              flex
+              items-center
+              gap-3
+            ">
 
               {selectedChapters.length > 0 && (
                 <>
 
-                  <span className="text-sm text-gray-500">
+                  <span className="
+                    text-sm
+                    theme-text-secondary
+                  ">
                     {selectedChapters.length} sélectionné
                     {selectedChapters.length !== 1
                       ? "s"
@@ -897,6 +1179,7 @@ Mis à jour :
                       rounded-xl
                       font-semibold
                       transition
+                      shadow-sm
                     "
                   >
                     <Trash2 size={17} />
@@ -913,9 +1196,24 @@ Mis à jour :
 
         {loading ? (
 
-          <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
+          <div
+            className="
+              theme-surface
+              theme-border
+              border
+              rounded-3xl
+              p-8
+              text-center
+              shadow-sm
+            "
+          >
 
-            <p className="text-gray-500">
+            <BookOpen
+              size={34}
+              className="mx-auto text-accent mb-3 animate-pulse"
+            />
+
+            <p className="theme-text-secondary">
               Chargement des chapitres...
             </p>
 
@@ -923,33 +1221,100 @@ Mis à jour :
 
         ) : chapters.length === 0 ? (
 
-          <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
+          <div
+            className="
+              theme-surface
+              theme-border
+              border
+              rounded-3xl
+              p-8
+              text-center
+              shadow-sm
+            "
+          >
 
-            <BookOpen
-              size={42}
-              className="mx-auto text-gray-300 mb-3"
-            />
+            <div
+              className="
+                w-14
+                h-14
+                rounded-2xl
+                bg-accent-soft
+                border
+                border-accent
+                text-accent
+                flex
+                items-center
+                justify-center
+                mx-auto
+                mb-4
+              "
+            >
+              <BookOpen size={28} />
+            </div>
 
-            <p className="text-gray-500">
+            <p className="
+              font-semibold
+              theme-text
+            ">
               Aucun chapitre disponible.
+            </p>
+
+            <p className="
+              text-sm
+              theme-text-secondary
+              mt-1
+            ">
+              Créez votre premier chapitre
+              ci-dessus.
             </p>
 
           </div>
 
         ) : filteredChapters.length === 0 ? (
 
-          <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
+          <div
+            className="
+              theme-surface
+              theme-border
+              border
+              rounded-3xl
+              p-8
+              text-center
+              shadow-sm
+            "
+          >
 
-            <Search
-              size={42}
-              className="mx-auto text-gray-300 mb-3"
-            />
+            <div
+              className="
+                w-14
+                h-14
+                rounded-2xl
+                bg-accent-soft
+                border
+                border-accent
+                text-accent
+                flex
+                items-center
+                justify-center
+                mx-auto
+                mb-4
+              "
+            >
+              <Search size={28} />
+            </div>
 
-            <p className="font-semibold text-gray-700">
+            <p className="
+              font-semibold
+              theme-text
+            ">
               Aucun chapitre trouvé.
             </p>
 
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="
+              text-sm
+              theme-text-secondary
+              mt-1
+            ">
               Essayez avec un autre mot-clé.
             </p>
 
@@ -958,9 +1323,10 @@ Mis à jour :
               onClick={() => setSearchTerm("")}
               className="
                 mt-4
-                text-blue-600
-                hover:text-blue-700
+                text-accent
+                hover:opacity-80
                 font-semibold
+                transition
               "
             >
               Effacer la recherche
@@ -986,10 +1352,10 @@ Mis à jour :
                 <div
                   key={chapter.id}
                   className={`
-                    bg-white
+                    theme-surface
                     shadow-sm
                     border
-                    rounded-2xl
+                    rounded-3xl
                     p-5
                     flex
                     flex-col
@@ -997,17 +1363,22 @@ Mis à jour :
                     md:items-center
                     md:justify-between
                     gap-4
+                    transition
                     ${
                       isSelected
-                        ? "border-blue-300 bg-blue-50/30"
-                        : "border-gray-100"
+                        ? "border-accent bg-accent-soft"
+                        : "theme-border hover:shadow-md"
                     }
                   `}
                 >
 
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
 
-                    <div className="flex items-center gap-3">
+                    <div className="
+                      flex
+                      items-center
+                      gap-3
+                    ">
 
                       <input
                         type="checkbox"
@@ -1017,7 +1388,12 @@ Mis à jour :
                             chapter.id
                           )
                         }
-                        className="w-4 h-4 flex-shrink-0"
+                        className="
+                          w-4
+                          h-4
+                          flex-shrink-0
+                          accent-[var(--accent-primary)]
+                        "
                       />
 
                       <div
@@ -1025,31 +1401,46 @@ Mis à jour :
                           w-10
                           h-10
                           rounded-xl
-                          bg-blue-50
-                          text-blue-600
+                          bg-accent-soft
+                          border
+                          border-accent
+                          text-accent
                           flex
                           items-center
                           justify-center
                           font-bold
+                          flex-shrink-0
                         "
                       >
                         {chapter.order_number}
                       </div>
 
-                      <div>
+                      <div className="min-w-0">
 
-                        <h3 className="font-bold text-gray-900">
+                        <h3 className="
+                          font-bold
+                          theme-text
+                          truncate
+                        ">
                           {chapter.title}
                         </h3>
 
                         {chapter.description && (
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="
+                            text-sm
+                            theme-text-secondary
+                            mt-1
+                          ">
                             {chapter.description}
                           </p>
                         )}
 
                         {importDate && (
-                          <p className="text-xs text-gray-400 mt-2">
+                          <p className="
+                            text-xs
+                            theme-text-secondary
+                            mt-2
+                          ">
                             📅 Importé le {importDate}
                           </p>
                         )}
@@ -1060,16 +1451,27 @@ Mis à jour :
 
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="
+                    flex
+                    flex-wrap
+                    gap-2
+                  ">
+
+                    {/* MODIFIER */}
 
                     <button
+                      type="button"
                       onClick={() =>
                         editChapter(chapter)
                       }
                       className="
                         p-2.5
                         bg-yellow-100
+                        dark:bg-yellow-950/30
                         hover:bg-yellow-200
+                        dark:hover:bg-yellow-900/40
+                        text-yellow-700
+                        dark:text-yellow-300
                         rounded-xl
                         transition
                       "
@@ -1078,14 +1480,21 @@ Mis à jour :
                       <Pencil size={18} />
                     </button>
 
+                    {/* SUPPRIMER */}
+
                     <button
+                      type="button"
                       onClick={() =>
                         handleDelete(chapter.id)
                       }
                       className="
                         p-2.5
                         bg-red-100
+                        dark:bg-red-950/30
                         hover:bg-red-200
+                        dark:hover:bg-red-900/40
+                        text-red-700
+                        dark:text-red-300
                         rounded-xl
                         transition
                       "
@@ -1094,21 +1503,26 @@ Mis à jour :
                       <Trash2 size={18} />
                     </button>
 
+                    {/* LEÇONS */}
+
                     <button
+                      type="button"
                       onClick={() =>
                         navigate(
                           `/admin/lessons/${chapter.id}`
                         )
                       }
                       className="
-                        bg-green-600
-                        hover:bg-green-700
+                        bg-accent
+                        hover:opacity-90
+                        hover:-translate-y-0.5
                         text-white
                         px-4
                         py-2.5
                         rounded-xl
                         font-semibold
                         transition
+                        shadow-sm
                       "
                     >
                       Leçons

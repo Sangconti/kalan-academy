@@ -4,32 +4,45 @@ export default function UserFilters({
   role,
   setRole
 }) {
-
   return (
-
     <div
       className="
         flex
-        gap-4
+        flex-col
+        sm:flex-row
+
+        gap-3
+        sm:gap-4
+
         mb-6
       "
     >
-
       <input
         className="
+          w-full
+
           border
           theme-border
-          rounded-lg
+
+          rounded-2xl
+
           p-3
+
           flex-1
+
           theme-surface
           theme-text
+
           placeholder:text-gray-400
           dark:placeholder:text-gray-500
+
           outline-none
+
           focus:border-accent
           focus:ring-2
           focus:ring-accent-soft
+
+          transition
         "
         placeholder="Rechercher un élève..."
         value={search}
@@ -38,26 +51,34 @@ export default function UserFilters({
         }
       />
 
-
       <select
         className="
+          w-full
+          sm:w-auto
+
           border
           theme-border
-          rounded-lg
+
+          rounded-2xl
+
           p-3
+
           theme-surface
           theme-text
+
           outline-none
+
           focus:border-accent
           focus:ring-2
           focus:ring-accent-soft
+
+          transition
         "
         value={role}
         onChange={(e) =>
           setRole(e.target.value)
         }
       >
-
         <option value="">
           Tous les rôles
         </option>
@@ -81,11 +102,7 @@ export default function UserFilters({
         <option value="super_admin">
           Super Admin
         </option>
-
       </select>
-
     </div>
-
   );
-
 }

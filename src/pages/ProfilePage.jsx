@@ -30,7 +30,8 @@ import {
   Award,
   KeyRound,
   Copy,
-  Check
+  Check,
+  BookOpen
 } from "lucide-react";
 
 
@@ -137,20 +138,9 @@ export default function ProfilePage({
   // PROTECTION DES REQUÊTES
   // ===================================================
 
-  /*
-    Évite les doubles chargements.
-
-    C'est particulièrement utile avec React
-    Strict Mode en développement, qui peut
-    exécuter deux fois certains effets.
-  */
   const loadingRequestRef =
     useRef(false);
 
-  /*
-    Empêche les setState après démontage
-    de la page.
-  */
   const mountedRef =
     useRef(false);
 
@@ -193,9 +183,6 @@ export default function ProfilePage({
       background = false
     } = {}) => {
 
-      /*
-        Protection contre les doubles chargements.
-      */
       if (loadingRequestRef.current) {
         return;
       }
@@ -206,7 +193,7 @@ export default function ProfilePage({
       try {
 
         // =================================================
-        // 👁️ MODE CONSULTATION
+        // MODE CONSULTATION
         // =================================================
 
         if (
@@ -220,10 +207,6 @@ export default function ProfilePage({
           );
 
 
-          // -----------------------------------------------
-          // CACHE ÉLÈVE CIBLÉ
-          // -----------------------------------------------
-
           const cachedProfile =
             readLocalCache(
               getProfileCacheKey(studentId),
@@ -236,10 +219,6 @@ export default function ProfilePage({
               []
             );
 
-
-          /*
-            Affichage immédiat du cache.
-          */
 
           if (
             mountedRef.current &&
@@ -281,12 +260,6 @@ export default function ProfilePage({
           // HORS LIGNE
           // -----------------------------------------------
 
-          /*
-            Si l'appareil est clairement hors ligne,
-            le cache est la seule source disponible.
-
-            On évite donc une attente réseau inutile.
-          */
           if (
             typeof navigator !== "undefined" &&
             navigator.onLine === false
@@ -401,10 +374,6 @@ export default function ProfilePage({
               badgeError
             );
 
-            /*
-              Le cache est conservé en cas d'erreur.
-            */
-
             if (
               !cachedBadges &&
               mountedRef.current
@@ -443,10 +412,6 @@ export default function ProfilePage({
         // =================================================
         // MODE NORMAL
         // =================================================
-
-        // -----------------------------------------------
-        // SESSION
-        // -----------------------------------------------
 
         const {
           data: {
@@ -497,10 +462,6 @@ export default function ProfilePage({
           );
 
 
-        /*
-          Le cache est affiché immédiatement.
-        */
-
         if (
           cachedProfile &&
           mountedRef.current
@@ -526,10 +487,6 @@ export default function ProfilePage({
         }
 
 
-        // -----------------------------------------------
-        // MODE PREMIER CHARGEMENT
-        // -----------------------------------------------
-
         if (
           !cachedProfile &&
           !background &&
@@ -545,13 +502,6 @@ export default function ProfilePage({
         // HORS LIGNE
         // -----------------------------------------------
 
-        /*
-          Si le téléphone est clairement hors ligne,
-          inutile d'attendre les requêtes Supabase.
-
-          Les données locales déjà affichées restent
-          disponibles.
-        */
         if (
           typeof navigator !== "undefined" &&
           navigator.onLine === false
@@ -574,10 +524,6 @@ export default function ProfilePage({
           badgesResult
         ] = await Promise.all([
 
-          // ---------------------------------------------
-          // PROFILE
-          // ---------------------------------------------
-
           supabase
             .from("profiles")
             .select(`
@@ -595,10 +541,6 @@ export default function ProfilePage({
             )
             .single(),
 
-
-          // ---------------------------------------------
-          // BADGES
-          // ---------------------------------------------
 
           supabase
             .from("user_badges")
@@ -674,11 +616,6 @@ export default function ProfilePage({
             badgeError
           );
 
-          /*
-            Le cache est conservé si Supabase
-            ne répond pas.
-          */
-
           if (
             !cachedBadges &&
             mountedRef.current
@@ -721,11 +658,6 @@ export default function ProfilePage({
 
         if (mountedRef.current) {
 
-          /*
-            Même en cas d'erreur réseau,
-            la page ne reste jamais bloquée.
-          */
-
           setLoading(false);
 
         }
@@ -750,12 +682,7 @@ export default function ProfilePage({
 
     mountedRef.current = true;
 
-    /*
-      Une nouvelle route doit pouvoir déclencher
-      un nouveau chargement.
-    */
     loadingRequestRef.current = false;
-
 
     loadProfile();
 
@@ -775,19 +702,10 @@ export default function ProfilePage({
 
   async function handleGenerateRecoveryCode() {
 
-    /*
-      Disponible uniquement pour l'élève connecté.
-    */
-
     if (isConsultation) {
       return;
     }
 
-
-    /*
-      Générer un nouveau code invalide
-      immédiatement l'ancien.
-    */
 
     if (recoveryCode) {
 
@@ -816,12 +734,6 @@ export default function ProfilePage({
         await generateDeviceRecoveryCode();
 
 
-      /*
-        Selon deviceService, le résultat peut être
-        directement l'objet RPC ou être contenu
-        dans result.data.
-      */
-
       const payload =
         result?.data ?? result;
 
@@ -834,10 +746,6 @@ export default function ProfilePage({
         payload?.success &&
         code
       ) {
-
-        /*
-          Le code reste uniquement en mémoire.
-        */
 
         setRecoveryCode(
           String(code)
@@ -1001,11 +909,6 @@ export default function ProfilePage({
 
   async function handleLogout() {
 
-    /*
-      En consultation, l'administrateur
-      ne doit jamais être déconnecté.
-    */
-
     if (isConsultation) {
       return;
     }
@@ -1156,56 +1059,6 @@ export default function ProfilePage({
 
 
       {/* =================================================
-          HEADER
-      ================================================= */}
-
-      <div
-        className="
-          theme-surface
-          border-b
-          theme-border
-          px-5
-          py-4
-        "
-      >
-
-        <button
-          onClick={goHome}
-          className="
-            flex
-            items-center
-            gap-2
-            text-xl
-            font-bold
-            theme-text
-            hover:text-accent
-            transition
-          "
-        >
-
-          <span
-            className="
-              w-9
-              h-9
-              rounded-xl
-              bg-accent
-              text-white
-              flex
-              items-center
-              justify-center
-            "
-          >
-            🎓
-          </span>
-
-          Kalan Academy
-
-        </button>
-
-      </div>
-
-
-      {/* =================================================
           BANDEAU CONSULTATION
       ================================================= */}
 
@@ -1213,7 +1066,7 @@ export default function ProfilePage({
 
         <div
           className="
-            bg-blue-600
+            bg-accent
             text-white
             px-5
             py-3
@@ -1274,39 +1127,247 @@ export default function ProfilePage({
 
 
         {/* =================================================
-            TITRE
+            HERO PROFIL
         ================================================= */}
 
-        <div className="mb-6">
+        <div
+          className="
+            relative
+            overflow-hidden
+            rounded-3xl
+            bg-accent-soft
+            border
+            border-accent
+            p-6
+            md:p-8
+            shadow-lg
+            mb-7
+          "
+        >
 
-          <h1
+          {/* DÉCORATIONS */}
+
+          <div
             className="
-              text-2xl
-              md:text-3xl
-              font-bold
-              theme-text
+              pointer-events-none
+              absolute
+              -right-10
+              -top-10
+              w-40
+              h-40
+              rounded-full
+              bg-accent
+              opacity-10
+            "
+            aria-hidden="true"
+          />
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              -left-16
+              -bottom-20
+              w-48
+              h-48
+              rounded-full
+              bg-accent
+              opacity-10
+            "
+            aria-hidden="true"
+          />
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              right-16
+              -bottom-24
+              w-56
+              h-56
+              rounded-full
+              bg-accent
+              opacity-5
+            "
+            aria-hidden="true"
+          />
+
+
+          <div
+            className="
+              relative
+              z-10
             "
           >
 
-            {isConsultation
-              ? "Profil de l'élève"
-              : "Mon profil"}
+            <div
+              className="
+                inline-flex
+                items-center
+                gap-2
+                px-3
+                py-1.5
+                rounded-full
+                bg-accent
+                text-white
+                text-xs
+                font-semibold
+                mb-4
+              "
+            >
 
-          </h1>
+              <User
+                size={14}
+              />
+
+              {isConsultation
+                ? "Profil élève"
+                : "Mon profil"}
+
+            </div>
 
 
-          <p
-            className="
-              theme-text-secondary
-              mt-1
-            "
-          >
+            <h1
+              className="
+                text-2xl
+                md:text-3xl
+                font-bold
+                leading-tight
+                theme-text
+                break-words
+              "
+            >
 
-            {isConsultation
-              ? "Consultation du profil et des récompenses de l'élève."
-              : "Consulte ton profil et tes récompenses."}
+              {profile?.full_name ||
+                (
+                  isConsultation
+                    ? "Profil de l'élève"
+                    : "Mon profil"
+                )}
 
-          </p>
+            </h1>
+
+
+            <p
+              className="
+                theme-text-secondary
+                mt-3
+                leading-relaxed
+              "
+            >
+
+              {isConsultation
+                ? "Consulte le profil et les récompenses de l'élève en lecture seule."
+                : "Consulte ton profil, tes récompenses et les options de ton compte."}
+
+            </p>
+
+
+            <div
+              className="
+                flex
+                flex-wrap
+                items-center
+                gap-3
+                mt-5
+              "
+            >
+
+              <div
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  px-3
+                  py-2
+                  rounded-xl
+                  bg-white/70
+                  dark:bg-gray-950/30
+                  theme-text
+                  text-sm
+                  font-medium
+                  border
+                  border-white/50
+                  dark:border-white/10
+                "
+              >
+
+                <User
+                  size={16}
+                  className="text-accent"
+                />
+
+                {isConsultation
+                  ? "Consultation"
+                  : "Compte étudiant"}
+
+              </div>
+
+
+              {profile?.is_premium && (
+
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-2
+                    rounded-xl
+                    bg-yellow-50
+                    dark:bg-yellow-950/30
+                    text-yellow-700
+                    dark:text-yellow-300
+                    text-sm
+                    font-semibold
+                    border
+                    border-yellow-200
+                    dark:border-yellow-900
+                  "
+                >
+
+                  <Crown
+                    size={16}
+                  />
+
+                  Premium
+
+                </div>
+
+              )}
+
+
+              <div
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  px-3
+                  py-2
+                  rounded-xl
+                  bg-white/70
+                  dark:bg-gray-950/30
+                  theme-text
+                  text-sm
+                  font-medium
+                  border
+                  border-white/50
+                  dark:border-white/10
+                "
+              >
+
+                <Trophy
+                  size={16}
+                  className="text-accent"
+                />
+
+                {badges.length} badge{badges.length > 1 ? "s" : ""}
+
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
 
@@ -1319,297 +1380,302 @@ export default function ProfilePage({
 
           <div
             className="
+              relative
+              overflow-hidden
+              rounded-3xl
               theme-surface
-              rounded-2xl
-              shadow-sm
               border
               theme-border
-              overflow-hidden
+              shadow-sm
+              p-6
+              md:p-8
               mb-6
             "
           >
 
             <div
               className="
-                h-24
+                pointer-events-none
+                absolute
+                -right-12
+                -top-12
+                w-36
+                h-36
+                rounded-full
                 bg-accent
+                opacity-5
               "
+              aria-hidden="true"
+            />
+
+            <div
+              className="
+                pointer-events-none
+                absolute
+                -left-10
+                -bottom-16
+                w-32
+                h-32
+                rounded-full
+                bg-accent
+                opacity-5
+              "
+              aria-hidden="true"
             />
 
 
-            <div className="relative">
+            <div
+              className="
+                relative
+                z-10
+              "
+            >
 
               <div
                 className="
-                  pointer-events-none
-                  absolute
-                  inset-0
-                  overflow-hidden
+                  flex
+                  flex-col
+                  sm:flex-row
+                  sm:items-center
+                  gap-4
                 "
-                aria-hidden="true"
               >
 
                 <div
                   className="
-                    absolute
-                    -right-16
-                    -top-16
-                    w-48
-                    h-48
-                    rounded-full
-                    bg-accent
-                    opacity-10
+                    w-20
+                    h-20
+                    shrink-0
+                    rounded-2xl
+                    theme-surface
+                    border-4
+                    border-accent
+                    shadow-sm
+                    overflow-hidden
+                    flex
+                    items-center
+                    justify-center
                   "
-                />
+                >
 
-                <div
-                  className="
-                    absolute
-                    right-10
-                    -bottom-24
-                    w-56
-                    h-56
-                    rounded-full
-                    bg-accent
-                    opacity-5
-                  "
-                />
+                  {profile.avatar_url ? (
+
+                    <img
+                      src={profile.avatar_url}
+                      alt="Avatar"
+                      className="
+                        w-full
+                        h-full
+                        object-cover
+                      "
+                    />
+
+                  ) : (
+
+                    <User
+                      size={34}
+                      className="text-accent"
+                    />
+
+                  )}
+
+                </div>
+
+
+                <div className="min-w-0">
+
+                  <p
+                    className="
+                      text-sm
+                      md:text-base
+                      font-semibold
+                      mb-1
+                      text-accent
+                    "
+                  >
+                    {isConsultation
+                      ? "Profil élève"
+                      : "Mon profil"}
+                  </p>
+
+
+                  <h2
+                    className="
+                      text-2xl
+                      md:text-3xl
+                      font-extrabold
+                      tracking-tight
+                      theme-text
+                      break-words
+                    "
+                  >
+                    {profile.full_name ||
+                      "Étudiant Kalan"}
+                  </h2>
+
+
+                  <p
+                    className="
+                      text-sm
+                      md:text-base
+                      theme-text-secondary
+                      mt-2
+                    "
+                  >
+                    {isConsultation
+                      ? "Profil élève — lecture seule"
+                      : "Élève Kalan Academy"}
+                  </p>
+
+                </div>
 
               </div>
 
+
+              {/* INFORMATIONS */}
+
               <div
                 className="
-                  relative
-                  z-10
-                  px-5
-                  pb-6
+                  grid
+                  grid-cols-1
+                  sm:grid-cols-2
+                  gap-3
+                  mt-6
                 "
               >
 
-                {/* AVATAR */}
+                {/* STATUT */}
 
                 <div
                   className="
-                    -mt-10
-                    mb-4
+                    rounded-2xl
+                    bg-accent-soft
+                    border
+                    border-accent
+                    p-4
                   "
                 >
 
                   <div
                     className="
-                      w-20
-                      h-20
-                      rounded-2xl
-                      theme-surface
-                      border-4
-                      border-white
-                      dark:border-gray-700
-                      shadow-sm
-                      overflow-hidden
+                      w-9
+                      h-9
+                      rounded-xl
+                      bg-accent
+                      text-white
                       flex
                       items-center
                       justify-center
+                      mb-3
                     "
                   >
 
-                    {profile.avatar_url ? (
+                    {profile.is_premium ? (
 
-                      <img
-                        src={profile.avatar_url}
-                        alt="Avatar"
-                        className="
-                          w-full
-                          h-full
-                          object-cover
-                        "
+                      <Crown
+                        size={19}
                       />
 
                     ) : (
 
                       <User
-                        size={34}
-                        className="text-accent"
+                        size={19}
                       />
 
                     )}
 
                   </div>
 
+
+                  <p
+                    className="
+                      text-xs
+                      theme-text-secondary
+                    "
+                  >
+                    Statut
+                  </p>
+
+
+                  <p
+                    className="
+                      font-bold
+                      theme-text
+                      mt-1
+                    "
+                  >
+                    {profile.is_premium
+                      ? "Premium"
+                      : "Gratuit"}
+                  </p>
+
                 </div>
 
 
-                {/* NOM */}
-
-                <h2
-                  className="
-                    text-xl
-                    font-bold
-                    theme-text
-                  "
-                >
-                  {profile.full_name ||
-                    "Étudiant Kalan"}
-                </h2>
-
-
-                <p
-                  className="
-                    text-sm
-                    theme-text-secondary
-                    mt-1
-                  "
-                >
-                  {isConsultation
-                    ? "Profil élève — lecture seule"
-                    : "Élève Kalan Academy"}
-                </p>
-
-
-                {/* INFORMATIONS */}
+                {/* COMPTE */}
 
                 <div
                   className="
-                    grid
-                    grid-cols-2
-                    gap-3
-                    mt-5
+                    rounded-2xl
+                    bg-accent-soft
+                    border
+                    border-accent
+                    p-4
                   "
                 >
 
-                  {/* STATUT */}
-
                   <div
                     className="
-                      rounded-2xl
-                      bg-gray-50
-                      dark:bg-gray-800
-                      p-4
+                      w-9
+                      h-9
+                      rounded-xl
+                      bg-accent
+                      text-white
+                      flex
+                      items-center
+                      justify-center
+                      mb-3
                     "
                   >
 
-                    <div
-                      className="
-                        w-9
-                        h-9
-                        rounded-xl
-                        bg-yellow-50
-                        dark:bg-yellow-950/40
-                        flex
-                        items-center
-                        justify-center
-                        mb-3
-                      "
-                    >
-
-                      {profile.is_premium ? (
-
-                        <Crown
-                          size={19}
-                          className="text-yellow-500"
-                        />
-
-                      ) : (
-
-                        <User
-                          size={19}
-                          className="theme-text-secondary"
-                        />
-
-                      )}
-
-                    </div>
-
-
-                    <p
-                      className="
-                        text-xs
-                        theme-text-secondary
-                      "
-                    >
-                      Statut
-                    </p>
-
-
-                    <p
-                      className="
-                        font-bold
-                        theme-text
-                        mt-1
-                      "
-                    >
-                      {profile.is_premium
-                        ? "Premium"
-                        : "Gratuit"}
-                    </p>
+                    <Star
+                      size={19}
+                    />
 
                   </div>
 
 
-                  {/* COMPTE */}
-
-                  <div
+                  <p
                     className="
-                      rounded-2xl
-                      bg-gray-50
-                      dark:bg-gray-800
-                      p-4
+                      text-xs
+                      theme-text-secondary
+                    "
+                  >
+                    Compte
+                  </p>
+
+
+                  <p
+                    className="
+                      font-bold
+                      theme-text
+                      mt-1
                     "
                   >
 
-                    <div
-                      className="
-                        w-9
-                        h-9
-                        rounded-xl
-                        bg-accent-soft
-                        flex
-                        items-center
-                        justify-center
-                        mb-3
-                      "
-                    >
+                    {profile.role ===
+                      "super_admin"
 
-                      <Star
-                        size={19}
-                        className="text-accent"
-                      />
+                      ? "Administrateur"
 
-                    </div>
+                      : profile.role ===
+                        "admin"
 
+                      ? "Administrateur"
 
-                    <p
-                      className="
-                        text-xs
-                        theme-text-secondary
-                      "
-                    >
-                      Compte
-                    </p>
+                      : "Étudiant"}
 
-
-                    <p
-                      className="
-                        font-bold
-                        theme-text
-                        mt-1
-                      "
-                    >
-
-                      {profile.role ===
-                        "super_admin"
-
-                        ? "Administrateur"
-
-                        : profile.role ===
-                          "admin"
-
-                        ? "Administrateur"
-
-                        : "Étudiant"}
-
-                    </p>
-
-                  </div>
+                  </p>
 
                 </div>
 
@@ -1633,7 +1699,7 @@ export default function ProfilePage({
               relative
               overflow-hidden
               theme-surface
-              rounded-2xl
+              rounded-3xl
               border
               theme-border
               shadow-sm
@@ -1814,8 +1880,7 @@ export default function ProfilePage({
                         rounded-xl
                         border
                         theme-border
-                        bg-gray-50
-                        dark:bg-gray-800
+                        theme-surface
                         px-4
                         py-3
                         flex
@@ -1935,13 +2000,13 @@ export default function ProfilePage({
                   gap-2
                   rounded-xl
                   border
-                  theme-border
-                  theme-text
+                  border-accent
+                  bg-accent-soft
+                  text-accent
                   px-4
                   py-3
                   font-semibold
-                  hover:bg-gray-100
-                  dark:hover:bg-gray-800
+                  hover:opacity-90
                   transition
                   disabled:opacity-50
                   disabled:cursor-not-allowed
@@ -2014,7 +2079,7 @@ export default function ProfilePage({
           className="
             w-full
             theme-surface
-            rounded-2xl
+            rounded-3xl
             border
             theme-border
             shadow-sm
@@ -2038,6 +2103,7 @@ export default function ProfilePage({
               flex
               items-center
               justify-center
+              shrink-0
             "
           >
 
@@ -2049,7 +2115,7 @@ export default function ProfilePage({
           </div>
 
 
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
 
             <h2
               className="
@@ -2084,8 +2150,9 @@ export default function ProfilePage({
 
           <span
             className="
-              theme-text-secondary
+              text-accent
               text-xl
+              font-semibold
             "
           >
             →
@@ -2122,7 +2189,7 @@ export default function ProfilePage({
 
               <Trophy
                 size={21}
-                className="text-yellow-500"
+                className="text-accent"
               />
 
               {isConsultation
@@ -2183,7 +2250,7 @@ export default function ProfilePage({
           <div
             className="
               theme-surface
-              rounded-2xl
+              rounded-3xl
               border
               theme-border
               shadow-sm
@@ -2199,8 +2266,7 @@ export default function ProfilePage({
                 mx-auto
                 mb-4
                 rounded-2xl
-                bg-gray-50
-                dark:bg-gray-800
+                bg-accent-soft
                 flex
                 items-center
                 justify-center
@@ -2209,7 +2275,7 @@ export default function ProfilePage({
 
               <Award
                 size={30}
-                className="theme-text-secondary"
+                className="text-accent"
               />
 
             </div>
@@ -2256,7 +2322,7 @@ export default function ProfilePage({
                   key={item.id}
                   className="
                     theme-surface
-                    rounded-2xl
+                    rounded-3xl
                     border
                     theme-border
                     shadow-sm
@@ -2277,8 +2343,9 @@ export default function ProfilePage({
                       w-14
                       h-14
                       rounded-2xl
-                      bg-yellow-50
-                      dark:bg-yellow-950/40
+                      bg-accent-soft
+                      border
+                      border-accent
                       flex
                       items-center
                       justify-center
@@ -2307,7 +2374,7 @@ export default function ProfilePage({
 
                       <Trophy
                         size={27}
-                        className="text-yellow-500"
+                        className="text-accent"
                       />
 
                     )}
@@ -2403,8 +2470,8 @@ export default function ProfilePage({
             py-3
             rounded-xl
             font-semibold
-            hover:bg-gray-100
-            dark:hover:bg-gray-800
+            hover:border-accent
+            hover:text-accent
             transition
           "
         >

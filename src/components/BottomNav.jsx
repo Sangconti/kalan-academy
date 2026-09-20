@@ -31,12 +31,6 @@ export default function BottomNav() {
     },
 
     {
-      path: "/settings",
-      label: "Paramètres",
-      icon: Settings
-    },
-
-    {
       path: "/dashboard",
       label: "Progression",
       icon: BarChart3
@@ -52,6 +46,12 @@ export default function BottomNav() {
       path: "/profile",
       label: "Profil",
       icon: User
+    },
+
+    {
+      path: "/settings",
+      label: "Paramètres",
+      icon: Settings
     }
 
   ];

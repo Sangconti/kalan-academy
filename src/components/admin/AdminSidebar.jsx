@@ -16,7 +16,6 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-
 const menu = [
   {
     name: "Dashboard",
@@ -50,60 +49,44 @@ const menu = [
   },
 ];
 
-
 export default function AdminSidebar({
   open = false,
   collapsed = false,
   onClose,
   onToggleCollapse,
 }) {
-
   const navigate = useNavigate();
-
 
   // =====================================================
   // FERMER
   // =====================================================
 
   function handleClose() {
-
     if (onClose) {
       onClose();
     }
-
   }
-
 
   // =====================================================
   // NAVIGATION
   // =====================================================
 
   function handleNavigation() {
-
     handleClose();
-
   }
-
 
   // =====================================================
   // APERÇU APPLICATION ÉLÈVE
   // =====================================================
 
   function handleStudentApp() {
-
     handleClose();
 
-    navigate(
-      "/admin/student-preview"
-    );
-
+    navigate("/admin/student-preview");
   }
 
-
   return (
-
     <>
-
       {/* ==================================================
           OVERLAY MOBILE
       ================================================== */}
@@ -131,7 +114,6 @@ export default function AdminSidebar({
         `}
       />
 
-
       {/* ==================================================
           SIDEBAR
       ================================================== */}
@@ -144,14 +126,17 @@ export default function AdminSidebar({
 
           z-50
 
-          bg-slate-900
-          text-white
+          bg-accent-soft
+          theme-text
+
+          border-r
+          border-accent
 
           flex
           flex-col
 
           shadow-2xl
-          md:shadow-none
+          md:shadow-lg
 
           transform
 
@@ -175,10 +160,9 @@ export default function AdminSidebar({
 
           w-64
 
-          p-5
+          p-4
         `}
       >
-
         {/* ==================================================
             EN-TÊTE
         ================================================== */}
@@ -197,33 +181,100 @@ export default function AdminSidebar({
             }
           `}
         >
-
           {/* NOM ADMIN */}
 
-          <h1
+          <div
             className={`
-              text-xl
-              sm:text-2xl
+              flex
+              items-center
+              gap-3
 
-              font-bold
-
-              whitespace-nowrap
-
-              overflow-hidden
-
-              transition-all
-              duration-300
+              min-w-0
 
               ${
                 collapsed
-                  ? "md:w-0 md:opacity-0"
-                  : "w-auto opacity-100"
+                  ? "md:hidden"
+                  : ""
               }
             `}
           >
-            Kalan Admin
-          </h1>
+            <div
+              className="
+                w-10
+                h-10
+                shrink-0
 
+                rounded-2xl
+
+                bg-accent
+                text-white
+
+                flex
+                items-center
+                justify-center
+
+                shadow-sm
+              "
+            >
+              <LayoutDashboard size={21} />
+            </div>
+
+            <div
+              className="
+                min-w-0
+                overflow-hidden
+              "
+            >
+              <h1
+                className="
+                  text-lg
+                  sm:text-xl
+                  font-bold
+                  whitespace-nowrap
+                  truncate
+                  theme-text
+                "
+              >
+                Kalan Admin
+              </h1>
+
+              <p
+                className="
+                  text-xs
+                  theme-text-secondary
+                  whitespace-nowrap
+                "
+              >
+                Administration
+              </p>
+            </div>
+          </div>
+
+          {/* LOGO EN MODE RÉDUIT */}
+
+          {collapsed && (
+            <div
+              className="
+                hidden
+                md:flex
+
+                w-10
+                h-10
+
+                rounded-2xl
+
+                bg-accent
+                text-white
+
+                items-center
+                justify-center
+
+                shadow-sm
+              "
+            >
+              <LayoutDashboard size={21} />
+            </div>
+          )}
 
           {/* ==================================================
               BOUTON FERMER MOBILE
@@ -241,23 +292,22 @@ export default function AdminSidebar({
               w-9
               h-9
 
-              rounded-lg
+              rounded-xl
 
-              text-slate-300
+              theme-text-secondary
 
-              hover:bg-slate-700
-              hover:text-white
+              hover:bg-white/70
+              dark:hover:bg-gray-950/30
+
+              hover:text-accent
 
               transition
 
               md:hidden
             "
           >
-
             <X size={22} />
-
           </button>
-
 
           {/* ==================================================
               BOUTON RÉDUIRE DESKTOP
@@ -286,12 +336,14 @@ export default function AdminSidebar({
               w-9
               h-9
 
-              rounded-lg
+              rounded-xl
 
-              text-slate-300
+              theme-text-secondary
 
-              hover:bg-slate-700
-              hover:text-white
+              hover:bg-white/70
+              dark:hover:bg-gray-950/30
+
+              hover:text-accent
 
               transition
 
@@ -302,30 +354,23 @@ export default function AdminSidebar({
               }
             `}
           >
-
             {collapsed ? (
               <PanelLeftOpen size={20} />
             ) : (
               <PanelLeftClose size={20} />
             )}
-
           </button>
-
         </div>
-
 
         {/* ==================================================
             MENU PRINCIPAL
         ================================================== */}
 
         <nav className="space-y-2">
-
           {menu.map((item) => {
-
             const Icon = item.icon;
 
             return (
-
               <NavLink
                 key={item.name}
                 to={item.path}
@@ -350,23 +395,32 @@ export default function AdminSidebar({
 
                   p-3
 
-                  rounded-lg
+                  rounded-xl
 
-                  transition
+                  font-medium
+
+                  transition-all
 
                   ${
                     isActive
-                      ? "bg-slate-700"
-                      : "hover:bg-slate-700"
+                      ? `
+                        bg-accent
+                        text-white
+                        shadow-sm
+                      `
+                      : `
+                        theme-text
+                        hover:bg-white/70
+                        dark:hover:bg-gray-950/30
+                        hover:text-accent
+                      `
                   }
                 `}
               >
-
                 <Icon
                   size={20}
                   className="shrink-0"
                 />
-
 
                 {/* TEXTE */}
 
@@ -387,31 +441,24 @@ export default function AdminSidebar({
                 >
                   {item.name}
                 </span>
-
               </NavLink>
-
             );
-
           })}
-
         </nav>
-
 
         {/* ==================================================
             ESPACE ÉLÈVE
         ================================================== */}
 
         <div className="mt-auto pt-6">
-
           <div
             className="
               border-t
-              border-slate-700
+              border-accent
 
               pt-5
             "
           >
-
             <button
               type="button"
               onClick={handleStudentApp}
@@ -436,23 +483,24 @@ export default function AdminSidebar({
 
                 p-3
 
-                rounded-lg
+                rounded-xl
 
-                transition
+                transition-all
 
                 text-left
-                text-slate-200
 
-                hover:bg-slate-700
-                hover:text-white
+                theme-text
+
+                hover:bg-white/70
+                dark:hover:bg-gray-950/30
+
+                hover:text-accent
               `}
             >
-
               <GraduationCap
                 size={20}
                 className="shrink-0"
               />
-
 
               {/* TEXTE */}
 
@@ -473,15 +521,10 @@ export default function AdminSidebar({
               >
                 Aperçu de l'application élève
               </span>
-
             </button>
-
           </div>
-
         </div>
-
       </aside>
-
     </>
   );
 }

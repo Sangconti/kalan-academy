@@ -1,6 +1,17 @@
 import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
+
+import {
+  ShieldCheck,
+  Mail,
+  Lock,
+  LogIn,
+  Loader2,
+} from "lucide-react";
+
 import { supabase } from "../../lib/supabase";
+
 import { getCurrentAdmin } from "../../services/adminAuthService";
 
 export default function LoginAdmin() {
@@ -8,13 +19,18 @@ export default function LoginAdmin() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState("");
 
   async function handleLogin(e) {
     e.preventDefault();
 
-    console.log("🔐 [LOGIN ADMIN] Tentative de connexion :", email);
+    console.log(
+      "🔐 [LOGIN ADMIN] Tentative de connexion :",
+      email
+    );
 
     setLoading(true);
     setError("");
@@ -110,7 +126,6 @@ export default function LoginAdmin() {
       navigate("/admin", {
         replace: true,
       });
-
     } catch (err) {
       console.error(
         "💥 [LOGIN ADMIN] Exception =",
@@ -121,7 +136,6 @@ export default function LoginAdmin() {
         err?.message ||
         "Une erreur est survenue lors de la connexion."
       );
-
     } finally {
       setLoading(false);
 
@@ -132,54 +146,425 @@ export default function LoginAdmin() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div
+      className="
+        min-h-screen
+        theme-bg
+        theme-text
 
-      <form
-        onSubmit={handleLogin}
-        className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md"
+        flex
+        items-center
+        justify-center
+
+        p-4
+        sm:p-6
+
+        relative
+        overflow-hidden
+      "
+    >
+      {/* ==================================================
+          DÉCORATIONS DE FOND
+      ================================================== */}
+
+      <div
+        className="
+          absolute
+          -right-20
+          -top-20
+
+          w-72
+          h-72
+
+          rounded-full
+
+          bg-accent
+
+          opacity-10
+        "
+      />
+
+      <div
+        className="
+          absolute
+          -left-24
+          -bottom-24
+
+          w-80
+          h-80
+
+          rounded-full
+
+          bg-accent
+
+          opacity-10
+        "
+      />
+
+      {/* ==================================================
+          CARTE
+      ================================================== */}
+
+      <div
+        className="
+          relative
+          z-10
+
+          w-full
+          max-w-md
+
+          rounded-3xl
+
+          bg-accent-soft
+          border
+          border-accent
+
+          shadow-lg
+
+          p-6
+          sm:p-8
+        "
       >
+        {/* ==================================================
+            EN-TÊTE
+        ================================================== */}
 
-        <h1 className="text-2xl font-bold mb-6 text-center">
-          Administration Kalan Academy
-        </h1>
+        <div className="text-center">
+          <div
+            className="
+              mx-auto
 
-        <input
-          className="border w-full p-3 rounded mb-4"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          disabled={loading}
-          required
-        />
+              w-16
+              h-16
 
-        <input
-          type="password"
-          className="border w-full p-3 rounded mb-4"
-          placeholder="Mot de passe"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          disabled={loading}
-          required
-        />
+              rounded-2xl
 
-        {error && (
-          <div className="text-red-500 mb-4">
-            {error}
+              bg-accent
+              text-white
+
+              flex
+              items-center
+              justify-center
+
+              shadow-md
+
+              mb-5
+            "
+          >
+            <ShieldCheck size={32} />
           </div>
-        )}
 
-        <button
-          type="submit"
-          className="bg-indigo-600 text-white w-full p-3 rounded disabled:opacity-60"
-          disabled={loading}
+          <div
+            className="
+              inline-flex
+              items-center
+              gap-2
+
+              px-3
+              py-1.5
+
+              rounded-full
+
+              bg-accent
+              text-white
+
+              text-xs
+              font-semibold
+
+              mb-3
+            "
+          >
+            <LogIn size={14} />
+            Espace administrateur
+          </div>
+
+          <h1
+            className="
+              text-2xl
+              sm:text-3xl
+
+              font-bold
+
+              theme-text
+            "
+          >
+            Administration
+          </h1>
+
+          <p
+            className="
+              theme-text-secondary
+
+              mt-3
+
+              leading-relaxed
+
+              text-sm
+              sm:text-base
+            "
+          >
+            Connectez-vous pour accéder à
+            l'administration de Kalan Academy.
+          </p>
+        </div>
+
+        {/* ==================================================
+            FORMULAIRE
+        ================================================== */}
+
+        <form
+          onSubmit={handleLogin}
+          className="mt-7"
         >
-          {loading
-            ? "Connexion..."
-            : "Connexion"}
-        </button>
+          {/* EMAIL */}
 
-      </form>
+          <div className="mb-4">
+            <label
+              htmlFor="admin-email"
+              className="
+                block
 
+                text-sm
+                font-semibold
+
+                theme-text
+
+                mb-2
+              "
+            >
+              Adresse e-mail
+            </label>
+
+            <div className="relative">
+              <Mail
+                size={18}
+                className="
+                  absolute
+                  left-3
+                  top-1/2
+                  -translate-y-1/2
+
+                  text-accent
+                "
+              />
+
+              <input
+                id="admin-email"
+                type="email"
+                className="
+                  w-full
+
+                  border
+                  theme-border
+
+                  rounded-xl
+
+                  p-3
+                  pl-10
+
+                  theme-surface
+                  theme-text
+
+                  placeholder:text-gray-400
+                  dark:placeholder:text-gray-500
+
+                  outline-none
+
+                  focus:border-accent
+                  focus:ring-2
+                  focus:ring-accent-soft
+
+                  transition
+                "
+                placeholder="admin@kalan-academy.com"
+                value={email}
+                onChange={(e) =>
+                  setEmail(e.target.value)
+                }
+                disabled={loading}
+                required
+              />
+            </div>
+          </div>
+
+          {/* MOT DE PASSE */}
+
+          <div className="mb-5">
+            <label
+              htmlFor="admin-password"
+              className="
+                block
+
+                text-sm
+                font-semibold
+
+                theme-text
+
+                mb-2
+              "
+            >
+              Mot de passe
+            </label>
+
+            <div className="relative">
+              <Lock
+                size={18}
+                className="
+                  absolute
+                  left-3
+                  top-1/2
+                  -translate-y-1/2
+
+                  text-accent
+                "
+              />
+
+              <input
+                id="admin-password"
+                type="password"
+                className="
+                  w-full
+
+                  border
+                  theme-border
+
+                  rounded-xl
+
+                  p-3
+                  pl-10
+
+                  theme-surface
+                  theme-text
+
+                  placeholder:text-gray-400
+                  dark:placeholder:text-gray-500
+
+                  outline-none
+
+                  focus:border-accent
+                  focus:ring-2
+                  focus:ring-accent-soft
+
+                  transition
+                "
+                placeholder="Votre mot de passe"
+                value={password}
+                onChange={(e) =>
+                  setPassword(e.target.value)
+                }
+                disabled={loading}
+                required
+              />
+            </div>
+          </div>
+
+          {/* ERREUR */}
+
+          {error && (
+            <div
+              className="
+                mb-5
+
+                rounded-xl
+
+                border
+                border-red-200
+                dark:border-red-900/50
+
+                bg-red-50
+                dark:bg-red-950/30
+
+                px-4
+                py-3
+
+                text-sm
+
+                text-red-700
+                dark:text-red-300
+              "
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
+
+          {/* BOUTON */}
+
+          <button
+            type="submit"
+            className="
+              w-full
+
+              inline-flex
+              items-center
+              justify-center
+              gap-2
+
+              bg-accent
+              text-white
+
+              px-5
+              py-3
+
+              rounded-xl
+
+              font-bold
+
+              shadow-md
+
+              hover:opacity-90
+              hover:-translate-y-0.5
+
+              active:scale-[0.99]
+
+              transition-all
+
+              disabled:opacity-60
+              disabled:hover:translate-y-0
+              disabled:cursor-not-allowed
+            "
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <Loader2
+                  size={18}
+                  className="animate-spin"
+                />
+
+                Connexion...
+              </>
+            ) : (
+              <>
+                <LogIn size={18} />
+
+                Connexion
+              </>
+            )}
+          </button>
+        </form>
+
+        {/* ==================================================
+            PIED
+        ================================================== */}
+
+        <div
+          className="
+            mt-6
+            pt-5
+
+            border-t
+            border-accent
+
+            text-center
+
+            text-xs
+            theme-text-secondary
+          "
+        >
+          Kalan Academy • Administration
+        </div>
+      </div>
     </div>
   );
 }

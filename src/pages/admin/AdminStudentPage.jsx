@@ -14,7 +14,6 @@ import {
   ArrowLeft,
   Award,
   BookOpen,
-  CheckCircle2,
   CreditCard,
   Mail,
   RefreshCw,
@@ -98,17 +97,17 @@ function getAccessStatusClass(status) {
   switch (status) {
 
     case "active":
-      return "bg-green-50 text-green-700 border-green-200";
+      return "bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800";
 
     case "suspended":
     case "blocked":
-      return "bg-red-50 text-red-700 border-red-200";
+      return "bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800";
 
     case "pending":
-      return "bg-amber-50 text-amber-700 border-amber-200";
+      return "bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800";
 
     default:
-      return "bg-gray-50 text-gray-700 border-gray-200";
+      return "bg-gray-50 dark:bg-gray-950/30 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700";
 
   }
 
@@ -518,6 +517,7 @@ export default function AdminStudentPage() {
         flex-col
         items-center
         justify-center
+        theme-bg
       ">
 
         <div className="
@@ -525,6 +525,8 @@ export default function AdminStudentPage() {
           h-14
           rounded-2xl
           bg-accent-soft
+          border
+          border-accent
           flex
           items-center
           justify-center
@@ -539,7 +541,7 @@ export default function AdminStudentPage() {
         </div>
 
         <p className="
-          text-gray-700
+          theme-text
           font-semibold
         ">
           Chargement de l'élève...
@@ -559,6 +561,8 @@ export default function AdminStudentPage() {
 
     return (
       <div className="
+        min-h-[60vh]
+        theme-bg
         max-w-2xl
         mx-auto
         px-5
@@ -566,10 +570,10 @@ export default function AdminStudentPage() {
       ">
 
         <div className="
-          bg-white
-          rounded-3xl
+          theme-surface
+          theme-border
           border
-          border-gray-200
+          rounded-3xl
           shadow-sm
           p-8
           text-center
@@ -581,6 +585,12 @@ export default function AdminStudentPage() {
             mx-auto
             rounded-2xl
             bg-red-50
+            dark:bg-red-950/30
+            border
+            border-red-200
+            dark:border-red-800
+            text-red-600
+            dark:text-red-300
             flex
             items-center
             justify-center
@@ -592,14 +602,14 @@ export default function AdminStudentPage() {
           <h2 className="
             text-xl
             font-bold
-            text-gray-900
+            theme-text
           ">
             Impossible de charger l'élève
           </h2>
 
           <p className="
             text-sm
-            text-gray-600
+            theme-text-secondary
             mt-2
           ">
             {error}
@@ -623,9 +633,14 @@ export default function AdminStudentPage() {
                 px-5
                 py-3
                 rounded-xl
-                bg-gray-100
-                text-gray-700
+                theme-surface
+                theme-border
+                border
+                theme-text
                 font-semibold
+                hover:bg-accent-soft
+                hover:text-accent
+                transition
               "
             >
               Retour aux utilisateurs
@@ -647,6 +662,10 @@ export default function AdminStudentPage() {
                 bg-accent
                 text-white
                 font-semibold
+                shadow-md
+                hover:opacity-90
+                hover:-translate-y-0.5
+                transition
               "
             >
               <RefreshCw size={18} />
@@ -671,10 +690,42 @@ export default function AdminStudentPage() {
 
     return (
       <div className="
+        min-h-[60vh]
+        theme-bg
+        flex
+        items-center
+        justify-center
         p-8
         text-center
       ">
-        Élève introuvable.
+
+        <div className="
+          theme-surface
+          theme-border
+          border
+          rounded-3xl
+          shadow-sm
+          p-8
+        ">
+
+          <User
+            size={36}
+            className="
+              mx-auto
+              text-accent
+              mb-3
+            "
+          />
+
+          <p className="
+            theme-text
+            font-bold
+          ">
+            Élève introuvable.
+          </p>
+
+        </div>
+
       </div>
     );
 
@@ -835,7 +886,7 @@ export default function AdminStudentPage() {
 
     <div className="
       min-h-screen
-      bg-white
+      theme-bg
       px-5
       py-6
       md:px-8
@@ -845,182 +896,298 @@ export default function AdminStudentPage() {
       <div className="
         max-w-6xl
         mx-auto
-        space-y-6
+        space-y-7
       ">
 
 
         {/* =================================================
-            BARRE GESTION DE L'ÉLÈVE
+            HERO GESTION DE L'ÉLÈVE
         ================================================= */}
 
-        <div className="
-          flex
-          flex-col
-          sm:flex-row
-          sm:items-center
-          sm:justify-between
-          gap-3
-          bg-amber-50
+        <section className="
+          relative
+          overflow-hidden
+          rounded-3xl
+          bg-accent-soft
           border
-          border-amber-200
-          rounded-2xl
-          px-4
-          py-3
+          border-accent
+          p-6
+          md:p-8
+          shadow-lg
         ">
 
           <div className="
-            flex
-            items-center
-            gap-3
+            absolute
+            -right-10
+            -top-10
+            w-40
+            h-40
+            rounded-full
+            bg-accent
+            opacity-10
+          " />
+
+          <div className="
+            absolute
+            -left-16
+            -bottom-20
+            w-48
+            h-48
+            rounded-full
+            bg-accent
+            opacity-10
+          " />
+
+          <div className="
+            absolute
+            right-16
+            -bottom-24
+            w-56
+            h-56
+            rounded-full
+            bg-accent
+            opacity-5
+          " />
+
+          <div className="
+            relative
+            z-10
           ">
 
             <div className="
-              w-10
-              h-10
-              rounded-xl
-              bg-amber-100
-              text-amber-700
               flex
-              items-center
-              justify-center
+              flex-col
+              lg:flex-row
+              lg:items-end
+              lg:justify-between
+              gap-6
             ">
-              ⚙️
+
+              <div>
+
+                <div className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  px-3
+                  py-1.5
+                  rounded-full
+                  bg-accent
+                  text-white
+                  text-xs
+                  font-semibold
+                  mb-4
+                ">
+                  <ShieldCheck size={14} />
+                  Gestion de l'élève
+                </div>
+
+                <h1 className="
+                  text-2xl
+                  md:text-3xl
+                  font-bold
+                  leading-tight
+                  theme-text
+                ">
+                  Gestion de {studentName}
+                </h1>
+
+                <p className="
+                  theme-text-secondary
+                  mt-3
+                  leading-relaxed
+                  max-w-3xl
+                ">
+                  Consultez le profil, la progression, les résultats,
+                  les badges et l'appareil associé à cet élève.
+                </p>
+
+              </div>
+
+              <div className="
+                flex
+                flex-col
+                sm:flex-row
+                gap-3
+              ">
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigate("/admin/users")
+                  }
+                  className="
+                    inline-flex
+                    items-center
+                    justify-center
+                    gap-2
+                    px-4
+                    py-3
+                    rounded-xl
+                    theme-surface
+                    theme-border
+                    border
+                    theme-text
+                    font-semibold
+                    shadow-sm
+                    hover:bg-accent
+                    hover:text-white
+                    hover:border-accent
+                    transition
+                  "
+                >
+                  <ArrowLeft size={17} />
+                  Retour
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    loadStudent(true)
+                  }
+                  disabled={refreshing}
+                  className="
+                    inline-flex
+                    items-center
+                    justify-center
+                    gap-2
+                    bg-accent
+                    text-white
+                    px-4
+                    py-3
+                    rounded-xl
+                    font-semibold
+                    shadow-md
+                    hover:opacity-90
+                    hover:-translate-y-0.5
+                    transition
+                    disabled:opacity-50
+                    disabled:cursor-not-allowed
+                  "
+                >
+
+                  <RefreshCw
+                    size={17}
+                    className={
+                      refreshing
+                        ? "animate-spin"
+                        : ""
+                    }
+                  />
+
+                  Actualiser
+
+                </button>
+
+              </div>
+
             </div>
 
-            <div>
+            <div className="
+              flex
+              flex-wrap
+              items-center
+              gap-3
+              mt-6
+            ">
 
-              <p className="
-                text-xs
-                font-bold
-                uppercase
-                tracking-wide
-                text-amber-700
+              <div className="
+                inline-flex
+                items-center
+                gap-2
+                px-3
+                py-2
+                rounded-xl
+                bg-white/70
+                dark:bg-gray-950/30
+                theme-text
+                text-sm
+                font-medium
+                border
+                border-white/50
+                dark:border-white/10
               ">
-                Gestion de l'élève
-              </p>
+                <User
+                  size={16}
+                  className="text-accent"
+                />
+                {studentName}
+              </div>
 
-              <p className="
-                font-semibold
-                text-amber-950
+              <div className="
+                inline-flex
+                items-center
+                gap-2
+                px-3
+                py-2
+                rounded-xl
+                bg-white/70
+                dark:bg-gray-950/30
+                theme-text
+                text-sm
+                font-medium
+                border
+                border-white/50
+                dark:border-white/10
               ">
-                Informations et progression de {studentName}
-              </p>
+                <BookOpen
+                  size={16}
+                  className="text-accent"
+                />
+                {className}
+              </div>
+
+              <div className="
+                inline-flex
+                items-center
+                gap-2
+                px-3
+                py-2
+                rounded-xl
+                bg-white/70
+                dark:bg-gray-950/30
+                theme-text
+                text-sm
+                font-medium
+                border
+                border-white/50
+                dark:border-white/10
+              ">
+                <Star
+                  size={16}
+                  className="text-accent"
+                />
+                Niveau {level}
+              </div>
+
+              <div className="
+                inline-flex
+                items-center
+                gap-2
+                px-3
+                py-2
+                rounded-xl
+                bg-white/70
+                dark:bg-gray-950/30
+                theme-text
+                text-sm
+                font-medium
+                border
+                border-white/50
+                dark:border-white/10
+              ">
+                <TrendingUp
+                  size={16}
+                  className="text-accent"
+                />
+                {xp} XP
+              </div>
 
             </div>
 
           </div>
 
-          <button
-            type="button"
-            onClick={() =>
-              navigate("/admin/users")
-            }
-            className="
-              inline-flex
-              items-center
-              justify-center
-              gap-2
-              px-4
-              py-2.5
-              rounded-xl
-              bg-white
-              border
-              border-amber-200
-              text-amber-800
-              font-semibold
-              hover:bg-amber-100
-              transition
-            "
-          >
-            <ArrowLeft size={17} />
-            Retour aux utilisateurs
-          </button>
-
-        </div>
-
-
-        {/* =================================================
-            HEADER
-        ================================================= */}
-
-        <div className="
-          flex
-          flex-col
-          sm:flex-row
-          sm:items-center
-          sm:justify-between
-          gap-4
-        ">
-
-          <div>
-
-            <p className="
-              text-sm
-              font-bold
-              text-accent
-            ">
-              Kalan Academy · Administration
-            </p>
-
-            <h1 className="
-              text-2xl
-              md:text-3xl
-              font-extrabold
-              text-gray-950
-              mt-1
-            ">
-              Gestion de {studentName}
-            </h1>
-
-            <p className="
-              text-gray-600
-              mt-1
-            ">
-              Consultez son profil, sa progression, ses résultats et son appareil associé.
-            </p>
-
-          </div>
-
-          <button
-            type="button"
-            onClick={() =>
-              loadStudent(true)
-            }
-            disabled={refreshing}
-            className="
-              inline-flex
-              items-center
-              justify-center
-              gap-2
-              bg-white
-              border
-              border-gray-200
-              text-gray-800
-              px-4
-              py-2.5
-              rounded-xl
-              font-semibold
-              shadow-sm
-              hover:bg-gray-50
-              transition
-              disabled:opacity-50
-            "
-          >
-
-            <RefreshCw
-              size={17}
-              className={
-                refreshing
-                  ? "animate-spin"
-                  : ""
-              }
-            />
-
-            Actualiser
-
-          </button>
-
-        </div>
+        </section>
 
 
         {/* =================================================
@@ -1028,10 +1195,10 @@ export default function AdminStudentPage() {
         ================================================= */}
 
         <section className="
-          bg-white
+          theme-surface
+          theme-border
           rounded-3xl
           border
-          border-gray-200
           shadow-sm
           p-6
         ">
@@ -1048,7 +1215,9 @@ export default function AdminStudentPage() {
               w-20
               h-20
               rounded-2xl
-              bg-gray-100
+              bg-accent-soft
+              border
+              border-accent
               overflow-hidden
               flex
               items-center
@@ -1072,7 +1241,7 @@ export default function AdminStudentPage() {
 
                 <User
                   size={34}
-                  className="text-gray-400"
+                  className="text-accent"
                 />
 
               )}
@@ -1084,14 +1253,14 @@ export default function AdminStudentPage() {
               <h2 className="
                 text-xl
                 font-bold
-                text-gray-950
+                theme-text
               ">
                 {studentName}
               </h2>
 
               <p className="
                 text-sm
-                text-gray-500
+                theme-text-secondary
                 mt-1
               ">
                 Élève Kalan Academy
@@ -1109,21 +1278,24 @@ export default function AdminStudentPage() {
                   items-center
                   gap-2
                   text-sm
-                  text-gray-600
+                  theme-text-secondary
                   break-all
                 ">
                   <Mail
                     size={15}
-                    className="shrink-0"
+                    className="shrink-0 text-accent"
                   />
                   {studentEmail}
                 </p>
 
                 <p className="
                   text-sm
-                  text-gray-600
+                  theme-text-secondary
                 ">
-                  Classe : <strong>{className}</strong>
+                  Classe :{" "}
+                  <strong className="theme-text">
+                    {className}
+                  </strong>
                 </p>
 
               </div>
@@ -1140,8 +1312,10 @@ export default function AdminStudentPage() {
                 px-3
                 py-2
                 rounded-xl
-                bg-blue-50
-                text-blue-700
+                bg-accent-soft
+                text-accent
+                border
+                border-accent
                 text-sm
                 font-semibold
               ">
@@ -1178,10 +1352,10 @@ export default function AdminStudentPage() {
         ================================================= */}
 
         <section className="
-          bg-white
+          theme-surface
+          theme-border
           rounded-3xl
           border
-          border-gray-200
           shadow-sm
           p-6
         ">
@@ -1199,6 +1373,8 @@ export default function AdminStudentPage() {
               rounded-xl
               bg-accent-soft
               text-accent
+              border
+              border-accent
               flex
               items-center
               justify-center
@@ -1211,14 +1387,14 @@ export default function AdminStudentPage() {
               <h2 className="
                 text-xl
                 font-bold
-                text-gray-950
+                theme-text
               ">
                 Informations administratives
               </h2>
 
               <p className="
                 text-sm
-                text-gray-600
+                theme-text-secondary
                 mt-1
               ">
                 Informations utiles à la gestion du compte.
@@ -1235,187 +1411,89 @@ export default function AdminStudentPage() {
             gap-4
           ">
 
-            <div className="
-              rounded-2xl
-              bg-gray-50
-              border
-              border-gray-200
-              p-4
-            ">
+            {[
+              {
+                label: "Classe",
+                value: className
+              },
+              {
+                label: "Rôle",
+                value: profile.role || "student"
+              },
+              {
+                label: "Orange Money",
+                value: orangeMoneyId,
+                icon: CreditCard,
+                iconClass: "text-orange-500"
+              },
+              {
+                label: "Compte créé",
+                value: formatDate(profile.created_at)
+              },
+              {
+                label: "Dernière mise à jour",
+                value: formatDate(profile.updated_at)
+              },
+              {
+                label: "Identifiant élève",
+                value: profile.id,
+                mono: true
+              }
+            ].map(item => {
 
-              <p className="
-                text-xs
-                uppercase
-                tracking-wide
-                font-bold
-                text-gray-500
-              ">
-                Classe
-              </p>
+              const Icon =
+                item.icon;
 
-              <p className="
-                font-bold
-                text-gray-900
-                mt-1
-              ">
-                {className}
-              </p>
+              return (
+                <div
+                  key={item.label}
+                  className="
+                    rounded-2xl
+                    bg-accent-soft
+                    border
+                    border-accent
+                    p-4
+                  "
+                >
 
-            </div>
+                  <p className="
+                    text-xs
+                    uppercase
+                    tracking-wide
+                    font-bold
+                    text-accent
+                  ">
+                    {item.label}
+                  </p>
 
-            <div className="
-              rounded-2xl
-              bg-gray-50
-              border
-              border-gray-200
-              p-4
-            ">
+                  <p className={`
+                    ${item.mono
+                      ? "text-xs font-mono"
+                      : "font-bold"
+                    }
+                    theme-text
+                    mt-1
+                    break-all
+                    inline-flex
+                    items-center
+                    gap-2
+                  `}>
 
-              <p className="
-                text-xs
-                uppercase
-                tracking-wide
-                font-bold
-                text-gray-500
-              ">
-                Rôle
-              </p>
+                    {Icon ? (
+                      <Icon
+                        size={16}
+                        className={`${item.iconClass || "text-accent"} shrink-0`}
+                      />
+                    ) : null}
 
-              <p className="
-                font-bold
-                text-gray-900
-                mt-1
-              ">
-                {profile.role || "student"}
-              </p>
+                    {item.value}
 
-            </div>
+                  </p>
 
-            <div className="
-              rounded-2xl
-              bg-gray-50
-              border
-              border-gray-200
-              p-4
-            ">
+                </div>
+              );
 
-              <p className="
-                text-xs
-                uppercase
-                tracking-wide
-                font-bold
-                text-gray-500
-              ">
-                Orange Money
-              </p>
-
-              <p className="
-                inline-flex
-                items-center
-                gap-2
-                font-bold
-                text-gray-900
-                mt-1
-                break-all
-              ">
-                <CreditCard
-                  size={16}
-                  className="text-orange-500 shrink-0"
-                />
-                {orangeMoneyId}
-              </p>
-
-            </div>
-
-            <div className="
-              rounded-2xl
-              bg-gray-50
-              border
-              border-gray-200
-              p-4
-            ">
-
-              <p className="
-                text-xs
-                uppercase
-                tracking-wide
-                font-bold
-                text-gray-500
-              ">
-                Compte créé
-              </p>
-
-              <p className="
-                font-bold
-                text-gray-900
-                mt-1
-              ">
-                {formatDate(
-                  profile.created_at
-                )}
-              </p>
-
-            </div>
-
-            <div className="
-              rounded-2xl
-              bg-gray-50
-              border
-              border-gray-200
-              p-4
-            ">
-
-              <p className="
-                text-xs
-                uppercase
-                tracking-wide
-                font-bold
-                text-gray-500
-              ">
-                Dernière mise à jour
-              </p>
-
-              <p className="
-                font-bold
-                text-gray-900
-                mt-1
-              ">
-                {formatDate(
-                  profile.updated_at
-                )}
-              </p>
-
-            </div>
-
-            <div className="
-              rounded-2xl
-              bg-gray-50
-              border
-              border-gray-200
-              p-4
-            ">
-
-              <p className="
-                text-xs
-                uppercase
-                tracking-wide
-                font-bold
-                text-gray-500
-              ">
-                Identifiant élève
-              </p>
-
-              <p className="
-                text-xs
-                font-mono
-                text-gray-700
-                mt-1
-                break-all
-              ">
-                {profile.id}
-              </p>
-
-            </div>
+            })}
 
           </div>
 
@@ -1435,13 +1513,24 @@ export default function AdminStudentPage() {
           border-accent
           p-6
           md:p-8
-          shadow-xl
+          shadow-lg
         ">
 
           <div className="
             absolute
-            -right-16
-            -top-16
+            -right-10
+            -top-10
+            w-40
+            h-40
+            rounded-full
+            bg-accent
+            opacity-10
+          "/>
+
+          <div className="
+            absolute
+            -left-16
+            -bottom-20
             w-48
             h-48
             rounded-full
@@ -1451,7 +1540,7 @@ export default function AdminStudentPage() {
 
           <div className="
             absolute
-            right-10
+            right-16
             -bottom-24
             w-56
             h-56
@@ -1481,6 +1570,7 @@ export default function AdminStudentPage() {
                 flex
                 items-center
                 justify-center
+                shadow-md
               ">
                 <Star size={25} />
               </div>
@@ -1499,7 +1589,7 @@ export default function AdminStudentPage() {
                   text-2xl
                   md:text-3xl
                   font-extrabold
-                  text-gray-950
+                  theme-text
                 ">
                   Niveau {level}
                 </h2>
@@ -1530,7 +1620,7 @@ export default function AdminStudentPage() {
                   font-extrabold
                   mt-1
                   tracking-tight
-                  text-gray-950
+                  theme-text
                 ">
                   {xp}
 
@@ -1562,7 +1652,7 @@ export default function AdminStudentPage() {
                   md:text-2xl
                   font-extrabold
                   mt-1
-                  text-gray-950
+                  theme-text
                 ">
                   {rank}
                 </p>
@@ -1580,7 +1670,7 @@ export default function AdminStudentPage() {
                 sm:justify-between
                 gap-1
                 text-sm
-                text-gray-700
+                theme-text-secondary
                 mb-2
               ">
 
@@ -1588,7 +1678,7 @@ export default function AdminStudentPage() {
                   Progression vers le niveau {level + 1}
                 </span>
 
-                <span className="font-bold">
+                <span className="font-bold theme-text">
                   {xpInCurrentLevel} / {XP_PER_LEVEL} XP
                 </span>
 
@@ -1597,6 +1687,7 @@ export default function AdminStudentPage() {
               <div className="
                 h-3
                 bg-white/70
+                dark:bg-gray-950/30
                 rounded-full
                 overflow-hidden
               ">
@@ -1621,7 +1712,7 @@ export default function AdminStudentPage() {
                 gap-2
                 mt-2
                 text-xs
-                text-gray-600
+                theme-text-secondary
               ">
 
                 <span>
@@ -1660,6 +1751,8 @@ export default function AdminStudentPage() {
               rounded-xl
               bg-accent-soft
               text-accent
+              border
+              border-accent
               flex
               items-center
               justify-center
@@ -1672,14 +1765,14 @@ export default function AdminStudentPage() {
               <h2 className="
                 text-xl
                 font-bold
-                text-gray-950
+                theme-text
               ">
                 Statistiques
               </h2>
 
               <p className="
                 text-sm
-                text-gray-600
+                theme-text-secondary
                 mt-1
               ">
                 Résumé de l'activité pédagogique de l'élève.
@@ -1727,21 +1820,25 @@ export default function AdminStudentPage() {
                 <div
                   key={label}
                   className="
-                    bg-white
-                    rounded-2xl
+                    theme-surface
+                    theme-border
+                    rounded-3xl
                     border
-                    border-gray-200
                     shadow-sm
                     p-5
+                    hover:shadow-lg
+                    transition
                   "
                 >
 
                   <div className="
-                    w-10
-                    h-10
-                    rounded-xl
+                    w-11
+                    h-11
+                    rounded-2xl
                     bg-accent-soft
                     text-accent
+                    border
+                    border-accent
                     flex
                     items-center
                     justify-center
@@ -1752,7 +1849,7 @@ export default function AdminStudentPage() {
 
                   <p className="
                     text-sm
-                    text-gray-600
+                    theme-text-secondary
                   ">
                     {label}
                   </p>
@@ -1760,7 +1857,7 @@ export default function AdminStudentPage() {
                   <p className="
                     text-2xl
                     font-extrabold
-                    text-gray-950
+                    theme-text
                     mt-1
                   ">
                     {value}
@@ -1795,6 +1892,8 @@ export default function AdminStudentPage() {
               rounded-xl
               bg-accent-soft
               text-accent
+              border
+              border-accent
               flex
               items-center
               justify-center
@@ -1807,14 +1906,14 @@ export default function AdminStudentPage() {
               <h2 className="
                 text-xl
                 font-bold
-                text-gray-950
+                theme-text
               ">
                 Progression par matière
               </h2>
 
               <p className="
                 text-sm
-                text-gray-600
+                theme-text-secondary
                 mt-1
               ">
                 Avancement réel de l'élève dans chaque matière.
@@ -1827,34 +1926,46 @@ export default function AdminStudentPage() {
           {Object.keys(subjects).length === 0 ? (
 
             <div className="
-              bg-white
-              rounded-2xl
+              theme-surface
+              theme-border
+              rounded-3xl
               border
-              border-gray-200
               shadow-sm
               p-8
               text-center
             ">
 
-              <BookOpen
-                size={36}
-                className="
-                  mx-auto
-                  text-gray-300
-                  mb-3
-                "
-              />
+              <div className="
+                w-14
+                h-14
+                mx-auto
+                rounded-2xl
+                bg-accent-soft
+                border
+                border-accent
+                flex
+                items-center
+                justify-center
+                mb-3
+              ">
+
+                <BookOpen
+                  size={28}
+                  className="text-accent"
+                />
+
+              </div>
 
               <h3 className="
                 font-bold
-                text-gray-800
+                theme-text
               ">
                 Pas encore de progression
               </h3>
 
               <p className="
                 text-sm
-                text-gray-600
+                theme-text-secondary
                 mt-1
               ">
                 Cet élève n'a pas encore terminé de leçon.
@@ -1901,12 +2012,14 @@ export default function AdminStudentPage() {
                         name
                       }
                       className="
-                        bg-white
-                        rounded-2xl
+                        theme-surface
+                        theme-border
+                        rounded-3xl
                         border
-                        border-gray-200
                         shadow-sm
                         p-5
+                        hover:shadow-lg
+                        transition
                       "
                     >
 
@@ -1919,7 +2032,7 @@ export default function AdminStudentPage() {
 
                         <h3 className="
                           font-bold
-                          text-gray-950
+                          theme-text
                           truncate
                         ">
                           {subject?.name || name}
@@ -1937,7 +2050,9 @@ export default function AdminStudentPage() {
 
                       <div className="
                         h-3
-                        bg-gray-100
+                        bg-accent-soft
+                        border
+                        border-accent
                         rounded-full
                         overflow-hidden
                         mt-4
@@ -1959,7 +2074,7 @@ export default function AdminStudentPage() {
 
                       <p className="
                         text-xs
-                        text-gray-600
+                        theme-text-secondary
                         mt-2
                       ">
 
@@ -2005,6 +2120,8 @@ export default function AdminStudentPage() {
               rounded-xl
               bg-accent-soft
               text-accent
+              border
+              border-accent
               flex
               items-center
               justify-center
@@ -2017,14 +2134,14 @@ export default function AdminStudentPage() {
               <h2 className="
                 text-xl
                 font-bold
-                text-gray-950
+                theme-text
               ">
                 Badges de l'élève
               </h2>
 
               <p className="
                 text-sm
-                text-gray-600
+                theme-text-secondary
               ">
                 Les récompenses obtenues sur Kalan Academy.
               </p>
@@ -2036,29 +2153,44 @@ export default function AdminStudentPage() {
           {badges.length === 0 ? (
 
             <div className="
-              bg-white
-              rounded-2xl
+              theme-surface
+              theme-border
+              rounded-3xl
               border
-              border-gray-200
               shadow-sm
               p-8
               text-center
             ">
 
-              <div className="text-4xl mb-3">
-                🏆
+              <div className="
+                w-14
+                h-14
+                mx-auto
+                rounded-2xl
+                bg-accent-soft
+                border
+                border-accent
+                flex
+                items-center
+                justify-center
+                mb-3
+              ">
+                <Trophy
+                  size={28}
+                  className="text-accent"
+                />
               </div>
 
               <h3 className="
                 font-bold
-                text-gray-800
+                theme-text
               ">
                 Aucun badge pour le moment
               </h3>
 
               <p className="
                 text-sm
-                text-gray-600
+                theme-text-secondary
                 mt-1
               ">
                 Les badges obtenus par l'élève apparaîtront ici.
@@ -2085,12 +2217,14 @@ export default function AdminStudentPage() {
                   <div
                     key={item.id}
                     className="
-                      bg-white
-                      rounded-2xl
+                      theme-surface
+                      theme-border
+                      rounded-3xl
                       border
-                      border-gray-200
                       shadow-sm
                       p-5
+                      hover:shadow-lg
+                      transition
                     "
                   >
 
@@ -2106,6 +2240,8 @@ export default function AdminStudentPage() {
                         shrink-0
                         rounded-2xl
                         bg-accent-soft
+                        border
+                        border-accent
                         flex
                         items-center
                         justify-center
@@ -2141,14 +2277,14 @@ export default function AdminStudentPage() {
 
                         <h3 className="
                           font-bold
-                          text-gray-950
+                          theme-text
                         ">
                           {badge?.name || "Badge"}
                         </h3>
 
                         <p className="
                           text-sm
-                          text-gray-600
+                          theme-text-secondary
                           mt-1
                         ">
                           {badge?.description ||
@@ -2189,18 +2325,31 @@ export default function AdminStudentPage() {
             GESTION DE L'APPAREIL
         ================================================= */}
 
-        <section
-          className="
-            bg-white
-            rounded-3xl
-            border
-            border-orange-200
-            shadow-sm
-            p-6
-          "
-        >
+        <section className="
+          relative
+          overflow-hidden
+          rounded-3xl
+          bg-accent-soft
+          border
+          border-accent
+          shadow-lg
+          p-6
+        ">
 
           <div className="
+            absolute
+            -right-10
+            -top-10
+            w-40
+            h-40
+            rounded-full
+            bg-accent
+            opacity-10
+          "/>
+
+          <div className="
+            relative
+            z-10
             flex
             flex-col
             gap-5
@@ -2225,29 +2374,47 @@ export default function AdminStudentPage() {
                   w-12
                   h-12
                   rounded-2xl
-                  bg-orange-50
-                  text-orange-600
+                  bg-accent
+                  text-white
                   flex
                   items-center
                   justify-center
                   shrink-0
+                  shadow-md
                 ">
                   <Smartphone size={24} />
                 </div>
 
                 <div>
 
+                  <div className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-1.5
+                    rounded-full
+                    bg-accent
+                    text-white
+                    text-xs
+                    font-semibold
+                    mb-2
+                  ">
+                    <Smartphone size={13} />
+                    Appareil
+                  </div>
+
                   <h2 className="
                     text-xl
                     font-bold
-                    text-gray-950
+                    theme-text
                   ">
                     Gestion de l'appareil
                   </h2>
 
                   <p className="
                     text-sm
-                    text-gray-600
+                    theme-text-secondary
                     mt-1
                     max-w-2xl
                   ">
@@ -2279,10 +2446,12 @@ export default function AdminStudentPage() {
                     px-4
                     py-3
                     rounded-xl
-                    bg-orange-500
+                    bg-accent
                     text-white
                     font-semibold
-                    hover:bg-orange-600
+                    shadow-md
+                    hover:opacity-90
+                    hover:-translate-y-0.5
                     transition
                     disabled:opacity-50
                     disabled:cursor-not-allowed
@@ -2315,12 +2484,15 @@ export default function AdminStudentPage() {
                     px-4
                     py-3
                     rounded-xl
-                    bg-gray-100
-                    text-gray-800
+                    theme-surface
+                    theme-border
                     border
-                    border-gray-200
+                    theme-text
                     font-semibold
-                    hover:bg-gray-200
+                    shadow-sm
+                    hover:bg-accent
+                    hover:text-white
+                    hover:border-accent
                     transition
                     disabled:opacity-50
                     disabled:cursor-not-allowed
@@ -2341,9 +2513,11 @@ export default function AdminStudentPage() {
 
             <div className="
               rounded-2xl
-              bg-orange-50
+              bg-white/70
+              dark:bg-gray-950/30
               border
-              border-orange-100
+              border-white/50
+              dark:border-white/10
               p-5
             ">
 
@@ -2353,21 +2527,36 @@ export default function AdminStudentPage() {
                   flex
                   items-center
                   gap-3
-                  text-orange-800
+                  theme-text
                 ">
 
-                  <Smartphone size={20} />
+                  <div className="
+                    w-10
+                    h-10
+                    rounded-xl
+                    bg-accent-soft
+                    border
+                    border-accent
+                    text-accent
+                    flex
+                    items-center
+                    justify-center
+                  ">
+                    <Smartphone size={20} />
+                  </div>
 
                   <div>
 
                     <p className="
                       font-bold
+                      theme-text
                     ">
                       Aucun appareil associé
                     </p>
 
                     <p className="
                       text-sm
+                      theme-text-secondary
                       mt-1
                     ">
                       Ce compte n'a actuellement aucun téléphone enregistré.
@@ -2386,137 +2575,66 @@ export default function AdminStudentPage() {
                   gap-4
                 ">
 
-                  <div>
+                  {[
+                    {
+                      label: "Appareil",
+                      value: deviceName
+                    },
+                    {
+                      label: "Fabricant",
+                      value: deviceManufacturer
+                    },
+                    {
+                      label: "Modèle",
+                      value: deviceModel
+                    },
+                    {
+                      label: "Plateforme",
+                      value: devicePlatform
+                    },
+                    {
+                      label: "Version système",
+                      value: deviceOS
+                    },
+                    {
+                      label: "Dernière activité",
+                      value: deviceLastSeen
+                    }
+                  ].map(item => (
 
-                    <p className="
-                      text-xs
-                      uppercase
-                      tracking-wide
-                      font-bold
-                      text-orange-700
-                    ">
-                      Appareil
-                    </p>
+                    <div
+                      key={item.label}
+                      className="
+                        rounded-2xl
+                        bg-accent-soft
+                        border
+                        border-accent
+                        p-4
+                      "
+                    >
 
-                    <p className="
-                      font-bold
-                      text-gray-900
-                      mt-1
-                    ">
-                      {deviceName}
-                    </p>
+                      <p className="
+                        text-xs
+                        uppercase
+                        tracking-wide
+                        font-bold
+                        text-accent
+                      ">
+                        {item.label}
+                      </p>
 
-                  </div>
+                      <p className="
+                        font-bold
+                        theme-text
+                        mt-1
+                        break-words
+                      ">
+                        {item.value}
+                      </p>
 
-                  <div>
+                    </div>
 
-                    <p className="
-                      text-xs
-                      uppercase
-                      tracking-wide
-                      font-bold
-                      text-orange-700
-                    ">
-                      Fabricant
-                    </p>
-
-                    <p className="
-                      font-bold
-                      text-gray-900
-                      mt-1
-                    ">
-                      {deviceManufacturer}
-                    </p>
-
-                  </div>
-
-                  <div>
-
-                    <p className="
-                      text-xs
-                      uppercase
-                      tracking-wide
-                      font-bold
-                      text-orange-700
-                    ">
-                      Modèle
-                    </p>
-
-                    <p className="
-                      font-bold
-                      text-gray-900
-                      mt-1
-                    ">
-                      {deviceModel}
-                    </p>
-
-                  </div>
-
-                  <div>
-
-                    <p className="
-                      text-xs
-                      uppercase
-                      tracking-wide
-                      font-bold
-                      text-orange-700
-                    ">
-                      Plateforme
-                    </p>
-
-                    <p className="
-                      font-bold
-                      text-gray-900
-                      mt-1
-                    ">
-                      {devicePlatform}
-                    </p>
-
-                  </div>
-
-                  <div>
-
-                    <p className="
-                      text-xs
-                      uppercase
-                      tracking-wide
-                      font-bold
-                      text-orange-700
-                    ">
-                      Version système
-                    </p>
-
-                    <p className="
-                      font-bold
-                      text-gray-900
-                      mt-1
-                    ">
-                      {deviceOS}
-                    </p>
-
-                  </div>
-
-                  <div>
-
-                    <p className="
-                      text-xs
-                      uppercase
-                      tracking-wide
-                      font-bold
-                      text-orange-700
-                    ">
-                      Dernière activité
-                    </p>
-
-                    <p className="
-                      font-bold
-                      text-gray-900
-                      mt-1
-                    ">
-                      {deviceLastSeen}
-                    </p>
-
-                  </div>
+                  ))}
 
                 </div>
 
@@ -2534,8 +2652,8 @@ export default function AdminStudentPage() {
                   p-4
                   ${
                     deviceMessageType === "success"
-                      ? "bg-green-50 border-green-200 text-green-800"
-                      : "bg-red-50 border-red-200 text-red-800"
+                      ? "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800 text-green-800 dark:text-green-300"
+                      : "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800 text-red-800 dark:text-red-300"
                   }
                 `}
               >
@@ -2562,10 +2680,11 @@ export default function AdminStudentPage() {
         ================================================= */}
 
         <section className="
-          bg-white
-          rounded-3xl
+          theme-surface
           border
           border-red-200
+          dark:border-red-800
+          rounded-3xl
           shadow-sm
           p-6
         ">
@@ -2590,7 +2709,12 @@ export default function AdminStudentPage() {
                 h-12
                 rounded-2xl
                 bg-red-50
+                dark:bg-red-950/30
+                border
+                border-red-200
+                dark:border-red-800
                 text-red-600
+                dark:text-red-300
                 flex
                 items-center
                 justify-center
@@ -2601,17 +2725,39 @@ export default function AdminStudentPage() {
 
               <div>
 
+                <div className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  px-3
+                  py-1.5
+                  rounded-full
+                  bg-red-50
+                  dark:bg-red-950/30
+                  border
+                  border-red-200
+                  dark:border-red-800
+                  text-red-700
+                  dark:text-red-300
+                  text-xs
+                  font-semibold
+                  mb-2
+                ">
+                  <RefreshCw size={13} />
+                  Action irréversible
+                </div>
+
                 <h2 className="
                   text-xl
                   font-bold
-                  text-gray-950
+                  theme-text
                 ">
                   Réinitialisation de la progression
                 </h2>
 
                 <p className="
                   text-sm
-                  text-gray-600
+                  theme-text-secondary
                   mt-1
                   max-w-2xl
                 ">
@@ -2641,7 +2787,9 @@ export default function AdminStudentPage() {
                 bg-red-600
                 text-white
                 font-semibold
+                shadow-md
                 hover:bg-red-700
+                hover:-translate-y-0.5
                 transition
                 disabled:opacity-50
                 disabled:cursor-not-allowed
@@ -2678,8 +2826,8 @@ export default function AdminStudentPage() {
                 p-4
                 ${
                   progressResetMessageType === "success"
-                    ? "bg-green-50 border-green-200 text-green-800"
-                    : "bg-red-50 border-red-200 text-red-800"
+                    ? "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800 text-green-800 dark:text-green-300"
+                    : "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800 text-red-800 dark:text-red-300"
                 }
               `}
             >

@@ -25,7 +25,6 @@ import {
 
 import { supabase } from "../../lib/supabase";
 
-
 export default function AdminStats() {
   // =========================================================
   // ÉTATS
@@ -47,7 +46,6 @@ export default function AdminStats() {
   const [downloads, setDownloads] = useState([]);
 
   const successTimeoutRef = useRef(null);
-
 
   // =========================================================
   // CHARGEMENT DES STATISTIQUES
@@ -75,18 +73,12 @@ export default function AdminStats() {
           attemptsResult,
           downloadsResult,
         ] = await Promise.all([
-          // ---------------------------------------------------
-          // PROFILS
-          // ---------------------------------------------------
           supabase
             .from("profiles")
             .select(
               "id, full_name, role, class_id, xp, level"
             ),
 
-          // ---------------------------------------------------
-          // CLASSES
-          // ---------------------------------------------------
           supabase
             .from("classes")
             .select(
@@ -96,9 +88,6 @@ export default function AdminStats() {
               ascending: true,
             }),
 
-          // ---------------------------------------------------
-          // MATIÈRES
-          // ---------------------------------------------------
           supabase
             .from("subjects")
             .select(
@@ -108,37 +97,24 @@ export default function AdminStats() {
               ascending: true,
             }),
 
-          // ---------------------------------------------------
-          // CHAPITRES
-          // ---------------------------------------------------
           supabase
             .from("chapters")
             .select(
               "id, subject_id, title, order_number"
             ),
 
-          // ---------------------------------------------------
-          // LEÇONS
-          // ---------------------------------------------------
           supabase
             .from("lessons")
             .select(
               "id, chapter_id, title, video_url, is_premium, order_number"
             ),
 
-          // ---------------------------------------------------
-          // QUIZ
-          // ---------------------------------------------------
           supabase
             .from("quizzes")
             .select(
               "id, lesson_id, title, passing_score, created_at"
             ),
 
-          // ---------------------------------------------------
-          // TENTATIVES DE QUIZ
-          // ---------------------------------------------------
-          // "answers" n'est pas nécessaire pour AdminStats.
           supabase
             .from("quiz_attempts")
             .select(
@@ -148,16 +124,12 @@ export default function AdminStats() {
               ascending: false,
             }),
 
-          // ---------------------------------------------------
-          // TÉLÉCHARGEMENTS
-          // ---------------------------------------------------
           supabase
             .from("downloads")
             .select(
               "id, user_id, lesson_id, file_size_mb, downloaded_at"
             ),
         ]);
-
 
         // =====================================================
         // VÉRIFICATION DES ERREURS
@@ -211,7 +183,6 @@ export default function AdminStats() {
           throw failedResult.result.error;
         }
 
-
         // =====================================================
         // STOCKAGE
         // =====================================================
@@ -264,7 +235,6 @@ export default function AdminStats() {
             : []
         );
 
-
         // =====================================================
         // MESSAGE DE SUCCÈS
         // =====================================================
@@ -286,7 +256,6 @@ export default function AdminStats() {
               successTimeoutRef.current = null;
             }, 3000);
         }
-
       } catch (err) {
         console.error(
           "Erreur chargement statistiques :",
@@ -297,7 +266,6 @@ export default function AdminStats() {
           err?.message ||
             "Impossible de charger les statistiques."
         );
-
       } finally {
         setLoading(false);
         setRefreshing(false);
@@ -305,7 +273,6 @@ export default function AdminStats() {
     },
     []
   );
-
 
   // =========================================================
   // CHARGEMENT INITIAL
@@ -325,7 +292,6 @@ export default function AdminStats() {
     };
   }, [loadStatistics]);
 
-
   // =========================================================
   // ÉLÈVES
   // =========================================================
@@ -340,27 +306,18 @@ export default function AdminStats() {
     );
   }, [profiles]);
 
-
   // =========================================================
   // STATISTIQUES GÉNÉRALES
   // =========================================================
 
   const totalStudents = students.length;
-
   const totalClasses = classes.length;
-
   const totalSubjects = subjects.length;
-
   const totalChapters = chapters.length;
-
   const totalLessons = lessons.length;
-
   const totalQuizzes = quizzes.length;
-
   const totalAttempts = quizAttempts.length;
-
   const totalDownloads = downloads.length;
-
 
   // =========================================================
   // VIDÉOS
@@ -374,7 +331,6 @@ export default function AdminStats() {
     ).length;
   }, [lessons]);
 
-
   // =========================================================
   // XP
   // =========================================================
@@ -387,14 +343,12 @@ export default function AdminStats() {
     );
   }, [students]);
 
-
   const averageXP =
     totalStudents > 0
       ? Math.round(
           totalXP / totalStudents
         )
       : 0;
-
 
   // =========================================================
   // NIVEAU
@@ -412,7 +366,6 @@ export default function AdminStats() {
         ).toFixed(1)
       : 0;
 
-
   // =========================================================
   // SCORES QUIZ
   // =========================================================
@@ -428,7 +381,6 @@ export default function AdminStats() {
           ) / totalAttempts
         )
       : 0;
-
 
   // =========================================================
   // MAP DES SEUILS DE RÉUSSITE
@@ -451,7 +403,6 @@ export default function AdminStats() {
 
     return map;
   }, [quizzes]);
-
 
   // =========================================================
   // TAUX DE RÉUSSITE
@@ -487,7 +438,6 @@ export default function AdminStats() {
     totalAttempts,
   ]);
 
-
   // =========================================================
   // ÉLÈVES AYANT RÉALISÉ AU MOINS UN QUIZ
   // =========================================================
@@ -504,10 +454,8 @@ export default function AdminStats() {
     return ids;
   }, [quizAttempts]);
 
-
   const activeStudents =
     activeStudentIds.size;
-
 
   const activityRate =
     totalStudents > 0
@@ -516,7 +464,6 @@ export default function AdminStats() {
             100
         )
       : 0;
-
 
   // =========================================================
   // CLASSEMENT XP
@@ -532,7 +479,6 @@ export default function AdminStats() {
       .slice(0, 10);
   }, [students]);
 
-
   // =========================================================
   // MAP DES ÉLÈVES PAR CLASSE
   // =========================================================
@@ -546,10 +492,7 @@ export default function AdminStats() {
       }
 
       if (!map.has(student.class_id)) {
-        map.set(
-          student.class_id,
-          []
-        );
+        map.set(student.class_id, []);
       }
 
       map
@@ -559,7 +502,6 @@ export default function AdminStats() {
 
     return map;
   }, [students]);
-
 
   // =========================================================
   // MAP DES TENTATIVES PAR ÉLÈVE
@@ -574,10 +516,7 @@ export default function AdminStats() {
       }
 
       if (!map.has(attempt.user_id)) {
-        map.set(
-          attempt.user_id,
-          []
-        );
+        map.set(attempt.user_id, []);
       }
 
       map
@@ -587,7 +526,6 @@ export default function AdminStats() {
 
     return map;
   }, [quizAttempts]);
-
 
   // =========================================================
   // STATISTIQUES PAR CLASSE
@@ -656,7 +594,6 @@ export default function AdminStats() {
     attemptsByUser,
   ]);
 
-
   // =========================================================
   // MAP CHAPITRES PAR MATIÈRE
   // =========================================================
@@ -670,10 +607,7 @@ export default function AdminStats() {
       }
 
       if (!map.has(chapter.subject_id)) {
-        map.set(
-          chapter.subject_id,
-          []
-        );
+        map.set(chapter.subject_id, []);
       }
 
       map
@@ -683,7 +617,6 @@ export default function AdminStats() {
 
     return map;
   }, [chapters]);
-
 
   // =========================================================
   // MAP LEÇONS PAR CHAPITRE
@@ -698,10 +631,7 @@ export default function AdminStats() {
       }
 
       if (!map.has(lesson.chapter_id)) {
-        map.set(
-          lesson.chapter_id,
-          []
-        );
+        map.set(lesson.chapter_id, []);
       }
 
       map
@@ -711,7 +641,6 @@ export default function AdminStats() {
 
     return map;
   }, [lessons]);
-
 
   // =========================================================
   // MAP QUIZ PAR LEÇON
@@ -726,10 +655,7 @@ export default function AdminStats() {
       }
 
       if (!map.has(quiz.lesson_id)) {
-        map.set(
-          quiz.lesson_id,
-          []
-        );
+        map.set(quiz.lesson_id, []);
       }
 
       map
@@ -739,7 +665,6 @@ export default function AdminStats() {
 
     return map;
   }, [quizzes]);
-
 
   // =========================================================
   // MAP TENTATIVES PAR QUIZ
@@ -754,10 +679,7 @@ export default function AdminStats() {
       }
 
       if (!map.has(attempt.quiz_id)) {
-        map.set(
-          attempt.quiz_id,
-          []
-        );
+        map.set(attempt.quiz_id, []);
       }
 
       map
@@ -767,7 +689,6 @@ export default function AdminStats() {
 
     return map;
   }, [quizAttempts]);
-
 
   // =========================================================
   // STATISTIQUES PAR MATIÈRE
@@ -859,7 +780,6 @@ export default function AdminStats() {
     attemptsByQuiz,
   ]);
 
-
   // =========================================================
   // FORMAT NOM ÉLÈVE
   // =========================================================
@@ -871,130 +791,171 @@ export default function AdminStats() {
     );
   };
 
-
   // =========================================================
   // RENDU CHARGEMENT
   // =========================================================
 
   if (loading) {
     return (
-      <div className="p-6">
-
+      <div className="p-4 md:p-6">
         <div className="flex items-center justify-center min-h-[400px]">
-
-          <div className="text-center">
-
+          <div className="theme-surface theme-border border rounded-3xl shadow-sm p-8 text-center">
             <Loader2
               size={40}
-              className="animate-spin text-blue-600 mx-auto mb-4"
+              className="animate-spin text-accent mx-auto mb-4"
             />
 
-            <p className="text-slate-600">
+            <p className="theme-text font-semibold">
               Chargement des statistiques...
             </p>
 
+            <p className="theme-text-secondary text-sm mt-1">
+              Analyse des données de Kalan Academy.
+            </p>
           </div>
-
         </div>
-
       </div>
     );
   }
-
 
   // =========================================================
   // RENDU PRINCIPAL
   // =========================================================
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6 space-y-7">
+      {/* HEADER */}
 
-      {/* =====================================================
-          HEADER
-      ===================================================== */}
+      <div
+        className="
+          relative
+          overflow-hidden
+          rounded-3xl
+          bg-accent-soft
+          border
+          border-accent
+          p-6
+          md:p-8
+          shadow-lg
+        "
+      >
+        <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent opacity-10" />
+        <div className="absolute -left-16 -bottom-20 w-48 h-48 rounded-full bg-accent opacity-10" />
+        <div className="absolute right-16 -bottom-24 w-56 h-56 rounded-full bg-accent opacity-5" />
 
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+        <div className="relative z-10">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+            <div className="flex items-start gap-4">
+              <div className="w-14 h-14 shrink-0 rounded-2xl bg-white/70 dark:bg-gray-950/30 border border-white/50 dark:border-white/10 flex items-center justify-center">
+                <BarChart3
+                  size={27}
+                  className="text-accent"
+                />
+              </div>
 
-        <div>
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent text-white text-xs font-semibold mb-3">
+                  <TrendingUp size={14} />
+                  Analyse de la plateforme
+                </div>
 
-          <div className="flex items-center gap-3">
+                <h1 className="text-2xl md:text-3xl font-bold leading-tight theme-text">
+                  Statistiques
+                </h1>
 
-            <div className="p-3 bg-blue-100 rounded-xl">
+                <p className="theme-text-secondary mt-3 leading-relaxed">
+                  Vue globale des performances et de
+                  l'activité de Kalan Academy.
+                </p>
+              </div>
+            </div>
 
-              <BarChart3
-                size={25}
-                className="text-blue-600"
+            <button
+              type="button"
+              onClick={() => loadStatistics(true)}
+              disabled={refreshing}
+              className="
+                inline-flex
+                items-center
+                justify-center
+                gap-2
+                px-5
+                py-3
+                rounded-xl
+                bg-accent
+                text-white
+                font-bold
+                shadow-md
+                hover:opacity-90
+                hover:-translate-y-0.5
+                disabled:opacity-50
+                disabled:cursor-not-allowed
+                transition
+              "
+            >
+              <RefreshCw
+                size={18}
+                className={
+                  refreshing
+                    ? "animate-spin"
+                    : ""
+                }
               />
 
-            </div>
-
-            <div>
-
-              <h1 className="text-2xl font-bold text-slate-900">
-                Statistiques
-              </h1>
-
-              <p className="text-sm text-slate-500">
-                Vue globale des performances de Kalan Academy.
-              </p>
-
-            </div>
-
+              Actualiser
+            </button>
           </div>
 
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-gray-950/30 theme-text text-sm font-medium border border-white/50 dark:border-white/10">
+              <Users
+                size={16}
+                className="text-accent"
+              />
+              {totalStudents} élève
+              {totalStudents > 1 ? "s" : ""}
+            </div>
+
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-gray-950/30 theme-text text-sm font-medium border border-white/50 dark:border-white/10">
+              <BookOpen
+                size={16}
+                className="text-accent"
+              />
+              {totalLessons} leçon
+              {totalLessons > 1 ? "s" : ""}
+            </div>
+
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-gray-950/30 theme-text text-sm font-medium border border-white/50 dark:border-white/10">
+              <ClipboardCheck
+                size={16}
+                className="text-accent"
+              />
+              {totalAttempts} tentative
+              {totalAttempts > 1 ? "s" : ""}
+            </div>
+
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-gray-950/30 theme-text text-sm font-medium border border-white/50 dark:border-white/10">
+              <Video
+                size={16}
+                className="text-accent"
+              />
+              {lessonsWithVideo} vidéo
+              {lessonsWithVideo > 1 ? "s" : ""}
+            </div>
+          </div>
         </div>
-
-
-        <button
-          type="button"
-          onClick={() => loadStatistics(true)}
-          disabled={refreshing}
-          className="
-            inline-flex
-            items-center
-            justify-center
-            gap-2
-            px-4
-            py-2.5
-            rounded-lg
-            bg-blue-600
-            text-white
-            hover:bg-blue-700
-            disabled:opacity-50
-            disabled:cursor-not-allowed
-          "
-        >
-
-          <RefreshCw
-            size={18}
-            className={
-              refreshing
-                ? "animate-spin"
-                : ""
-            }
-          />
-
-          Actualiser
-
-        </button>
-
       </div>
 
-
-      {/* =====================================================
-          ERREUR
-      ===================================================== */}
+      {/* ERREUR */}
 
       {error && (
-        <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 flex gap-3">
-
+        <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-300 flex gap-3">
           <AlertCircle
             size={20}
             className="shrink-0"
           />
 
           <div>
-
             <p className="font-semibold">
               Impossible de charger les statistiques
             </p>
@@ -1002,20 +963,14 @@ export default function AdminStats() {
             <p className="text-sm mt-1">
               {error}
             </p>
-
           </div>
-
         </div>
       )}
 
-
-      {/* =====================================================
-          SUCCÈS
-      ===================================================== */}
+      {/* SUCCÈS */}
 
       {success && (
-        <div className="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 text-green-700 flex gap-3">
-
+        <div className="p-4 rounded-2xl bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900/50 text-green-700 dark:text-green-300 flex gap-3">
           <CheckCircle
             size={20}
             className="shrink-0"
@@ -1024,65 +979,48 @@ export default function AdminStats() {
           <p className="text-sm font-medium">
             {success}
           </p>
-
         </div>
       )}
 
+      {/* CARTES PRINCIPALES */}
 
-      {/* =====================================================
-          CARTES PRINCIPALES
-      ===================================================== */}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
-
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         <StatCard
           icon={Users}
           label="Élèves"
           value={totalStudents}
           description={`${activeStudents} actifs`}
-          iconClass="text-blue-600"
-          bgClass="bg-blue-100"
+          iconClass="text-accent"
         />
-
 
         <StatCard
           icon={Trophy}
           label="XP total"
           value={totalXP.toLocaleString("fr-FR")}
           description={`${averageXP.toLocaleString("fr-FR")} XP moyen`}
-          iconClass="text-yellow-600"
-          bgClass="bg-yellow-100"
+          iconClass="text-yellow-600 dark:text-yellow-300"
         />
-
 
         <StatCard
           icon={ClipboardCheck}
           label="Tentatives de quiz"
           value={totalAttempts}
           description={`${successRate}% de réussite`}
-          iconClass="text-green-600"
-          bgClass="bg-green-100"
+          iconClass="text-green-600 dark:text-green-300"
         />
-
 
         <StatCard
           icon={TrendingUp}
           label="Score moyen"
           value={`${averageQuizScore}%`}
           description={`${activeStudents} élèves actifs`}
-          iconClass="text-purple-600"
-          bgClass="bg-purple-100"
+          iconClass="text-purple-600 dark:text-purple-300"
         />
-
       </div>
 
+      {/* CONTENU PÉDAGOGIQUE */}
 
-      {/* =====================================================
-          CONTENU PÉDAGOGIQUE
-      ===================================================== */}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5 mb-8">
-
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
         <MiniStat
           icon={GraduationCap}
           label="Classes"
@@ -1112,431 +1050,276 @@ export default function AdminStats() {
           label="Leçons vidéo"
           value={`${lessonsWithVideo}/${totalLessons}`}
         />
-
       </div>
 
+      {/* ANALYSE ACTIVITÉ */}
 
-      {/* =====================================================
-          ANALYSE ACTIVITÉ
-      ===================================================== */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <InsightCard
+          title="Activité élèves"
+          icon={Users}
+          iconClass="text-accent"
+          iconBackground="bg-accent-soft"
+          value={`${activityRate}%`}
+          description="des élèves ont réalisé un quiz"
+        />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <InsightCard
+          title="Niveau moyen"
+          icon={Award}
+          iconClass="text-purple-600 dark:text-purple-300"
+          iconBackground="bg-purple-50 dark:bg-purple-950/30"
+          value={averageLevel}
+          description="niveau moyen des élèves"
+        />
 
-        <div className="bg-white border border-slate-200 rounded-xl p-5">
-
-          <h2 className="font-semibold text-slate-900 mb-4">
-            Activité élèves
-          </h2>
-
-          <div className="flex items-center gap-4">
-
-            <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-
-              <Users
-                size={28}
-                className="text-blue-600"
-              />
-
-            </div>
-
-            <div>
-
-              <p className="text-3xl font-bold text-slate-900">
-                {activityRate}%
-              </p>
-
-              <p className="text-sm text-slate-500">
-                des élèves ont réalisé un quiz
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div className="bg-white border border-slate-200 rounded-xl p-5">
-
-          <h2 className="font-semibold text-slate-900 mb-4">
-            Niveau moyen
-          </h2>
-
-          <div className="flex items-center gap-4">
-
-            <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center">
-
-              <Award
-                size={28}
-                className="text-purple-600"
-              />
-
-            </div>
-
-            <div>
-
-              <p className="text-3xl font-bold text-slate-900">
-                {averageLevel}
-              </p>
-
-              <p className="text-sm text-slate-500">
-                niveau moyen des élèves
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div className="bg-white border border-slate-200 rounded-xl p-5">
-
-          <h2 className="font-semibold text-slate-900 mb-4">
-            Téléchargements
-          </h2>
-
-          <div className="flex items-center gap-4">
-
-            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
-
-              <Download
-                size={28}
-                className="text-green-600"
-              />
-
-            </div>
-
-            <div>
-
-              <p className="text-3xl font-bold text-slate-900">
-                {totalDownloads}
-              </p>
-
-              <p className="text-sm text-slate-500">
-                téléchargements enregistrés
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-
+        <InsightCard
+          title="Téléchargements"
+          icon={Download}
+          iconClass="text-green-600 dark:text-green-300"
+          iconBackground="bg-green-50 dark:bg-green-950/30"
+          value={totalDownloads}
+          description="téléchargements enregistrés"
+        />
       </div>
 
+      {/* CLASSES */}
 
-      {/* =====================================================
-          CLASSES
-      ===================================================== */}
+      <div className="theme-surface theme-border border rounded-3xl overflow-hidden shadow-sm">
+        <div className="p-5 md:p-6 border-b theme-border">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-accent-soft border border-accent flex items-center justify-center">
+              <GraduationCap
+                size={19}
+                className="text-accent"
+              />
+            </div>
 
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mb-8">
+            <div>
+              <h2 className="text-lg font-bold theme-text">
+                Statistiques par classe
+              </h2>
 
-        <div className="p-5 border-b border-slate-200">
-
-          <h2 className="text-lg font-semibold text-slate-900">
-            Statistiques par classe
-          </h2>
-
-          <p className="text-sm text-slate-500 mt-1">
-            Élèves, XP et performances aux quiz.
-          </p>
-
+              <p className="text-sm theme-text-secondary mt-1">
+                Élèves, XP et performances aux quiz.
+              </p>
+            </div>
+          </div>
         </div>
-
 
         {classStatistics.length === 0 ? (
-
-          <div className="p-8 text-center text-slate-500">
+          <div className="p-8 text-center theme-text-secondary">
             Aucune classe disponible.
           </div>
-
         ) : (
-
           <div className="overflow-x-auto">
-
             <table className="w-full text-sm">
-
-              <thead className="bg-slate-50">
-
+              <thead className="bg-accent-soft">
                 <tr>
-
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Classe
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Élèves
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     XP total
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Quiz
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Score moyen
                   </th>
-
                 </tr>
-
               </thead>
 
-
               <tbody>
-
                 {classStatistics.map((classe) => (
-
                   <tr
                     key={classe.id}
-                    className="border-t border-slate-100"
+                    className="border-t theme-border hover:bg-accent-soft transition"
                   >
-
-                    <td className="p-4 font-medium text-slate-900">
+                    <td className="p-4 font-semibold theme-text">
                       {classe.name}
                     </td>
 
-                    <td className="p-4 text-slate-600">
+                    <td className="p-4 theme-text-secondary">
                       {classe.students}
                     </td>
 
-                    <td className="p-4 text-slate-600">
-                      {classe.totalXP.toLocaleString("fr-FR")}
+                    <td className="p-4 theme-text-secondary">
+                      {classe.totalXP.toLocaleString(
+                        "fr-FR"
+                      )}
                     </td>
 
-                    <td className="p-4 text-slate-600">
+                    <td className="p-4 theme-text-secondary">
                       {classe.attempts}
                     </td>
 
                     <td className="p-4">
-
-                      <span
-                        className={`
-                          inline-flex
-                          px-2.5
-                          py-1
-                          rounded-full
-                          text-xs
-                          font-semibold
-
-                          ${
-                            classe.averageScore >= 70
-                              ? "bg-green-100 text-green-700"
-                              : classe.averageScore >= 50
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-red-100 text-red-700"
-                          }
-                        `}
-                      >
-                        {classe.averageScore}%
-                      </span>
-
+                      <ScoreBadge
+                        score={classe.averageScore}
+                      />
                     </td>
-
                   </tr>
-
                 ))}
-
               </tbody>
-
             </table>
-
           </div>
-
         )}
-
       </div>
 
+      {/* MATIÈRES */}
 
-      {/* =====================================================
-          MATIÈRES
-      ===================================================== */}
+      <div className="theme-surface theme-border border rounded-3xl overflow-hidden shadow-sm">
+        <div className="p-5 md:p-6 border-b theme-border">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-accent-soft border border-accent flex items-center justify-center">
+              <BookOpen
+                size={19}
+                className="text-accent"
+              />
+            </div>
 
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mb-8">
+            <div>
+              <h2 className="text-lg font-bold theme-text">
+                Statistiques par matière
+              </h2>
 
-        <div className="p-5 border-b border-slate-200">
-
-          <h2 className="text-lg font-semibold text-slate-900">
-            Statistiques par matière
-          </h2>
-
-          <p className="text-sm text-slate-500 mt-1">
-            Contenu pédagogique et performances des quiz.
-          </p>
-
+              <p className="text-sm theme-text-secondary mt-1">
+                Contenu pédagogique et performances des quiz.
+              </p>
+            </div>
+          </div>
         </div>
 
-
         {subjectStatistics.length === 0 ? (
-
-          <div className="p-8 text-center text-slate-500">
+          <div className="p-8 text-center theme-text-secondary">
             Aucune matière disponible.
           </div>
-
         ) : (
-
           <div className="overflow-x-auto">
-
             <table className="w-full text-sm">
-
-              <thead className="bg-slate-50">
-
+              <thead className="bg-accent-soft">
                 <tr>
-
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Matière
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Chapitres
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Leçons
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Quiz
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Tentatives
                   </th>
 
-                  <th className="text-left p-4 font-semibold text-slate-600">
+                  <th className="text-left p-4 font-semibold theme-text-secondary">
                     Score moyen
                   </th>
-
                 </tr>
-
               </thead>
 
-
               <tbody>
-
                 {subjectStatistics.map((subject) => (
-
                   <tr
                     key={subject.id}
-                    className="border-t border-slate-100"
+                    className="border-t theme-border hover:bg-accent-soft transition"
                   >
-
                     <td className="p-4">
-
                       <div>
-
-                        <p className="font-medium text-slate-900">
+                        <p className="font-semibold theme-text">
                           {subject.name}
                         </p>
 
                         {subject.code && (
-                          <p className="text-xs text-slate-400">
+                          <p className="text-xs theme-text-secondary mt-0.5">
                             {subject.code}
                           </p>
                         )}
-
                       </div>
-
                     </td>
 
-                    <td className="p-4 text-slate-600">
+                    <td className="p-4 theme-text-secondary">
                       {subject.chapters}
                     </td>
 
-                    <td className="p-4 text-slate-600">
+                    <td className="p-4 theme-text-secondary">
                       {subject.lessons}
                     </td>
 
-                    <td className="p-4 text-slate-600">
+                    <td className="p-4 theme-text-secondary">
                       {subject.quizzes}
                     </td>
 
-                    <td className="p-4 text-slate-600">
+                    <td className="p-4 theme-text-secondary">
                       {subject.attempts}
                     </td>
 
                     <td className="p-4">
-
-                      <span
-                        className={`
-                          inline-flex
-                          px-2.5
-                          py-1
-                          rounded-full
-                          text-xs
-                          font-semibold
-
-                          ${
-                            subject.averageScore >= 70
-                              ? "bg-green-100 text-green-700"
-                              : subject.averageScore >= 50
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-red-100 text-red-700"
-                          }
-                        `}
-                      >
-                        {subject.averageScore}%
-                      </span>
-
+                      <ScoreBadge
+                        score={subject.averageScore}
+                      />
                     </td>
-
                   </tr>
-
                 ))}
-
               </tbody>
-
             </table>
-
           </div>
-
         )}
-
       </div>
 
+      {/* CLASSEMENT XP */}
 
-      {/* =====================================================
-          CLASSEMENT XP
-      ===================================================== */}
+      <div className="theme-surface theme-border border rounded-3xl overflow-hidden shadow-sm">
+        <div className="p-5 md:p-6 border-b theme-border">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-accent-soft border border-accent flex items-center justify-center">
+              <Trophy
+                size={19}
+                className="text-accent"
+              />
+            </div>
 
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+            <div>
+              <h2 className="text-lg font-bold theme-text">
+                Classement XP
+              </h2>
 
-        <div className="p-5 border-b border-slate-200">
-
-          <h2 className="text-lg font-semibold text-slate-900">
-            Classement XP
-          </h2>
-
-          <p className="text-sm text-slate-500 mt-1">
-            Les élèves ayant accumulé le plus d'XP.
-          </p>
-
+              <p className="text-sm theme-text-secondary mt-1">
+                Les élèves ayant accumulé le plus d'XP.
+              </p>
+            </div>
+          </div>
         </div>
 
-
         {topStudents.length === 0 ? (
-
-          <div className="p-8 text-center text-slate-500">
+          <div className="p-8 text-center theme-text-secondary">
             Aucun élève disponible.
           </div>
-
         ) : (
-
-          <div className="divide-y divide-slate-100">
-
+          <div className="divide-y theme-border">
             {topStudents.map(
               (student, index) => (
-
                 <div
                   key={student.id}
-                  className="flex items-center justify-between gap-4 p-4"
+                  className="flex items-center justify-between gap-4 p-4 hover:bg-accent-soft transition"
                 >
-
                   <div className="flex items-center gap-4 min-w-0">
-
                     <div
                       className={`
                         w-9
@@ -1547,74 +1330,59 @@ export default function AdminStats() {
                         justify-center
                         font-bold
                         shrink-0
-
                         ${
                           index === 0
-                            ? "bg-yellow-100 text-yellow-700"
+                            ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-950/30 dark:text-yellow-300"
                             : index === 1
-                            ? "bg-slate-200 text-slate-700"
+                            ? "bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
                             : index === 2
-                            ? "bg-orange-100 text-orange-700"
-                            : "bg-slate-100 text-slate-500"
+                            ? "bg-orange-100 text-orange-700 dark:bg-orange-950/30 dark:text-orange-300"
+                            : "bg-accent-soft text-accent"
                         }
                       `}
                     >
                       {index + 1}
                     </div>
 
-
                     <div className="min-w-0">
-
-                      <p className="font-medium text-slate-900 truncate">
+                      <p className="font-semibold theme-text truncate">
                         {getStudentName(student)}
                       </p>
 
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs theme-text-secondary">
                         Niveau {Number(student.level) || 0}
                       </p>
-
                     </div>
-
                   </div>
 
-
                   <div className="flex items-center gap-2 shrink-0">
-
                     <Trophy
                       size={17}
                       className="text-yellow-500"
                     />
 
-                    <span className="font-bold text-slate-900">
+                    <span className="font-bold theme-text">
                       {(Number(student.xp) || 0).toLocaleString(
                         "fr-FR"
                       )}
                     </span>
 
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs theme-text-secondary">
                       XP
                     </span>
-
                   </div>
-
                 </div>
-
               )
             )}
-
           </div>
-
         )}
-
       </div>
-
     </div>
   );
 }
 
-
 // ===========================================================
-// COMPOSANT STAT CARD
+// COMPOSANTS VISUELS
 // ===========================================================
 
 function StatCard({
@@ -1623,57 +1391,38 @@ function StatCard({
   value,
   description,
   iconClass,
-  bgClass,
 }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5">
+    <div className="relative overflow-hidden theme-surface theme-border border rounded-3xl shadow-sm p-5 hover:shadow-lg hover:-translate-y-0.5 transition">
+      <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-accent opacity-5" />
 
-      <div className="flex items-start justify-between gap-4">
-
+      <div className="relative z-10 flex items-start justify-between gap-4">
         <div>
-
-          <p className="text-sm text-slate-500">
+          <p className="text-sm theme-text-secondary">
             {label}
           </p>
 
-          <p className="text-3xl font-bold text-slate-900 mt-2">
+          <p className="text-3xl font-bold theme-text mt-2">
             {value}
           </p>
 
           {description && (
-            <p className="text-xs text-slate-500 mt-2">
+            <p className="text-xs theme-text-secondary mt-2">
               {description}
             </p>
           )}
-
         </div>
 
-
-        <div
-          className={`
-            p-3
-            rounded-xl
-            ${bgClass}
-          `}
-        >
-
+        <div className="w-12 h-12 rounded-2xl bg-accent-soft border border-accent flex items-center justify-center shrink-0">
           <Icon
             size={22}
             className={iconClass}
           />
-
         </div>
-
       </div>
-
     </div>
   );
 }
-
-
-// ===========================================================
-// COMPOSANT MINI STAT
-// ===========================================================
 
 function MiniStat({
   icon: Icon,
@@ -1681,33 +1430,99 @@ function MiniStat({
   value,
 }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-4">
-
+    <div className="theme-surface theme-border border rounded-3xl shadow-sm p-4 hover:shadow-md transition">
       <div className="flex items-center gap-3">
-
-        <div className="p-2 bg-slate-100 rounded-lg">
-
+        <div className="w-10 h-10 rounded-xl bg-accent-soft border border-accent flex items-center justify-center shrink-0">
           <Icon
             size={19}
-            className="text-slate-600"
+            className="text-accent"
           />
-
         </div>
 
         <div>
-
-          <p className="text-xs text-slate-500">
+          <p className="text-xs theme-text-secondary">
             {label}
           </p>
 
-          <p className="text-xl font-bold text-slate-900">
+          <p className="text-xl font-bold theme-text">
+            {value}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InsightCard({
+  title,
+  icon: Icon,
+  iconClass,
+  iconBackground,
+  value,
+  description,
+}) {
+  return (
+    <div className="theme-surface theme-border border rounded-3xl shadow-sm p-5 hover:shadow-md transition">
+      <h2 className="font-bold theme-text mb-4">
+        {title}
+      </h2>
+
+      <div className="flex items-center gap-4">
+        <div
+          className={`
+            w-16
+            h-16
+            rounded-2xl
+            flex
+            items-center
+            justify-center
+            border
+            border-accent
+            ${iconBackground}
+          `}
+        >
+          <Icon
+            size={28}
+            className={iconClass}
+          />
+        </div>
+
+        <div>
+          <p className="text-3xl font-bold theme-text">
             {value}
           </p>
 
+          <p className="text-sm theme-text-secondary">
+            {description}
+          </p>
         </div>
-
       </div>
-
     </div>
+  );
+}
+
+function ScoreBadge({ score }) {
+  const className =
+    score >= 70
+      ? "bg-green-100 text-green-700 dark:bg-green-950/30 dark:text-green-300 border-green-200 dark:border-green-900/50"
+      : score >= 50
+      ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-950/30 dark:text-yellow-300 border-yellow-200 dark:border-yellow-900/50"
+      : "bg-red-100 text-red-700 dark:bg-red-950/30 dark:text-red-300 border-red-200 dark:border-red-900/50";
+
+  return (
+    <span
+      className={`
+        inline-flex
+        px-2.5
+        py-1
+        rounded-full
+        text-xs
+        font-semibold
+        border
+        ${className}
+      `}
+    >
+      {score}%
+    </span>
   );
 }

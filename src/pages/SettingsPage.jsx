@@ -1,3 +1,5 @@
+// src/pages/SettingsPage.jsx
+
 import {
   Settings,
   User,
@@ -809,8 +811,8 @@ export default function SettingsPage() {
             gap-3
             ${
               message.type === "success"
-                ? "bg-green-50 border-green-200 text-green-700"
-                : "bg-red-50 border-red-200 text-red-700"
+                ? "bg-green-50 border-green-200 text-green-700 dark:bg-green-950/30 dark:border-green-900 dark:text-green-400"
+                : "bg-red-50 border-red-200 text-red-700 dark:bg-red-950/30 dark:border-red-900 dark:text-red-400"
             }
           `}
         >
@@ -841,71 +843,208 @@ export default function SettingsPage() {
       )}
 
 
-      <div className="mb-7">
+      {/* =================================================
+          EN-TÊTE
+      ================================================= */}
+
+      <div
+        className="
+          relative
+          overflow-hidden
+          rounded-3xl
+          bg-accent-soft
+          border
+          border-accent
+          p-6
+          md:p-8
+          shadow-lg
+          mb-7
+        "
+      >
 
         <div
           className="
-            w-12
-            h-12
-            rounded-2xl
-            bg-blue-50
-            flex
-            items-center
-            justify-center
-            mb-4
-            theme-accent-light
+            absolute
+            -right-10
+            -top-10
+            w-40
+            h-40
+            rounded-full
+            bg-accent
+            opacity-10
+          "
+        />
+
+
+        <div
+          className="
+            absolute
+            -left-16
+            -bottom-20
+            w-48
+            h-48
+            rounded-full
+            bg-accent
+            opacity-10
+          "
+        />
+
+
+        <div
+          className="
+            absolute
+            right-16
+            -bottom-24
+            w-56
+            h-56
+            rounded-full
+            bg-accent
+            opacity-5
+          "
+        />
+
+
+        <div
+          className="
+            relative
+            z-10
           "
         >
 
-          <Settings
-            size={25}
+          <div
             className="
-              text-blue-600
-              theme-accent-text
+              inline-flex
+              items-center
+              gap-2
+              px-3
+              py-1.5
+              rounded-full
+              bg-accent
+              text-white
+              text-xs
+              font-semibold
+              mb-4
             "
-          />
+          >
+
+            <Settings size={14} />
+
+            Kalan Academy
+
+          </div>
+
+
+          <h1
+            className="
+              text-2xl
+              md:text-3xl
+              font-bold
+              leading-tight
+              theme-text
+            "
+          >
+            Paramètres
+          </h1>
+
+
+          <p
+            className="
+              theme-text-secondary
+              mt-3
+              leading-relaxed
+              max-w-2xl
+            "
+          >
+            Gère les paramètres et les préférences
+            de ton application.
+          </p>
+
+
+          <div
+            className="
+              flex
+              flex-wrap
+              items-center
+              gap-3
+              mt-5
+            "
+          >
+
+            <div
+              className="
+                inline-flex
+                items-center
+                gap-2
+                px-3
+                py-2
+                rounded-xl
+                bg-white/70
+                dark:bg-gray-950/30
+                theme-text
+                text-sm
+                font-medium
+                border
+                border-white/50
+                dark:border-white/10
+              "
+            >
+              <Settings
+                size={16}
+                className="text-accent"
+              />
+
+              Personnalisation
+            </div>
+
+
+            <div
+              className="
+                inline-flex
+                items-center
+                gap-2
+                px-3
+                py-2
+                rounded-xl
+                bg-white/70
+                dark:bg-gray-950/30
+                theme-text
+                text-sm
+                font-medium
+                border
+                border-white/50
+                dark:border-white/10
+              "
+            >
+
+              {isOnline ? (
+                <Wifi
+                  size={16}
+                  className="text-accent"
+                />
+              ) : (
+                <WifiOff
+                  size={16}
+                  className="text-accent"
+                />
+              )}
+
+              {isOnline
+                ? "En ligne"
+                : "Hors ligne"
+              }
+
+            </div>
+
+          </div>
 
         </div>
 
-
-        <p
-          className="
-            text-sm
-            font-medium
-            text-blue-600
-            mb-1
-            theme-accent-text
-          "
-        >
-          Kalan Academy
-        </p>
-
-
-        <h1
-          className="
-            text-2xl
-            md:text-3xl
-            font-bold
-            text-gray-900
-            theme-text
-          "
-        >
-          Paramètres
-        </h1>
-
-
-        <p
-          className="
-            text-gray-500
-            mt-2
-            theme-text-secondary
-          "
-        >
-          Gère les paramètres de ton application.
-        </p>
-
       </div>
 
+
+      {/* =================================================
+          APPARENCE
+      ================================================= */}
 
       <section className="mb-5">
 
@@ -913,7 +1052,6 @@ export default function SettingsPage() {
           className="
             text-xs
             font-bold
-            text-gray-500
             uppercase
             tracking-wider
             mb-2
@@ -927,25 +1065,22 @@ export default function SettingsPage() {
 
         <div
           className="
-            bg-white
-            rounded-2xl
-            border
-            border-gray-100
-            shadow-sm
-            overflow-hidden
+            rounded-3xl
             theme-surface
             theme-border
+            border
+            shadow-sm
+            overflow-hidden
           "
         >
 
-          <div className="p-5">
+          <div className="p-5 md:p-6">
 
             <div className="mb-4">
 
               <h3
                 className="
                   font-semibold
-                  text-gray-900
                   theme-text
                 "
               >
@@ -956,7 +1091,6 @@ export default function SettingsPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
                   mt-1
                   theme-text-secondary
                 "
@@ -998,13 +1132,13 @@ export default function SettingsPage() {
                       justify-center
                       gap-2
                       p-4
-                      rounded-xl
+                      rounded-2xl
                       border
                       transition-all
                       ${
                         selected
                           ? "theme-option-selected"
-                          : "border-gray-200 hover:bg-gray-50 theme-option"
+                          : "theme-option theme-border hover:bg-accent-soft"
                       }
                     `}
                   >
@@ -1041,7 +1175,7 @@ export default function SettingsPage() {
                       className={
                         selected
                           ? "theme-accent-text"
-                          : "text-gray-500 theme-text-secondary"
+                          : "theme-text-secondary"
                       }
                     />
 
@@ -1060,7 +1194,6 @@ export default function SettingsPage() {
                     <span
                       className="
                         text-xs
-                        text-gray-500
                         text-center
                         theme-text-secondary
                       "
@@ -1082,20 +1215,18 @@ export default function SettingsPage() {
           <div
             className="
               border-t
-              border-gray-100
               theme-border
             "
           />
 
 
-          <div className="p-5">
+          <div className="p-5 md:p-6">
 
             <div className="mb-4">
 
               <h3
                 className="
                   font-semibold
-                  text-gray-900
                   theme-text
                 "
               >
@@ -1106,7 +1237,6 @@ export default function SettingsPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
                   mt-1
                   theme-text-secondary
                 "
@@ -1150,7 +1280,7 @@ export default function SettingsPage() {
                       transition-all
                       ${
                         selected
-                          ? "ring-4 ring-offset-2 ring-gray-300 scale-110"
+                          ? "ring-4 ring-offset-2 ring-accent scale-110"
                           : "hover:scale-105"
                       }
                     `}
@@ -1183,7 +1313,6 @@ export default function SettingsPage() {
             <p
               className="
                 text-xs
-                text-gray-500
                 mt-4
                 theme-text-secondary
               "
@@ -1213,13 +1342,16 @@ export default function SettingsPage() {
       </section>
 
 
+      {/* =================================================
+          COMPTE
+      ================================================= */}
+
       <section className="mb-5">
 
         <h2
           className="
             text-xs
             font-bold
-            text-gray-500
             uppercase
             tracking-wider
             mb-2
@@ -1233,14 +1365,12 @@ export default function SettingsPage() {
 
         <div
           className="
-            bg-white
-            rounded-2xl
-            border
-            border-gray-100
-            shadow-sm
-            overflow-hidden
+            rounded-3xl
             theme-surface
             theme-border
+            border
+            shadow-sm
+            overflow-hidden
           "
         >
 
@@ -1254,9 +1384,8 @@ export default function SettingsPage() {
               gap-4
               p-5
               text-left
-              hover:bg-gray-50
+              hover:bg-accent-soft
               transition
-              theme-hover
             "
           >
 
@@ -1264,22 +1393,18 @@ export default function SettingsPage() {
               className="
                 w-11
                 h-11
-                rounded-xl
-                bg-blue-50
+                rounded-2xl
+                bg-accent-soft
                 flex
                 items-center
                 justify-center
                 shrink-0
-                theme-accent-light
               "
             >
 
               <User
                 size={20}
-                className="
-                  text-blue-600
-                  theme-accent-text
-                "
+                className="text-accent"
               />
 
             </div>
@@ -1290,7 +1415,6 @@ export default function SettingsPage() {
               <h3
                 className="
                   font-semibold
-                  text-gray-900
                   theme-text
                 "
               >
@@ -1301,7 +1425,6 @@ export default function SettingsPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
                   mt-1
                   theme-text-secondary
                 "
@@ -1314,10 +1437,7 @@ export default function SettingsPage() {
 
             <ChevronRight
               size={20}
-              className="
-                text-gray-400
-                theme-text-secondary
-              "
+              className="theme-text-secondary"
             />
 
           </button>
@@ -1326,7 +1446,6 @@ export default function SettingsPage() {
           <div
             className="
               border-t
-              border-gray-100
               theme-border
             "
           />
@@ -1344,6 +1463,7 @@ export default function SettingsPage() {
               p-5
               text-left
               hover:bg-red-50
+              dark:hover:bg-red-950/20
               transition
               disabled:opacity-50
             "
@@ -1353,8 +1473,9 @@ export default function SettingsPage() {
               className="
                 w-11
                 h-11
-                rounded-xl
+                rounded-2xl
                 bg-red-50
+                dark:bg-red-950/30
                 flex
                 items-center
                 justify-center
@@ -1368,6 +1489,7 @@ export default function SettingsPage() {
                   size={20}
                   className="
                     text-red-600
+                    dark:text-red-400
                     animate-spin
                   "
                 />
@@ -1376,7 +1498,10 @@ export default function SettingsPage() {
 
                 <LogOut
                   size={20}
-                  className="text-red-600"
+                  className="
+                    text-red-600
+                    dark:text-red-400
+                  "
                 />
 
               )}
@@ -1390,6 +1515,7 @@ export default function SettingsPage() {
                 className="
                   font-semibold
                   text-red-600
+                  dark:text-red-400
                 "
               >
                 {loggingOut
@@ -1402,7 +1528,6 @@ export default function SettingsPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
                   mt-1
                   theme-text-secondary
                 "
@@ -1419,13 +1544,16 @@ export default function SettingsPage() {
       </section>
 
 
+      {/* =================================================
+          APPLICATION
+      ================================================= */}
+
       <section className="mb-5">
 
         <h2
           className="
             text-xs
             font-bold
-            text-gray-500
             uppercase
             tracking-wider
             mb-2
@@ -1439,14 +1567,12 @@ export default function SettingsPage() {
 
         <div
           className="
-            bg-white
-            rounded-2xl
-            border
-            border-gray-100
-            shadow-sm
-            overflow-hidden
+            rounded-3xl
             theme-surface
             theme-border
+            border
+            shadow-sm
+            overflow-hidden
           "
         >
 
@@ -1456,8 +1582,8 @@ export default function SettingsPage() {
               className="
                 w-11
                 h-11
-                rounded-xl
-                bg-yellow-50
+                rounded-2xl
+                bg-accent-soft
                 flex
                 items-center
                 justify-center
@@ -1467,7 +1593,7 @@ export default function SettingsPage() {
 
               <Bell
                 size={20}
-                className="text-yellow-600"
+                className="text-accent"
               />
 
             </div>
@@ -1478,7 +1604,6 @@ export default function SettingsPage() {
               <h3
                 className="
                   font-semibold
-                  text-gray-900
                   theme-text
                 "
               >
@@ -1489,7 +1614,6 @@ export default function SettingsPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
                   mt-1
                   theme-text-secondary
                 "
@@ -1505,11 +1629,13 @@ export default function SettingsPage() {
               className="
                 text-xs
                 font-medium
-                text-gray-400
-                bg-gray-100
+                theme-text-secondary
+                bg-accent-soft
                 px-2.5
                 py-1
                 rounded-full
+                border
+                theme-border
               "
             >
               Bientôt
@@ -1521,7 +1647,6 @@ export default function SettingsPage() {
           <div
             className="
               border-t
-              border-gray-100
               theme-border
             "
           />
@@ -1533,8 +1658,8 @@ export default function SettingsPage() {
               className="
                 w-11
                 h-11
-                rounded-xl
-                bg-green-50
+                rounded-2xl
+                bg-accent-soft
                 flex
                 items-center
                 justify-center
@@ -1544,7 +1669,7 @@ export default function SettingsPage() {
 
               <Globe
                 size={20}
-                className="text-green-600"
+                className="text-accent"
               />
 
             </div>
@@ -1555,7 +1680,6 @@ export default function SettingsPage() {
               <h3
                 className="
                   font-semibold
-                  text-gray-900
                   theme-text
                 "
               >
@@ -1566,7 +1690,6 @@ export default function SettingsPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
                   mt-1
                   theme-text-secondary
                 "
@@ -1583,13 +1706,16 @@ export default function SettingsPage() {
       </section>
 
 
+      {/* =================================================
+          HORS CONNEXION
+      ================================================= */}
+
       <section className="mb-5">
 
         <h2
           className="
             text-xs
             font-bold
-            text-gray-500
             uppercase
             tracking-wider
             mb-2
@@ -1603,48 +1729,42 @@ export default function SettingsPage() {
 
         <div
           className="
-            bg-white
-            rounded-2xl
-            border
-            border-gray-100
-            shadow-sm
-            overflow-hidden
+            rounded-3xl
             theme-surface
             theme-border
+            border
+            shadow-sm
+            overflow-hidden
           "
         >
 
           <div className="flex items-center gap-4 p-5">
 
             <div
-              className={`
+              className="
                 w-11
                 h-11
-                rounded-xl
+                rounded-2xl
+                bg-accent-soft
                 flex
                 items-center
                 justify-center
                 shrink-0
-                ${
-                  isOnline
-                    ? "bg-green-50"
-                    : "bg-orange-50"
-                }
-              `}
+              "
             >
 
               {isOnline ? (
 
                 <Wifi
                   size={20}
-                  className="text-green-600"
+                  className="text-accent"
                 />
 
               ) : (
 
                 <WifiOff
                   size={20}
-                  className="text-orange-600"
+                  className="text-accent"
                 />
 
               )}
@@ -1657,7 +1777,6 @@ export default function SettingsPage() {
               <h3
                 className="
                   font-semibold
-                  text-gray-900
                   theme-text
                 "
               >
@@ -1666,15 +1785,11 @@ export default function SettingsPage() {
 
 
               <p
-                className={`
+                className="
                   text-sm
                   mt-1
-                  ${
-                    isOnline
-                      ? "text-gray-500 theme-text-secondary"
-                      : "text-orange-600"
-                  }
-                `}
+                  theme-text-secondary
+                "
               >
                 {isOnline
                   ? "Connexion Internet disponible."
@@ -1686,18 +1801,17 @@ export default function SettingsPage() {
 
 
             <span
-              className={`
+              className="
                 text-xs
                 font-semibold
                 px-2.5
                 py-1
                 rounded-full
-                ${
-                  isOnline
-                    ? "bg-green-100 text-green-700"
-                    : "bg-orange-100 text-orange-700"
-                }
-              `}
+                bg-accent-soft
+                text-accent
+                border
+                border-accent
+              "
             >
               {isOnline
                 ? "En ligne"
@@ -1711,7 +1825,6 @@ export default function SettingsPage() {
           <div
             className="
               border-t
-              border-gray-100
               theme-border
             "
           />
@@ -1728,11 +1841,10 @@ export default function SettingsPage() {
               gap-4
               p-5
               text-left
-              hover:bg-gray-50
+              hover:bg-accent-soft
               transition
               disabled:opacity-60
               disabled:cursor-not-allowed
-              theme-hover
             "
           >
 
@@ -1740,8 +1852,8 @@ export default function SettingsPage() {
               className="
                 w-11
                 h-11
-                rounded-xl
-                bg-gray-100
+                rounded-2xl
+                bg-accent-soft
                 flex
                 items-center
                 justify-center
@@ -1754,7 +1866,7 @@ export default function SettingsPage() {
                 <Loader2
                   size={20}
                   className="
-                    text-gray-500
+                    text-accent
                     animate-spin
                   "
                 />
@@ -1763,7 +1875,7 @@ export default function SettingsPage() {
 
                 <Trash2
                   size={20}
-                  className="text-gray-500"
+                  className="text-accent"
                 />
 
               )}
@@ -1776,7 +1888,6 @@ export default function SettingsPage() {
               <h3
                 className="
                   font-semibold
-                  text-gray-900
                   theme-text
                 "
               >
@@ -1790,7 +1901,6 @@ export default function SettingsPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
                   mt-1
                   theme-text-secondary
                 "
@@ -1807,10 +1917,7 @@ export default function SettingsPage() {
 
               <ChevronRight
                 size={20}
-                className="
-                  text-gray-400
-                  theme-text-secondary
-                "
+                className="theme-text-secondary"
               />
 
             )}
@@ -1822,13 +1929,16 @@ export default function SettingsPage() {
       </section>
 
 
+      {/* =================================================
+          APPRENTISSAGE
+      ================================================= */}
+
       <section className="mb-5">
 
         <h2
           className="
             text-xs
             font-bold
-            text-gray-500
             uppercase
             tracking-wider
             mb-2
@@ -1842,14 +1952,12 @@ export default function SettingsPage() {
 
         <div
           className="
-            bg-white
-            rounded-2xl
-            border
-            border-gray-100
-            shadow-sm
-            overflow-hidden
+            rounded-3xl
             theme-surface
             theme-border
+            border
+            shadow-sm
+            overflow-hidden
           "
         >
 
@@ -1865,6 +1973,7 @@ export default function SettingsPage() {
               p-5
               text-left
               hover:bg-orange-50
+              dark:hover:bg-orange-950/20
               transition
               disabled:opacity-60
               disabled:cursor-not-allowed
@@ -1875,8 +1984,9 @@ export default function SettingsPage() {
               className="
                 w-11
                 h-11
-                rounded-xl
+                rounded-2xl
                 bg-orange-50
+                dark:bg-orange-950/30
                 flex
                 items-center
                 justify-center
@@ -1890,6 +2000,7 @@ export default function SettingsPage() {
                   size={20}
                   className="
                     text-orange-600
+                    dark:text-orange-400
                     animate-spin
                   "
                 />
@@ -1898,7 +2009,10 @@ export default function SettingsPage() {
 
                 <RotateCcw
                   size={20}
-                  className="text-orange-600"
+                  className="
+                    text-orange-600
+                    dark:text-orange-400
+                  "
                 />
 
               )}
@@ -1911,7 +2025,6 @@ export default function SettingsPage() {
               <h3
                 className="
                   font-semibold
-                  text-gray-900
                   theme-text
                 "
               >
@@ -1925,7 +2038,6 @@ export default function SettingsPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
                   mt-1
                   theme-text-secondary
                 "
@@ -1941,10 +2053,7 @@ export default function SettingsPage() {
 
               <ChevronRight
                 size={20}
-                className="
-                  text-gray-400
-                  theme-text-secondary
-                "
+                className="theme-text-secondary"
               />
 
             )}
@@ -1956,13 +2065,16 @@ export default function SettingsPage() {
       </section>
 
 
+      {/* =================================================
+          À PROPOS
+      ================================================= */}
+
       <section className="mb-5">
 
         <h2
           className="
             text-xs
             font-bold
-            text-gray-500
             uppercase
             tracking-wider
             mb-2
@@ -1976,14 +2088,12 @@ export default function SettingsPage() {
 
         <div
           className="
-            bg-white
-            rounded-2xl
-            border
-            border-gray-100
-            shadow-sm
-            overflow-hidden
+            rounded-3xl
             theme-surface
             theme-border
+            border
+            shadow-sm
+            overflow-hidden
           "
         >
 
@@ -1994,7 +2104,6 @@ export default function SettingsPage() {
               gap-4
               p-5
               border-b
-              border-gray-100
               theme-border
             "
           >
@@ -2003,22 +2112,18 @@ export default function SettingsPage() {
               className="
                 w-11
                 h-11
-                rounded-xl
-                bg-blue-50
+                rounded-2xl
+                bg-accent-soft
                 flex
                 items-center
                 justify-center
                 shrink-0
-                theme-accent-light
               "
             >
 
               <Info
                 size={20}
-                className="
-                  text-blue-600
-                  theme-accent-text
-                "
+                className="text-accent"
               />
 
             </div>
@@ -2029,7 +2134,6 @@ export default function SettingsPage() {
               <h3
                 className="
                   font-semibold
-                  text-gray-900
                   theme-text
                 "
               >
@@ -2040,7 +2144,6 @@ export default function SettingsPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
                   mt-1
                   theme-text-secondary
                 "
@@ -2055,7 +2158,6 @@ export default function SettingsPage() {
               className="
                 text-sm
                 font-semibold
-                text-gray-600
                 theme-text-secondary
               "
             >
@@ -2071,8 +2173,8 @@ export default function SettingsPage() {
               className="
                 w-11
                 h-11
-                rounded-xl
-                bg-purple-50
+                rounded-2xl
+                bg-accent-soft
                 flex
                 items-center
                 justify-center
@@ -2092,7 +2194,6 @@ export default function SettingsPage() {
               <h3
                 className="
                   font-semibold
-                  text-gray-900
                   theme-text
                 "
               >
@@ -2103,7 +2204,6 @@ export default function SettingsPage() {
               <p
                 className="
                   text-sm
-                  text-gray-500
                   mt-1
                   theme-text-secondary
                 "
@@ -2121,11 +2221,15 @@ export default function SettingsPage() {
       </section>
 
 
+      {/* =================================================
+          FOOTER
+      ================================================= */}
+
       <div
         className="
           text-center
           text-xs
-          text-gray-400
+          theme-text-secondary
           pt-3
         "
       >

@@ -16,8 +16,7 @@ import {
 import {
   ArrowLeft,
   BookOpen,
-  ArrowRight,
-  Loader2
+  ArrowRight
 } from "lucide-react";
 
 import { db } from "../offline/db";
@@ -724,12 +723,13 @@ export default function SubjectPage() {
       <div className="
         relative
         overflow-hidden
-        theme-surface
         rounded-3xl
+        bg-accent-soft
         border
-        theme-border
-        shadow-sm
+        border-accent
+        shadow-lg
         p-6
+        md:p-8
         mb-7
       ">
 
@@ -738,10 +738,10 @@ export default function SubjectPage() {
 
         <div className="
           absolute
-          -right-12
-          -top-12
-          w-36
-          h-36
+          -right-10
+          -top-10
+          w-40
+          h-40
           rounded-full
           bg-accent
           opacity-10
@@ -750,10 +750,10 @@ export default function SubjectPage() {
 
         <div className="
           absolute
-          -left-10
-          -bottom-14
-          w-28
-          h-28
+          -left-16
+          -bottom-20
+          w-48
+          h-48
           rounded-full
           bg-accent
           opacity-10
@@ -761,9 +761,24 @@ export default function SubjectPage() {
 
 
         <div className="
+          absolute
+          right-16
+          -bottom-24
+          w-56
+          h-56
+          rounded-full
+          bg-accent
+          opacity-5
+        " />
+
+
+        <div className="
           relative
           z-10
         ">
+
+
+          {/* CONTENU PRINCIPAL */}
 
           <div className="
             flex
@@ -779,7 +794,11 @@ export default function SubjectPage() {
               h-16
               shrink-0
               rounded-2xl
-              bg-accent-soft
+              bg-white/70
+              dark:bg-gray-950/30
+              border
+              border-white/50
+              dark:border-white/10
               flex
               items-center
               justify-center
@@ -798,24 +817,35 @@ export default function SubjectPage() {
               min-w-0
             ">
 
-              <p className="
-                text-sm
+              <div className="
+                inline-flex
+                items-center
+                gap-2
+                px-3
+                py-1.5
+                rounded-full
+                bg-accent
+                text-white
+                text-xs
                 font-semibold
-                text-accent
-                mb-1
+                mb-3
               ">
+
+                <BookOpen
+                  size={14}
+                />
 
                 Matière
 
-              </p>
+              </div>
 
 
               <h1 className="
                 text-2xl
                 md:text-3xl
-                font-extrabold
-                theme-text
+                font-bold
                 leading-tight
+                theme-text
               ">
 
                 {subject?.name}
@@ -826,9 +856,8 @@ export default function SubjectPage() {
               {subject?.description && (
 
                 <p className="
-                  text-sm
                   theme-text-secondary
-                  mt-2
+                  mt-3
                   leading-relaxed
                 ">
 
@@ -843,75 +872,72 @@ export default function SubjectPage() {
           </div>
 
 
-          {/* STATISTIQUES */}
+          {/* INFORMATIONS */}
 
           <div className="
             mt-6
-            pt-4
-            border-t
-            theme-border
             flex
+            flex-wrap
             items-center
-            justify-between
-            gap-4
+            gap-3
           ">
 
 
-            <div>
+            {/* PROGRAMME */}
 
-              <p className="
-                text-xs
-                theme-text-secondary
-                font-medium
-                uppercase
-                tracking-wide
-              ">
+            <div className="
+              inline-flex
+              items-center
+              gap-2
+              px-3
+              py-2
+              rounded-xl
+              bg-white/70
+              dark:bg-gray-950/30
+              theme-text
+              text-sm
+              font-medium
+              border
+              border-white/50
+              dark:border-white/10
+            ">
 
-                Programme
+              <BookOpen
+                size={16}
+                className="text-accent"
+              />
 
-              </p>
-
-
-              <p className="
-                theme-text
-                font-bold
-                mt-1
-              ">
-
-                Mali • 7ème année
-
-              </p>
+              Mali • 7ème année
 
             </div>
 
 
+            {/* CHAPITRES */}
+
             <div className="
-              text-right
+              inline-flex
+              items-center
+              gap-2
+              px-3
+              py-2
+              rounded-xl
+              bg-white/70
+              dark:bg-gray-950/30
+              theme-text
+              text-sm
+              font-medium
+              border
+              border-white/50
+              dark:border-white/10
             ">
 
-              <p className="
-                text-xs
-                theme-text-secondary
-                font-medium
-                uppercase
-                tracking-wide
-              ">
+              <BookOpen
+                size={16}
+                className="text-accent"
+              />
 
-                Chapitres
-
-              </p>
-
-
-              <p className="
-                font-bold
-                text-accent
-                text-lg
-                mt-1
-              ">
-
-                {chapters.length}
-
-              </p>
+              {chapters.length} chapitre
+              {chapters.length > 1 ? "s" : ""}
 
             </div>
 

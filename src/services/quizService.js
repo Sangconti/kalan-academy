@@ -13,9 +13,246 @@ import {
 
   markQuizAttemptSynced,
 
-  addToSyncQueue
+  addToSyncQueue,
 
+  getLocalProgressResetVersion,
+
+  setLocalProgressResetVersion,
+
+  clearLocalUserProgress
 } from "../offline/db";
+
+
+// =====================================
+// VÉRIFICATION RESET PROGRESSION
+// =====================================
+
+async function checkProgressResetBeforeWrite(userId) {
+
+  if (!userId) {
+    return {
+      success: false,
+      checked: false
+    };
+  }
+
+
+  const localVersion =
+    getLocalProgressResetVersion(
+      userId
+    );
+
+
+  const isOnline =
+    typeof navigator === "undefined" ||
+    navigator.onLine === true;
+
+
+  /*
+   * =====================================
+   * MODE OFFLINE
+   * =====================================
+   *
+   * Impossible de connaître une nouvelle
+   * version côté serveur.
+   *
+   * On utilise donc la version locale connue.
+   *
+   * La synchronisation générale vérifiera
+   * le serveur dès que la connexion reviendra.
+   */
+
+  if (!isOnline) {
+
+    return {
+      success: true,
+      checked: false,
+      offline: true,
+      resetDetected: false,
+      userId,
+      localVersion
+    };
+
+  }
+
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabase
+      .from("profiles")
+      .select(
+        "progress_reset_version"
+      )
+      .eq(
+        "id",
+        userId
+      )
+      .maybeSingle();
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    const serverVersion =
+      Number(
+        data?.progress_reset_version
+      ) || 0;
+
+
+    /*
+     * =====================================
+     * NOUVEAU RESET DÉTECTÉ
+     * =====================================
+     */
+
+    if (
+      serverVersion >
+      localVersion
+    ) {
+
+      console.log(
+        "🚨 Reset détecté avant écriture quiz/progression :",
+        {
+          userId,
+          localVersion,
+          serverVersion
+        }
+      );
+
+
+      /*
+       * Supprime :
+       *
+       * - userProgress
+       * - quizAttempts
+       * - anciennes opérations de queue
+       * - cache XP
+       */
+
+      await clearLocalUserProgress(
+        userId
+      );
+
+
+      setLocalProgressResetVersion(
+        userId,
+        serverVersion
+      );
+
+
+      console.log(
+        "✅ État local invalidé avant écriture :",
+        {
+          userId,
+          previousVersion:
+            localVersion,
+          newVersion:
+            serverVersion
+        }
+      );
+
+
+      return {
+        success: true,
+        checked: true,
+        resetDetected: true,
+        userId,
+        localVersion,
+        serverVersion
+      };
+
+    }
+
+
+    /*
+     * =====================================
+     * VERSION IDENTIQUE
+     * =====================================
+     */
+
+    if (
+      serverVersion ===
+      localVersion
+    ) {
+
+      setLocalProgressResetVersion(
+        userId,
+        serverVersion
+      );
+
+
+      return {
+        success: true,
+        checked: true,
+        resetDetected: false,
+        userId,
+        localVersion,
+        serverVersion
+      };
+
+    }
+
+
+    /*
+     * =====================================
+     * VERSION LOCALE SUPÉRIEURE
+     * =====================================
+     *
+     * On ne supprime surtout pas les
+     * données locales.
+     */
+
+    console.warn(
+      "⚠️ Version locale supérieure à la version serveur :",
+      {
+        userId,
+        localVersion,
+        serverVersion
+      }
+    );
+
+
+    return {
+      success: true,
+      checked: true,
+      resetDetected: false,
+      userId,
+      localVersion,
+      serverVersion
+    };
+
+
+  } catch (error) {
+
+    /*
+     * Impossible de vérifier le serveur.
+     *
+     * En ligne, on ne considère pas que
+     * l'état est sûr pour une écriture.
+     */
+
+    console.warn(
+      "⚠️ Impossible de vérifier le reset avant écriture :",
+      error
+    );
+
+
+    return {
+      success: false,
+      checked: false,
+      resetDetected: false,
+      userId,
+      localVersion
+    };
+
+  }
+
+}
 
 
 // =====================================
@@ -144,6 +381,54 @@ export async function submitQuizAttempt(
 ) {
 
   /*
+   * ==========================================================
+   * VÉRIFICATION RESET
+   * ==========================================================
+   *
+   * Cette vérification intervient AVANT :
+   *
+   * - saveQuizAttempt()
+   * - l'écriture Supabase
+   * - addToSyncQueue()
+   */
+
+  const resetCheck =
+    await checkProgressResetBeforeWrite(
+      userId
+    );
+
+
+  /*
+   * Si nous sommes en ligne mais que
+   * la vérification du reset échoue,
+   * on ne crée pas de nouvelle tentative.
+   *
+   * Cela évite de risquer de remettre
+   * une ancienne progression dans la queue.
+   */
+
+  if (
+    !resetCheck.success
+  ) {
+
+    throw new Error(
+      "Impossible de vérifier l'état de la progression. Veuillez réessayer."
+    );
+
+  }
+
+
+  /*
+   * Si un reset vient d'être détecté,
+   * l'état local a déjà été nettoyé.
+   *
+   * La nouvelle tentative peut normalement
+   * être enregistrée : elle appartient à
+   * la nouvelle progression.
+   */
+
+
+  /*
     Si les questions ne sont pas
     fournies, on les récupère.
   */
@@ -198,13 +483,18 @@ export async function submitQuizAttempt(
         `📝 QUESTION ${index + 1}`,
         {
           userAnswer,
+
           userAnswerText:
-            question.choices?.[Number(userAnswer)],
+            question.choices?.[
+              Number(userAnswer)
+            ],
 
           correctIndex,
 
           correctAnswerText:
-            question.choices?.[correctIndex],
+            question.choices?.[
+              correctIndex
+            ],
 
           isCorrect
         }
@@ -295,14 +585,6 @@ export async function submitQuizAttempt(
     ------------------------------------
     DONNÉES SUPABASE
     ------------------------------------
-
-    On n'envoie PAS les champs
-    purement locaux :
-    - id Dexie
-    - correct_answers
-    - total_questions
-    - passed
-    - completed_at
   */
 
   const remotePayload = {
@@ -316,7 +598,6 @@ export async function submitQuizAttempt(
     score,
 
     answers:
-
       answers || {},
 
     attempt_number:
@@ -337,6 +618,32 @@ export async function submitQuizAttempt(
   ) {
 
     try {
+
+      /*
+       * Nouvelle vérification juste avant
+       * l'écriture distante.
+       *
+       * Cela réduit le risque qu'un reset
+       * soit intervenu pendant la correction
+       * du quiz.
+       */
+
+      const finalResetCheck =
+        await checkProgressResetBeforeWrite(
+          userId
+        );
+
+
+      if (
+        !finalResetCheck.success
+      ) {
+
+        throw new Error(
+          "Impossible de vérifier la réinitialisation avant synchronisation."
+        );
+
+      }
+
 
       const {
 
@@ -392,13 +699,9 @@ export async function submitQuizAttempt(
     catch (error) {
 
       /*
-        TRÈS IMPORTANT :
-
-        Même avec 403, on NE PERD PAS
-        la tentative.
-
-        Elle reste locale et est ajoutée
-        à la queue.
+        Même avec une erreur réseau,
+        la tentative reste locale et
+        peut être mise en queue.
       */
 
       console.error(
@@ -415,7 +718,65 @@ export async function submitQuizAttempt(
     ------------------------------------
     QUEUE
     ------------------------------------
-  */
+   *
+   * Une dernière vérification est faite
+   * avant de remettre la tentative dans
+   * syncQueue.
+   */
+
+  const queueResetCheck =
+    await checkProgressResetBeforeWrite(
+      userId
+    );
+
+
+  if (
+    !queueResetCheck.success
+  ) {
+
+    /*
+     * On ne met pas une opération
+     * potentiellement ancienne en queue
+     * si nous ne pouvons pas vérifier
+     * l'état du compte.
+     */
+
+    return {
+
+      attempt: {
+
+        id:
+          localId,
+
+        ...localAttempt
+
+      },
+
+      score,
+
+      correct,
+
+      total,
+
+      xp,
+
+      synced: false,
+
+      queued: false
+
+    };
+
+  }
+
+
+  /*
+   * Si un reset vient d'être détecté,
+   * clearLocalUserProgress() a supprimé
+   * la tentative locale précédente.
+   *
+   * La tentative actuelle peut être
+   * conservée comme nouvelle tentative.
+   */
 
   await addToSyncQueue({
 
@@ -477,21 +838,61 @@ export async function validateChapterProgress(
   lessonId,
   score
 ) {
-  const numericScore = Number(score) || 0;
+
+  /*
+   * Vérification avant toute écriture.
+   */
+
+  const resetCheck =
+    await checkProgressResetBeforeWrite(
+      userId
+    );
+
+
+  if (
+    !resetCheck.success
+  ) {
+
+    console.warn(
+      "⚠️ Validation chapitre annulée : reset impossible à vérifier."
+    );
+
+    return null;
+
+  }
+
+
+  const numericScore =
+    Number(score) || 0;
+
 
   const completed =
     numericScore >= 80;
 
+
   const payload = {
-    user_id: userId,
-    lesson_id: lessonId,
+
+    user_id:
+      userId,
+
+    lesson_id:
+      lessonId,
+
     completed,
-    completion_percentage: numericScore,
-    last_score: numericScore,
-    completed_at: completed
-      ? new Date().toISOString()
-      : null
+
+    completion_percentage:
+      numericScore,
+
+    last_score:
+      numericScore,
+
+    completed_at:
+      completed
+        ? new Date().toISOString()
+        : null
+
   };
+
 
   // =====================================
   // MODE ONLINE
@@ -501,7 +902,29 @@ export async function validateChapterProgress(
     typeof navigator !== "undefined" &&
     navigator.onLine
   ) {
+
     try {
+
+      /*
+       * Vérification supplémentaire avant
+       * l'upsert distant.
+       */
+
+      const finalResetCheck =
+        await checkProgressResetBeforeWrite(
+          userId
+        );
+
+
+      if (
+        !finalResetCheck.success
+      ) {
+
+        return null;
+
+      }
+
+
       const {
         data,
         error
@@ -516,43 +939,112 @@ export async function validateChapterProgress(
         )
         .select();
 
+
       if (!error) {
+
         console.log(
           "☁️ Progression chapitre synchronisée"
         );
 
         return data;
+
       }
+
 
       console.error(
         "Erreur progression online :",
         error
       );
+
     } catch (error) {
+
       console.error(
         "Erreur réseau progression :",
         error
       );
+
     }
+
   }
+
 
   // =====================================
   // MODE OFFLINE
   // =====================================
 
   try {
+
+    /*
+     * Dernière protection avant l'écriture
+     * locale.
+     */
+
+    const offlineResetCheck =
+      await checkProgressResetBeforeWrite(
+        userId
+      );
+
+
+    if (
+      !offlineResetCheck.success
+    ) {
+
+      return null;
+
+    }
+
+
     const localId =
-      await saveProgress(payload);
+      await saveProgress(
+        payload
+      );
+
 
     if (!localId) {
+
       console.error(
         "❌ Impossible de sauvegarder la progression offline"
       );
 
       return null;
+
     }
 
+
+    /*
+     * Vérification avant ajout à la queue.
+     */
+
+    const queueResetCheck =
+      await checkProgressResetBeforeWrite(
+        userId
+      );
+
+
+    if (
+      !queueResetCheck.success
+    ) {
+
+      return {
+
+        ...payload,
+
+        id:
+          localId,
+
+        offline:
+          true,
+
+        queued:
+          false
+
+      };
+
+    }
+
+
     await addToSyncQueue({
+
       table_name:
         "user_progress",
 
@@ -566,6 +1058,7 @@ export async function validateChapterProgress(
         localId,
 
       payload: {
+
         user_id:
           userId,
 
@@ -580,17 +1073,27 @@ export async function validateChapterProgress(
 
         completed_at:
           payload.completed_at
+
       }
+
     });
+
 
     console.log(
       "💾 Progression chapitre sauvegardée offline"
     );
 
+
     return {
+
       ...payload,
-      id: localId,
-      offline: true
+
+      id:
+        localId,
+
+      offline:
+        true
+
     };
 
   } catch (error) {
@@ -601,7 +1104,9 @@ export async function validateChapterProgress(
     );
 
     return null;
+
   }
+
 }
 
 
@@ -616,13 +1121,44 @@ export async function giveBadge(
 
   try {
 
-    if (!userId || !badgeName) {
+    if (
+      !userId ||
+      !badgeName
+    ) {
+
       console.warn(
         "⚠️ giveBadge : userId ou badgeName manquant"
       );
 
       return null;
+
     }
+
+
+    /*
+     * =====================================
+     * VÉRIFICATION RESET
+     * =====================================
+     */
+
+    const resetCheck =
+      await checkProgressResetBeforeWrite(
+        userId
+      );
+
+
+    if (
+      !resetCheck.success
+    ) {
+
+      console.warn(
+        "⚠️ Attribution badge annulée : impossible de vérifier le reset."
+      );
+
+      return null;
+
+    }
+
 
     // =====================================
     // MODE ONLINE
@@ -634,6 +1170,26 @@ export async function giveBadge(
     ) {
 
       try {
+
+        /*
+         * Nouvelle vérification avant écriture
+         * du badge.
+         */
+
+        const finalResetCheck =
+          await checkProgressResetBeforeWrite(
+            userId
+          );
+
+
+        if (
+          !finalResetCheck.success
+        ) {
+
+          return null;
+
+        }
+
 
         const {
           data: badge,
@@ -647,8 +1203,10 @@ export async function giveBadge(
           )
           .maybeSingle();
 
+
         if (badgeError)
           throw badgeError;
+
 
         if (!badge) {
 
@@ -658,7 +1216,9 @@ export async function giveBadge(
           );
 
           return null;
+
         }
+
 
         const {
           data,
@@ -679,13 +1239,16 @@ export async function giveBadge(
             }
           );
 
+
         if (error)
           throw error;
+
 
         console.log(
           "🏆 Badge attribué online :",
           badgeName
         );
+
 
         return data;
 
@@ -701,18 +1264,37 @@ export async function giveBadge(
           "⚠️ Attribution badge online impossible, passage offline :",
           onlineError
         );
+
       }
+
     }
+
 
     // =====================================
     // MODE OFFLINE
     // =====================================
+
+    const offlineResetCheck =
+      await checkProgressResetBeforeWrite(
+        userId
+      );
+
+
+    if (
+      !offlineResetCheck.success
+    ) {
+
+      return null;
+
+    }
+
 
     const badge =
       await db.badges
         .where("name")
         .equals(badgeName)
         .first();
+
 
     if (!badge) {
 
@@ -722,22 +1304,48 @@ export async function giveBadge(
       );
 
       return null;
+
     }
+
 
     // =====================================
     // AJOUT À LA FILE DE SYNCHRONISATION
     // =====================================
 
     const payload = {
+
       user_id:
         userId,
 
       badge_id:
         badge.id
+
     };
+
 
     const localRecordId =
       `${userId}-${badge.id}`;
+
+
+    /*
+     * Dernière vérification avant d'ajouter
+     * le badge à syncQueue.
+     */
+
+    const queueResetCheck =
+      await checkProgressResetBeforeWrite(
+        userId
+      );
+
+
+    if (
+      !queueResetCheck.success
+    ) {
+
+      return null;
+
+    }
+
 
     await addToSyncQueue({
 
@@ -757,15 +1365,22 @@ export async function giveBadge(
 
     });
 
+
     console.log(
       "💾 Badge ajouté à la file offline :",
       badgeName
     );
 
+
     return {
+
       ...payload,
-      offline: true
+
+      offline:
+        true
+
     };
+
 
   } catch (error) {
 
@@ -775,5 +1390,7 @@ export async function giveBadge(
     );
 
     return null;
+
   }
+
 }

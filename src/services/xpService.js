@@ -3,7 +3,10 @@
 import { supabase } from "../lib/supabase";
 
 import {
-  addToSyncQueue
+  addToSyncQueue,
+  getLocalProgressResetVersion,
+  setLocalProgressResetVersion,
+  clearLocalUserProgress,
 } from "../offline/db";
 
 
@@ -138,6 +141,201 @@ function saveCachedXP(
 
 
 // =====================================
+// PROTECTION RÉINITIALISATION XP
+// =====================================
+
+async function checkProgressResetBeforeXP(
+  userId
+) {
+
+  if (!userId) {
+
+    return {
+
+      allowed:
+        false,
+
+      resetDetected:
+        false
+
+    };
+
+  }
+
+
+  const localVersion =
+    getLocalProgressResetVersion(
+      userId
+    );
+
+
+  try {
+
+    const {
+      data: profile,
+      error
+    } = await supabase
+
+      .from("profiles")
+
+      .select(
+        "progress_reset_version"
+      )
+
+      .eq(
+        "id",
+        userId
+      )
+
+      .single();
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    const serverVersion =
+      Math.max(
+        Number(
+          profile?.progress_reset_version
+        ) || 0,
+        0
+      );
+
+
+    // ---------------------------------
+    // UNE RÉINITIALISATION A EU LIEU
+    // ---------------------------------
+
+    if (
+      serverVersion >
+      localVersion
+    ) {
+
+      console.log(
+        "🚨 Nouvelle réinitialisation XP détectée."
+      );
+
+
+      await clearLocalUserProgress(
+        userId
+      );
+
+
+      setLocalProgressResetVersion(
+        userId,
+        serverVersion
+      );
+
+
+      console.log(
+        "✅ Ancienne progression XP locale supprimée."
+      );
+
+
+      return {
+
+        allowed:
+          true,
+
+        resetDetected:
+          true,
+
+        localVersion:
+          serverVersion,
+
+        serverVersion
+
+      };
+
+    }
+
+
+    // ---------------------------------
+    // VERSION IDENTIQUE
+    // ---------------------------------
+
+    if (
+      serverVersion ===
+      localVersion
+    ) {
+
+      setLocalProgressResetVersion(
+        userId,
+        serverVersion
+      );
+
+    }
+
+
+    // ---------------------------------
+    // VERSION LOCALE SUPÉRIEURE
+    // ---------------------------------
+
+    if (
+      localVersion >
+      serverVersion
+    ) {
+
+      console.warn(
+        "⚠️ Version locale XP supérieure à la version serveur."
+      );
+
+    }
+
+
+    return {
+
+      allowed:
+        true,
+
+      resetDetected:
+        false,
+
+      localVersion,
+
+      serverVersion
+
+    };
+
+  }
+  catch (error) {
+
+    console.warn(
+      "⚠️ Impossible de vérifier la réinitialisation XP :",
+      error
+    );
+
+
+    /*
+      On autorise ici le fonctionnement offline.
+
+      La protection principale reste active dès que
+      le serveur est de nouveau accessible.
+    */
+
+    return {
+
+      allowed:
+        true,
+
+      resetDetected:
+        false,
+
+      localVersion,
+
+      serverVersion:
+        null
+
+    };
+
+  }
+
+}
+
+
+// =====================================
 // AJOUT XP
 // =====================================
 
@@ -161,6 +359,27 @@ export async function addXP(
 
 
   // ===================================
+  // PROTECTION RÉINITIALISATION
+  // ===================================
+
+  const resetCheck =
+    await checkProgressResetBeforeXP(
+      userId
+    );
+
+
+  if (!resetCheck.allowed) {
+
+    console.warn(
+      "⛔ Ajout XP bloqué."
+    );
+
+    return null;
+
+  }
+
+
+  // ===================================
   // MODE ONLINE
   // ===================================
 
@@ -179,7 +398,7 @@ export async function addXP(
         .from("profiles")
 
         .select(
-          "xp, level"
+          "xp, level, progress_reset_version"
         )
 
         .eq(
@@ -192,6 +411,62 @@ export async function addXP(
 
       if (getError) {
         throw getError;
+      }
+
+
+      // --------------------------------
+      // VÉRIFICATION VERSION
+      // --------------------------------
+
+      const serverVersion =
+        Math.max(
+          Number(
+            profile?.progress_reset_version
+          ) || 0,
+          0
+        );
+
+
+      const localVersion =
+        getLocalProgressResetVersion(
+          userId
+        );
+
+
+      if (
+        serverVersion >
+        localVersion
+      ) {
+
+        console.log(
+          "🚨 Réinitialisation détectée avant écriture XP."
+        );
+
+
+        await clearLocalUserProgress(
+          userId
+        );
+
+
+        setLocalProgressResetVersion(
+          userId,
+          serverVersion
+        );
+
+
+        return {
+
+          xp:
+            0,
+
+          level:
+            1,
+
+          pending:
+            false
+
+        };
+
       }
 
 
@@ -352,7 +627,7 @@ export async function addXP(
         .from("profiles")
 
         .select(
-          "xp, level"
+          "xp, level, progress_reset_version"
         )
 
         .eq(
@@ -365,26 +640,82 @@ export async function addXP(
 
       if (profile) {
 
-        cached = {
-
-          xp:
-            Math.max(
-              Number(profile.xp) || 0,
-              0
-            ),
-
-          level:
-            calculateLevel(
-              profile.xp
-            )
-
-        };
+        const serverVersion =
+          Math.max(
+            Number(
+              profile.progress_reset_version
+            ) || 0,
+            0
+          );
 
 
-        saveCachedXP(
-          userId,
-          cached
-        );
+        const localVersion =
+          getLocalProgressResetVersion(
+            userId
+          );
+
+
+        // ------------------------------
+        // PROTECTION RESET
+        // ------------------------------
+
+        if (
+          serverVersion >
+          localVersion
+        ) {
+
+          console.log(
+            "🚨 Réinitialisation détectée avant récupération XP."
+          );
+
+
+          await clearLocalUserProgress(
+            userId
+          );
+
+
+          setLocalProgressResetVersion(
+            userId,
+            serverVersion
+          );
+
+
+          cached = {
+
+            xp:
+              0,
+
+            level:
+              1
+
+          };
+
+        }
+
+        else {
+
+          cached = {
+
+            xp:
+              Math.max(
+                Number(profile.xp) || 0,
+                0
+              ),
+
+            level:
+              calculateLevel(
+                profile.xp
+              )
+
+          };
+
+
+          saveCachedXP(
+            userId,
+            cached
+          );
+
+        }
 
       }
 
@@ -392,7 +723,7 @@ export async function addXP(
     catch {
 
       // Si aucun accès serveur n'est possible,
-      // on utilisera 0 comme dernier recours.
+      // on utilisera le cache ou 0 comme dernier recours.
 
     }
 

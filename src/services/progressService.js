@@ -5,8 +5,217 @@ import {
   saveProgress,
   getCachedProgress,
   addToSyncQueue,
-  markProgressSynced
+  markProgressSynced,
+  getLocalProgressResetVersion,
+  setLocalProgressResetVersion,
+  clearLocalUserProgress
 } from "../offline/db";
+
+/**
+ * ============================================================
+ * VÉRIFIER UNE RÉINITIALISATION DE PROGRESSION
+ * ============================================================
+ *
+ * IMPORTANT :
+ *
+ * Avant de réutiliser une progression locale, on vérifie que
+ * sa version de réinitialisation correspond à celle du serveur.
+ *
+ * Cela empêche un ancien état local comme :
+ *
+ *   score = 95
+ *   completed = true
+ *
+ * de revenir après une réinitialisation admin.
+ */
+async function checkProgressResetBeforeRead(userId) {
+  if (!userId) {
+    return {
+      success: false,
+      checked: false
+    };
+  }
+
+  const localVersion =
+    getLocalProgressResetVersion(userId);
+
+  const isOnline =
+    typeof navigator === "undefined" ||
+    navigator.onLine === true;
+
+  /*
+   * Hors ligne :
+   *
+   * Nous ne pouvons pas connaître une éventuelle nouvelle
+   * version côté serveur.
+   *
+   * La synchronisation générale vérifiera la version dès que
+   * le serveur sera de nouveau accessible.
+   */
+  if (!isOnline) {
+    return {
+      success: true,
+      checked: false,
+      offline: true,
+      resetDetected: false,
+      userId,
+      localVersion
+    };
+  }
+
+  try {
+    const {
+      data,
+      error
+    } = await supabase
+      .from("profiles")
+      .select("progress_reset_version")
+      .eq("id", userId)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    const serverVersion =
+      Number(
+        data?.progress_reset_version
+      ) || 0;
+
+    /*
+     * ========================================================
+     * NOUVELLE RÉINITIALISATION DÉTECTÉE
+     * ========================================================
+     */
+
+    if (serverVersion > localVersion) {
+
+      console.log(
+        "🚨 Nouvelle réinitialisation détectée avant lecture locale :",
+        {
+          userId,
+          localVersion,
+          serverVersion
+        }
+      );
+
+      /*
+       * Suppression de l'ancien état local.
+       *
+       * Cette fonction supprime :
+       *   - userProgress
+       *   - quizAttempts
+       *   - anciennes opérations de sync liées à l'utilisateur
+       *   - cache XP
+       */
+      await clearLocalUserProgress(userId);
+
+      /*
+       * On mémorise immédiatement la nouvelle version.
+       */
+      setLocalProgressResetVersion(
+        userId,
+        serverVersion
+      );
+
+      console.log(
+        "✅ Réinitialisation locale appliquée avant lecture de progression :",
+        {
+          userId,
+          previousVersion: localVersion,
+          newVersion: serverVersion
+        }
+      );
+
+      return {
+        success: true,
+        checked: true,
+        resetDetected: true,
+        userId,
+        localVersion,
+        serverVersion
+      };
+    }
+
+    /*
+     * ========================================================
+     * VERSION IDENTIQUE
+     * ========================================================
+     */
+
+    if (serverVersion === localVersion) {
+
+      /*
+       * On s'assure que la version locale existe bien.
+       */
+      setLocalProgressResetVersion(
+        userId,
+        serverVersion
+      );
+
+      return {
+        success: true,
+        checked: true,
+        resetDetected: false,
+        userId,
+        localVersion,
+        serverVersion
+      };
+    }
+
+    /*
+     * ========================================================
+     * VERSION LOCALE SUPÉRIEURE
+     * ========================================================
+     *
+     * Situation anormale :
+     *
+     * localVersion > serverVersion
+     *
+     * On ne supprime surtout pas la progression locale.
+     */
+    console.warn(
+      "⚠️ Version locale de reset supérieure à la version serveur :",
+      {
+        userId,
+        localVersion,
+        serverVersion
+      }
+    );
+
+    return {
+      success: true,
+      checked: true,
+      resetDetected: false,
+      userId,
+      localVersion,
+      serverVersion
+    };
+
+  } catch (error) {
+
+    /*
+     * Si la vérification distante échoue, on ne doit surtout
+     * pas réutiliser aveuglément une ancienne progression locale.
+     *
+     * La synchronisation générale pourra effectuer une nouvelle
+     * vérification dès que le serveur sera accessible.
+     */
+    console.warn(
+      "⚠️ Impossible de vérifier la version de reset avant lecture locale :",
+      error
+    );
+
+    return {
+      success: false,
+      checked: false,
+      resetDetected: false,
+      userId,
+      localVersion
+    };
+  }
+}
+
 
 /**
  * ============================================================
@@ -23,14 +232,7 @@ import {
  *
  * 3. Le meilleur score est toujours conservé.
  *
- *    Exemple :
- *      85 → 50 → 70 → 95
- *
- *    Résultat final :
- *      score     = 95
- *      completed = true
- *
- * 4. Ces règles doivent fonctionner :
+ * 4. Ces règles fonctionnent :
  *      - en ligne
  *      - hors ligne
  *      - après reconnexion
@@ -49,6 +251,35 @@ export async function saveLessonProgress({
   }
 
 
+  /*
+   * ==========================================================
+   * VÉRIFICATION DU RESET AVANT TOUTE LECTURE LOCALE
+   * ==========================================================
+   *
+   * C'est volontairement placé AVANT getCachedProgress().
+   *
+   * Ainsi, une ancienne progression locale ne peut pas être
+   * utilisée pour reconstruire une progression après reset.
+   */
+
+  const resetCheck =
+    await checkProgressResetBeforeRead(
+      userId
+    );
+
+
+  /*
+   * Si nous sommes en ligne mais que la vérification du reset
+   * a échoué, nous ne devons pas réutiliser l'ancien cache local.
+   *
+   * On continue cependant avec une progression vide afin de
+   * permettre une nouvelle progression.
+   */
+  const canUseLocalProgress =
+    resetCheck.success ||
+    resetCheck.offline;
+
+
   const currentScore = Math.max(
     0,
     Number(score) || 0
@@ -59,23 +290,15 @@ export async function saveLessonProgress({
    * ==========================================================
    * ÉTAT LOCAL EXISTANT
    * ==========================================================
-   *
-   * La progression locale peut déjà contenir :
-   *
-   *   completed = true
-   *   score     = 85
-   *
-   * Une nouvelle tentative à 50 % ne doit donc jamais produire :
-   *
-   *   completed = false
-   *   score     = 50
    */
 
   const localProgress =
-    await getCachedProgress(
-      userId,
-      lessonId
-    );
+    canUseLocalProgress
+      ? await getCachedProgress(
+          userId,
+          lessonId
+        )
+      : null;
 
 
   const localBestScore = Math.max(
@@ -93,17 +316,6 @@ export async function saveLessonProgress({
    * ==========================================================
    * ÉTAT DISTANT EXISTANT
    * ==========================================================
-   *
-   * Lorsque nous sommes en ligne, on vérifie également Supabase.
-   *
-   * Cela protège le cas où :
-   *
-   * - le cache local a été perdu ;
-   * - l'application a été réinstallée ;
-   * - la progression distante est meilleure que la progression
-   *   locale ;
-   * - une ancienne donnée locale risquerait d'écraser une
-   *   progression déjà terminée.
    */
 
   let remoteProgress = null;
@@ -141,14 +353,6 @@ export async function saveLessonProgress({
 
     } catch (error) {
 
-      /*
-       * Une erreur lors de la lecture distante ne doit pas
-       * empêcher la progression locale.
-       *
-       * La sauvegarde locale continuera et la synchronisation
-       * pourra être effectuée plus tard.
-       */
-
       console.warn(
         "⚠️ Impossible de lire la progression distante. Conservation de la progression locale :",
         error
@@ -163,12 +367,6 @@ export async function saveLessonProgress({
    * ==========================================================
    * CALCUL DU MEILLEUR SCORE
    * ==========================================================
-   *
-   * On prend toujours le maximum entre :
-   *
-   *   - la nouvelle tentative ;
-   *   - le meilleur score local ;
-   *   - le meilleur score distant.
    */
 
   const remoteBestScore = Math.max(
@@ -188,17 +386,6 @@ export async function saveLessonProgress({
    * ==========================================================
    * CALCUL DE L'ÉTAT "TERMINÉE"
    * ==========================================================
-   *
-   * Une seule condition suffit pour conserver "terminée" :
-   *
-   *   - ancienne progression locale terminée ;
-   *   - ancienne progression distante terminée ;
-   *   - meilleur score >= 80.
-   *
-   * Ainsi :
-   *
-   *   85 % → true
-   *   50 % → reste true
    */
 
   const remoteWasCompleted =
@@ -216,11 +403,6 @@ export async function saveLessonProgress({
    * ==========================================================
    * DATE DE TERMINAISON
    * ==========================================================
-   *
-   * Si la leçon était déjà terminée, on conserve sa date.
-   *
-   * Sinon, si elle vient de passer à 80 % ou plus, on crée
-   * maintenant la date de terminaison.
    */
 
   let completedAt = null;
@@ -265,12 +447,6 @@ export async function saveLessonProgress({
    * ==========================================================
    * 1. SAUVEGARDE LOCALE
    * ==========================================================
-   *
-   * saveProgress() retourne déjà l'identifiant local du
-   * record sauvegardé.
-   *
-   * Nous le conservons directement afin d'éviter une seconde
-   * lecture Dexie juste après la sauvegarde.
    */
 
   const savedLocalId =
@@ -321,13 +497,6 @@ export async function saveLessonProgress({
       }
 
 
-      /*
-       * Le record local est déjà connu grâce au résultat
-       * de saveProgress().
-       *
-       * Aucun nouveau getCachedProgress() n'est nécessaire.
-       */
-
       await markProgressSynced(
         savedLocalId
       );
@@ -348,14 +517,6 @@ export async function saveLessonProgress({
 
     } catch (error) {
 
-      /*
-       * La connexion peut avoir disparu entre la lecture
-       * et l'écriture.
-       *
-       * Dans ce cas, la progression locale reste la source
-       * de vérité temporaire et sera synchronisée plus tard.
-       */
-
       console.warn(
         "⚠️ Progression non synchronisée, mise en attente :",
         error
@@ -370,27 +531,6 @@ export async function saveLessonProgress({
    * ==========================================================
    * 3. MISE EN FILE POUR SYNCHRONISATION
    * ==========================================================
-   *
-   * IMPORTANT :
-   *
-   * On met dans la queue la progression FINALE calculée
-   * ci-dessus, et non le score inférieur de la dernière
-   * tentative.
-   *
-   * Exemple :
-   *
-   *   ancienne meilleure note = 85
-   *   nouvelle tentative      = 50
-   *
-   * La queue recevra :
-   *
-   *   score     = 85
-   *   completed = true
-   *
-   * et jamais :
-   *
-   *   score     = 50
-   *   completed = false
    */
 
   await addToSyncQueue({
@@ -455,6 +595,26 @@ export async function getLessonProgress(
   lessonId
 ) {
 
+  /*
+   * Même protection que saveLessonProgress().
+   *
+   * Une lecture directe de getCachedProgress() ne doit pas
+   * pouvoir récupérer une ancienne progression après reset.
+   */
+
+  const resetCheck =
+    await checkProgressResetBeforeRead(
+      userId
+    );
+
+  const canUseLocalProgress =
+    resetCheck.success ||
+    resetCheck.offline;
+
+  if (!canUseLocalProgress) {
+    return null;
+  }
+
   return await getCachedProgress(
     userId,
     lessonId
@@ -471,6 +631,22 @@ export async function getLessonProgress(
 export async function getUserProgress(
   userId
 ) {
+
+  /*
+   * Vérification du reset avant toute lecture globale.
+   */
+  const resetCheck =
+    await checkProgressResetBeforeRead(
+      userId
+    );
+
+  const canUseLocalProgress =
+    resetCheck.success ||
+    resetCheck.offline;
+
+  if (!canUseLocalProgress) {
+    return [];
+  }
 
   return await db.userProgress
     .where("user_id")

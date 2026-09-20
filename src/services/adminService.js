@@ -836,15 +836,22 @@ export async function getAdminStudentView(
     // -----------------------------------------
     // TOUTES LES LEÇONS
     // -----------------------------------------
+    // Relation réelle :
+    // lessons → chapters → subjects
+    // -----------------------------------------
 
     supabase
       .from("lessons")
       .select(`
         id,
-        subject_id,
-        subjects(
+        chapter_id,
+        chapters(
           id,
-          name
+          subject_id,
+          subjects(
+            id,
+            name
+          )
         )
       `),
 
@@ -999,7 +1006,7 @@ export async function getAdminStudentView(
   for (const lesson of lessonsData) {
 
     const subject =
-      lesson?.subjects;
+      lesson?.chapters?.subjects;
 
 
     if (!subject?.id) {

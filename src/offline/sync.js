@@ -14,6 +14,10 @@ import {
   getUnsyncedQuizAttempts,
   markQuizAttemptSynced,
 
+  getLocalProgressResetVersion,
+  setLocalProgressResetVersion,
+  clearLocalUserProgress,
+
   cacheClasses,
   cacheSubjects,
   cacheChapters,
@@ -32,6 +36,304 @@ import {
 // ======================================
 
 let syncing = false;
+
+
+// ======================================
+// VÉRIFICATION RÉINITIALISATION
+// ======================================
+
+async function checkProgressReset() {
+  try {
+    /*
+      ----------------------------------
+      1. UTILISATEUR ACTUEL
+      ----------------------------------
+
+      On utilise l'utilisateur réellement
+      connecté.
+
+      Cela permet de ne supprimer que
+      les données locales de cet utilisateur.
+    */
+
+    const {
+      data: userData,
+      error: userError
+    } = await supabase.auth.getUser();
+
+
+    if (userError) {
+      console.warn(
+        "⚠️ Impossible de récupérer l'utilisateur connecté :",
+        userError
+      );
+
+      return {
+        success: false,
+        checked: false
+      };
+    }
+
+
+    const userId =
+      userData?.user?.id;
+
+
+    if (!userId) {
+      console.log(
+        "ℹ️ Aucun utilisateur connecté : vérification reset ignorée."
+      );
+
+      return {
+        success: true,
+        checked: false
+      };
+    }
+
+
+    /*
+      ----------------------------------
+      2. VERSION SERVEUR
+      ----------------------------------
+    */
+
+    const {
+      data: profile,
+      error: profileError
+    } = await supabase
+      .from("profiles")
+      .select(
+        "progress_reset_version"
+      )
+      .eq(
+        "id",
+        userId
+      )
+      .maybeSingle();
+
+
+    if (profileError) {
+      console.warn(
+        "⚠️ Impossible de vérifier progress_reset_version :",
+        profileError
+      );
+
+      return {
+        success: false,
+        checked: false
+      };
+    }
+
+
+    /*
+      Si aucun profil n'est trouvé,
+      on ne touche pas aux données locales.
+    */
+
+    if (!profile) {
+      console.warn(
+        "⚠️ Profil utilisateur introuvable lors de la vérification du reset :",
+        userId
+      );
+
+      return {
+        success: false,
+        checked: false
+      };
+    }
+
+
+    const serverVersion =
+      Math.max(
+        0,
+        Number(
+          profile.progress_reset_version
+        ) || 0
+      );
+
+
+    /*
+      ----------------------------------
+      3. VERSION LOCALE
+      ----------------------------------
+    */
+
+    const localVersion =
+      getLocalProgressResetVersion(
+        userId
+      );
+
+
+    console.log(
+      "🔐 Vérification réinitialisation progression :",
+      {
+        userId,
+        localVersion,
+        serverVersion
+      }
+    );
+
+
+    /*
+      ----------------------------------
+      4. UNE NOUVELLE RÉINITIALISATION
+      A ÉTÉ DÉTECTÉE
+      ----------------------------------
+
+      Exemple :
+
+        local = 0
+        serveur = 1
+
+      Cela signifie qu'une réinitialisation
+      a été effectuée depuis le dernier
+      passage de l'application.
+
+      On doit donc supprimer les anciennes
+      données locales AVANT toute nouvelle
+      synchronisation.
+    */
+
+    if (
+      serverVersion >
+      localVersion
+    ) {
+      console.log(
+        "🚨 Nouvelle réinitialisation détectée !"
+      );
+
+      console.log(
+        "🧹 Suppression de l'ancienne progression locale..."
+      );
+
+
+      await clearLocalUserProgress(
+        userId
+      );
+
+
+      /*
+        On enregistre la nouvelle version
+        uniquement après avoir supprimé
+        les anciennes données.
+      */
+
+      setLocalProgressResetVersion(
+        userId,
+        serverVersion
+      );
+
+
+      console.log(
+        "✅ Réinitialisation locale appliquée :",
+        {
+          userId,
+          previousVersion:
+            localVersion,
+          newVersion:
+            serverVersion
+        }
+      );
+
+
+      return {
+        success: true,
+        checked: true,
+        resetDetected: true,
+        userId,
+        localVersion,
+        serverVersion
+      };
+    }
+
+
+    /*
+      ----------------------------------
+      5. PREMIÈRE INITIALISATION
+      ----------------------------------
+
+      Si le serveur et le local sont
+      tous les deux à 0, on initialise
+      simplement la version locale.
+
+      Cela évite de refaire cette logique
+      à chaque synchronisation.
+    */
+
+    if (
+      serverVersion ===
+      localVersion
+    ) {
+      /*
+        On écrit quand même la valeur
+        lorsqu'elle n'existait pas encore.
+
+        Pour la version 0, cela permet
+        notamment d'initialiser proprement
+        le stockage local.
+      */
+
+      setLocalProgressResetVersion(
+        userId,
+        serverVersion
+      );
+    }
+
+
+    /*
+      ----------------------------------
+      6. CAS ANORMAL
+      ----------------------------------
+
+      La version serveur est supposée
+      être monotone.
+
+      Elle ne devrait donc jamais être
+      inférieure à la version locale.
+
+      On ne supprime aucune donnée dans
+      ce cas afin d'éviter une suppression
+      locale injustifiée.
+    */
+
+    if (
+      serverVersion <
+      localVersion
+    ) {
+      console.warn(
+        "⚠️ Version locale supérieure à la version serveur :",
+        {
+          userId,
+          localVersion,
+          serverVersion
+        }
+      );
+    }
+
+
+    return {
+      success: true,
+      checked: true,
+      resetDetected: false,
+      userId,
+      localVersion,
+      serverVersion
+    };
+  }
+
+  catch (error) {
+    console.error(
+      "❌ Erreur vérification réinitialisation progression :",
+      error
+    );
+
+    return {
+      success: false,
+      checked: false,
+      error
+    };
+  }
+}
 
 
 // ======================================
@@ -54,17 +356,73 @@ export async function syncPendingData() {
       "🔄 Synchronisation des données utilisateur..."
     );
 
+
+    /*
+      ----------------------------------
+      0. VÉRIFIER UNE ÉVENTUELLE
+         RÉINITIALISATION SERVEUR
+      ----------------------------------
+
+      IMPORTANT :
+
+      Cette étape doit impérativement
+      avoir lieu AVANT de transformer les
+      anciennes données Dexie en opérations
+      de synchronisation.
+
+      Sinon une ancienne progression
+      pourrait être renvoyée vers Supabase
+      après une réinitialisation admin.
+    */
+
+    const resetCheck =
+      await checkProgressReset();
+
+
+    /*
+      ----------------------------------
+      PROTECTION EN CAS D'ERREUR RÉSEAU
+      ----------------------------------
+
+      Si la vérification du reset n'a pas
+      pu être effectuée, on ne prend pas
+      le risque d'envoyer une ancienne
+      progression potentiellement réinitialisée.
+
+      On arrête donc uniquement la
+      synchronisation utilisateur.
+    */
+
+    if (
+      resetCheck?.checked === false
+    ) {
+      console.warn(
+        "⚠️ Vérification de réinitialisation impossible."
+      );
+
+      console.warn(
+        "⏸️ Synchronisation utilisateur interrompue pour éviter de ressusciter une ancienne progression."
+      );
+
+      return {
+        success: 0,
+        errors: 1,
+        resetCheckFailed: true
+      };
+    }
+
+
     /*
       ----------------------------------
       1. AJOUTER LES DONNÉES LOCALES
-      NON SYNCHRONISÉES À LA QUEUE
+         NON SYNCHRONISÉES À LA QUEUE
       ----------------------------------
 
-      Les deux lectures Dexie sont
-      indépendantes.
+      La vérification du reset a déjà
+      été effectuée.
 
-      On les exécute donc en parallèle
-      afin de réduire le temps d'attente.
+      Les anciennes données d'un élève
+      réinitialisé ont donc été supprimées.
     */
 
     await Promise.all([
@@ -75,7 +433,48 @@ export async function syncPendingData() {
 
     /*
       ----------------------------------
-      2. TRAITER LA QUEUE
+      2. DEUXIÈME VÉRIFICATION
+      ----------------------------------
+
+      Cette deuxième vérification protège
+      contre le cas où une réinitialisation
+      aurait été effectuée entre :
+
+        - la première vérification
+        - la création de la queue
+
+      Si une nouvelle version apparaît,
+      clearLocalUserProgress() supprime
+      immédiatement les opérations locales
+      correspondantes avant leur traitement.
+    */
+
+    const secondResetCheck =
+      await checkProgressReset();
+
+
+    if (
+      secondResetCheck?.checked === false
+    ) {
+      console.warn(
+        "⚠️ Deuxième vérification reset impossible."
+      );
+
+      console.warn(
+        "⏸️ Traitement de la queue interrompu."
+      );
+
+      return {
+        success: 0,
+        errors: 1,
+        resetCheckFailed: true
+      };
+    }
+
+
+    /*
+      ----------------------------------
+      3. TRAITER LA QUEUE
       ----------------------------------
 
       IMPORTANT :
@@ -331,22 +730,6 @@ async function mergeUserProgress(
     ----------------------------------
     2. CALCUL DU MEILLEUR SCORE
     ----------------------------------
-
-    Règle :
-
-    score final =
-      MAX(
-        score local,
-        score serveur
-      )
-
-    Ainsi :
-
-      85 → 50
-      reste 85
-
-      85 → 95
-      devient 95
   */
 
   const localScore =
@@ -366,12 +749,6 @@ async function mergeUserProgress(
     ----------------------------------
     3. COMPLETED PERMANENT
     ----------------------------------
-
-    Une fois true, completed
-    ne peut plus redevenir false.
-
-    Et un score >= 80 suffit également
-    pour considérer la leçon comme terminée.
   */
 
   const completed =
@@ -384,11 +761,6 @@ async function mergeUserProgress(
     ----------------------------------
     4. DATE DE COMPLÉTION
     ----------------------------------
-
-    On conserve la date existante.
-
-    Si la leçon devient terminée pour
-    la première fois, on crée une date.
   */
 
   let completedAt =
@@ -449,7 +821,7 @@ async function mergeUserProgress(
   /*
     ----------------------------------
     6. ENVOYER LA VALEUR FUSIONNÉE
-    VERS SUPABASE
+       VERS SUPABASE
     ----------------------------------
   */
 
@@ -483,18 +855,8 @@ async function mergeUserProgress(
 
   /*
     ----------------------------------
-    7. METTRE DEXIE À JOUR AVEC
-       LA VALEUR FINALE SERVEUR
+    7. METTRE DEXIE À JOUR
     ----------------------------------
-
-    Optimisation :
-
-    localRecordId est déjà connu.
-
-    On utilise donc directement
-    db.userProgress.get(localRecordId)
-    au lieu de rechercher par
-    user_id puis filtrer par lesson_id.
   */
 
   try {
@@ -539,16 +901,6 @@ async function mergeUserProgress(
     };
 
 
-    /*
-      Si le record local existe,
-      on conserve son ID.
-
-      Si localRecordId est connu mais
-      que le record n'est pas retrouvé,
-      on le réutilise pour éviter de
-      perdre la référence locale.
-    */
-
     if (existing?.id) {
       localRecord.id =
         existing.id;
@@ -573,14 +925,6 @@ async function mergeUserProgress(
   }
 
   catch (localError) {
-    /*
-      La synchronisation serveur
-      a réussi.
-
-      Une erreur locale ne doit pas
-      faire croire que Supabase a échoué.
-    */
-
     console.warn(
       "⚠️ Impossible de mettre à jour la progression locale :",
       localError
@@ -590,7 +934,7 @@ async function mergeUserProgress(
 
   /*
     ----------------------------------
-    8. MARQUER L'ANCIEN ENREGISTREMENT
+    8. MARQUER L'ENREGISTREMENT
        LOCAL COMME SYNCHRONISÉ
     ----------------------------------
   */
@@ -656,18 +1000,6 @@ async function processQueueItem(item) {
   ======================================
   PROGRESSION
   ======================================
-
-  IMPORTANT :
-
-  On ne fait plus un upsert direct.
-
-  On fusionne d'abord :
-    - score local
-    - score serveur
-    - completed local
-    - completed serveur
-
-  afin de conserver la meilleure progression.
   */
 
   if (
@@ -701,12 +1033,6 @@ async function processQueueItem(item) {
 
 
     if (error) {
-
-      /*
-      Si cette tentative existe déjà
-      côté serveur, elle est considérée
-      comme synchronisée.
-      */
 
       if (
         error.code === "23505"
@@ -766,20 +1092,6 @@ async function processQueueItem(item) {
   ======================================
   USER BADGES
   ======================================
-
-  IMPORTANT :
-
-  user_badges possède une contrainte
-  unique :
-
-    user_id + badge_id
-
-  On utilise donc UPSERT et non INSERT.
-
-  Ainsi :
-  - badge absent → création
-  - badge déjà présent → aucune erreur
-  - queue offline → supprimée correctement
   */
 
   if (
@@ -838,12 +1150,6 @@ async function processQueueItem(item) {
 
 
     if (error) {
-
-      /*
-      Une opération déjà présente
-      côté serveur est considérée
-      comme réussie.
-      */
 
       if (
         error.code === "23505"
@@ -979,15 +1285,57 @@ async function syncXP(
 
 
   /*
-    On récupère le XP actuel
-    directement depuis Supabase.
+    ----------------------------------
+    VÉRIFICATION RESET AVANT XP
+    ----------------------------------
 
-    Puis on ajoute le montant
-    en attente.
+    Une opération XP ancienne ne doit
+    jamais pouvoir ressusciter le XP
+    supprimé par une réinitialisation.
+  */
 
-    Cela permet de traiter plusieurs
-    opérations XP offline l'une après
-    l'autre.
+  const resetCheck =
+    await checkProgressReset();
+
+
+  if (
+    resetCheck?.checked === false
+  ) {
+    console.warn(
+      "⏸️ XP non synchronisé : vérification reset impossible."
+    );
+
+    return false;
+  }
+
+
+  /*
+    Si une nouvelle réinitialisation a
+    été détectée, clearLocalUserProgress()
+    a déjà supprimé les anciennes
+    opérations de cet utilisateur.
+
+    Cette opération peut donc être
+    considérée comme annulée.
+  */
+
+  if (
+    resetCheck?.resetDetected === true &&
+    String(resetCheck.userId) ===
+      String(userId)
+  ) {
+    console.log(
+      "🧹 Ancienne opération XP annulée après réinitialisation."
+    );
+
+    return true;
+  }
+
+
+  /*
+    ----------------------------------
+    RÉCUPÉRER LE XP SERVEUR
+    ----------------------------------
   */
 
   const {
@@ -1098,22 +1446,6 @@ export async function syncEducationContent() {
     );
 
 
-    /*
-      ----------------------------------
-      TÉLÉCHARGEMENT PARALLÈLE
-      ----------------------------------
-
-      Toutes ces tables sont indépendantes
-      au niveau de la récupération réseau.
-
-      On peut donc lancer les requêtes
-      simultanément.
-
-      Les badges restent facultatifs :
-      une erreur badges ne bloque pas
-      toute la synchronisation.
-    */
-
     const [
       classesResult,
       subjectsResult,
@@ -1159,12 +1491,6 @@ export async function syncEducationContent() {
         .select("*")
     ]);
 
-
-    /*
-      ----------------------------------
-      VÉRIFICATION DES REQUÊTES
-      ----------------------------------
-    */
 
     if (classesResult.error) {
       throw classesResult.error;
@@ -1263,18 +1589,6 @@ export async function syncEducationContent() {
     );
 
 
-    /*
-      ----------------------------------
-      CACHE DEXIE
-      ----------------------------------
-
-      On conserve l'ordre logique
-      des écritures.
-
-      Cela permet de ne pas changer
-      le comportement existant du cache.
-    */
-
     await cacheClasses(
       classes
     );
@@ -1303,15 +1617,6 @@ export async function syncEducationContent() {
       questions
     );
 
-
-    /*
-      ----------------------------------
-      BADGES
-      ----------------------------------
-
-      Les badges étaient déjà
-      facultatifs auparavant.
-    */
 
     if (!badgesResult.error) {
       await cacheBadges(
@@ -1420,18 +1725,6 @@ export async function downloadLessonContent(
   lessonId
 ) {
   try {
-
-    /*
-      ----------------------------------
-      LEÇON + BLOCS + QUIZ
-      ----------------------------------
-
-      Ces trois requêtes sont
-      indépendantes.
-
-      Elles sont donc exécutées
-      simultanément.
-    */
 
     const [
       lessonResult,
@@ -1579,11 +1872,6 @@ export function enableAutoSync() {
     return;
   }
 
-
-  /*
-    Évite d'enregistrer plusieurs
-    fois le même listener.
-  */
 
   if (
     window.__kalanAutoSyncEnabled

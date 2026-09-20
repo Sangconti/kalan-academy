@@ -23,6 +23,7 @@ import {
 import {
   useLocation,
   useNavigate,
+  useOutletContext,
 } from "react-router-dom";
 
 import {
@@ -45,26 +46,11 @@ import {
 
 import {
   db,
+  clearLocalUserProgress,
+  setLocalProgressResetVersion,
 } from "../offline/db";
 
-
-// =====================================================
-// VERSION APPLICATION
-// =====================================================
-
 const APP_VERSION = "1.0.0";
-
-
-// =====================================================
-// XP CACHE
-// =====================================================
-
-const XP_CACHE_PREFIX = "kalan_xp_cache_";
-
-
-// =====================================================
-// THÈMES
-// =====================================================
 
 const THEME_OPTIONS = [
   {
@@ -86,11 +72,6 @@ const THEME_OPTIONS = [
     icon: Monitor,
   },
 ];
-
-
-// =====================================================
-// COULEURS
-// =====================================================
 
 const COLOR_OPTIONS = [
   {
@@ -120,22 +101,11 @@ const COLOR_OPTIONS = [
   },
 ];
 
-
-// =====================================================
-// COMPOSANT
-// =====================================================
-
 export default function SettingsPage() {
-
   const navigate = useNavigate();
-
   const location = useLocation();
 
-
-  const {
-    isOnline,
-  } = useNetwork();
-
+  const { isOnline } = useNetwork();
 
   const {
     theme,
@@ -144,142 +114,162 @@ export default function SettingsPage() {
     setAccentColor,
   } = useTheme();
 
+  /*
+   * =====================================================
+   * CONTEXTE DE CONSULTATION
+   * =====================================================
+   *
+   * ConsultationStudentLayout transmet :
+   *
+   * {
+   *   consultationMode: true,
+   *   studentId,
+   *   studentName,
+   *   student
+   * }
+   *
+   * En mode normal ou dans StudentPreviewLayout,
+   * aucun contexte n'est fourni.
+   */
 
-  const [
-    loggingOut,
-    setLoggingOut,
-  ] = useState(false);
+  const outletContext =
+    useOutletContext() || {};
 
+  const {
+    consultationMode = false,
+    studentId: consultationStudentId = null,
+  } = outletContext;
 
-  const [
-    clearingCache,
-    setClearingCache,
-  ] = useState(false);
-
-
-  const [
-    resettingProgress,
-    setResettingProgress,
-  ] = useState(false);
-
-
-  const [
-    message,
-    setMessage,
-  ] = useState(null);
-
-
-  // ===================================================
-  // MODE APERÇU ADMIN
-  // ===================================================
+  /*
+   * =====================================================
+   * MODES ADMINISTRATEUR
+   * =====================================================
+   */
 
   const isStudentPreview =
     location.pathname.startsWith(
       "/admin/student-preview"
     );
 
+  const isConsultation =
+    consultationMode ||
+    location.pathname.includes(
+      "/consultation"
+    );
 
-  // ===================================================
-  // TIMER MESSAGE
-  // ===================================================
+  /*
+   * Toute action destructive sur la progression
+   * est interdite dans les interfaces administrateur.
+   *
+   * - Aperçu général : aucune donnée élève
+   * - Consultation : lecture seule
+   */
 
-  const messageTimeoutRef = useRef(null);
+  const canResetProgress =
+    !isStudentPreview &&
+    !isConsultation;
 
+  /*
+   * Cet identifiant sert uniquement au contexte
+   * de navigation de consultation.
+   *
+   * Il n'est JAMAIS utilisé pour réinitialiser
+   * une progression depuis cette page.
+   */
+
+  void consultationStudentId;
+
+  const [loggingOut, setLoggingOut] =
+    useState(false);
+
+  const [clearingCache, setClearingCache] =
+    useState(false);
+
+  const [resettingProgress, setResettingProgress] =
+    useState(false);
+
+  const [message, setMessage] =
+    useState(null);
+
+  const messageTimeoutRef =
+    useRef(null);
 
   useEffect(() => {
-
     return () => {
-
       if (messageTimeoutRef.current) {
-
         window.clearTimeout(
           messageTimeoutRef.current
         );
 
         messageTimeoutRef.current = null;
-
       }
-
     };
-
   }, []);
 
-
-  // ===================================================
-  // PROFIL
-  // ===================================================
+  /*
+   * =====================================================
+   * PROFIL
+   * =====================================================
+   */
 
   function openProfile() {
-
     if (isStudentPreview) {
-
       navigate(
         "/admin/student-preview/profile"
       );
 
       return;
-
     }
 
+    if (isConsultation) {
+      navigate(
+        `/admin/student/${consultationStudentId}/consultation/profile`
+      );
+
+      return;
+    }
 
     navigate("/profile");
-
   }
 
+  /*
+   * =====================================================
+   * MESSAGES
+   * =====================================================
+   */
 
-  // ===================================================
-  // MESSAGE
-  // ===================================================
-
-  function showMessage(
-    type,
-    text
-  ) {
-
+  function showMessage(type, text) {
     if (messageTimeoutRef.current) {
-
       window.clearTimeout(
         messageTimeoutRef.current
       );
 
       messageTimeoutRef.current = null;
-
     }
-
 
     setMessage({
       type,
       text,
     });
 
-
     messageTimeoutRef.current =
       window.setTimeout(() => {
-
         setMessage(null);
-
         messageTimeoutRef.current = null;
-
       }, 4000);
-
   }
 
-
-  // ===================================================
-  // DÉCONNEXION
-  // ===================================================
+  /*
+   * =====================================================
+   * DÉCONNEXION
+   * =====================================================
+   */
 
   async function logout() {
-
-    if (loggingOut) {
-      return;
-    }
-
+    if (loggingOut) return;
 
     try {
-
       setLoggingOut(true);
-
 
       const {
         error,
@@ -287,93 +277,62 @@ export default function SettingsPage() {
         scope: "local",
       });
 
-
       if (error) {
-
         console.error(
           "❌ Erreur déconnexion :",
           error
         );
 
-
         if (!isOnline) {
           navigate("/login");
         }
 
-
         return;
-
       }
 
-
       navigate("/login");
-
     } catch (error) {
-
       console.error(
         "❌ Erreur déconnexion :",
         error
       );
 
-
       if (!isOnline) {
         navigate("/login");
       }
-
     } finally {
-
       setLoggingOut(false);
-
     }
-
   }
 
-
-  // ===================================================
-  // VIDER LE CACHE PÉDAGOGIQUE
-  // ===================================================
+  /*
+   * =====================================================
+   * VIDER LE CACHE
+   * =====================================================
+   */
 
   async function clearCache() {
+    if (clearingCache) return;
 
-    if (clearingCache) {
-      return;
-    }
-
-
-    const confirmed =
-      window.confirm(
-
-        "Vider le cache ?\n\n" +
-
+    const confirmed = window.confirm(
+      "Vider le cache ?\n\n" +
         "Les cours, chapitres, leçons, quiz et " +
         "données pédagogiques stockés localement " +
         "seront supprimés.\n\n" +
-
         "Ta progression, tes tentatives de quiz " +
         "et les données en attente de synchronisation " +
         "seront conservées.\n\n" +
-
         "Cette action ne supprime pas ton compte."
+    );
 
-      );
-
-
-    if (!confirmed) {
-      return;
-    }
-
+    if (!confirmed) return;
 
     try {
-
       setClearingCache(true);
-
       setMessage(null);
 
-
       await db.transaction(
-
         "rw",
-
         [
           db.classes,
           db.subjects,
@@ -386,157 +345,156 @@ export default function SettingsPage() {
           db.badges,
           db.downloads,
         ],
-
         async () => {
-
           await Promise.all([
-
             db.classes.clear(),
-
             db.subjects.clear(),
-
             db.chapters.clear(),
-
             db.lessons.clear(),
-
             db.lessonBlocks.clear(),
-
             db.exercises.clear(),
-
             db.quizzes.clear(),
-
             db.quizQuestions.clear(),
-
             db.badges.clear(),
-
             db.downloads.clear(),
-
           ]);
-
         }
-
       );
-
 
       showMessage(
         "success",
         "Le cache pédagogique a été vidé avec succès."
       );
 
-
       console.log(
         "🗑️ Cache pédagogique Kalan Academy supprimé."
       );
-
-
     } catch (error) {
-
       console.error(
         "❌ Impossible de vider le cache :",
         error
       );
 
-
       showMessage(
         "error",
         "Impossible de vider le cache."
       );
-
-
     } finally {
-
       setClearingCache(false);
-
     }
-
   }
 
-
-  // ===================================================
-  // RÉINITIALISER LA PROGRESSION
-  // ===================================================
+  /*
+   * =====================================================
+   * RÉINITIALISER LA PROGRESSION
+   * =====================================================
+   *
+   * Cette fonction est disponible uniquement
+   * pour l'élève réellement connecté.
+   *
+   * Elle est interdite :
+   *
+   * - dans l'aperçu admin ;
+   * - dans la consultation.
+   *
+   * Elle utilise reset_my_progress(), qui ne peut
+   * réinitialiser que la progression de auth.uid().
+   */
 
   async function resetProgress() {
+    if (resettingProgress) return;
 
-    if (resettingProgress) {
-      return;
-    }
+    /*
+     * Sécurité supplémentaire :
+     * aucune réinitialisation dans les interfaces
+     * administrateur.
+     */
 
-
-    const confirmed =
-      window.confirm(
-
-        "Réinitialiser ta progression ?\n\n" +
-
-        "Cette action supprimera :\n" +
-
-        "• ta progression des leçons\n" +
-
-        "• tes tentatives de quiz\n" +
-
-        "• ton XP\n\n" +
-
-        "Ton niveau sera remis au niveau 1.\n\n" +
-
-        "Tes badges seront également supprimés.\n\n" +
-
-        (
-          isOnline
-            ? "Les données enregistrées sur le serveur seront également réinitialisées."
-            : "Tu es actuellement hors connexion. Seules les données locales seront réinitialisées."
-        ) +
-
-        "\n\nCette action est irréversible."
-
+    if (!canResetProgress) {
+      showMessage(
+        "error",
+        "La réinitialisation de la progression n'est pas disponible dans cette interface."
       );
 
-
-    if (!confirmed) {
       return;
     }
 
+    const confirmed = window.confirm(
+      "Réinitialiser ta progression ?\n\n" +
+        "Cette action supprimera :\n" +
+        "• ta progression des leçons\n" +
+        "• tes tentatives de quiz\n" +
+        "• ton XP\n" +
+        "• tes badges\n\n" +
+        "Ton niveau sera remis au niveau 1.\n\n" +
+        (isOnline
+          ? "Les données enregistrées sur le serveur seront également réinitialisées."
+          : "Tu es actuellement hors connexion. Seules les données locales seront réinitialisées.") +
+        "\n\nCette action est irréversible."
+    );
+
+    if (!confirmed) return;
 
     try {
-
       setResettingProgress(true);
-
       setMessage(null);
 
+      /*
+       * =================================================
+       * VÉRIFICATION SESSION
+       * =================================================
+       */
 
       const {
         data,
         error: sessionError,
       } = await supabase.auth.getSession();
 
-
       if (sessionError) {
-
         console.error(
           "❌ Impossible de récupérer la session :",
           sessionError
         );
-
       }
-
 
       const userId =
         data?.session?.user?.id;
 
-
       if (!userId) {
-
         showMessage(
           "error",
           "Utilisateur non identifié."
         );
 
         return;
-
       }
 
+      /*
+       * =================================================
+       * DOUBLE SÉCURITÉ ADMIN
+       * =================================================
+       */
+
+      if (
+        isStudentPreview ||
+        isConsultation ||
+        location.pathname.startsWith("/admin/")
+      ) {
+        showMessage(
+          "error",
+          "Cette action n'est pas disponible dans l'espace administrateur."
+        );
+
+        return;
+      }
+
+      /*
+       * =================================================
+       * RESET SERVEUR
+       * =================================================
+       */
 
       if (isOnline) {
-
         const {
           data: resetData,
           error: resetError,
@@ -544,14 +502,11 @@ export default function SettingsPage() {
           "reset_my_progress"
         );
 
-
         if (resetError) {
-
           console.error(
             "❌ Erreur réinitialisation serveur :",
             resetError
           );
-
 
           showMessage(
             "error",
@@ -559,246 +514,156 @@ export default function SettingsPage() {
               "Impossible de réinitialiser ta progression sur le serveur."
           );
 
-
           return;
-
         }
-
 
         if (
           !resetData ||
           resetData.success !== true
         ) {
-
           showMessage(
             "error",
             resetData?.message ||
               "La réinitialisation du serveur a été refusée."
           );
 
-
           return;
-
         }
 
+        /*
+         * La RPC retourne la nouvelle version.
+         *
+         * On l'enregistre immédiatement localement
+         * avant de supprimer la progression locale.
+         */
 
-        const {
-          data: profileData,
-          error: profileError,
-        } = await supabase
-          .from("profiles")
-          .select("xp, level")
-          .eq("id", userId)
-          .maybeSingle();
+        const serverResetVersion =
+          Number(
+            resetData.progress_reset_version
+          ) || 0;
 
+        setLocalProgressResetVersion(
+          userId,
+          serverResetVersion
+        );
 
-        if (profileError) {
-
-          console.error(
-            "❌ Vérification XP serveur impossible :",
-            profileError
-          );
-
-
-          showMessage(
-            "error",
-            "La réinitialisation a été effectuée, mais sa vérification a échoué."
-          );
-
-
-          return;
-
-        }
-
-
-        if (
-          !profileData ||
-          Number(profileData.xp) !== 0 ||
-          Number(profileData.level) !== 1
-        ) {
-
-          showMessage(
-            "error",
-            "La progression du serveur n'a pas été correctement remise à zéro."
-          );
-
-
-          return;
-
-        }
-
+        console.log(
+          "✅ Réinitialisation serveur confirmée :",
+          {
+            userId,
+            progressResetVersion:
+              serverResetVersion,
+          }
+        );
       }
 
+      /*
+       * =================================================
+       * RESET LOCAL
+       * =================================================
+       *
+       * Supprime :
+       * - userProgress
+       * - quizAttempts
+       * - anciennes opérations sync
+       * - cache XP
+       *
+       * Les contenus pédagogiques et téléchargements
+       * restent intacts.
+       */
 
-      await db.transaction(
-
-        "rw",
-
-        [
-          db.userProgress,
-          db.quizAttempts,
-          db.syncQueue,
-        ],
-
-        async () => {
-
-          await Promise.all([
-
-            db.userProgress
-              .where("user_id")
-              .equals(userId)
-              .delete(),
-
-            db.quizAttempts
-              .where("user_id")
-              .equals(userId)
-              .delete(),
-
-            db.syncQueue
-              .filter(
-                item =>
-                  item.table_name ===
-                    "user_progress"
-                  ||
-                  item.table_name ===
-                    "quiz_attempts"
-                  ||
-                  (
-                    item.table_name ===
-                      "profiles"
-                    &&
-                    item.action ===
-                      "xp"
-                  )
-              )
-              .delete(),
-
-          ]);
-
-        }
-
+      await clearLocalUserProgress(
+        userId
       );
 
+      /*
+       * =================================================
+       * CACHES UI COMPLÉMENTAIRES
+       * =================================================
+       */
 
       try {
-
-        localStorage.removeItem(
-          `${XP_CACHE_PREFIX}${userId}`
-        );
-
-      } catch (error) {
-
-        console.warn(
-          "⚠️ Impossible de supprimer le cache XP :",
-          error
-        );
-
-      }
-
-
-      try {
-
         localStorage.removeItem(
           `kalan_badges_${userId}`
         );
-
       } catch (error) {
-
         console.warn(
           "⚠️ Impossible de supprimer le cache des badges :",
           error
         );
-
       }
 
-
       try {
-
         sessionStorage.removeItem(
           `kalan_dashboard_${userId}`
         );
-
       } catch (error) {
-
         console.warn(
           "⚠️ Impossible de supprimer le cache Dashboard :",
           error
         );
-
       }
 
+      /*
+       * =================================================
+       * SUCCÈS
+       * =================================================
+       */
 
       if (isOnline) {
-
         showMessage(
           "success",
           "Ta progression a été entièrement réinitialisée."
         );
 
-
         window.setTimeout(() => {
-
           window.location.reload();
-
         }, 500);
-
       } else {
-
         showMessage(
           "success",
           "Ta progression locale a été réinitialisée. Les données du serveur restent inchangées hors connexion."
         );
-
       }
 
-
       console.log(
-        "🔄 Progression Kalan Academy réinitialisée."
+        "🔄 Progression Kalan Academy réinitialisée :",
+        userId
       );
-
-
     } catch (error) {
-
       console.error(
         "❌ Impossible de réinitialiser la progression :",
         error
       );
-
 
       showMessage(
         "error",
         error?.message ||
           "Impossible de réinitialiser la progression."
       );
-
-
     } finally {
-
       setResettingProgress(false);
-
     }
-
   }
 
-
-  // ===================================================
-  // AFFICHAGE
-  // ===================================================
-
   return (
-
     <div
       className="
+        min-h-full
         max-w-3xl
         mx-auto
         px-4
         py-6
         pb-10
+        theme-bg
+        theme-text
       "
     >
+      {/* =====================================================
+          MESSAGE
+      ===================================================== */}
 
       {message && (
-
         <div
           className={`
             mb-5
@@ -807,47 +672,40 @@ export default function SettingsPage() {
             px-4
             py-3
             flex
-            items-center
+            items-start
             gap-3
+            shadow-sm
+
             ${
               message.type === "success"
-                ? "bg-green-50 border-green-200 text-green-700 dark:bg-green-950/30 dark:border-green-900 dark:text-green-400"
-                : "bg-red-50 border-red-200 text-red-700 dark:bg-red-950/30 dark:border-red-900 dark:text-red-400"
+                ? "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-900/60 text-green-700 dark:text-green-300"
+                : "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300"
             }
           `}
         >
-
           {message.type === "success" ? (
-
             <Check
-              size={18}
-              className="shrink-0"
+              size={20}
+              className="shrink-0 mt-0.5"
             />
-
           ) : (
-
             <AlertTriangle
-              size={18}
-              className="shrink-0"
+              size={20}
+              className="shrink-0 mt-0.5"
             />
-
           )}
-
 
           <p className="text-sm font-medium">
             {message.text}
           </p>
-
         </div>
-
       )}
 
-
-      {/* =================================================
+      {/* =====================================================
           EN-TÊTE
-      ================================================= */}
+      ===================================================== */}
 
-      <div
+      <section
         className="
           relative
           overflow-hidden
@@ -855,213 +713,160 @@ export default function SettingsPage() {
           bg-accent-soft
           border
           border-accent
-          p-6
-          md:p-8
           shadow-lg
-          mb-7
+          p-6
+          mb-8
         "
       >
-
         <div
           className="
             absolute
-            -right-10
-            -top-10
-            w-40
-            h-40
+            -top-12
+            -right-12
+            w-32
+            h-32
             rounded-full
             bg-accent
             opacity-10
           "
         />
 
-
         <div
           className="
             absolute
-            -left-16
-            -bottom-20
-            w-48
-            h-48
+            -bottom-16
+            -left-10
+            w-32
+            h-32
             rounded-full
             bg-accent
             opacity-10
           "
         />
 
-
-        <div
-          className="
-            absolute
-            right-16
-            -bottom-24
-            w-56
-            h-56
-            rounded-full
-            bg-accent
-            opacity-5
-          "
-        />
-
-
-        <div
-          className="
-            relative
-            z-10
-          "
-        >
-
+        <div className="relative">
           <div
             className="
               inline-flex
               items-center
               gap-2
-              px-3
-              py-1.5
-              rounded-full
+              rounded-xl
               bg-accent
               text-white
+              px-3
+              py-1.5
               text-xs
               font-semibold
               mb-4
             "
           >
+            <Settings size={15} />
 
-            <Settings size={14} />
-
-            Kalan Academy
-
+            <span>
+              Kalan Academy
+            </span>
           </div>
-
 
           <h1
             className="
               text-2xl
-              md:text-3xl
+              sm:text-3xl
               font-bold
-              leading-tight
               theme-text
             "
           >
             Paramètres
           </h1>
 
-
           <p
             className="
+              mt-2
+              text-sm
+              sm:text-base
               theme-text-secondary
-              mt-3
-              leading-relaxed
-              max-w-2xl
             "
           >
             Gère les paramètres et les préférences
             de ton application.
           </p>
 
-
           <div
             className="
+              mt-5
               flex
               flex-wrap
-              items-center
-              gap-3
-              mt-5
+              gap-2
             "
           >
-
-            <div
+            <span
               className="
                 inline-flex
                 items-center
                 gap-2
-                px-3
-                py-2
                 rounded-xl
                 bg-white/70
                 dark:bg-gray-950/30
-                theme-text
-                text-sm
+                px-3
+                py-2
+                text-xs
                 font-medium
-                border
-                border-white/50
-                dark:border-white/10
+                theme-text
               "
             >
-              <Settings
-                size={16}
-                className="text-accent"
-              />
-
+              <Settings size={14} />
               Personnalisation
-            </div>
+            </span>
 
-
-            <div
+            <span
               className="
                 inline-flex
                 items-center
                 gap-2
-                px-3
-                py-2
                 rounded-xl
                 bg-white/70
                 dark:bg-gray-950/30
-                theme-text
-                text-sm
+                px-3
+                py-2
+                text-xs
                 font-medium
-                border
-                border-white/50
-                dark:border-white/10
+                theme-text
               "
             >
-
               {isOnline ? (
                 <Wifi
-                  size={16}
-                  className="text-accent"
+                  size={14}
+                  className="text-green-500"
                 />
               ) : (
                 <WifiOff
-                  size={16}
-                  className="text-accent"
+                  size={14}
+                  className="text-orange-500"
                 />
               )}
 
               {isOnline
                 ? "En ligne"
-                : "Hors ligne"
-              }
-
-            </div>
-
+                : "Hors connexion"}
+            </span>
           </div>
-
         </div>
+      </section>
 
-      </div>
-
-
-      {/* =================================================
+      {/* =====================================================
           APPARENCE
-      ================================================= */}
+      ===================================================== */}
 
-      <section className="mb-5">
-
+      <section className="mb-8">
         <h2
           className="
-            text-xs
+            text-lg
             font-bold
-            uppercase
-            tracking-wider
-            mb-2
-            px-1
-            theme-text-secondary
+            theme-text
+            mb-3
           "
         >
           🎨 Apparence
         </h2>
-
 
         <div
           className="
@@ -1073,11 +878,8 @@ export default function SettingsPage() {
             overflow-hidden
           "
         >
-
-          <div className="p-5 md:p-6">
-
+          <div className="p-5">
             <div className="mb-4">
-
               <h3
                 className="
                   font-semibold
@@ -1087,43 +889,37 @@ export default function SettingsPage() {
                 Thème
               </h3>
 
-
               <p
                 className="
                   text-sm
-                  mt-1
                   theme-text-secondary
+                  mt-1
                 "
               >
                 Choisis l'apparence de Kalan Academy.
               </p>
-
             </div>
-
 
             <div
               className="
                 grid
-                grid-cols-1
-                sm:grid-cols-3
+                grid-cols-3
                 gap-3
               "
             >
-
               {THEME_OPTIONS.map((option) => {
-
                 const Icon = option.icon;
-
                 const selected =
                   theme === option.id;
 
-
                 return (
-
                   <button
                     key={option.id}
                     type="button"
-                    onClick={() => setTheme(option.id)}
+                    aria-pressed={selected}
+                    onClick={() =>
+                      setTheme(option.id)
+                    }
                     className={`
                       relative
                       flex
@@ -1135,17 +931,16 @@ export default function SettingsPage() {
                       rounded-2xl
                       border
                       transition-all
+
                       ${
                         selected
-                          ? "theme-option-selected"
-                          : "theme-option theme-border hover:bg-accent-soft"
+                          ? "bg-accent-soft border-accent shadow-sm"
+                          : "theme-surface theme-border theme-text hover:bg-accent-soft"
                       }
                     `}
                   >
-
                     {selected && (
-
-                      <div
+                      <span
                         className="
                           absolute
                           top-2
@@ -1153,64 +948,54 @@ export default function SettingsPage() {
                           w-5
                           h-5
                           rounded-full
+                          bg-accent
                           flex
                           items-center
                           justify-center
-                          accent-bg
                         "
                       >
-
                         <Check
-                          size={13}
+                          size={12}
                           className="text-white"
                         />
-
-                      </div>
-
+                      </span>
                     )}
-
 
                     <Icon
                       size={22}
                       className={
                         selected
-                          ? "theme-accent-text"
+                          ? "text-accent"
                           : "theme-text-secondary"
                       }
                     />
-
 
                     <span
                       className="
                         text-sm
                         font-semibold
-                        theme-text
                       "
                     >
                       {option.label}
                     </span>
 
-
                     <span
                       className="
-                        text-xs
-                        text-center
+                        hidden
+                        sm:block
+                        text-[11px]
+                        leading-tight
                         theme-text-secondary
+                        text-center
                       "
                     >
                       {option.description}
                     </span>
-
                   </button>
-
                 );
-
               })}
-
             </div>
-
           </div>
-
 
           <div
             className="
@@ -1219,11 +1004,8 @@ export default function SettingsPage() {
             "
           />
 
-
-          <div className="p-5 md:p-6">
-
+          <div className="p-5">
             <div className="mb-4">
-
               <h3
                 className="
                   font-semibold
@@ -1233,135 +1015,113 @@ export default function SettingsPage() {
                 Couleur principale
               </h3>
 
-
               <p
                 className="
                   text-sm
-                  mt-1
                   theme-text-secondary
+                  mt-1
                 "
               >
-                Choisis la couleur principale de l'application.
+                Choisis la couleur principale de
+                l'application.
               </p>
-
             </div>
-
 
             <div
               className="
                 flex
                 flex-wrap
-                gap-3
+                items-center
+                gap-5
               "
             >
-
-              {COLOR_OPTIONS.map((color) => {
-
+              {COLOR_OPTIONS.map((option) => {
                 const selected =
-                  accentColor === color.id;
-
+                  accentColor === option.id;
 
                 return (
-
                   <button
-                    key={color.id}
+                    key={option.id}
                     type="button"
+                    aria-label={`Choisir la couleur ${option.label}`}
+                    aria-pressed={selected}
                     onClick={() =>
-                      setAccentColor(color.id)
+                      setAccentColor(option.id)
                     }
-                    title={color.label}
-                    aria-label={`Couleur ${color.label}`}
-                    className={`
-                      relative
-                      w-12
-                      h-12
-                      rounded-full
-                      ${color.className}
-                      transition-all
-                      ${
-                        selected
-                          ? "ring-4 ring-offset-2 ring-accent scale-110"
-                          : "hover:scale-105"
-                      }
-                    `}
+                    className="
+                      flex
+                      flex-col
+                      items-center
+                      gap-2
+                      transition-transform
+                      hover:scale-105
+                    "
                   >
+                    <span
+                      className={`
+                        w-10
+                        h-10
+                        rounded-full
+                        ${option.className}
+                        ${
+                          selected
+                            ? "ring-4 ring-offset-2 ring-accent dark:ring-offset-gray-900 scale-110"
+                            : ""
+                        }
+                        transition-all
+                      `}
+                    />
 
-                    {selected && (
-
-                      <Check
-                        size={20}
-                        className="
-                          absolute
-                          inset-0
-                          m-auto
-                          text-white
-                          drop-shadow
-                        "
-                      />
-
-                    )}
-
+                    <span
+                      className="
+                        text-xs
+                        font-medium
+                        theme-text-secondary
+                      "
+                    >
+                      {option.label}
+                    </span>
                   </button>
-
                 );
-
               })}
-
             </div>
-
 
             <p
               className="
-                text-xs
                 mt-4
+                text-xs
                 theme-text-secondary
               "
             >
-              Couleur sélectionnée :{" "}
-
-              <span
-                className="
-                  font-semibold
-                  theme-accent-text
-                "
-              >
+              Couleur actuelle :{" "}
+              <span className="font-semibold theme-text">
                 {
                   COLOR_OPTIONS.find(
-                    (color) =>
-                      color.id === accentColor
-                  )?.label
+                    (option) =>
+                      option.id === accentColor
+                  )?.label || "Bleu"
                 }
               </span>
-
             </p>
-
           </div>
-
         </div>
-
       </section>
 
-
-      {/* =================================================
+      {/* =====================================================
           COMPTE
-      ================================================= */}
+      ===================================================== */}
 
-      <section className="mb-5">
-
+      <section className="mb-8">
         <h2
           className="
-            text-xs
+            text-lg
             font-bold
-            uppercase
-            tracking-wider
-            mb-2
-            px-1
-            theme-text-secondary
+            theme-text
+            mb-3
           "
         >
           👤 Compte
         </h2>
-
 
         <div
           className="
@@ -1373,7 +1133,6 @@ export default function SettingsPage() {
             overflow-hidden
           "
         >
-
           <button
             type="button"
             onClick={openProfile}
@@ -1384,11 +1143,11 @@ export default function SettingsPage() {
               gap-4
               p-5
               text-left
+              theme-text
               hover:bg-accent-soft
               transition
             "
           >
-
             <div
               className="
                 w-11
@@ -1401,47 +1160,38 @@ export default function SettingsPage() {
                 shrink-0
               "
             >
-
               <User
-                size={20}
+                size={21}
                 className="text-accent"
               />
-
             </div>
 
-
-            <div className="flex-1">
-
-              <h3
+            <div className="flex-1 min-w-0">
+              <p
                 className="
                   font-semibold
                   theme-text
                 "
               >
                 Mon profil
-              </h3>
-
+              </p>
 
               <p
                 className="
                   text-sm
-                  mt-1
                   theme-text-secondary
+                  mt-0.5
                 "
               >
                 Consulter et gérer mon profil.
               </p>
-
             </div>
-
 
             <ChevronRight
               size={20}
-              className="theme-text-secondary"
+              className="theme-text-secondary shrink-0"
             />
-
           </button>
-
 
           <div
             className="
@@ -1449,7 +1199,6 @@ export default function SettingsPage() {
               theme-border
             "
           />
-
 
           <button
             type="button"
@@ -1462,13 +1211,14 @@ export default function SettingsPage() {
               gap-4
               p-5
               text-left
+              text-red-600
+              dark:text-red-400
               hover:bg-red-50
               dark:hover:bg-red-950/20
               transition
-              disabled:opacity-50
+              disabled:opacity-60
             "
           >
-
             <div
               className="
                 w-11
@@ -1482,88 +1232,58 @@ export default function SettingsPage() {
                 shrink-0
               "
             >
-
               {loggingOut ? (
-
                 <Loader2
-                  size={20}
-                  className="
-                    text-red-600
-                    dark:text-red-400
-                    animate-spin
-                  "
+                  size={21}
+                  className="animate-spin"
                 />
-
               ) : (
-
-                <LogOut
-                  size={20}
-                  className="
-                    text-red-600
-                    dark:text-red-400
-                  "
-                />
-
+                <LogOut size={21} />
               )}
-
             </div>
 
-
-            <div className="flex-1">
-
-              <h3
-                className="
-                  font-semibold
-                  text-red-600
-                  dark:text-red-400
-                "
-              >
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold">
                 {loggingOut
                   ? "Déconnexion..."
-                  : "Déconnexion"
-                }
-              </h3>
-
+                  : "Déconnexion"}
+              </p>
 
               <p
                 className="
                   text-sm
-                  mt-1
-                  theme-text-secondary
+                  text-red-500/80
+                  dark:text-red-400/80
+                  mt-0.5
                 "
               >
                 Se déconnecter de Kalan Academy.
               </p>
-
             </div>
 
+            <ChevronRight
+              size={20}
+              className="shrink-0"
+            />
           </button>
-
         </div>
-
       </section>
 
-
-      {/* =================================================
+      {/* =====================================================
           APPLICATION
-      ================================================= */}
+      ===================================================== */}
 
-      <section className="mb-5">
-
+      <section className="mb-8">
         <h2
           className="
-            text-xs
+            text-lg
             font-bold
-            uppercase
-            tracking-wider
-            mb-2
-            px-1
-            theme-text-secondary
+            theme-text
+            mb-3
           "
         >
           📱 Application
         </h2>
-
 
         <div
           className="
@@ -1575,9 +1295,14 @@ export default function SettingsPage() {
             overflow-hidden
           "
         >
-
-          <div className="flex items-center gap-4 p-5">
-
+          <div
+            className="
+              flex
+              items-center
+              gap-4
+              p-5
+            "
+          >
             <div
               className="
                 w-11
@@ -1590,59 +1315,49 @@ export default function SettingsPage() {
                 shrink-0
               "
             >
-
               <Bell
-                size={20}
+                size={21}
                 className="text-accent"
               />
-
             </div>
 
-
-            <div className="flex-1">
-
-              <h3
+            <div className="flex-1 min-w-0">
+              <p
                 className="
                   font-semibold
                   theme-text
                 "
               >
                 Notifications
-              </h3>
-
+              </p>
 
               <p
                 className="
                   text-sm
-                  mt-1
                   theme-text-secondary
+                  mt-0.5
                 "
               >
-                Les notifications ne sont pas
-                encore configurables.
+                Les notifications ne sont pas encore
+                configurables.
               </p>
-
             </div>
-
 
             <span
               className="
-                text-xs
-                font-medium
-                theme-text-secondary
+                shrink-0
+                rounded-lg
                 bg-accent-soft
+                text-accent
                 px-2.5
                 py-1
-                rounded-full
-                border
-                theme-border
+                text-xs
+                font-semibold
               "
             >
               Bientôt
             </span>
-
           </div>
-
 
           <div
             className="
@@ -1651,9 +1366,14 @@ export default function SettingsPage() {
             "
           />
 
-
-          <div className="flex items-center gap-4 p-5">
-
+          <div
+            className="
+              flex
+              items-center
+              gap-4
+              p-5
+            "
+          >
             <div
               className="
                 w-11
@@ -1666,66 +1386,61 @@ export default function SettingsPage() {
                 shrink-0
               "
             >
-
               <Globe
-                size={20}
+                size={21}
                 className="text-accent"
               />
-
             </div>
 
-
-            <div className="flex-1">
-
-              <h3
+            <div className="flex-1 min-w-0">
+              <p
                 className="
                   font-semibold
                   theme-text
                 "
               >
                 Langue
-              </h3>
-
+              </p>
 
               <p
                 className="
                   text-sm
-                  mt-1
                   theme-text-secondary
+                  mt-0.5
                 "
               >
-                Français
+                Langue de l'application.
               </p>
-
             </div>
 
+            <span
+              className="
+                theme-text
+                text-sm
+                font-semibold
+              "
+            >
+              Français
+            </span>
           </div>
-
         </div>
-
       </section>
 
-
-      {/* =================================================
+      {/* =====================================================
           HORS CONNEXION
-      ================================================= */}
+      ===================================================== */}
 
-      <section className="mb-5">
-
+      <section className="mb-8">
         <h2
           className="
-            text-xs
+            text-lg
             font-bold
-            uppercase
-            tracking-wider
-            mb-2
-            px-1
-            theme-text-secondary
+            theme-text
+            mb-3
           "
         >
           📴 Hors connexion
         </h2>
-
 
         <div
           className="
@@ -1737,90 +1452,94 @@ export default function SettingsPage() {
             overflow-hidden
           "
         >
-
-          <div className="flex items-center gap-4 p-5">
-
+          <div
+            className="
+              flex
+              items-center
+              gap-4
+              p-5
+            "
+          >
             <div
-              className="
+              className={`
                 w-11
                 h-11
                 rounded-2xl
-                bg-accent-soft
                 flex
                 items-center
                 justify-center
                 shrink-0
-              "
+
+                ${
+                  isOnline
+                    ? "bg-green-50 dark:bg-green-950/30"
+                    : "bg-orange-50 dark:bg-orange-950/30"
+                }
+              `}
             >
-
               {isOnline ? (
-
                 <Wifi
-                  size={20}
-                  className="text-accent"
+                  size={21}
+                  className="
+                    text-green-600
+                    dark:text-green-400
+                  "
                 />
-
               ) : (
-
                 <WifiOff
-                  size={20}
-                  className="text-accent"
+                  size={21}
+                  className="
+                    text-orange-600
+                    dark:text-orange-400
+                  "
                 />
-
               )}
-
             </div>
 
-
-            <div className="flex-1">
-
-              <h3
+            <div className="flex-1 min-w-0">
+              <p
                 className="
                   font-semibold
                   theme-text
                 "
               >
-                État de synchronisation
-              </h3>
-
+                Synchronisation
+              </p>
 
               <p
                 className="
                   text-sm
-                  mt-1
                   theme-text-secondary
+                  mt-0.5
                 "
               >
                 {isOnline
                   ? "Connexion Internet disponible."
-                  : "Mode hors connexion actif."
-                }
+                  : "Tu peux continuer à apprendre hors connexion."}
               </p>
-
             </div>
 
-
             <span
-              className="
-                text-xs
-                font-semibold
+              className={`
+                shrink-0
+                rounded-lg
                 px-2.5
                 py-1
-                rounded-full
-                bg-accent-soft
-                text-accent
-                border
-                border-accent
-              "
+                text-xs
+                font-semibold
+
+                ${
+                  isOnline
+                    ? "bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-300"
+                    : "bg-orange-50 dark:bg-orange-950/30 text-orange-700 dark:text-orange-300"
+                }
+              `}
             >
               {isOnline
                 ? "En ligne"
-                : "Hors ligne"
-              }
+                : "Hors ligne"}
             </span>
-
           </div>
-
 
           <div
             className="
@@ -1828,7 +1547,6 @@ export default function SettingsPage() {
               theme-border
             "
           />
-
 
           <button
             type="button"
@@ -1841,13 +1559,12 @@ export default function SettingsPage() {
               gap-4
               p-5
               text-left
+              theme-text
               hover:bg-accent-soft
               transition
               disabled:opacity-60
-              disabled:cursor-not-allowed
             "
           >
-
             <div
               className="
                 w-11
@@ -1860,32 +1577,24 @@ export default function SettingsPage() {
                 shrink-0
               "
             >
-
               {clearingCache ? (
-
                 <Loader2
-                  size={20}
+                  size={21}
                   className="
                     text-accent
                     animate-spin
                   "
                 />
-
               ) : (
-
                 <Trash2
-                  size={20}
+                  size={21}
                   className="text-accent"
                 />
-
               )}
-
             </div>
 
-
-            <div className="flex-1">
-
-              <h3
+            <div className="flex-1 min-w-0">
+              <p
                 className="
                   font-semibold
                   theme-text
@@ -1893,62 +1602,165 @@ export default function SettingsPage() {
               >
                 {clearingCache
                   ? "Vidage du cache..."
-                  : "Vider le cache"
-                }
-              </h3>
-
+                  : "Vider le cache"}
+              </p>
 
               <p
                 className="
                   text-sm
-                  mt-1
                   theme-text-secondary
+                  mt-0.5
                 "
               >
                 Supprimer les données pédagogiques
-                stockées localement sans supprimer
-                ta progression.
+                stockées localement.
               </p>
-
             </div>
 
-
             {!clearingCache && (
-
               <ChevronRight
                 size={20}
-                className="theme-text-secondary"
+                className="theme-text-secondary shrink-0"
               />
-
             )}
-
           </button>
-
         </div>
-
       </section>
 
-
-      {/* =================================================
+      {/* =====================================================
           APPRENTISSAGE
-      ================================================= */}
+      ===================================================== */}
 
-      <section className="mb-5">
+      {canResetProgress && (
+        <section className="mb-8">
+          <h2
+            className="
+              text-lg
+              font-bold
+              theme-text
+              mb-3
+            "
+          >
+            📚 Apprentissage
+          </h2>
 
+          <div
+            className="
+              rounded-3xl
+              theme-surface
+              theme-border
+              border
+              shadow-sm
+              overflow-hidden
+            "
+          >
+            <button
+              type="button"
+              onClick={resetProgress}
+              disabled={resettingProgress}
+              className="
+                w-full
+                flex
+                items-center
+                gap-4
+                p-5
+                text-left
+                theme-text
+                hover:bg-orange-50
+                dark:hover:bg-orange-950/20
+                transition
+                disabled:opacity-60
+              "
+            >
+              <div
+                className="
+                  w-11
+                  h-11
+                  rounded-2xl
+                  bg-orange-50
+                  dark:bg-orange-950/30
+                  flex
+                  items-center
+                  justify-center
+                  shrink-0
+                "
+              >
+                {resettingProgress ? (
+                  <Loader2
+                    size={21}
+                    className="
+                      text-orange-600
+                      dark:text-orange-400
+                      animate-spin
+                    "
+                  />
+                ) : (
+                  <RotateCcw
+                    size={21}
+                    className="
+                      text-orange-600
+                      dark:text-orange-400
+                    "
+                  />
+                )}
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <p
+                  className="
+                    font-semibold
+                    text-orange-700
+                    dark:text-orange-300
+                  "
+                >
+                  {resettingProgress
+                    ? "Réinitialisation..."
+                    : "Réinitialiser ma progression"}
+                </p>
+
+                <p
+                  className="
+                    text-sm
+                    text-orange-600/80
+                    dark:text-orange-400/80
+                    mt-0.5
+                  "
+                >
+                  Supprimer ma progression, mes
+                  tentatives de quiz et mon XP.
+                </p>
+              </div>
+
+              {!resettingProgress && (
+                <ChevronRight
+                  size={20}
+                  className="
+                    text-orange-500
+                    dark:text-orange-400
+                    shrink-0
+                  "
+                />
+              )}
+            </button>
+          </div>
+        </section>
+      )}
+
+      {/* =====================================================
+          À PROPOS
+      ===================================================== */}
+
+      <section className="mb-8">
         <h2
           className="
-            text-xs
+            text-lg
             font-bold
-            uppercase
-            tracking-wider
-            mb-2
-            px-1
-            theme-text-secondary
+            theme-text
+            mb-3
           "
         >
-          📚 Apprentissage
+          ℹ️ À propos
         </h2>
-
 
         <div
           className="
@@ -1960,142 +1772,70 @@ export default function SettingsPage() {
             overflow-hidden
           "
         >
-
-          <button
-            type="button"
-            onClick={resetProgress}
-            disabled={resettingProgress}
+          <div
             className="
-              w-full
               flex
               items-center
               gap-4
               p-5
-              text-left
-              hover:bg-orange-50
-              dark:hover:bg-orange-950/20
-              transition
-              disabled:opacity-60
-              disabled:cursor-not-allowed
             "
           >
-
             <div
               className="
                 w-11
                 h-11
                 rounded-2xl
-                bg-orange-50
-                dark:bg-orange-950/30
+                bg-accent-soft
                 flex
                 items-center
                 justify-center
                 shrink-0
               "
             >
-
-              {resettingProgress ? (
-
-                <Loader2
-                  size={20}
-                  className="
-                    text-orange-600
-                    dark:text-orange-400
-                    animate-spin
-                  "
-                />
-
-              ) : (
-
-                <RotateCcw
-                  size={20}
-                  className="
-                    text-orange-600
-                    dark:text-orange-400
-                  "
-                />
-
-              )}
-
+              <Info
+                size={21}
+                className="text-accent"
+              />
             </div>
 
-
-            <div className="flex-1">
-
-              <h3
+            <div className="flex-1 min-w-0">
+              <p
                 className="
                   font-semibold
                   theme-text
                 "
               >
-                {resettingProgress
-                  ? "Réinitialisation..."
-                  : "Réinitialiser ma progression"
-                }
-              </h3>
-
+                Version
+              </p>
 
               <p
                 className="
                   text-sm
-                  mt-1
                   theme-text-secondary
+                  mt-0.5
                 "
               >
-                Supprimer ma progression locale,
-                mes tentatives de quiz et mon cache XP.
+                Version actuelle de l'application.
               </p>
-
             </div>
 
+            <span
+              className="
+                theme-text
+                text-sm
+                font-semibold
+              "
+            >
+              {APP_VERSION}
+            </span>
+          </div>
 
-            {!resettingProgress && (
-
-              <ChevronRight
-                size={20}
-                className="theme-text-secondary"
-              />
-
-            )}
-
-          </button>
-
-        </div>
-
-      </section>
-
-
-      {/* =================================================
-          À PROPOS
-      ================================================= */}
-
-      <section className="mb-5">
-
-        <h2
-          className="
-            text-xs
-            font-bold
-            uppercase
-            tracking-wider
-            mb-2
-            px-1
-            theme-text-secondary
-          "
-        >
-          ℹ️ À propos
-        </h2>
-
-
-        <div
-          className="
-            rounded-3xl
-            theme-surface
-            theme-border
-            border
-            shadow-sm
-            overflow-hidden
-          "
-        >
+          <div
+            className="
+              border-t
+              theme-border
+            "
+          />
 
           <div
             className="
@@ -2103,11 +1843,8 @@ export default function SettingsPage() {
               items-center
               gap-4
               p-5
-              border-b
-              theme-border
             "
           >
-
             <div
               className="
                 w-11
@@ -2118,127 +1855,52 @@ export default function SettingsPage() {
                 items-center
                 justify-center
                 shrink-0
+                text-xl
               "
             >
-
-              <Info
-                size={20}
-                className="text-accent"
-              />
-
+              🎓
             </div>
 
-
-            <div className="flex-1">
-
-              <h3
-                className="
-                  font-semibold
-                  theme-text
-                "
-              >
-                Version
-              </h3>
-
-
+            <div className="min-w-0">
               <p
-                className="
-                  text-sm
-                  mt-1
-                  theme-text-secondary
-                "
-              >
-                Version actuelle de l'application.
-              </p>
-
-            </div>
-
-
-            <span
-              className="
-                text-sm
-                font-semibold
-                theme-text-secondary
-              "
-            >
-              {APP_VERSION}
-            </span>
-
-          </div>
-
-
-          <div className="flex items-center gap-4 p-5">
-
-            <div
-              className="
-                w-11
-                h-11
-                rounded-2xl
-                bg-accent-soft
-                flex
-                items-center
-                justify-center
-                shrink-0
-              "
-            >
-
-              <span className="text-xl">
-                🎓
-              </span>
-
-            </div>
-
-
-            <div>
-
-              <h3
                 className="
                   font-semibold
                   theme-text
                 "
               >
                 Kalan Academy
-              </h3>
-
+              </p>
 
               <p
                 className="
                   text-sm
-                  mt-1
                   theme-text-secondary
+                  mt-0.5
                 "
               >
-                Plateforme d'apprentissage
-                pour les élèves du Mali.
+                Plateforme d'apprentissage pour les
+                élèves du Mali.
               </p>
-
             </div>
-
           </div>
-
         </div>
-
       </section>
 
-
-      {/* =================================================
+      {/* =====================================================
           FOOTER
-      ================================================= */}
+      ===================================================== */}
 
-      <div
+      <footer
         className="
           text-center
           text-xs
           theme-text-secondary
-          pt-3
+          pt-2
         "
       >
-        Kalan Academy • Apprendre partout,
-        même hors connexion.
-      </div>
-
+        Kalan Academy • Apprendre partout, même hors
+        connexion.
+      </footer>
     </div>
-
   );
-
 }

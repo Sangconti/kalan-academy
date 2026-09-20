@@ -746,45 +746,19 @@ export async function saveProgress(progress) {
   return savedId;
 }
 
-
 // ======================================================
 // PROGRESSIONS NON SYNCHRONISÉES
 // ======================================================
 
 export async function getUnsyncedProgress() {
+  const allProgress = await db.userProgress.toArray();
 
-  const [
-    unsyncedFalse,
-    unsyncedZero,
-    unsyncedUndefined
-  ] = await Promise.all([
-
-    db.userProgress
-      .where("synced")
-      .equals(false)
-      .toArray(),
-
-    db.userProgress
-      .where("synced")
-      .equals(0)
-      .toArray(),
-
-    db.userProgress
-      .filter(
-        item =>
-          item.synced === undefined
-      )
-      .toArray()
-
-  ]);
-
-
-  return [
-    ...unsyncedFalse,
-    ...unsyncedZero,
-    ...unsyncedUndefined
-  ];
-
+  return allProgress.filter(
+    (item) =>
+      item?.synced === false ||
+      item?.synced === 0 ||
+      item?.synced === undefined
+  );
 }
 
 
@@ -835,6 +809,231 @@ export async function getCachedProgress(
     .first();
 }
 
+// ======================================================
+// RÉINITIALISATION LOCALE DE LA PROGRESSION
+// ======================================================
+//
+// Ces fonctions permettent de détecter une réinitialisation
+// effectuée côté serveur et d'invalider uniquement les
+// données locales de l'utilisateur concerné.
+//
+// IMPORTANT :
+// - contenu pédagogique conservé
+// - téléchargements conservés
+// - autres utilisateurs conservés
+// - progression/quiz/queue de cet utilisateur supprimés
+// ======================================================
+
+
+// ======================================
+// CLÉ VERSION RESET
+// ======================================
+
+function getProgressResetVersionKey(userId) {
+
+  if (!userId)
+    return null;
+
+  return `kalan_progress_reset_version_${userId}`;
+}
+
+
+// ======================================
+// RÉCUPÉRER LA VERSION LOCALE
+// ======================================
+
+export function getLocalProgressResetVersion(
+  userId
+) {
+
+  if (!userId)
+    return 0;
+
+  try {
+
+    const key =
+      getProgressResetVersionKey(
+        userId
+      );
+
+    const value =
+      localStorage.getItem(key);
+
+    if (value === null)
+      return 0;
+
+    const version =
+      Number(value);
+
+    return Number.isFinite(version)
+      ? version
+      : 0;
+
+  }
+  catch {
+
+    return 0;
+  }
+}
+
+
+// ======================================
+// ENREGISTRER LA VERSION LOCALE
+// ======================================
+
+export function setLocalProgressResetVersion(
+  userId,
+  version
+) {
+
+  if (!userId)
+    return;
+
+  try {
+
+    const key =
+      getProgressResetVersionKey(
+        userId
+      );
+
+    const safeVersion =
+      Math.max(
+        0,
+        Number(version) || 0
+      );
+
+    localStorage.setItem(
+      key,
+      String(safeVersion)
+    );
+
+  }
+  catch {
+
+    // Ignorer les erreurs localStorage
+  }
+}
+
+
+// ======================================
+// SUPPRIMER LA VERSION LOCALE
+// ======================================
+
+export function clearLocalProgressResetVersion(
+  userId
+) {
+
+  if (!userId)
+    return;
+
+  try {
+
+    const key =
+      getProgressResetVersionKey(
+        userId
+      );
+
+    localStorage.removeItem(key);
+
+  }
+  catch {
+
+    // Ignorer
+  }
+}
+
+
+// ======================================
+// SUPPRESSION LOCALE PROGRESSION
+// ======================================
+//
+// Supprime uniquement les données appartenant
+// à l'utilisateur indiqué.
+// ======================================
+
+export async function clearLocalUserProgress(
+  userId
+) {
+
+  if (!userId)
+    return;
+
+
+  // --------------------------------------
+  // PROGRESSIONS
+  // --------------------------------------
+
+  await db.userProgress
+    .where("user_id")
+    .equals(userId)
+    .delete();
+
+
+  // --------------------------------------
+  // TENTATIVES DE QUIZ
+  // --------------------------------------
+
+  await db.quizAttempts
+    .where("user_id")
+    .equals(userId)
+    .delete();
+
+
+  // --------------------------------------
+  // QUEUE DE SYNCHRONISATION
+  // --------------------------------------
+
+  const queueItems =
+    await db.syncQueue.toArray();
+
+
+  const userQueueIds =
+    queueItems
+      .filter(item => {
+
+        const payload =
+          item?.payload;
+
+        return (
+          payload?.user_id &&
+          String(payload.user_id) ===
+          String(userId)
+        );
+
+      })
+      .map(item => item.id);
+
+
+  if (userQueueIds.length > 0) {
+
+    await db.syncQueue.bulkDelete(
+      userQueueIds
+    );
+  }
+
+
+  // --------------------------------------
+  // CACHE XP
+  // --------------------------------------
+
+  try {
+
+    localStorage.removeItem(
+      `kalan_xp_cache_${userId}`
+    );
+
+  }
+  catch {
+
+    // Ignorer
+  }
+
+
+  console.log(
+    "🧹 Progression locale supprimée :",
+    userId
+  );
+}
 
 // ======================================================
 // QUIZ ATTEMPTS
@@ -865,42 +1064,20 @@ export async function saveQuizAttempt(
 }
 
 
+// ======================================================
+// TENTATIVES DE QUIZ NON SYNCHRONISÉES
+// ======================================================
+
 export async function getUnsyncedQuizAttempts() {
+  const allAttempts = await db.quizAttempts.toArray();
 
-  const [
-    unsyncedFalse,
-    unsyncedZero,
-    unsyncedUndefined
-  ] = await Promise.all([
-
-    db.quizAttempts
-      .where("synced")
-      .equals(false)
-      .toArray(),
-
-    db.quizAttempts
-      .where("synced")
-      .equals(0)
-      .toArray(),
-
-    db.quizAttempts
-      .filter(
-        item =>
-          item.synced === undefined
-      )
-      .toArray()
-
-  ]);
-
-
-  return [
-    ...unsyncedFalse,
-    ...unsyncedZero,
-    ...unsyncedUndefined
-  ];
-
+  return allAttempts.filter(
+    (item) =>
+      item?.synced === false ||
+      item?.synced === 0 ||
+      item?.synced === undefined
+  );
 }
-
 
 // ======================================================
 // MARQUER UNE TENTATIVE SYNCHRONISÉE

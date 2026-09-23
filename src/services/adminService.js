@@ -1,7 +1,8 @@
 import { supabase } from "../lib/supabase";
 
+
 // ==========================
-// JOURNAL ADMIN
+// JOURNAL ADMIN — ENREGISTRER
 // ==========================
 
 export async function logAdminActivity({
@@ -25,10 +26,8 @@ export async function logAdminActivity({
       "log_admin_activity",
       {
         p_action: action,
-        p_target_user_id:
-          targetUserId || null,
-        p_details:
-          details || {}
+        p_target_user_id: targetUserId || null,
+        p_details: details || {}
       }
     );
 
@@ -61,6 +60,65 @@ export async function logAdminActivity({
     return false;
   }
 }
+
+
+// ==========================
+// JOURNAL ADMIN — RÉCUPÉRER
+// ==========================
+
+export async function getAdminActivityLogs(
+  limit = 10
+) {
+  const safeLimit =
+    Math.min(
+      Math.max(
+        Number(limit) || 10,
+        1
+      ),
+      50
+    );
+
+  const {
+    data,
+    error
+  } = await supabase
+    .from("admin_activity_logs")
+    .select(`
+      id,
+      admin_id,
+      action,
+      target_user_id,
+      details,
+      created_at,
+      admin:profiles!admin_id(
+        id,
+        full_name
+      ),
+      target_user:profiles!target_user_id(
+        id,
+        full_name
+      )
+    `)
+    .order(
+      "created_at",
+      {
+        ascending: false
+      }
+    )
+    .limit(safeLimit);
+
+  if (error) {
+    console.error(
+      "❌ [ADMIN ACTIVITY] Erreur récupération :",
+      error
+    );
+
+    throw error;
+  }
+
+  return data || [];
+}
+
 
 // ==========================
 // DASHBOARD STATISTIQUES
@@ -274,6 +332,27 @@ export async function updateUserRole(
   }
 
 
+  const activityLogged =
+    await logAdminActivity({
+      action:
+        "user_role_updated",
+
+      targetUserId:
+        userId,
+
+      details: {
+        new_role:
+          role
+      }
+    });
+
+  if (!activityLogged) {
+    console.warn(
+      "⚠️ [ADMIN] Rôle modifié mais activité non enregistrée."
+    );
+  }
+
+
   return true;
 }
 
@@ -301,6 +380,27 @@ export async function updateUserAccess(
 
   if (error) {
     throw error;
+  }
+
+
+  const activityLogged =
+    await logAdminActivity({
+      action:
+        "user_access_updated",
+
+      targetUserId:
+        userId,
+
+      details: {
+        access_status:
+          accessStatus
+      }
+    });
+
+  if (!activityLogged) {
+    console.warn(
+      "⚠️ [ADMIN] Accès utilisateur modifié mais activité non enregistrée."
+    );
   }
 
 
@@ -339,6 +439,27 @@ export async function updateUserAccessStatus(
   }
 
 
+  const activityLogged =
+    await logAdminActivity({
+      action:
+        "user_access_updated",
+
+      targetUserId:
+        userId,
+
+      details: {
+        access_status:
+          accessStatus
+      }
+    });
+
+  if (!activityLogged) {
+    console.warn(
+      "⚠️ [ADMIN] Access_status modifié mais activité non enregistrée."
+    );
+  }
+
+
   return true;
 }
 
@@ -358,12 +479,17 @@ export async function updateUserPremium(
   }
 
 
+  const normalizedPremium =
+    Boolean(isPremium);
+
+
   const {
     error
   } = await supabase
     .from("profiles")
     .update({
-      is_premium: Boolean(isPremium)
+      is_premium:
+        normalizedPremium
     })
     .eq(
       "id",
@@ -378,6 +504,27 @@ export async function updateUserPremium(
     );
 
     throw error;
+  }
+
+
+  const activityLogged =
+    await logAdminActivity({
+      action:
+        "user_premium_updated",
+
+      targetUserId:
+        userId,
+
+      details: {
+        is_premium:
+          normalizedPremium
+      }
+    });
+
+  if (!activityLogged) {
+    console.warn(
+      "⚠️ [ADMIN] Statut Premium modifié mais activité non enregistrée."
+    );
   }
 
 
@@ -400,12 +547,17 @@ export async function updateUserClass(
   }
 
 
+  const normalizedClassId =
+    classId || null;
+
+
   const {
     error
   } = await supabase
     .from("profiles")
     .update({
-      class_id: classId || null
+      class_id:
+        normalizedClassId
     })
     .eq(
       "id",
@@ -420,6 +572,27 @@ export async function updateUserClass(
     );
 
     throw error;
+  }
+
+
+  const activityLogged =
+    await logAdminActivity({
+      action:
+        "user_class_updated",
+
+      targetUserId:
+        userId,
+
+      details: {
+        class_id:
+          normalizedClassId
+      }
+    });
+
+  if (!activityLogged) {
+    console.warn(
+      "⚠️ [ADMIN] Classe utilisateur modifiée mais activité non enregistrée."
+    );
   }
 
 
@@ -442,13 +615,17 @@ export async function updateUserOrangeMoney(
   }
 
 
+  const normalizedOrangeMoneyId =
+    orangeMoneyId?.trim() || null;
+
+
   const {
     error
   } = await supabase
     .from("profiles")
     .update({
       orange_money_id:
-        orangeMoneyId?.trim() || null
+        normalizedOrangeMoneyId
     })
     .eq(
       "id",
@@ -463,6 +640,27 @@ export async function updateUserOrangeMoney(
     );
 
     throw error;
+  }
+
+
+  const activityLogged =
+    await logAdminActivity({
+      action:
+        "user_orange_money_updated",
+
+      targetUserId:
+        userId,
+
+      details: {
+        orange_money_id:
+          normalizedOrangeMoneyId
+      }
+    });
+
+  if (!activityLogged) {
+    console.warn(
+      "⚠️ [ADMIN] Orange Money modifié mais activité non enregistrée."
+    );
   }
 
 
@@ -509,6 +707,27 @@ export async function resetUserProgress(
     throw new Error(
       data?.message ||
       "La réinitialisation de la progression a échoué."
+    );
+  }
+
+
+  const activityLogged =
+    await logAdminActivity({
+      action:
+        "progress_reset",
+
+      targetUserId:
+        userId,
+
+      details: {
+        progress_reset_version:
+          data?.progress_reset_version ?? null
+      }
+    });
+
+  if (!activityLogged) {
+    console.warn(
+      "⚠️ [ADMIN] Progression réinitialisée mais activité non enregistrée."
     );
   }
 
@@ -571,6 +790,58 @@ export async function getAdminStudentEmail(
 export async function deleteAdminUser(
   userId
 ) {
+  if (!userId) {
+    throw new Error(
+      "Identifiant utilisateur manquant."
+    );
+  }
+
+
+  // ----------------------------------------
+  // Récupérer les informations avant
+  // suppression afin de conserver une trace
+  // lisible dans le journal.
+  // ----------------------------------------
+
+  let targetUserName = null;
+
+
+  try {
+    const {
+      data: targetUser,
+      error: targetUserError
+    } = await supabase
+      .from("profiles")
+      .select(`
+        id,
+        full_name,
+        role
+      `)
+      .eq(
+        "id",
+        userId
+      )
+      .maybeSingle();
+
+
+    if (targetUserError) {
+      console.warn(
+        "⚠️ [ADMIN] Impossible de récupérer le nom avant suppression :",
+        targetUserError
+      );
+    } else {
+      targetUserName =
+        targetUser?.full_name || null;
+    }
+
+  } catch (error) {
+    console.warn(
+      "⚠️ [ADMIN] Exception récupération utilisateur avant suppression :",
+      error
+    );
+  }
+
+
   const {
     data,
     error
@@ -646,6 +917,43 @@ export async function deleteAdminUser(
   }
 
 
+  // ----------------------------------------
+  // JOURNAL ADMIN
+  // ----------------------------------------
+  //
+  // Le profil a maintenant été supprimé.
+  // On ne peut donc pas utiliser userId dans
+  // target_user_id, car cette colonne possède
+  // une clé étrangère vers profiles.
+  //
+  // On conserve l'ancien identifiant et le nom
+  // dans details.
+  // ----------------------------------------
+
+  const activityLogged =
+    await logAdminActivity({
+      action:
+        "user_deleted",
+
+      targetUserId:
+        null,
+
+      details: {
+        user_id:
+          userId,
+
+        full_name:
+          targetUserName
+      }
+    });
+
+  if (!activityLogged) {
+    console.warn(
+      "⚠️ [ADMIN] Utilisateur supprimé mais activité non enregistrée."
+    );
+  }
+
+
   return true;
 }
 
@@ -700,6 +1008,34 @@ export async function createClass(
   }
 
 
+  const activityLogged =
+    await logAdminActivity({
+      action:
+        "class_created",
+
+      details: {
+        class_id:
+          data?.id || null,
+
+        name:
+          data?.name ||
+          classData?.name ||
+          null,
+
+        order_number:
+          data?.order_number ??
+          classData?.order_number ??
+          null
+      }
+    });
+
+  if (!activityLogged) {
+    console.warn(
+      "⚠️ [ADMIN] Classe créée mais activité non enregistrée."
+    );
+  }
+
+
   return data;
 }
 
@@ -728,6 +1064,26 @@ export async function updateClass(
   }
 
 
+  const activityLogged =
+    await logAdminActivity({
+      action:
+        "class_updated",
+
+      details: {
+        class_id:
+          id,
+
+        ...classData
+      }
+    });
+
+  if (!activityLogged) {
+    console.warn(
+      "⚠️ [ADMIN] Classe modifiée mais activité non enregistrée."
+    );
+  }
+
+
   return true;
 }
 
@@ -739,6 +1095,58 @@ export async function updateClass(
 export async function deleteClass(
   id
 ) {
+  if (!id) {
+    throw new Error(
+      "Identifiant classe manquant."
+    );
+  }
+
+
+  // ----------------------------------------
+  // Récupérer les informations avant
+  // suppression pour conserver une trace
+  // lisible dans le journal.
+  // ----------------------------------------
+
+  let className = null;
+
+
+  try {
+    const {
+      data: classData,
+      error: classError
+    } = await supabase
+      .from("classes")
+      .select(`
+        id,
+        name,
+        order_number
+      `)
+      .eq(
+        "id",
+        id
+      )
+      .maybeSingle();
+
+
+    if (classError) {
+      console.warn(
+        "⚠️ [ADMIN] Impossible de récupérer la classe avant suppression :",
+        classError
+      );
+    } else {
+      className =
+        classData?.name || null;
+    }
+
+  } catch (error) {
+    console.warn(
+      "⚠️ [ADMIN] Exception récupération classe avant suppression :",
+      error
+    );
+  }
+
+
   const {
     error
   } = await supabase
@@ -752,6 +1160,27 @@ export async function deleteClass(
 
   if (error) {
     throw error;
+  }
+
+
+  const activityLogged =
+    await logAdminActivity({
+      action:
+        "class_deleted",
+
+      details: {
+        class_id:
+          id,
+
+        name:
+          className
+      }
+    });
+
+  if (!activityLogged) {
+    console.warn(
+      "⚠️ [ADMIN] Classe supprimée mais activité non enregistrée."
+    );
   }
 
 

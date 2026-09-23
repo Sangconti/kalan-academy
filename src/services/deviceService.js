@@ -830,11 +830,6 @@ export async function generateUserDeviceRecoveryCode(
       };
     }
 
-    await logAdminActivity({
-      action: "device_recovery_code_generated",
-      targetUserId: userId
-    });
-
 
     // ----------------------------------------
     // Résultat
@@ -844,6 +839,37 @@ export async function generateUserDeviceRecoveryCode(
       "📱 [ADMIN DEVICE RECOVERY] Résultat génération =",
       data
     );
+
+
+    // ----------------------------------------
+    // JOURNAL ADMIN
+    // ----------------------------------------
+    //
+    // Important :
+    // l'action principale est déjà réussie.
+    // Une éventuelle erreur du journal ne doit
+    // jamais empêcher le retour du code.
+    // ----------------------------------------
+
+    const activityLogged =
+      await logAdminActivity({
+        action:
+          "device_recovery_code_generated",
+
+        targetUserId:
+          userId,
+
+        details: {
+          status:
+            data?.status || null
+        }
+      });
+
+    if (!activityLogged) {
+      console.warn(
+        "⚠️ [ADMIN DEVICE RECOVERY] Le code a été généré mais l'activité n'a pas pu être enregistrée."
+      );
+    }
 
     return data;
 
@@ -1035,6 +1061,36 @@ export async function resetUserDevice(userId) {
       "📱 [ADMIN DEVICE] Résultat réinitialisation =",
       data
     );
+
+
+    // ----------------------------------------
+    // JOURNAL ADMIN
+    // ----------------------------------------
+    //
+    // Important :
+    // la réinitialisation est déjà réussie.
+    // Le journal est secondaire.
+    // ----------------------------------------
+
+    const activityLogged =
+      await logAdminActivity({
+        action:
+          "device_reset",
+
+        targetUserId:
+          userId,
+
+        details: {
+          status:
+            data?.status || null
+        }
+      });
+
+    if (!activityLogged) {
+      console.warn(
+        "⚠️ [ADMIN DEVICE] L'appareil a été réinitialisé mais l'activité n'a pas pu être enregistrée."
+      );
+    }
 
     return data;
 

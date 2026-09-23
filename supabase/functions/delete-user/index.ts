@@ -211,7 +211,32 @@ export default {
         }
 
         // =====================================================
-        // 9. SUCCÈS
+        // 9. ENREGISTRER L'ACTIVITÉ ADMIN
+        // =====================================================
+
+        const { error: activityError } =
+          await ctx.supabaseAdmin.rpc(
+            "log_admin_activity",
+            {
+              p_action: "user_deleted",
+              p_target_user_id: null,
+              p_details: {
+                target_user_id: targetUserId,
+                target_user_name:
+                  targetProfile.full_name || null,
+              },
+            }
+          );
+
+        if (activityError) {
+          console.error(
+            "⚠️ Suppression réussie mais erreur journal admin :",
+            activityError
+          );
+        }
+
+        // =====================================================
+        // 10. SUCCÈS
         // =====================================================
 
         return Response.json({

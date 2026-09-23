@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import StatCard from "../../components/admin/StatCard";
 
 import {
-  getAdminStats
+  getAdminStats,
+  getAdminActivityLogs
 } from "../../services/adminService";
 
 import {
@@ -43,6 +44,23 @@ export default function DashboardAdmin() {
     useState(null);
 
   const [generatingRecoveryCode, setGeneratingRecoveryCode] =
+    useState(false);
+
+
+  // ==========================================
+  // JOURNAL D'ACTIVITÉ
+  // ==========================================
+
+  const [activityLogs, setActivityLogs] =
+    useState([]);
+
+  const [activityLoading, setActivityLoading] =
+    useState(true);
+
+  const [activityError, setActivityError] =
+    useState(null);
+
+  const [activityRefreshing, setActivityRefreshing] =
     useState(false);
 
 
@@ -173,6 +191,265 @@ export default function DashboardAdmin() {
       setStudentsLoading(false);
 
     }
+
+  }
+
+
+  // ==========================================
+  // CHARGER LE JOURNAL D'ACTIVITÉ
+  // ==========================================
+
+  async function loadActivityLogs(
+    showRefreshState = false
+  ) {
+
+    console.log(
+      "🕘 [ADMIN ACTIVITY] Chargement du journal..."
+    );
+
+    try {
+
+      if (showRefreshState) {
+        setActivityRefreshing(true);
+      } else {
+        setActivityLoading(true);
+      }
+
+      setActivityError(null);
+
+      const data =
+        await getAdminActivityLogs(10);
+
+      console.log(
+        "🕘 [ADMIN ACTIVITY] Activités récupérées =",
+        data
+      );
+
+      setActivityLogs(
+        data || []
+      );
+
+    } catch (err) {
+
+      console.error(
+        "❌ [ADMIN ACTIVITY] Erreur chargement journal =",
+        err
+      );
+
+      setActivityError(
+        "Impossible de charger le journal d'activité."
+      );
+
+    } finally {
+
+      setActivityLoading(false);
+      setActivityRefreshing(false);
+
+    }
+
+  }
+
+
+  // ==========================================
+  // LIBELLÉS DU JOURNAL
+  // ==========================================
+
+  function getActivityMeta(action) {
+
+    const actions = {
+
+      progress_reset: {
+        icon: "🔄",
+        label: "Progression réinitialisée"
+      },
+
+      device_recovery_code_generated: {
+        icon: "🔑",
+        label: "Code de récupération généré"
+      },
+
+      device_reset: {
+        icon: "📱",
+        label: "Appareil réinitialisé"
+      },
+
+      user_role_updated: {
+        icon: "👤",
+        label: "Rôle utilisateur modifié"
+      },
+
+      user_access_updated: {
+        icon: "🔐",
+        label: "Accès utilisateur modifié"
+      },
+
+      user_premium_updated: {
+        icon: "⭐",
+        label: "Statut Premium modifié"
+      },
+
+      user_class_updated: {
+        icon: "🎓",
+        label: "Classe utilisateur modifiée"
+      },
+
+      user_orange_money_updated: {
+        icon: "💰",
+        label: "Identifiant Orange Money modifié"
+      },
+
+      user_deleted: {
+        icon: "🗑️",
+        label: "Utilisateur supprimé"
+      },
+
+      class_created: {
+        icon: "➕",
+        label: "Classe créée"
+      },
+
+      class_updated: {
+        icon: "✏️",
+        label: "Classe modifiée"
+      },
+
+      class_deleted: {
+        icon: "🗑️",
+        label: "Classe supprimée"
+      }
+
+    };
+
+    return (
+      actions[action] || {
+        icon: "📌",
+        label: action || "Activité administrative"
+      }
+    );
+
+  }
+
+
+  // ==========================================
+  // TEMPS RELATIF
+  // ==========================================
+
+  function formatRelativeTime(dateValue) {
+
+    if (!dateValue) {
+      return "";
+    }
+
+    const date =
+      new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+      return "";
+    }
+
+    const now =
+      new Date();
+
+    const difference =
+      Math.max(
+        0,
+        now.getTime() - date.getTime()
+      );
+
+    const seconds =
+      Math.floor(
+        difference / 1000
+      );
+
+    if (seconds < 10) {
+      return "À l'instant";
+    }
+
+    if (seconds < 60) {
+      return `Il y a ${seconds} sec`;
+    }
+
+    const minutes =
+      Math.floor(
+        seconds / 60
+      );
+
+    if (minutes < 60) {
+      return `Il y a ${minutes} min`;
+    }
+
+    const hours =
+      Math.floor(
+        minutes / 60
+      );
+
+    if (hours < 24) {
+      return `Il y a ${hours} h`;
+    }
+
+    const days =
+      Math.floor(
+        hours / 24
+      );
+
+    if (days < 7) {
+      return `Il y a ${days} j`;
+    }
+
+    return date.toLocaleDateString(
+      "fr-FR",
+      {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      }
+    );
+
+  }
+
+
+  // ==========================================
+  // NOM DE LA CIBLE
+  // ==========================================
+
+  function getActivityTarget(activity) {
+
+    const action =
+      activity?.action;
+
+    const details =
+      activity?.details || {};
+
+    const targetName =
+      activity?.target_user?.full_name ||
+      details?.full_name;
+
+    // ----------------------------------------
+    // UTILISATEUR / ÉLÈVE
+    // ----------------------------------------
+
+    if (targetName) {
+      return targetName;
+    }
+
+    // ----------------------------------------
+    // ACTION SUR UNE CLASSE
+    // ----------------------------------------
+
+    if (
+      action === "class_created" ||
+      action === "class_updated" ||
+      action === "class_deleted"
+    ) {
+
+      if (details?.name) {
+        return details.name;
+      }
+
+      return "une classe";
+    }
+
+    return null;
 
   }
 
@@ -335,6 +612,11 @@ export default function DashboardAdmin() {
           selectedStudent
         );
 
+        // ------------------------------------
+        // ACTUALISER LE JOURNAL
+        // ------------------------------------
+
+        await loadActivityLogs(true);
 
         return;
       }
@@ -459,6 +741,8 @@ export default function DashboardAdmin() {
     loadStats();
 
     loadStudents();
+
+    loadActivityLogs();
 
   }, []);
 
@@ -624,10 +908,12 @@ export default function DashboardAdmin() {
               onClick={() => {
                 loadStats();
                 loadStudents();
+                loadActivityLogs(true);
               }}
               disabled={
                 loading ||
-                studentsLoading
+                studentsLoading ||
+                activityRefreshing
               }
               className="
                 w-full
@@ -653,7 +939,9 @@ export default function DashboardAdmin() {
             >
 
               <span>
-                {loading || studentsLoading
+                {loading ||
+                studentsLoading ||
+                activityRefreshing
                   ? "Actualisation..."
                   : "↻ Actualiser"
                 }
@@ -1638,55 +1926,578 @@ export default function DashboardAdmin() {
         "
       >
 
+        {/* EN-TÊTE DU JOURNAL */}
+
         <div
           className="
-            inline-flex
-            items-center
-            gap-2
-            px-3
-            py-1.5
-            rounded-full
-            bg-accent-soft
-            border
-            border-accent
-            text-accent
-            text-xs
-            font-semibold
-            mb-3
+            flex
+            flex-col
+            sm:flex-row
+            sm:items-start
+            sm:justify-between
+            gap-4
+            mb-5
           "
         >
 
-          🕘
+          <div>
 
-          Journal
+            <div
+              className="
+                inline-flex
+                items-center
+                gap-2
+                px-3
+                py-1.5
+                rounded-full
+                bg-accent-soft
+                border
+                border-accent
+                text-accent
+                text-xs
+                font-semibold
+                mb-3
+              "
+            >
+
+              🕘
+
+              Journal
+
+            </div>
+
+
+            <h2
+              className="
+                text-lg
+                sm:text-xl
+                font-bold
+                theme-text
+              "
+            >
+              Activité récente
+            </h2>
+
+
+            <p
+              className="
+                theme-text-secondary
+                text-sm
+                mt-1
+              "
+            >
+              Les dernières actions effectuées par les administrateurs.
+            </p>
+
+          </div>
+
+
+          {/* ACTUALISER LE JOURNAL */}
+
+          <button
+            type="button"
+            onClick={() =>
+              loadActivityLogs(true)
+            }
+            disabled={
+              activityLoading ||
+              activityRefreshing
+            }
+            className="
+              inline-flex
+              items-center
+              justify-center
+              gap-2
+              px-4
+              py-2.5
+              rounded-xl
+              border
+              theme-border
+              theme-surface
+              theme-text
+              font-semibold
+              text-sm
+              hover:bg-accent-soft
+              transition
+              disabled:opacity-50
+              disabled:cursor-not-allowed
+              whitespace-nowrap
+              w-full
+              sm:w-auto
+            "
+          >
+
+            {activityRefreshing
+              ? "Actualisation..."
+              : "↻ Actualiser"
+            }
+
+          </button>
 
         </div>
 
 
-        <h2
-          className="
-            text-lg
-            sm:text-xl
-            font-bold
-            mb-2
-            theme-text
-          "
-        >
-          Activité récente
-        </h2>
+        {/* ERREUR DU JOURNAL */}
+
+        {activityError && (
+
+          <div
+            className="
+              rounded-2xl
+              border
+              border-red-200
+              dark:border-red-900
+              bg-red-50
+              dark:bg-red-950/30
+              text-red-700
+              dark:text-red-300
+              p-4
+            "
+          >
+
+            <p className="text-sm font-semibold">
+              Journal indisponible
+            </p>
 
 
-        <p
-          className="
-            theme-text-secondary
-            text-sm
-            sm:text-base
-            break-words
-          "
-        >
-          Le journal d'activité pourra être connecté
-          à une table d'administration dédiée.
-        </p>
+            <p className="text-sm mt-1">
+              {activityError}
+            </p>
+
+          </div>
+
+        )}
+
+
+        {/* CHARGEMENT */}
+
+        {activityLoading && !activityError && (
+
+          <div className="space-y-3">
+
+            {Array.from(
+              { length: 3 }
+            ).map(
+              (_, index) => (
+
+                <div
+                  key={index}
+                  className="
+                    flex
+                    items-center
+                    gap-4
+                    p-4
+                    rounded-2xl
+                    border
+                    theme-border
+                    bg-accent-soft
+                    animate-pulse
+                  "
+                >
+
+                  <div
+                    className="
+                      w-11
+                      h-11
+                      rounded-xl
+                      bg-gray-200
+                      dark:bg-gray-700
+                      shrink-0
+                    "
+                  />
+
+                  <div
+                    className="
+                      flex-1
+                      min-w-0
+                      space-y-2
+                    "
+                  >
+
+                    <div
+                      className="
+                        h-4
+                        w-2/3
+                        rounded
+                        bg-gray-200
+                        dark:bg-gray-700
+                      "
+                    />
+
+                    <div
+                      className="
+                        h-3
+                        w-1/2
+                        rounded
+                        bg-gray-200
+                        dark:bg-gray-700
+                      "
+                    />
+
+                  </div>
+
+                </div>
+
+              )
+            )}
+
+          </div>
+
+        )}
+
+
+        {/* AUCUNE ACTIVITÉ */}
+
+        {!activityLoading &&
+        !activityError &&
+        activityLogs.length === 0 && (
+
+          <div
+            className="
+              rounded-2xl
+              border
+              theme-border
+              bg-accent-soft
+              p-6
+              text-center
+            "
+          >
+
+            <div
+              className="
+                text-3xl
+                mb-3
+              "
+            >
+              🕘
+            </div>
+
+
+            <p
+              className="
+                font-semibold
+                theme-text
+              "
+            >
+              Aucune activité enregistrée
+            </p>
+
+
+            <p
+              className="
+                text-sm
+                theme-text-secondary
+                mt-1
+              "
+            >
+              Les prochaines actions administratives apparaîtront ici.
+            </p>
+
+          </div>
+
+        )}
+
+
+        {/* LISTE DES ACTIVITÉS */}
+
+        {!activityLoading &&
+        !activityError &&
+        activityLogs.length > 0 && (
+
+          <div className="space-y-3">
+
+            {activityLogs.map(
+              (activity) => {
+
+                const meta =
+                  getActivityMeta(
+                    activity?.action
+                  );
+
+                const target =
+                  getActivityTarget(
+                    activity
+                  );
+
+                const adminName =
+                  activity?.admin?.full_name ||
+                  "Administrateur";
+
+                const details =
+                  activity?.details || {};
+
+                return (
+
+                  <div
+                    key={activity.id}
+                    className="
+                      flex
+                      items-start
+                      gap-3
+                      sm:gap-4
+                      p-4
+                      rounded-2xl
+                      border
+                      theme-border
+                      theme-surface
+                      hover:bg-accent-soft
+                      transition
+                      min-w-0
+                    "
+                  >
+
+                    {/* ICÔNE */}
+
+                    <div
+                      className="
+                        w-11
+                        h-11
+                        rounded-xl
+                        bg-accent-soft
+                        border
+                        border-accent
+                        flex
+                        items-center
+                        justify-center
+                        text-lg
+                        shrink-0
+                      "
+                    >
+                      {meta.icon}
+                    </div>
+
+
+                    {/* CONTENU */}
+
+                    <div
+                      className="
+                        flex-1
+                        min-w-0
+                      "
+                    >
+
+                      <div
+                        className="
+                          flex
+                          flex-col
+                          sm:flex-row
+                          sm:items-start
+                          sm:justify-between
+                          gap-1
+                        "
+                      >
+
+                        <p
+                          className="
+                            font-semibold
+                            theme-text
+                            text-sm
+                            sm:text-base
+                            break-words
+                          "
+                        >
+                          {meta.label}
+                        </p>
+
+
+                        <span
+                          className="
+                            text-xs
+                            theme-text-secondary
+                            whitespace-nowrap
+                            shrink-0
+                          "
+                        >
+                          {formatRelativeTime(
+                            activity.created_at
+                          )}
+                        </span>
+
+                      </div>
+
+
+                      {/* ADMINISTRATEUR */}
+
+                      <p
+                        className="
+                          text-xs
+                          sm:text-sm
+                          theme-text-secondary
+                          mt-1
+                          break-words
+                        "
+                      >
+                        Par{" "}
+                        <span
+                          className="
+                            font-medium
+                            theme-text
+                          "
+                        >
+                          {adminName}
+                        </span>
+                      </p>
+
+
+                      {/* CIBLE */}
+
+                      {target && (
+
+                        <p
+                          className="
+                            text-xs
+                            sm:text-sm
+                            theme-text-secondary
+                            mt-1
+                            break-words
+                          "
+                        >
+                          {(
+                            activity?.action ===
+                              "class_created" ||
+                            activity?.action ===
+                              "class_updated" ||
+                            activity?.action ===
+                              "class_deleted"
+                          )
+                            ? "Classe : "
+                            : "Utilisateur : "
+                          }
+
+                          <span
+                            className="
+                              font-medium
+                              theme-text
+                            "
+                          >
+                            {target}
+                          </span>
+
+                        </p>
+
+                      )}
+
+
+                      {/* INFORMATIONS COMPLÉMENTAIRES */}
+
+                      {activity?.action ===
+                        "user_role_updated" &&
+                        details?.new_role && (
+
+                        <p
+                          className="
+                            text-xs
+                            theme-text-secondary
+                            mt-1
+                          "
+                        >
+                          Nouveau rôle :{" "}
+                          <span
+                            className="
+                              font-medium
+                              theme-text
+                            "
+                          >
+                            {details.new_role}
+                          </span>
+                        </p>
+
+                      )}
+
+
+                      {activity?.action ===
+                        "user_access_updated" &&
+                        details?.access_status && (
+
+                        <p
+                          className="
+                            text-xs
+                            theme-text-secondary
+                            mt-1
+                          "
+                        >
+                          Statut d'accès :{" "}
+                          <span
+                            className="
+                              font-medium
+                              theme-text
+                            "
+                          >
+                            {details.access_status}
+                          </span>
+                        </p>
+
+                      )}
+
+
+                      {activity?.action ===
+                        "user_premium_updated" &&
+                        typeof details?.is_premium ===
+                          "boolean" && (
+
+                        <p
+                          className="
+                            text-xs
+                            theme-text-secondary
+                            mt-1
+                          "
+                        >
+                          Premium :{" "}
+                          <span
+                            className="
+                              font-medium
+                              theme-text
+                            "
+                          >
+                            {details.is_premium
+                              ? "Activé"
+                              : "Désactivé"
+                            }
+                          </span>
+                        </p>
+
+                      )}
+
+
+                      {activity?.action ===
+                        "progress_reset" &&
+                        details?.progress_reset_version !==
+                          null &&
+                        details?.progress_reset_version !==
+                          undefined && (
+
+                        <p
+                          className="
+                            text-xs
+                            theme-text-secondary
+                            mt-1
+                          "
+                        >
+                          Version de réinitialisation :{" "}
+                          <span
+                            className="
+                              font-medium
+                              theme-text
+                            "
+                          >
+                            {details.progress_reset_version}
+                          </span>
+                        </p>
+
+                      )}
+
+                    </div>
+
+                  </div>
+
+                );
+
+              }
+            )}
+
+          </div>
+
+        )}
 
       </div>
 

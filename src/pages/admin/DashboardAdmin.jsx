@@ -4,14 +4,13 @@ import StatCard from "../../components/admin/StatCard";
 
 import {
   getAdminStats,
+  getAdminUsers,
   getAdminActivityLogs
 } from "../../services/adminService";
 
 import {
   generateUserDeviceRecoveryCode
 } from "../../services/deviceService";
-
-import { supabase } from "../../lib/supabase";
 
 
 export default function DashboardAdmin() {
@@ -114,45 +113,27 @@ export default function DashboardAdmin() {
 
       setStudentsLoading(true);
 
-      const {
-        data,
-        error: studentsError
-      } = await supabase
-        .from("profiles")
-        .select(
-          "id, full_name, role"
-        )
-        .eq(
-          "role",
-          "student"
-        )
-        .order(
-          "full_name",
-          {
-            ascending: true
-          }
-        );
-
-
-      if (studentsError) {
-
-        console.error(
-          "❌ [ADMIN] Erreur chargement élèves =",
-          studentsError
-        );
-
-        throw studentsError;
-      }
-
+      const data =
+        await getAdminUsers();
 
       console.log(
-        "👨‍🎓 [ADMIN] Élèves récupérés =",
+        "👨‍🎓 [ADMIN] Utilisateurs récupérés =",
         data
       );
 
+      const studentList =
+        (data || []).filter(
+          (user) =>
+            user?.role === "student"
+        );
+
+      console.log(
+        "👨‍🎓 [ADMIN] Élèves récupérés =",
+        studentList
+      );
 
       setStudents(
-        data || []
+        studentList
       );
 
 
@@ -162,7 +143,7 @@ export default function DashboardAdmin() {
 
       if (
         selectedStudentId &&
-        !(data || []).some(
+        !studentList.some(
           (student) =>
             student.id === selectedStudentId
         )
@@ -173,7 +154,6 @@ export default function DashboardAdmin() {
         setRecoveryStudent(null);
 
       }
-
 
     } catch (err) {
 

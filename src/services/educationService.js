@@ -42,32 +42,26 @@ const NETWORK_TIMEOUT = 1500;
 
 
 // ------------------------------------------------------
-// URL SUPABASE
+// Vérifie réellement si Supabase est accessible
 // ------------------------------------------------------
 //
 // IMPORTANT
 //
-// src/lib/supabase.js utilise actuellement une URL
-// Supabase écrite directement dans le fichier.
+// On n'utilise plus :
 //
-// educationService.js utilisait auparavant :
+//     HEAD /rest/v1/
 //
-// import.meta.env.VITE_SUPABASE_URL
+// car cette requête directe n'envoie pas correctement
+// le contexte du client Supabase et provoquait :
 //
-// ce qui provoquait :
+//     401 Unauthorized
 //
-// ⚠️ VITE_SUPABASE_URL introuvable
+// À la place, on utilise le client Supabase déjà
+// configuré dans src/lib/supabase.js.
 //
-// On utilise donc la même URL ici.
+// Une petite requête sur "classes" permet de vérifier
+// que Supabase répond réellement.
 //
-// ------------------------------------------------------
-
-const SUPABASE_URL =
-  "https://gchimptswrhchpdtemni.supabase.co";
-
-
-// ------------------------------------------------------
-// Vérifie réellement si Supabase est accessible
 // ------------------------------------------------------
 
 async function checkSupabaseConnection() {
@@ -109,27 +103,8 @@ async function checkSupabaseConnection() {
 
 
   // ----------------------------------------------------
-  // Vérification réelle
+  // Vérification réelle Supabase
   // ----------------------------------------------------
-
-  const supabaseUrl =
-    SUPABASE_URL;
-
-
-  if (!supabaseUrl) {
-
-    console.warn(
-      "⚠️ URL Supabase introuvable"
-    );
-
-    networkStatus = false;
-
-    networkCheckedAt = now;
-
-    return false;
-
-  }
-
 
   const controller =
     new AbortController();
@@ -144,47 +119,85 @@ async function checkSupabaseConnection() {
 
   try {
 
-    const response =
-      await fetch(
-        `${supabaseUrl}/rest/v1/`,
-        {
-          method: "HEAD",
-          signal: controller.signal
-        }
-      );
+    const {
+      data,
+      error
+    } = await supabase
+      .from("classes")
+      .select("id")
+      .limit(1);
 
 
     clearTimeout(timeout);
 
 
-    /*
-     * Selon la configuration Supabase,
-     * /rest/v1/ peut retourner différents codes.
-     *
-     * Le but ici est uniquement de savoir si
-     * le serveur est joignable.
-     */
+    // --------------------------------------------------
+    // Une réponse Supabase signifie que le serveur
+    // est joignable.
+    //
+    // Même une erreur Supabase avec un code HTTP
+    // signifie que le serveur a répondu.
+    // --------------------------------------------------
 
-    networkStatus =
-      response.ok ||
-      response.status === 401 ||
-      response.status === 404;
+    if (error) {
 
-
-    networkCheckedAt =
-      Date.now();
+      const status =
+        Number(error?.status);
 
 
-    if (networkStatus) {
+      if (
+        Number.isFinite(status)
+      ) {
 
-      console.log(
-        "🌐 Supabase accessible"
+        networkStatus = true;
+
+        networkCheckedAt =
+          Date.now();
+
+        console.log(
+          "🌐 Supabase accessible"
+        );
+
+        return true;
+
+      }
+
+
+      // ------------------------------------------------
+      // Pas de statut HTTP :
+      // probablement problème réseau / connexion.
+      // ------------------------------------------------
+
+      networkStatus = false;
+
+      networkCheckedAt =
+        Date.now();
+
+      console.warn(
+        "📴 Supabase inaccessible → mode offline",
+        error?.message || error
       );
+
+      return false;
 
     }
 
 
-    return networkStatus;
+    // --------------------------------------------------
+    // Supabase a répondu correctement
+    // --------------------------------------------------
+
+    networkStatus = true;
+
+    networkCheckedAt =
+      Date.now();
+
+    console.log(
+      "🌐 Supabase accessible"
+    );
+
+
+    return true;
 
   } catch (error) {
 
@@ -262,7 +275,6 @@ if (
   );
 
 }
-
 
 // ======================================================
 // HELPERS

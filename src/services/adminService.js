@@ -1,5 +1,132 @@
 import { supabase } from "../lib/supabase";
 
+// ==========================
+// CACHES ADMIN — HORS LIGNE
+// ==========================
+
+const ADMIN_ACTIVITY_LOGS_CACHE_KEY =
+  "kalan_admin_activity_logs_cache";
+
+const ADMIN_USERS_CACHE_KEY =
+  "kalan_admin_users_cache";
+
+
+// ==========================
+// CACHE — JOURNAL ADMIN
+// ==========================
+
+function getCachedAdminActivityLogs() {
+  try {
+    const raw =
+      localStorage.getItem(
+        ADMIN_ACTIVITY_LOGS_CACHE_KEY
+      );
+
+    if (!raw) {
+      return null;
+    }
+
+    const logs =
+      JSON.parse(raw);
+
+    if (!Array.isArray(logs)) {
+      return null;
+    }
+
+    return logs;
+
+  } catch (error) {
+    console.warn(
+      "⚠️ [ADMIN ACTIVITY] Impossible de lire le cache local :",
+      error
+    );
+
+    return null;
+  }
+}
+
+
+function cacheAdminActivityLogs(logs) {
+  if (!Array.isArray(logs)) {
+    return;
+  }
+
+  try {
+    localStorage.setItem(
+      ADMIN_ACTIVITY_LOGS_CACHE_KEY,
+      JSON.stringify(logs)
+    );
+
+    console.log(
+      "💾 [ADMIN ACTIVITY] Journal mis en cache local"
+    );
+
+  } catch (error) {
+    console.warn(
+      "⚠️ [ADMIN ACTIVITY] Impossible de sauvegarder le journal localement :",
+      error
+    );
+  }
+}
+
+
+// ==========================
+// CACHE — UTILISATEURS ADMIN
+// ==========================
+
+function getCachedAdminUsers() {
+  try {
+    const raw =
+      localStorage.getItem(
+        ADMIN_USERS_CACHE_KEY
+      );
+
+    if (!raw) {
+      return null;
+    }
+
+    const users =
+      JSON.parse(raw);
+
+    if (!Array.isArray(users)) {
+      return null;
+    }
+
+    return users;
+
+  } catch (error) {
+    console.warn(
+      "⚠️ [ADMIN USERS] Impossible de lire le cache local :",
+      error
+    );
+
+    return null;
+  }
+}
+
+
+function cacheAdminUsers(users) {
+  if (!Array.isArray(users)) {
+    return;
+  }
+
+  try {
+    localStorage.setItem(
+      ADMIN_USERS_CACHE_KEY,
+      JSON.stringify(users)
+    );
+
+    console.log(
+      "💾 [ADMIN USERS] Utilisateurs mis en cache local"
+    );
+
+  } catch (error) {
+    console.warn(
+      "⚠️ [ADMIN USERS] Impossible de sauvegarder les utilisateurs localement :",
+      error
+    );
+  }
+}
 
 // ==========================
 // JOURNAL ADMIN — ENREGISTRER
@@ -78,45 +205,127 @@ export async function getAdminActivityLogs(
       50
     );
 
-  const {
-    data,
-    error
-  } = await supabase
-    .from("admin_activity_logs")
-    .select(`
-      id,
-      admin_id,
-      action,
-      target_user_id,
-      details,
-      created_at,
-      admin:profiles!admin_id(
-        id,
-        full_name
-      ),
-      target_user:profiles!target_user_id(
-        id,
-        full_name
-      )
-    `)
-    .order(
-      "created_at",
-      {
-        ascending: false
-      }
-    )
-    .limit(safeLimit);
 
-  if (error) {
-    console.error(
-      "❌ [ADMIN ACTIVITY] Erreur récupération :",
-      error
+  // =====================================================
+  // 1. HORS LIGNE → CACHE LOCAL
+  // =====================================================
+
+  if (
+    typeof navigator !== "undefined" &&
+    navigator.onLine === false
+  ) {
+
+    const cachedLogs =
+      getCachedAdminActivityLogs();
+
+    if (cachedLogs) {
+
+      console.log(
+        "📴 [ADMIN ACTIVITY] Hors ligne → utilisation du cache local"
+      );
+
+      return cachedLogs.slice(
+        0,
+        safeLimit
+      );
+    }
+
+    console.warn(
+      "⚠️ [ADMIN ACTIVITY] Hors ligne et aucun cache disponible."
     );
+
+    throw new Error(
+      "Journal administrateur indisponible hors ligne."
+    );
+  }
+
+
+  // =====================================================
+  // 2. EN LIGNE → SUPABASE
+  // =====================================================
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabase
+      .from("admin_activity_logs")
+      .select(`
+        id,
+        admin_id,
+        action,
+        target_user_id,
+        details,
+        created_at,
+        admin:profiles!admin_id(
+          id,
+          full_name
+        ),
+        target_user:profiles!target_user_id(
+          id,
+          full_name
+        )
+      `)
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      )
+      .limit(safeLimit);
+
+
+    if (error) {
+
+      console.error(
+        "❌ [ADMIN ACTIVITY] Erreur récupération :",
+        error
+      );
+
+      throw error;
+    }
+
+
+    const logs =
+      data || [];
+
+
+    // ===================================================
+    // 3. CACHE DES DERNIERS JOURNAUX VALIDES
+    // ===================================================
+
+    cacheAdminActivityLogs(
+      logs
+    );
+
+
+    return logs;
+
+  } catch (error) {
+
+    // ===================================================
+    // 4. FALLBACK CACHE
+    // ===================================================
+
+    const cachedLogs =
+      getCachedAdminActivityLogs();
+
+    if (cachedLogs) {
+
+      console.warn(
+        "📴 [ADMIN ACTIVITY] Requête Supabase échouée → utilisation du cache local"
+      );
+
+      return cachedLogs.slice(
+        0,
+        safeLimit
+      );
+    }
+
 
     throw error;
   }
-
-  return data || [];
 }
 
 
@@ -124,145 +333,312 @@ export async function getAdminActivityLogs(
 // DASHBOARD STATISTIQUES
 // ==========================
 
-export async function getAdminStats() {
-  const [
-    students,
-    premium,
-    classes,
-    subjects,
-    lessons,
-    quizzes,
-    xp
-  ] = await Promise.all([
-    supabase
-      .from("profiles")
-      .select("*", {
-        count: "exact",
-        head: true
-      })
-      .eq("role", "student"),
-
-    supabase
-      .from("profiles")
-      .select("*", {
-        count: "exact",
-        head: true
-      })
-      .eq("is_premium", true),
-
-    supabase
-      .from("classes")
-      .select("*", {
-        count: "exact",
-        head: true
-      }),
-
-    supabase
-      .from("subjects")
-      .select("*", {
-        count: "exact",
-        head: true
-      }),
-
-    supabase
-      .from("lessons")
-      .select("*", {
-        count: "exact",
-        head: true
-      }),
-
-    supabase
-      .from("quizzes")
-      .select("*", {
-        count: "exact",
-        head: true
-      }),
-
-    supabase
-      .from("profiles")
-      .select("xp")
-  ]);
+const ADMIN_STATS_CACHE_KEY =
+  "kalan_admin_stats_cache";
 
 
-  const responses = [
-    {
-      name: "students",
-      response: students
-    },
-    {
-      name: "premium",
-      response: premium
-    },
-    {
-      name: "classes",
-      response: classes
-    },
-    {
-      name: "subjects",
-      response: subjects
-    },
-    {
-      name: "lessons",
-      response: lessons
-    },
-    {
-      name: "quizzes",
-      response: quizzes
-    },
-    {
-      name: "xp",
-      response: xp
+function getCachedAdminStats() {
+  try {
+    const raw =
+      localStorage.getItem(
+        ADMIN_STATS_CACHE_KEY
+      );
+
+    if (!raw) {
+      return null;
     }
-  ];
 
+    const stats =
+      JSON.parse(raw);
 
-  const failedRequest = responses.find(
-    item => item.response.error
-  );
+    if (
+      !stats ||
+      typeof stats !== "object"
+    ) {
+      return null;
+    }
 
+    return stats;
 
-  if (failedRequest) {
-    console.error(
-      `Erreur statistiques ${failedRequest.name}:`,
-      failedRequest.response.error
+  } catch (error) {
+    console.warn(
+      "⚠️ [ADMIN STATS] Impossible de lire le cache local :",
+      error
     );
 
-    throw failedRequest.response.error;
+    return null;
+  }
+}
+
+
+function cacheAdminStats(stats) {
+  if (!stats) {
+    return;
+  }
+
+  try {
+    localStorage.setItem(
+      ADMIN_STATS_CACHE_KEY,
+      JSON.stringify(stats)
+    );
+
+    console.log(
+      "💾 [ADMIN STATS] Statistiques mises en cache local"
+    );
+
+  } catch (error) {
+    console.warn(
+      "⚠️ [ADMIN STATS] Impossible de sauvegarder les statistiques localement :",
+      error
+    );
+  }
+}
+
+
+export async function getAdminStats() {
+
+  // =====================================================
+  // 1. HORS LIGNE → CACHE LOCAL
+  // =====================================================
+
+  if (
+    typeof navigator !== "undefined" &&
+    navigator.onLine === false
+  ) {
+
+    const cachedStats =
+      getCachedAdminStats();
+
+    if (cachedStats) {
+
+      console.log(
+        "📴 [ADMIN STATS] Hors ligne → utilisation du cache local"
+      );
+
+      return cachedStats;
+    }
+
+    console.warn(
+      "⚠️ [ADMIN STATS] Hors ligne et aucun cache disponible."
+    );
+
+    throw new Error(
+      "Statistiques administrateur indisponibles hors ligne."
+    );
   }
 
 
-  const totalXP =
-    xp.data?.reduce(
-      (sum, user) => {
-        return sum + (
-          Number(user.xp) || 0
-        );
+  // =====================================================
+  // 2. EN LIGNE → SUPABASE
+  // =====================================================
+
+  try {
+
+    const [
+      students,
+      premium,
+      classes,
+      subjects,
+      lessons,
+      quizzes,
+      xp
+    ] = await Promise.all([
+
+      supabase
+        .from("profiles")
+        .select("*", {
+          count: "exact",
+          head: true
+        })
+        .eq(
+          "role",
+          "student"
+        ),
+
+      supabase
+        .from("profiles")
+        .select("*", {
+          count: "exact",
+          head: true
+        })
+        .eq(
+          "is_premium",
+          true
+        ),
+
+      supabase
+        .from("classes")
+        .select("*", {
+          count: "exact",
+          head: true
+        }),
+
+      supabase
+        .from("subjects")
+        .select("*", {
+          count: "exact",
+          head: true
+        }),
+
+      supabase
+        .from("lessons")
+        .select("*", {
+          count: "exact",
+          head: true
+        }),
+
+      supabase
+        .from("quizzes")
+        .select("*", {
+          count: "exact",
+          head: true
+        }),
+
+      supabase
+        .from("profiles")
+        .select("xp")
+    ]);
+
+
+    const responses = [
+      {
+        name:
+          "students",
+        response:
+          students
       },
-      0
-    ) || 0;
+      {
+        name:
+          "premium",
+        response:
+          premium
+      },
+      {
+        name:
+          "classes",
+        response:
+          classes
+      },
+      {
+        name:
+          "subjects",
+        response:
+          subjects
+      },
+      {
+        name:
+          "lessons",
+        response:
+          lessons
+      },
+      {
+        name:
+          "quizzes",
+        response:
+          quizzes
+      },
+      {
+        name:
+          "xp",
+        response:
+          xp
+      }
+    ];
 
 
-  return {
-    students:
-      students.count || 0,
+    const failedRequest =
+      responses.find(
+        item =>
+          item.response.error
+      );
 
-    premium:
-      premium.count || 0,
 
-    classes:
-      classes.count || 0,
+    if (failedRequest) {
 
-    subjects:
-      subjects.count || 0,
+      console.error(
+        `Erreur statistiques ${failedRequest.name}:`,
+        failedRequest.response.error
+      );
 
-    lessons:
-      lessons.count || 0,
+      throw failedRequest.response.error;
+    }
 
-    quizzes:
-      quizzes.count || 0,
 
-    totalXP
-  };
+    const totalXP =
+      xp.data?.reduce(
+        (sum, user) => {
+
+          return (
+            sum +
+            (
+              Number(
+                user.xp
+              ) || 0
+            )
+          );
+
+        },
+        0
+      ) || 0;
+
+
+    const stats = {
+
+      students:
+        students.count || 0,
+
+      premium:
+        premium.count || 0,
+
+      classes:
+        classes.count || 0,
+
+      subjects:
+        subjects.count || 0,
+
+      lessons:
+        lessons.count || 0,
+
+      quizzes:
+        quizzes.count || 0,
+
+      totalXP
+
+    };
+
+
+    // ===================================================
+    // 3. CACHE DES DERNIÈRES STATISTIQUES VALIDES
+    // ===================================================
+
+    cacheAdminStats(
+      stats
+    );
+
+
+    return stats;
+
+  } catch (error) {
+
+    // ===================================================
+    // 4. FALLBACK CACHE
+    // ===================================================
+
+    const cachedStats =
+      getCachedAdminStats();
+
+    if (cachedStats) {
+
+      console.warn(
+        "📴 [ADMIN STATS] Requête Supabase échouée → utilisation du cache local"
+      );
+
+      return cachedStats;
+    }
+
+
+    throw error;
+  }
 }
 
 
@@ -271,38 +647,111 @@ export async function getAdminStats() {
 // ==========================
 
 export async function getAdminUsers() {
-  const {
-    data,
-    error
-  } = await supabase
-    .from("profiles")
-    .select(`
-      id,
-      full_name,
-      avatar_url,
-      role,
-      access_status,
-      class_id,
-      is_premium,
-      xp,
-      level,
-      orange_money_id,
-      created_at
-    `)
-    .order(
-      "created_at",
-      {
-        ascending: false
-      }
+
+  // =====================================================
+  // 1. HORS LIGNE → CACHE LOCAL
+  // =====================================================
+
+  if (
+    typeof navigator !== "undefined" &&
+    navigator.onLine === false
+  ) {
+
+    const cachedUsers =
+      getCachedAdminUsers();
+
+    if (cachedUsers) {
+
+      console.log(
+        "📴 [ADMIN USERS] Hors ligne → utilisation du cache local"
+      );
+
+      return cachedUsers;
+    }
+
+    console.warn(
+      "⚠️ [ADMIN USERS] Hors ligne et aucun cache disponible."
     );
 
-
-  if (error) {
-    throw error;
+    throw new Error(
+      "Utilisateurs administrateur indisponibles hors ligne."
+    );
   }
 
 
-  return data || [];
+  // =====================================================
+  // 2. EN LIGNE → SUPABASE
+  // =====================================================
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabase
+      .from("profiles")
+      .select(`
+        id,
+        full_name,
+        avatar_url,
+        role,
+        access_status,
+        class_id,
+        is_premium,
+        xp,
+        level,
+        orange_money_id,
+        created_at
+      `)
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    const users =
+      data || [];
+
+
+    // ===================================================
+    // 3. CACHE DES DERNIERS UTILISATEURS VALIDES
+    // ===================================================
+
+    cacheAdminUsers(
+      users
+    );
+
+
+    return users;
+
+  } catch (error) {
+
+    // ===================================================
+    // 4. FALLBACK CACHE
+    // ===================================================
+
+    const cachedUsers =
+      getCachedAdminUsers();
+
+    if (cachedUsers) {
+
+      console.warn(
+        "📴 [ADMIN USERS] Requête Supabase échouée → utilisation du cache local"
+      );
+
+      return cachedUsers;
+    }
+
+
+    throw error;
+  }
 }
 
 

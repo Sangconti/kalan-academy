@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 
 import { supabase } from "../../lib/supabase";
+import { logAdminActivity } from "../../services/adminService";
 
 // ===========================================================
 // CONSTANTES
@@ -435,19 +436,46 @@ export default function AdminVideos() {
           throw updateError;
         }
 
-        setLessons((current) =>
-          current.map((lesson) =>
-            lesson.id === data.id
-              ? data
-              : lesson
-          )
-        );
+                setLessons((current) =>
+                  current.map((lesson) =>
+                    lesson.id === data.id
+                      ? data
+                      : lesson
+                  )
+                );
 
-        setEditingLesson(null);
 
-        showSuccess(
-          "Les informations de la vidéo ont été enregistrées."
-        );
+                // ===================================================
+                // JOURNAL ADMINISTRATEUR
+                // ===================================================
+
+                await logAdminActivity({
+                  action: "lesson_video_updated",
+                  targetUserId: null,
+                  details: {
+                    lesson_id: data.id,
+                    lesson_title: data.title || editingLesson.title,
+
+                    video_url:
+                      data.video_url || null,
+
+                    thumbnail_url:
+                      data.thumbnail_url || null,
+
+                    duration_minutes:
+                      data.duration_minutes ?? null,
+
+                    is_premium:
+                      Boolean(data.is_premium),
+                  },
+                });
+
+
+                setEditingLesson(null);
+
+                showSuccess(
+                  "Les informations de la vidéo ont été enregistrées."
+                );
       } catch (err) {
         console.error(
           "Erreur sauvegarde vidéo :",

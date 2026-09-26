@@ -296,7 +296,31 @@ export default function DashboardAdmin() {
       class_deleted: {
         icon: "🗑️",
         label: "Classe supprimée"
-      }
+      },
+
+      admin_settings_updated: {
+        icon: "⚙️",
+        label: "Paramètres administrateur modifiés"
+      },
+
+      lesson_video_updated: {
+        icon: "🎬",
+        label: "Vidéo de leçon modifiée"
+      },
+      subject_created: {
+        icon: "📚",
+        label: "Matière créée"
+      },
+
+      subject_updated: {
+        icon: "✏️",
+        label: "Matière modifiée"
+      },
+
+      subject_deleted: {
+        icon: "🗑️",
+        label: "Matière supprimée"
+      },
 
     };
 
@@ -713,7 +737,8 @@ export default function DashboardAdmin() {
 
 
   // ==========================================
-  // CHARGEMENT INITIAL
+  // CHARGEMENT INITIAL + ACTUALISATION
+  // DU JOURNAL APRÈS UNE ACTION ADMIN
   // ==========================================
 
   useEffect(() => {
@@ -723,6 +748,41 @@ export default function DashboardAdmin() {
     loadStudents();
 
     loadActivityLogs();
+
+
+    // ========================================
+    // NOUVELLE ACTIVITÉ ADMINISTRATIVE
+    // ========================================
+
+    const handleActivityUpdated = () => {
+
+      console.log(
+        "🕘 [ADMIN ACTIVITY] Nouvelle activité détectée → actualisation du journal"
+      );
+
+      loadActivityLogs(true);
+
+    };
+
+
+    window.addEventListener(
+      "kalan-admin-activity-updated",
+      handleActivityUpdated
+    );
+
+
+    // ========================================
+    // NETTOYAGE
+    // ========================================
+
+    return () => {
+
+      window.removeEventListener(
+        "kalan-admin-activity-updated",
+        handleActivityUpdated
+      );
+
+    };
 
   }, []);
 
@@ -761,8 +821,6 @@ export default function DashboardAdmin() {
         "
       >
 
-        {/* CERCLES DÉCORATIFS */}
-
         <div
           className="
             absolute
@@ -775,7 +833,6 @@ export default function DashboardAdmin() {
             opacity-10
           "
         />
-
 
         <div
           className="
@@ -790,7 +847,6 @@ export default function DashboardAdmin() {
           "
         />
 
-
         <div
           className="
             absolute
@@ -803,7 +859,6 @@ export default function DashboardAdmin() {
             opacity-5
           "
         />
-
 
         <div
           className="
@@ -823,8 +878,6 @@ export default function DashboardAdmin() {
             "
           >
 
-            {/* TITRE */}
-
             <div className="min-w-0">
 
               <div
@@ -842,15 +895,9 @@ export default function DashboardAdmin() {
                   mb-4
                 "
               >
-
-                <span>
-                  📊
-                </span>
-
+                <span>📊</span>
                 Administration
-
               </div>
-
 
               <h1
                 className="
@@ -864,7 +911,6 @@ export default function DashboardAdmin() {
               >
                 Dashboard Kalan Academy
               </h1>
-
 
               <p
                 className="
@@ -880,8 +926,6 @@ export default function DashboardAdmin() {
 
             </div>
 
-
-            {/* ACTUALISER */}
 
             <button
               type="button"
@@ -917,7 +961,6 @@ export default function DashboardAdmin() {
                 whitespace-nowrap
               "
             >
-
               <span>
                 {loading ||
                 studentsLoading ||
@@ -926,13 +969,10 @@ export default function DashboardAdmin() {
                   : "↻ Actualiser"
                 }
               </span>
-
             </button>
 
           </div>
 
-
-          {/* MÉTADONNÉES */}
 
           <div
             className="
@@ -962,16 +1002,12 @@ export default function DashboardAdmin() {
                 dark:border-white/10
               "
             >
-
               👨‍🎓
-
               {loading
                 ? "..."
                 : `${stats?.students ?? 0} élèves`
               }
-
             </div>
-
 
             <div
               className="
@@ -991,16 +1027,12 @@ export default function DashboardAdmin() {
                 dark:border-white/10
               "
             >
-
               📚
-
               {loading
                 ? "..."
                 : `${stats?.lessons ?? 0} leçons`
               }
-
             </div>
-
 
             <div
               className="
@@ -1020,14 +1052,11 @@ export default function DashboardAdmin() {
                 dark:border-white/10
               "
             >
-
               📝
-
               {loading
                 ? "..."
                 : `${stats?.quizzes ?? 0} quiz`
               }
-
             </div>
 
           </div>
@@ -1064,7 +1093,6 @@ export default function DashboardAdmin() {
             Erreur
           </p>
 
-
           <p
             className="
               text-sm
@@ -1099,8 +1127,6 @@ export default function DashboardAdmin() {
         "
       >
 
-        {/* CERCLES DÉCORATIFS */}
-
         <div
           className="
             absolute
@@ -1113,7 +1139,6 @@ export default function DashboardAdmin() {
             opacity-10
           "
         />
-
 
         <div
           className="
@@ -1128,7 +1153,6 @@ export default function DashboardAdmin() {
           "
         />
 
-
         <div
           className="
             absolute
@@ -1142,15 +1166,12 @@ export default function DashboardAdmin() {
           "
         />
 
-
         <div
           className="
             relative
             z-10
           "
         >
-
-          {/* TITRE */}
 
           <div className="mb-6">
 
@@ -1169,13 +1190,9 @@ export default function DashboardAdmin() {
                 mb-3
               "
             >
-
               🔐
-
               Sécurité
-
             </div>
-
 
             <h2
               className="
@@ -1187,7 +1204,6 @@ export default function DashboardAdmin() {
             >
               Récupération d'un appareil
             </h2>
-
 
             <p
               className="
@@ -1206,8 +1222,6 @@ export default function DashboardAdmin() {
 
           </div>
 
-
-          {/* SÉLECTION */}
 
           <div
             className="
@@ -1233,7 +1247,6 @@ export default function DashboardAdmin() {
               >
                 Élève concerné
               </label>
-
 
               <select
                 id="recovery-student"
@@ -1275,7 +1288,6 @@ export default function DashboardAdmin() {
                   }
                 </option>
 
-
                 {students.map(
                   (student) => (
 
@@ -1294,8 +1306,6 @@ export default function DashboardAdmin() {
 
             </div>
 
-
-            {/* BOUTON GÉNÉRER */}
 
             <button
               type="button"
@@ -1329,18 +1339,14 @@ export default function DashboardAdmin() {
                 whitespace-nowrap
               "
             >
-
               {generatingRecoveryCode
                 ? "Génération..."
                 : "🔐 Générer le code"
               }
-
             </button>
 
           </div>
 
-
-          {/* CODE GÉNÉRÉ */}
 
           {recoveryCode && (
 
@@ -1356,8 +1362,6 @@ export default function DashboardAdmin() {
               "
             >
 
-              {/* UTILISATEUR */}
-
               <div className="mb-4">
 
                 <p
@@ -1369,7 +1373,6 @@ export default function DashboardAdmin() {
                 >
                   Code généré pour :
                 </p>
-
 
                 <p
                   className="
@@ -1386,8 +1389,6 @@ export default function DashboardAdmin() {
 
               </div>
 
-
-              {/* CODE + COPIER */}
 
               <div
                 className="
@@ -1422,7 +1423,6 @@ export default function DashboardAdmin() {
                   {recoveryCode}
                 </div>
 
-
                 <button
                   type="button"
                   onClick={
@@ -1447,8 +1447,6 @@ export default function DashboardAdmin() {
 
               </div>
 
-
-              {/* AVERTISSEMENT */}
 
               <div
                 className="
@@ -1518,7 +1516,6 @@ export default function DashboardAdmin() {
           description="Comptes étudiants actifs"
         />
 
-
         <StatCard
           title="Premium"
           value={
@@ -1529,7 +1526,6 @@ export default function DashboardAdmin() {
           icon="⭐"
           description="Abonnements premium"
         />
-
 
         <StatCard
           title="Cours"
@@ -1542,7 +1538,6 @@ export default function DashboardAdmin() {
           description="Leçons disponibles"
         />
 
-
         <StatCard
           title="Quiz"
           value={
@@ -1553,7 +1548,6 @@ export default function DashboardAdmin() {
           icon="📝"
           description="Évaluations"
         />
-
 
         <StatCard
           title="XP distribuée"
@@ -1566,7 +1560,6 @@ export default function DashboardAdmin() {
           description="Expérience totale"
         />
 
-
         <StatCard
           title="Classes"
           value={
@@ -1577,7 +1570,6 @@ export default function DashboardAdmin() {
           icon="🏫"
           description="Niveaux scolaires"
         />
-
 
         <StatCard
           title="Matières"
@@ -1613,8 +1605,6 @@ export default function DashboardAdmin() {
         "
       >
 
-        {/* EN-TÊTE */}
-
         <div
           className="
             flex
@@ -1647,13 +1637,9 @@ export default function DashboardAdmin() {
                 mb-2
               "
             >
-
               ⚙️
-
               Système
-
             </div>
-
 
             <h2
               className="
@@ -1667,7 +1653,6 @@ export default function DashboardAdmin() {
             </h2>
 
           </div>
-
 
           <span
             className="
@@ -1693,8 +1678,6 @@ export default function DashboardAdmin() {
         </div>
 
 
-        {/* INFORMATIONS */}
-
         <div
           className="
             grid
@@ -1706,8 +1689,6 @@ export default function DashboardAdmin() {
             min-w-0
           "
         >
-
-          {/* CONTENU */}
 
           <div
             className="
@@ -1729,7 +1710,6 @@ export default function DashboardAdmin() {
               Contenu pédagogique
             </p>
 
-
             <p
               className="
                 text-base
@@ -1740,18 +1720,14 @@ export default function DashboardAdmin() {
                 break-words
               "
             >
-
               {loading
                 ? "..."
                 : `${stats?.lessons ?? 0} leçons`
               }
-
             </p>
 
           </div>
 
-
-          {/* ÉVALUATIONS */}
 
           <div
             className="
@@ -1773,7 +1749,6 @@ export default function DashboardAdmin() {
               Évaluations
             </p>
 
-
             <p
               className="
                 text-base
@@ -1784,18 +1759,14 @@ export default function DashboardAdmin() {
                 break-words
               "
             >
-
               {loading
                 ? "..."
                 : `${stats?.quizzes ?? 0} quiz`
               }
-
             </p>
 
           </div>
 
-
-          {/* PREMIUM */}
 
           <div
             className="
@@ -1817,7 +1788,6 @@ export default function DashboardAdmin() {
               Utilisateurs premium
             </p>
 
-
             <p
               className="
                 text-base
@@ -1828,18 +1798,14 @@ export default function DashboardAdmin() {
                 break-words
               "
             >
-
               {loading
                 ? "..."
                 : `${stats?.premium ?? 0} abonnés`
               }
-
             </p>
 
           </div>
 
-
-          {/* XP */}
 
           <div
             className="
@@ -1861,7 +1827,6 @@ export default function DashboardAdmin() {
               XP distribuée
             </p>
 
-
             <p
               className="
                 text-base
@@ -1872,12 +1837,10 @@ export default function DashboardAdmin() {
                 break-words
               "
             >
-
               {loading
                 ? "..."
                 : `${stats?.totalXP ?? 0} XP`
               }
-
             </p>
 
           </div>
@@ -1939,13 +1902,9 @@ export default function DashboardAdmin() {
                 mb-3
               "
             >
-
               🕘
-
               Journal
-
             </div>
-
 
             <h2
               className="
@@ -1957,7 +1916,6 @@ export default function DashboardAdmin() {
             >
               Activité récente
             </h2>
-
 
             <p
               className="
@@ -1971,8 +1929,6 @@ export default function DashboardAdmin() {
 
           </div>
 
-
-          {/* ACTUALISER LE JOURNAL */}
 
           <button
             type="button"
@@ -2006,12 +1962,10 @@ export default function DashboardAdmin() {
               sm:w-auto
             "
           >
-
             {activityRefreshing
               ? "Actualisation..."
               : "↻ Actualiser"
             }
-
           </button>
 
         </div>
@@ -2038,7 +1992,6 @@ export default function DashboardAdmin() {
             <p className="text-sm font-semibold">
               Journal indisponible
             </p>
-
 
             <p className="text-sm mt-1">
               {activityError}
@@ -2152,7 +2105,6 @@ export default function DashboardAdmin() {
               🕘
             </div>
 
-
             <p
               className="
                 font-semibold
@@ -2161,7 +2113,6 @@ export default function DashboardAdmin() {
             >
               Aucune activité enregistrée
             </p>
-
 
             <p
               className="
@@ -2178,16 +2129,17 @@ export default function DashboardAdmin() {
         )}
 
 
-        {/* LISTE DES ACTIVITÉS */}
+        {/* ==========================================
+            LISTE DES ACTIVITÉS
+        ========================================== */}
 
         {!activityLoading &&
-        !activityError &&
-        activityLogs.length > 0 && (
+          !activityError &&
+          activityLogs.length > 0 && (
 
-          <div className="space-y-3">
+            <div className="space-y-3 mt-4">
 
-            {activityLogs.map(
-              (activity) => {
+              {activityLogs.map((activity) => {
 
                 const meta =
                   getActivityMeta(
@@ -2218,9 +2170,13 @@ export default function DashboardAdmin() {
                       p-4
                       rounded-2xl
                       border
-                      theme-border
-                      theme-surface
-                      hover:bg-accent-soft
+                      border-gray-200
+                      dark:border-gray-700
+                      bg-white
+                      dark:bg-gray-800
+                      shadow-sm
+                      hover:bg-gray-50
+                      dark:hover:bg-gray-700
                       transition
                       min-w-0
                     "
@@ -2233,9 +2189,11 @@ export default function DashboardAdmin() {
                         w-11
                         h-11
                         rounded-xl
-                        bg-accent-soft
+                        bg-blue-50
+                        dark:bg-blue-900/30
                         border
-                        border-accent
+                        border-blue-200
+                        dark:border-blue-800
                         flex
                         items-center
                         justify-center
@@ -2256,6 +2214,8 @@ export default function DashboardAdmin() {
                       "
                     >
 
+                      {/* ACTION + DATE */}
+
                       <div
                         className="
                           flex
@@ -2270,7 +2230,8 @@ export default function DashboardAdmin() {
                         <p
                           className="
                             font-semibold
-                            theme-text
+                            text-gray-900
+                            dark:text-gray-100
                             text-sm
                             sm:text-base
                             break-words
@@ -2279,11 +2240,11 @@ export default function DashboardAdmin() {
                           {meta.label}
                         </p>
 
-
                         <span
                           className="
                             text-xs
-                            theme-text-secondary
+                            text-gray-500
+                            dark:text-gray-400
                             whitespace-nowrap
                             shrink-0
                           "
@@ -2302,20 +2263,24 @@ export default function DashboardAdmin() {
                         className="
                           text-xs
                           sm:text-sm
-                          theme-text-secondary
+                          text-gray-500
+                          dark:text-gray-400
                           mt-1
                           break-words
                         "
                       >
                         Par{" "}
+
                         <span
                           className="
                             font-medium
-                            theme-text
+                            text-gray-900
+                            dark:text-gray-100
                           "
                         >
                           {adminName}
                         </span>
+
                       </p>
 
 
@@ -2327,19 +2292,19 @@ export default function DashboardAdmin() {
                           className="
                             text-xs
                             sm:text-sm
-                            theme-text-secondary
+                            text-gray-500
+                            dark:text-gray-400
                             mt-1
                             break-words
                           "
                         >
-                          {(
-                            activity?.action ===
-                              "class_created" ||
-                            activity?.action ===
-                              "class_updated" ||
-                            activity?.action ===
-                              "class_deleted"
-                          )
+
+                          {activity?.action ===
+                            "class_created" ||
+                          activity?.action ===
+                            "class_updated" ||
+                          activity?.action ===
+                            "class_deleted"
                             ? "Classe : "
                             : "Utilisateur : "
                           }
@@ -2347,7 +2312,8 @@ export default function DashboardAdmin() {
                           <span
                             className="
                               font-medium
-                              theme-text
+                              text-gray-900
+                              dark:text-gray-100
                             "
                           >
                             {target}
@@ -2358,7 +2324,7 @@ export default function DashboardAdmin() {
                       )}
 
 
-                      {/* INFORMATIONS COMPLÉMENTAIRES */}
+                      {/* NOUVEAU RÔLE */}
 
                       {activity?.action ===
                         "user_role_updated" &&
@@ -2367,23 +2333,29 @@ export default function DashboardAdmin() {
                         <p
                           className="
                             text-xs
-                            theme-text-secondary
+                            text-gray-500
+                            dark:text-gray-400
                             mt-1
                           "
                         >
                           Nouveau rôle :{" "}
+
                           <span
                             className="
                               font-medium
-                              theme-text
+                              text-gray-900
+                              dark:text-gray-100
                             "
                           >
                             {details.new_role}
                           </span>
+
                         </p>
 
                       )}
 
+
+                      {/* STATUT D'ACCÈS */}
 
                       {activity?.action ===
                         "user_access_updated" &&
@@ -2392,23 +2364,29 @@ export default function DashboardAdmin() {
                         <p
                           className="
                             text-xs
-                            theme-text-secondary
+                            text-gray-500
+                            dark:text-gray-400
                             mt-1
                           "
                         >
                           Statut d'accès :{" "}
+
                           <span
                             className="
                               font-medium
-                              theme-text
+                              text-gray-900
+                              dark:text-gray-100
                             "
                           >
                             {details.access_status}
                           </span>
+
                         </p>
 
                       )}
 
+
+                      {/* PREMIUM */}
 
                       {activity?.action ===
                         "user_premium_updated" &&
@@ -2418,15 +2396,18 @@ export default function DashboardAdmin() {
                         <p
                           className="
                             text-xs
-                            theme-text-secondary
+                            text-gray-500
+                            dark:text-gray-400
                             mt-1
                           "
                         >
                           Premium :{" "}
+
                           <span
                             className="
                               font-medium
-                              theme-text
+                              text-gray-900
+                              dark:text-gray-100
                             "
                           >
                             {details.is_premium
@@ -2434,10 +2415,13 @@ export default function DashboardAdmin() {
                               : "Désactivé"
                             }
                           </span>
+
                         </p>
 
                       )}
 
+
+                      {/* RÉINITIALISATION DE PROGRESSION */}
 
                       {activity?.action ===
                         "progress_reset" &&
@@ -2449,19 +2433,25 @@ export default function DashboardAdmin() {
                         <p
                           className="
                             text-xs
-                            theme-text-secondary
+                            text-gray-500
+                            dark:text-gray-400
                             mt-1
                           "
                         >
                           Version de réinitialisation :{" "}
+
                           <span
                             className="
                               font-medium
-                              theme-text
+                              text-gray-900
+                              dark:text-gray-100
                             "
                           >
-                            {details.progress_reset_version}
+                            {
+                              details.progress_reset_version
+                            }
                           </span>
+
                         </p>
 
                       )}
@@ -2471,16 +2461,13 @@ export default function DashboardAdmin() {
                   </div>
 
                 );
+              })}
 
-              }
-            )}
+            </div>
 
-          </div>
-
-        )}
+          )}
 
       </div>
-
 
     </div>
 

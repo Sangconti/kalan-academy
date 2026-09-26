@@ -40,28 +40,12 @@ const NETWORK_CACHE_DURATION = 5000;
 
 const NETWORK_TIMEOUT = 1500;
 
+const SUPABASE_URL =
+  "https://gchimptswrhchpdtemni.supabase.co";
+
 
 // ------------------------------------------------------
 // Vérifie réellement si Supabase est accessible
-// ------------------------------------------------------
-//
-// IMPORTANT
-//
-// On n'utilise plus :
-//
-//     HEAD /rest/v1/
-//
-// car cette requête directe n'envoie pas correctement
-// le contexte du client Supabase et provoquait :
-//
-//     401 Unauthorized
-//
-// À la place, on utilise le client Supabase déjà
-// configuré dans src/lib/supabase.js.
-//
-// Une petite requête sur "classes" permet de vérifier
-// que Supabase répond réellement.
-//
 // ------------------------------------------------------
 
 async function checkSupabaseConnection() {
@@ -103,7 +87,7 @@ async function checkSupabaseConnection() {
 
 
   // ----------------------------------------------------
-  // Vérification réelle Supabase
+  // Vérification HTTP Supabase
   // ----------------------------------------------------
 
   const controller =
@@ -119,85 +103,51 @@ async function checkSupabaseConnection() {
 
   try {
 
-    const {
-      data,
-      error
-    } = await supabase
-      .from("classes")
-      .select("id")
-      .limit(1);
+    const response =
+      await fetch(
+        `${SUPABASE_URL}/rest/v1/`,
+        {
+          method: "HEAD",
+          signal: controller.signal
+        }
+      );
 
 
     clearTimeout(timeout);
 
 
-    // --------------------------------------------------
-    // Une réponse Supabase signifie que le serveur
-    // est joignable.
-    //
-    // Même une erreur Supabase avec un code HTTP
-    // signifie que le serveur a répondu.
-    // --------------------------------------------------
+    /*
+     * --------------------------------------------------
+     * IMPORTANT
+     *
+     * Un 401 signifie que Supabase a bien répondu.
+     * Ce n'est donc PAS une perte de réseau.
+     *
+     * Même principe pour 404 :
+     * le serveur est joignable.
+     * --------------------------------------------------
+     */
 
-    if (error) {
+    networkStatus =
+      response.ok ||
+      response.status === 401 ||
+      response.status === 404;
 
-      const status =
-        Number(error?.status);
-
-
-      if (
-        Number.isFinite(status)
-      ) {
-
-        networkStatus = true;
-
-        networkCheckedAt =
-          Date.now();
-
-        console.log(
-          "🌐 Supabase accessible"
-        );
-
-        return true;
-
-      }
-
-
-      // ------------------------------------------------
-      // Pas de statut HTTP :
-      // probablement problème réseau / connexion.
-      // ------------------------------------------------
-
-      networkStatus = false;
-
-      networkCheckedAt =
-        Date.now();
-
-      console.warn(
-        "📴 Supabase inaccessible → mode offline",
-        error?.message || error
-      );
-
-      return false;
-
-    }
-
-
-    // --------------------------------------------------
-    // Supabase a répondu correctement
-    // --------------------------------------------------
-
-    networkStatus = true;
 
     networkCheckedAt =
       Date.now();
 
-    console.log(
-      "🌐 Supabase accessible"
-    );
+
+    if (networkStatus) {
+
+      console.log(
+        "🌐 Supabase accessible"
+      );
+
+    }
 
 
-    return true;
+    return networkStatus;
 
   } catch (error) {
 

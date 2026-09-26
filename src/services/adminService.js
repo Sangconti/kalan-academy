@@ -176,6 +176,19 @@ export async function logAdminActivity({
       return false;
     }
 
+    console.log(
+      "✅ [ADMIN ACTIVITY] Activité enregistrée :",
+      action
+    );
+
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent(
+          "kalan-admin-activity-updated"
+        )
+      );
+    }
+
     return true;
 
   } catch (error) {

@@ -21,6 +21,7 @@ import {
   deleteSubject,
   getChapters,
 } from "../../services/educationAdminService";
+import { logAdminActivity } from "../../services/adminService";
 
 export default function AdminSubjects() {
   const navigate = useNavigate();
@@ -158,16 +159,63 @@ export default function AdminSubjects() {
       };
 
       if (editing) {
-        await updateSubject(editing.id, payload);
+        const updatedSubject =
+          await updateSubject(
+            editing.id,
+            payload
+          );
+
+        await logAdminActivity({
+          action: "subject_updated",
+          details: {
+            subject_id: updatedSubject?.id || editing.id,
+            subject_name:
+              updatedSubject?.name ||
+              payload.name,
+            subject_code:
+              updatedSubject?.code ||
+              payload.code,
+            class_id:
+              updatedSubject?.class_id ||
+              payload.class_id,
+            order_number:
+              updatedSubject?.order_number ??
+              payload.order_number,
+          },
+        });
       } else {
-        await createSubject(payload);
+        const createdSubject =
+          await createSubject(payload);
+
+        await logAdminActivity({
+          action: "subject_created",
+          details: {
+            subject_id:
+              createdSubject?.id || null,
+            subject_name:
+              createdSubject?.name ||
+              payload.name,
+            subject_code:
+              createdSubject?.code ||
+              payload.code,
+            class_id:
+              createdSubject?.class_id ||
+              payload.class_id,
+            order_number:
+              createdSubject?.order_number ??
+              payload.order_number,
+          },
+        });
       }
 
       resetForm();
 
       await loadSubjects();
     } catch (error) {
-      console.error("Erreur sauvegarde matière", error);
+      console.error(
+        "Erreur sauvegarde matière",
+        error
+      );
 
       alert(
         error?.message ||
@@ -209,6 +257,16 @@ export default function AdminSubjects() {
 
     try {
       await deleteSubject(id);
+
+      await logAdminActivity({
+        action: "subject_deleted",
+        details: {
+          subject_id: id,
+          subject_name: subject?.name || null,
+          subject_code: subject?.code || null,
+          class_id: subject?.class_id || null,
+        },
+      });
 
       await loadSubjects();
     } catch (error) {

@@ -5,7 +5,7 @@ import {
 
 import { useNavigate } from "react-router-dom";
 
-import { supabase } from "../../lib/supabase";
+import { resetUserDevice } from "../../services/deviceService";
 
 import UserTable from "../../components/admin/UserTable";
 import UserFilters from "../../components/admin/UserFilters";
@@ -17,6 +17,7 @@ import {
   deleteAdminUser,
   updateUserAccessStatus
 } from "../../services/adminService";
+
 
 export default function UsersAdmin() {
   const navigate = useNavigate();
@@ -63,52 +64,6 @@ export default function UsersAdmin() {
     } catch (error) {
       console.error(
         "Erreur suppression utilisateur :",
-        error
-      );
-
-      throw error;
-    }
-  }
-
-  // =====================================================
-  // RÉINITIALISATION APPAREIL
-  // =====================================================
-
-  async function resetUserDevice(id) {
-    try {
-      const {
-        data,
-        error
-      } = await supabase.rpc(
-        "reset_user_device",
-        {
-          p_user_id: id
-        }
-      );
-
-      if (error) {
-        console.error(
-          "❌ [ADMIN] Erreur RPC reset appareil :",
-          error
-        );
-
-        throw error;
-      }
-
-      if (!data?.success) {
-        throw new Error(
-          data?.status === "not_authorized"
-            ? "Vous n'êtes pas autorisé à réinitialiser cet appareil."
-            : data?.status === "not_authenticated"
-              ? "Votre session administrateur n'est plus valide."
-              : "Impossible de réinitialiser l'appareil."
-        );
-      }
-
-      await load();
-    } catch (error) {
-      console.error(
-        "Erreur réinitialisation appareil :",
         error
       );
 

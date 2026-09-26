@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
+import { logAdminActivity } from "../../services/adminService";
 
+import { useEffect, useState } from "react";
 import {
   Save,
   RefreshCw,
@@ -12,8 +14,6 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
-
-import { supabase } from "../../lib/supabase";
 
 
 const DEFAULT_SETTINGS = {
@@ -350,14 +350,56 @@ export default function AdminSettings() {
       }
 
 
-      // =====================================================
-      // SUCCÈS
-      // =====================================================
+            // =====================================================
+            // JOURNAL ADMINISTRATEUR
+            // =====================================================
 
-      setSuccess(
-        "Les paramètres ont été enregistrés avec succès."
-      );
+            await logAdminActivity({
+              action: "admin_settings_updated",
+              details: {
+                academy_name:
+                  payload.academy_name,
 
+                academy_description:
+                  payload.academy_description,
+
+                video_default_duration:
+                  payload.video_default_duration,
+
+                video_premium_enabled:
+                  payload.video_premium_enabled,
+
+                xp_lesson_completion:
+                  payload.xp_lesson_completion,
+
+                xp_quiz_completion:
+                  payload.xp_quiz_completion,
+
+                xp_quiz_perfect:
+                  payload.xp_quiz_perfect,
+
+                level_base_xp:
+                  payload.level_base_xp,
+
+                badges_enabled:
+                  payload.badges_enabled,
+
+                app_maintenance_mode:
+                  payload.app_maintenance_mode,
+
+                app_registration_enabled:
+                  payload.app_registration_enabled,
+              },
+            });
+
+
+            // =====================================================
+            // SUCCÈS
+            // =====================================================
+
+            setSuccess(
+              "Les paramètres ont été enregistrés avec succès."
+            );
 
       setTimeout(() => {
         setSuccess("");

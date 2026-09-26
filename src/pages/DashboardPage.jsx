@@ -362,7 +362,7 @@ export default function DashboardPage({
                     id,
                     name,
                     description,
-                    icon
+                    image_url
                   )
                 `
               )
@@ -2231,10 +2231,12 @@ export default function DashboardPage({
                         mb-3
                       "
                     >
-                      {badge?.icon ? (
-                        <span className="text-2xl">
-                          {badge.icon}
-                        </span>
+                      {badge?.image_url ? (
+                        <img
+                          src={badge.image_url}
+                          alt={badge.name || "Badge"}
+                          className="w-10 h-10 object-contain"
+                        />
                       ) : (
                         <Award
                           size={24}

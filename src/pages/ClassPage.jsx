@@ -172,222 +172,27 @@ export default function ClassPage() {
 
 
         // =================================================
-        // MODE CONSULTATION / APERÇU
+        // 📦 DEXIE TOUJOURS EN PREMIER
         // =================================================
-        // Dexie est toujours prioritaire.
         //
-        // Si le cache contient les matières :
-        // → aucun réseau.
+        // Tous les modes utilisent la même priorité :
         //
-        // Si le cache est vide :
-        // → Supabase directement si disponible.
-        // → Aucun appel à isOnline().
-        // → Aucun HEAD /rest/v1/.
-        // =================================================
-
-        if (
-          isConsultation ||
-          isStudentPreview
-        ) {
-
-          console.log(
-            isConsultation
-              ? "👁️ [CONSULTATION] Chargement matières depuis Dexie :"
-              : "👁️ [APERÇU] Chargement matières depuis Dexie :",
-            classId
-          );
-
-
-          const cachedSubjects =
-            await getCachedSubjects(
-              classId
-            );
-
-
-          if (
-            Array.isArray(cachedSubjects) &&
-            cachedSubjects.length > 0
-          ) {
-
-            console.log(
-              isConsultation
-                ? "📦 [CONSULTATION] Matières trouvées dans Dexie"
-                : "📦 [APERÇU] Matières trouvées dans Dexie"
-            );
-
-
-            if (!cancelled) {
-
-              setSubjects(
-                cachedSubjects
-              );
-
-            }
-
-
-            return;
-
-          }
-
-
-          console.log(
-            isConsultation
-              ? "📭 [CONSULTATION] Aucune matière en cache"
-              : "📭 [APERÇU] Aucune matière en cache"
-          );
-
-
-          // -------------------------------------------------
-          // CACHE VIDE + HORS LIGNE
-          // -------------------------------------------------
-
-          if (!isOnline) {
-
-            console.log(
-              isConsultation
-                ? "📴 [CONSULTATION] Cache vide et hors ligne"
-                : "📴 [APERÇU] Cache vide et hors ligne"
-            );
-
-
-            if (!cancelled) {
-
-              setSubjects([]);
-
-            }
-
-
-            return;
-
-          }
-
-
-          // -------------------------------------------------
-          // CACHE VIDE + EN LIGNE
-          // -------------------------------------------------
-
-          console.log(
-            isConsultation
-              ? "🌐 [CONSULTATION] Chargement matières depuis Supabase"
-              : "🌐 [APERÇU] Chargement matières depuis Supabase"
-          );
-
-
-          const {
-            data,
-            error: subjectsError
-          } = await supabase
-            .from("subjects")
-            .select("*")
-            .eq("class_id", classId);
-
-
-          if (subjectsError) {
-            throw subjectsError;
-          }
-
-
-          const filtered =
-            (data || []).filter(
-              subject =>
-                String(subject.class_id) ===
-                String(classId)
-            );
-
-
-          if (
-            filtered.length > 0
-          ) {
-
-            await cacheSubjects(
-              filtered
-            );
-
-          }
-
-
-          if (!cancelled) {
-
-            setSubjects(
-              filtered
-            );
-
-          }
-
-
-          return;
-
-        }
-
-
-        // =================================================
-        // MODE ÉLÈVE NORMAL
-        // =================================================
-        // Supabase direct si Internet disponible.
-        // Aucun HEAD /rest/v1/.
-        // =================================================
-
-        if (isOnline) {
-
-          console.log(
-            "🌐 [ÉLÈVE] Chargement matières depuis Supabase :",
-            classId
-          );
-
-
-          const {
-            data,
-            error: subjectsError
-          } = await supabase
-            .from("subjects")
-            .select("*")
-            .eq("class_id", classId);
-
-
-          if (subjectsError) {
-            throw subjectsError;
-          }
-
-
-          const filtered =
-            (data || []).filter(
-              subject =>
-                String(subject.class_id) ===
-                String(classId)
-            );
-
-
-          if (
-            filtered.length > 0
-          ) {
-
-            await cacheSubjects(
-              filtered
-            );
-
-          }
-
-
-          if (!cancelled) {
-
-            setSubjects(
-              filtered
-            );
-
-          }
-
-
-          return;
-
-        }
-
-
-        // =================================================
-        // MODE ÉLÈVE NORMAL HORS LIGNE
+        // 1. Dexie
+        // 2. Si cache disponible → aucun réseau
+        // 3. Si cache absent :
+        //    - hors ligne → Dexie uniquement
+        //    - en ligne → Supabase
+        //
+        // Aucun appel à educationService.isOnline()
+        // Aucun HEAD /rest/v1/
         // =================================================
 
         console.log(
-          "📴 [ÉLÈVE] Chargement matières depuis Dexie :",
+          isConsultation
+            ? "👁️ [CONSULTATION] Chargement matières depuis Dexie :"
+            : isStudentPreview
+              ? "👁️ [APERÇU] Chargement matières depuis Dexie :"
+              : "📦 [ÉLÈVE] Chargement matières depuis Dexie :",
           classId
         );
 
@@ -398,15 +203,158 @@ export default function ClassPage() {
           );
 
 
+        if (cancelled) {
+          return;
+        }
+
+
+        // =================================================
+        // 📦 CACHE DISPONIBLE
+        // =================================================
+
+        if (
+          Array.isArray(cachedSubjects) &&
+          cachedSubjects.length > 0
+        ) {
+
+          console.log(
+            isConsultation
+              ? "📦 [CONSULTATION] Matières trouvées dans Dexie"
+              : isStudentPreview
+                ? "📦 [APERÇU] Matières trouvées dans Dexie"
+                : "📦 [ÉLÈVE] Matières trouvées dans Dexie"
+          );
+
+
+          if (!cancelled) {
+
+            setSubjects(
+              cachedSubjects
+            );
+
+          }
+
+
+          return;
+
+        }
+
+
+        // =================================================
+        // 📭 CACHE VIDE
+        // =================================================
+
+        console.log(
+          isConsultation
+            ? "📭 [CONSULTATION] Aucune matière en cache"
+            : isStudentPreview
+              ? "📭 [APERÇU] Aucune matière en cache"
+              : "📭 [ÉLÈVE] Aucune matière en cache"
+        );
+
+
+        // =================================================
+        // 📴 CACHE VIDE + HORS LIGNE
+        // =================================================
+
+        if (!navigator.onLine) {
+
+          console.log(
+            isConsultation
+              ? "📴 [CONSULTATION] Cache vide et hors ligne"
+              : isStudentPreview
+                ? "📴 [APERÇU] Cache vide et hors ligne"
+                : "📴 [ÉLÈVE] Cache vide et hors ligne"
+          );
+
+
+          if (!cancelled) {
+
+            setSubjects([]);
+
+          }
+
+
+          return;
+
+        }
+
+
+        // =================================================
+        // 🌐 CACHE VIDE + EN LIGNE
+        // =================================================
+
+        console.log(
+          isConsultation
+            ? "🌐 [CONSULTATION] Matières absentes de Dexie → Supabase"
+            : isStudentPreview
+              ? "🌐 [APERÇU] Matières absentes de Dexie → Supabase"
+              : "🌐 [ÉLÈVE] Matières absentes de Dexie → Supabase"
+        );
+
+
+        const {
+          data,
+          error: subjectsError
+        } = await supabase
+          .from("subjects")
+          .select("*")
+          .eq("class_id", classId);
+
+
+        if (subjectsError) {
+          throw subjectsError;
+        }
+
+
+        if (cancelled) {
+          return;
+        }
+
+
+        const filtered =
+          (data || []).filter(
+            subject =>
+              String(subject.class_id) ===
+              String(classId)
+          );
+
+
+        // =================================================
+        // 💾 MISE EN CACHE
+        // =================================================
+
+        if (
+          filtered.length > 0
+        ) {
+
+          await cacheSubjects(
+            filtered
+          );
+
+
+          if (cancelled) {
+            return;
+          }
+
+        }
+
+
         if (!cancelled) {
 
           setSubjects(
-            cachedSubjects || []
+            filtered
           );
 
         }
 
+
       } catch (err) {
+
+        if (cancelled) {
+          return;
+        }
+
 
         console.error(
           "Erreur chargement matières :",
@@ -415,7 +363,7 @@ export default function ClassPage() {
 
 
         // =================================================
-        // FALLBACK DEXIE
+        // 📦 FALLBACK DEXIE
         // =================================================
 
         try {
@@ -424,6 +372,11 @@ export default function ClassPage() {
             await getCachedSubjects(
               classId
             );
+
+
+          if (cancelled) {
+            return;
+          }
 
 
           if (
@@ -436,16 +389,11 @@ export default function ClassPage() {
             );
 
 
-            if (!cancelled) {
+            setSubjects(
+              cachedSubjects
+            );
 
-              setSubjects(
-                cachedSubjects
-              );
-
-              setError("");
-
-            }
-
+            setError("");
 
             return;
 
@@ -453,10 +401,14 @@ export default function ClassPage() {
 
         } catch (cacheError) {
 
-          console.error(
-            "Erreur fallback Dexie :",
-            cacheError
-          );
+          if (!cancelled) {
+
+            console.error(
+              "Erreur fallback Dexie :",
+              cacheError
+            );
+
+          }
 
         }
 
@@ -882,9 +834,6 @@ export default function ClassPage() {
         mb-8
       ">
 
-
-        {/* CERCLES DÉCORATIFS */}
-
         <div className="
           absolute
           -right-10
@@ -894,7 +843,7 @@ export default function ClassPage() {
           rounded-full
           bg-accent
           opacity-10
-        " />
+        "/>
 
 
         <div className="
@@ -906,7 +855,7 @@ export default function ClassPage() {
           rounded-full
           bg-accent
           opacity-10
-        " />
+        "/>
 
 
         <div className="
@@ -918,7 +867,7 @@ export default function ClassPage() {
           rounded-full
           bg-accent
           opacity-5
-        " />
+        "/>
 
 
         <div className="
@@ -1064,30 +1013,20 @@ export default function ClassPage() {
                     group
                     relative
                     overflow-hidden
-
                     theme-surface
-
                     rounded-3xl
-
                     border
                     theme-border
-
                     p-5
                     md:p-6
-
                     text-left
-
                     shadow-sm
-
                     hover:shadow-xl
                     hover:-translate-y-1
-
                     transition-all
-
                     hover:border-accent
                   "
                 >
-
 
                   {/* BARRE ACCENT */}
 
@@ -1107,7 +1046,6 @@ export default function ClassPage() {
                     justify-between
                     gap-4
                   ">
-
 
                     {/* ICÔNE */}
 
@@ -1233,7 +1171,6 @@ export default function ClassPage() {
                     />
 
                   </div>
-
 
                 </button>
 

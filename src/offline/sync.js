@@ -179,19 +179,6 @@ async function checkProgressReset() {
       4. UNE NOUVELLE RÉINITIALISATION
       A ÉTÉ DÉTECTÉE
       ----------------------------------
-
-      Exemple :
-
-        local = 0
-        serveur = 1
-
-      Cela signifie qu'une réinitialisation
-      a été effectuée depuis le dernier
-      passage de l'application.
-
-      On doit donc supprimer les anciennes
-      données locales AVANT toute nouvelle
-      synchronisation.
     */
 
     if (
@@ -211,12 +198,6 @@ async function checkProgressReset() {
         userId
       );
 
-
-      /*
-        On enregistre la nouvelle version
-        uniquement après avoir supprimé
-        les anciennes données.
-      */
 
       setLocalProgressResetVersion(
         userId,
@@ -251,28 +232,12 @@ async function checkProgressReset() {
       ----------------------------------
       5. PREMIÈRE INITIALISATION
       ----------------------------------
-
-      Si le serveur et le local sont
-      tous les deux à 0, on initialise
-      simplement la version locale.
-
-      Cela évite de refaire cette logique
-      à chaque synchronisation.
     */
 
     if (
       serverVersion ===
       localVersion
     ) {
-      /*
-        On écrit quand même la valeur
-        lorsqu'elle n'existait pas encore.
-
-        Pour la version 0, cela permet
-        notamment d'initialiser proprement
-        le stockage local.
-      */
-
       setLocalProgressResetVersion(
         userId,
         serverVersion
@@ -284,16 +249,6 @@ async function checkProgressReset() {
       ----------------------------------
       6. CAS ANORMAL
       ----------------------------------
-
-      La version serveur est supposée
-      être monotone.
-
-      Elle ne devrait donc jamais être
-      inférieure à la version locale.
-
-      On ne supprime aucune donnée dans
-      ce cas afin d'éviter une suppression
-      locale injustifiée.
     */
 
     if (
@@ -362,36 +317,11 @@ export async function syncPendingData() {
       0. VÉRIFIER UNE ÉVENTUELLE
          RÉINITIALISATION SERVEUR
       ----------------------------------
-
-      IMPORTANT :
-
-      Cette étape doit impérativement
-      avoir lieu AVANT de transformer les
-      anciennes données Dexie en opérations
-      de synchronisation.
-
-      Sinon une ancienne progression
-      pourrait être renvoyée vers Supabase
-      après une réinitialisation admin.
     */
 
     const resetCheck =
       await checkProgressReset();
 
-
-    /*
-      ----------------------------------
-      PROTECTION EN CAS D'ERREUR RÉSEAU
-      ----------------------------------
-
-      Si la vérification du reset n'a pas
-      pu être effectuée, on ne prend pas
-      le risque d'envoyer une ancienne
-      progression potentiellement réinitialisée.
-
-      On arrête donc uniquement la
-      synchronisation utilisateur.
-    */
 
     if (
       resetCheck?.checked === false
@@ -417,12 +347,6 @@ export async function syncPendingData() {
       1. AJOUTER LES DONNÉES LOCALES
          NON SYNCHRONISÉES À LA QUEUE
       ----------------------------------
-
-      La vérification du reset a déjà
-      été effectuée.
-
-      Les anciennes données d'un élève
-      réinitialisé ont donc été supprimées.
     */
 
     await Promise.all([
@@ -435,18 +359,6 @@ export async function syncPendingData() {
       ----------------------------------
       2. DEUXIÈME VÉRIFICATION
       ----------------------------------
-
-      Cette deuxième vérification protège
-      contre le cas où une réinitialisation
-      aurait été effectuée entre :
-
-        - la première vérification
-        - la création de la queue
-
-      Si une nouvelle version apparaît,
-      clearLocalUserProgress() supprime
-      immédiatement les opérations locales
-      correspondantes avant leur traitement.
     */
 
     const secondResetCheck =
@@ -476,15 +388,6 @@ export async function syncPendingData() {
       ----------------------------------
       3. TRAITER LA QUEUE
       ----------------------------------
-
-      IMPORTANT :
-
-      On conserve volontairement un
-      traitement séquentiel.
-
-      Certaines opérations, notamment
-      le XP et les fusions de progression,
-      doivent respecter leur ordre.
     */
 
     const queue =
@@ -641,15 +544,24 @@ async function queueUnsyncedQuizAttempts() {
       local_record_id:
         attempt.id,
 
+      /*
+        IMPORTANT :
+
+        Dexie peut conserver lesson_id pour
+        le fonctionnement offline.
+
+        Mais la table Supabase quiz_attempts
+        ne possède PAS de colonne lesson_id.
+
+        On ne l'envoie donc pas à Supabase.
+      */
+
       payload: {
         user_id:
           attempt.user_id,
 
         quiz_id:
           attempt.quiz_id,
-
-        lesson_id:
-          attempt.lesson_id || null,
 
         score:
           Number(attempt.score) || 0,
@@ -1023,12 +935,43 @@ async function processQueueItem(item) {
     table_name === "quiz_attempts" &&
     action === "insert"
   ) {
+    /*
+      Sécurité supplémentaire :
+
+      Même si une ancienne opération de
+      syncQueue contient encore lesson_id,
+      on construit ici un payload strictement
+      compatible avec le schéma Supabase.
+
+      Cela permet notamment de traiter les
+      anciennes opérations déjà présentes dans
+      la queue avant cette correction.
+    */
+
+    const quizPayload = {
+      user_id:
+        payload?.user_id,
+
+      quiz_id:
+        payload?.quiz_id,
+
+      score:
+        Number(payload?.score) || 0,
+
+      answers:
+        payload?.answers || {},
+
+      attempt_number:
+        Number(payload?.attempt_number) || 1
+    };
+
+
     const {
       error
     } = await supabase
       .from("quiz_attempts")
       .insert(
-        payload
+        quizPayload
       );
 
 
@@ -1039,7 +982,7 @@ async function processQueueItem(item) {
       ) {
         console.warn(
           "⚠️ Tentative quiz déjà présente dans Supabase :",
-          payload
+          quizPayload
         );
 
 
@@ -1288,10 +1231,6 @@ async function syncXP(
     ----------------------------------
     VÉRIFICATION RESET AVANT XP
     ----------------------------------
-
-    Une opération XP ancienne ne doit
-    jamais pouvoir ressusciter le XP
-    supprimé par une réinitialisation.
   */
 
   const resetCheck =
@@ -1308,16 +1247,6 @@ async function syncXP(
     return false;
   }
 
-
-  /*
-    Si une nouvelle réinitialisation a
-    été détectée, clearLocalUserProgress()
-    a déjà supprimé les anciennes
-    opérations de cet utilisateur.
-
-    Cette opération peut donc être
-    considérée comme annulée.
-  */
 
   if (
     resetCheck?.resetDetected === true &&
@@ -1584,7 +1513,7 @@ export async function syncEducationContent() {
     );
 
     console.log(
-      "BADGES TELECHARGES",
+      "BADGES TELECHARGEES",
       badges.length
     );
 

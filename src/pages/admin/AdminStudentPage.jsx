@@ -28,6 +28,8 @@ import {
 
 import {
   getAdminStudentView,
+  getAdminClasses,
+  updateUserClass,
   resetUserProgress
 } from "../../services/adminService";
 
@@ -141,6 +143,29 @@ export default function AdminStudentPage() {
 
 
   // ===================================================
+  // GESTION CLASSE
+  // ===================================================
+
+  const [classes, setClasses] =
+    useState([]);
+
+  const [classesLoading, setClassesLoading] =
+    useState(true);
+
+  const [selectedClassId, setSelectedClassId] =
+    useState("");
+
+  const [classSaving, setClassSaving] =
+    useState(false);
+
+  const [classMessage, setClassMessage] =
+    useState("");
+
+  const [classMessageType, setClassMessageType] =
+    useState("");
+
+
+  // ===================================================
   // GESTION APPAREIL
   // ===================================================
 
@@ -198,6 +223,11 @@ export default function AdminStudentPage() {
 
       setData(result);
 
+      setSelectedClassId(
+        result?.profile?.class_id ||
+        ""
+      );
+
       console.log(
         "✅ [ADMIN STUDENT] Données chargées =",
         result
@@ -219,6 +249,163 @@ export default function AdminStudentPage() {
 
       setLoading(false);
       setRefreshing(false);
+
+    }
+
+  }
+
+
+  // ===================================================
+  // CHARGEMENT DES CLASSES
+  // ===================================================
+
+  async function loadClasses() {
+
+    try {
+
+      setClassesLoading(true);
+      setClassMessage("");
+      setClassMessageType("");
+
+      console.log(
+        "🏫 [ADMIN STUDENT] Chargement des classes"
+      );
+
+      const result =
+        await getAdminClasses();
+
+      setClasses(
+        result || []
+      );
+
+      console.log(
+        "✅ [ADMIN STUDENT] Classes chargées =",
+        result || []
+      );
+
+    } catch (error) {
+
+      console.error(
+        "❌ [ADMIN STUDENT] Erreur chargement classes =",
+        error
+      );
+
+      setClasses([]);
+
+      setClassMessage(
+        error?.message ||
+        "Impossible de charger la liste des classes."
+      );
+
+      setClassMessageType("error");
+
+    } finally {
+
+      setClassesLoading(false);
+
+    }
+
+  }
+
+
+  // ===================================================
+  // ENREGISTRER LA CLASSE
+  // ===================================================
+
+  async function handleSaveClass() {
+
+    if (!studentId) {
+      return;
+    }
+
+    try {
+
+      setClassSaving(true);
+      setClassMessage("");
+      setClassMessageType("");
+
+      const normalizedClassId =
+        selectedClassId ||
+        null;
+
+      console.log(
+        "🏫 [ADMIN STUDENT] Modification classe =",
+        {
+          studentId,
+          classId: normalizedClassId
+        }
+      );
+
+      await updateUserClass(
+        studentId,
+        normalizedClassId
+      );
+
+      const selectedClass =
+        classes.find(
+          item =>
+            item.id ===
+            normalizedClassId
+        ) || null;
+
+
+      // -----------------------------------------------
+      // Mise à jour locale immédiate
+      // -----------------------------------------------
+
+      setData(previous => {
+
+        if (!previous) {
+          return previous;
+        }
+
+        return {
+          ...previous,
+
+          profile: {
+            ...previous.profile,
+
+            class_id:
+              normalizedClassId,
+
+            classes:
+              selectedClass
+          }
+        };
+
+      });
+
+
+      setClassMessage(
+        selectedClass
+          ? `Classe « ${selectedClass.name} » attribuée avec succès.`
+          : "Classe retirée avec succès."
+      );
+
+      setClassMessageType("success");
+
+      console.log(
+        "✅ [ADMIN STUDENT] Classe mise à jour =",
+        selectedClass
+      );
+
+    } catch (error) {
+
+      console.error(
+        "❌ [ADMIN STUDENT] Erreur modification classe =",
+        error
+      );
+
+      setClassMessage(
+        error?.message ||
+        "Impossible de modifier la classe."
+      );
+
+      setClassMessageType("error");
+
+    } finally {
+
+      setClassSaving(false);
 
     }
 
@@ -500,6 +687,7 @@ export default function AdminStudentPage() {
   useEffect(() => {
 
     loadStudent();
+    loadClasses();
 
   }, [studentId]);
 
@@ -1494,6 +1682,221 @@ export default function AdminStudentPage() {
               );
 
             })}
+
+          </div>
+
+
+          {/* =================================================
+              AFFECTATION DE LA CLASSE
+          ================================================= */}
+
+          <div className="
+            mt-5
+            rounded-2xl
+            bg-accent-soft
+            border
+            border-accent
+            p-5
+          ">
+
+            <div className="
+              flex
+              flex-col
+              lg:flex-row
+              lg:items-end
+              lg:justify-between
+              gap-5
+            ">
+
+              <div className="flex-1">
+
+                <div className="
+                  flex
+                  items-center
+                  gap-2
+                  mb-2
+                ">
+
+                  <BookOpen
+                    size={19}
+                    className="text-accent"
+                  />
+
+                  <h3 className="
+                    font-bold
+                    theme-text
+                  ">
+                    Affectation de la classe
+                  </h3>
+
+                </div>
+
+                <p className="
+                  text-sm
+                  theme-text-secondary
+                  mb-3
+                ">
+                  Sélectionnez la classe à laquelle cet élève doit être rattaché.
+                </p>
+
+
+                <select
+                  value={
+                    selectedClassId
+                  }
+                  onChange={(event) => {
+
+                    setSelectedClassId(
+                      event.target.value
+                    );
+
+                    setClassMessage("");
+                    setClassMessageType("");
+
+                  }}
+                  disabled={
+                    classesLoading ||
+                    classSaving
+                  }
+                  className="
+                    w-full
+                    rounded-xl
+                    theme-surface
+                    theme-border
+                    border
+                    theme-text
+                    px-4
+                    py-3
+                    outline-none
+                    focus:ring-2
+                    focus:ring-accent
+                    disabled:opacity-60
+                  "
+                >
+
+                  <option value="">
+                    Aucune classe
+                  </option>
+
+                  {classes.map(
+                    item => (
+                      <option
+                        key={item.id}
+                        value={item.id}
+                      >
+                        {item.name}
+                      </option>
+                    )
+                  )}
+
+                </select>
+
+              </div>
+
+
+              <button
+                type="button"
+                onClick={
+                  handleSaveClass
+                }
+                disabled={
+                  classesLoading ||
+                  classSaving ||
+                  selectedClassId ===
+                    (profile.class_id || "")
+                }
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  px-5
+                  py-3
+                  rounded-xl
+                  bg-accent
+                  text-white
+                  font-semibold
+                  shadow-md
+                  hover:opacity-90
+                  transition
+                  disabled:opacity-50
+                  disabled:cursor-not-allowed
+                  whitespace-nowrap
+                "
+              >
+
+                <RefreshCw
+                  size={17}
+                  className={
+                    classSaving
+                      ? "animate-spin"
+                      : ""
+                  }
+                />
+
+                {classSaving
+                  ? "Enregistrement..."
+                  : "Enregistrer la classe"}
+
+              </button>
+
+            </div>
+
+
+            {classesLoading && (
+
+              <p className="
+                text-sm
+                theme-text-secondary
+                mt-3
+              ">
+                Chargement des classes...
+              </p>
+
+            )}
+
+
+            {!classesLoading &&
+              classes.length === 0 && (
+
+                <p className="
+                  text-sm
+                  text-red-600
+                  dark:text-red-300
+                  mt-3
+                ">
+                  Aucune classe disponible.
+                </p>
+
+              )}
+
+
+            {classMessage && (
+
+              <div
+                className={`
+                  mt-4
+                  rounded-xl
+                  border
+                  p-3
+                  ${
+                    classMessageType === "success"
+                      ? "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800 text-green-800 dark:text-green-300"
+                      : "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800 text-red-800 dark:text-red-300"
+                  }
+                `}
+              >
+
+                <p className="
+                  text-sm
+                  font-semibold
+                ">
+                  {classMessage}
+                </p>
+
+              </div>
+
+            )}
 
           </div>
 

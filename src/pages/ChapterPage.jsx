@@ -11,11 +11,6 @@ import {
   useLocation
 } from "react-router-dom";
 
-import {
-  getLessons,
-  getChapter
-} from "../services/educationService";
-
 import { supabase } from "../lib/supabase";
 
 import {
@@ -107,75 +102,97 @@ export default function ChapterPage() {
 
 
         // =================================================
-        // MODE CONSULTATION / APERÇU
+        // 1. DEXIE PRIORITAIRE — TOUS LES MODES
         // =================================================
 
-        if (
-          isConsultation ||
-          isStudentPreview
-        ) {
-
-          console.log(
-            isConsultation
-              ? "👁️ [CONSULTATION] Chargement chapitre depuis Dexie :"
-              : "👁️ [APERÇU] Chargement chapitre depuis Dexie :",
+        chapterData =
+          await getCachedChapter(
             chapterId
           );
 
 
-          // -------------------------------------------------
-          // 1. DEXIE
-          // -------------------------------------------------
-
-          chapterData =
-            await getCachedChapter(
-              chapterId
-            );
+        lessonsData =
+          await getCachedLessons(
+            chapterId
+          );
 
 
-          lessonsData =
-            await getCachedLessons(
-              chapterId
-            );
+        const hasCachedChapter =
+          Boolean(chapterData);
 
 
-          const hasCachedChapter =
-            Boolean(chapterData);
+        const hasCachedLessons =
+          Array.isArray(lessonsData) &&
+          lessonsData.length > 0;
 
 
-          const hasCachedLessons =
-            Array.isArray(lessonsData) &&
-            lessonsData.length > 0;
+        // =================================================
+        // CACHE COMPLET
+        // =================================================
 
+        if (
+          hasCachedChapter &&
+          hasCachedLessons
+        ) {
 
-          // -------------------------------------------------
-          // 2. CACHE COMPLET
-          // -------------------------------------------------
-
-          if (
-            hasCachedChapter &&
-            hasCachedLessons
-          ) {
+          if (isConsultation) {
 
             console.log(
-              isConsultation
-                ? "📦 [CONSULTATION] Chapitre et leçons trouvés dans Dexie"
-                : "📦 [APERÇU] Chapitre et leçons trouvés dans Dexie"
+              "📦 [CONSULTATION] Chapitre et leçons trouvés dans Dexie"
+            );
+
+          } else if (isStudentPreview) {
+
+            console.log(
+              "📦 [APERÇU] Chapitre et leçons trouvés dans Dexie"
+            );
+
+          } else {
+
+            console.log(
+              "📦 [CHAPTER] Chapitre et leçons trouvés dans Dexie"
+            );
+
+          }
+
+        }
+
+
+        // =================================================
+        // CACHE INCOMPLET
+        // =================================================
+
+        else {
+
+          const modeLabel =
+            isConsultation
+              ? "[CONSULTATION]"
+              : isStudentPreview
+                ? "[APERÇU]"
+                : "[CHAPTER]";
+
+
+          // -------------------------------------------------
+          // HORS LIGNE
+          // -------------------------------------------------
+
+          if (!isOnline) {
+
+            console.log(
+              `📴 ${modeLabel} Cache incomplet mais appareil hors ligne → Dexie uniquement`
             );
 
           }
 
 
           // -------------------------------------------------
-          // 3. CACHE INCOMPLET
+          // EN LIGNE → SUPABASE DIRECT
           // -------------------------------------------------
 
           else {
 
             console.log(
-              isConsultation
-                ? "🌐 [CONSULTATION] Cache incomplet/vide → Supabase direct"
-                : "🌐 [APERÇU] Cache incomplet/vide → Supabase direct"
+              `🌐 ${modeLabel} Cache incomplet → Supabase direct`
             );
 
 
@@ -217,12 +234,17 @@ export default function ChapterPage() {
                     chapterData
                   );
 
+
+                  console.log(
+                    `📥 ${modeLabel} Chapitre récupéré depuis Supabase`
+                  );
+
                 }
 
               } catch (chapterError) {
 
                 console.warn(
-                  "⚠️ [APERÇU] Chapitre réseau indisponible :",
+                  `⚠️ ${modeLabel} Chapitre Supabase indisponible → conservation du cache :`,
                   chapterError
                 );
 
@@ -276,12 +298,18 @@ export default function ChapterPage() {
                     lessonsData
                   );
 
+
+                  console.log(
+                    `📥 ${modeLabel} Leçons récupérées depuis Supabase :`,
+                    lessonsData.length
+                  );
+
                 }
 
               } catch (lessonsError) {
 
                 console.warn(
-                  "⚠️ [APERÇU] Leçons réseau indisponibles :",
+                  `⚠️ ${modeLabel} Leçons Supabase indisponibles → conservation du cache :`,
                   lessonsError
                 );
 
@@ -290,85 +318,6 @@ export default function ChapterPage() {
             }
 
           }
-
-        }
-
-
-        // =================================================
-        // MODE NORMAL
-        // =================================================
-
-        else if (isOnline) {
-
-          try {
-
-            chapterData =
-              await getChapter(
-                chapterId
-              );
-
-
-            lessonsData =
-              await getLessons(
-                chapterId
-              );
-
-
-            if (
-              lessonsData?.length
-            ) {
-
-              await cacheLessons(
-                lessonsData
-              );
-
-            }
-
-          } catch (onlineError) {
-
-            console.warn(
-              "⚠️ Erreur réseau, utilisation du cache :",
-              onlineError
-            );
-
-
-            chapterData =
-              await getCachedChapter(
-                chapterId
-              );
-
-
-            lessonsData =
-              await getCachedLessons(
-                chapterId
-              );
-
-          }
-
-        }
-
-
-        // =================================================
-        // MODE HORS LIGNE
-        // =================================================
-
-        else {
-
-          console.log(
-            "📴 CHAPTER PAGE OFFLINE"
-          );
-
-
-          chapterData =
-            await getCachedChapter(
-              chapterId
-            );
-
-
-          lessonsData =
-            await getCachedLessons(
-              chapterId
-            );
 
         }
 

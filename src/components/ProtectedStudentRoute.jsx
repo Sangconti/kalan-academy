@@ -39,11 +39,66 @@ export default function ProtectedStudentRoute({
         user.id
       );
 
-      try {
-        // ==========================================
-        // RÉCUPÉRER LE PROFIL
-        // ==========================================
+      // ==========================================
+      // CACHE LOCAL DU PROFIL
+      // ==========================================
 
+      const profileCacheKey =
+        `kalan_student_profile_${user.id}`;
+
+      // ==========================================
+      // HORS LIGNE
+      // ==========================================
+
+      if (!navigator.onLine) {
+        console.log(
+          "📴 [PROTECTED STUDENT] Hors ligne → utilisation du profil local"
+        );
+
+        try {
+          const cachedProfile =
+            localStorage.getItem(profileCacheKey);
+
+          if (cachedProfile) {
+            const parsedProfile =
+              JSON.parse(cachedProfile);
+
+            console.log(
+              "📦 [PROTECTED STUDENT] Profil chargé depuis le cache local =",
+              parsedProfile
+            );
+
+            if (mounted) {
+              setProfile(parsedProfile);
+              setLoading(false);
+            }
+
+            return;
+          }
+
+          console.log(
+            "⚠️ [PROTECTED STUDENT] Aucun profil local disponible hors ligne"
+          );
+        } catch (cacheError) {
+          console.error(
+            "💥 [PROTECTED STUDENT] Erreur lecture profil local =",
+            cacheError
+          );
+        }
+
+        if (mounted) {
+          setProfile(null);
+          setLoading(false);
+        }
+
+        return;
+      }
+
+      // ==========================================
+      // EN LIGNE → RÉCUPÉRER LE PROFIL SUPABASE
+      // ==========================================
+
+      try {
         const {
           data,
           error,
@@ -69,52 +124,111 @@ export default function ProtectedStudentRoute({
           return;
         }
 
-        if (error || !data) {
+        // ==========================================
+        // PROFIL SUPABASE VALIDE
+        // ==========================================
 
-          console.error(
-            "🚫 [PROTECTED STUDENT] Profil introuvable"
+        if (!error && data) {
+          // ========================================
+          // SAUVEGARDER LE PROFIL LOCALEMENT
+          // ========================================
+
+          try {
+            localStorage.setItem(
+              profileCacheKey,
+              JSON.stringify(data)
+            );
+
+            console.log(
+              "💾 [PROTECTED STUDENT] Profil sauvegardé dans le cache local"
+            );
+          } catch (cacheError) {
+            console.error(
+              "⚠️ [PROTECTED STUDENT] Impossible de sauvegarder le profil local =",
+              cacheError
+            );
+          }
+
+          setProfile(data);
+          setLoading(false);
+
+          // ========================================
+          // LOG DIAGNOSTIC
+          // ========================================
+
+          console.log(
+            "🎭 [PROTECTED STUDENT] role =",
+            data.role
           );
 
-          setProfile(null);
-          setLoading(false);
+          console.log(
+            "🔐 [PROTECTED STUDENT] access_status =",
+            data.access_status
+          );
 
           return;
         }
 
         // ==========================================
-        // STOCKER LE PROFIL
+        // PROFIL NON TROUVÉ / ERREUR
         // ==========================================
 
-        setProfile(data);
+        console.error(
+          "🚫 [PROTECTED STUDENT] Profil introuvable"
+        );
+
+        setProfile(null);
         setLoading(false);
 
-        // ==========================================
-        // LOG DIAGNOSTIC
-        // ==========================================
-
-        console.log(
-          "🎭 [PROTECTED STUDENT] role =",
-          data.role
-        );
-
-        console.log(
-          "🔐 [PROTECTED STUDENT] access_status =",
-          data.access_status
-        );
-
       } catch (error) {
+        // ==========================================
+        // ERREUR RÉSEAU
+        // ==========================================
 
         console.error(
           "💥 [PROTECTED STUDENT] Exception =",
           error
         );
 
-        if (!mounted) {
-          return;
+        // ==========================================
+        // FALLBACK CACHE LOCAL
+        //
+        // Même si navigator.onLine indiquait
+        // "en ligne", la connexion réelle peut
+        // être indisponible.
+        // ==========================================
+
+        try {
+          const cachedProfile =
+            localStorage.getItem(profileCacheKey);
+
+          if (cachedProfile) {
+            const parsedProfile =
+              JSON.parse(cachedProfile);
+
+            console.log(
+              "📦 [PROTECTED STUDENT] Erreur réseau → profil local utilisé =",
+              parsedProfile
+            );
+
+            if (mounted) {
+              setProfile(parsedProfile);
+              setLoading(false);
+            }
+
+            return;
+          }
+        } catch (cacheError) {
+          console.error(
+            "💥 [PROTECTED STUDENT] Erreur lecture fallback local =",
+            cacheError
+          );
         }
 
-        setProfile(null);
-        setLoading(false);
+        if (mounted) {
+          setProfile(null);
+          setLoading(false);
+        }
       }
     }
 
@@ -123,7 +237,6 @@ export default function ProtectedStudentRoute({
     return () => {
       mounted = false;
     };
-
   }, [user]);
 
   // ==========================================
@@ -188,7 +301,6 @@ export default function ProtectedStudentRoute({
     profile.role === "admin" ||
     profile.role === "super_admin"
   ) {
-
     console.log(
       "🛡️ [PROTECTED STUDENT] Compte administrateur détecté"
     );
@@ -212,7 +324,6 @@ export default function ProtectedStudentRoute({
   if (
     profile.access_status === "blocked"
   ) {
-
     console.log(
       "🚫 [PROTECTED STUDENT] Compte bloqué"
     );
@@ -232,7 +343,6 @@ export default function ProtectedStudentRoute({
   if (
     profile.access_status !== "active"
   ) {
-
     console.log(
       "⏳ [PROTECTED STUDENT] Accès non actif =",
       profile.access_status

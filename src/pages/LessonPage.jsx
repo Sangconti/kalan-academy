@@ -254,103 +254,115 @@ export default function LessonPage({
 
 
         // =================================================
-        // 👁️ MODE CONSULTATION / APERÇU
-        // =================================================
-        // Dexie est toujours prioritaire.
-        //
-        // Si le cache est complet :
-        // → aucun réseau.
-        //
-        // Si le cache est incomplet :
-        // → Supabase directement.
-        // → Aucun appel à isOnline().
-        // → Aucun HEAD /rest/v1/.
+        // IDENTIFICATION DU MODE
         // =================================================
 
-        if (
-          isConsultation ||
-          isStudentPreview
-        ) {
+        const modeLabel =
+          isConsultation
+            ? "[CONSULTATION]"
+            : isStudentPreview
+              ? "[APERÇU]"
+              : "[ÉLÈVE]";
 
-          console.log(
-            isConsultation
-              ? "👁️ [CONSULTATION] Chargement leçon depuis Dexie :"
-              : "👁️ [APERÇU] Chargement leçon depuis Dexie :",
+
+        // =================================================
+        // 📦 DEXIE TOUJOURS EN PREMIER
+        // =================================================
+        //
+        // Même avec Internet :
+        //
+        // 1. Leçon depuis Dexie
+        // 2. Blocs depuis Dexie
+        // 3. Si le cache est complet → aucun réseau
+        // 4. Si le cache est incomplet :
+        //      - hors ligne → Dexie uniquement
+        //      - en ligne → Supabase uniquement pour
+        //        les données manquantes
+        //
+        // Aucun appel à educationService.isOnline()
+        // Aucun HEAD /rest/v1/.
+        // =================================================
+
+        console.log(
+          `📦 ${modeLabel} Recherche leçon dans Dexie :`,
+          lessonId
+        );
+
+
+        lessonData =
+          await getCachedLesson(
             lessonId
           );
 
 
+        blockData =
+          await getCachedLessonBlocks(
+            lessonId
+          );
+
+
+        const hasLesson =
+          Boolean(lessonData);
+
+
+        const hasBlocks =
+          Array.isArray(blockData) &&
+          blockData.length > 0;
+
+
+        // =================================================
+        // 📦 CACHE COMPLET
+        // =================================================
+
+        if (
+          hasLesson &&
+          hasBlocks
+        ) {
+
+          console.log(
+            `📦 ${modeLabel} Leçon et blocs trouvés dans Dexie`
+          );
+
+        }
+
+
+        // =================================================
+        // ⚠️ CACHE INCOMPLET
+        // =================================================
+
+        else {
+
           // -------------------------------------------------
-          // CHARGEMENT DU CACHE
+          // 📴 HORS LIGNE
           // -------------------------------------------------
 
-          lessonData =
-            await getCachedLesson(
-              lessonId
-            );
-
-
-          blockData =
-            await getCachedLessonBlocks(
-              lessonId
-            );
-
-
-          const hasLesson =
-            Boolean(lessonData);
-
-
-          const hasBlocks =
-            Array.isArray(blockData) &&
-            blockData.length > 0;
-
-
-          // -------------------------------------------------
-          // CACHE COMPLET
-          // -------------------------------------------------
-
-          if (
-            hasLesson &&
-            hasBlocks
-          ) {
+          if (!isOnline) {
 
             console.log(
-              isConsultation
-                ? "📦 [CONSULTATION] Leçon et blocs trouvés dans Dexie"
-                : "📦 [APERÇU] Leçon et blocs trouvés dans Dexie"
+              `📴 ${modeLabel} Cache leçon incomplet mais appareil hors ligne → Dexie uniquement`
             );
 
           }
 
 
           // -------------------------------------------------
-          // CACHE INCOMPLET
+          // 🌐 EN LIGNE
           // -------------------------------------------------
 
           else {
 
-            if (!isOnline) {
-
-              console.log(
-                isConsultation
-                  ? "📴 [CONSULTATION] Cache leçon incomplet et hors ligne"
-                  : "📴 [APERÇU] Cache leçon incomplet et hors ligne"
-              );
-
-            } else {
-
-              console.log(
-                isConsultation
-                  ? "🌐 [CONSULTATION] Cache leçon incomplet/vide, chargement réseau"
-                  : "🌐 [APERÇU] Cache leçon incomplet/vide, chargement réseau"
-              );
+            console.log(
+              `🌐 ${modeLabel} Cache leçon incomplet → Supabase direct`
+            );
 
 
-              // -------------------------------------------------
-              // LEÇON
-              // -------------------------------------------------
+            // -------------------------------------------------
+            // LEÇON MANQUANTE
+            // -------------------------------------------------
 
-              if (!hasLesson) {
+            if (!hasLesson) {
+
+              try {
 
                 const {
                   data,
@@ -367,26 +379,42 @@ export default function LessonPage({
                 }
 
 
-                if (data) {
+                lessonData =
+                  data || null;
 
-                  lessonData =
-                    data;
 
+                if (lessonData) {
 
                   await cacheLesson(
-                    data
+                    lessonData
+                  );
+
+
+                  console.log(
+                    `📥 ${modeLabel} Leçon récupérée depuis Supabase`
                   );
 
                 }
 
+              } catch (lessonError) {
+
+                console.warn(
+                  `⚠️ ${modeLabel} Leçon Supabase indisponible → conservation du cache :`,
+                  lessonError
+                );
+
               }
 
+            }
 
-              // -------------------------------------------------
-              // BLOCS
-              // -------------------------------------------------
 
-              if (!hasBlocks) {
+            // -------------------------------------------------
+            // BLOCS MANQUANTS
+            // -------------------------------------------------
+
+            if (!hasBlocks) {
+
+              try {
 
                 const {
                   data,
@@ -412,8 +440,25 @@ export default function LessonPage({
                   data || [];
 
 
-                await cacheLessonBlocks(
-                  blockData
+                if (blockData.length > 0) {
+
+                  await cacheLessonBlocks(
+                    blockData
+                  );
+
+
+                  console.log(
+                    `📥 ${modeLabel} Blocs récupérés depuis Supabase :`,
+                    blockData.length
+                  );
+
+                }
+
+              } catch (blocksError) {
+
+                console.warn(
+                  `⚠️ ${modeLabel} Blocs Supabase indisponibles → conservation du cache :`,
+                  blocksError
                 );
 
               }
@@ -421,118 +466,6 @@ export default function LessonPage({
             }
 
           }
-
-        }
-
-
-        // =================================================
-        // 👨‍🎓 MODE ÉLÈVE NORMAL AVEC INTERNET
-        // =================================================
-        // Requête Supabase directe.
-        // Aucun HEAD /rest/v1/.
-        // =================================================
-
-        else if (isOnline) {
-
-          console.log(
-            "🌐 [ÉLÈVE] Chargement leçon depuis Supabase :",
-            lessonId
-          );
-
-
-          // -------------------------------------------------
-          // LEÇON
-          // -------------------------------------------------
-
-          const {
-            data: lessonFromSupabase,
-            error: lessonError
-          } = await supabase
-            .from("lessons")
-            .select("*")
-            .eq("id", lessonId)
-            .maybeSingle();
-
-
-          if (lessonError) {
-            throw lessonError;
-          }
-
-
-          lessonData =
-            lessonFromSupabase;
-
-
-          // -------------------------------------------------
-          // BLOCS
-          // -------------------------------------------------
-
-          const {
-            data: blocksFromSupabase,
-            error: blocksError
-          } = await supabase
-            .from("lesson_blocks")
-            .select("*")
-            .eq("lesson_id", lessonId)
-            .order(
-              "order_number",
-              {
-                ascending: true
-              }
-            );
-
-
-          if (blocksError) {
-            throw blocksError;
-          }
-
-
-          blockData =
-            blocksFromSupabase || [];
-
-
-          // -------------------------------------------------
-          // MISE EN CACHE
-          // -------------------------------------------------
-
-          if (lessonData) {
-
-            await cacheLesson(
-              lessonData
-            );
-
-          }
-
-
-          await cacheLessonBlocks(
-            blockData
-          );
-
-        }
-
-
-        // =================================================
-        // 📴 MODE ÉLÈVE NORMAL HORS LIGNE
-        // =================================================
-
-        else {
-
-          console.log(
-            "📴 [ÉLÈVE] Chargement leçon depuis Dexie :",
-            lessonId
-          );
-
-
-          lessonData =
-            await getCachedLesson(
-              lessonId
-            );
-
-
-          blockData =
-            await getCachedLessonBlocks(
-              lessonId
-            );
 
         }
 
@@ -572,7 +505,8 @@ export default function LessonPage({
         // -------------------------------------------------
         // FALLBACK DEXIE
         // -------------------------------------------------
-        // Si Supabase échoue, on tente toujours le cache.
+        // Si une erreur inattendue survient, on tente
+        // toujours le cache.
         // -------------------------------------------------
 
         try {

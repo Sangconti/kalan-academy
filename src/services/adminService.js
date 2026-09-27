@@ -1649,6 +1649,668 @@ export async function deleteClass(
   return true;
 }
 
+// ==========================
+// VUE LÉGÈRE — CONSULTATION ÉLÈVE
+// ==========================
+//
+// Cette fonction est dédiée au mode consultation.
+// Elle ne remplace PAS getAdminStudentView().
+//
+// Objectif :
+// - charger rapidement les données nécessaires au mode consultation
+// - éviter user_devices
+// - éviter l'email RPC
+// - éviter de récupérer toutes les leçons de l'académie
+// - conserver le même format attendu par DashboardPage
+// ==========================
+
+export async function getConsultationStudentView(
+  studentId
+) {
+  if (!studentId) {
+    throw new Error(
+      "Identifiant élève manquant."
+    );
+  }
+
+
+  // =====================================================
+  // 1. PROFIL + PROGRESSION + QUIZ + BADGES
+  // =====================================================
+
+  const [
+    profileResult,
+    progressResult,
+    attemptsResult,
+    badgesResult
+  ] = await Promise.all([
+
+    // -----------------------------------------
+    // PROFIL
+    // -----------------------------------------
+
+    supabase
+      .from("profiles")
+      .select(`
+        id,
+        full_name,
+        avatar_url,
+        role,
+        access_status,
+        class_id,
+        is_premium,
+        orange_money_id,
+        xp,
+        level,
+        created_at,
+        classes(
+          id,
+          name
+        )
+      `)
+      .eq(
+        "id",
+        studentId
+      )
+      .single(),
+
+
+    // -----------------------------------------
+    // PROGRESSION
+    // -----------------------------------------
+
+    supabase
+      .from("user_progress")
+      .select(`
+        lesson_id,
+        completed
+      `)
+      .eq(
+        "user_id",
+        studentId
+      ),
+
+
+    // -----------------------------------------
+    // QUIZ
+    // -----------------------------------------
+
+    supabase
+      .from("quiz_attempts")
+      .select(`
+        score
+      `)
+      .eq(
+        "user_id",
+        studentId
+      ),
+
+
+    // -----------------------------------------
+    // BADGES
+    // -----------------------------------------
+
+    supabase
+      .from("user_badges")
+      .select(`
+        id,
+        badge_id,
+        earned_at,
+        badges(
+          id,
+          name,
+          description,
+          image_url,
+          xp_reward
+        )
+      `)
+      .eq(
+        "user_id",
+        studentId
+      )
+
+  ]);
+
+
+  // =====================================================
+  // 2. VALIDATION DU PROFIL
+  // =====================================================
+
+  if (profileResult.error) {
+
+    console.error(
+      "❌ [CONSULTATION] Erreur profil :",
+      profileResult.error
+    );
+
+    throw profileResult.error;
+  }
+
+
+  if (!profileResult.data) {
+    throw new Error(
+      "Élève introuvable."
+    );
+  }
+
+
+  const profile =
+    profileResult.data;
+
+
+  console.log(
+    "🔎 [CONSULTATION] PROFIL ÉLÈVE :",
+    {
+      id: profile.id,
+      full_name: profile.full_name,
+      class_id: profile.class_id,
+      classes: profile.classes
+    }
+  );
+
+
+  // =====================================================
+  // 3. DONNÉES PROGRESSION
+  // =====================================================
+
+  if (progressResult.error) {
+
+    console.error(
+      "❌ [CONSULTATION] Erreur progression :",
+      progressResult.error
+    );
+
+  }
+
+
+  const progressData =
+    progressResult.data || [];
+
+
+  // =====================================================
+  // 4. DONNÉES QUIZ
+  // =====================================================
+
+  if (attemptsResult.error) {
+
+    console.error(
+      "❌ [CONSULTATION] Erreur quiz :",
+      attemptsResult.error
+    );
+
+  }
+
+
+  const attemptsData =
+    attemptsResult.data || [];
+
+
+  // =====================================================
+  // 5. DONNÉES BADGES
+  // =====================================================
+
+  if (badgesResult.error) {
+
+    console.error(
+      "❌ [CONSULTATION] Erreur badges :",
+      badgesResult.error
+    );
+
+  }
+
+
+  const badges =
+    badgesResult.data || [];
+
+
+  // =====================================================
+  // 6. LEÇONS DE LA CLASSE DE L'ÉLÈVE
+  // =====================================================
+  //
+  // On récupère uniquement les leçons appartenant
+  // à la classe de l'élève.
+  //
+  // Contrairement à getAdminStudentView(), on ne
+  // récupère plus toutes les leçons de l'académie.
+  // =====================================================
+
+  let lessonsData = [];
+
+  if (profile.class_id) {
+    try {
+
+      // ============================================
+      // 1. MATIÈRES DE LA CLASSE
+      // ============================================
+
+      const {
+        data: subjectsData,
+        error: subjectsError
+      } = await supabase
+        .from("subjects")
+        .select(`
+          id,
+          name
+        `)
+        .eq(
+          "class_id",
+          profile.class_id
+        );
+
+
+      if (subjectsError) {
+
+        console.error(
+          "❌ [CONSULTATION] Erreur matières :",
+          subjectsError
+        );
+
+      } else if (subjectsData?.length) {
+
+        const subjectIds =
+          subjectsData.map(
+            subject =>
+              subject.id
+          );
+
+
+        console.log(
+          "🔎 [CONSULTATION] MATIÈRES DE LA CLASSE :",
+          {
+            classId:
+              profile.class_id,
+
+            count:
+              subjectsData?.length || 0,
+
+            subjects:
+              subjectsData || [],
+
+            error:
+              subjectsError || null
+          }
+        );
+
+
+        // ==========================================
+        // 2. CHAPITRES DES MATIÈRES
+        // ==========================================
+
+        const {
+          data: chaptersData,
+          error: chaptersError
+        } = await supabase
+          .from("chapters")
+          .select(`
+            id,
+            subject_id
+          `)
+          .in(
+            "subject_id",
+            subjectIds
+          );
+
+
+        if (chaptersError) {
+
+          console.error(
+            "❌ [CONSULTATION] Erreur chapitres :",
+            chaptersError
+          );
+
+        } else if (chaptersData?.length) {
+
+          const chapterIds =
+            chaptersData.map(
+              chapter =>
+                chapter.id
+            );
+
+
+          console.log(
+            "🔎 [CONSULTATION] CHAPITRES :",
+            {
+              count:
+                chaptersData?.length || 0,
+
+              chapters:
+                chaptersData || [],
+
+              error:
+                chaptersError || null
+            }
+          );
+
+
+          // ========================================
+          // 3. LEÇONS DES CHAPITRES
+          // ========================================
+
+          const {
+            data: lessonsQueryData,
+            error: lessonsQueryError
+          } = await supabase
+            .from("lessons")
+            .select(`
+              id,
+              chapter_id
+            `)
+            .in(
+              "chapter_id",
+              chapterIds
+            );
+
+
+          if (lessonsQueryError) {
+
+            console.error(
+              "❌ [CONSULTATION] Erreur leçons :",
+              lessonsQueryError
+            );
+
+          } else {
+
+            lessonsData =
+              (lessonsQueryData || []).map(
+                lesson => {
+
+                  const chapter =
+                    chaptersData.find(
+                      item =>
+                        item.id ===
+                        lesson.chapter_id
+                    );
+
+
+                  const subject =
+                    subjectsData.find(
+                      item =>
+                        item.id ===
+                        chapter?.subject_id
+                    );
+
+
+                  return {
+                    ...lesson,
+
+                    chapters: {
+                      id:
+                        chapter?.id ||
+                        null,
+
+                      subject_id:
+                        chapter?.subject_id ||
+                        null,
+
+                      subjects: {
+                        id:
+                          subject?.id ||
+                          null,
+
+                        name:
+                          subject?.name ||
+                          "Matière inconnue"
+                      }
+                    }
+                  };
+
+                }
+              );
+
+          }
+        }
+      }
+
+    } catch (error) {
+
+      console.error(
+        "❌ [CONSULTATION] Exception chargement contenu :",
+        error
+      );
+
+    }
+  }
+
+
+  // =====================================================
+  // 6.1. LOG DES LEÇONS
+  // =====================================================
+
+  console.log(
+    "🔎 [CONSULTATION] LEÇONS :",
+    {
+      count:
+        lessonsData.length,
+
+      lessons:
+        lessonsData,
+
+      error:
+        null
+    }
+  );
+
+
+  // =====================================================
+  // 7. LEÇONS TERMINÉES
+  // =====================================================
+
+  const completedLessons =
+    progressData.reduce(
+      (total, item) =>
+        total +
+        (
+          item?.completed === true
+            ? 1
+            : 0
+        ),
+      0
+    );
+
+
+  // =====================================================
+  // 8. LEÇONS TERMINÉES PAR ID
+  // =====================================================
+
+  const completedLessonIds =
+    new Set(
+      progressData
+        .filter(
+          item =>
+            item?.completed === true &&
+            item?.lesson_id
+        )
+        .map(
+          item =>
+            item.lesson_id
+        )
+    );
+
+
+  // =====================================================
+  // 9. PROGRESSION PAR MATIÈRE
+  // =====================================================
+
+  const subjectsProgress = {};
+
+
+  for (
+    const lesson of lessonsData
+  ) {
+
+    const subject =
+      lesson?.chapters?.subjects;
+
+
+    if (!subject?.id) {
+      continue;
+    }
+
+
+    const subjectId =
+      subject.id;
+
+
+    const subjectName =
+      subject.name ||
+      "Matière inconnue";
+
+
+    if (!subjectsProgress[subjectId]) {
+
+      subjectsProgress[subjectId] = {
+        id:
+          subjectId,
+
+        name:
+          subjectName,
+
+        total:
+          0,
+
+        completed:
+          0,
+
+        percent:
+          0
+      };
+
+    }
+
+
+    subjectsProgress[
+      subjectId
+    ].total += 1;
+
+
+    if (
+      completedLessonIds.has(
+        lesson.id
+      )
+    ) {
+
+      subjectsProgress[
+        subjectId
+      ].completed += 1;
+
+    }
+
+  }
+
+
+  // =====================================================
+  // 10. POURCENTAGES
+  // =====================================================
+
+  Object.values(
+    subjectsProgress
+  ).forEach(
+    subject => {
+
+      if (subject.total > 0) {
+
+        subject.percent =
+          Math.round(
+            (
+              subject.completed /
+              subject.total
+            ) * 100
+          );
+
+      } else {
+
+        subject.percent = 0;
+
+      }
+
+    }
+  );
+
+
+  // =====================================================
+  // 11. SCORE MOYEN
+  // =====================================================
+
+  let averageScore = 0;
+
+
+  if (attemptsData.length > 0) {
+
+    const totalScore =
+      attemptsData.reduce(
+        (total, attempt) =>
+          total +
+          Number(
+            attempt?.score || 0
+          ),
+        0
+      );
+
+
+    averageScore =
+      Math.round(
+        totalScore /
+        attemptsData.length
+      );
+
+  }
+
+
+  // =====================================================
+  // 12. RÉSULTAT LÉGER
+  // =====================================================
+
+  console.log(
+    "⚡ [CONSULTATION] Vue légère chargée :",
+    {
+      studentId,
+
+      subjects:
+        Object.keys(
+          subjectsProgress
+        ).length,
+
+      lessons:
+        lessonsData.length,
+
+      completedLessons,
+
+      attempts:
+        attemptsData.length,
+
+      badges:
+        badges.length
+    }
+  );
+
+
+  return {
+
+    profile,
+
+    subjects:
+      subjectsProgress,
+
+    stats: {
+
+      lessons:
+        completedLessons,
+
+      score:
+        averageScore,
+
+      badges:
+        badges.length,
+
+      attempts:
+        attemptsData.length
+
+    },
+
+    badges
+
+  };
+}
 
 // ==========================
 // VUE ADMIN D'UN ÉLÈVE

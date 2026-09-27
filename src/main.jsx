@@ -6,6 +6,9 @@ import App from "./App";
 import "./index.css";
 
 import { ThemeProvider } from "./context/ThemeContext";
+import { enableAutoSync } from "./offline/sync";
+
+enableAutoSync();
 
 ReactDOM.createRoot(
   document.getElementById("root")

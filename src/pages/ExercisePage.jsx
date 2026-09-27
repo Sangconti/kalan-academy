@@ -17,7 +17,8 @@ import {
 
 import {
   cacheQuizzes,
-  getCachedQuizzes
+  getCachedQuizzes,
+  getCachedQuizQuestions
 } from "../offline/db";
 
 import ExerciseQuiz from "../components/ExerciseQuiz";
@@ -123,12 +124,26 @@ export default function ExercisePage({
 
 
   // =====================================================
+  // MODE APERÇU / CONSULTATION
+  // =====================================================
+
+  const isPreviewMode =
+    isConsultation ||
+    isStudentPreview;
+
+
+  // =====================================================
   // STATE
   // =====================================================
 
   const [
     quiz,
     setQuiz
+  ] = useState(null);
+
+  const [
+    initialQuestions,
+    setInitialQuestions
   ] = useState(null);
 
   const [
@@ -148,61 +163,46 @@ export default function ExercisePage({
 
   useEffect(() => {
 
-    if (!lessonId) {
-
-      setQuiz(null);
-
-      setError(
-        "Identifiant de leçon introuvable."
-      );
-
-      setLoading(false);
-
-      return;
-
-    }
-
-    loadQuiz();
-
-  }, [
-    lessonId,
-    isConsultation,
-    isStudentPreview
-  ]);
+    let cancelled = false;
 
 
-  async function loadQuiz() {
+    async function load() {
 
-    try {
+      if (!lessonId) {
 
-      setLoading(true);
-      setError(null);
+        setQuiz(null);
+        setInitialQuestions(null);
+
+        setError(
+          "Identifiant de leçon introuvable."
+        );
+
+        setLoading(false);
+
+        return;
+
+      }
 
 
-      // =================================================
-      // 👁️ CONSULTATION / APERÇU
-      // =================================================
-      //
-      // Dexie est toujours consulté en premier.
-      //
-      // Si le quiz existe :
-      //
-      //     Dexie → affichage immédiat
-      //
-      // Aucun appel Supabase.
-      // Aucun HEAD /rest/v1/.
-      //
-      // =================================================
+      try {
 
-      if (
-        isConsultation ||
-        isStudentPreview
-      ) {
+        setLoading(true);
+        setError(null);
+
+        setQuiz(null);
+        setInitialQuestions(null);
+
+
+        // =================================================
+        // 📦 1. DEXIE TOUJOURS EN PREMIER
+        // =================================================
 
         console.log(
           isConsultation
-            ? "👁️ [CONSULTATION] Chargement quiz depuis Dexie :"
-            : "👁️ [APERÇU] Chargement quiz depuis Dexie :",
+            ? "👁️ [CONSULTATION] Recherche quiz dans Dexie :"
+            : isStudentPreview
+              ? "👁️ [APERÇU] Recherche quiz dans Dexie :"
+              : "📦 [ÉLÈVE] Recherche quiz dans Dexie :",
           lessonId
         );
 
@@ -213,6 +213,11 @@ export default function ExercisePage({
           );
 
 
+        if (cancelled) {
+          return;
+        }
+
+
         const cachedQuiz =
           Array.isArray(cachedQuizzes) &&
           cachedQuizzes.length > 0
@@ -220,81 +225,246 @@ export default function ExercisePage({
             : null;
 
 
-        // =============================================
-        // CACHE DISPONIBLE
-        // =============================================
+        // =================================================
+        // 📦 2. QUIZ TROUVÉ DANS DEXIE
+        // =================================================
 
         if (cachedQuiz) {
 
           console.log(
             isConsultation
               ? "📦 [CONSULTATION] Quiz trouvé dans Dexie"
-              : "📦 [APERÇU] Quiz trouvé dans Dexie",
+              : isStudentPreview
+                ? "📦 [APERÇU] Quiz trouvé dans Dexie"
+                : "📦 [ÉLÈVE] Quiz trouvé dans Dexie",
             cachedQuiz
           );
+
+
+          // ===============================================
+          // 📦 RECHERCHE DES QUESTIONS DANS DEXIE
+          // ===============================================
+
+          const cachedQuestions =
+            await getCachedQuizQuestions(
+              cachedQuiz.id
+            );
+
+
+          if (cancelled) {
+            return;
+          }
+
+
+          const hasCachedQuestions =
+            Array.isArray(cachedQuestions) &&
+            cachedQuestions.length > 0;
+
+
+          // ===============================================
+          // 📦 QUIZ + QUESTIONS DISPONIBLES
+          // ===============================================
+
+          if (hasCachedQuestions) {
+
+            console.log(
+              isConsultation
+                ? "📦 [CONSULTATION] Questions trouvées dans Dexie :"
+                : isStudentPreview
+                  ? "📦 [APERÇU] Questions trouvées dans Dexie :"
+                  : "📦 [ÉLÈVE] Questions trouvées dans Dexie :",
+              cachedQuestions.length
+            );
+
+
+            setInitialQuestions(
+              cachedQuestions
+            );
+
+            setQuiz(
+              cachedQuiz
+            );
+
+            return;
+
+          }
+
+
+          // ===============================================
+          // 📭 QUIZ PRÉSENT MAIS QUESTIONS ABSENTES
+          // ===============================================
+
+          console.log(
+            isConsultation
+              ? "📭 [CONSULTATION] Aucune question en cache"
+              : isStudentPreview
+                ? "📭 [APERÇU] Aucune question en cache"
+                : "📭 [ÉLÈVE] Aucune question en cache"
+          );
+
+
+          // ===============================================
+          // 📴 HORS LIGNE
+          // ===============================================
+
+          if (!navigator.onLine) {
+
+            console.log(
+              isConsultation
+                ? "📴 [CONSULTATION] Hors ligne, quiz disponible sans questions"
+                : isStudentPreview
+                  ? "📴 [APERÇU] Hors ligne, quiz disponible sans questions"
+                  : "📴 [ÉLÈVE] Hors ligne, quiz disponible sans questions"
+            );
+
+
+            setQuiz(
+              cachedQuiz
+            );
+
+            return;
+
+          }
+
+
+          // ===============================================
+          // 🌐 QUESTIONS MANQUANTES → SUPABASE
+          // ===============================================
+
+          console.log(
+            isConsultation
+              ? "🌐 [CONSULTATION] Questions manquantes → Supabase"
+              : isStudentPreview
+                ? "🌐 [APERÇU] Questions manquantes → Supabase"
+                : "🌐 [ÉLÈVE] Questions manquantes → Supabase"
+          );
+
+
+          const {
+            data: networkQuestions,
+            error: questionsError
+          } = await supabase
+            .from("quiz_questions")
+            .select("*")
+            .eq("quiz_id", cachedQuiz.id)
+            .order("order_number", {
+              ascending: true
+            });
+
+
+          if (cancelled) {
+            return;
+          }
+
+
+          if (questionsError) {
+
+            console.warn(
+              "⚠️ Impossible de charger les questions du quiz",
+              questionsError
+            );
+
+            setQuiz(
+              cachedQuiz
+            );
+
+            return;
+
+          }
+
+
+          if (
+            Array.isArray(networkQuestions) &&
+            networkQuestions.length > 0
+          ) {
+
+            console.log(
+              isConsultation
+                ? "🌐 [CONSULTATION] Questions chargées depuis Supabase :"
+                : isStudentPreview
+                  ? "🌐 [APERÇU] Questions chargées depuis Supabase :"
+                  : "🌐 [ÉLÈVE] Questions chargées depuis Supabase :",
+              networkQuestions.length
+            );
+
+
+            // -------------------------------------------------
+            // IMPORTANT :
+            // Le cache des questions est géré par le système
+            // existant. On ne modifie pas ici les autres
+            // mécanismes de synchronisation.
+            // -------------------------------------------------
+
+            setInitialQuestions(
+              networkQuestions
+            );
+
+          }
 
 
           setQuiz(
             cachedQuiz
           );
 
-
           return;
 
         }
 
 
-        // =============================================
-        // CACHE VIDE
-        // =============================================
+        // =================================================
+        // 📭 3. QUIZ ABSENT DE DEXIE
+        // =================================================
 
         console.log(
           isConsultation
             ? "📭 [CONSULTATION] Aucun quiz dans Dexie"
-            : "📭 [APERÇU] Aucun quiz dans Dexie"
+            : isStudentPreview
+              ? "📭 [APERÇU] Aucun quiz dans Dexie"
+              : "📭 [ÉLÈVE] Aucun quiz dans Dexie"
         );
 
 
-        // =============================================
-        // HORS LIGNE
-        // =============================================
+        // =================================================
+        // 📴 4. HORS LIGNE → DEXIE UNIQUEMENT
+        // =================================================
 
         if (!navigator.onLine) {
 
           console.log(
             isConsultation
               ? "📴 [CONSULTATION] Hors ligne, impossible de charger le quiz"
-              : "📴 [APERÇU] Hors ligne, impossible de charger le quiz"
+              : isStudentPreview
+                ? "📴 [APERÇU] Hors ligne, impossible de charger le quiz"
+                : "📴 [ÉLÈVE] Hors ligne, impossible de charger le quiz"
           );
 
 
-          setQuiz(null);
+          if (!cancelled) {
 
-          setError(
-            "Le quiz n'est pas disponible hors ligne."
-          );
+            setQuiz(null);
+            setInitialQuestions(null);
+
+            setError(
+              "Le quiz n'est pas disponible hors ligne."
+            );
+
+          }
 
           return;
 
         }
 
 
-        // =============================================
-        // SUPABASE DIRECT
-        // =============================================
-        //
-        // IMPORTANT :
-        //
-        // Aucun getQuizByLesson().
-        // Aucun isOnline().
-        // Aucun HEAD /rest/v1/.
-        //
-        // =============================================
+        // =================================================
+        // 🌐 5. QUIZ ABSENT + ONLINE → SUPABASE
+        // =================================================
 
         console.log(
           isConsultation
-            ? "🌐 [CONSULTATION] Chargement quiz directement depuis Supabase"
-            : "🌐 [APERÇU] Chargement quiz directement depuis Supabase"
+            ? "🌐 [CONSULTATION] Quiz absent de Dexie → Supabase"
+            : isStudentPreview
+              ? "🌐 [APERÇU] Quiz absent de Dexie → Supabase"
+              : "🌐 [ÉLÈVE] Quiz absent de Dexie → Supabase"
         );
 
 
@@ -313,191 +483,219 @@ export default function ExercisePage({
         }
 
 
-        // =============================================
-        // MISE EN CACHE
-        // =============================================
+        if (cancelled) {
+          return;
+        }
 
-        if (networkQuiz) {
 
-          await cacheQuizzes([
-            networkQuiz
-          ]);
+        if (!networkQuiz) {
+
+          setQuiz(null);
+          setInitialQuestions(null);
+
+          return;
 
         }
 
 
-        setQuiz(
-          networkQuiz || null
+        // =================================================
+        // 💾 CACHE DU QUIZ
+        // =================================================
+
+        await cacheQuizzes([
+          networkQuiz
+        ]);
+
+
+        if (cancelled) {
+          return;
+        }
+
+
+        // =================================================
+        // 🌐 QUESTIONS DU QUIZ MANQUANT EN CACHE
+        // =================================================
+
+        const {
+          data: networkQuestions,
+          error: questionsError
+        } = await supabase
+          .from("quiz_questions")
+          .select("*")
+          .eq("quiz_id", networkQuiz.id)
+          .order("order_number", {
+            ascending: true
+          });
+
+
+        if (questionsError) {
+
+          console.warn(
+            "⚠️ Impossible de précharger les questions du quiz",
+            questionsError
+          );
+
+        } else if (
+          Array.isArray(networkQuestions) &&
+          networkQuestions.length > 0
+        ) {
+
+          console.log(
+            isConsultation
+              ? "🌐 [CONSULTATION] Questions chargées depuis Supabase :"
+              : isStudentPreview
+                ? "🌐 [APERÇU] Questions chargées depuis Supabase :"
+                : "🌐 [ÉLÈVE] Questions chargées depuis Supabase :",
+            networkQuestions.length
+          );
+
+
+          if (!cancelled) {
+
+            setInitialQuestions(
+              networkQuestions
+            );
+
+          }
+
+        }
+
+
+        if (!cancelled) {
+
+          setQuiz(
+            networkQuiz
+          );
+
+        }
+
+
+      } catch (err) {
+
+        if (cancelled) {
+          return;
+        }
+
+
+        console.error(
+          "Erreur chargement quiz :",
+          err
         );
 
 
-        return;
-
-      }
-
-
-      // =================================================
-      // 👨‍🎓 MODE ÉLÈVE NORMAL
-      // =================================================
-      //
-      // En ligne :
-      //     Supabase direct
-      //
-      // Hors ligne :
-      //     Dexie
-      //
-      // En cas d'erreur réseau :
-      //     fallback Dexie
-      //
-      // =================================================
-
-      if (navigator.onLine) {
-
-        console.log(
-          "🌐 [ÉLÈVE] Chargement quiz directement depuis Supabase :",
-          lessonId
-        );
-
+        // =================================================
+        // 📦 DERNIER FALLBACK DEXIE
+        // =================================================
 
         try {
 
-          const {
-            data: networkQuiz,
-            error: quizError
-          } = await supabase
-            .from("quizzes")
-            .select("*")
-            .eq("lesson_id", lessonId)
-            .maybeSingle();
+          const cachedQuizzes =
+            await getCachedQuizzes(
+              lessonId
+            );
 
 
-          if (quizError) {
-            throw quizError;
+          if (cancelled) {
+            return;
           }
 
 
-          if (networkQuiz) {
+          const cachedQuiz =
+            Array.isArray(cachedQuizzes) &&
+            cachedQuizzes.length > 0
+              ? cachedQuizzes[0]
+              : null;
 
-            await cacheQuizzes([
-              networkQuiz
-            ]);
+
+          if (cachedQuiz) {
+
+            console.log(
+              "📦 Fallback final : quiz récupéré depuis Dexie"
+            );
+
+
+            const cachedQuestions =
+              await getCachedQuizQuestions(
+                cachedQuiz.id
+              );
+
+
+            if (cancelled) {
+              return;
+            }
+
+
+            if (
+              Array.isArray(cachedQuestions) &&
+              cachedQuestions.length > 0
+            ) {
+
+              setInitialQuestions(
+                cachedQuestions
+              );
+
+            }
+
+
+            setQuiz(
+              cachedQuiz
+            );
+
+            return;
 
           }
 
+        } catch (cacheError) {
 
-          setQuiz(
-            networkQuiz || null
-          );
+          if (!cancelled) {
+
+            console.error(
+              "❌ Erreur fallback Dexie :",
+              cacheError
+            );
+
+          }
+
+        }
 
 
-          return;
+        if (!cancelled) {
 
-        } catch (networkError) {
+          setQuiz(null);
+          setInitialQuestions(null);
 
-          console.warn(
-            "⚠️ [ÉLÈVE] Erreur réseau quiz → fallback Dexie",
-            networkError
+          setError(
+            err?.message ||
+            "Impossible de charger le quiz."
           );
 
         }
 
-      }
+      } finally {
 
-
-      // =================================================
-      // FALLBACK DEXIE
-      // =================================================
-
-      console.log(
-        "📦 [ÉLÈVE] Chargement quiz depuis Dexie :",
-        lessonId
-      );
-
-
-      const cachedQuizzes =
-        await getCachedQuizzes(
-          lessonId
-        );
-
-
-      const cachedQuiz =
-        Array.isArray(cachedQuizzes) &&
-        cachedQuizzes.length > 0
-          ? cachedQuizzes[0]
-          : null;
-
-
-      setQuiz(
-        cachedQuiz || null
-      );
-
-
-    } catch (err) {
-
-      console.error(
-        "Erreur chargement quiz :",
-        err
-      );
-
-
-      // =================================================
-      // DERNIER FALLBACK DEXIE
-      // =================================================
-
-      try {
-
-        const cachedQuizzes =
-          await getCachedQuizzes(
-            lessonId
-          );
-
-
-        const cachedQuiz =
-          Array.isArray(cachedQuizzes) &&
-          cachedQuizzes.length > 0
-            ? cachedQuizzes[0]
-            : null;
-
-
-        if (cachedQuiz) {
-
-          console.log(
-            "📦 Fallback final : quiz récupéré depuis Dexie"
-          );
-
-          setQuiz(
-            cachedQuiz
-          );
-
-          return;
-
+        if (!cancelled) {
+          setLoading(false);
         }
 
-      } catch (cacheError) {
-
-        console.error(
-          "❌ Erreur fallback Dexie :",
-          cacheError
-        );
-
       }
-
-
-      setQuiz(null);
-
-      setError(
-        err?.message ||
-        "Impossible de charger le quiz."
-      );
-
-
-    } finally {
-
-      setLoading(false);
 
     }
 
-  }
+
+    load();
+
+
+    return () => {
+
+      cancelled = true;
+
+    };
+
+  }, [
+    lessonId,
+    isConsultation,
+    isStudentPreview
+  ]);
 
 
   // =====================================================
@@ -520,6 +718,7 @@ export default function ExercisePage({
 
     }
 
+
     // ---------------------------------------------------
     // MODE NORMAL / CONSULTATION
     // ---------------------------------------------------
@@ -533,7 +732,10 @@ export default function ExercisePage({
   // LOADING
   // =====================================================
 
-  if (loading) {
+  if (
+    loading &&
+    !isPreviewMode
+  ) {
 
     return (
 
@@ -608,6 +810,20 @@ export default function ExercisePage({
       </div>
 
     );
+
+  }
+
+
+  // =====================================================
+  // ATTENTE SILENCIEUSE APERÇU / CONSULTATION
+  // =====================================================
+
+  if (
+    loading &&
+    isPreviewMode
+  ) {
+
+    return null;
 
   }
 
@@ -774,7 +990,15 @@ export default function ExercisePage({
 
               <button
                 type="button"
-                onClick={loadQuiz}
+                onClick={() => {
+                  setLoading(true);
+                  setError(null);
+                  setQuiz(null);
+                  setInitialQuestions(null);
+                  window.dispatchEvent(
+                    new Event("kalan-reload-quiz")
+                  );
+                }}
                 className="
                   inline-flex
                   items-center
@@ -1300,6 +1524,10 @@ export default function ExercisePage({
 
               lessonId={
                 lessonId
+              }
+
+              initialQuestions={
+                initialQuestions
               }
 
               consultationMode={

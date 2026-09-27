@@ -23,6 +23,13 @@ import {
 
 import { supabase } from "../lib/supabase";
 
+import {
+  getCachedUserProgress,
+  getCachedQuizAttempts,
+  getCachedLessons,
+  getCachedSubjects,
+} from "../offline/db";
+
 const XP_PER_LEVEL = 500;
 
 const DASHBOARD_CACHE_PREFIX =
@@ -31,8 +38,11 @@ const DASHBOARD_CACHE_PREFIX =
 const DASHBOARD_CACHE_DURATION =
   5 * 60 * 1000;
 
+const XP_CACHE_PREFIX =
+  "kalan_xp_cache_";
+
 // =====================================================
-// CACHE
+// CACHE DASHBOARD
 // =====================================================
 
 function getDashboardCacheKey(userId) {
@@ -107,6 +117,337 @@ function setCachedDashboard(
 }
 
 // =====================================================
+// CACHE XP LOCAL
+// =====================================================
+
+function getCachedXP(userId) {
+  if (!userId) {
+    return null;
+  }
+
+  try {
+    const raw =
+      localStorage.getItem(
+        `${XP_CACHE_PREFIX}${userId}`
+      );
+
+    if (!raw) {
+      return null;
+    }
+
+    const parsed =
+      JSON.parse(raw);
+
+    if (!parsed) {
+      return null;
+    }
+
+    const xp =
+      Math.max(
+        Number(parsed.xp) || 0,
+        0
+      );
+
+    return {
+      xp,
+      level:
+        Math.floor(
+          xp / XP_PER_LEVEL
+        ) + 1,
+    };
+  } catch {
+    return null;
+  }
+}
+
+// =====================================================
+// CONSTRUCTION DES DONNÉES LOCALES
+// =====================================================
+
+async function buildLocalDashboard(
+  userId,
+  cachedDashboard = null
+) {
+  if (!userId) {
+    return null;
+  }
+
+  const [
+    progressData,
+    attemptsData,
+    lessonsData,
+    subjectsData,
+  ] = await Promise.all([
+    getCachedUserProgress(userId),
+    getCachedQuizAttempts(userId),
+    getCachedLessonsFromAllChapters(),
+    getCachedSubjectsFromAllClasses(),
+  ]);
+
+  const xpCache =
+    getCachedXP(userId);
+
+  const baseProfile =
+    cachedDashboard?.profile || null;
+
+  const profile = {
+    ...(baseProfile || {}),
+    id:
+      baseProfile?.id ||
+      userId,
+    xp:
+      xpCache?.xp ??
+      Number(baseProfile?.xp) ??
+      0,
+    level:
+      xpCache?.level ??
+      (
+        Math.floor(
+          (
+            Number(
+              baseProfile?.xp
+            ) || 0
+          ) /
+          XP_PER_LEVEL
+        ) + 1
+      ),
+    full_name:
+      baseProfile?.full_name ||
+      "Élève",
+  };
+
+  // =====================================================
+  // INDEX DES LEÇONS
+  // =====================================================
+
+  const lessonById =
+    new Map();
+
+  lessonsData.forEach(
+    (lesson) => {
+      if (lesson?.id) {
+        lessonById.set(
+          String(lesson.id),
+          lesson
+        );
+      }
+    }
+  );
+
+  // =====================================================
+  // INDEX DES MATIÈRES
+  // =====================================================
+
+  const subjectById =
+    new Map();
+
+  subjectsData.forEach(
+    (subject) => {
+      if (subject?.id) {
+        subjectById.set(
+          String(subject.id),
+          subject
+        );
+      }
+    }
+  );
+
+  // =====================================================
+  // LEÇONS TERMINÉES
+  // =====================================================
+
+  const completedLessons =
+    progressData.reduce(
+      (total, item) =>
+        total +
+        (
+          item?.completed === true
+            ? 1
+            : 0
+        ),
+      0
+    );
+
+  // =====================================================
+  // PROGRESSION PAR MATIÈRE
+  // =====================================================
+
+  const subjectsProgress =
+    {};
+
+  progressData.forEach(
+    (item) => {
+      if (!item?.lesson_id) {
+        return;
+      }
+
+      const lesson =
+        lessonById.get(
+          String(item.lesson_id)
+        );
+
+      if (!lesson) {
+        return;
+      }
+
+      const subject =
+        subjectById.get(
+          String(
+            lesson.subject_id
+          )
+        );
+
+      const subjectName =
+        subject?.name;
+
+      if (!subjectName) {
+        return;
+      }
+
+      if (
+        !subjectsProgress[
+          subjectName
+        ]
+      ) {
+        subjectsProgress[
+          subjectName
+        ] = {
+          total: 0,
+          completed: 0,
+          percentage: 0,
+        };
+      }
+
+      subjectsProgress[
+        subjectName
+      ].total += 1;
+
+      if (
+        item?.completed === true
+      ) {
+        subjectsProgress[
+          subjectName
+        ].completed += 1;
+      }
+    }
+  );
+
+  Object.keys(
+    subjectsProgress
+  ).forEach(
+    (subjectName) => {
+      const item =
+        subjectsProgress[
+          subjectName
+        ];
+
+      item.percentage =
+        item.total > 0
+          ? Math.round(
+              (
+                item.completed /
+                item.total
+              ) *
+              100
+            )
+          : 0;
+    }
+  );
+
+  // =====================================================
+  // SCORE MOYEN
+  // =====================================================
+
+  const totalScore =
+    attemptsData.reduce(
+      (total, attempt) =>
+        total +
+        (
+          Number(
+            attempt?.score
+          ) || 0
+        ),
+      0
+    );
+
+  const averageScore =
+    attemptsData.length > 0
+      ? Math.round(
+          totalScore /
+          attemptsData.length
+        )
+      : 0;
+
+  // =====================================================
+  // BADGES
+  // =====================================================
+  //
+  // Les badges utilisateur ne sont pas stockés dans
+  // Dexie. On conserve donc ceux du cache Dashboard
+  // lorsqu'ils existent.
+  //
+
+  const badgeData =
+    Array.isArray(
+      cachedDashboard?.badges
+    )
+      ? cachedDashboard.badges
+      : [];
+
+  return {
+    profile,
+
+    subjects:
+      subjectsProgress,
+
+    badges:
+      badgeData,
+
+    stats: {
+      lessons:
+        completedLessons,
+
+      score:
+        averageScore,
+
+      badges:
+        badgeData.length,
+
+      attempts:
+        attemptsData.length,
+    },
+  };
+}
+
+
+// =====================================================
+// LECTURE PÉDAGOGIQUE LOCALE
+// =====================================================
+//
+// Les index Dexie sont construits par chapter_id / class_id.
+// Pour le Dashboard, nous avons besoin de toutes les leçons
+// et matières déjà présentes localement.
+//
+// IMPORTANT : aucune requête réseau.
+// =====================================================
+
+async function getCachedLessonsFromAllChapters() {
+  const { db } =
+    await import("../offline/db");
+
+  return await db.lessons.toArray();
+}
+
+
+async function getCachedSubjectsFromAllClasses() {
+  const { db } =
+    await import("../offline/db");
+
+  return await db.subjects.toArray();
+}
+
+
+// =====================================================
 // COMPOSANT
 // =====================================================
 
@@ -119,16 +460,6 @@ export default function DashboardPage({
   const location =
     useLocation();
 
-  /*
-   * IMPORTANT
-   *
-   * En consultation, ConsultationStudentLayout
-   * transmet les données déjà chargées par
-   * ConsultationStudentProvider.
-   *
-   * En mode normal / preview, aucun contexte
-   * n'est nécessaire.
-   */
   const outletContext =
     useOutletContext() || {};
 
@@ -290,10 +621,6 @@ export default function DashboardPage({
           badgesResult,
         ] =
           await Promise.all([
-            // -------------------------------------------------
-            // PROFILE
-            // -------------------------------------------------
-
             supabase
               .from("profiles")
               .select(
@@ -306,10 +633,6 @@ export default function DashboardPage({
               )
               .eq("id", userId)
               .maybeSingle(),
-
-            // -------------------------------------------------
-            // PROGRESSION
-            // -------------------------------------------------
 
             supabase
               .from("user_progress")
@@ -335,10 +658,6 @@ export default function DashboardPage({
                 userId
               ),
 
-            // -------------------------------------------------
-            // QUIZ
-            // -------------------------------------------------
-
             supabase
               .from("quiz_attempts")
               .select(
@@ -348,10 +667,6 @@ export default function DashboardPage({
                 "user_id",
                 userId
               ),
-
-            // -------------------------------------------------
-            // BADGES
-            // -------------------------------------------------
 
             supabase
               .from("user_badges")
@@ -371,10 +686,6 @@ export default function DashboardPage({
                 userId
               ),
           ]);
-
-        // =====================================================
-        // ERREURS
-        // =====================================================
 
         if (profileResult.error) {
           throw profileResult.error;
@@ -425,10 +736,6 @@ export default function DashboardPage({
                 badgesResult.data || []
               );
 
-        // =====================================================
-        // LEÇONS TERMINÉES
-        // =====================================================
-
         const completedLessons =
           progressData.reduce(
             (total, item) =>
@@ -440,10 +747,6 @@ export default function DashboardPage({
               ),
             0
           );
-
-        // =====================================================
-        // PROGRESSION PAR MATIÈRE
-        // =====================================================
 
         const subjectsProgress =
           {};
@@ -508,10 +811,6 @@ export default function DashboardPage({
           }
         );
 
-        // =====================================================
-        // SCORE MOYEN
-        // =====================================================
-
         const totalScore =
           attemptsData.reduce(
             (total, attempt) =>
@@ -532,10 +831,6 @@ export default function DashboardPage({
               )
             : 0;
 
-        // =====================================================
-        // BADGES
-        // =====================================================
-
         const badgeData =
           badgesRaw
             .map(
@@ -543,10 +838,6 @@ export default function DashboardPage({
                 item?.badges
             )
             .filter(Boolean);
-
-        // =====================================================
-        // RÉSULTAT FINAL
-        // =====================================================
 
         return {
           profile:
@@ -602,11 +893,9 @@ export default function DashboardPage({
         setError(null);
 
         try {
-          /*
-           * =================================================
-           * CONSULTATION
-           * =================================================
-           */
+          // =================================================
+          // CONSULTATION
+          // =================================================
 
           if (
             isConsultation &&
@@ -659,9 +948,9 @@ export default function DashboardPage({
             return;
           }
 
-          // =====================================================
+          // =================================================
           // UTILISATEUR CIBLE
-          // =====================================================
+          // =================================================
 
           const userId =
             await getTargetUserId();
@@ -672,14 +961,14 @@ export default function DashboardPage({
             );
           }
 
-          // =====================================================
-          // CACHE
-          // =====================================================
+          // =================================================
+          // CACHE DASHBOARD RÉCENT
+          // =================================================
 
           const cachedData =
             getCachedDashboard(
               userId,
-              true
+              false
             );
 
           if (
@@ -690,63 +979,92 @@ export default function DashboardPage({
               cachedData
             );
 
-            if (
-              mountedRef.current
-            ) {
-              setLoading(false);
-            }
+            console.log(
+              "⚡ Dashboard chargé depuis le cache"
+            );
 
-            const raw =
-              sessionStorage.getItem(
-                getDashboardCacheKey(
-                  userId
-                )
-              );
+            return;
+          }
 
-            let cacheIsFresh =
-              false;
+          // =================================================
+          // DONNÉES LOCALES
+          // =================================================
+          //
+          // Si le cache Dashboard est absent ou expiré,
+          // on reconstruit le Dashboard depuis Dexie
+          // et le cache XP avant de contacter Supabase.
+          //
+          // Le bouton Actualiser reste volontairement
+          // capable de forcer une vraie actualisation
+          // serveur.
+          // =================================================
 
-            if (raw) {
-              try {
-                const parsed =
-                  JSON.parse(raw);
+          if (!isRefresh) {
+            try {
+              const localData =
+                await buildLocalDashboard(
+                  userId,
+                  getCachedDashboard(
+                    userId,
+                    true
+                  )
+                );
 
-                const age =
-                  Date.now() -
-                  Number(
-                    parsed.timestamp || 0
+              const hasLocalData =
+                Boolean(
+                  localData?.profile
+                ) &&
+                (
+                  localData.stats.lessons > 0 ||
+                  localData.stats.attempts > 0 ||
+                  getCachedXP(userId) !== null ||
+                  getCachedDashboard(
+                    userId,
+                    true
+                  ) !== null
+                );
+
+              if (hasLocalData) {
+                if (
+                  mountedRef.current
+                ) {
+                  applyDashboardData(
+                    localData
                   );
+                }
 
-                cacheIsFresh =
-                  age <=
-                  DASHBOARD_CACHE_DURATION;
-              } catch {
-                cacheIsFresh =
-                  false;
+                console.log(
+                  "📦 Dashboard chargé depuis Dexie + cache local"
+                );
+
+                return;
               }
-            }
-
-            if (cacheIsFresh) {
-              console.log(
-                "⚡ Dashboard chargé depuis le cache"
+            } catch (localError) {
+              console.warn(
+                "⚠️ Chargement local Dashboard impossible :",
+                localError
               );
-
-              return;
             }
           }
 
-          // =====================================================
+          // =================================================
           // HORS LIGNE
-          // =====================================================
+          // =================================================
 
           if (
             typeof navigator !==
               "undefined" &&
             navigator.onLine === false
           ) {
-            if (cachedData) {
+            const fallback =
+              getCachedDashboard(
+                userId,
+                true
+              );
+
+            if (fallback) {
               applyDashboardData(
-                cachedData
+                fallback
               );
 
               console.log(
@@ -757,13 +1075,13 @@ export default function DashboardPage({
             }
 
             throw new Error(
-              "Connexion Internet indisponible et aucune donnée en cache."
+              "Connexion Internet indisponible et aucune donnée locale disponible."
             );
           }
 
-          // =====================================================
+          // =================================================
           // SUPABASE
-          // =====================================================
+          // =================================================
 
           const freshData =
             await fetchDashboardFromSupabase(
@@ -794,9 +1112,10 @@ export default function DashboardPage({
             loadError
           );
 
-          /*
-           * Fallback cache
-           */
+          // =================================================
+          // FALLBACK LOCAL
+          // =================================================
+
           try {
             const fallbackUserId =
               isConsultation
@@ -804,19 +1123,36 @@ export default function DashboardPage({
                 : await getTargetUserId();
 
             if (fallbackUserId) {
-              const fallback =
+              const fallbackCache =
                 getCachedDashboard(
                   fallbackUserId,
                   true
                 );
 
-              if (fallback) {
+              if (fallbackCache) {
                 applyDashboardData(
-                  fallback
+                  fallbackCache
                 );
 
                 console.log(
                   "⚠️ Dashboard récupéré depuis le cache"
+                );
+
+                return;
+              }
+
+              const localData =
+                await buildLocalDashboard(
+                  fallbackUserId
+                );
+
+              if (localData) {
+                applyDashboardData(
+                  localData
+                );
+
+                console.log(
+                  "⚠️ Dashboard récupéré depuis les données locales"
                 );
 
                 return;
@@ -1178,8 +1514,6 @@ export default function DashboardPage({
           shadow-lg
         "
       >
-        {/* DÉCORATIONS */}
-
         <div
           className="
             absolute
@@ -1225,8 +1559,6 @@ export default function DashboardPage({
             z-10
           "
         >
-          {/* BADGE */}
-
           <div
             className="
               inline-flex
@@ -1247,8 +1579,6 @@ export default function DashboardPage({
             Tableau de bord
           </div>
 
-          {/* BIENVENUE */}
-
           <p
             className="
               text-sm
@@ -1260,8 +1590,6 @@ export default function DashboardPage({
           >
             Bienvenue sur ton espace d'apprentissage
           </p>
-
-          {/* NOM */}
 
           <h1
             className="
@@ -1275,8 +1603,6 @@ export default function DashboardPage({
             {profile.full_name || "Élève"}
           </h1>
 
-          {/* SLOGAN */}
-
           <p
             className="
               text-lg
@@ -1288,8 +1614,6 @@ export default function DashboardPage({
           >
             Continue ton apprentissage et progresse chaque jour.
           </p>
-
-          {/* DESCRIPTION + ACTUALISATION */}
 
           <div
             className="
@@ -1685,8 +2009,6 @@ export default function DashboardPage({
             gap-3
           "
         >
-          {/* LEÇONS */}
-
           <div
             className="
               theme-surface
@@ -1743,8 +2065,6 @@ export default function DashboardPage({
               </div>
             </div>
           </div>
-
-          {/* SCORE */}
 
           <div
             className="
@@ -1803,8 +2123,6 @@ export default function DashboardPage({
             </div>
           </div>
 
-          {/* BADGES */}
-
           <div
             className="
               theme-surface
@@ -1861,8 +2179,6 @@ export default function DashboardPage({
               </div>
             </div>
           </div>
-
-          {/* QUIZ */}
 
           <div
             className="

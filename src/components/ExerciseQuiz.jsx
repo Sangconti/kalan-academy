@@ -34,6 +34,7 @@ import {
 export default function ExerciseQuiz({
   quizId,
   lessonId,
+  initialQuestions = null,
   consultationMode = false
 }) {
 
@@ -55,6 +56,11 @@ export default function ExerciseQuiz({
   // STATE
   // ====================================
 
+  const hasInitialQuestions =
+    Array.isArray(initialQuestions) &&
+    initialQuestions.length > 0;
+
+
   const [answers, setAnswers] =
     useState({});
 
@@ -62,10 +68,18 @@ export default function ExerciseQuiz({
     useState(null);
 
   const [questions, setQuestions] =
-    useState([]);
+    useState(
+      hasInitialQuestions
+        ? prepareShuffledQuestions(
+            initialQuestions
+          )
+        : []
+    );
 
   const [loading, setLoading] =
-    useState(true);
+    useState(
+      !hasInitialQuestions
+    );
 
   const [validating, setValidating] =
     useState(false);
@@ -191,9 +205,59 @@ export default function ExerciseQuiz({
 
     if (!quizId) return;
 
+
+    // ==================================
+    // 📦 QUESTIONS PRÉCHARGÉES
+    // ==================================
+
+    if (
+      Array.isArray(initialQuestions) &&
+      initialQuestions.length > 0
+    ) {
+
+      const shuffledQuestions =
+        prepareShuffledQuestions(
+          initialQuestions
+        );
+
+
+      console.log(
+        "📦 QUESTIONS PRÉCHARGÉES UTILISÉES",
+        initialQuestions
+      );
+
+
+      console.log(
+        "🔀 QUESTIONS MÉLANGÉES",
+        shuffledQuestions
+      );
+
+
+      setAnswers({});
+
+      setResult(null);
+
+      setQuestions(
+        shuffledQuestions
+      );
+
+      setLoading(false);
+
+      return;
+
+    }
+
+
+    // ==================================
+    // 🌐 FALLBACK
+    // ==================================
+
     loadQuestions();
 
-  }, [quizId]);
+  }, [
+    quizId,
+    initialQuestions
+  ]);
 
 
   async function loadQuestions() {

@@ -746,6 +746,7 @@ export async function saveProgress(progress) {
   return savedId;
 }
 
+
 // ======================================================
 // PROGRESSIONS NON SYNCHRONISÉES
 // ======================================================
@@ -808,6 +809,37 @@ export async function getCachedProgress(
     )
     .first();
 }
+
+
+// ======================================================
+// RÉCUPÉRER TOUTES LES PROGRESSIONS D'UN UTILISATEUR
+// ======================================================
+//
+// Utilisé notamment par le Dashboard étudiant.
+//
+// IMPORTANT :
+// - lecture uniquement
+// - aucune modification de la progression
+// - aucune modification de la synchronisation
+// - retourne uniquement les données de l'utilisateur demandé
+//
+// L'index user_id permet d'éviter de parcourir inutilement
+// les progressions des autres utilisateurs.
+// ======================================================
+
+export async function getCachedUserProgress(
+  userId
+) {
+
+  if (!userId)
+    return [];
+
+  return await db.userProgress
+    .where("user_id")
+    .equals(userId)
+    .toArray();
+}
+
 
 // ======================================================
 // RÉINITIALISATION LOCALE DE LA PROGRESSION
@@ -1035,6 +1067,7 @@ export async function clearLocalUserProgress(
   );
 }
 
+
 // ======================================================
 // QUIZ ATTEMPTS
 // ======================================================
@@ -1078,6 +1111,34 @@ export async function getUnsyncedQuizAttempts() {
       item?.synced === undefined
   );
 }
+
+
+// ======================================================
+// RÉCUPÉRER TOUTES LES TENTATIVES D'UN UTILISATEUR
+// ======================================================
+//
+// Utilisé notamment par le Dashboard étudiant.
+//
+// IMPORTANT :
+// - lecture uniquement
+// - aucune modification des tentatives
+// - aucune modification de la synchronisation
+// - retourne uniquement les tentatives de l'utilisateur demandé
+// ======================================================
+
+export async function getCachedQuizAttempts(
+  userId
+) {
+
+  if (!userId)
+    return [];
+
+  return await db.quizAttempts
+    .where("user_id")
+    .equals(userId)
+    .toArray();
+}
+
 
 // ======================================================
 // MARQUER UNE TENTATIVE SYNCHRONISÉE

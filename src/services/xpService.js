@@ -169,6 +169,58 @@ async function checkProgressResetBeforeXP(
     );
 
 
+  // ===================================
+  // MODE OFFLINE
+  // ===================================
+
+  /*
+    Hors ligne, il est impossible de vérifier
+    une nouvelle réinitialisation sur Supabase.
+
+    On utilise donc la dernière version locale
+    connue.
+
+    La vérification serveur sera effectuée
+    dès qu'une connexion sera disponible.
+
+    Cela évite toute requête :
+
+      GET /rest/v1/profiles
+
+    pendant le fonctionnement offline.
+  */
+
+  if (
+    typeof navigator !== "undefined" &&
+    !navigator.onLine
+  ) {
+
+    console.log(
+      "📴 [XP] Hors ligne → vérification reset locale uniquement"
+    );
+
+    return {
+
+      allowed:
+        true,
+
+      resetDetected:
+        false,
+
+      localVersion,
+
+      serverVersion:
+        null
+
+    };
+
+  }
+
+
+  // ===================================
+  // MODE ONLINE
+  // ===================================
+
   try {
 
     const {
@@ -309,10 +361,12 @@ async function checkProgressResetBeforeXP(
 
 
     /*
-      On autorise ici le fonctionnement offline.
+      Si la connexion devient indisponible
+      pendant la vérification, on autorise
+      le fonctionnement offline.
 
-      La protection principale reste active dès que
-      le serveur est de nouveau accessible.
+      La protection serveur sera réévaluée
+      lors de la prochaine connexion disponible.
     */
 
     return {
@@ -603,129 +657,35 @@ export async function addXP(
 
 
   /*
-    Si aucun cache XP n'existe encore,
-    on essaie de récupérer le XP serveur
-    une dernière fois.
+    IMPORTANT :
 
-    Cela évite de faire :
+    Hors ligne, on ne tente plus de récupérer
+    le XP depuis Supabase.
 
-    5500 XP → offline → 100 XP
+    Si un cache XP existe, il est utilisé.
 
-    au lieu de :
+    S'il n'existe pas encore, on démarre
+    avec 0 XP puis on ajoute le gain localement.
 
-    5500 XP → offline → 5600 XP
+    Les gains sont placés dans syncQueue
+    pour être synchronisés ultérieurement.
   */
 
   if (!cached) {
 
-    try {
+    console.log(
+      "📴 [XP] Aucun cache XP → démarrage local à 0 XP"
+    );
 
-      const {
-        data: profile
-      } = await supabase
+    cached = {
 
-        .from("profiles")
+      xp:
+        0,
 
-        .select(
-          "xp, level, progress_reset_version"
-        )
+      level:
+        1
 
-        .eq(
-          "id",
-          userId
-        )
-
-        .single();
-
-
-      if (profile) {
-
-        const serverVersion =
-          Math.max(
-            Number(
-              profile.progress_reset_version
-            ) || 0,
-            0
-          );
-
-
-        const localVersion =
-          getLocalProgressResetVersion(
-            userId
-          );
-
-
-        // ------------------------------
-        // PROTECTION RESET
-        // ------------------------------
-
-        if (
-          serverVersion >
-          localVersion
-        ) {
-
-          console.log(
-            "🚨 Réinitialisation détectée avant récupération XP."
-          );
-
-
-          await clearLocalUserProgress(
-            userId
-          );
-
-
-          setLocalProgressResetVersion(
-            userId,
-            serverVersion
-          );
-
-
-          cached = {
-
-            xp:
-              0,
-
-            level:
-              1
-
-          };
-
-        }
-
-        else {
-
-          cached = {
-
-            xp:
-              Math.max(
-                Number(profile.xp) || 0,
-                0
-              ),
-
-            level:
-              calculateLevel(
-                profile.xp
-              )
-
-          };
-
-
-          saveCachedXP(
-            userId,
-            cached
-          );
-
-        }
-
-      }
-
-    }
-    catch {
-
-      // Si aucun accès serveur n'est possible,
-      // on utilisera le cache ou 0 comme dernier recours.
-
-    }
+    };
 
   }
 

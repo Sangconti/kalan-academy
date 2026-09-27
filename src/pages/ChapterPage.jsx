@@ -16,7 +16,10 @@ import {
   getChapter
 } from "../services/educationService";
 
+import { supabase } from "../lib/supabase";
+
 import {
+  cacheChapter,
   cacheLessons,
   getCachedLessons,
   getCachedChapter
@@ -104,10 +107,198 @@ export default function ChapterPage() {
 
 
         // =================================================
-        // ONLINE
+        // MODE CONSULTATION / APERÇU
         // =================================================
 
-        if (isOnline) {
+        if (
+          isConsultation ||
+          isStudentPreview
+        ) {
+
+          console.log(
+            isConsultation
+              ? "👁️ [CONSULTATION] Chargement chapitre depuis Dexie :"
+              : "👁️ [APERÇU] Chargement chapitre depuis Dexie :",
+            chapterId
+          );
+
+
+          // -------------------------------------------------
+          // 1. DEXIE
+          // -------------------------------------------------
+
+          chapterData =
+            await getCachedChapter(
+              chapterId
+            );
+
+
+          lessonsData =
+            await getCachedLessons(
+              chapterId
+            );
+
+
+          const hasCachedChapter =
+            Boolean(chapterData);
+
+
+          const hasCachedLessons =
+            Array.isArray(lessonsData) &&
+            lessonsData.length > 0;
+
+
+          // -------------------------------------------------
+          // 2. CACHE COMPLET
+          // -------------------------------------------------
+
+          if (
+            hasCachedChapter &&
+            hasCachedLessons
+          ) {
+
+            console.log(
+              isConsultation
+                ? "📦 [CONSULTATION] Chapitre et leçons trouvés dans Dexie"
+                : "📦 [APERÇU] Chapitre et leçons trouvés dans Dexie"
+            );
+
+          }
+
+
+          // -------------------------------------------------
+          // 3. CACHE INCOMPLET
+          // -------------------------------------------------
+
+          else {
+
+            console.log(
+              isConsultation
+                ? "🌐 [CONSULTATION] Cache incomplet/vide → Supabase direct"
+                : "🌐 [APERÇU] Cache incomplet/vide → Supabase direct"
+            );
+
+
+            // ===============================================
+            // CHAPITRE
+            // ===============================================
+
+            if (!hasCachedChapter) {
+
+              try {
+
+                const {
+                  data,
+                  error
+                } = await supabase
+                  .from("chapters")
+                  .select("*")
+                  .eq(
+                    "id",
+                    chapterId
+                  )
+                  .maybeSingle();
+
+
+                if (error) {
+
+                  throw error;
+
+                }
+
+
+                chapterData =
+                  data || null;
+
+
+                if (chapterData) {
+
+                  await cacheChapter(
+                    chapterData
+                  );
+
+                }
+
+              } catch (chapterError) {
+
+                console.warn(
+                  "⚠️ [APERÇU] Chapitre réseau indisponible :",
+                  chapterError
+                );
+
+              }
+
+            }
+
+
+            // ===============================================
+            // LEÇONS
+            // ===============================================
+
+            if (!hasCachedLessons) {
+
+              try {
+
+                const {
+                  data,
+                  error
+                } = await supabase
+                  .from("lessons")
+                  .select("*")
+                  .eq(
+                    "chapter_id",
+                    chapterId
+                  )
+                  .order(
+                    "order_number",
+                    {
+                      ascending: true
+                    }
+                  );
+
+
+                if (error) {
+
+                  throw error;
+
+                }
+
+
+                lessonsData =
+                  data || [];
+
+
+                if (
+                  lessonsData.length > 0
+                ) {
+
+                  await cacheLessons(
+                    lessonsData
+                  );
+
+                }
+
+              } catch (lessonsError) {
+
+                console.warn(
+                  "⚠️ [APERÇU] Leçons réseau indisponibles :",
+                  lessonsError
+                );
+
+              }
+
+            }
+
+          }
+
+        }
+
+
+        // =================================================
+        // MODE NORMAL
+        // =================================================
+
+        else if (isOnline) {
 
           try {
 
@@ -123,7 +314,9 @@ export default function ChapterPage() {
               );
 
 
-            if (lessonsData?.length) {
+            if (
+              lessonsData?.length
+            ) {
 
               await cacheLessons(
                 lessonsData
@@ -156,7 +349,7 @@ export default function ChapterPage() {
 
 
         // =================================================
-        // OFFLINE
+        // MODE HORS LIGNE
         // =================================================
 
         else {
@@ -180,7 +373,11 @@ export default function ChapterPage() {
         }
 
 
-        if (cancelled) return;
+        if (cancelled) {
+
+          return;
+
+        }
 
 
         setChapter(
@@ -238,7 +435,9 @@ export default function ChapterPage() {
 
   }, [
     chapterId,
-    isOnline
+    isOnline,
+    isConsultation,
+    isStudentPreview
   ]);
 
 

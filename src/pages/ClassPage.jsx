@@ -12,8 +12,13 @@ import {
 } from "react-router-dom";
 
 import {
-  getSubjects
-} from "../services/educationService";
+  supabase
+} from "../lib/supabase";
+
+import {
+  getCachedSubjects,
+  cacheSubjects
+} from "../offline/db";
 
 import {
   ArrowLeft,
@@ -37,6 +42,57 @@ export default function ClassPage() {
 
   const [error, setError] =
     useState("");
+
+
+  // =====================================================
+  // 🌐 ÉTAT RÉSEAU DU NAVIGATEUR
+  // =====================================================
+
+  const [isOnline, setIsOnline] =
+    useState(
+      typeof navigator !== "undefined"
+        ? navigator.onLine
+        : true
+    );
+
+
+  useEffect(() => {
+
+    const handleOnline = () => {
+      setIsOnline(true);
+    };
+
+    const handleOffline = () => {
+      setIsOnline(false);
+    };
+
+
+    window.addEventListener(
+      "online",
+      handleOnline
+    );
+
+    window.addEventListener(
+      "offline",
+      handleOffline
+    );
+
+
+    return () => {
+
+      window.removeEventListener(
+        "online",
+        handleOnline
+      );
+
+      window.removeEventListener(
+        "offline",
+        handleOffline
+      );
+
+    };
+
+  }, []);
 
 
   // =====================================================
@@ -115,24 +171,238 @@ export default function ClassPage() {
         }
 
 
-        const data =
-          await getSubjects(classId);
+        // =================================================
+        // MODE CONSULTATION / APERÇU
+        // =================================================
+        // Dexie est toujours prioritaire.
+        //
+        // Si le cache contient les matières :
+        // → aucun réseau.
+        //
+        // Si le cache est vide :
+        // → Supabase directement si disponible.
+        // → Aucun appel à isOnline().
+        // → Aucun HEAD /rest/v1/.
+        // =================================================
+
+        if (
+          isConsultation ||
+          isStudentPreview
+        ) {
+
+          console.log(
+            isConsultation
+              ? "👁️ [CONSULTATION] Chargement matières depuis Dexie :"
+              : "👁️ [APERÇU] Chargement matières depuis Dexie :",
+            classId
+          );
 
 
-        // Sécurité :
-        // uniquement les matières de cette classe
+          const cachedSubjects =
+            await getCachedSubjects(
+              classId
+            );
 
-        const filtered =
-          (data || []).filter(
-            subject =>
-              String(subject.class_id) ===
-              String(classId)
+
+          if (
+            Array.isArray(cachedSubjects) &&
+            cachedSubjects.length > 0
+          ) {
+
+            console.log(
+              isConsultation
+                ? "📦 [CONSULTATION] Matières trouvées dans Dexie"
+                : "📦 [APERÇU] Matières trouvées dans Dexie"
+            );
+
+
+            if (!cancelled) {
+
+              setSubjects(
+                cachedSubjects
+              );
+
+            }
+
+
+            return;
+
+          }
+
+
+          console.log(
+            isConsultation
+              ? "📭 [CONSULTATION] Aucune matière en cache"
+              : "📭 [APERÇU] Aucune matière en cache"
+          );
+
+
+          // -------------------------------------------------
+          // CACHE VIDE + HORS LIGNE
+          // -------------------------------------------------
+
+          if (!isOnline) {
+
+            console.log(
+              isConsultation
+                ? "📴 [CONSULTATION] Cache vide et hors ligne"
+                : "📴 [APERÇU] Cache vide et hors ligne"
+            );
+
+
+            if (!cancelled) {
+
+              setSubjects([]);
+
+            }
+
+
+            return;
+
+          }
+
+
+          // -------------------------------------------------
+          // CACHE VIDE + EN LIGNE
+          // -------------------------------------------------
+
+          console.log(
+            isConsultation
+              ? "🌐 [CONSULTATION] Chargement matières depuis Supabase"
+              : "🌐 [APERÇU] Chargement matières depuis Supabase"
+          );
+
+
+          const {
+            data,
+            error: subjectsError
+          } = await supabase
+            .from("subjects")
+            .select("*")
+            .eq("class_id", classId);
+
+
+          if (subjectsError) {
+            throw subjectsError;
+          }
+
+
+          const filtered =
+            (data || []).filter(
+              subject =>
+                String(subject.class_id) ===
+                String(classId)
+            );
+
+
+          if (
+            filtered.length > 0
+          ) {
+
+            await cacheSubjects(
+              filtered
+            );
+
+          }
+
+
+          if (!cancelled) {
+
+            setSubjects(
+              filtered
+            );
+
+          }
+
+
+          return;
+
+        }
+
+
+        // =================================================
+        // MODE ÉLÈVE NORMAL
+        // =================================================
+        // Supabase direct si Internet disponible.
+        // Aucun HEAD /rest/v1/.
+        // =================================================
+
+        if (isOnline) {
+
+          console.log(
+            "🌐 [ÉLÈVE] Chargement matières depuis Supabase :",
+            classId
+          );
+
+
+          const {
+            data,
+            error: subjectsError
+          } = await supabase
+            .from("subjects")
+            .select("*")
+            .eq("class_id", classId);
+
+
+          if (subjectsError) {
+            throw subjectsError;
+          }
+
+
+          const filtered =
+            (data || []).filter(
+              subject =>
+                String(subject.class_id) ===
+                String(classId)
+            );
+
+
+          if (
+            filtered.length > 0
+          ) {
+
+            await cacheSubjects(
+              filtered
+            );
+
+          }
+
+
+          if (!cancelled) {
+
+            setSubjects(
+              filtered
+            );
+
+          }
+
+
+          return;
+
+        }
+
+
+        // =================================================
+        // MODE ÉLÈVE NORMAL HORS LIGNE
+        // =================================================
+
+        console.log(
+          "📴 [ÉLÈVE] Chargement matières depuis Dexie :",
+          classId
+        );
+
+
+        const cachedSubjects =
+          await getCachedSubjects(
+            classId
           );
 
 
         if (!cancelled) {
 
-          setSubjects(filtered);
+          setSubjects(
+            cachedSubjects || []
+          );
 
         }
 
@@ -142,6 +412,53 @@ export default function ClassPage() {
           "Erreur chargement matières :",
           err
         );
+
+
+        // =================================================
+        // FALLBACK DEXIE
+        // =================================================
+
+        try {
+
+          const cachedSubjects =
+            await getCachedSubjects(
+              classId
+            );
+
+
+          if (
+            Array.isArray(cachedSubjects) &&
+            cachedSubjects.length > 0
+          ) {
+
+            console.log(
+              "📦 [FALLBACK] Matières récupérées depuis Dexie"
+            );
+
+
+            if (!cancelled) {
+
+              setSubjects(
+                cachedSubjects
+              );
+
+              setError("");
+
+            }
+
+
+            return;
+
+          }
+
+        } catch (cacheError) {
+
+          console.error(
+            "Erreur fallback Dexie :",
+            cacheError
+          );
+
+        }
 
 
         if (!cancelled) {
@@ -175,7 +492,12 @@ export default function ClassPage() {
 
     };
 
-  }, [classId]);
+  }, [
+    classId,
+    isOnline,
+    isConsultation,
+    isStudentPreview
+  ]);
 
 
   // =====================================================

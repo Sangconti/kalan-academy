@@ -3,7 +3,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getClasses } from "../services/educationService";
+import { supabase } from "../lib/supabase";
+
+import {
+  getCachedClasses,
+  cacheClasses,
+} from "../offline/db";
 
 import {
   ArrowLeft,
@@ -17,30 +22,172 @@ export default function CoursesPage() {
 
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isOnline, setIsOnline] = useState(
+    typeof navigator !== "undefined"
+      ? navigator.onLine
+      : true
+  );
+
+  // ==========================================
+  // DÉTECTION RÉSEAU LOCALE
+  // ==========================================
+
+  useEffect(() => {
+    function handleOnline() {
+      setIsOnline(true);
+    }
+
+    function handleOffline() {
+      setIsOnline(false);
+    }
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
 
   // ==========================================
   // CHARGEMENT DES CLASSES
   // ==========================================
 
   useEffect(() => {
+    let cancelled = false;
+
     async function loadClasses() {
       try {
-        const data = await getClasses();
-        setClasses(data || []);
+        setLoading(true);
+
+        // ======================================
+        // 1. CACHE DEXIE EN PRIORITÉ
+        // ======================================
+
+        const cachedClasses = await getCachedClasses();
+
+        if (cancelled) return;
+
+        if (
+          Array.isArray(cachedClasses) &&
+          cachedClasses.length > 0
+        ) {
+          console.log(
+            "📦 [COURS] Classes trouvées dans Dexie :",
+            cachedClasses.length
+          );
+
+          setClasses(cachedClasses);
+          setLoading(false);
+        } else {
+          console.log(
+            "📭 [COURS] Aucune classe disponible dans Dexie"
+          );
+        }
+
+        // ======================================
+        // 2. SI PAS INTERNET → CACHE UNIQUEMENT
+        // ======================================
+
+        if (!isOnline) {
+          console.log(
+            "📴 [COURS] Hors ligne → utilisation du cache"
+          );
+
+          return;
+        }
+
+        // ======================================
+        // 3. SUPABASE DIRECT
+        //    Aucun appel à getClasses()
+        //    donc aucun HEAD /rest/v1/
+        // ======================================
+
+        console.log(
+          "🌐 [COURS] Chargement direct depuis Supabase"
+        );
+
+        const {
+          data,
+          error,
+        } = await supabase
+          .from("classes")
+          .select("*")
+          .order("order_number", {
+            ascending: true,
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        const freshClasses = Array.isArray(data)
+          ? data
+          : [];
+
+        if (cancelled) return;
+
+        // ======================================
+        // 4. MISE À JOUR DE L'INTERFACE
+        // ======================================
+
+        setClasses(freshClasses);
+
+        // ======================================
+        // 5. MISE EN CACHE DEXIE
+        // ======================================
+
+        if (freshClasses.length > 0) {
+          await cacheClasses(freshClasses);
+
+          console.log(
+            "📦 [COURS] Classes Supabase mises en cache :",
+            freshClasses.length
+          );
+        }
       } catch (error) {
         console.error(
-          "Erreur chargement des cours :",
+          "❌ Erreur chargement des cours :",
           error
         );
 
-        setClasses([]);
+        // ======================================
+        // FALLBACK DEXIE
+        // ======================================
+
+        try {
+          const fallbackClasses =
+            await getCachedClasses();
+
+          if (cancelled) return;
+
+          if (Array.isArray(fallbackClasses)) {
+            setClasses(fallbackClasses);
+          }
+        } catch (cacheError) {
+          console.error(
+            "❌ Erreur fallback Dexie :",
+            cacheError
+          );
+
+          if (!cancelled) {
+            setClasses([]);
+          }
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
     loadClasses();
-  }, []);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isOnline]);
 
   // ==========================================
   // LOADING

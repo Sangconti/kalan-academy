@@ -1,15 +1,19 @@
 // src/pages/HomePage.jsx
 
 import { useEffect, useState } from "react";
+
 import {
   useLocation,
   useNavigate,
   useParams
 } from "react-router-dom";
 
-import { getClasses } from "../services/educationService";
+import {
+  supabase
+} from "../lib/supabase";
 
 import {
+  cacheClasses,
   getCachedClasses
 } from "../offline/db";
 
@@ -18,6 +22,7 @@ import {
   ArrowRight,
   BookOpen
 } from "lucide-react";
+
 
 export default function HomePage() {
 
@@ -47,6 +52,57 @@ export default function HomePage() {
     location.pathname.startsWith(
       "/admin/student-preview"
     );
+
+
+  // =====================================================
+  // 🌐 ÉTAT RÉSEAU DU NAVIGATEUR
+  // =====================================================
+
+  const [isOnline, setIsOnline] =
+    useState(
+      typeof navigator !== "undefined"
+        ? navigator.onLine
+        : true
+    );
+
+
+  useEffect(() => {
+
+    const handleOnline = () => {
+      setIsOnline(true);
+    };
+
+    const handleOffline = () => {
+      setIsOnline(false);
+    };
+
+
+    window.addEventListener(
+      "online",
+      handleOnline
+    );
+
+    window.addEventListener(
+      "offline",
+      handleOffline
+    );
+
+
+    return () => {
+
+      window.removeEventListener(
+        "online",
+        handleOnline
+      );
+
+      window.removeEventListener(
+        "offline",
+        handleOffline
+      );
+
+    };
+
+  }, []);
 
 
   // =====================================================
@@ -102,97 +158,216 @@ export default function HomePage() {
 
     async function loadClasses() {
 
-      // =================================================
-      // 1. CACHE DEXIE — PRIORITÉ
-      // =================================================
-
       try {
+
+        setLoading(true);
+
+
+        // =================================================
+        // 1. CACHE DEXIE
+        // =================================================
 
         const cachedClasses =
           await getCachedClasses();
 
 
-        if (
-          !mounted
-        ) {
-
+        if (!mounted) {
           return;
-
         }
 
 
-        if (
+        const hasCachedClasses =
           Array.isArray(cachedClasses) &&
-          cachedClasses.length > 0
-        ) {
+          cachedClasses.length > 0;
+
+
+        if (hasCachedClasses) {
 
           setClasses(
             cachedClasses
           );
 
-          // ---------------------------------------------
-          // L'accueil peut maintenant être affiché
-          // immédiatement.
-          // ---------------------------------------------
-
           setLoading(false);
 
-        }
 
-      } catch (error) {
+          // -----------------------------------------------
+          // Consultation / aperçu :
+          // le cache suffit.
+          // -----------------------------------------------
 
-        console.warn(
-          "⚠️ Impossible de charger les classes depuis Dexie :",
-          error
-        );
+          if (
+            isConsultation ||
+            isStudentPreview
+          ) {
 
-      }
+            console.log(
+              isConsultation
+                ? "📦 [CONSULTATION] Classes chargées depuis Dexie"
+                : "📦 [APERÇU] Classes chargées depuis Dexie"
+            );
 
-
-      // =================================================
-      // 2. ACTUALISATION EN ARRIÈRE-PLAN
-      // =================================================
-
-      try {
-
-        const freshClasses =
-          await getClasses();
-
-
-        if (
-          !mounted
-        ) {
-
-          return;
+            return;
+          }
 
         }
 
 
-        if (
-          Array.isArray(freshClasses)
-        ) {
+        // =================================================
+        // 2. CACHE VIDE OU MODE ÉLÈVE NORMAL
+        // =================================================
+        //
+        // Si Internet est disponible :
+        // → requête Supabase directe.
+        //
+        // Aucun appel à getClasses().
+        // Aucun appel à isOnline().
+        // Aucun HEAD /rest/v1/.
+        // =================================================
+
+        if (isOnline) {
+
+          console.log(
+            hasCachedClasses
+              ? "🌐 [CLASSES] Actualisation depuis Supabase"
+              : isConsultation
+                ? "🌐 [CONSULTATION] Cache vide, chargement Supabase"
+                : isStudentPreview
+                  ? "🌐 [APERÇU] Cache vide, chargement Supabase"
+                  : "🌐 [ÉLÈVE] Cache vide, chargement Supabase"
+          );
+
+
+          const {
+            data,
+            error
+          } = await supabase
+            .from("classes")
+            .select("*")
+            .order(
+              "order_number",
+              {
+                ascending: true
+              }
+            );
+
+
+          if (error) {
+            throw error;
+          }
+
+
+          const freshClasses =
+            data || [];
+
+
+          if (!mounted) {
+            return;
+          }
+
 
           setClasses(
             freshClasses
           );
 
+
+          // -------------------------------------------------
+          // MISE EN CACHE
+          // -------------------------------------------------
+
+          await cacheClasses(
+            freshClasses
+          );
+
+
+          console.log(
+            isConsultation
+              ? "📦 [CONSULTATION] Classes Supabase mises en cache"
+              : isStudentPreview
+                ? "📦 [APERÇU] Classes Supabase mises en cache"
+                : "📦 [CLASSES] Classes Supabase mises en cache"
+          );
+
+        }
+
+
+        // =================================================
+        // 3. HORS LIGNE
+        // =================================================
+
+        else {
+
+          console.log(
+            isConsultation
+              ? "📴 [CONSULTATION] Hors ligne → Dexie"
+              : isStudentPreview
+                ? "📴 [APERÇU] Hors ligne → Dexie"
+                : "📴 [ÉLÈVE] Hors ligne → Dexie"
+          );
+
+
+          // Le cache a déjà été chargé au début.
+          // Si le cache est vide, classes reste [].
+
+          if (!hasCachedClasses) {
+
+            setClasses([]);
+
+          }
+
         }
 
       } catch (error) {
 
         console.warn(
-          "⚠️ Actualisation des classes impossible :",
+          "⚠️ Impossible de charger les classes depuis Supabase :",
           error
         );
 
+
+        // =================================================
+        // FALLBACK DEXIE
+        // =================================================
+
+        try {
+
+          const fallbackClasses =
+            await getCachedClasses();
+
+
+          if (!mounted) {
+            return;
+          }
+
+
+          setClasses(
+            Array.isArray(fallbackClasses)
+              ? fallbackClasses
+              : []
+          );
+
+
+          console.log(
+            "📦 [FALLBACK] Classes récupérées depuis Dexie"
+          );
+
+        } catch (cacheError) {
+
+          console.error(
+            "❌ Erreur fallback classes Dexie:",
+            cacheError
+          );
+
+
+          if (mounted) {
+            setClasses([]);
+          }
+
+        }
+
       } finally {
 
-        if (
-          mounted
-        ) {
-
+        if (mounted) {
           setLoading(false);
-
         }
 
       }
@@ -209,18 +384,16 @@ export default function HomePage() {
 
     };
 
-  }, []);
+  }, [
+    isConsultation,
+    isStudentPreview,
+    isOnline
+  ]);
 
 
   // =====================================================
   // LOADING
   // =====================================================
-
-  /*
-   * Ce loading n'est affiché que lorsque le cache Dexie
-   * ne contient aucune classe et que nous attendons encore
-   * la première récupération.
-   */
 
   if (loading) {
 
@@ -301,8 +474,6 @@ export default function HomePage() {
         "
       >
 
-        {/* Décoration */}
-
         <div
           className="
             absolute
@@ -337,8 +508,6 @@ export default function HomePage() {
           "
         >
 
-          {/* BIENVENUE */}
-
           <p
             className="
               text-sm
@@ -351,8 +520,6 @@ export default function HomePage() {
             Bienvenue sur
           </p>
 
-
-          {/* NOM */}
 
           <h1
             className="
@@ -367,8 +534,6 @@ export default function HomePage() {
           </h1>
 
 
-          {/* SLOGAN */}
-
           <h2
             className="
               text-xl
@@ -381,8 +546,6 @@ export default function HomePage() {
             Apprends. Progresse. Réussis.
           </h2>
 
-
-          {/* DESCRIPTION */}
 
           <p
             className="
@@ -522,31 +685,20 @@ export default function HomePage() {
                 group
                 relative
                 overflow-hidden
-
                 theme-surface
-
                 rounded-3xl
-
                 border
                 theme-border
-
                 p-5
                 md:p-6
-
                 text-left
-
                 shadow-sm
-
                 hover:shadow-xl
                 hover:-translate-y-1
-
                 transition-all
-
                 hover:border-accent
               "
             >
-
-              {/* BARRE ACCENT */}
 
               <div
                 className="
@@ -569,8 +721,6 @@ export default function HomePage() {
                 "
               >
 
-                {/* ICÔNE */}
-
                 <div
                   className="
                     w-14
@@ -589,8 +739,6 @@ export default function HomePage() {
                 </div>
 
 
-                {/* FLÈCHE */}
-
                 <ArrowRight
                   size={21}
                   className="
@@ -605,8 +753,6 @@ export default function HomePage() {
               </div>
 
 
-              {/* NOM CLASSE */}
-
               <h3
                 className="
                   mt-5
@@ -618,8 +764,6 @@ export default function HomePage() {
                 {classe.name}
               </h3>
 
-
-              {/* DESCRIPTION */}
 
               {classe.description && (
 
@@ -636,8 +780,6 @@ export default function HomePage() {
 
               )}
 
-
-              {/* COMMENCER */}
 
               <div
                 className="

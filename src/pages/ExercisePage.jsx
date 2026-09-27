@@ -12,12 +12,13 @@ import {
 } from "react-router-dom";
 
 import {
-  getQuizByLesson
-} from "../services/educationService";
+  supabase
+} from "../lib/supabase";
 
 import {
-  useNetwork
-} from "../hooks/useNetwork";
+  cacheQuizzes,
+  getCachedQuizzes
+} from "../offline/db";
 
 import ExerciseQuiz from "../components/ExerciseQuiz";
 
@@ -45,9 +46,56 @@ export default function ExercisePage({
   const location =
     useLocation();
 
-  const {
-    isOnline
-  } = useNetwork();
+
+  // =====================================================
+  // 🌐 ÉTAT RÉSEAU LOCAL
+  // =====================================================
+
+  const [
+    isOnline,
+    setIsOnline
+  ] = useState(
+    typeof navigator !== "undefined"
+      ? navigator.onLine
+      : true
+  );
+
+
+  useEffect(() => {
+
+    function handleOnline() {
+      setIsOnline(true);
+    }
+
+    function handleOffline() {
+      setIsOnline(false);
+    }
+
+    window.addEventListener(
+      "online",
+      handleOnline
+    );
+
+    window.addEventListener(
+      "offline",
+      handleOffline
+    );
+
+    return () => {
+
+      window.removeEventListener(
+        "online",
+        handleOnline
+      );
+
+      window.removeEventListener(
+        "offline",
+        handleOffline
+      );
+
+    };
+
+  }, []);
 
 
   // =====================================================
@@ -118,7 +166,8 @@ export default function ExercisePage({
 
   }, [
     lessonId,
-    isOnline
+    isConsultation,
+    isStudentPreview
   ]);
 
 
@@ -130,14 +179,256 @@ export default function ExercisePage({
       setError(null);
 
 
-      const data =
-        await getQuizByLesson(
+      // =================================================
+      // 👁️ CONSULTATION / APERÇU
+      // =================================================
+      //
+      // Dexie est toujours consulté en premier.
+      //
+      // Si le quiz existe :
+      //
+      //     Dexie → affichage immédiat
+      //
+      // Aucun appel Supabase.
+      // Aucun HEAD /rest/v1/.
+      //
+      // =================================================
+
+      if (
+        isConsultation ||
+        isStudentPreview
+      ) {
+
+        console.log(
+          isConsultation
+            ? "👁️ [CONSULTATION] Chargement quiz depuis Dexie :"
+            : "👁️ [APERÇU] Chargement quiz depuis Dexie :",
           lessonId
         );
 
 
+        const cachedQuizzes =
+          await getCachedQuizzes(
+            lessonId
+          );
+
+
+        const cachedQuiz =
+          Array.isArray(cachedQuizzes) &&
+          cachedQuizzes.length > 0
+            ? cachedQuizzes[0]
+            : null;
+
+
+        // =============================================
+        // CACHE DISPONIBLE
+        // =============================================
+
+        if (cachedQuiz) {
+
+          console.log(
+            isConsultation
+              ? "📦 [CONSULTATION] Quiz trouvé dans Dexie"
+              : "📦 [APERÇU] Quiz trouvé dans Dexie",
+            cachedQuiz
+          );
+
+
+          setQuiz(
+            cachedQuiz
+          );
+
+
+          return;
+
+        }
+
+
+        // =============================================
+        // CACHE VIDE
+        // =============================================
+
+        console.log(
+          isConsultation
+            ? "📭 [CONSULTATION] Aucun quiz dans Dexie"
+            : "📭 [APERÇU] Aucun quiz dans Dexie"
+        );
+
+
+        // =============================================
+        // HORS LIGNE
+        // =============================================
+
+        if (!navigator.onLine) {
+
+          console.log(
+            isConsultation
+              ? "📴 [CONSULTATION] Hors ligne, impossible de charger le quiz"
+              : "📴 [APERÇU] Hors ligne, impossible de charger le quiz"
+          );
+
+
+          setQuiz(null);
+
+          setError(
+            "Le quiz n'est pas disponible hors ligne."
+          );
+
+          return;
+
+        }
+
+
+        // =============================================
+        // SUPABASE DIRECT
+        // =============================================
+        //
+        // IMPORTANT :
+        //
+        // Aucun getQuizByLesson().
+        // Aucun isOnline().
+        // Aucun HEAD /rest/v1/.
+        //
+        // =============================================
+
+        console.log(
+          isConsultation
+            ? "🌐 [CONSULTATION] Chargement quiz directement depuis Supabase"
+            : "🌐 [APERÇU] Chargement quiz directement depuis Supabase"
+        );
+
+
+        const {
+          data: networkQuiz,
+          error: quizError
+        } = await supabase
+          .from("quizzes")
+          .select("*")
+          .eq("lesson_id", lessonId)
+          .maybeSingle();
+
+
+        if (quizError) {
+          throw quizError;
+        }
+
+
+        // =============================================
+        // MISE EN CACHE
+        // =============================================
+
+        if (networkQuiz) {
+
+          await cacheQuizzes([
+            networkQuiz
+          ]);
+
+        }
+
+
+        setQuiz(
+          networkQuiz || null
+        );
+
+
+        return;
+
+      }
+
+
+      // =================================================
+      // 👨‍🎓 MODE ÉLÈVE NORMAL
+      // =================================================
+      //
+      // En ligne :
+      //     Supabase direct
+      //
+      // Hors ligne :
+      //     Dexie
+      //
+      // En cas d'erreur réseau :
+      //     fallback Dexie
+      //
+      // =================================================
+
+      if (navigator.onLine) {
+
+        console.log(
+          "🌐 [ÉLÈVE] Chargement quiz directement depuis Supabase :",
+          lessonId
+        );
+
+
+        try {
+
+          const {
+            data: networkQuiz,
+            error: quizError
+          } = await supabase
+            .from("quizzes")
+            .select("*")
+            .eq("lesson_id", lessonId)
+            .maybeSingle();
+
+
+          if (quizError) {
+            throw quizError;
+          }
+
+
+          if (networkQuiz) {
+
+            await cacheQuizzes([
+              networkQuiz
+            ]);
+
+          }
+
+
+          setQuiz(
+            networkQuiz || null
+          );
+
+
+          return;
+
+        } catch (networkError) {
+
+          console.warn(
+            "⚠️ [ÉLÈVE] Erreur réseau quiz → fallback Dexie",
+            networkError
+          );
+
+        }
+
+      }
+
+
+      // =================================================
+      // FALLBACK DEXIE
+      // =================================================
+
+      console.log(
+        "📦 [ÉLÈVE] Chargement quiz depuis Dexie :",
+        lessonId
+      );
+
+
+      const cachedQuizzes =
+        await getCachedQuizzes(
+          lessonId
+        );
+
+
+      const cachedQuiz =
+        Array.isArray(cachedQuizzes) &&
+        cachedQuizzes.length > 0
+          ? cachedQuizzes[0]
+          : null;
+
+
       setQuiz(
-        data || null
+        cachedQuiz || null
       );
 
 
@@ -147,6 +438,49 @@ export default function ExercisePage({
         "Erreur chargement quiz :",
         err
       );
+
+
+      // =================================================
+      // DERNIER FALLBACK DEXIE
+      // =================================================
+
+      try {
+
+        const cachedQuizzes =
+          await getCachedQuizzes(
+            lessonId
+          );
+
+
+        const cachedQuiz =
+          Array.isArray(cachedQuizzes) &&
+          cachedQuizzes.length > 0
+            ? cachedQuizzes[0]
+            : null;
+
+
+        if (cachedQuiz) {
+
+          console.log(
+            "📦 Fallback final : quiz récupéré depuis Dexie"
+          );
+
+          setQuiz(
+            cachedQuiz
+          );
+
+          return;
+
+        }
+
+      } catch (cacheError) {
+
+        console.error(
+          "❌ Erreur fallback Dexie :",
+          cacheError
+        );
+
+      }
 
 
       setQuiz(null);
@@ -172,15 +506,23 @@ export default function ExercisePage({
 
   function handleBack() {
 
+    // ---------------------------------------------------
+    // MODE APERÇU APPLICATION ÉLÈVE
+    // ---------------------------------------------------
+
     if (isStudentPreview) {
 
       navigate(
-        "/admin/student-preview"
+        `/admin/student-preview/lesson/${lessonId}`
       );
 
       return;
 
     }
+
+    // ---------------------------------------------------
+    // MODE NORMAL / CONSULTATION
+    // ---------------------------------------------------
 
     navigate(-1);
 
@@ -295,10 +637,6 @@ export default function ExercisePage({
           "
         >
 
-          {/* =================================================
-              RETOUR
-          ================================================= */}
-
           <button
             type="button"
             onClick={handleBack}
@@ -329,10 +667,6 @@ export default function ExercisePage({
 
           </button>
 
-
-          {/* =================================================
-              CARTE ERREUR
-          ================================================= */}
 
           <div
             className="
@@ -408,8 +742,6 @@ export default function ExercisePage({
               "
             >
 
-              {/* RETOUR */}
-
               <button
                 type="button"
                 onClick={handleBack}
@@ -439,8 +771,6 @@ export default function ExercisePage({
 
               </button>
 
-
-              {/* RÉESSAYER */}
 
               <button
                 type="button"
@@ -507,10 +837,6 @@ export default function ExercisePage({
           "
         >
 
-          {/* =================================================
-              RETOUR
-          ================================================= */}
-
           <button
             type="button"
             onClick={handleBack}
@@ -542,10 +868,6 @@ export default function ExercisePage({
           </button>
 
 
-          {/* =================================================
-              CARTE AUCUN QUIZ
-          ================================================= */}
-
           <div
             className="
               relative
@@ -560,8 +882,6 @@ export default function ExercisePage({
               text-center
             "
           >
-
-            {/* CERCLE HAUT DROIT */}
 
             <div
               className="
@@ -578,8 +898,6 @@ export default function ExercisePage({
             />
 
 
-            {/* CERCLE BAS GAUCHE */}
-
             <div
               className="
                 pointer-events-none
@@ -594,8 +912,6 @@ export default function ExercisePage({
               "
             />
 
-
-            {/* CONTENU */}
 
             <div
               className="
@@ -690,10 +1006,6 @@ export default function ExercisePage({
         "
       >
 
-        {/* =================================================
-            RETOUR
-        ================================================= */}
-
         <button
           type="button"
           onClick={handleBack}
@@ -724,10 +1036,6 @@ export default function ExercisePage({
         </button>
 
 
-        {/* =================================================
-            EN-TÊTE DU QUIZ
-        ================================================= */}
-
         <div
           className="
             relative
@@ -741,10 +1049,6 @@ export default function ExercisePage({
             md:p-8
           "
         >
-
-          {/* =================================================
-              CERCLES DÉCORATIFS
-          ================================================= */}
 
           <div
             className="
@@ -791,18 +1095,12 @@ export default function ExercisePage({
           />
 
 
-          {/* =================================================
-              CONTENU
-          ================================================= */}
-
           <div
             className="
               relative
               z-10
             "
           >
-
-            {/* BADGE */}
 
             <div
               className="
@@ -833,8 +1131,6 @@ export default function ExercisePage({
             </div>
 
 
-            {/* TITRE */}
-
             <h1
               className="
                 text-2xl
@@ -849,8 +1145,6 @@ export default function ExercisePage({
 
             </h1>
 
-
-            {/* DESCRIPTION */}
 
             {quiz.description && (
 
@@ -869,8 +1163,6 @@ export default function ExercisePage({
 
             )}
 
-
-            {/* INFORMATIONS */}
 
             <div
               className="
@@ -950,10 +1242,6 @@ export default function ExercisePage({
         </div>
 
 
-        {/* =================================================
-            CARTE DU QUIZ
-        ================================================= */}
-
         <div
           className="
             relative
@@ -967,10 +1255,6 @@ export default function ExercisePage({
             md:p-7
           "
         >
-
-          {/* =================================================
-              CERCLES DÉCORATIFS
-          ================================================= */}
 
           <div
             className="
@@ -1001,10 +1285,6 @@ export default function ExercisePage({
             "
           />
 
-
-          {/* =================================================
-              CONTENU QUIZ
-          ================================================= */}
 
           <div
             className="

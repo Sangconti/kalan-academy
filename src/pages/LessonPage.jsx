@@ -12,9 +12,8 @@ import {
 } from "react-router-dom";
 
 import {
-  getLesson,
-  getLessonBlocks
-} from "../services/educationService";
+  supabase
+} from "../lib/supabase";
 
 import {
   cacheLesson,
@@ -22,10 +21,6 @@ import {
   cacheLessonBlocks,
   getCachedLessonBlocks
 } from "../offline/db";
-
-import {
-  useNetwork
-} from "../hooks/useNetwork";
 
 import {
   ArrowLeft,
@@ -52,8 +47,56 @@ export default function LessonPage({
   const location =
     useLocation();
 
-  const { isOnline } =
-    useNetwork();
+
+  // =====================================================
+  // 🌐 ÉTAT RÉSEAU DU NAVIGATEUR
+  // =====================================================
+
+  const [isOnline, setIsOnline] =
+    useState(
+      typeof navigator !== "undefined"
+        ? navigator.onLine
+        : true
+    );
+
+
+  useEffect(() => {
+
+    const handleOnline = () => {
+      setIsOnline(true);
+    };
+
+    const handleOffline = () => {
+      setIsOnline(false);
+    };
+
+
+    window.addEventListener(
+      "online",
+      handleOnline
+    );
+
+    window.addEventListener(
+      "offline",
+      handleOffline
+    );
+
+
+    return () => {
+
+      window.removeEventListener(
+        "online",
+        handleOnline
+      );
+
+      window.removeEventListener(
+        "offline",
+        handleOffline
+      );
+
+    };
+
+  }, []);
 
 
   // =====================================================
@@ -195,86 +238,438 @@ export default function LessonPage({
 
   useEffect(() => {
 
-    loadLesson();
-
-  }, [lessonId, isOnline]);
+    let cancelled = false;
 
 
-  async function loadLesson() {
+    async function loadLesson() {
 
-    try {
+      try {
 
-      setLoading(true);
-      setError(null);
-
-      let lessonData = null;
-      let blockData = [];
+        setLoading(true);
+        setError(null);
 
 
-      if (isOnline) {
-
-        lessonData =
-          await getLesson(lessonId);
-
-        blockData =
-          await getLessonBlocks(lessonId);
+        let lessonData = null;
+        let blockData = [];
 
 
-        if (lessonData) {
+        // =================================================
+        // 👁️ MODE CONSULTATION / APERÇU
+        // =================================================
+        // Dexie est toujours prioritaire.
+        //
+        // Si le cache est complet :
+        // → aucun réseau.
+        //
+        // Si le cache est incomplet :
+        // → Supabase directement.
+        // → Aucun appel à isOnline().
+        // → Aucun HEAD /rest/v1/.
+        // =================================================
 
-          await cacheLesson(
-            lessonData
+        if (
+          isConsultation ||
+          isStudentPreview
+        ) {
+
+          console.log(
+            isConsultation
+              ? "👁️ [CONSULTATION] Chargement leçon depuis Dexie :"
+              : "👁️ [APERÇU] Chargement leçon depuis Dexie :",
+            lessonId
+          );
+
+
+          // -------------------------------------------------
+          // CHARGEMENT DU CACHE
+          // -------------------------------------------------
+
+          lessonData =
+            await getCachedLesson(
+              lessonId
+            );
+
+
+          blockData =
+            await getCachedLessonBlocks(
+              lessonId
+            );
+
+
+          const hasLesson =
+            Boolean(lessonData);
+
+
+          const hasBlocks =
+            Array.isArray(blockData) &&
+            blockData.length > 0;
+
+
+          // -------------------------------------------------
+          // CACHE COMPLET
+          // -------------------------------------------------
+
+          if (
+            hasLesson &&
+            hasBlocks
+          ) {
+
+            console.log(
+              isConsultation
+                ? "📦 [CONSULTATION] Leçon et blocs trouvés dans Dexie"
+                : "📦 [APERÇU] Leçon et blocs trouvés dans Dexie"
+            );
+
+          }
+
+
+          // -------------------------------------------------
+          // CACHE INCOMPLET
+          // -------------------------------------------------
+
+          else {
+
+            if (!isOnline) {
+
+              console.log(
+                isConsultation
+                  ? "📴 [CONSULTATION] Cache leçon incomplet et hors ligne"
+                  : "📴 [APERÇU] Cache leçon incomplet et hors ligne"
+              );
+
+            } else {
+
+              console.log(
+                isConsultation
+                  ? "🌐 [CONSULTATION] Cache leçon incomplet/vide, chargement réseau"
+                  : "🌐 [APERÇU] Cache leçon incomplet/vide, chargement réseau"
+              );
+
+
+              // -------------------------------------------------
+              // LEÇON
+              // -------------------------------------------------
+
+              if (!hasLesson) {
+
+                const {
+                  data,
+                  error: lessonError
+                } = await supabase
+                  .from("lessons")
+                  .select("*")
+                  .eq("id", lessonId)
+                  .maybeSingle();
+
+
+                if (lessonError) {
+                  throw lessonError;
+                }
+
+
+                if (data) {
+
+                  lessonData =
+                    data;
+
+
+                  await cacheLesson(
+                    data
+                  );
+
+                }
+
+              }
+
+
+              // -------------------------------------------------
+              // BLOCS
+              // -------------------------------------------------
+
+              if (!hasBlocks) {
+
+                const {
+                  data,
+                  error: blocksError
+                } = await supabase
+                  .from("lesson_blocks")
+                  .select("*")
+                  .eq("lesson_id", lessonId)
+                  .order(
+                    "order_number",
+                    {
+                      ascending: true
+                    }
+                  );
+
+
+                if (blocksError) {
+                  throw blocksError;
+                }
+
+
+                blockData =
+                  data || [];
+
+
+                await cacheLessonBlocks(
+                  blockData
+                );
+
+              }
+
+            }
+
+          }
+
+        }
+
+
+        // =================================================
+        // 👨‍🎓 MODE ÉLÈVE NORMAL AVEC INTERNET
+        // =================================================
+        // Requête Supabase directe.
+        // Aucun HEAD /rest/v1/.
+        // =================================================
+
+        else if (isOnline) {
+
+          console.log(
+            "🌐 [ÉLÈVE] Chargement leçon depuis Supabase :",
+            lessonId
+          );
+
+
+          // -------------------------------------------------
+          // LEÇON
+          // -------------------------------------------------
+
+          const {
+            data: lessonFromSupabase,
+            error: lessonError
+          } = await supabase
+            .from("lessons")
+            .select("*")
+            .eq("id", lessonId)
+            .maybeSingle();
+
+
+          if (lessonError) {
+            throw lessonError;
+          }
+
+
+          lessonData =
+            lessonFromSupabase;
+
+
+          // -------------------------------------------------
+          // BLOCS
+          // -------------------------------------------------
+
+          const {
+            data: blocksFromSupabase,
+            error: blocksError
+          } = await supabase
+            .from("lesson_blocks")
+            .select("*")
+            .eq("lesson_id", lessonId)
+            .order(
+              "order_number",
+              {
+                ascending: true
+              }
+            );
+
+
+          if (blocksError) {
+            throw blocksError;
+          }
+
+
+          blockData =
+            blocksFromSupabase || [];
+
+
+          // -------------------------------------------------
+          // MISE EN CACHE
+          // -------------------------------------------------
+
+          if (lessonData) {
+
+            await cacheLesson(
+              lessonData
+            );
+
+          }
+
+
+          await cacheLessonBlocks(
+            blockData
           );
 
         }
 
 
-        await cacheLessonBlocks(
+        // =================================================
+        // 📴 MODE ÉLÈVE NORMAL HORS LIGNE
+        // =================================================
+
+        else {
+
+          console.log(
+            "📴 [ÉLÈVE] Chargement leçon depuis Dexie :",
+            lessonId
+          );
+
+
+          lessonData =
+            await getCachedLesson(
+              lessonId
+            );
+
+
+          blockData =
+            await getCachedLessonBlocks(
+              lessonId
+            );
+
+        }
+
+
+        // =================================================
+        // APPLICATION DES DONNÉES
+        // =================================================
+
+        if (cancelled) {
+          return;
+        }
+
+
+        setLesson(
+          lessonData || null
+        );
+
+
+        setBlocks(
           blockData || []
         );
 
-      } else {
 
-        lessonData =
-          await getCachedLesson(
-            lessonId
+      } catch (err) {
+
+        if (cancelled) {
+          return;
+        }
+
+
+        console.error(
+          "Erreur LessonPage:",
+          err
+        );
+
+
+        // -------------------------------------------------
+        // FALLBACK DEXIE
+        // -------------------------------------------------
+        // Si Supabase échoue, on tente toujours le cache.
+        // -------------------------------------------------
+
+        try {
+
+          const cachedLesson =
+            await getCachedLesson(
+              lessonId
+            );
+
+
+          const cachedBlocks =
+            await getCachedLessonBlocks(
+              lessonId
+            );
+
+
+          if (
+            cachedLesson ||
+            (
+              Array.isArray(cachedBlocks) &&
+              cachedBlocks.length > 0
+            )
+          ) {
+
+            console.log(
+              "📦 [FALLBACK] Leçon récupérée depuis Dexie"
+            );
+
+
+            if (!cancelled) {
+
+              setLesson(
+                cachedLesson || null
+              );
+
+
+              setBlocks(
+                cachedBlocks || []
+              );
+
+
+              setError(
+                null
+              );
+
+            }
+
+
+            return;
+
+          }
+
+        } catch (cacheError) {
+
+          console.error(
+            "Erreur fallback Dexie:",
+            cacheError
           );
 
-        blockData =
-          await getCachedLessonBlocks(
-            lessonId
+        }
+
+
+        if (!cancelled) {
+
+          setError(
+            err?.message ||
+            "Impossible de charger la leçon"
           );
+
+        }
+
+      } finally {
+
+        if (!cancelled) {
+          setLoading(false);
+        }
 
       }
 
-
-      setLesson(
-        lessonData
-      );
-
-      setBlocks(
-        blockData || []
-      );
-
-    } catch (err) {
-
-      console.error(
-        "Erreur LessonPage:",
-        err
-      );
-
-      setError(
-        err?.message ||
-        "Impossible de charger la leçon"
-      );
-
-    } finally {
-
-      setLoading(false);
-
     }
 
-  }
+
+    if (lessonId) {
+      loadLesson();
+    }
+
+
+    return () => {
+      cancelled = true;
+    };
+
+  }, [
+    lessonId,
+    isOnline,
+    isConsultation,
+    isStudentPreview
+  ]);
 
 
   // =====================================================
@@ -534,7 +929,9 @@ export default function LessonPage({
 
           <button
             type="button"
-            onClick={loadLesson}
+            onClick={() => {
+              window.location.reload();
+            }}
             className="
               px-5
               py-3
@@ -698,8 +1095,6 @@ export default function LessonPage({
         "
       >
 
-        {/* CERCLES DÉCORATIFS */}
-
         <div
           className="
             absolute
@@ -749,8 +1144,6 @@ export default function LessonPage({
           "
         >
 
-          {/* BADGE LEÇON */}
-
           <div
             className="
               inline-flex
@@ -781,8 +1174,6 @@ export default function LessonPage({
           </div>
 
 
-          {/* TITRE */}
-
           <h1
             className="
               text-2xl
@@ -797,8 +1188,6 @@ export default function LessonPage({
 
           </h1>
 
-
-          {/* DESCRIPTION */}
 
           {lesson.description && (
 
@@ -816,8 +1205,6 @@ export default function LessonPage({
 
           )}
 
-
-          {/* INFORMATIONS */}
 
           <div
             className="
@@ -888,8 +1275,6 @@ export default function LessonPage({
 
           </div>
 
-
-          {/* VIDEO */}
 
           {lesson.video_url && (
 
@@ -1166,8 +1551,6 @@ export default function LessonPage({
           shadow-lg
         "
       >
-
-        {/* CERCLES DÉCORATIFS */}
 
         <div
           className="

@@ -8,10 +8,7 @@ import {
   useNavigate
 } from "react-router-dom";
 
-import {
-  getSubjects,
-  getChapters
-} from "../services/educationService";
+import { supabase } from "../lib/supabase";
 
 import {
   ArrowLeft,
@@ -46,6 +43,13 @@ export default function SubjectPage() {
   const [error, setError] =
     useState("");
 
+  const [isOnline, setIsOnline] =
+    useState(
+      typeof navigator !== "undefined"
+        ? navigator.onLine
+        : true
+    );
+
 
   // =====================================================
   // MODE CONSULTATION
@@ -68,6 +72,54 @@ export default function SubjectPage() {
 
 
   // =====================================================
+  // DÉTECTION RÉSEAU LOCALE
+  // =====================================================
+
+  useEffect(() => {
+
+    function handleOnline() {
+
+      setIsOnline(true);
+
+    }
+
+
+    function handleOffline() {
+
+      setIsOnline(false);
+
+    }
+
+
+    window.addEventListener(
+      "online",
+      handleOnline
+    );
+
+    window.addEventListener(
+      "offline",
+      handleOffline
+    );
+
+
+    return () => {
+
+      window.removeEventListener(
+        "online",
+        handleOnline
+      );
+
+      window.removeEventListener(
+        "offline",
+        handleOffline
+      );
+
+    };
+
+  }, []);
+
+
+  // =====================================================
   // CHARGEMENT
   // =====================================================
 
@@ -80,7 +132,6 @@ export default function SubjectPage() {
 
       try {
 
-        setLoading(true);
         setError("");
 
 
@@ -94,15 +145,10 @@ export default function SubjectPage() {
 
 
         // =================================================
-        // 1. RÉCUPÉRER LA MATIÈRE
+        // 1. RÉCUPÉRER LA MATIÈRE DEPUIS DEXIE
         // =================================================
 
-        let currentSubject = null;
-
-
-        // PRIORITÉ DEXIE
-
-        currentSubject =
+        let currentSubject =
           await db.subjects.get(
             subjectId
           );
@@ -114,28 +160,57 @@ export default function SubjectPage() {
         );
 
 
-        // SI PAS TROUVÉE → SERVICE
+        // =================================================
+        // 2. SI ABSENTE → SUPABASE DIRECT
+        // =================================================
 
         if (!currentSubject) {
 
-          const classId =
-            location.state?.class_id;
+          if (!navigator.onLine) {
+
+            throw new Error(
+              "Matière introuvable hors ligne"
+            );
+
+          }
 
 
-          if (classId) {
-
-            const subjects =
-              await getSubjects(
-                classId
-              );
+          console.log(
+            "🌐 [SUBJECT] Matière absente de Dexie → Supabase"
+          );
 
 
-            currentSubject =
-              (subjects || []).find(
-                (subject) =>
-                  String(subject.id) ===
-                  String(subjectId)
-              );
+          const {
+            data,
+            error: subjectError
+          } = await supabase
+            .from("subjects")
+            .select("*")
+            .eq("id", subjectId)
+            .maybeSingle();
+
+
+          if (subjectError) {
+
+            throw subjectError;
+
+          }
+
+
+          currentSubject =
+            data || null;
+
+
+          if (currentSubject) {
+
+            await db.subjects.put(
+              currentSubject
+            );
+
+
+            console.log(
+              "📦 [SUBJECT] Matière mise en cache"
+            );
 
           }
 
@@ -166,82 +241,18 @@ export default function SubjectPage() {
 
 
         // =================================================
-        // 2. RÉCUPÉRER LES CHAPITRES
+        // 3. CHARGER LES CHAPITRES DEPUIS DEXIE
         // =================================================
 
-        let chaptersData = [];
+        const cachedChapters =
+          await db.chapters
+            .where("subject_id")
+            .equals(subjectId)
+            .toArray();
 
 
-        // =================================================
-        // OFFLINE
-        // =================================================
-
-        if (!navigator.onLine) {
-
-          console.log(
-            "📴 MODE OFFLINE"
-          );
-
-
-          chaptersData =
-            await db.chapters
-              .where("subject_id")
-              .equals(subjectId)
-              .toArray();
-
-
-          console.log(
-            "📦 CHAPITRES DEXIE DIRECT :",
-            chaptersData
-          );
-
-        }
-
-
-        // =================================================
-        // ONLINE
-        // =================================================
-
-        else {
-
-          try {
-
-            chaptersData =
-              await getChapters(
-                subjectId
-              );
-
-
-            console.log(
-              "🌐 CHAPITRES SERVICE :",
-              chaptersData
-            );
-
-          } catch (err) {
-
-            console.warn(
-              "⚠️ Erreur service chapitres, fallback Dexie",
-              err
-            );
-
-
-            chaptersData =
-              await db.chapters
-                .where("subject_id")
-                .equals(subjectId)
-                .toArray();
-
-          }
-
-        }
-
-
-        // =================================================
-        // 3. SÉCURITÉ
-        // =================================================
-
-        chaptersData =
-          (chaptersData || [])
+        const normalizedCachedChapters =
+          (cachedChapters || [])
             .filter(
               (chapter) =>
                 String(
@@ -256,24 +267,164 @@ export default function SubjectPage() {
             );
 
 
+        // =================================================
+        // 4. CACHE DISPONIBLE
+        // =================================================
+        //
+        // IMPORTANT :
+        //
+        // On affiche immédiatement Dexie.
+        // On ne bloque PAS l'interface avec Supabase.
+        //
+        // =================================================
+
+        if (
+          normalizedCachedChapters.length > 0
+        ) {
+
+          console.log(
+            "📦 [SUBJECT] Chapitres trouvés dans Dexie :",
+            normalizedCachedChapters.length
+          );
+
+
+          if (!cancelled) {
+
+            setChapters(
+              normalizedCachedChapters
+            );
+
+            setLoading(false);
+
+          }
+
+
+          // =================================================
+          // ACTUALISATION EN ARRIÈRE-PLAN
+          // =================================================
+
+          if (navigator.onLine) {
+
+            refreshChaptersInBackground();
+
+          }
+
+
+          return;
+
+        }
+
+
+        // =================================================
+        // 5. CACHE VIDE
+        // =================================================
+
         console.log(
-          "📚 CHAPITRES APRÈS FILTRE :",
-          chaptersData
+          "📭 [SUBJECT] Aucun chapitre dans Dexie"
         );
 
 
+        if (!navigator.onLine) {
+
+          if (!cancelled) {
+
+            setChapters([]);
+
+            setLoading(false);
+
+          }
+
+          return;
+
+        }
+
+
+        // =================================================
+        // 6. PREMIER CHARGEMENT → SUPABASE
+        // =================================================
+
         console.log(
-          "📚 NOMBRE FINAL CHAPITRES :",
-          chaptersData.length
+          "🌐 [SUBJECT] Cache vide → chargement direct Supabase"
         );
+
+
+        const {
+          data,
+          error: chaptersError
+        } = await supabase
+          .from("chapters")
+          .select("*")
+          .eq(
+            "subject_id",
+            subjectId
+          )
+          .order(
+            "order_number",
+            {
+              ascending: true
+            }
+          );
+
+
+        if (chaptersError) {
+
+          throw chaptersError;
+
+        }
+
+
+        const freshChapters =
+          Array.isArray(data)
+            ? data
+            : [];
+
+
+        // =================================================
+        // 7. MISE EN CACHE
+        // =================================================
+
+        if (
+          freshChapters.length > 0
+        ) {
+
+          await db.chapters.bulkPut(
+            freshChapters
+          );
+
+
+          console.log(
+            "📦 [SUBJECT] Chapitres Supabase mis en cache :",
+            freshChapters.length
+          );
+
+        }
 
 
         if (cancelled) return;
 
 
+        const finalChapters =
+          freshChapters
+            .filter(
+              (chapter) =>
+                String(
+                  chapter.subject_id
+                ) ===
+                String(subjectId)
+            )
+            .sort(
+              (a, b) =>
+                (a.order_number || 0) -
+                (b.order_number || 0)
+            );
+
+
         setChapters(
-          chaptersData
+          finalChapters
         );
+
+
+        setLoading(false);
 
 
       } catch (err) {
@@ -286,20 +437,170 @@ export default function SubjectPage() {
 
         if (!cancelled) {
 
+          // =================================================
+          // FALLBACK DEXIE
+          // =================================================
+
+          try {
+
+            const fallbackChapters =
+              await db.chapters
+                .where("subject_id")
+                .equals(subjectId)
+                .toArray();
+
+
+            const sortedFallback =
+              (fallbackChapters || [])
+                .filter(
+                  (chapter) =>
+                    String(
+                      chapter.subject_id
+                    ) ===
+                    String(subjectId)
+                )
+                .sort(
+                  (a, b) =>
+                    (a.order_number || 0) -
+                    (b.order_number || 0)
+                );
+
+
+            if (
+              sortedFallback.length > 0
+            ) {
+
+              console.log(
+                "📦 [SUBJECT] Fallback Dexie :",
+                sortedFallback.length
+              );
+
+
+              setChapters(
+                sortedFallback
+              );
+
+              setLoading(false);
+
+              return;
+
+            }
+
+          } catch (cacheError) {
+
+            console.error(
+              "❌ [SUBJECT] Erreur fallback Dexie :",
+              cacheError
+            );
+
+          }
+
+
           setError(
-            err.message ||
+            err?.message ||
             "Impossible de charger la matière"
           );
-
-        }
-
-      } finally {
-
-        if (!cancelled) {
 
           setLoading(false);
 
         }
+
+      }
+
+    }
+
+
+    // =====================================================
+    // ACTUALISATION EN ARRIÈRE-PLAN
+    // =====================================================
+
+    async function refreshChaptersInBackground() {
+
+      try {
+
+        console.log(
+          "🔄 [SUBJECT] Actualisation des chapitres en arrière-plan"
+        );
+
+
+        const {
+          data,
+          error: chaptersError
+        } = await supabase
+          .from("chapters")
+          .select("*")
+          .eq(
+            "subject_id",
+            subjectId
+          )
+          .order(
+            "order_number",
+            {
+              ascending: true
+            }
+          );
+
+
+        if (chaptersError) {
+
+          throw chaptersError;
+
+        }
+
+
+        const freshChapters =
+          Array.isArray(data)
+            ? data
+            : [];
+
+
+        if (
+          freshChapters.length > 0
+        ) {
+
+          await db.chapters.bulkPut(
+            freshChapters
+          );
+
+        }
+
+
+        if (cancelled) return;
+
+
+        const sortedFreshChapters =
+          freshChapters
+            .filter(
+              (chapter) =>
+                String(
+                  chapter.subject_id
+                ) ===
+                String(subjectId)
+            )
+            .sort(
+              (a, b) =>
+                (a.order_number || 0) -
+                (b.order_number || 0)
+            );
+
+
+        setChapters(
+          sortedFreshChapters
+        );
+
+
+        console.log(
+          "✅ [SUBJECT] Chapitres actualisés en arrière-plan :",
+          sortedFreshChapters.length
+        );
+
+
+      } catch (err) {
+
+        console.warn(
+          "⚠️ [SUBJECT] Actualisation arrière-plan échouée → conservation du cache",
+          err
+        );
 
       }
 
@@ -317,7 +618,7 @@ export default function SubjectPage() {
 
   }, [
     subjectId,
-    location.state
+    isOnline
   ]);
 
 
@@ -472,11 +773,72 @@ export default function SubjectPage() {
   // RETOUR
   // =====================================================
 
-  function goBack() {
+ function goBack() {
 
-    navigate(-1);
+   // ---------------------------------------------------
+   // MODE CONSULTATION
+   // ---------------------------------------------------
 
-  }
+   if (isConsultation) {
+
+     if (subject?.class_id) {
+
+       navigate(
+         `/admin/student/${studentId}/consultation/class/${subject.class_id}`
+       );
+
+       return;
+     }
+
+     navigate(-1);
+
+     return;
+   }
+
+
+   // ---------------------------------------------------
+   // MODE APERÇU APPLICATION ÉLÈVE
+   // ---------------------------------------------------
+
+   if (isStudentPreview) {
+
+     if (subject?.class_id) {
+
+       navigate(
+         `/admin/student-preview/class/${subject.class_id}`
+       );
+
+       return;
+     }
+
+     navigate(
+       "/admin/student-preview"
+     );
+
+     return;
+   }
+
+
+   // ---------------------------------------------------
+   // MODE ÉLÈVE NORMAL
+   // ---------------------------------------------------
+
+   if (subject?.class_id) {
+
+     navigate(
+       `/class/${subject.class_id}`
+     );
+
+     return;
+   }
+
+
+   // ---------------------------------------------------
+   // FALLBACK
+   // ---------------------------------------------------
+
+   navigate(-1);
+ }
 
 
   // =====================================================

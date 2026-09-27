@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
 import { useUser } from "./hooks/useUser";
@@ -71,6 +71,11 @@ import { ConsultationStudentProvider } from "./context/ConsultationStudentContex
 
 function App() {
 
+  const location = useLocation();
+
+  const isAdminRoute =
+    location.pathname.startsWith("/admin");
+
   const {
     user,
     loading,
@@ -85,22 +90,21 @@ function App() {
   // ===================================================
 
   useEffect(() => {
-
     if (
       isOnline &&
-      user
+      user &&
+      !isAdminRoute
     ) {
-
       console.log(
         "🔄 [APP] Lancement synchronisation utilisateur"
       );
 
       syncPendingData();
     }
-
   }, [
     isOnline,
     user,
+    isAdminRoute
   ]);
 
   // ===================================================

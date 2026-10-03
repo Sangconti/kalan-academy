@@ -16,8 +16,8 @@ import {
 } from "../lib/supabase";
 
 import {
-  getLesson
-} from "../services/educationService";
+  getCachedLesson
+} from "../offline/db";
 
 import {
   addXP
@@ -161,11 +161,81 @@ export default function VideoPage({
       // LEÇON
       // ========================================
 
-      const lessonData =
-        await getLesson(lessonId);
+      // ------------------------------------------------
+      // DEXIE EN PRIORITÉ
+      //
+      // Contrairement à educationService.getLesson(),
+      // aucun test HEAD /rest/v1/ n'est effectué ici.
+      // ------------------------------------------------
+
+      let lessonData =
+        await getCachedLesson(
+          lessonId
+        );
 
 
-      setLesson(lessonData);
+      // ------------------------------------------------
+      // SUPABASE UNIQUEMENT SI LA LEÇON N'EST PAS
+      // EN CACHE ET QUE L'APPAREIL EST EN LIGNE
+      // ------------------------------------------------
+
+      if (
+        !lessonData &&
+        typeof navigator !== "undefined" &&
+        navigator.onLine
+      ) {
+
+        try {
+
+          const {
+            data,
+            error
+          } = await supabase
+            .from("lessons")
+            .select("*")
+            .eq(
+              "id",
+              lessonId
+            )
+            .maybeSingle();
+
+
+          if (error) {
+
+            throw error;
+
+          }
+
+
+          lessonData =
+            data || null;
+
+        } catch (error) {
+
+          console.warn(
+            "⚠️ VideoPage : impossible de charger la leçon depuis Supabase → Dexie",
+            error
+          );
+
+        }
+
+      }
+
+
+      if (
+        !lessonData
+      ) {
+
+        console.warn(
+          "📴 VideoPage : leçon absente du cache et réseau indisponible."
+        );
+
+      }
+
+
+      setLesson(
+        lessonData
+      );
 
 
       if (!lessonData) {

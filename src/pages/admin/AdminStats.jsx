@@ -25,27 +25,283 @@ import {
 
 import { supabase } from "../../lib/supabase";
 
+// ===========================================================
+// CACHE MÉMOIRE
+// ===========================================================
+
+let statisticsCache = null;
+let statisticsLoadingPromise = null;
+
+// ===========================================================
+// CHARGEMENT CENTRALISÉ
+// ===========================================================
+
+async function fetchStatistics() {
+  if (statisticsCache) {
+    return statisticsCache;
+  }
+
+  if (statisticsLoadingPromise) {
+    return statisticsLoadingPromise;
+  }
+
+  statisticsLoadingPromise = (async () => {
+    const [
+      profilesResult,
+      classesResult,
+      subjectsResult,
+      chaptersResult,
+      lessonsResult,
+      quizzesResult,
+      attemptsResult,
+      downloadsResult,
+    ] = await Promise.all([
+      // -------------------------------------------------------
+      // PROFILS
+      // -------------------------------------------------------
+      supabase
+        .from("profiles")
+        .select(
+          "id, full_name, role, class_id, xp, level"
+        ),
+
+      // -------------------------------------------------------
+      // CLASSES
+      // -------------------------------------------------------
+      supabase
+        .from("classes")
+        .select("id, name")
+        .order("name", {
+          ascending: true,
+        }),
+
+      // -------------------------------------------------------
+      // MATIÈRES
+      // -------------------------------------------------------
+      supabase
+        .from("subjects")
+        .select("id, name, code")
+        .order("order_number", {
+          ascending: true,
+        }),
+
+      // -------------------------------------------------------
+      // CHAPITRES
+      // -------------------------------------------------------
+      supabase
+        .from("chapters")
+        .select(
+          "id, subject_id, title"
+        ),
+
+      // -------------------------------------------------------
+      // LEÇONS
+      // -------------------------------------------------------
+      supabase
+        .from("lessons")
+        .select(
+          "id, chapter_id, title, video_url, is_premium"
+        ),
+
+      // -------------------------------------------------------
+      // QUIZ
+      // -------------------------------------------------------
+      supabase
+        .from("quizzes")
+        .select(
+          "id, lesson_id, passing_score"
+        ),
+
+      // -------------------------------------------------------
+      // TENTATIVES
+      // -------------------------------------------------------
+      supabase
+        .from("quiz_attempts")
+        .select(
+          "id, user_id, quiz_id, score"
+        )
+        .order("created_at", {
+          ascending: false,
+        }),
+
+      // -------------------------------------------------------
+      // TÉLÉCHARGEMENTS
+      // -------------------------------------------------------
+      // On ne récupère plus toutes les lignes.
+      // La page utilise uniquement le nombre total.
+      supabase
+        .from("downloads")
+        .select("id", {
+          count: "exact",
+          head: true,
+        }),
+    ]);
+
+    // =========================================================
+    // VÉRIFICATION DES ERREURS
+    // =========================================================
+
+    const results = [
+      {
+        name: "profiles",
+        result: profilesResult,
+      },
+      {
+        name: "classes",
+        result: classesResult,
+      },
+      {
+        name: "subjects",
+        result: subjectsResult,
+      },
+      {
+        name: "chapters",
+        result: chaptersResult,
+      },
+      {
+        name: "lessons",
+        result: lessonsResult,
+      },
+      {
+        name: "quizzes",
+        result: quizzesResult,
+      },
+      {
+        name: "quiz_attempts",
+        result: attemptsResult,
+      },
+      {
+        name: "downloads",
+        result: downloadsResult,
+      },
+    ];
+
+    const failedResult = results.find(
+      ({ result }) => result?.error
+    );
+
+    if (failedResult) {
+      console.error(
+        `Erreur Supabase dans "${failedResult.name}" :`,
+        failedResult.result.error
+      );
+
+      throw failedResult.result.error;
+    }
+
+    const statistics = {
+      profiles: Array.isArray(profilesResult.data)
+        ? profilesResult.data
+        : [],
+
+      classes: Array.isArray(classesResult.data)
+        ? classesResult.data
+        : [],
+
+      subjects: Array.isArray(subjectsResult.data)
+        ? subjectsResult.data
+        : [],
+
+      chapters: Array.isArray(chaptersResult.data)
+        ? chaptersResult.data
+        : [],
+
+      lessons: Array.isArray(lessonsResult.data)
+        ? lessonsResult.data
+        : [],
+
+      quizzes: Array.isArray(quizzesResult.data)
+        ? quizzesResult.data
+        : [],
+
+      quizAttempts: Array.isArray(attemptsResult.data)
+        ? attemptsResult.data
+        : [],
+
+      downloads: Number(downloadsResult.count) || 0,
+    };
+
+    statisticsCache = statistics;
+
+    return statistics;
+  })();
+
+  try {
+    return await statisticsLoadingPromise;
+  } finally {
+    statisticsLoadingPromise = null;
+  }
+}
+
+// ===========================================================
+// COMPOSANT PRINCIPAL
+// ===========================================================
+
 export default function AdminStats() {
   // =========================================================
   // ÉTATS
   // =========================================================
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(
+    () => !statisticsCache
+  );
+
   const [refreshing, setRefreshing] = useState(false);
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const [profiles, setProfiles] = useState([]);
-  const [classes, setClasses] = useState([]);
-  const [subjects, setSubjects] = useState([]);
-  const [chapters, setChapters] = useState([]);
-  const [lessons, setLessons] = useState([]);
-  const [quizzes, setQuizzes] = useState([]);
-  const [quizAttempts, setQuizAttempts] = useState([]);
-  const [downloads, setDownloads] = useState([]);
+  const [profiles, setProfiles] = useState(
+    () => statisticsCache?.profiles || []
+  );
+
+  const [classes, setClasses] = useState(
+    () => statisticsCache?.classes || []
+  );
+
+  const [subjects, setSubjects] = useState(
+    () => statisticsCache?.subjects || []
+  );
+
+  const [chapters, setChapters] = useState(
+    () => statisticsCache?.chapters || []
+  );
+
+  const [lessons, setLessons] = useState(
+    () => statisticsCache?.lessons || []
+  );
+
+  const [quizzes, setQuizzes] = useState(
+    () => statisticsCache?.quizzes || []
+  );
+
+  const [quizAttempts, setQuizAttempts] = useState(
+    () => statisticsCache?.quizAttempts || []
+  );
+
+  const [downloads, setDownloads] = useState(
+    () => statisticsCache?.downloads || 0
+  );
 
   const successTimeoutRef = useRef(null);
+
+  // =========================================================
+  // APPLICATION DES DONNÉES
+  // =========================================================
+
+  const applyStatistics = useCallback(
+    (statistics) => {
+      setProfiles(statistics.profiles);
+      setClasses(statistics.classes);
+      setSubjects(statistics.subjects);
+      setChapters(statistics.chapters);
+      setLessons(statistics.lessons);
+      setQuizzes(statistics.quizzes);
+      setQuizAttempts(statistics.quizAttempts);
+      setDownloads(statistics.downloads);
+    },
+    []
+  );
 
   // =========================================================
   // CHARGEMENT DES STATISTIQUES
@@ -56,188 +312,20 @@ export default function AdminStats() {
       try {
         if (isRefresh) {
           setRefreshing(true);
-        } else {
+
+          // Le bouton Actualiser force une nouvelle récupération.
+          statisticsCache = null;
+        } else if (!statisticsCache) {
           setLoading(true);
         }
 
         setError("");
         setSuccess("");
 
-        const [
-          profilesResult,
-          classesResult,
-          subjectsResult,
-          chaptersResult,
-          lessonsResult,
-          quizzesResult,
-          attemptsResult,
-          downloadsResult,
-        ] = await Promise.all([
-          supabase
-            .from("profiles")
-            .select(
-              "id, full_name, role, class_id, xp, level"
-            ),
+        const statistics =
+          await fetchStatistics();
 
-          supabase
-            .from("classes")
-            .select(
-              "id, name, description, order_number"
-            )
-            .order("order_number", {
-              ascending: true,
-            }),
-
-          supabase
-            .from("subjects")
-            .select(
-              "id, class_id, name, code, order_number"
-            )
-            .order("order_number", {
-              ascending: true,
-            }),
-
-          supabase
-            .from("chapters")
-            .select(
-              "id, subject_id, title, order_number"
-            ),
-
-          supabase
-            .from("lessons")
-            .select(
-              "id, chapter_id, title, video_url, is_premium, order_number"
-            ),
-
-          supabase
-            .from("quizzes")
-            .select(
-              "id, lesson_id, title, passing_score, created_at"
-            ),
-
-          supabase
-            .from("quiz_attempts")
-            .select(
-              "id, user_id, quiz_id, score, attempt_number, created_at"
-            )
-            .order("created_at", {
-              ascending: false,
-            }),
-
-          supabase
-            .from("downloads")
-            .select(
-              "id, user_id, lesson_id, file_size_mb, downloaded_at"
-            ),
-        ]);
-
-        // =====================================================
-        // VÉRIFICATION DES ERREURS
-        // =====================================================
-
-        const results = [
-          {
-            name: "profiles",
-            result: profilesResult,
-          },
-          {
-            name: "classes",
-            result: classesResult,
-          },
-          {
-            name: "subjects",
-            result: subjectsResult,
-          },
-          {
-            name: "chapters",
-            result: chaptersResult,
-          },
-          {
-            name: "lessons",
-            result: lessonsResult,
-          },
-          {
-            name: "quizzes",
-            result: quizzesResult,
-          },
-          {
-            name: "quiz_attempts",
-            result: attemptsResult,
-          },
-          {
-            name: "downloads",
-            result: downloadsResult,
-          },
-        ];
-
-        const failedResult = results.find(
-          ({ result }) => result?.error
-        );
-
-        if (failedResult) {
-          console.error(
-            `Erreur Supabase dans "${failedResult.name}" :`,
-            failedResult.result.error
-          );
-
-          throw failedResult.result.error;
-        }
-
-        // =====================================================
-        // STOCKAGE
-        // =====================================================
-
-        setProfiles(
-          Array.isArray(profilesResult.data)
-            ? profilesResult.data
-            : []
-        );
-
-        setClasses(
-          Array.isArray(classesResult.data)
-            ? classesResult.data
-            : []
-        );
-
-        setSubjects(
-          Array.isArray(subjectsResult.data)
-            ? subjectsResult.data
-            : []
-        );
-
-        setChapters(
-          Array.isArray(chaptersResult.data)
-            ? chaptersResult.data
-            : []
-        );
-
-        setLessons(
-          Array.isArray(lessonsResult.data)
-            ? lessonsResult.data
-            : []
-        );
-
-        setQuizzes(
-          Array.isArray(quizzesResult.data)
-            ? quizzesResult.data
-            : []
-        );
-
-        setQuizAttempts(
-          Array.isArray(attemptsResult.data)
-            ? attemptsResult.data
-            : []
-        );
-
-        setDownloads(
-          Array.isArray(downloadsResult.data)
-            ? downloadsResult.data
-            : []
-        );
-
-        // =====================================================
-        // MESSAGE DE SUCCÈS
-        // =====================================================
+        applyStatistics(statistics);
 
         if (isRefresh) {
           setSuccess(
@@ -271,7 +359,7 @@ export default function AdminStats() {
         setRefreshing(false);
       }
     },
-    []
+    [applyStatistics]
   );
 
   // =========================================================
@@ -317,7 +405,7 @@ export default function AdminStats() {
   const totalLessons = lessons.length;
   const totalQuizzes = quizzes.length;
   const totalAttempts = quizAttempts.length;
-  const totalDownloads = downloads.length;
+  const totalDownloads = downloads;
 
   // =========================================================
   // VIDÉOS

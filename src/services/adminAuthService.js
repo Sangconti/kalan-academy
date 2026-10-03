@@ -1,7 +1,28 @@
 import { supabase } from "../lib/supabase";
 
-const ADMIN_PROFILE_CACHE_KEY =
-  "kalan_admin_profile_cache";
+const ADMIN_PROFILE_CACHE_KEY = "kalan_admin_profile_cache";
+
+// ============================================================
+// CACHE MÉMOIRE ADMIN
+// ============================================================
+
+// Le profil admin reste disponible en mémoire pendant cette durée.
+// Cela évite de refaire les mêmes requêtes à chaque changement
+// de page dans l'interface administrateur.
+const ADMIN_MEMORY_CACHE_TTL = 5 * 60 * 1000;
+
+let adminMemoryCache = null;
+let adminMemoryCacheTimestamp = 0;
+
+// Promise partagée pendant un chargement en cours.
+// Très important avec React StrictMode et plusieurs composants
+// qui appellent useAdmin() en même temps.
+let adminLoadingPromise = null;
+
+
+// ============================================================
+// CACHE LOCALSTORAGE
+// ============================================================
 
 function getCachedAdminProfile(userId) {
   if (!userId) {
@@ -19,22 +40,18 @@ function getCachedAdminProfile(userId) {
 
     const profile = JSON.parse(raw);
 
-    if (!profile?.id || profile.id !== userId) {
+    if (!profile?.id) {
       return null;
     }
 
-    if (
-      !["admin", "super_admin"].includes(
-        profile.role
-      )
-    ) {
+    if (!["admin", "super_admin"].includes(profile.role)) {
       return null;
     }
 
     return profile;
   } catch (error) {
     console.warn(
-      "⚠️ [ADMIN AUTH] Impossible de lire le profil admin local =",
+      "⚠️ Impossible de lire le profil admin en cache :",
       error
     );
 
@@ -42,16 +59,9 @@ function getCachedAdminProfile(userId) {
   }
 }
 
+
 function cacheAdminProfile(profile) {
   if (!profile?.id) {
-    return;
-  }
-
-  if (
-    !["admin", "super_admin"].includes(
-      profile.role
-    )
-  ) {
     return;
   }
 
@@ -60,48 +70,109 @@ function cacheAdminProfile(profile) {
       `${ADMIN_PROFILE_CACHE_KEY}_${profile.id}`,
       JSON.stringify(profile)
     );
-
-    console.log(
-      "💾 [ADMIN AUTH] Profil admin mis en cache local"
-    );
   } catch (error) {
     console.warn(
-      "⚠️ [ADMIN AUTH] Impossible de mettre le profil admin en cache =",
+      "⚠️ Impossible de mettre en cache le profil admin :",
       error
     );
   }
 }
 
-export async function getCurrentAdmin() {
-  console.log(
-    "🔐 [ADMIN AUTH] getCurrentAdmin()"
-  );
 
-  // =====================================================
-  // 1. RÉCUPÉRER LA SESSION LOCALE
-  // =====================================================
+// ============================================================
+// OUTILS CACHE MÉMOIRE
+// ============================================================
+
+function getMemoryCachedAdmin() {
+  if (!adminMemoryCache) {
+    return null;
+  }
+
+  const age =
+    Date.now() - adminMemoryCacheTimestamp;
+
+  if (age > ADMIN_MEMORY_CACHE_TTL) {
+    adminMemoryCache = null;
+    adminMemoryCacheTimestamp = 0;
+    return null;
+  }
+
+  return adminMemoryCache;
+}
+
+
+function setMemoryCachedAdmin(admin) {
+  adminMemoryCache = admin;
+  adminMemoryCacheTimestamp = Date.now();
+}
+
+
+export function clearAdminAuthCache() {
+  adminMemoryCache = null;
+  adminMemoryCacheTimestamp = 0;
+  adminLoadingPromise = null;
+}
+
+
+// ============================================================
+// DÉTECTION ERREUR RÉSEAU
+// ============================================================
+
+function isNetworkError(error) {
+  if (!error) {
+    return false;
+  }
+
+  const message = String(
+    error?.message || error
+  ).toLowerCase();
+
+  return (
+    message.includes("failed to fetch") ||
+    message.includes("networkerror") ||
+    message.includes("network error") ||
+    message.includes("fetch failed") ||
+    message.includes("err_network") ||
+    message.includes("offline") ||
+    message.includes("timeout")
+  );
+}
+
+
+// ============================================================
+// CHARGEMENT RÉEL DE L'ADMIN
+// ============================================================
+
+async function fetchCurrentAdmin() {
+  console.log("👤 [ADMIN AUTH] chargement réel");
+
+  // ----------------------------------------------------------
+  // 1. SESSION LOCALE
+  // ----------------------------------------------------------
 
   const {
     data: sessionData,
     error: sessionError,
   } = await supabase.auth.getSession();
 
-  const session = sessionData?.session;
-  const sessionUser = session?.user;
+  if (sessionError) {
+    console.error(
+      "❌ [ADMIN AUTH] erreur getSession :",
+      sessionError
+    );
 
-  console.log(
-    "🔐 [ADMIN AUTH] Session locale =",
-    session
-  );
+    return null;
+  }
 
-  console.log(
-    "❌ [ADMIN AUTH] Session error =",
-    sessionError
-  );
+  const session =
+    sessionData?.session;
 
-  if (sessionError || !sessionUser) {
+  const sessionUser =
+    session?.user;
+
+  if (!sessionUser?.id) {
     console.log(
-      "🚫 [ADMIN AUTH] Aucune session utilisateur"
+      "👤 [ADMIN AUTH] aucune session"
     );
 
     return null;
@@ -110,9 +181,9 @@ export async function getCurrentAdmin() {
   let user = sessionUser;
   let offlineFallback = false;
 
-  // =====================================================
-  // 2. VÉRIFICATION SERVEUR DE L'UTILISATEUR
-  // =====================================================
+  // ----------------------------------------------------------
+  // 2. VÉRIFICATION UTILISATEUR
+  // ----------------------------------------------------------
 
   try {
     const {
@@ -120,152 +191,82 @@ export async function getCurrentAdmin() {
       error: userError,
     } = await supabase.auth.getUser();
 
-    console.log(
-      "👤 [ADMIN AUTH] user =",
-      userData?.user
-    );
-
-    console.log(
-      "❌ [ADMIN AUTH] userError =",
-      userError
-    );
-
     if (userData?.user) {
       user = userData.user;
     }
 
-    // ---------------------------------------------------
-    // Erreur d'authentification réseau :
-    // on conserve la session locale.
-    // ---------------------------------------------------
-
     if (userError) {
-      const errorName =
-        userError?.name || "";
-
-      const errorMessage =
-        userError?.message || "";
-
-      const isNetworkError =
-        errorName ===
-          "AuthRetryableFetchError" ||
-        errorMessage
-          .toLowerCase()
-          .includes("failed to fetch") ||
-        errorMessage
-          .toLowerCase()
-          .includes(
-            "network request failed"
-          ) ||
-        errorMessage
-          .toLowerCase()
-          .includes(
-            "networkerror"
-          );
-
-      if (isNetworkError) {
+      if (isNetworkError(userError)) {
         console.warn(
-          "📴 [ADMIN AUTH] Vérification serveur impossible → utilisation de la session locale"
+          "🌐 [ADMIN AUTH] réseau indisponible, utilisation du cache"
         );
 
         offlineFallback = true;
         user = sessionUser;
       } else {
         console.error(
-          "❌ [ADMIN AUTH] Erreur authentification non réseau"
+          "❌ [ADMIN AUTH] erreur getUser :",
+          userError
         );
 
         return null;
       }
     }
-
   } catch (error) {
-    console.error(
-      "💥 [ADMIN AUTH] Exception getUser() =",
-      error
-    );
-
-    const errorName =
-      error?.name || "";
-
-    const errorMessage =
-      error?.message || "";
-
-    const isNetworkError =
-      errorName ===
-        "AuthRetryableFetchError" ||
-      errorMessage
-        .toLowerCase()
-        .includes("failed to fetch") ||
-      errorMessage
-        .toLowerCase()
-        .includes(
-          "network request failed"
-        ) ||
-      errorMessage
-        .toLowerCase()
-        .includes(
-          "networkerror"
-        );
-
-    if (isNetworkError) {
+    if (isNetworkError(error)) {
       console.warn(
-        "📴 [ADMIN AUTH] Réseau indisponible → session locale conservée"
+        "🌐 [ADMIN AUTH] erreur réseau, utilisation du cache"
       );
 
       offlineFallback = true;
       user = sessionUser;
     } else {
+      console.error(
+        "❌ [ADMIN AUTH] exception getUser :",
+        error
+      );
+
       return null;
     }
   }
 
   if (!user?.id) {
-    console.log(
-      "🚫 [ADMIN AUTH] Aucun utilisateur valide"
-    );
-
     return null;
   }
 
-  // =====================================================
+  // ----------------------------------------------------------
   // 3. MODE HORS LIGNE
-  // =====================================================
+  // ----------------------------------------------------------
 
   if (offlineFallback) {
     const cachedProfile =
       getCachedAdminProfile(user.id);
 
-    console.log(
-      "💾 [ADMIN AUTH] Profil admin local =",
-      cachedProfile
-    );
-
     if (!cachedProfile) {
       console.warn(
-        "⚠️ [ADMIN AUTH] Aucun profil admin local disponible hors ligne"
+        "⚠️ [ADMIN AUTH] aucun profil admin en cache"
       );
 
       return null;
     }
 
-    console.log(
-      "✅ [ADMIN AUTH] ADMIN VALIDÉ HORS LIGNE"
-    );
-
-    return {
+    const result = {
       user,
       profile: cachedProfile,
     };
+
+    setMemoryCachedAdmin(result);
+
+    return result;
   }
 
-  // =====================================================
-  // 4. RÉCUPÉRER LE PROFIL EN LIGNE
-  // =====================================================
+  // ----------------------------------------------------------
+  // 4. PROFIL ADMIN
+  // ----------------------------------------------------------
 
   const {
     data: profile,
-    error,
+    error: profileError,
   } = await supabase
     .from("profiles")
     .select(
@@ -274,58 +275,105 @@ export async function getCurrentAdmin() {
     .eq("id", user.id)
     .single();
 
-  console.log(
-    "📋 [ADMIN AUTH] profile =",
-    profile
-  );
-
-  console.log(
-    "❌ [ADMIN AUTH] profile error =",
-    error
-  );
-
-  if (error || !profile) {
-    console.log(
-      "🚫 [ADMIN AUTH] Profil introuvable"
+  if (profileError) {
+    console.error(
+      "❌ [ADMIN AUTH] erreur profil :",
+      profileError
     );
 
     return null;
   }
 
-  // =====================================================
-  // 5. VÉRIFICATION DU RÔLE
-  // =====================================================
+  if (!profile) {
+    console.warn(
+      "⚠️ [ADMIN AUTH] profil introuvable"
+    );
 
-  console.log(
-    "🎭 [ADMIN AUTH] role =",
-    profile.role
-  );
+    return null;
+  }
 
   if (
     !["admin", "super_admin"].includes(
       profile.role
     )
   ) {
-    console.log(
-      "🚫 [ADMIN AUTH] Rôle refusé :",
-      profile.role
+    console.warn(
+      "🚫 [ADMIN AUTH] utilisateur non administrateur"
     );
 
     return null;
   }
 
-  // =====================================================
-  // 6. CACHE LOCAL DU PROFIL ADMIN
-  // =====================================================
+  // ----------------------------------------------------------
+  // 5. CACHE
+  // ----------------------------------------------------------
 
   cacheAdminProfile(profile);
 
-  console.log(
-    "✅ [ADMIN AUTH] ADMIN VALIDÉ"
-  );
-
-  return {
+  const result = {
     user,
     profile,
   };
+
+  setMemoryCachedAdmin(result);
+
+  console.log(
+    "✅ [ADMIN AUTH] administrateur chargé"
+  );
+
+  return result;
+}
+
+
+// ============================================================
+// API PUBLIQUE
+// ============================================================
+
+export async function getCurrentAdmin() {
+  // ----------------------------------------------------------
+  // CACHE MÉMOIRE
+  // ----------------------------------------------------------
+
+  const cachedAdmin =
+    getMemoryCachedAdmin();
+
+  if (cachedAdmin) {
+    console.log(
+      "⚡ [ADMIN AUTH] utilisation du cache mémoire"
+    );
+
+    return cachedAdmin;
+  }
+
+  // ----------------------------------------------------------
+  // CHARGEMENT DÉJÀ EN COURS
+  // ----------------------------------------------------------
+
+  if (adminLoadingPromise) {
+    console.log(
+      "⏳ [ADMIN AUTH] chargement déjà en cours → promise partagée"
+    );
+
+    return adminLoadingPromise;
+  }
+
+  // ----------------------------------------------------------
+  // NOUVEAU CHARGEMENT
+  // ----------------------------------------------------------
+
+  adminLoadingPromise =
+    fetchCurrentAdmin()
+      .catch((error) => {
+        console.error(
+          "❌ [ADMIN AUTH] erreur globale :",
+          error
+        );
+
+        return null;
+      })
+      .finally(() => {
+        adminLoadingPromise = null;
+      });
+
+  return adminLoadingPromise;
 }

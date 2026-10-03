@@ -37,15 +37,142 @@ const DEFAULT_SETTINGS = {
 };
 
 
+// ===========================================================
+// CACHE MÉMOIRE
+// ===========================================================
+
+let settingsCache = null;
+let settingsLoadingPromise = null;
+
+
+// ===========================================================
+// NORMALISER LES PARAMÈTRES
+// ===========================================================
+
+const normalizeSettings = (data) => ({
+  academy_name:
+    data?.academy_name ??
+    DEFAULT_SETTINGS.academy_name,
+
+  academy_description:
+    data?.academy_description ??
+    DEFAULT_SETTINGS.academy_description,
+
+  video_default_duration:
+    data?.video_default_duration ??
+    DEFAULT_SETTINGS.video_default_duration,
+
+  video_premium_enabled:
+    data?.video_premium_enabled ??
+    DEFAULT_SETTINGS.video_premium_enabled,
+
+  xp_lesson_completion:
+    data?.xp_lesson_completion ??
+    DEFAULT_SETTINGS.xp_lesson_completion,
+
+  xp_quiz_completion:
+    data?.xp_quiz_completion ??
+    DEFAULT_SETTINGS.xp_quiz_completion,
+
+  xp_quiz_perfect:
+    data?.xp_quiz_perfect ??
+    DEFAULT_SETTINGS.xp_quiz_perfect,
+
+  level_base_xp:
+    data?.level_base_xp ??
+    DEFAULT_SETTINGS.level_base_xp,
+
+  badges_enabled:
+    data?.badges_enabled ??
+    DEFAULT_SETTINGS.badges_enabled,
+
+  app_maintenance_mode:
+    data?.app_maintenance_mode ??
+    DEFAULT_SETTINGS.app_maintenance_mode,
+
+  app_registration_enabled:
+    data?.app_registration_enabled ??
+    DEFAULT_SETTINGS.app_registration_enabled,
+});
+
+
+// ===========================================================
+// CHARGER LES PARAMÈTRES
+// ===========================================================
+
+const fetchSettings = async (force = false) => {
+  if (!force && settingsCache) {
+    return settingsCache;
+  }
+
+  if (!force && settingsLoadingPromise) {
+    return settingsLoadingPromise;
+  }
+
+  settingsLoadingPromise = (async () => {
+    const { data, error: fetchError } =
+      await supabase
+        .from("admin_settings")
+        .select(
+          `
+            id,
+            academy_name,
+            academy_description,
+            video_default_duration,
+            video_premium_enabled,
+            xp_lesson_completion,
+            xp_quiz_completion,
+            xp_quiz_perfect,
+            level_base_xp,
+            badges_enabled,
+            app_maintenance_mode,
+            app_registration_enabled
+          `
+        )
+        .limit(1)
+        .maybeSingle();
+
+    if (fetchError) {
+      throw fetchError;
+    }
+
+    const settings = normalizeSettings(data);
+
+    settingsCache = {
+      settings,
+      id: data?.id ?? null,
+    };
+
+    return settingsCache;
+  })();
+
+  try {
+    return await settingsLoadingPromise;
+  } finally {
+    settingsLoadingPromise = null;
+  }
+};
+
+
 export default function AdminSettings() {
   const [settings, setSettings] =
-    useState(DEFAULT_SETTINGS);
+    useState(
+      () =>
+        settingsCache?.settings ||
+        DEFAULT_SETTINGS
+    );
 
   const [settingsId, setSettingsId] =
-    useState(null);
+    useState(
+      () =>
+        settingsCache?.id ||
+        null
+    );
 
   const [loading, setLoading] =
-    useState(true);
+    useState(
+      () => !settingsCache
+    );
 
   const [saving, setSaving] =
     useState(false);
@@ -58,77 +185,30 @@ export default function AdminSettings() {
 
 
   // =========================================================
-  // CHARGER LES PARAMÈTRES
+  // CHARGEMENT
   // =========================================================
 
-  const loadSettings = async () => {
+  const loadSettings = async (
+    force = false
+  ) => {
     try {
-      setLoading(true);
       setError("");
       setSuccess("");
 
-      const { data, error: fetchError } =
-        await supabase
-          .from("admin_settings")
-          .select("*")
-          .limit(1)
-          .maybeSingle();
-
-      if (fetchError) {
-        throw fetchError;
+      if (force || !settingsCache) {
+        setLoading(true);
       }
 
-      if (data) {
-        setSettings({
-          academy_name:
-            data.academy_name ??
-            DEFAULT_SETTINGS.academy_name,
+      const result =
+        await fetchSettings(force);
 
-          academy_description:
-            data.academy_description ??
-            DEFAULT_SETTINGS.academy_description,
+      setSettings(
+        result.settings
+      );
 
-          video_default_duration:
-            data.video_default_duration ??
-            DEFAULT_SETTINGS.video_default_duration,
-
-          video_premium_enabled:
-            data.video_premium_enabled ??
-            DEFAULT_SETTINGS.video_premium_enabled,
-
-          xp_lesson_completion:
-            data.xp_lesson_completion ??
-            DEFAULT_SETTINGS.xp_lesson_completion,
-
-          xp_quiz_completion:
-            data.xp_quiz_completion ??
-            DEFAULT_SETTINGS.xp_quiz_completion,
-
-          xp_quiz_perfect:
-            data.xp_quiz_perfect ??
-            DEFAULT_SETTINGS.xp_quiz_perfect,
-
-          level_base_xp:
-            data.level_base_xp ??
-            DEFAULT_SETTINGS.level_base_xp,
-
-          badges_enabled:
-            data.badges_enabled ??
-            DEFAULT_SETTINGS.badges_enabled,
-
-          app_maintenance_mode:
-            data.app_maintenance_mode ??
-            DEFAULT_SETTINGS.app_maintenance_mode,
-
-          app_registration_enabled:
-            data.app_registration_enabled ??
-            DEFAULT_SETTINGS.app_registration_enabled,
-        });
-
-        setSettingsId(data.id);
-      } else {
-        setSettings(DEFAULT_SETTINGS);
-      }
+      setSettingsId(
+        result.id
+      );
     } catch (err) {
       console.error(
         "Erreur chargement paramètres :",
@@ -254,10 +334,6 @@ export default function AdminSettings() {
             settings.app_registration_enabled
           ),
 
-        // ===================================================
-        // TRAÇABILITÉ
-        // ===================================================
-
         updated_at:
           new Date().toISOString(),
 
@@ -317,7 +393,6 @@ export default function AdminSettings() {
 
       let result;
 
-
       if (settingsId) {
         result = await supabase
           .from("admin_settings")
@@ -350,56 +425,75 @@ export default function AdminSettings() {
       }
 
 
-            // =====================================================
-            // JOURNAL ADMINISTRATEUR
-            // =====================================================
+      // =====================================================
+      // METTRE À JOUR LE CACHE
+      // =====================================================
 
-            await logAdminActivity({
-              action: "admin_settings_updated",
-              details: {
-                academy_name:
-                  payload.academy_name,
+      const normalizedSettings =
+        normalizeSettings(
+          result.data || payload
+        );
 
-                academy_description:
-                  payload.academy_description,
-
-                video_default_duration:
-                  payload.video_default_duration,
-
-                video_premium_enabled:
-                  payload.video_premium_enabled,
-
-                xp_lesson_completion:
-                  payload.xp_lesson_completion,
-
-                xp_quiz_completion:
-                  payload.xp_quiz_completion,
-
-                xp_quiz_perfect:
-                  payload.xp_quiz_perfect,
-
-                level_base_xp:
-                  payload.level_base_xp,
-
-                badges_enabled:
-                  payload.badges_enabled,
-
-                app_maintenance_mode:
-                  payload.app_maintenance_mode,
-
-                app_registration_enabled:
-                  payload.app_registration_enabled,
-              },
-            });
+      settingsCache = {
+        settings:
+          normalizedSettings,
+        id:
+          result.data?.id ||
+          settingsId ||
+          null,
+      };
 
 
-            // =====================================================
-            // SUCCÈS
-            // =====================================================
+      // =====================================================
+      // JOURNAL ADMINISTRATEUR
+      // =====================================================
 
-            setSuccess(
-              "Les paramètres ont été enregistrés avec succès."
-            );
+      await logAdminActivity({
+        action: "admin_settings_updated",
+        details: {
+          academy_name:
+            payload.academy_name,
+
+          academy_description:
+            payload.academy_description,
+
+          video_default_duration:
+            payload.video_default_duration,
+
+          video_premium_enabled:
+            payload.video_premium_enabled,
+
+          xp_lesson_completion:
+            payload.xp_lesson_completion,
+
+          xp_quiz_completion:
+            payload.xp_quiz_completion,
+
+          xp_quiz_perfect:
+            payload.xp_quiz_perfect,
+
+          level_base_xp:
+            payload.level_base_xp,
+
+          badges_enabled:
+            payload.badges_enabled,
+
+          app_maintenance_mode:
+            payload.app_maintenance_mode,
+
+          app_registration_enabled:
+            payload.app_registration_enabled,
+        },
+      });
+
+
+      // =====================================================
+      // SUCCÈS
+      // =====================================================
+
+      setSuccess(
+        "Les paramètres ont été enregistrés avec succès."
+      );
 
       setTimeout(() => {
         setSuccess("");
@@ -423,11 +517,11 @@ export default function AdminSettings() {
 
 
   // =========================================================
-  // RÉINITIALISATION LOCALE
+  // RÉINITIALISATION / ACTUALISATION
   // =========================================================
 
   const resetForm = () => {
-    loadSettings();
+    loadSettings(true);
   };
 
 

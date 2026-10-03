@@ -4,7 +4,7 @@ import StatCard from "../../components/admin/StatCard";
 
 import {
   getAdminStats,
-  getAdminUsers,
+  getAdminStudents,
   getAdminActivityLogs
 } from "../../services/adminService";
 
@@ -113,19 +113,8 @@ export default function DashboardAdmin() {
 
       setStudentsLoading(true);
 
-      const data =
-        await getAdminUsers();
-
-      console.log(
-        "👨‍🎓 [ADMIN] Utilisateurs récupérés =",
-        data
-      );
-
       const studentList =
-        (data || []).filter(
-          (user) =>
-            user?.role === "student"
-        );
+        await getAdminStudents();
 
       console.log(
         "👨‍🎓 [ADMIN] Élèves récupérés =",
@@ -133,7 +122,7 @@ export default function DashboardAdmin() {
       );
 
       setStudents(
-        studentList
+        studentList || []
       );
 
 
@@ -143,7 +132,7 @@ export default function DashboardAdmin() {
 
       if (
         selectedStudentId &&
-        !studentList.some(
+        !(studentList || []).some(
           (student) =>
             student.id === selectedStudentId
         )
@@ -307,6 +296,7 @@ export default function DashboardAdmin() {
         icon: "🎬",
         label: "Vidéo de leçon modifiée"
       },
+
       subject_created: {
         icon: "📚",
         label: "Matière créée"

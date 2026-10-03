@@ -10,6 +10,8 @@ const ADMIN_ACTIVITY_LOGS_CACHE_KEY =
 const ADMIN_USERS_CACHE_KEY =
   "kalan_admin_users_cache";
 
+const ADMIN_STATS_CACHE_KEY =
+  "kalan_admin_stats_cache";
 
 // ==========================
 // CACHE — JOURNAL ADMIN
@@ -17,24 +19,21 @@ const ADMIN_USERS_CACHE_KEY =
 
 function getCachedAdminActivityLogs() {
   try {
-    const raw =
-      localStorage.getItem(
-        ADMIN_ACTIVITY_LOGS_CACHE_KEY
-      );
+    const raw = localStorage.getItem(
+      ADMIN_ACTIVITY_LOGS_CACHE_KEY
+    );
 
     if (!raw) {
       return null;
     }
 
-    const logs =
-      JSON.parse(raw);
+    const logs = JSON.parse(raw);
 
     if (!Array.isArray(logs)) {
       return null;
     }
 
     return logs;
-
   } catch (error) {
     console.warn(
       "⚠️ [ADMIN ACTIVITY] Impossible de lire le cache local :",
@@ -44,7 +43,6 @@ function getCachedAdminActivityLogs() {
     return null;
   }
 }
-
 
 function cacheAdminActivityLogs(logs) {
   if (!Array.isArray(logs)) {
@@ -60,7 +58,6 @@ function cacheAdminActivityLogs(logs) {
     console.log(
       "💾 [ADMIN ACTIVITY] Journal mis en cache local"
     );
-
   } catch (error) {
     console.warn(
       "⚠️ [ADMIN ACTIVITY] Impossible de sauvegarder le journal localement :",
@@ -69,31 +66,27 @@ function cacheAdminActivityLogs(logs) {
   }
 }
 
-
 // ==========================
 // CACHE — UTILISATEURS ADMIN
 // ==========================
 
 function getCachedAdminUsers() {
   try {
-    const raw =
-      localStorage.getItem(
-        ADMIN_USERS_CACHE_KEY
-      );
+    const raw = localStorage.getItem(
+      ADMIN_USERS_CACHE_KEY
+    );
 
     if (!raw) {
       return null;
     }
 
-    const users =
-      JSON.parse(raw);
+    const users = JSON.parse(raw);
 
     if (!Array.isArray(users)) {
       return null;
     }
 
     return users;
-
   } catch (error) {
     console.warn(
       "⚠️ [ADMIN USERS] Impossible de lire le cache local :",
@@ -103,7 +96,6 @@ function getCachedAdminUsers() {
     return null;
   }
 }
-
 
 function cacheAdminUsers(users) {
   if (!Array.isArray(users)) {
@@ -119,10 +111,65 @@ function cacheAdminUsers(users) {
     console.log(
       "💾 [ADMIN USERS] Utilisateurs mis en cache local"
     );
-
   } catch (error) {
     console.warn(
       "⚠️ [ADMIN USERS] Impossible de sauvegarder les utilisateurs localement :",
+      error
+    );
+  }
+}
+
+// ==========================
+// CACHE — STATISTIQUES ADMIN
+// ==========================
+
+function getCachedAdminStats() {
+  try {
+    const raw = localStorage.getItem(
+      ADMIN_STATS_CACHE_KEY
+    );
+
+    if (!raw) {
+      return null;
+    }
+
+    const stats = JSON.parse(raw);
+
+    if (
+      !stats ||
+      typeof stats !== "object"
+    ) {
+      return null;
+    }
+
+    return stats;
+  } catch (error) {
+    console.warn(
+      "⚠️ [ADMIN STATS] Impossible de lire le cache local :",
+      error
+    );
+
+    return null;
+  }
+}
+
+function cacheAdminStats(stats) {
+  if (!stats) {
+    return;
+  }
+
+  try {
+    localStorage.setItem(
+      ADMIN_STATS_CACHE_KEY,
+      JSON.stringify(stats)
+    );
+
+    console.log(
+      "💾 [ADMIN STATS] Statistiques mises en cache local"
+    );
+  } catch (error) {
+    console.warn(
+      "⚠️ [ADMIN STATS] Impossible de sauvegarder les statistiques localement :",
       error
     );
   }
@@ -153,8 +200,10 @@ export async function logAdminActivity({
       "log_admin_activity",
       {
         p_action: action,
-        p_target_user_id: targetUserId || null,
-        p_details: details || {}
+        p_target_user_id:
+          targetUserId || null,
+        p_details:
+          details || {}
       }
     );
 
@@ -190,7 +239,6 @@ export async function logAdminActivity({
     }
 
     return true;
-
   } catch (error) {
     console.error(
       "💥 [ADMIN ACTIVITY] Exception enregistrement :",
@@ -201,7 +249,6 @@ export async function logAdminActivity({
   }
 }
 
-
 // ==========================
 // JOURNAL ADMIN — RÉCUPÉRER
 // ==========================
@@ -209,15 +256,13 @@ export async function logAdminActivity({
 export async function getAdminActivityLogs(
   limit = 10
 ) {
-  const safeLimit =
-    Math.min(
-      Math.max(
-        Number(limit) || 10,
-        1
-      ),
-      50
-    );
-
+  const safeLimit = Math.min(
+    Math.max(
+      Number(limit) || 10,
+      1
+    ),
+    50
+  );
 
   // =====================================================
   // 1. HORS LIGNE → CACHE LOCAL
@@ -227,12 +272,10 @@ export async function getAdminActivityLogs(
     typeof navigator !== "undefined" &&
     navigator.onLine === false
   ) {
-
     const cachedLogs =
       getCachedAdminActivityLogs();
 
     if (cachedLogs) {
-
       console.log(
         "📴 [ADMIN ACTIVITY] Hors ligne → utilisation du cache local"
       );
@@ -252,13 +295,11 @@ export async function getAdminActivityLogs(
     );
   }
 
-
   // =====================================================
   // 2. EN LIGNE → SUPABASE
   // =====================================================
 
   try {
-
     const {
       data,
       error
@@ -288,9 +329,7 @@ export async function getAdminActivityLogs(
       )
       .limit(safeLimit);
 
-
     if (error) {
-
       console.error(
         "❌ [ADMIN ACTIVITY] Erreur récupération :",
         error
@@ -299,33 +338,18 @@ export async function getAdminActivityLogs(
       throw error;
     }
 
-
-    const logs =
-      data || [];
-
-
-    // ===================================================
-    // 3. CACHE DES DERNIERS JOURNAUX VALIDES
-    // ===================================================
+    const logs = data || [];
 
     cacheAdminActivityLogs(
       logs
     );
 
-
     return logs;
-
   } catch (error) {
-
-    // ===================================================
-    // 4. FALLBACK CACHE
-    // ===================================================
-
     const cachedLogs =
       getCachedAdminActivityLogs();
 
     if (cachedLogs) {
-
       console.warn(
         "📴 [ADMIN ACTIVITY] Requête Supabase échouée → utilisation du cache local"
       );
@@ -336,80 +360,39 @@ export async function getAdminActivityLogs(
       );
     }
 
-
     throw error;
   }
 }
 
-
 // ==========================
 // DASHBOARD STATISTIQUES
 // ==========================
-
-const ADMIN_STATS_CACHE_KEY =
-  "kalan_admin_stats_cache";
-
-
-function getCachedAdminStats() {
-  try {
-    const raw =
-      localStorage.getItem(
-        ADMIN_STATS_CACHE_KEY
-      );
-
-    if (!raw) {
-      return null;
-    }
-
-    const stats =
-      JSON.parse(raw);
-
-    if (
-      !stats ||
-      typeof stats !== "object"
-    ) {
-      return null;
-    }
-
-    return stats;
-
-  } catch (error) {
-    console.warn(
-      "⚠️ [ADMIN STATS] Impossible de lire le cache local :",
-      error
-    );
-
-    return null;
-  }
-}
-
-
-function cacheAdminStats(stats) {
-  if (!stats) {
-    return;
-  }
-
-  try {
-    localStorage.setItem(
-      ADMIN_STATS_CACHE_KEY,
-      JSON.stringify(stats)
-    );
-
-    console.log(
-      "💾 [ADMIN STATS] Statistiques mises en cache local"
-    );
-
-  } catch (error) {
-    console.warn(
-      "⚠️ [ADMIN STATS] Impossible de sauvegarder les statistiques localement :",
-      error
-    );
-  }
-}
-
+//
+// Optimisation :
+// Ancien fonctionnement : 7 requêtes
+//
+// 1. students
+// 2. premium
+// 3. classes
+// 4. subjects
+// 5. lessons
+// 6. quizzes
+// 7. xp de tous les profils
+//
+// Nouveau fonctionnement : 5 requêtes
+//
+// 1. élèves + premium + XP
+// 2. classes
+// 3. subjects
+// 4. lessons
+// 5. quizzes
+//
+// On récupère uniquement les profils ayant role = student.
+// Le nombre d'élèves, le nombre Premium et le XP total
+// sont ensuite calculés localement.
+// ==========================
 
 export async function getAdminStats() {
-
   // =====================================================
   // 1. HORS LIGNE → CACHE LOCAL
   // =====================================================
@@ -418,12 +401,10 @@ export async function getAdminStats() {
     typeof navigator !== "undefined" &&
     navigator.onLine === false
   ) {
-
     const cachedStats =
       getCachedAdminStats();
 
     if (cachedStats) {
-
       console.log(
         "📴 [ADMIN STATS] Hors ligne → utilisation du cache local"
       );
@@ -440,44 +421,37 @@ export async function getAdminStats() {
     );
   }
 
-
   // =====================================================
   // 2. EN LIGNE → SUPABASE
   // =====================================================
 
   try {
-
     const [
-      students,
-      premium,
-      classes,
-      subjects,
-      lessons,
-      quizzes,
-      xp
+      studentsResult,
+      classesResult,
+      subjectsResult,
+      lessonsResult,
+      quizzesResult
     ] = await Promise.all([
+      // -----------------------------------------
+      // ÉLÈVES + PREMIUM + XP
+      // -----------------------------------------
 
       supabase
         .from("profiles")
-        .select("*", {
-          count: "exact",
-          head: true
-        })
+        .select(`
+          id,
+          is_premium,
+          xp
+        `)
         .eq(
           "role",
           "student"
         ),
 
-      supabase
-        .from("profiles")
-        .select("*", {
-          count: "exact",
-          head: true
-        })
-        .eq(
-          "is_premium",
-          true
-        ),
+      // -----------------------------------------
+      // CLASSES
+      // -----------------------------------------
 
       supabase
         .from("classes")
@@ -486,12 +460,20 @@ export async function getAdminStats() {
           head: true
         }),
 
+      // -----------------------------------------
+      // MATIÈRES
+      // -----------------------------------------
+
       supabase
         .from("subjects")
         .select("*", {
           count: "exact",
           head: true
         }),
+
+      // -----------------------------------------
+      // LEÇONS
+      // -----------------------------------------
 
       supabase
         .from("lessons")
@@ -500,74 +482,62 @@ export async function getAdminStats() {
           head: true
         }),
 
+      // -----------------------------------------
+      // QUIZ
+      // -----------------------------------------
+
       supabase
         .from("quizzes")
         .select("*", {
           count: "exact",
           head: true
-        }),
-
-      supabase
-        .from("profiles")
-        .select("xp")
+        })
     ]);
 
+    // =====================================================
+    // 3. VÉRIFICATION DES REQUÊTES
+    // =====================================================
 
     const responses = [
       {
         name:
           "students",
         response:
-          students
-      },
-      {
-        name:
-          "premium",
-        response:
-          premium
+          studentsResult
       },
       {
         name:
           "classes",
         response:
-          classes
+          classesResult
       },
       {
         name:
           "subjects",
         response:
-          subjects
+          subjectsResult
       },
       {
         name:
           "lessons",
         response:
-          lessons
+          lessonsResult
       },
       {
         name:
           "quizzes",
         response:
-          quizzes
-      },
-      {
-        name:
-          "xp",
-        response:
-          xp
+          quizzesResult
       }
     ];
-
 
     const failedRequest =
       responses.find(
         item =>
-          item.response.error
+          item.response?.error
       );
 
-
     if (failedRequest) {
-
       console.error(
         `Erreur statistiques ${failedRequest.name}:`,
         failedRequest.response.error
@@ -576,72 +546,81 @@ export async function getAdminStats() {
       throw failedRequest.response.error;
     }
 
+    // =====================================================
+    // 4. CALCULS LOCAUX
+    // =====================================================
+
+    const students =
+      studentsResult.data || [];
+
+    const premiumCount =
+      students.reduce(
+        (count, student) =>
+          count +
+          (
+            student?.is_premium === true
+              ? 1
+              : 0
+          ),
+        0
+      );
 
     const totalXP =
-      xp.data?.reduce(
-        (sum, user) => {
-
-          return (
-            sum +
-            (
-              Number(
-                user.xp
-              ) || 0
-            )
-          );
-
-        },
+      students.reduce(
+        (sum, student) =>
+          sum +
+          (
+            Number(
+              student?.xp
+            ) || 0
+          ),
         0
-      ) || 0;
+      );
 
+    // =====================================================
+    // 5. STATISTIQUES FINALES
+    // =====================================================
 
     const stats = {
-
       students:
-        students.count || 0,
+        students.length,
 
       premium:
-        premium.count || 0,
+        premiumCount,
 
       classes:
-        classes.count || 0,
+        classesResult.count || 0,
 
       subjects:
-        subjects.count || 0,
+        subjectsResult.count || 0,
 
       lessons:
-        lessons.count || 0,
+        lessonsResult.count || 0,
 
       quizzes:
-        quizzes.count || 0,
+        quizzesResult.count || 0,
 
       totalXP
-
     };
 
-
-    // ===================================================
-    // 3. CACHE DES DERNIÈRES STATISTIQUES VALIDES
-    // ===================================================
+    // =====================================================
+    // 6. CACHE
+    // =====================================================
 
     cacheAdminStats(
       stats
     );
 
-
     return stats;
-
   } catch (error) {
-
-    // ===================================================
-    // 4. FALLBACK CACHE
-    // ===================================================
+    // =====================================================
+    // 7. FALLBACK CACHE
+    // =====================================================
 
     const cachedStats =
       getCachedAdminStats();
 
     if (cachedStats) {
-
       console.warn(
         "📴 [ADMIN STATS] Requête Supabase échouée → utilisation du cache local"
       );
@@ -649,18 +628,15 @@ export async function getAdminStats() {
       return cachedStats;
     }
 
-
     throw error;
   }
 }
-
 
 // ==========================
 // UTILISATEURS ADMIN
 // ==========================
 
 export async function getAdminUsers() {
-
   // =====================================================
   // 1. HORS LIGNE → CACHE LOCAL
   // =====================================================
@@ -669,12 +645,10 @@ export async function getAdminUsers() {
     typeof navigator !== "undefined" &&
     navigator.onLine === false
   ) {
-
     const cachedUsers =
       getCachedAdminUsers();
 
     if (cachedUsers) {
-
       console.log(
         "📴 [ADMIN USERS] Hors ligne → utilisation du cache local"
       );
@@ -691,13 +665,11 @@ export async function getAdminUsers() {
     );
   }
 
-
   // =====================================================
   // 2. EN LIGNE → SUPABASE
   // =====================================================
 
   try {
-
     const {
       data,
       error
@@ -723,38 +695,22 @@ export async function getAdminUsers() {
         }
       );
 
-
     if (error) {
       throw error;
     }
 
-
-    const users =
-      data || [];
-
-
-    // ===================================================
-    // 3. CACHE DES DERNIERS UTILISATEURS VALIDES
-    // ===================================================
+    const users = data || [];
 
     cacheAdminUsers(
       users
     );
 
-
     return users;
-
   } catch (error) {
-
-    // ===================================================
-    // 4. FALLBACK CACHE
-    // ===================================================
-
     const cachedUsers =
       getCachedAdminUsers();
 
     if (cachedUsers) {
-
       console.warn(
         "📴 [ADMIN USERS] Requête Supabase échouée → utilisation du cache local"
       );
@@ -762,11 +718,11 @@ export async function getAdminUsers() {
       return cachedUsers;
     }
 
-
     throw error;
   }
 }
 
+export const getAdminStudents = getAdminUsers;
 
 // ==========================
 // MODIFIER LE RÔLE
@@ -788,11 +744,9 @@ export async function updateUserRole(
       userId
     );
 
-
   if (error) {
     throw error;
   }
-
 
   const activityLogged =
     await logAdminActivity({
@@ -814,10 +768,8 @@ export async function updateUserRole(
     );
   }
 
-
   return true;
 }
-
 
 // ==========================
 // ACTIVER / DÉSACTIVER
@@ -832,18 +784,17 @@ export async function updateUserAccess(
   } = await supabase
     .from("profiles")
     .update({
-      access_status: accessStatus
+      access_status:
+        accessStatus
     })
     .eq(
       "id",
       userId
     );
 
-
   if (error) {
     throw error;
   }
-
 
   const activityLogged =
     await logAdminActivity({
@@ -865,10 +816,8 @@ export async function updateUserAccess(
     );
   }
 
-
   return true;
 }
-
 
 // ==========================
 // MODIFIER L'ACCÈS UTILISATEUR
@@ -883,13 +832,13 @@ export async function updateUserAccessStatus(
   } = await supabase
     .from("profiles")
     .update({
-      access_status: accessStatus
+      access_status:
+        accessStatus
     })
     .eq(
       "id",
       userId
     );
-
 
   if (error) {
     console.error(
@@ -899,7 +848,6 @@ export async function updateUserAccessStatus(
 
     throw error;
   }
-
 
   const activityLogged =
     await logAdminActivity({
@@ -921,10 +869,8 @@ export async function updateUserAccessStatus(
     );
   }
 
-
   return true;
 }
-
 
 // ==========================
 // MODIFIER PREMIUM
@@ -940,10 +886,8 @@ export async function updateUserPremium(
     );
   }
 
-
   const normalizedPremium =
     Boolean(isPremium);
-
 
   const {
     error
@@ -958,7 +902,6 @@ export async function updateUserPremium(
       userId
     );
 
-
   if (error) {
     console.error(
       "Erreur modification Premium :",
@@ -967,7 +910,6 @@ export async function updateUserPremium(
 
     throw error;
   }
-
 
   const activityLogged =
     await logAdminActivity({
@@ -989,10 +931,8 @@ export async function updateUserPremium(
     );
   }
 
-
   return true;
 }
-
 
 // ==========================
 // MODIFIER LA CLASSE
@@ -1008,10 +948,8 @@ export async function updateUserClass(
     );
   }
 
-
   const normalizedClassId =
     classId || null;
-
 
   const {
     error
@@ -1026,7 +964,6 @@ export async function updateUserClass(
       userId
     );
 
-
   if (error) {
     console.error(
       "Erreur modification classe :",
@@ -1035,7 +972,6 @@ export async function updateUserClass(
 
     throw error;
   }
-
 
   const activityLogged =
     await logAdminActivity({
@@ -1057,10 +993,8 @@ export async function updateUserClass(
     );
   }
 
-
   return true;
 }
-
 
 // ==========================
 // MODIFIER ORANGE MONEY
@@ -1076,10 +1010,8 @@ export async function updateUserOrangeMoney(
     );
   }
 
-
   const normalizedOrangeMoneyId =
     orangeMoneyId?.trim() || null;
-
 
   const {
     error
@@ -1094,7 +1026,6 @@ export async function updateUserOrangeMoney(
       userId
     );
 
-
   if (error) {
     console.error(
       "Erreur modification Orange Money :",
@@ -1103,7 +1034,6 @@ export async function updateUserOrangeMoney(
 
     throw error;
   }
-
 
   const activityLogged =
     await logAdminActivity({
@@ -1125,10 +1055,8 @@ export async function updateUserOrangeMoney(
     );
   }
 
-
   return true;
 }
-
 
 // ==========================
 // RÉINITIALISER LA PROGRESSION
@@ -1143,17 +1071,16 @@ export async function resetUserProgress(
     );
   }
 
-
   const {
     data,
     error
   } = await supabase.rpc(
     "reset_user_progress",
     {
-      p_user_id: userId
+      p_user_id:
+        userId
     }
   );
-
 
   if (error) {
     console.error(
@@ -1164,14 +1091,12 @@ export async function resetUserProgress(
     throw error;
   }
 
-
   if (!data?.success) {
     throw new Error(
       data?.message ||
       "La réinitialisation de la progression a échoué."
     );
   }
-
 
   const activityLogged =
     await logAdminActivity({
@@ -1183,7 +1108,8 @@ export async function resetUserProgress(
 
       details: {
         progress_reset_version:
-          data?.progress_reset_version ?? null
+          data?.progress_reset_version ??
+          null
       }
     });
 
@@ -1193,10 +1119,8 @@ export async function resetUserProgress(
     );
   }
 
-
   return data;
 }
-
 
 // ==========================
 // EMAIL ADMIN DE L'ÉLÈVE
@@ -1211,17 +1135,16 @@ export async function getAdminStudentEmail(
     );
   }
 
-
   const {
     data,
     error
   } = await supabase.rpc(
     "get_admin_student_email",
     {
-      p_user_id: userId
+      p_user_id:
+        userId
     }
   );
-
 
   if (error) {
     console.error(
@@ -1232,7 +1155,6 @@ export async function getAdminStudentEmail(
     throw error;
   }
 
-
   if (!data?.success) {
     throw new Error(
       data?.message ||
@@ -1240,10 +1162,8 @@ export async function getAdminStudentEmail(
     );
   }
 
-
   return data.email || null;
 }
-
 
 // ==========================
 // SUPPRIMER UN UTILISATEUR
@@ -1258,15 +1178,7 @@ export async function deleteAdminUser(
     );
   }
 
-
-  // ----------------------------------------
-  // Récupérer les informations avant
-  // suppression afin de conserver une trace
-  // lisible dans le journal.
-  // ----------------------------------------
-
   let targetUserName = null;
-
 
   try {
     const {
@@ -1285,7 +1197,6 @@ export async function deleteAdminUser(
       )
       .maybeSingle();
 
-
     if (targetUserError) {
       console.warn(
         "⚠️ [ADMIN] Impossible de récupérer le nom avant suppression :",
@@ -1293,16 +1204,15 @@ export async function deleteAdminUser(
       );
     } else {
       targetUserName =
-        targetUser?.full_name || null;
+        targetUser?.full_name ||
+        null;
     }
-
   } catch (error) {
     console.warn(
       "⚠️ [ADMIN] Exception récupération utilisateur avant suppression :",
       error
     );
   }
-
 
   const {
     data,
@@ -1315,7 +1225,6 @@ export async function deleteAdminUser(
       }
     }
   );
-
 
   if (error) {
     console.error(
@@ -1333,7 +1242,6 @@ export async function deleteAdminUser(
       error?.message
     );
 
-
     if (error.context) {
       try {
         const details =
@@ -1349,9 +1257,7 @@ export async function deleteAdminUser(
           details?.message ||
           "Erreur lors de la suppression."
         );
-
       } catch (readError) {
-
         if (
           readError instanceof Error &&
           readError.message
@@ -1366,10 +1272,8 @@ export async function deleteAdminUser(
       }
     }
 
-
     throw error;
   }
-
 
   if (!data?.success) {
     throw new Error(
@@ -1377,20 +1281,6 @@ export async function deleteAdminUser(
       "La suppression n'a pas été confirmée."
     );
   }
-
-
-  // ----------------------------------------
-  // JOURNAL ADMIN
-  // ----------------------------------------
-  //
-  // Le profil a maintenant été supprimé.
-  // On ne peut donc pas utiliser userId dans
-  // target_user_id, car cette colonne possède
-  // une clé étrangère vers profiles.
-  //
-  // On conserve l'ancien identifiant et le nom
-  // dans details.
-  // ----------------------------------------
 
   const activityLogged =
     await logAdminActivity({
@@ -1415,10 +1305,8 @@ export async function deleteAdminUser(
     );
   }
 
-
   return true;
 }
-
 
 // ==========================
 // CLASSES
@@ -1438,15 +1326,12 @@ export async function getAdminClasses() {
       }
     );
 
-
   if (error) {
     throw error;
   }
 
-
   return data || [];
 }
-
 
 // ==========================
 // CRÉER UNE CLASSE
@@ -1464,11 +1349,9 @@ export async function createClass(
     .select()
     .single();
 
-
   if (error) {
     throw error;
   }
-
 
   const activityLogged =
     await logAdminActivity({
@@ -1477,7 +1360,8 @@ export async function createClass(
 
       details: {
         class_id:
-          data?.id || null,
+          data?.id ||
+          null,
 
         name:
           data?.name ||
@@ -1497,10 +1381,8 @@ export async function createClass(
     );
   }
 
-
   return data;
 }
-
 
 // ==========================
 // MODIFIER UNE CLASSE
@@ -1520,11 +1402,9 @@ export async function updateClass(
       id
     );
 
-
   if (error) {
     throw error;
   }
-
 
   const activityLogged =
     await logAdminActivity({
@@ -1545,10 +1425,8 @@ export async function updateClass(
     );
   }
 
-
   return true;
 }
-
 
 // ==========================
 // SUPPRIMER UNE CLASSE
@@ -1563,15 +1441,7 @@ export async function deleteClass(
     );
   }
 
-
-  // ----------------------------------------
-  // Récupérer les informations avant
-  // suppression pour conserver une trace
-  // lisible dans le journal.
-  // ----------------------------------------
-
   let className = null;
-
 
   try {
     const {
@@ -1590,7 +1460,6 @@ export async function deleteClass(
       )
       .maybeSingle();
 
-
     if (classError) {
       console.warn(
         "⚠️ [ADMIN] Impossible de récupérer la classe avant suppression :",
@@ -1598,16 +1467,15 @@ export async function deleteClass(
       );
     } else {
       className =
-        classData?.name || null;
+        classData?.name ||
+        null;
     }
-
   } catch (error) {
     console.warn(
       "⚠️ [ADMIN] Exception récupération classe avant suppression :",
       error
     );
   }
-
 
   const {
     error
@@ -1619,11 +1487,9 @@ export async function deleteClass(
       id
     );
 
-
   if (error) {
     throw error;
   }
-
 
   const activityLogged =
     await logAdminActivity({
@@ -1645,23 +1511,11 @@ export async function deleteClass(
     );
   }
 
-
   return true;
 }
 
 // ==========================
 // VUE LÉGÈRE — CONSULTATION ÉLÈVE
-// ==========================
-//
-// Cette fonction est dédiée au mode consultation.
-// Elle ne remplace PAS getAdminStudentView().
-//
-// Objectif :
-// - charger rapidement les données nécessaires au mode consultation
-// - éviter user_devices
-// - éviter l'email RPC
-// - éviter de récupérer toutes les leçons de l'académie
-// - conserver le même format attendu par DashboardPage
 // ==========================
 
 export async function getConsultationStudentView(
@@ -1673,22 +1527,12 @@ export async function getConsultationStudentView(
     );
   }
 
-
-  // =====================================================
-  // 1. PROFIL + PROGRESSION + QUIZ + BADGES
-  // =====================================================
-
   const [
     profileResult,
     progressResult,
     attemptsResult,
     badgesResult
   ] = await Promise.all([
-
-    // -----------------------------------------
-    // PROFIL
-    // -----------------------------------------
-
     supabase
       .from("profiles")
       .select(`
@@ -1714,11 +1558,6 @@ export async function getConsultationStudentView(
       )
       .single(),
 
-
-    // -----------------------------------------
-    // PROGRESSION
-    // -----------------------------------------
-
     supabase
       .from("user_progress")
       .select(`
@@ -1730,11 +1569,6 @@ export async function getConsultationStudentView(
         studentId
       ),
 
-
-    // -----------------------------------------
-    // QUIZ
-    // -----------------------------------------
-
     supabase
       .from("quiz_attempts")
       .select(`
@@ -1744,11 +1578,6 @@ export async function getConsultationStudentView(
         "user_id",
         studentId
       ),
-
-
-    // -----------------------------------------
-    // BADGES
-    // -----------------------------------------
 
     supabase
       .from("user_badges")
@@ -1768,16 +1597,9 @@ export async function getConsultationStudentView(
         "user_id",
         studentId
       )
-
   ]);
 
-
-  // =====================================================
-  // 2. VALIDATION DU PROFIL
-  // =====================================================
-
   if (profileResult.error) {
-
     console.error(
       "❌ [CONSULTATION] Erreur profil :",
       profileResult.error
@@ -1786,103 +1608,63 @@ export async function getConsultationStudentView(
     throw profileResult.error;
   }
 
-
   if (!profileResult.data) {
     throw new Error(
       "Élève introuvable."
     );
   }
 
-
   const profile =
     profileResult.data;
-
 
   console.log(
     "🔎 [CONSULTATION] PROFIL ÉLÈVE :",
     {
-      id: profile.id,
-      full_name: profile.full_name,
-      class_id: profile.class_id,
-      classes: profile.classes
+      id:
+        profile.id,
+      full_name:
+        profile.full_name,
+      class_id:
+        profile.class_id,
+      classes:
+        profile.classes
     }
   );
 
-
-  // =====================================================
-  // 3. DONNÉES PROGRESSION
-  // =====================================================
-
   if (progressResult.error) {
-
     console.error(
       "❌ [CONSULTATION] Erreur progression :",
       progressResult.error
     );
-
   }
-
 
   const progressData =
     progressResult.data || [];
 
-
-  // =====================================================
-  // 4. DONNÉES QUIZ
-  // =====================================================
-
   if (attemptsResult.error) {
-
     console.error(
       "❌ [CONSULTATION] Erreur quiz :",
       attemptsResult.error
     );
-
   }
-
 
   const attemptsData =
     attemptsResult.data || [];
 
-
-  // =====================================================
-  // 5. DONNÉES BADGES
-  // =====================================================
-
   if (badgesResult.error) {
-
     console.error(
       "❌ [CONSULTATION] Erreur badges :",
       badgesResult.error
     );
-
   }
-
 
   const badges =
     badgesResult.data || [];
-
-
-  // =====================================================
-  // 6. LEÇONS DE LA CLASSE DE L'ÉLÈVE
-  // =====================================================
-  //
-  // On récupère uniquement les leçons appartenant
-  // à la classe de l'élève.
-  //
-  // Contrairement à getAdminStudentView(), on ne
-  // récupère plus toutes les leçons de l'académie.
-  // =====================================================
 
   let lessonsData = [];
 
   if (profile.class_id) {
     try {
-
-      // ============================================
-      // 1. MATIÈRES DE LA CLASSE
-      // ============================================
-
       const {
         data: subjectsData,
         error: subjectsError
@@ -1897,22 +1679,19 @@ export async function getConsultationStudentView(
           profile.class_id
         );
 
-
       if (subjectsError) {
-
         console.error(
           "❌ [CONSULTATION] Erreur matières :",
           subjectsError
         );
-
-      } else if (subjectsData?.length) {
-
+      } else if (
+        subjectsData?.length
+      ) {
         const subjectIds =
           subjectsData.map(
             subject =>
               subject.id
           );
-
 
         console.log(
           "🔎 [CONSULTATION] MATIÈRES DE LA CLASSE :",
@@ -1921,20 +1700,17 @@ export async function getConsultationStudentView(
               profile.class_id,
 
             count:
-              subjectsData?.length || 0,
+              subjectsData?.length ||
+              0,
 
             subjects:
               subjectsData || [],
 
             error:
-              subjectsError || null
+              subjectsError ||
+              null
           }
         );
-
-
-        // ==========================================
-        // 2. CHAPITRES DES MATIÈRES
-        // ==========================================
 
         const {
           data: chaptersData,
@@ -1950,41 +1726,35 @@ export async function getConsultationStudentView(
             subjectIds
           );
 
-
         if (chaptersError) {
-
           console.error(
             "❌ [CONSULTATION] Erreur chapitres :",
             chaptersError
           );
-
-        } else if (chaptersData?.length) {
-
+        } else if (
+          chaptersData?.length
+        ) {
           const chapterIds =
             chaptersData.map(
               chapter =>
                 chapter.id
             );
 
-
           console.log(
             "🔎 [CONSULTATION] CHAPITRES :",
             {
               count:
-                chaptersData?.length || 0,
+                chaptersData?.length ||
+                0,
 
               chapters:
                 chaptersData || [],
 
               error:
-                chaptersError || null
+                chaptersError ||
+                null
             }
           );
-
-
-          // ========================================
-          // 3. LEÇONS DES CHAPITRES
-          // ========================================
 
           const {
             data: lessonsQueryData,
@@ -2000,20 +1770,18 @@ export async function getConsultationStudentView(
               chapterIds
             );
 
-
           if (lessonsQueryError) {
-
             console.error(
               "❌ [CONSULTATION] Erreur leçons :",
               lessonsQueryError
             );
-
           } else {
-
             lessonsData =
-              (lessonsQueryData || []).map(
+              (
+                lessonsQueryData ||
+                []
+              ).map(
                 lesson => {
-
                   const chapter =
                     chaptersData.find(
                       item =>
@@ -2021,14 +1789,12 @@ export async function getConsultationStudentView(
                         lesson.chapter_id
                     );
 
-
                   const subject =
                     subjectsData.find(
                       item =>
                         item.id ===
                         chapter?.subject_id
                     );
-
 
                   return {
                     ...lesson,
@@ -2053,28 +1819,18 @@ export async function getConsultationStudentView(
                       }
                     }
                   };
-
                 }
               );
-
           }
         }
       }
-
     } catch (error) {
-
       console.error(
         "❌ [CONSULTATION] Exception chargement contenu :",
         error
       );
-
     }
   }
-
-
-  // =====================================================
-  // 6.1. LOG DES LEÇONS
-  // =====================================================
 
   console.log(
     "🔎 [CONSULTATION] LEÇONS :",
@@ -2090,11 +1846,6 @@ export async function getConsultationStudentView(
     }
   );
 
-
-  // =====================================================
-  // 7. LEÇONS TERMINÉES
-  // =====================================================
-
   const completedLessons =
     progressData.reduce(
       (total, item) =>
@@ -2106,11 +1857,6 @@ export async function getConsultationStudentView(
         ),
       0
     );
-
-
-  // =====================================================
-  // 8. LEÇONS TERMINÉES PAR ID
-  // =====================================================
 
   const completedLessonIds =
     new Set(
@@ -2126,39 +1872,33 @@ export async function getConsultationStudentView(
         )
     );
 
-
-  // =====================================================
-  // 9. PROGRESSION PAR MATIÈRE
-  // =====================================================
-
   const subjectsProgress = {};
-
 
   for (
     const lesson of lessonsData
   ) {
-
     const subject =
       lesson?.chapters?.subjects;
-
 
     if (!subject?.id) {
       continue;
     }
 
-
     const subjectId =
       subject.id;
-
 
     const subjectName =
       subject.name ||
       "Matière inconnue";
 
-
-    if (!subjectsProgress[subjectId]) {
-
-      subjectsProgress[subjectId] = {
+    if (
+      !subjectsProgress[
+        subjectId
+      ]
+    ) {
+      subjectsProgress[
+        subjectId
+      ] = {
         id:
           subjectId,
 
@@ -2174,41 +1914,28 @@ export async function getConsultationStudentView(
         percent:
           0
       };
-
     }
-
 
     subjectsProgress[
       subjectId
     ].total += 1;
-
 
     if (
       completedLessonIds.has(
         lesson.id
       )
     ) {
-
       subjectsProgress[
         subjectId
       ].completed += 1;
-
     }
-
   }
-
-
-  // =====================================================
-  // 10. POURCENTAGES
-  // =====================================================
 
   Object.values(
     subjectsProgress
   ).forEach(
     subject => {
-
       if (subject.total > 0) {
-
         subject.percent =
           Math.round(
             (
@@ -2216,26 +1943,17 @@ export async function getConsultationStudentView(
               subject.total
             ) * 100
           );
-
       } else {
-
         subject.percent = 0;
-
       }
-
     }
   );
 
-
-  // =====================================================
-  // 11. SCORE MOYEN
-  // =====================================================
-
   let averageScore = 0;
 
-
-  if (attemptsData.length > 0) {
-
+  if (
+    attemptsData.length > 0
+  ) {
     const totalScore =
       attemptsData.reduce(
         (total, attempt) =>
@@ -2246,19 +1964,12 @@ export async function getConsultationStudentView(
         0
       );
 
-
     averageScore =
       Math.round(
         totalScore /
         attemptsData.length
       );
-
   }
-
-
-  // =====================================================
-  // 12. RÉSULTAT LÉGER
-  // =====================================================
 
   console.log(
     "⚡ [CONSULTATION] Vue légère chargée :",
@@ -2283,16 +1994,13 @@ export async function getConsultationStudentView(
     }
   );
 
-
   return {
-
     profile,
 
     subjects:
       subjectsProgress,
 
     stats: {
-
       lessons:
         completedLessons,
 
@@ -2304,11 +2012,9 @@ export async function getConsultationStudentView(
 
       attempts:
         attemptsData.length
-
     },
 
     badges
-
   };
 }
 
@@ -2325,7 +2031,6 @@ export async function getAdminStudentView(
     );
   }
 
-
   const [
     profileResult,
     progressResult,
@@ -2335,11 +2040,6 @@ export async function getAdminStudentView(
     lessonsResult,
     emailResult
   ] = await Promise.all([
-
-    // -----------------------------------------
-    // PROFIL
-    // -----------------------------------------
-
     supabase
       .from("profiles")
       .select(`
@@ -2365,11 +2065,6 @@ export async function getAdminStudentView(
       )
       .single(),
 
-
-    // -----------------------------------------
-    // PROGRESSION ÉLÈVE
-    // -----------------------------------------
-
     supabase
       .from("user_progress")
       .select(`
@@ -2381,11 +2076,6 @@ export async function getAdminStudentView(
         studentId
       ),
 
-
-    // -----------------------------------------
-    // QUIZ
-    // -----------------------------------------
-
     supabase
       .from("quiz_attempts")
       .select(`
@@ -2395,11 +2085,6 @@ export async function getAdminStudentView(
         "user_id",
         studentId
       ),
-
-
-    // -----------------------------------------
-    // BADGES
-    // -----------------------------------------
 
     supabase
       .from("user_badges")
@@ -2419,11 +2104,6 @@ export async function getAdminStudentView(
         "user_id",
         studentId
       ),
-
-
-    // -----------------------------------------
-    // APPAREIL
-    // -----------------------------------------
 
     supabase
       .from("user_devices")
@@ -2446,14 +2126,6 @@ export async function getAdminStudentView(
       )
       .maybeSingle(),
 
-
-    // -----------------------------------------
-    // TOUTES LES LEÇONS
-    // -----------------------------------------
-    // Relation réelle :
-    // lessons → chapters → subjects
-    // -----------------------------------------
-
     supabase
       .from("lessons")
       .select(`
@@ -2469,24 +2141,14 @@ export async function getAdminStudentView(
         )
       `),
 
-
-    // -----------------------------------------
-    // EMAIL
-    // -----------------------------------------
-
     supabase.rpc(
       "get_admin_student_email",
       {
-        p_user_id: studentId
+        p_user_id:
+          studentId
       }
     )
-
   ]);
-
-
-  // -----------------------------------------
-  // PROFIL
-  // -----------------------------------------
 
   if (profileResult.error) {
     console.error(
@@ -2497,20 +2159,13 @@ export async function getAdminStudentView(
     throw profileResult.error;
   }
 
-
   if (!profileResult.data) {
     throw new Error(
       "Élève introuvable."
     );
   }
 
-
-  // -----------------------------------------
-  // EMAIL
-  // -----------------------------------------
-
   let email = null;
-
 
   if (emailResult.error) {
     console.error(
@@ -2521,13 +2176,9 @@ export async function getAdminStudentView(
     emailResult.data?.success
   ) {
     email =
-      emailResult.data.email || null;
+      emailResult.data.email ||
+      null;
   }
-
-
-  // -----------------------------------------
-  // APPAREIL
-  // -----------------------------------------
 
   if (deviceResult.error) {
     console.error(
@@ -2536,14 +2187,8 @@ export async function getAdminStudentView(
     );
   }
 
-
   const deviceData =
     deviceResult.data || null;
-
-
-  // -----------------------------------------
-  // PROGRESSION
-  // -----------------------------------------
 
   if (progressResult.error) {
     console.error(
@@ -2552,14 +2197,8 @@ export async function getAdminStudentView(
     );
   }
 
-
   const progressData =
     progressResult.data || [];
-
-
-  // -----------------------------------------
-  // TOUTES LES LEÇONS
-  // -----------------------------------------
 
   if (lessonsResult.error) {
     console.error(
@@ -2568,33 +2207,20 @@ export async function getAdminStudentView(
     );
   }
 
-
   const lessonsData =
     lessonsResult.data || [];
-
-
-  // -----------------------------------------
-  // LEÇONS TERMINÉES
-  // -----------------------------------------
 
   const completedLessons =
     progressData.reduce(
       (total, item) =>
-
         total +
         (
           item?.completed === true
             ? 1
             : 0
         ),
-
       0
     );
-
-
-  // -----------------------------------------
-  // LEÇONS TERMINÉES PAR ID
-  // -----------------------------------------
 
   const completedLessonIds =
     new Set(
@@ -2605,99 +2231,87 @@ export async function getAdminStudentView(
             item?.lesson_id
         )
         .map(
-          item => item.lesson_id
+          item =>
+            item.lesson_id
         )
     );
 
-
-  // -----------------------------------------
-  // PROGRESSION PAR MATIÈRE
-  // -----------------------------------------
-
   const subjectsProgress = {};
 
-
-  for (const lesson of lessonsData) {
-
+  for (
+    const lesson of lessonsData
+  ) {
     const subject =
       lesson?.chapters?.subjects;
-
 
     if (!subject?.id) {
       continue;
     }
 
-
     const subjectId =
       subject.id;
-
 
     const subjectName =
       subject.name ||
       "Matière inconnue";
 
+    if (
+      !subjectsProgress[
+        subjectId
+      ]
+    ) {
+      subjectsProgress[
+        subjectId
+      ] = {
+        id:
+          subjectId,
 
-    if (!subjectsProgress[subjectId]) {
+        name:
+          subjectName,
 
-      subjectsProgress[subjectId] = {
-        id: subjectId,
-        name: subjectName,
-        total: 0,
-        completed: 0,
-        percent: 0
+        total:
+          0,
+
+        completed:
+          0,
+
+        percent:
+          0
       };
-
     }
 
-
-    subjectsProgress[subjectId].total += 1;
-
+    subjectsProgress[
+      subjectId
+    ].total += 1;
 
     if (
       completedLessonIds.has(
         lesson.id
       )
     ) {
-
       subjectsProgress[
         subjectId
       ].completed += 1;
-
     }
-
   }
-
-
-  // -----------------------------------------
-  // CALCUL DES POURCENTAGES
-  // -----------------------------------------
 
   Object.values(
     subjectsProgress
-  ).forEach(subject => {
-
-    if (subject.total > 0) {
-
-      subject.percent =
-        Math.round(
-          (
-            subject.completed /
-            subject.total
-          ) * 100
-        );
-
-    } else {
-
-      subject.percent = 0;
-
+  ).forEach(
+    subject => {
+      if (subject.total > 0) {
+        subject.percent =
+          Math.round(
+            (
+              subject.completed /
+              subject.total
+            ) * 100
+          );
+      } else {
+        subject.percent = 0;
+      }
     }
-
-  });
-
-
-  // -----------------------------------------
-  // QUIZ
-  // -----------------------------------------
+  );
 
   if (attemptsResult.error) {
     console.error(
@@ -2706,41 +2320,30 @@ export async function getAdminStudentView(
     );
   }
 
-
   const attemptsData =
     attemptsResult.data || [];
 
-
   let averageScore = 0;
 
-
-  if (attemptsData.length > 0) {
-
+  if (
+    attemptsData.length > 0
+  ) {
     const totalScore =
       attemptsData.reduce(
         (total, attempt) =>
-
           total +
           Number(
             attempt?.score || 0
           ),
-
         0
       );
-
 
     averageScore =
       Math.round(
         totalScore /
         attemptsData.length
       );
-
   }
-
-
-  // -----------------------------------------
-  // BADGES
-  // -----------------------------------------
 
   if (badgesResult.error) {
     console.error(
@@ -2749,17 +2352,10 @@ export async function getAdminStudentView(
     );
   }
 
-
   const badges =
     badgesResult.data || [];
 
-
-  // -----------------------------------------
-  // RÉSULTAT FINAL
-  // -----------------------------------------
-
   return {
-
     profile: {
       ...profileResult.data,
       email
@@ -2772,7 +2368,6 @@ export async function getAdminStudentView(
       subjectsProgress,
 
     stats: {
-
       lessons:
         completedLessons,
 
@@ -2784,10 +2379,8 @@ export async function getAdminStudentView(
 
       attempts:
         attemptsData.length
-
     },
 
     badges
-
   };
 }

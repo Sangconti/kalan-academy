@@ -32,6 +32,13 @@ import { logAdminActivity } from "../../services/adminService";
 const SUCCESS_MESSAGE_DURATION = 3500;
 
 // ===========================================================
+// CACHE MÉMOIRE
+// ===========================================================
+
+let videosCache = null;
+let videosLoadingPromise = null;
+
+// ===========================================================
 // HELPERS
 // ===========================================================
 
@@ -49,6 +56,58 @@ function normalizeText(value) {
 }
 
 // ===========================================================
+// CHARGEMENT CENTRALISÉ
+// ===========================================================
+
+async function fetchLessons() {
+  if (videosCache) {
+    return videosCache;
+  }
+
+  if (videosLoadingPromise) {
+    return videosLoadingPromise;
+  }
+
+  videosLoadingPromise = (async () => {
+    const { data, error } = await supabase
+      .from("lessons")
+      .select(`
+        id,
+        chapter_id,
+        title,
+        description,
+        duration_minutes,
+        video_url,
+        thumbnail_url,
+        is_premium,
+        chapters (
+          title,
+          subjects (
+            name
+          )
+        )
+      `)
+      .order("created_at", {
+        ascending: false,
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    videosCache = Array.isArray(data) ? data : [];
+
+    return videosCache;
+  })();
+
+  try {
+    return await videosLoadingPromise;
+  } finally {
+    videosLoadingPromise = null;
+  }
+}
+
+// ===========================================================
 // COMPOSANT
 // ===========================================================
 
@@ -57,9 +116,14 @@ export default function AdminVideos() {
   // ÉTATS
   // =========================================================
 
-  const [lessons, setLessons] = useState([]);
+  const [lessons, setLessons] = useState(
+    () => videosCache || []
+  );
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(
+    () => !videosCache
+  );
+
   const [refreshing, setRefreshing] = useState(false);
 
   const [error, setError] = useState("");
@@ -100,7 +164,7 @@ export default function AdminVideos() {
       try {
         if (isRefresh) {
           setRefreshing(true);
-        } else {
+        } else if (!videosCache) {
           setLoading(true);
         }
 
@@ -110,35 +174,15 @@ export default function AdminVideos() {
           setSuccess("");
         }
 
-        const { data, error: fetchError } = await supabase
-          .from("lessons")
-          .select(`
-            id,
-            chapter_id,
-            title,
-            description,
-            duration_minutes,
-            video_url,
-            thumbnail_url,
-            is_premium,
-            chapters (
-              id,
-              title,
-              subjects (
-                id,
-                name
-              )
-            )
-          `)
-          .order("created_at", {
-            ascending: false,
-          });
-
-        if (fetchError) {
-          throw fetchError;
+        if (!isRefresh && videosCache) {
+          setLessons(videosCache);
+          setLoading(false);
+          return;
         }
 
-        setLessons(Array.isArray(data) ? data : []);
+        const data = await fetchLessons();
+
+        setLessons(data);
 
         if (isRefresh) {
           showSuccess(
@@ -422,10 +466,8 @@ export default function AdminVideos() {
             thumbnail_url,
             is_premium,
             chapters (
-              id,
               title,
               subjects (
-                id,
                 name
               )
             )
@@ -436,46 +478,51 @@ export default function AdminVideos() {
           throw updateError;
         }
 
-                setLessons((current) =>
-                  current.map((lesson) =>
-                    lesson.id === data.id
-                      ? data
-                      : lesson
-                  )
-                );
+        setLessons((current) => {
+          const updated = current.map(
+            (lesson) =>
+              lesson.id === data.id
+                ? data
+                : lesson
+          );
 
+          videosCache = updated;
 
-                // ===================================================
-                // JOURNAL ADMINISTRATEUR
-                // ===================================================
+          return updated;
+        });
 
-                await logAdminActivity({
-                  action: "lesson_video_updated",
-                  targetUserId: null,
-                  details: {
-                    lesson_id: data.id,
-                    lesson_title: data.title || editingLesson.title,
+        // ===================================================
+        // JOURNAL ADMINISTRATEUR
+        // ===================================================
 
-                    video_url:
-                      data.video_url || null,
+        await logAdminActivity({
+          action: "lesson_video_updated",
+          targetUserId: null,
+          details: {
+            lesson_id: data.id,
+            lesson_title:
+              data.title ||
+              editingLesson.title,
 
-                    thumbnail_url:
-                      data.thumbnail_url || null,
+            video_url:
+              data.video_url || null,
 
-                    duration_minutes:
-                      data.duration_minutes ?? null,
+            thumbnail_url:
+              data.thumbnail_url || null,
 
-                    is_premium:
-                      Boolean(data.is_premium),
-                  },
-                });
+            duration_minutes:
+              data.duration_minutes ?? null,
 
+            is_premium:
+              Boolean(data.is_premium),
+          },
+        });
 
-                setEditingLesson(null);
+        setEditingLesson(null);
 
-                showSuccess(
-                  "Les informations de la vidéo ont été enregistrées."
-                );
+        showSuccess(
+          "Les informations de la vidéo ont été enregistrées."
+        );
       } catch (err) {
         console.error(
           "Erreur sauvegarde vidéo :",
@@ -518,7 +565,6 @@ export default function AdminVideos() {
       <div className="p-6">
         <div className="min-h-[400px] flex items-center justify-center">
           <div className="text-center">
-
             <Loader2
               size={40}
               className="animate-spin text-accent mx-auto mb-4"
@@ -527,7 +573,6 @@ export default function AdminVideos() {
             <p className="theme-text-secondary">
               Chargement des vidéos...
             </p>
-
           </div>
         </div>
       </div>
@@ -558,7 +603,6 @@ export default function AdminVideos() {
           md:p-8
         "
       >
-
         <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent opacity-10" />
 
         <div className="absolute -left-16 -bottom-20 w-48 h-48 rounded-full bg-accent opacity-10" />
@@ -566,7 +610,6 @@ export default function AdminVideos() {
         <div className="absolute right-16 -bottom-24 w-56 h-56 rounded-full bg-accent opacity-5" />
 
         <div className="relative z-10">
-
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
 
             <div className="flex items-start gap-4">
@@ -712,11 +755,8 @@ export default function AdminVideos() {
                   </div>
 
                 </div>
-
               </div>
-
             </div>
-
 
             <button
               type="button"
@@ -742,7 +782,6 @@ export default function AdminVideos() {
                 shrink-0
               "
             >
-
               <RefreshCw
                 size={18}
                 className={
@@ -753,15 +792,11 @@ export default function AdminVideos() {
               />
 
               Actualiser
-
             </button>
 
           </div>
-
         </div>
-
       </div>
-
 
       {/* =====================================================
           ERREUR
@@ -783,14 +818,12 @@ export default function AdminVideos() {
             gap-3
           "
         >
-
           <AlertCircle
             size={20}
             className="shrink-0"
           />
 
           <div>
-
             <p className="font-semibold">
               Une erreur est survenue
             </p>
@@ -798,12 +831,9 @@ export default function AdminVideos() {
             <p className="text-sm mt-1">
               {error}
             </p>
-
           </div>
-
         </div>
       )}
-
 
       {/* =====================================================
           SUCCÈS
@@ -825,7 +855,6 @@ export default function AdminVideos() {
             gap-3
           "
         >
-
           <CheckCircle
             size={20}
             className="shrink-0"
@@ -834,10 +863,8 @@ export default function AdminVideos() {
           <p className="text-sm font-medium">
             {success}
           </p>
-
         </div>
       )}
-
 
       {/* =====================================================
           STATISTIQUES
@@ -874,7 +901,6 @@ export default function AdminVideos() {
 
       </div>
 
-
       {/* =====================================================
           FILTRES
       ===================================================== */}
@@ -890,7 +916,6 @@ export default function AdminVideos() {
           md:p-6
         "
       >
-
         <div className="flex items-center gap-3 mb-4">
 
           <div
@@ -911,7 +936,6 @@ export default function AdminVideos() {
           </div>
 
           <div>
-
             <h2 className="font-bold theme-text">
               Rechercher et filtrer
             </h2>
@@ -919,14 +943,11 @@ export default function AdminVideos() {
             <p className="text-sm theme-text-secondary mt-0.5">
               Trouvez rapidement une leçon ou un contenu vidéo.
             </p>
-
           </div>
 
         </div>
 
         <div className="flex flex-col lg:flex-row gap-3">
-
-          {/* Recherche */}
 
           <div className="relative flex-1">
 
@@ -967,9 +988,6 @@ export default function AdminVideos() {
 
           </div>
 
-
-          {/* Filtre */}
-
           <select
             value={filter}
             onChange={(event) =>
@@ -989,7 +1007,6 @@ export default function AdminVideos() {
               lg:min-w-[190px]
             "
           >
-
             <option value="all">
               Toutes les leçons
             </option>
@@ -1005,13 +1022,10 @@ export default function AdminVideos() {
             <option value="premium">
               Premium
             </option>
-
           </select>
 
         </div>
-
       </div>
-
 
       {/* =====================================================
           TABLE
@@ -1027,7 +1041,6 @@ export default function AdminVideos() {
           overflow-hidden
         "
       >
-
         <div
           className="
             p-5
@@ -1037,11 +1050,9 @@ export default function AdminVideos() {
             bg-accent-soft
           "
         >
-
           <div className="flex items-center justify-between gap-4">
 
             <div>
-
               <div className="flex items-center gap-3">
 
                 <div
@@ -1064,7 +1075,6 @@ export default function AdminVideos() {
                 </div>
 
                 <div>
-
                   <h2 className="text-xl font-bold theme-text">
                     Leçons
                   </h2>
@@ -1078,17 +1088,13 @@ export default function AdminVideos() {
                       ? "s"
                       : ""}
                   </p>
-
                 </div>
 
               </div>
-
             </div>
 
           </div>
-
         </div>
-
 
         {filteredLessons.length === 0 ? (
 
@@ -1165,7 +1171,6 @@ export default function AdminVideos() {
 
               </thead>
 
-
               <tbody>
 
                 {filteredLessons.map((lesson) => {
@@ -1192,8 +1197,6 @@ export default function AdminVideos() {
                       "
                     >
 
-                      {/* Leçon */}
-
                       <td className="p-4">
 
                         <div className="max-w-xs">
@@ -1212,30 +1215,17 @@ export default function AdminVideos() {
 
                       </td>
 
-
-                      {/* Matière */}
-
                       <td className="p-4">
-
                         <span className="theme-text">
                           {subjectName}
                         </span>
-
                       </td>
 
-
-                      {/* Chapitre */}
-
                       <td className="p-4">
-
                         <span className="theme-text-secondary">
                           {chapterTitle}
                         </span>
-
                       </td>
-
-
-                      {/* Vidéo */}
 
                       <td className="p-4">
 
@@ -1306,9 +1296,6 @@ export default function AdminVideos() {
 
                       </td>
 
-
-                      {/* Durée */}
-
                       <td className="p-4">
 
                         <div className="flex items-center gap-2 theme-text-secondary">
@@ -1322,9 +1309,6 @@ export default function AdminVideos() {
                         </div>
 
                       </td>
-
-
-                      {/* Type */}
 
                       <td className="p-4">
 
@@ -1362,9 +1346,6 @@ export default function AdminVideos() {
                         )}
 
                       </td>
-
-
-                      {/* Action */}
 
                       <td className="p-4 text-right">
 
@@ -1411,7 +1392,6 @@ export default function AdminVideos() {
 
       </div>
 
-
       {/* =====================================================
           MODAL ÉDITION
       ===================================================== */}
@@ -1445,8 +1425,6 @@ export default function AdminVideos() {
               border
             "
           >
-
-            {/* Header modal */}
 
             <div
               className="
@@ -1482,7 +1460,6 @@ export default function AdminVideos() {
 
               </div>
 
-
               <button
                 type="button"
                 onClick={closeEditor}
@@ -1498,15 +1475,10 @@ export default function AdminVideos() {
                   transition
                 "
               >
-
                 <X size={21} />
-
               </button>
 
             </div>
-
-
-            {/* Corps */}
 
             <div className="p-5 md:p-6 space-y-5">
 
@@ -1576,7 +1548,6 @@ export default function AdminVideos() {
 
               </div>
 
-
               {/* Thumbnail */}
 
               <div>
@@ -1639,7 +1610,6 @@ export default function AdminVideos() {
 
               </div>
 
-
               {/* Aperçu miniature */}
 
               {editingLesson.thumbnail_url && (
@@ -1672,7 +1642,6 @@ export default function AdminVideos() {
                 </div>
 
               )}
-
 
               {/* Durée */}
 
@@ -1738,7 +1707,6 @@ export default function AdminVideos() {
 
               </div>
 
-
               {/* Premium */}
 
               <label
@@ -1794,7 +1762,6 @@ export default function AdminVideos() {
 
                 </div>
 
-
                 <input
                   type="checkbox"
                   checked={
@@ -1816,7 +1783,6 @@ export default function AdminVideos() {
               </label>
 
             </div>
-
 
             {/* Footer */}
 
@@ -1875,7 +1841,6 @@ export default function AdminVideos() {
 
               </div>
 
-
               <div className="flex gap-3">
 
                 <button
@@ -1898,7 +1863,6 @@ export default function AdminVideos() {
                 >
                   Annuler
                 </button>
-
 
                 <button
                   type="button"
@@ -2020,7 +1984,6 @@ function VideoStat({
           </p>
 
         </div>
-
 
         <div
           className="

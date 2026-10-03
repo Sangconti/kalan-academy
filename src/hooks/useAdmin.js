@@ -1,34 +1,135 @@
-import { useEffect, useState } from "react";
-import { getCurrentAdmin } from "../services/adminAuthService";
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  getCurrentAdmin,
+  clearAdminAuthCache,
+} from "../services/adminAuthService";
+
+
+// ============================================================
+// CACHE GLOBAL DU HOOK
+// ============================================================
+
+let sharedAdmin = null;
+let sharedLoading = true;
+
+const subscribers = new Set();
+
+let initializationPromise = null;
+
+
+// ============================================================
+// NOTIFICATION
+// ============================================================
+
+function notifySubscribers() {
+  subscribers.forEach(
+    (setState) => {
+      setState({
+        admin: sharedAdmin,
+        loading: sharedLoading,
+      });
+    }
+  );
+}
+
+
+// ============================================================
+// CHARGEMENT PARTAGÉ
+// ============================================================
+
+async function loadSharedAdmin() {
+  if (initializationPromise) {
+    return initializationPromise;
+  }
+
+  initializationPromise =
+    getCurrentAdmin()
+      .then((data) => {
+        sharedAdmin = data;
+        sharedLoading = false;
+
+        notifySubscribers();
+
+        return data;
+      })
+      .catch((error) => {
+        console.error(
+          "❌ [USE ADMIN] erreur :",
+          error
+        );
+
+        sharedAdmin = null;
+        sharedLoading = false;
+
+        notifySubscribers();
+
+        return null;
+      })
+      .finally(() => {
+        initializationPromise = null;
+      });
+
+  return initializationPromise;
+}
+
+
+// ============================================================
+// HOOK
+// ============================================================
 
 export default function useAdmin() {
-  const [loading, setLoading] = useState(true);
-  const [admin, setAdmin] = useState(null);
+  const [
+    state,
+    setState,
+  ] = useState({
+    admin: sharedAdmin,
+    loading: sharedLoading,
+  });
 
   useEffect(() => {
-    async function load() {
+    subscribers.add(setState);
 
-    console.log("👤 useAdmin — chargement");
+    // --------------------------------------------------------
+    // Si l'état partagé n'est pas encore chargé
+    // --------------------------------------------------------
 
-      const data = await getCurrentAdmin();
-
-     console.log("👤 useAdmin — résultat =", data);
-      setAdmin(data);
-      setLoading(false);
+    if (
+      sharedLoading &&
+      !initializationPromise
+    ) {
+      loadSharedAdmin();
     }
 
-    load();
+    return () => {
+      subscribers.delete(setState);
+    };
   }, []);
 
-  console.log("📊 [USE ADMIN] state =", {
-      loading,
-      admin,
-      isAdmin: !!admin,
-    });
+  const isAdmin =
+    !!state.admin;
 
   return {
-    loading,
-    admin,
-    isAdmin: !!admin,
+    loading: state.loading,
+    admin: state.admin,
+    isAdmin,
   };
+}
+
+
+// ============================================================
+// INVALIDATION ADMIN
+// ============================================================
+
+export function resetAdminState() {
+  sharedAdmin = null;
+  sharedLoading = true;
+  initializationPromise = null;
+
+  clearAdminAuthCache();
+
+  notifySubscribers();
 }

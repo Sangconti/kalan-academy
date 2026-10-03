@@ -13,14 +13,16 @@ import {
   X,
 } from "lucide-react";
 
+import { supabase } from "../../lib/supabase";
+
 import {
   getAllSubjects,
   getAdminClasses,
   createSubject,
   updateSubject,
   deleteSubject,
-  getChapters,
 } from "../../services/educationAdminService";
+
 import { logAdminActivity } from "../../services/adminService";
 
 export default function AdminSubjects() {
@@ -48,39 +50,137 @@ export default function AdminSubjects() {
   // =====================================
   // CHARGEMENT DES MATIÈRES
   // =====================================
+  //
+  // IMPORTANT :
+  // Les matières sont affichées dès qu'elles
+  // sont récupérées.
+  //
+  // Le comptage des chapitres est ensuite
+  // effectué en arrière-plan et ne bloque
+  // plus l'affichage de la page.
+  // =====================================
 
   async function loadSubjects() {
     try {
-      setLoading(true);
+      // On affiche le loading uniquement lorsque
+      // la liste des matières n'est pas encore disponible.
+      if (subjects.length === 0) {
+        setLoading(true);
+      }
+
+      // ---------------------------------------------------
+      // 1. Récupérer les matières
+      // ---------------------------------------------------
 
       const data = await getAllSubjects();
 
-      setSubjects(data || []);
+      const subjectList = data || [];
+
+      // ---------------------------------------------------
+      // 2. Afficher immédiatement les matières
+      // ---------------------------------------------------
+
+      setSubjects(subjectList);
+
+      // IMPORTANT :
+      // Le chargement principal est terminé ici.
+      // On n'attend plus la requête des chapitres.
+      setLoading(false);
+
+      // ---------------------------------------------------
+      // 3. Aucun sujet → aucun appel supplémentaire
+      // ---------------------------------------------------
+
+      if (subjectList.length === 0) {
+        setChapterCounts({});
+        return;
+      }
+
+      // ---------------------------------------------------
+      // 4. Récupérer les IDs des matières
+      // ---------------------------------------------------
+
+      const subjectIds = subjectList
+        .map((subject) => subject?.id)
+        .filter(Boolean);
+
+      if (subjectIds.length === 0) {
+        setChapterCounts({});
+        return;
+      }
+
+      // ---------------------------------------------------
+      // 5. Charger les chapitres EN ARRIÈRE-PLAN
+      // ---------------------------------------------------
+      //
+      // Cette requête ne bloque plus l'affichage.
+      //
+      // Avant :
+      //
+      // matières
+      //   ↓
+      // chapitres
+      //   ↓
+      // affichage
+      //
+      // Maintenant :
+      //
+      // matières
+      //   ↓
+      // AFFICHAGE IMMÉDIAT
+      //   ↓
+      // chapitres en arrière-plan
+      //
+      // ---------------------------------------------------
+
+      const {
+        data: chapters,
+        error: chaptersError,
+      } = await supabase
+        .from("chapters")
+        .select("id, subject_id")
+        .in("subject_id", subjectIds);
+
+      if (chaptersError) {
+        console.error(
+          "Erreur chargement chapitres des matières",
+          chaptersError
+        );
+
+        return;
+      }
+
+      // ---------------------------------------------------
+      // 6. Comptage local des chapitres
+      // ---------------------------------------------------
 
       const counts = {};
 
-      await Promise.all(
-        (data || []).map(async (subject) => {
-          try {
-            const chapters = await getChapters(subject.id);
+      subjectIds.forEach((subjectId) => {
+        counts[subjectId] = 0;
+      });
 
-            counts[subject.id] = chapters?.length || 0;
-          } catch (error) {
-            console.error(
-              `Erreur chapitres matière ${subject.id}:`,
-              error
-            );
+      (chapters || []).forEach((chapter) => {
+        if (!chapter?.subject_id) {
+          return;
+        }
 
-            counts[subject.id] = 0;
-          }
-        })
-      );
+        counts[chapter.subject_id] =
+          (counts[chapter.subject_id] || 0) + 1;
+      });
 
       setChapterCounts(counts);
     } catch (error) {
-      console.error("Erreur chargement matières", error);
-    } finally {
+      console.error(
+        "Erreur chargement matières",
+        error
+      );
+
+      // Si aucune matière n'a encore été affichée,
+      // on termine le loading.
       setLoading(false);
+
+      setChapterCounts({});
     }
   }
 
@@ -96,7 +196,10 @@ export default function AdminSubjects() {
 
       setClasses(data || []);
     } catch (error) {
-      console.error("Erreur chargement classes", error);
+      console.error(
+        "Erreur chargement classes",
+        error
+      );
     } finally {
       setLoadingClasses(false);
     }
@@ -115,23 +218,31 @@ export default function AdminSubjects() {
   // RECHERCHE
   // =====================================
 
-  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const normalizedSearch =
+    searchTerm.trim().toLowerCase();
 
-  const filteredSubjects = subjects.filter((subject) => {
-    if (!normalizedSearch) {
-      return true;
+  const filteredSubjects = subjects.filter(
+    (subject) => {
+      if (!normalizedSearch) {
+        return true;
+      }
+
+      const name =
+        subject?.name?.toLowerCase() || "";
+
+      const code =
+        subject?.code?.toLowerCase() || "";
+
+      const className =
+        subject?.classes?.name?.toLowerCase() || "";
+
+      return (
+        name.includes(normalizedSearch) ||
+        code.includes(normalizedSearch) ||
+        className.includes(normalizedSearch)
+      );
     }
-
-    const name = subject?.name?.toLowerCase() || "";
-    const code = subject?.code?.toLowerCase() || "";
-    const className = subject?.classes?.name?.toLowerCase() || "";
-
-    return (
-      name.includes(normalizedSearch) ||
-      code.includes(normalizedSearch) ||
-      className.includes(normalizedSearch)
-    );
-  });
+  );
 
   // =====================================
   // FORMULAIRE
@@ -141,12 +252,16 @@ export default function AdminSubjects() {
     e.preventDefault();
 
     if (!form.name.trim()) {
-      alert("Veuillez saisir le nom de la matière.");
+      alert(
+        "Veuillez saisir le nom de la matière."
+      );
       return;
     }
 
     if (!form.class_id) {
-      alert("Veuillez sélectionner une classe.");
+      alert(
+        "Veuillez sélectionner une classe."
+      );
       return;
     }
 
@@ -155,7 +270,8 @@ export default function AdminSubjects() {
         name: form.name.trim(),
         code: form.code.trim() || null,
         class_id: form.class_id,
-        order_number: Number(form.order_number) || 1,
+        order_number:
+          Number(form.order_number) || 1,
       };
 
       if (editing) {
@@ -168,16 +284,22 @@ export default function AdminSubjects() {
         await logAdminActivity({
           action: "subject_updated",
           details: {
-            subject_id: updatedSubject?.id || editing.id,
+            subject_id:
+              updatedSubject?.id ||
+              editing.id,
+
             subject_name:
               updatedSubject?.name ||
               payload.name,
+
             subject_code:
               updatedSubject?.code ||
               payload.code,
+
             class_id:
               updatedSubject?.class_id ||
               payload.class_id,
+
             order_number:
               updatedSubject?.order_number ??
               payload.order_number,
@@ -192,15 +314,19 @@ export default function AdminSubjects() {
           details: {
             subject_id:
               createdSubject?.id || null,
+
             subject_name:
               createdSubject?.name ||
               payload.name,
+
             subject_code:
               createdSubject?.code ||
               payload.code,
+
             class_id:
               createdSubject?.class_id ||
               payload.class_id,
+
             order_number:
               createdSubject?.order_number ??
               payload.order_number,
@@ -249,11 +375,15 @@ export default function AdminSubjects() {
     );
 
     const confirmed = confirm(
-      `Supprimer la matière "${subject?.name || ""}" ?\n\n` +
+      `Supprimer la matière "${
+        subject?.name || ""
+      }" ?\n\n` +
         "Cette action peut supprimer les éléments liés à cette matière."
     );
 
-    if (!confirmed) return;
+    if (!confirmed) {
+      return;
+    }
 
     try {
       await deleteSubject(id);
@@ -262,15 +392,21 @@ export default function AdminSubjects() {
         action: "subject_deleted",
         details: {
           subject_id: id,
-          subject_name: subject?.name || null,
-          subject_code: subject?.code || null,
-          class_id: subject?.class_id || null,
+          subject_name:
+            subject?.name || null,
+          subject_code:
+            subject?.code || null,
+          class_id:
+            subject?.class_id || null,
         },
       });
 
       await loadSubjects();
     } catch (error) {
-      console.error("Erreur suppression matière", error);
+      console.error(
+        "Erreur suppression matière",
+        error
+      );
 
       alert(
         error?.message ||
@@ -290,7 +426,8 @@ export default function AdminSubjects() {
       name: subject.name || "",
       code: subject.code || "",
       class_id: subject.class_id || "",
-      order_number: subject.order_number || 1,
+      order_number:
+        subject.order_number || 1,
     });
 
     window.scrollTo({
@@ -302,8 +439,16 @@ export default function AdminSubjects() {
   // =====================================
   // LOADING
   // =====================================
+  //
+  // IMPORTANT :
+  // On ne bloque plus la page sur loadingClasses.
+  //
+  // Les matières peuvent donc être affichées
+  // pendant que les classes terminent leur
+  // chargement en arrière-plan.
+  // =====================================
 
-  if (loading || loadingClasses) {
+  if (loading) {
     return (
       <div className="p-4 md:p-6">
         <div className="theme-surface theme-border border rounded-3xl shadow-sm p-8 text-center">
@@ -332,21 +477,7 @@ export default function AdminSubjects() {
     <div className="p-4 md:p-6 space-y-7">
       {/* RETOUR */}
 
-      <button
-        onClick={() => navigate(-1)}
-        className="
-          inline-flex
-          items-center
-          gap-2
-          theme-text-secondary
-          hover:text-accent
-          font-semibold
-          transition
-        "
-      >
-        <ArrowLeft size={18} />
-        Retour
-      </button>
+
 
       {/* HEADER */}
 
@@ -424,21 +555,39 @@ export default function AdminSubjects() {
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-gray-950/30 theme-text text-sm font-medium border border-white/50 dark:border-white/10">
-              <BookOpen size={16} className="text-accent" />
+              <BookOpen
+                size={16}
+                className="text-accent"
+              />
+
               {subjects.length} matière
-              {subjects.length > 1 ? "s" : ""}
+              {subjects.length > 1
+                ? "s"
+                : ""}
             </div>
 
             <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-gray-950/30 theme-text text-sm font-medium border border-white/50 dark:border-white/10">
-              <GraduationCap size={16} className="text-accent" />
+              <GraduationCap
+                size={16}
+                className="text-accent"
+              />
+
               {classes.length} classe
-              {classes.length > 1 ? "s" : ""}
+              {classes.length > 1
+                ? "s"
+                : ""}
             </div>
 
             <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-gray-950/30 theme-text text-sm font-medium border border-white/50 dark:border-white/10">
-              <Layers size={16} className="text-accent" />
+              <Layers
+                size={16}
+                className="text-accent"
+              />
+
               {filteredSubjects.length} affichée
-              {filteredSubjects.length > 1 ? "s" : ""}
+              {filteredSubjects.length > 1
+                ? "s"
+                : ""}
             </div>
           </div>
         </div>
@@ -451,9 +600,15 @@ export default function AdminSubjects() {
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-2xl bg-accent-soft border border-accent flex items-center justify-center">
               {editing ? (
-                <Pencil size={20} className="text-accent" />
+                <Pencil
+                  size={20}
+                  className="text-accent"
+                />
               ) : (
-                <Plus size={20} className="text-accent" />
+                <Plus
+                  size={20}
+                  className="text-accent"
+                />
               )}
             </div>
 
@@ -544,19 +699,24 @@ export default function AdminSubjects() {
                   class_id: e.target.value,
                 })
               }
+              disabled={loadingClasses}
             >
               <option value="">
-                Sélectionner une classe
+                {loadingClasses
+                  ? "Chargement des classes..."
+                  : "Sélectionner une classe"}
               </option>
 
-              {classes.map((classItem) => (
-                <option
-                  key={classItem.id}
-                  value={classItem.id}
-                >
-                  {classItem.name}
-                </option>
-              ))}
+              {classes.map(
+                (classItem) => (
+                  <option
+                    key={classItem.id}
+                    value={classItem.id}
+                  >
+                    {classItem.name}
+                  </option>
+                )
+              )}
             </select>
           </div>
 
@@ -619,7 +779,8 @@ export default function AdminSubjects() {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  order_number: Number(e.target.value),
+                  order_number:
+                    Number(e.target.value),
                 })
               }
             />
@@ -630,6 +791,7 @@ export default function AdminSubjects() {
           <div className="md:col-span-2 flex flex-wrap gap-3">
             <button
               type="submit"
+              disabled={loadingClasses}
               className="
                 bg-accent
                 text-white
@@ -644,6 +806,8 @@ export default function AdminSubjects() {
                 hover:opacity-90
                 hover:-translate-y-0.5
                 transition
+                disabled:opacity-50
+                disabled:cursor-not-allowed
               "
             >
               {editing ? (
@@ -736,7 +900,9 @@ export default function AdminSubjects() {
                 type="text"
                 value={searchTerm}
                 onChange={(e) =>
-                  setSearchTerm(e.target.value)
+                  setSearchTerm(
+                    e.target.value
+                  )
                 }
                 placeholder="Rechercher une matière..."
                 className="
@@ -759,7 +925,9 @@ export default function AdminSubjects() {
               {searchTerm && (
                 <button
                   type="button"
-                  onClick={() => setSearchTerm("")}
+                  onClick={() =>
+                    setSearchTerm("")
+                  }
                   className="
                     absolute
                     right-3
@@ -806,7 +974,9 @@ export default function AdminSubjects() {
 
             <button
               type="button"
-              onClick={() => setSearchTerm("")}
+              onClick={() =>
+                setSearchTerm("")
+              }
               className="
                 mt-4
                 text-accent
@@ -819,162 +989,173 @@ export default function AdminSubjects() {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            {filteredSubjects.map((subject) => (
-              <div
-                key={subject.id}
-                className="
-                  theme-surface
-                  theme-border
-                  border
-                  rounded-3xl
-                  shadow-sm
-                  p-5
-                  hover:shadow-lg
-                  hover:-translate-y-0.5
-                  transition
-                "
-              >
-                {/* TOP */}
+            {filteredSubjects.map(
+              (subject) => (
+                <div
+                  key={subject.id}
+                  className="
+                    theme-surface
+                    theme-border
+                    border
+                    rounded-3xl
+                    shadow-sm
+                    p-5
+                    hover:shadow-lg
+                    hover:-translate-y-0.5
+                    transition
+                  "
+                >
+                  {/* TOP */}
 
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-start gap-3 min-w-0">
-                    <div className="w-12 h-12 rounded-2xl bg-accent-soft border border-accent flex items-center justify-center flex-shrink-0">
-                      <BookOpen
-                        size={21}
-                        className="text-accent"
-                      />
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-3 min-w-0">
+                      <div className="w-12 h-12 rounded-2xl bg-accent-soft border border-accent flex items-center justify-center flex-shrink-0">
+                        <BookOpen
+                          size={21}
+                          className="text-accent"
+                        />
+                      </div>
+
+                      <div className="min-w-0">
+                        <h3 className="text-lg font-bold theme-text truncate">
+                          {subject.name}
+                        </h3>
+
+                        {subject.code && (
+                          <p className="text-sm theme-text-secondary mt-0.5">
+                            Code :{" "}
+                            {subject.code}
+                          </p>
+                        )}
+                      </div>
                     </div>
 
-                    <div className="min-w-0">
-                      <h3 className="text-lg font-bold theme-text truncate">
-                        {subject.name}
-                      </h3>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-accent-soft text-accent border border-accent shrink-0">
+                      #{subject.order_number}
+                    </span>
+                  </div>
 
-                      {subject.code && (
-                        <p className="text-sm theme-text-secondary mt-0.5">
-                          Code : {subject.code}
-                        </p>
-                      )}
+                  {/* CLASSE */}
+
+                  <div className="mt-4 flex items-center gap-2 rounded-2xl bg-accent-soft border border-accent px-3 py-3">
+                    <GraduationCap
+                      size={18}
+                      className="text-accent shrink-0"
+                    />
+
+                    <div>
+                      <p className="text-xs theme-text-secondary">
+                        Classe
+                      </p>
+
+                      <p className="text-sm font-bold theme-text">
+                        {subject.classes
+                          ?.name ||
+                          "Classe non renseignée"}
+                      </p>
                     </div>
                   </div>
 
-                  <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-accent-soft text-accent border border-accent shrink-0">
-                    #{subject.order_number}
-                  </span>
-                </div>
+                  {/* CHAPITRES */}
 
-                {/* CLASSE */}
+                  <div className="mt-3 flex items-center gap-2 text-sm theme-text-secondary">
+                    <Layers
+                      size={17}
+                      className="text-accent"
+                    />
 
-                <div className="mt-4 flex items-center gap-2 rounded-2xl bg-accent-soft border border-accent px-3 py-3">
-                  <GraduationCap
-                    size={18}
-                    className="text-accent shrink-0"
-                  />
+                    <span>
+                      {chapterCounts[
+                        subject.id
+                      ] ?? 0}{" "}
+                      chapitre(s)
+                    </span>
+                  </div>
 
-                  <div>
-                    <p className="text-xs theme-text-secondary">
-                      Classe
-                    </p>
+                  {/* ACTIONS */}
 
-                    <p className="text-sm font-bold theme-text">
-                      {subject.classes?.name ||
-                        "Classe non renseignée"}
-                    </p>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    <button
+                      onClick={() =>
+                        navigate(
+                          `/admin/chapters/${subject.id}`
+                        )
+                      }
+                      className="
+                        flex-1
+                        min-w-[150px]
+                        px-4
+                        py-2.5
+                        bg-accent
+                        hover:opacity-90
+                        text-white
+                        rounded-xl
+                        font-semibold
+                        flex
+                        items-center
+                        justify-center
+                        gap-2
+                        shadow-sm
+                        transition
+                      "
+                    >
+                      <Layers size={17} />
+                      Voir les chapitres
+                    </button>
+
+                    <button
+                      onClick={() =>
+                        editSubject(subject)
+                      }
+                      className="
+                        px-3
+                        py-2.5
+                        rounded-xl
+                        bg-yellow-50
+                        dark:bg-yellow-950/30
+                        text-yellow-700
+                        dark:text-yellow-300
+                        border
+                        border-yellow-200
+                        dark:border-yellow-900/50
+                        hover:bg-yellow-100
+                        dark:hover:bg-yellow-950/50
+                        transition
+                      "
+                      title="Modifier"
+                    >
+                      <Pencil size={18} />
+                    </button>
+
+                    <button
+                      onClick={() =>
+                        handleDelete(
+                          subject.id
+                        )
+                      }
+                      className="
+                        px-3
+                        py-2.5
+                        rounded-xl
+                        bg-red-50
+                        dark:bg-red-950/30
+                        text-red-700
+                        dark:text-red-300
+                        border
+                        border-red-200
+                        dark:border-red-900/50
+                        hover:bg-red-100
+                        dark:hover:bg-red-950/50
+                        transition
+                      "
+                      title="Supprimer"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </div>
                 </div>
-
-                {/* CHAPITRES */}
-
-                <div className="mt-3 flex items-center gap-2 text-sm theme-text-secondary">
-                  <Layers
-                    size={17}
-                    className="text-accent"
-                  />
-
-                  <span>
-                    {chapterCounts[subject.id] ?? 0} chapitre(s)
-                  </span>
-                </div>
-
-                {/* ACTIONS */}
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  <button
-                    onClick={() =>
-                      navigate(
-                        `/admin/chapters/${subject.id}`
-                      )
-                    }
-                    className="
-                      flex-1
-                      min-w-[150px]
-                      px-4
-                      py-2.5
-                      bg-accent
-                      hover:opacity-90
-                      text-white
-                      rounded-xl
-                      font-semibold
-                      flex
-                      items-center
-                      justify-center
-                      gap-2
-                      shadow-sm
-                      transition
-                    "
-                  >
-                    <Layers size={17} />
-                    Voir les chapitres
-                  </button>
-
-                  <button
-                    onClick={() => editSubject(subject)}
-                    className="
-                      px-3
-                      py-2.5
-                      rounded-xl
-                      bg-yellow-50
-                      dark:bg-yellow-950/30
-                      text-yellow-700
-                      dark:text-yellow-300
-                      border
-                      border-yellow-200
-                      dark:border-yellow-900/50
-                      hover:bg-yellow-100
-                      dark:hover:bg-yellow-950/50
-                      transition
-                    "
-                    title="Modifier"
-                  >
-                    <Pencil size={18} />
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      handleDelete(subject.id)
-                    }
-                    className="
-                      px-3
-                      py-2.5
-                      rounded-xl
-                      bg-red-50
-                      dark:bg-red-950/30
-                      text-red-700
-                      dark:text-red-300
-                      border
-                      border-red-200
-                      dark:border-red-900/50
-                      hover:bg-red-100
-                      dark:hover:bg-red-950/50
-                      transition
-                    "
-                    title="Supprimer"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
         )}
       </div>

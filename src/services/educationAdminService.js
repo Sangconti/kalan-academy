@@ -1,18 +1,59 @@
 import { supabase } from "../lib/supabase";
 
 // =====================================
+// CACHE ADMIN — CLASSES / SUBJECTS
+// =====================================
+
+// Cache mémoire uniquement.
+// Il est valable pendant la session de l'application.
+// Il est invalidé automatiquement après les opérations CRUD.
+
+let adminClassesCache = null;
+let adminClassesPromise = null;
+
+let adminSubjectsCache = null;
+let adminSubjectsPromise = null;
+
+function invalidateAdminClassesCache() {
+  adminClassesCache = null;
+}
+
+function invalidateAdminSubjectsCache() {
+  adminSubjectsCache = null;
+}
+
+// =====================================
 // CLASSES
 // =====================================
 
 export async function getAdminClasses() {
-  const { data, error } = await supabase
+  // Retour immédiat si déjà chargé
+  if (adminClassesCache) {
+    return adminClassesCache;
+  }
+
+  // Si une requête est déjà en cours,
+  // partager cette même requête.
+  if (adminClassesPromise) {
+    return adminClassesPromise;
+  }
+
+  adminClassesPromise = supabase
     .from("classes")
-    .select("*")
-    .order("order_number");
+    .select("id, name, order_number")
+    .order("order_number")
+    .then(({ data, error }) => {
+      if (error) throw error;
 
-  if (error) throw error;
+      adminClassesCache = data || [];
 
-  return data || [];
+      return adminClassesCache;
+    })
+    .finally(() => {
+      adminClassesPromise = null;
+    });
+
+  return adminClassesPromise;
 }
 
 export async function createClass(classData) {
@@ -23,6 +64,8 @@ export async function createClass(classData) {
     .single();
 
   if (error) throw error;
+
+  invalidateAdminClassesCache();
 
   return data;
 }
@@ -37,6 +80,9 @@ export async function updateClass(id, updates) {
 
   if (error) throw error;
 
+  invalidateAdminClassesCache();
+  invalidateAdminSubjectsCache();
+
   return data;
 }
 
@@ -48,6 +94,9 @@ export async function deleteClass(id) {
 
   if (error) throw error;
 
+  invalidateAdminClassesCache();
+  invalidateAdminSubjectsCache();
+
   return true;
 }
 
@@ -56,20 +105,42 @@ export async function deleteClass(id) {
 // =====================================
 
 export async function getAllSubjects() {
-  const { data, error } = await supabase
+  // Retour immédiat si déjà chargé
+  if (adminSubjectsCache) {
+    return adminSubjectsCache;
+  }
+
+  // Partage de la requête si déjà en cours
+  if (adminSubjectsPromise) {
+    return adminSubjectsPromise;
+  }
+
+  adminSubjectsPromise = supabase
     .from("subjects")
     .select(`
-      *,
+      id,
+      name,
+      code,
+      class_id,
+      order_number,
       classes (
         id,
         name
       )
     `)
-    .order("order_number");
+    .order("order_number")
+    .then(({ data, error }) => {
+      if (error) throw error;
 
-  if (error) throw error;
+      adminSubjectsCache = data || [];
 
-  return data || [];
+      return adminSubjectsCache;
+    })
+    .finally(() => {
+      adminSubjectsPromise = null;
+    });
+
+  return adminSubjectsPromise;
 }
 
 export async function getSubjectsByClass(classId) {
@@ -93,6 +164,8 @@ export async function createSubject(subject) {
 
   if (error) throw error;
 
+  invalidateAdminSubjectsCache();
+
   return data;
 }
 
@@ -106,6 +179,8 @@ export async function updateSubject(id, updates) {
 
   if (error) throw error;
 
+  invalidateAdminSubjectsCache();
+
   return data;
 }
 
@@ -116,6 +191,8 @@ export async function deleteSubject(id) {
     .eq("id", id);
 
   if (error) throw error;
+
+  invalidateAdminSubjectsCache();
 
   return true;
 }
@@ -888,9 +965,6 @@ export async function importAdminLessonPack(
       // -------------------------------------
       // CORRECTION DE L'ORDRE
       // -------------------------------------
-      // Si la leçon existe déjà mais possède
-      // un mauvais order_number, on le corrige.
-      // -------------------------------------
 
       if (
         Number(oldLesson.order_number) !==
@@ -978,8 +1052,6 @@ export async function importAdminLessonPack(
       lesson.lesson_blocks ??
       [];
 
-    // Récupération de tous les blocs existants
-    // pour permettre la migration des anciens blocs.
     const {
       data: existingBlocks,
       error: existingBlocksError
@@ -1003,47 +1075,25 @@ export async function importAdminLessonPack(
       const block =
         lessonBlocks[blockIndex];
 
-      // -------------------------------------
-      // ORDRE DU BLOC
-      // -------------------------------------
-
       const blockOrder =
         block.order_number ??
         blockIndex + 1;
 
-      // -------------------------------------
-      // TITRE DU BLOC
-      // -------------------------------------
-
       const blockTitle =
         block.title?.trim() || null;
-
-      // -------------------------------------
-      // CONTENU
-      // -------------------------------------
 
       const blockContent =
         typeof block.content === "object"
           ? block.content?.text ?? ""
           : block.content ?? "";
 
-      // -------------------------------------
-      // TYPE
-      // -------------------------------------
-
       const blockType =
         block.type ??
         block.block_type ??
         "text";
 
-      // -------------------------------------
-      // RECHERCHE DU BLOC EXISTANT
-      // -------------------------------------
-
       let existingBlock = null;
 
-      // 1. Première priorité :
-      // rechercher par titre s'il existe.
       if (blockTitle) {
         existingBlock =
           existingBlocks?.find(
@@ -1053,11 +1103,6 @@ export async function importAdminLessonPack(
           ) ?? null;
       }
 
-      // 2. Deuxième priorité :
-      // rechercher par ordre.
-      //
-      // Cela permet notamment de retrouver
-      // les anciens blocs dont title = null.
       if (!existingBlock) {
         const blocksWithSameOrder =
           existingBlocks?.filter(
@@ -1075,11 +1120,6 @@ export async function importAdminLessonPack(
         }
       }
 
-      // 3. Troisième priorité :
-      // migration des anciens blocs dont
-      // les order_number sont identiques.
-      //
-      // On utilise alors leur position.
       if (!existingBlock) {
         const candidate =
           existingBlocks?.[blockIndex];
@@ -1088,10 +1128,6 @@ export async function importAdminLessonPack(
           existingBlock = candidate;
         }
       }
-
-      // =====================================
-      // BLOC EXISTANT → MISE À JOUR
-      // =====================================
 
       if (existingBlock) {
         const needsUpdate =
@@ -1112,11 +1148,8 @@ export async function importAdminLessonPack(
             .from("lesson_blocks")
             .update({
               block_type: blockType,
-
               title: blockTitle,
-
               content: blockContent,
-
               order_number: blockOrder
             })
             .eq(
@@ -1135,10 +1168,6 @@ export async function importAdminLessonPack(
 
         continue;
       }
-
-      // =====================================
-      // BLOC INEXISTANT → CREATION
-      // =====================================
 
       const {
         error: blockError
@@ -1191,21 +1220,11 @@ export async function importAdminLessonPack(
 
       let quiz;
 
-      // =====================================
-      // QUIZ EXISTANT
-      // =====================================
-
       if (existingQuiz) {
         quiz = existingQuiz;
 
         result.skipped.quizzes++;
-      }
-
-      // =====================================
-      // NOUVEAU QUIZ
-      // =====================================
-
-      else {
+      } else {
         const {
           data: newQuiz,
           error: quizError
@@ -1261,10 +1280,6 @@ export async function importAdminLessonPack(
           throw existingQuestionError;
         }
 
-        // -------------------------------------
-        // QUESTION EXISTANTE
-        // -------------------------------------
-
         if (existingQuestion) {
           result.skipped.questions++;
 
@@ -1272,10 +1287,6 @@ export async function importAdminLessonPack(
 
           continue;
         }
-
-        // -------------------------------------
-        // NOUVELLE QUESTION
-        // -------------------------------------
 
         const {
           error: questionError
